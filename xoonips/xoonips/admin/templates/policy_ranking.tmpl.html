@@ -1,0 +1,114 @@
+<patTemplate:tmpl name="main">
+<patTemplate:tmpl name="header_include" src="adminheader.tmpl.html" parse="on"/>
+<patTemplate:tmpl name="sort_javascript" whitespace="">
+<script type="text/javascript">
+<!--//
+function xoonips_admin_policy_ranking_sort( name, id, updown ) {
+  /* sort */
+  var prefix = 'xoonips_admin_policy_ranking';
+  var form = document.getElementById( prefix + '_form' );
+  var action = document.getElementById( prefix + '_action' );
+  var sort_ranking = document.getElementById( prefix + '_sort_ranking' );
+  var sort_id = document.getElementById( prefix + '_sort_id' );
+  var sort_updown = document.getElementById( prefix + '_sort_updown' );
+  action.value = 'sort';
+  sort_ranking.value = name;
+  sort_id.value = id;
+  sort_updown.value = updown;
+  form.submit();
+  return false;
+}
+//--></script>
+</patTemplate:tmpl>
+<form id="xoonips_admin_policy_ranking_form" name="xoonips_admin_policy_ranking_form" action="policy.php?page=ranking" method="post">
+<input id="xoonips_admin_policy_ranking_action" name="action" value="update" type="hidden"/>
+<input id="xoonips_admin_policy_ranking_sort_ranking" name="sort_ranking" value="" type="hidden"/>
+<input id="xoonips_admin_policy_ranking_sort_id" name="sort_id" value="" type="hidden"/>
+<input id="xoonips_admin_policy_ranking_sort_updown" name="sort_updown" value="" type="hidden"/>
+{TOKEN_TICKET}
+<h4 style="margin-top: 20px; margin-bottom: 10px;">&raquo;&nbsp;{GENERAL_RANKING_TITLE}</h4>
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th style="text-align: center;">{VISIBLE}</th>
+    <th>{RANKING_NAME}</th>
+    <th style="text-align: center;">{SORT}</th>
+  </tr>
+  <patTemplate:tmpl name="general_ranking">
+  <tr>
+    <td class="{EVENODD}" style="width: 60px; text-align: center;">
+      <input name="ranking_visible[{ID}]" type="checkbox" value="1" {CHECKED}/>
+    </td>
+    <td class="{EVENODD}" style="text-align: left;">
+      <span style="text-weight: bold;">{NAME}</span>
+    </td>
+    <td class="{EVENODD}" style="width: 100px; text-align: center;">
+      <select name="general_step[{ID}]">
+        <option label="1" value="1" selected="selected">1</option>
+        <option label="2" value="2">2</option>
+        <option label="3" value="3">3</option>
+        <option label="4" value="4">4</option>
+      </select>
+      &nbsp;&nbsp;
+      <a href="#" onclick="return xoonips_admin_policy_ranking_sort( 'general', '{ID}', 'up' );"><img src="../images/icon_up.png" title="{UP}" alt="{UP}"/></a>
+      &nbsp;
+      <a href="#" onclick="return xoonips_admin_policy_ranking_sort( 'general', '{ID}', 'down' );"><img src="../images/icon_down.png" title="{DOWN}" alt="{DOWN}"/></a>
+    </td>
+  </tr>
+  </patTemplate:tmpl>
+  </tbody>
+</table>
+<div style="margin-top: 10px; margin-left: 10px; margin-bottom: 5px;">
+{GENERAL_RANGE_DESC1}
+<input name="ranking_num_rows" type="text" size="3" maxlength="3" value="{GENERAL_NUMROWS}" style="text-align: right;"/>
+{GENERAL_RANGE_DESC2}
+</div>
+<br />
+<h4 style="margin-top: 20px; margin-bottom: 10px;">&raquo;&nbsp;{RECENT_RANKING_TITLE}</h4>
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th style="text-align: center;">{VISIBLE}</th>
+    <th>{RANKING_NAME}</th>
+    <th style="text-align: center;">{SORT}</th>
+  </tr>
+  <patTemplate:tmpl name="recent_ranking">
+  <tr>
+    <td class="{EVENODD}" style="width: 60px; text-align: center;">
+      <input name="ranking_new_visible[{ID}]" type="checkbox" value="1" {CHECKED}/>
+    </td>
+    <td class="{EVENODD}" style="text-align: left;">
+      <span style="text-weight: bold;">{NAME}</span>
+    </td>
+    <td class="{EVENODD}" style="width: 100px; text-align: center;">
+      <input name="recent_step[{ID}]" type="hidden" value="1"/>
+      <a href="#" onclick="return xoonips_admin_policy_ranking_sort( 'recent', '{ID}', 'up' );"><img src="../images/icon_up.png" title="{UP}" alt="{UP}"/></a>
+      &nbsp;
+      <a href="#" onclick="return xoonips_admin_policy_ranking_sort( 'recent', '{ID}', 'down' );"><img src="../images/icon_down.png" title="{DOWN}" alt="{DOWN}"/></a>
+    </td>
+  </tr>
+  </patTemplate:tmpl>
+  </tbody>
+</table>
+<div style="margin-top: 10px; margin-left: 10px; margin-bottom: 5px;">
+{RECENT_RANGE_DESC1}
+<input name="ranking_new_num_rows" type="text" size="3" maxlength="3" value="{RECENT_NUMROWS}" style="text-align: right;"/>
+{RECENT_RANGE_DESC2}
+</div>
+<br />
+<h4 style="margin-top: 20px; margin-bottom: 10px;">&raquo;&nbsp;{DAYS_TITLE}</h4>
+<div style="margin-top: 10px; margin-left: 10px; margin-bottom: 5px; color:blue;">
+{DAYS_DESC1}
+</div>
+<div style="margin-top: 10px; margin-left: 10px; margin-bottom: 5px;">
+<input name="ranking_days_enabled" type="checkbox" value="on" {DAYS_CHECKED}/>
+&nbsp;
+{DAYS_DESC2}
+<input name="ranking_days" type="text" size="3" maxlength="3" value="{DAYS}" style="text-align: right"/>
+{DAYS_DESC3}
+</div>
+<br /><br />
+<input name="submit_update" type="submit" value="{SUBMIT}"/>
+</form>
+<patTemplate:tmpl name="footer_include" src="adminfooter.tmpl.html" parse="on"/>
+</patTemplate:tmpl>

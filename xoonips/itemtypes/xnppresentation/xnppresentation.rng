@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!-- Presentation Item Type XML definition file (Relax NG) -->
+<!-- version 1.03 -->
+
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <include href="http://xoonips.sourceforge.jp/rng/basic.rng"/>
+
+  <include href="http://xoonips.sourceforge.jp/rng/link.rng"/>
+
+  <start>
+
+    <element name="item">
+
+      <ref name="basic"/>
+
+      <ref name="link"/>
+
+      <ref name="detail"/>
+
+    </element>
+
+  </start>
+
+
+  <include href="http://xoonips.sourceforge.jp/rng/file.rng"/>
+
+  <define name="detail">
+
+    <element name="detail">
+
+      <attribute name="id">
+
+        <data type="integer"/>
+
+      </attribute>
+
+      <interleave>
+
+        <element name="presentation_type">
+
+          <data type="string"/>
+
+        </element>
+
+        <element name="creators">
+
+          <oneOrMore>
+
+            <element name="creator">
+
+              <data type="string"/>
+
+            </element>
+
+          </oneOrMore>
+
+        </element>
+
+        <element name="readme">
+
+          <data type="string"/>
+
+        </element>
+
+        <element name="license">
+
+          <data type="string"/>
+
+        </element>
+
+        <element name="rights">
+
+          <data type="string"/>
+
+        </element>
+
+        <optional>
+
+          <oneOrMore>
+
+            <ref name="file"/>
+
+          </oneOrMore>
+
+        </optional>
+    
+      </interleave>
+
+    </element>
+
+  </define>
+
+</grammar>

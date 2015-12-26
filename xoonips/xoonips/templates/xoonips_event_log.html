@@ -1,0 +1,355 @@
+<{* page for download event logs *}>
+<{* $Revision: 1.4.2.1.2.2 $ *}>
+<script type="text/javascript">
+<!--//
+function xoonips_eventlog_submit( log_type_id, mode ) {
+  var form = document.getElementById( 'xoonips_eventlog_eventform' );
+  form.log_type_id.value = log_type_id;
+  form.mode.value = mode;
+  form.submit();
+}
+//--></script>
+<{include file="db:xoonips_breadcrumbs.inc.html"}>
+
+<h4><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD_TITLE}></h4>
+
+<div style="margin: 10px 10px 30px 10px;">
+  <form id="xoonips_eventlog_downloadform" name="xoonips_eventlog_downloadform" action="" method="post">
+  <input type="hidden" name="log_type_id" value="0"/>
+  <input type="hidden" name="mode" value="download"/>
+  <{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD_DESC1}>
+
+  <table style="margin: 10px;">
+    <tr>
+      <{if $smarty.const._MD_XOONIPS_EVENTLOG_DATE_FROM_PREFIX}>
+        <td style="width: 50px;"><{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_FROM_PREFIX}></td>
+      <{/if}>
+      <td style="white-space: nowrap;">
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_YEAR_PREFIX}>
+      <{html_select_date prefix="StartDate" time=$time-31536000 start_year=$start_year end_year=$end_year display_days=false display_months=false}>
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_YEAR_POSTFIX}>
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_MONTH_PREFIX}>
+      <{html_select_date prefix="StartDate" time=$time-31536000 display_days=false display_years=false month_format="%m"}>
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_MONTH_POSTFIX}>
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_DAY_PREFIX}>
+      <{html_select_date prefix="StartDate" time=$time-31536000 display_years=false display_months=false}>
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_DAY_POSTFIX}>
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_TILDA}>
+      </td>
+    </tr>
+    <tr>
+      <{if $smarty.const._MD_XOONIPS_EVENTLOG_DATE_TO_PREFIX}>
+        <td style="width: 50px;"><{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_TO_PREFIX}></td>
+      <{/if}>
+      <td style="white-space: nowrap;">
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_YEAR_PREFIX}>
+      <{html_select_date prefix="EndDate" time=$time start_year=$start_year end_year=$end_year display_days=false display_months=false}>
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_YEAR_POSTFIX}>
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_MONTH_PREFIX}>
+      <{html_select_date prefix="EndDate" time=$time display_days=false display_years=false month_format="%m"}>
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_MONTH_POSTFIX}>
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_DAY_PREFIX}>
+      <{html_select_date prefix="EndDate" time=$time display_years=false display_months=false}>
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_DAY_POSTFIX}>
+      </td>
+    </tr>
+  </table>
+
+  <{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD_DESC2}>
+  <input class="formButton" type="submit" value="<{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}>"/>
+  </form>
+</div>
+
+<h4><{$smarty.const._MD_XOONIPS_EVENTLOG_CATEGORY_TITLE}></h4>
+
+<form id="xoonips_eventlog_eventform" name="xoonips_eventlog_eventform" action="" method="post">
+<input type="hidden" name="log_type_id" value=""/>
+<input type="hidden" name="mode" value=""/>
+<div style="margin: 10px;">
+  <{$smarty.const._MD_XOONIPS_EVENTLOG_CATEGORY_DESC}>
+
+  <table style="margin: 10px;">
+    <tr>
+      <{if $smarty.const._MD_XOONIPS_EVENTLOG_DATE_FROM_PREFIX}>
+      <td style="width: 50px;"><{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_FROM_PREFIX}></td>
+      <{/if}>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_YEAR_PREFIX}>
+        <{html_select_date prefix="StartDate" time=$time-31536000 start_year=$start_year end_year=$end_year display_days=false display_months=false}>
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_YEAR_POSTFIX}>
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_MONTH_PREFIX}>
+        <{html_select_date prefix="StartDate" time=$time-31536000 display_days=false display_years=false month_format="%m"}>
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_MONTH_POSTFIX}>
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_TILDA}>
+      </td>
+    </tr>
+    <tr>
+      <{if $smarty.const._MD_XOONIPS_EVENTLOG_DATE_TO_PREFIX}>
+      <td style="width: 50px;"><{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_TO_PREFIX}></td>
+      <{/if}>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_YEAR_PREFIX}>
+        <{html_select_date prefix="EndDate" time=$time start_year=$start_year end_year=$end_year display_days=false display_months=false}>
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_YEAR_POSTFIX}>
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_MONTH_PREFIX}>
+        <{html_select_date prefix="EndDate" time=$time display_days=false display_years=false month_format="%m"}>
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DATE_MONTH_POSTFIX}>
+      </td>
+    </tr>
+  </table>
+
+  <{* number of the top page access *}>
+  <table style="margin: 10px 0px 10px 0px;">
+    <tr>
+      <th colspan="4" style="text-align: left;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_ACCESS_TOP}>
+      </th>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DAYS_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(1,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(1,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_MONTHS_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(2,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(2,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_TOTAL_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(3,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(3,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DOMAINS_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(4,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(4,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+    </tr>
+  </table>
+
+  <{* number of the item access *}>
+  <table style="margin: 10px 0px 10px 0px;">
+    <tr>
+      <th colspan="4" style="text-align: left;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_ACCESS_ITEM}>
+      </th>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DAYS_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(5,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(5,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_MONTHS_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(6,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(6,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_TOTAL_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(7,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(7,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DOMAINS_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(8,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(8,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_PER_ITEM_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(18,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+      </td>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_PER_USER_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(19,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+      </td>
+    </tr>
+  </table>
+
+  <{* number of attachment download *}>
+  <table style="margin: 10px 0px 10px 0px;">
+    <tr>
+      <th colspan="4" style="text-align: left;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD_ITEM}>
+      </th>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DAYS_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(9,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(9,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_MONTHS_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(10,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(10,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_TOTAL_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(11,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(11,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_DOMAINS_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(12,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(12,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_PER_ITEM_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(15,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+      </td>
+      <td style="white-space: nowrap;">
+      <{$smarty.const._MD_XOONIPS_EVENTLOG_PER_USER_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(17,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+      </td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_PER_FILE_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(16,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+      </td>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+  </table>
+
+  <{* number of newly registerd users and items *}>
+  <table style="margin: 10px 0px 10px 0px;">
+    <tr>
+      <th colspan="4" style="text-align: left;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_ADD}>
+      </th>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_NEW_USER_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(13,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(13,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+      <td style="white-space: nowrap;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_NEW_ITEM_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(14,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(14,'graphview')"><{$smarty.const._MD_XOONIPS_EVENTLOG_GRAPH}></a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<{* list of registered users and items *}>
+<h4><{$smarty.const._MD_XOONIPS_EVENTLOG_VIEW_TITLE}></h4>
+
+<div style="margin: 10px;">
+  <{$smarty.const._MD_XOONIPS_EVENTLOG_VIEW_DESCRIPTION}>
+
+  <table style="margin: 10px 0px 10px 0px;">
+    <tr>
+      <th colspan="4" style="text-align: left;">
+        <{$smarty.const._MD_XOONIPS_EVENTLOG_VIEW_LIST_TITLE}>
+      </th>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">
+        <strong><{$num_of_user}></strong> <{$smarty.const._MD_XOONIPS_EVENTLOG_NEW_USER_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(20,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="?mode=list&amp;log_type_id=20"><{$smarty.const._MD_XOONIPS_EVENTLOG_LIST_LABEL}></a>
+      </td>
+      <td style="white-space: nowrap;">
+        <strong><{$num_of_item}></strong> <{$smarty.const._MD_XOONIPS_EVENTLOG_NEW_ITEM_LABEL}>
+      </td>
+      <td style="white-space: nowrap;">
+        &gt;&nbsp;
+        <a href="javascript:xoonips_eventlog_submit(21,'download')"><{$smarty.const._MD_XOONIPS_EVENTLOG_DOWNLOAD}></a>
+        &nbsp;&frasl;&nbsp;
+        <a href="?mode=list&amp;log_type_id=21"><{$smarty.const._MD_XOONIPS_EVENTLOG_LIST_LABEL}></a>
+      </td>
+    </tr>
+  </table>
+</div>
+</form>
+

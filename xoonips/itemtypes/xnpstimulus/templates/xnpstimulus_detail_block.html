@@ -1,0 +1,100 @@
+<{* $Revision: 1.8.8.5 $ *}>
+<form id="xoonips_edit_form" action="#">
+<table class="outer">
+  <!-- Basic Information -->
+  <tr>
+    <td class="head"><{$basic.doi.name}></td>
+    <td class="<{cycle name="oddeven" values="odd,even"}>"><{$basic.doi.value}></td>
+  </tr>
+  <tr>
+    <td width="30%" class="head"><{$basic.lang.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.lang.value}></td>
+  </tr>
+  <tr>
+    <td width="30%" class="head"><{$basic.title.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.title.value|nl2br}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$basic.keywords.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.keywords.value}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$basic.description.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.description.value}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPSTIMULUS_DATE_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.publication_date.value}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$basic.last_update_date.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.last_update_date.value}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$basic.creation_date.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.creation_date.value}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$basic.contributor.name}></td>
+    <td class="<{cycle name="oddeven"}>"><a href="<{$xoops_url}>/modules/xoonips/showusers.php?uid=<{$basic.uid.value}>" target="_self"><{$basic.contributor.value}></a></td>
+  </tr>
+  <tr>
+    <td class="head"><{$basic.item_type.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.item_type.value}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$basic.change_logs.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.change_logs.value}></td>
+  </tr>
+  
+  <!-- Stimulus Item Detail Information -->
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPSTIMULUS_STIMULUS_TYPE_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$xoonips_item.detail.stimulus_type}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPSTIMULUS_DEVELOPER_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>">
+<{include file='db:xoonips_confirm_multiple_field.html' vars=$xoonips_item.xnpstimulus_developer}>
+    </td>
+  </tr>
+  <tr>
+    <td class="head"><{$preview.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$preview.value}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPSTIMULUS_STIMULUS_FILE}></td>
+    <td class="<{cycle name="oddeven"}>"><{$stimulus_data.value}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XOONIPS_ITEM_README_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$readme.value}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XOONIPS_ITEM_RIGHTS_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$rights.value}></td>
+  </tr>
+  <!-- index -->
+  <tr>
+    <td class="head"><{$index.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$index.value}></td>
+  </tr>
+  <!-- related_to -->
+  <tr>
+    <td class="head"><{$basic.related_to.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.related_to.value}></td>
+  </tr>
+</table>
+<!-- For add to public index -->
+<{if $editable }>
+<{$basic.hidden}>
+<input type="hidden" name="stimulus_type" value="<{$xoonips_item.detail.stimulus_type_value}>"/>
+<input type="hidden" name="attachment_dl_limit" value="<{$xoonips_item.detail.attachment_dl_limit}>"/>
+<input type="hidden" name="attachment_dl_notify" value="<{$xoonips_item.detail.attachment_dl_notify}>"/>
+<input type="hidden" name="stimulus_dataFileID" value="<{$xoonips_item.detail.stimulus_data.file_id}>"/>
+<{$preview.hidden}>
+<{$readme.hidden}>
+<{$rights.hidden}>
+<{$index.hidden}>
+<{/if}>
+</form>

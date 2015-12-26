@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!-- Url Item Type XML definition file (Relax NG) -->
+<!-- version 1.00 -->
+
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <include href="http://xoonips.sourceforge.jp/rng/basic.rng"/>
+
+  <include href="http://xoonips.sourceforge.jp/rng/link.rng"/>
+
+  <start>
+
+    <element name="item">
+
+      <ref name="basic"/>
+
+      <ref name="link"/>
+
+      <ref name="detail"/>
+
+    </element>
+
+  </start>
+
+  <include href="http://xoonips.sourceforge.jp/rng/file.rng"/>
+
+  <define name="detail">
+
+    <element name="detail">
+
+      <attribute name="id">
+
+        <data type="integer"/>
+
+      </attribute>
+
+      <interleave>
+
+        <element name="url">
+
+          <data type="string"/>
+
+        </element>
+
+        <optional>
+
+          <ref name="file"/>
+
+        </optional>
+    
+      </interleave>
+
+    </element>
+
+  </define>
+
+</grammar>

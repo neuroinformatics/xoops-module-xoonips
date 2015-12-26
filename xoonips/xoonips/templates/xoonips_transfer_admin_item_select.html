@@ -1,0 +1,139 @@
+<script type="text/javascript" src="../js/prototype.js">
+</script>
+
+<{foreach item=i from=$can_not_transfer_items.request_certify}>
+<{$i|string_format:$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_LIST_CAN_NOT_TRANSFER_REQUEST_CERTIFY_ITEM}><br />
+<{/foreach}>
+
+<{foreach item=i from=$can_not_transfer_items.request_transfer}>
+<{$i|string_format:$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_LIST_CAN_NOT_TRANSFER_REQUEST_TRANSFER_ITEM}><br />
+<{/foreach}>
+
+<{foreach item=i from=$can_not_transfer_items.have_another_parent}>
+<{$i|string_format:$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_LIST_CAN_NOT_TRANSFER_HAVE_ANOTHER_PARENT_ITEM}><br />
+<{/foreach}>
+
+<{foreach item=i from=$can_not_transfer_items.child_request_certify}>
+<{$i|string_format:$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_LIST_CAN_NOT_TRANSFER_CHILD_REQUEST_CERTIFY_ITEM}><br />
+<{/foreach}>
+
+<{foreach item=i from=$can_not_transfer_items.child_request_transfer}>
+<{$i|string_format:$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_LIST_CAN_NOT_TRANSFER_CHILD_REQUEST_TRANSFER_ITEM}><br />
+<{/foreach}>
+
+<br />
+
+<form id="xoonips_form_transfer_admin_item_select" action="maintenance.php?page=item&amp;action=tconfirm" method="post">
+
+<input id="xoonips_hidden_op" type="hidden" name="op" value=""/>
+
+<{$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_SELECT_FROM}>
+
+<select id="xoonips_select_from_user" name="from_uid"
+    onchange="$('xoonips_hidden_op').value='from_uid_changed'; $('xoonips_form_transfer_admin_item_select').action=''; $('xoonips_form_transfer_admin_item_select').submit();">
+<{foreach item=uname key=uid from=$from_user_options}>
+ <option id="xoonips_select_from_uid_<{$uid}>" value="<{$uid}>" <{if $uid==$from_uid}>selected="selected"<{/if}>><{$uname}></option>
+<{/foreach}>
+</select>
+
+<select id="xoonips_select_from_index" name="from_index_id"
+    onchange="$('xoonips_hidden_op').value='from_index_id_changed'; $('xoonips_form_transfer_admin_item_select').action=''; $('xoonips_form_transfer_admin_item_select').submit();">
+<{foreach item=i from=$from_index_options}>
+ <option id="xoonips_select_from_index_id_<{$i.index_id}>" value="<{$i.index_id}>" <{if $i.index_id==$from_index_id}>selected="selected"<{/if}>><{$i.title|indent:$i.depth:"&nbsp;&nbsp;"}>(<{$i.number_of_items}>)</option>
+<{/foreach}>
+</select>
+
+<br />
+
+<input type="hidden" id="xoonips_page" name="page" value="1" />
+<{include
+    file="db:xoonips_pagenavi.html"
+    page_no_label=""
+    maxpage=$maxpage
+    page=$page
+    pages=$pages
+    form_id="xoonips_form_transfer_admin_item_select"
+    form=false
+    pagenavi_extra_onclick="$('xoonips_hidden_op').value='page_changed'; $('xoonips_form_transfer_admin_item_select').action='';"}>
+
+<table class="outer">
+ <thead>
+  <tr>
+   <th><{$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_SELECT_CHECK}></th>
+   <th><{$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_SELECT_ITEM_ID}></th>
+   <th><{$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_SELECT_ITEM_TYPE}></th>
+   <th><{$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_SELECT_TITLE}></th>
+  </tr>
+ </thead>
+ <tbody>
+<{if !empty( $transfer_item_options ) }>
+<{foreach item=i from=$transfer_item_options}>
+  <tr class="<{cycle values="odd,even"}>">
+   <td>
+<{if !in_array( $i.item_id, $can_not_transfer_items.request_certify )
+     && !in_array( $i.item_id, $can_not_transfer_items.request_transfer )
+     && !in_array( $i.item_id, $can_not_transfer_items.have_another_parent )
+     && !in_array( $i.item_id, $can_not_transfer_items.child_request_certify )
+     && !in_array( $i.item_id, $can_not_transfer_items.child_request_transfer ) }>
+   <input id="xoonips_checkbox_<{$i.item_id}>" type="checkbox" name="checked_item_ids[]" value="<{$i.item_id}>" <{if $i.checked}>checked="checked"<{/if}>/>
+<{/if }>
+   </td>
+   <td><{$i.item_id}></td>
+   <td><{$i.item_type_name}></td>
+   <td>
+    <a href="<{$smarty.const.XOOPS_URL}>/modules/xoonips/transfer_item.php?action=detail_item&amp;item_id=<{$i.item_id}>"
+       target="xoonips_windows_transfer_user_item_detail">
+<{$i.title}>
+    </a>
+<{foreach item=j from=$i.child_titles}>
+    <br /><{$j|indent:1:"&nbsp;&nbsp;"}>
+<{/foreach}>
+   </td>
+  </tr>
+<{/foreach}>
+<{else}>
+ <tr>
+  <td class="even" style="text-align: center;" colspan="4"><span style="font-weight: bold; color: red;"><{$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_SELECT_NO_ITEM}></span></td>
+ </tr>
+<{/if}>
+ </tbody>
+</table>
+
+<{include
+    file="db:xoonips_pagenavi.html"
+    page_no_label=""
+    maxpage=$maxpage
+    page=$page
+    pages=$pages
+    form_id="xoonips_form_transfer_admin_item_select"
+    form=false
+    pagenavi_extra_onclick="$('xoonips_hidden_op').value='page_changed'; $('xoonips_form_transfer_admin_item_select').action='';"}>
+
+<{$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_SELECT_TO}>
+
+<select id="xoonips_select_to_user" name="to_uid"
+    onchange="$('xoonips_hidden_op').value='to_uid_changed'; $('xoonips_form_transfer_admin_item_select').action=''; $('xoonips_form_transfer_admin_item_select').submit();">
+<{foreach item=uname key=uid from=$to_user_options}>
+ <option id="xoonips_select_to_uid_<{$uid}>" value="<{$uid}>" <{if $uid==$to_uid}>selected="selected"<{/if}>><{$uname}></option>
+<{/foreach}>
+</select>
+
+<select id="xoonips_select_to_index" name="to_index_id">
+<{foreach item=i from=$to_index_options}>
+ <option id="xoonips_select_to_index_id_<{$i.index_id}>" value="<{$i.index_id}>" <{if $i.index_id==$to_index_id}>selected="selected"<{/if}>><{$i.title|indent:$i.depth:"&nbsp;&nbsp;"}>(<{$i.number_of_items}>)</option>
+<{/foreach}>
+</select>
+
+<br />
+<br />
+
+<input id="xoonips_button_submit" type="submit" value="<{$smarty.const._AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_SELECT_SUBMIT}>" 
+  <{if empty($transfer_item_options)}>disabled="disabled"<{/if}> />
+
+<{foreach item=i from=$transfer_item_options_hidden}>
+<{if $i.checked}>
+<input type="hidden" name="checked_item_ids[]" value="<{$i.item_id}>"/>
+<{/if}>
+<{/foreach}>
+
+</form>

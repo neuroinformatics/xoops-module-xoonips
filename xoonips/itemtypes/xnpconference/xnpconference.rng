@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<!-- Conference Item Type XML definition file (Relax NG) -->
+<!-- version 1.02 -->
+
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <include href="http://xoonips.sourceforge.jp/rng/basic.rng"/>
+
+  <include href="http://xoonips.sourceforge.jp/rng/link.rng"/>
+
+  <start>
+
+    <element name="item">
+
+      <ref name="basic"/>
+
+      <ref name="link"/>
+
+      <ref name="detail"/>
+
+    </element>
+
+  </start>
+
+
+  <include href="http://xoonips.sourceforge.jp/rng/file.rng"/>
+
+  <define name="detail">
+
+    <element name="detail">
+
+      <attribute name="id">
+
+        <data type="integer"/>
+
+      </attribute>
+
+      <interleave>
+
+        <element name="presentation_type">
+
+          <data type="string"/>
+
+        </element>
+
+        <element name="conference_title">
+
+          <data type="string"/>
+
+        </element>
+
+        <element name="place">
+
+          <data type="string"/>
+
+        </element>
+
+        <element name="authors">
+
+          <oneOrMore>
+
+            <element name="author">
+
+              <data type="string"/>
+
+            </element>
+
+          </oneOrMore>
+
+        </element>
+
+        <element name="abstract">
+
+          <data type="string"/>
+
+        </element>
+
+        <element name="conference_from_year">
+
+          <data type="integer"/>
+
+        </element>
+
+        <element name="conference_from_month">
+
+          <data type="integer"/>
+
+        </element>
+
+        <element name="conference_from_mday">
+
+          <data type="integer"/>
+
+        </element>
+
+        <element name="conference_to_year">
+
+          <data type="integer"/>
+
+        </element>
+
+        <element name="conference_to_month">
+
+          <data type="integer"/>
+
+        </element>
+
+        <element name="conference_to_mday">
+
+          <data type="integer"/>
+
+        </element>
+
+      </interleave>
+
+    </element>
+
+  </define>
+
+</grammar>

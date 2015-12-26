@@ -1,0 +1,254 @@
+<patTemplate:tmpl name="main">
+<patTemplate:tmpl name="header_include" src="adminheader.tmpl.html" parse="on"/>
+<form name="xoonips_admin_maintenance_account_form" id="xoonips_admin_maintenance_account_form" action="maintenance.php?page=account" method="post" onsubmit="return xoonips_admin_maintenance_account_validate();">
+<input name="action" value="{ACTION}" type="hidden"/>
+<input name="uid" value="{UID}" type="hidden"/>
+{TOKEN_TICKET}
+<table class="outer" cellspacing="1" width="100%">
+<tbody>
+  <tr>
+    <th colspan="2">{FORM_TITLE}</th>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{UNAME_TITLE}</td>
+    <td class="even">
+      <input name="uname" size="25" maxlength="25" value="{UNAME_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{NAME_TITLE}</td>
+    <td class="even">
+      <input name="name" size="30" maxlength="60" value="{NAME_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{EMAIL_TITLE}</td>
+    <td class="even">
+      <input name="email" size="30" maxlength="60" value="{EMAIL_VALUE}" type="text"/>
+      <br />
+      <input name="user_viewemail" value="1" type="checkbox" {USER_VIEWEMAIL_CHECKED}/>{USER_VIEWEMAIL_TITLE}
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{URL_TITLE}</td>
+    <td class="even">
+      <input name="url" size="30" maxlength="100" value="{URL_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{GROUPS_TITLE}</td>
+    <td class="even">
+      <select size="5" name="groups[]" multiple="multiple">
+        <patTemplate:tmpl name="groups">
+        <option value="{GID}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+      </select>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{POSITION_TITLE}</td>
+    <td class="even">
+      <select size="1" name="posi">
+        <patTemplate:tmpl name="position">
+        <option value="{POSI_ID}" {SELECTED}>{TITLE}</option>
+        </patTemplate:tmpl>
+      </select>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{COMPANY_NAME_TITLE}</td>
+    <td class="even">
+      <input name="company_name" size="60" maxlength="255" value="{COMPANY_NAME_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{DIVISION_TITLE}</td>
+    <td class="even">
+      <input name="division" size="60" maxlength="255" value="{DIVISION_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{TEL_TITLE}</td>
+    <td class="even">
+      <input name="tel" size="25" maxlength="32" value="{TEL_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{FAX_TITLE}</td>
+    <td class="even">
+      <input name="fax" size="25" maxlength="32" value="{FAX_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{ADDRESS_TITLE}</td>
+    <td class="even">
+      <input name="address" size="60" maxlength="255" value="{ADDRESS_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{COUNTRY_TITLE}</td>
+    <td class="even">
+      <input name="country" size="25" maxlength="255" value="{COUNTRY_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{ZIPCODE_TITLE}</td>
+    <td class="even">
+      <input name="zipcode" size="20" maxlength="32" value="{ZIPCODE_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{TIMEZONE_TITLE}</td>
+    <td class="even">
+      <select size="1" name="timezone_offset">
+        <patTemplate:tmpl name="timezone">
+          <option value="{OFFSET}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+      </select>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{USER_INTREST_TITLE}</td>
+    <td class="even">
+      <input name="user_intrest" size="30" maxlength="150" value="{USER_INTREST_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{APPEAL_TITLE}</td>
+    <td class="even">
+      <textarea name="appeal" rows="5" cols="50">{APPEAL_VALUE}</textarea>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{USER_SIG_TITLE}</td>
+    <td class="even">
+      <textarea name="user_sig" rows="5" cols="50">{USER_SIG_VALUE}</textarea>
+      <br />
+      <input name="attachsig" value="1" type="checkbox" {ATTACHSIG_CHECKED}/>{ATTACHSIG_TITLE}
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{PASS_TITLE}</td>
+    <td class="even">
+      <input name="pass" size="10" maxlength="32" value="" type="password"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{PASS2_TITLE}</td>
+    <td class="even">
+      <input name="pass2" size="10" maxlength="32" value="" type="password"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{NOTICE_MAIL_TITLE}</td>
+    <td class="even">
+      <input name="notice_mail" size="5" maxlength="10" value="{NOTICE_MAIL_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{PRIVATE_ITEM_NUMBER_LIMIT_TITLE}</td>
+    <td class="even">
+      <input name="private_item_number_limit" size="5" maxlength="10" value="{PRIVATE_ITEM_NUMBER_LIMIT_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{PRIVATE_INDEX_NUMBER_LIMIT_TITLE}</td>
+    <td class="even">
+      <input name="private_index_number_limit" size="5" maxlength="10" value="{PRIVATE_INDEX_NUMBER_LIMIT_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{PRIVATE_ITEM_STORAGE_LIMIT_TITLE}</td>
+    <td class="even">
+      <input name="private_item_storage_limit" size="5" maxlength="10" value="{PRIVATE_ITEM_STORAGE_LIMIT_VALUE}" type="text"/>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{UMODE_TITLE}</td>
+    <td class="even">
+      <select size="1" name="umode">
+        <patTemplate:tmpl name="umode">
+        <option value="{UMODE}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+      </select>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{UORDER_TITLE}</td>
+    <td class="even">
+      <select size="1" name="uorder">
+        <patTemplate:tmpl name="uorder">
+        <option value="{UORDER}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+      </select>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{RANK_TITLE}</td>
+    <td class="even">
+      <select size="1" name="rank">
+        <patTemplate:tmpl name="rank">
+        <option value="{RANK}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+      </select>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{NOTIFY_METHOD_TITLE}</td>
+    <td class="even">
+      <select size="1" name="notify_method">
+        <patTemplate:tmpl name="notify_method">
+        <option value="{NOTIFY_METHOD}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+      </select>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{NOTIFY_MODE_TITLE}</td>
+    <td class="even">
+      <select size="1" name="notify_mode">
+        <patTemplate:tmpl name="notify_mode">
+        <option value="{NOTIFY_MODE}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+      </select>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head">{USER_MAILOK_TITLE}</td>
+    <td class="even">
+      <patTemplate:tmpl name="user_mailok">
+      <input name="user_mailok" value="{USER_MAILOK}" type="radio" {CHECKED}/>{TITLE}
+      </patTemplate:tmpl>
+    </td>
+  </tr>
+  <tr align="left" valign="top">
+    <td class="head"></td>
+    <td class="even">
+      <input class="formButton" name="submit" value="{SUBMIT}" type="submit"/>
+    </td>
+  </tr>
+</tbody>
+</table>
+</form>
+
+<patTemplate:tmpl name="validation_javascript" whitespace="">
+<!-- Start Form Validation JavaScript //-->
+<script type="text/javascript">
+<!--//
+function xoonips_admin_maintenance_account_validate() {
+  myform = window.document.xoonips_admin_maintenance_account_form;
+  <patTemplate:tmpl name="validate">
+  if ( myform.{NAME}.value == "" ) { 
+    window.alert( "{MESSAGE}" ); 
+    myform.{NAME}.focus();
+    return false;
+  }
+  </patTemplate:tmpl>
+  return true;
+}
+//--></script>
+<!-- End Form Validation JavaScript //-->
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="footer_include" src="adminfooter.tmpl.html" parse="on"/>
+</patTemplate:tmpl>

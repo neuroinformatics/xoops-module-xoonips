@@ -1,0 +1,61 @@
+<metadata>
+<junii2 xmlns="http://irdb.nii.ac.jp/oai"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://irdb.nii.ac.jp/oai http://irdb.nii.ac.jp/oai/junii2.xsd">
+  <title><{foreach from=$basic.titles item='title' name='title'}><{if !$smarty.foreach.title.first}> <{/if}><{$title|xoonips_escape:'xml'}><{/foreach}></title>
+<{foreach name='authors' from=$detail.authors item='author'}>
+  <creator><{$author|xoonips_escape:'xml'}></creator>
+<{/foreach}>
+<{foreach name='keywords' from=$basic.keywords item='keyword'}>
+  <subject><{$keyword|xoonips_escape:'xml'}></subject>
+<{/foreach}>
+<{foreach name='indexes' from=$indexes item='index'}>
+  <subject><{$index|xoonips_escape:'xml'}></subject>
+<{/foreach}>
+<{if !empty($basic.description)}>
+  <description><{$basic.description|xoonips_escape:'xml'}></description>
+<{/if}>
+  <publisher><{$detail.publisher|xoonips_escape:'xml'}></publisher>
+<{if !empty($repository.publisher) && $repository.publisher ne 'none'}>
+  <publisher><{if $repository.publisher eq 'meta_author'}><{$repository.meta_author|xoonips_escape:'xml'}><{elseif $repository.publisher eq 'creator'}><{if $basic.uid|xoops_user:'name' == ''}><{$basic.uid|xoops_user:'uname'}><{else}><{$basic.uid|xoops_user:'name'}><{/if}><{else}><{$repository.publisher|xoonips_escape:'xml'}><{/if}></publisher>
+<{/if}>
+<{if !empty($detail.editor)}>
+  <contributor><{$detail.editor|xoonips_escape:'xml'}></contributor>
+<{/if}>
+  <type>itemType:xnpbook</type>
+  <NIItype>Book</NIItype>
+<{if !empty($files)}>
+<{if $repository.download_file_compression == 'on'}>
+  <format>application/zip</format>
+<{else}>
+<{foreach name='mimetypes' from=$mimetypes item='mimetype'}>
+  <format><{$mimetype|xoonips_escape:'xml'}></format>
+<{/foreach}>
+<{/if}>
+<{/if}>
+  <identifier><{$repository.nijc_code|xoonips_escape:'xml'}>/<{$basic.item_type_id|xoonips_escape:'xml'}>.<{$basic.item_id|xoonips_escape:'xml'}></identifier>
+<{if !empty($basic.doi)}>
+  <identifier><{$repository.nijc_code|xoonips_escape:'xml'}>:<{$smarty.const.XNP_CONFIG_DOI_FIELD_PARAM_NAME}>/<{$basic.doi|xoonips_escape:'xml'}></identifier>
+<{/if}>
+  <URI><{$basic.item_url|xoonips_escape:'xml'}></URI>
+<{foreach name='files' from=$files item='file'}>
+  <fullTextURL><{$file.file_url|xoonips_escape:'xml'}></fullTextURL>
+<{/foreach}>
+<{if !empty($detail.isbn)}>
+  <isbn><{$detail.isbn|xoonips_escape:'xml'}></isbn>
+<{/if}>
+  <dateofissued><{$basic.publication_year|xoonips_escape:'xml'}></dateofissued>
+  <language><{$basic.lang|xoonips_escape:'xml'}></language>
+<{if !empty($detail.url)}>
+  <relation><{$detail.url|xoonips_escape:'xml'}></relation>
+<{/if}>
+<{foreach name='related_tos' from=$related_tos item='related_to'}>
+  <relation><{$related_to.item_url|xoonips_escape:'xml'}></relation>
+<{/foreach}>
+<{if !empty($files)}>
+  <textversion>author</textversion>
+<{else}>
+  <textversion>none</textversion>
+<{/if}>
+</junii2>
+</metadata>

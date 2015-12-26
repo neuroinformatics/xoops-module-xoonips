@@ -1,0 +1,96 @@
+<{*
+$http_vars: association array of parameters to send to next page
+$i: general
+$ids: ids of all items to display
+$item_htmls: information of items(association array).
+    array( 'selected' => (1:checked 0:not checked),
+           'html'     => (summary of item in HTML),
+           'item_id'  => id of item )
+$item_per_page:      number of items displaying a page
+$submit_url URL to go when submit
+$maxpage
+$order_by_select
+$page
+$page_no_label
+$search_var[]:   array of parameter names that send in submit.
+$selected
+$search_tabs tabname of [item] [metadata] and [file] array('label'=>tab label,'count'=>nuber of result in the tab)
+$search_tab 
+$url_for_get:    url for displaying this page directly
+$export_enabled: when items in this page can export, this parameter is defined.
+*}>
+
+<script type="text/javascript" src="js/prototype.js">
+</script>
+
+<h3><{$smarty.const._MD_XOONIPS_ITEM_LISTING_ITEM}></h3>
+
+<{if !empty($error_message) }>
+<span style='color:#ff0000;'><{$error_message}></span>
+<{else}>
+
+<form id="xoonips_itemselect" action="" method="post">
+<input type='hidden' name='op' value='<{$op}>' />
+<{include file="db:xoonips_item_list_header.html"
+ order_by=$item_list_header.order_by
+ order_dir=$item_list_header.order_dir
+ item_per_page=$item_list_header.item_per_page form_id="xoonips_itemselect"}>
+<{include file="db:xoonips_pagenavi.html" maxpage=$maxpage page=$page pages=$pages form_id="xoonips_itemselect"}>
+<{include file="db:xoonips_extra_param.html" extra_param=$extra_param}>
+
+<input type='hidden' id='xoonips_page' name='page' value='<{$page}>' />
+
+<input class="formButton" type="submit"
+ value="<{$smarty.const._MD_XOONIPS_ITEM_SELECT_BUTTON_LABEL}>"
+ onclick="action='<{$submit_url}>'; op.value='add_selected_item'" />
+
+<table width="100%" border="0" cellspacing="5">
+<{* item / file List *}>
+<{foreach item=i from=$item_htmls}>
+  <tr style="vertical-align: top;">
+    <td class="<{cycle values="odd,even" name="cycle1"}>" style="text-align: center;">
+     <{if $i.selected==1}>
+     <input type='checkbox' name='selected[]' value='<{$i.item_id}>' checked="checked" />
+     <input type='hidden' name='selected_old[]' value='<{$i.item_id}>' />
+     <{else}>
+     <input type='checkbox' name='selected[]' value='<{$i.item_id}>' />
+     <{/if}>
+    </td>
+    <td class="<{cycle values="odd,even" name="cycle2"}>">
+     <{$i.html}>
+    </td>
+  </tr>
+<{/foreach}>
+</table>
+
+<{foreach key=k item=v from=$http_vars}>
+<input type="hidden" name="<{$k}>" value="<{$v}>" />
+<{/foreach}>
+<{foreach item=id from=$selected}>
+<input type="hidden" name="selected[]" value="<{$id}>" />
+<{/foreach}>
+<{foreach item=id from=$initially_selected}>
+<input type="hidden" name="initially_selected[]" value="<{$id}>" />
+<{/foreach}>
+<{foreach item=i from=$query_var_name}>
+<input type="hidden" name="query_var_name[]" value="<{$i}>" />
+<{/foreach}>
+<{foreach item=i from=$search_var}>
+<input type="hidden" name="search_var[]" value="<{$i}>" />
+<{/foreach}>
+
+<input type="hidden" name="add_to_index_id" value="<{$add_to_index_id}>" />
+<input type="hidden" name="search_itemtype" value="<{$search_itemtype}>" />
+<input type="hidden" name="search_cache_id" value="<{$search_cache_id}>" />
+
+<input class="formButton" type="submit"
+ value="<{$smarty.const._MD_XOONIPS_ITEM_SELECT_BUTTON_LABEL}>"
+ onclick="action='<{$submit_url}>'; op.value='add_selected_item'" />
+
+<{include file="db:xoonips_pagenavi.html" maxpage=$maxpage page=$page form_id="xoonips_itemselect"}>
+<{include file="db:xoonips_extra_param.html" extra_param=$extra_param}>
+</form>
+
+<{/if}>
+
+<!-- end module search results loop -->

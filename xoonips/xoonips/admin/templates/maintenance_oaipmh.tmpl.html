@@ -1,0 +1,45 @@
+<patTemplate:tmpl name="main">
+<patTemplate:tmpl name="header_include" src="adminheader.tmpl.html" parse="on"/>
+<h4 style="margin-top: 20px; margin-bottom: 10px;">&raquo;&nbsp;{CONFIGURE_TITLE}</h4>
+<div style="margin-left: 10px; margin-bottom: 5px;">
+ <a href="system.php?page=oaipmh">{CONFIGURE_DESC}</a>
+</div>
+<h4 style="margin-top: 20px; margin-bottom: 10px;">&raquo;&nbsp;{RESULTS_TITLE}</h4>
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th style="width: 10%; text-align: left;">{DATE}</th>
+    <th style="width: 40%; text-align: left;">{URL}</th>
+    <th style="width: 50%; text-align: left;">{RESULT}</th>
+  </tr>
+  <patTemplate:tmpl name="results">
+  <tr>
+    <td class="{EVENODD}" style="width: 10%; vertical-align: top; text-align: left;">
+      {LAST_ACCESS_DATE}
+    <td class="{EVENODD}" style="width: 40%; vertical-align: top; text-align: left;">
+      {URL}
+    </td>
+    <td class="{EVENODD}" style="width: 50%; vertical-align: top; text-align: left;">
+      {LAST_ACCESS_RESULT}
+    </td>
+  </tr>
+  </patTemplate:tmpl>
+  <patTemplate:tmpl name="empty_results" visibility="hidden">
+  <tr>
+    <td colspan="3" class="odd" style="text-align: center;">
+      <span style="font-weight: bold; color: red;">{EMPTY_RESULTS}</span>
+    </td>
+  </tr>
+  </patTemplate:tmpl>
+  </tbody>
+</table>
+<h4 style="margin-top: 20px; margin-bottom: 10px;">&raquo;&nbsp;{HARVEST_TITLE}</h4>
+<form name="xoonips_admin_maintenance_oaipmh" action="../harvest.php" method="post">
+<div style="margin-left: 10px; margin-bottom: 5px;">
+{HARVEST_DESC}
+&nbsp;&nbsp;&nbsp;
+<input name="harvest_submit" value="{HARVEST}" type="submit"/>
+</div>
+</form>
+<patTemplate:tmpl name="footer_include" src="adminfooter.tmpl.html" parse="on"/>
+</patTemplate:tmpl>

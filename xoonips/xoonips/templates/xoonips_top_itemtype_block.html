@@ -1,0 +1,24 @@
+<{* xoonips module top page itemtype block *}>
+<{* $Revision: 1.4 $ *}>
+
+<table style="width: auto">
+ <tr>
+  <td>
+   <img src="<{$icon}>" alt="<{$displayName}>" />
+  </td>
+  <td style="vertical-align: middle; font-size: large; ">
+   <a href="<{$xoops_url}>/modules/xoonips/itemselect.php?op=itemtypesearch&amp;search_itemtype=<{$moduleName}>"><{$displayName}></a>
+  </td>
+ </tr>
+</table>
+
+<hr />
+<{$explanation}><br />
+
+<{if !empty($searchURLs) }>
+  <{foreach from=$searchURLs item=searchURL name=searchURLs}>
+   <{if !$smarty.foreach.searchURLs.first }> / <{/if}>
+   <a href="<{$xoops_url}>/modules/xoonips/itemselect.php?op=itemsubtypesearch&amp;<{$moduleName}>=on&amp;<{$subtypeVarName}>=<{$searchURL.subtypeName}>&amp;search_var%5B%5D=<{$moduleName}>&amp;search_var%5B%5D=<{$subtypeVarName}>">
+   <{$searchURL.subtypeDisplayName}></a>
+  <{/foreach}>
+<{/if}>

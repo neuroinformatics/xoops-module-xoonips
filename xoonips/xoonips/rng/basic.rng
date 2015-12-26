@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <define name="basic">
+
+    <element name="basic">
+
+      <attribute name="id">
+
+        <data type="integer"/>
+
+      </attribute>
+
+      <interleave>
+
+        <element name="itemtype">
+
+          <data type="string"/>
+
+        </element>
+
+        <element name="contributor">
+
+          <data type="string"/>
+
+        </element>
+
+        <element name="title" >
+
+          <data type="string"/>
+
+        </element>
+
+        <element name="keywords">
+
+          <zeroOrMore>
+
+            <element name="keyword">
+
+              <data type="string"/>
+
+            </element>
+
+          </zeroOrMore>
+
+        </element>
+
+        <element name="description">
+
+          <data type="string"/>
+
+        </element>
+
+        <element name="doi">
+
+          <data type="string"/>
+
+        </element>
+
+        <optional>
+
+          <element name="last_update_date">
+
+            <data type="dateTime"/>
+
+          </element>
+
+        </optional>
+
+        <optional>
+
+          <element name="creation_date">
+
+            <data type="dateTime"/>
+
+          </element>
+
+        </optional>
+
+        <element name="publication_year">
+
+          <data type="integer"/>
+
+        </element>
+
+        <element name="publication_month">
+
+          <data type="integer"/>
+
+        </element>
+
+        <element name="publication_mday">
+
+          <data type="integer"/>
+
+        </element>
+
+        <element name="url">
+
+          <data type="string"/>
+
+        </element>
+
+        <zeroOrMore>
+
+          <ref name="changelogs"/>
+        
+        </zeroOrMore>
+        
+      </interleave>
+
+    </element>
+
+  </define>
+
+
+  <define name="changelogs">
+
+    <element name="changelogs">
+
+      <zeroOrMore>
+
+        <element name="changelog">
+
+          <attribute name="date">
+
+            <data type="dateTime"/>
+
+          </attribute>
+
+          <data type="string"/>
+
+        </element>
+
+      </zeroOrMore>
+
+    </element>
+
+  </define>
+
+</grammar>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <define name="link">
+
+        <zeroOrMore>
+
+    <element name="link">
+
+      <interleave>
+
+        <attribute name="index_id">
+
+          <data type="integer"/>
+
+        </attribute>
+
+        <attribute name="item_id">
+
+          <data type="integer"/>
+
+        </attribute>
+
+      </interleave>
+
+    </element>
+
+        </zeroOrMore>
+
+  </define>
+
+</grammar>

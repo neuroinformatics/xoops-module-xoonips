@@ -1,0 +1,79 @@
+<script type="text/javascript" src="js/prototype.js">
+</script>
+
+<div class="xoonips_page_title">
+<{$smarty.const._MD_XOONIPS_TRANSFER_USER_REQUESTED_ITEM_CONFIRM_PAGE_TITLE}>
+</div>
+
+<form id="xoonips_form_transfer_requested_item_confirm" action="transfer_item.php?action=request" method="post">
+
+<{if $limit_check_result}>
+<{$smarty.const._MD_XOONIPS_TRANSFER_USER_REQUESTED_ITEM_CONFIRM_LIMIT_CHECK_OUT_OF_BOUNDS}><br />
+<{/if}>
+
+<input id="xoonips_hidden_item_id" type="hidden" name="item_id" value=""/>
+
+<br />
+
+<table class="outer">
+ <thead>
+  <tr>
+   <th><{$smarty.const._MD_XOONIPS_TRANSFER_USER_REQUESTED_ITEM_CONFIRM_ITEM_ID}></th>
+   <th><{$smarty.const._MD_XOONIPS_TRANSFER_USER_REQUESTED_ITEM_CONFIRM_ITEM_TYPE}></th>
+   <th><{$smarty.const._MD_XOONIPS_TRANSFER_USER_REQUESTED_ITEM_CONFIRM_OWNER}></th>
+   <th><{$smarty.const._MD_XOONIPS_TRANSFER_USER_REQUESTED_ITEM_CONFIRM_TITLE}></th>
+  </tr>
+ </thead>
+ <tbody>
+<{if !empty( $transfer_items ) }>
+<{foreach item=item from=$transfer_items}>
+  <tr class="<{cycle values="odd,even"}>">
+   <td><{$item.item_id}></td>
+   <td><{$item.item_type_name}></td>
+   <td><{$item.owner_uname}></td>
+   <td>
+    <a href="transfer_item.php?action=detail_item&amp;item_id=<{$item.item_id}>"
+       target="xoonips_windows_transfer_user_item_detail">
+     <{$item.title}>
+    </a>
+   </td>
+  </tr>
+<{/foreach}>
+<{else}>
+ <tr>
+  <td class="even" style="text-align: center;" colspan="4"><span style="font-weight: bold; color: red;"><{$smarty.const._MD_XOONIPS_TRANSFER_USER_REQUESTED_ITEM_CONFIRM_NO_TRANSFER_ITEMS}></span></td>
+ </tr>
+<{/if}>
+ </tbody>
+</table>
+
+<br />
+
+<{$smarty.const._MD_XOONIPS_TRANSFER_USER_REQUESTED_ITEM_CONFIRM_TO_INDEX}>
+<select id="xoonips_select_index" name="index_id">
+<{foreach item=i from=$index_options}>
+ <option id="xoonips_select_index_id_<{$i.index_id}>" value="<{$i.index_id}>"><{$i.title|indent:$i.depth:"&nbsp;&nbsp;"}>(<{$i.number_of_indexes}>)</option>
+<{/foreach}>
+</select>
+
+<br />
+<br />
+
+<input id="xoonips_button_accept" type="submit"
+       onclick="$('xoonips_form_transfer_requested_item_confirm').action='transfer_item.php?action=accept';"
+       value="<{$smarty.const._MD_XOONIPS_TRANSFER_USER_REQUESTED_ITEM_CONFIRM_ACCEPT}>"
+       <{if $limit_check_result || empty( $transfer_items )}>disabled="disabled"<{/if}>/>
+<input id="xoonips_button_reject" type="submit"
+       onclick="$('xoonips_form_transfer_requested_item_confirm').action='transfer_item.php?action=reject';"
+       value="<{$smarty.const._MD_XOONIPS_TRANSFER_USER_REQUESTED_ITEM_CONFIRM_REJECT}>"
+       <{if empty( $transfer_items )}>disabled="disabled"<{/if}>/>
+<input id="xoonips_button_back_to_top" type="submit"
+       onclick="$('xoonips_form_transfer_requested_item_confirm').action='<{$smarty.const.XOOPS_URL}>/';"
+       value="<{$smarty.const._MD_XOONIPS_TRANSFER_USER_REQUESTED_ITEM_CONFIRM_BACK_TO_TOP}>" />
+
+<{foreach item=item_id from=$item_ids_to_transfer}>
+<input type="hidden" name="item_ids_to_transfer[]" value="<{$item_id}>"/>
+<{/foreach}>
+
+<{$token_hidden}>
+</form>

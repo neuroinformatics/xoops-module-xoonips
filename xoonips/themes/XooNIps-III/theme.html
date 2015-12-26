@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<{$xoops_langcode}>" lang="<{$xoops_langcode}>">
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=<{$xoops_charset}>" />
+<meta http-equiv="content-language" content="<{$xoops_langcode}>" />
+<meta name="robots" content="<{$xoops_meta_robots}>" />
+<meta name="keywords" content="<{$xoops_meta_keywords}>" />
+<meta name="description" content="<{$xoops_meta_description}>" />
+<meta name="rating" content="<{$xoops_meta_rating}>" />
+<meta name="author" content="<{$xoops_meta_author}>" />
+<meta name="copyright" content="<{$xoops_meta_copyright}>" />
+<title><{$xoops_pagetitle}> - <{$xoops_sitename}></title>
+<link href="<{$xoops_url}>/favicon.ico" rel="SHORTCUT ICON" />
+<link rel="stylesheet" type="text/css" media="all" href="<{$xoops_url}>/xoops.css" />
+<link rel="stylesheet" type="text/css" media="all" href="<{$xoops_themecss}>" />
+<script type="text/javascript" src="<{$xoops_imageurl}>extra.js"></script>
+<!--[if lt IE 7]> 
+<script type="text/javascript" src="<{$xoops_imageurl}>minmax.js"></script>
+<![endif]-->  
+<script type="text/javascript" src="<{$xoops_imageurl}>xoonips_theme.js"></script>
+<!-- RMV: added module header -->
+
+<{$xoops_module_header}>
+<script type="text/javascript">
+<!--
+<{$xoops_js}>
+xoonips_cookie = new XooNIpsThemeJS.Cookie( false, false, 0, false );
+xoonips_leftcolumn = new XooNIpsThemeJS.ResizableColumn( 'left', 'leftcolumn', 'leftResizeBar', xoonips_cookie, 'left' );
+xoonips_rightcolumn = new XooNIpsThemeJS.ResizableColumn( 'right', 'rightcolumn', 'rightResizeBar', xoonips_cookie, 'right' );
+//-->
+</script>
+</head>
+<body>
+<{include_php file="$xoops_rootpath/themes/XooNIps-III/ex_assign.php"}>
+<div id="page">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td id="header_l"><img src="<{$xoops_imageurl}>images/logo.gif" alt="<{$xoops_sitename}>" width="254" height="55" /></td>
+    <td id="header_r"><a href="http://www.brain.riken.jp"><img
+	 src="<{$xoops_imageurl}>images/BSI.gif"
+	 alt="RIKEN Brain Science Institute" width="253" height="29" vspace="15" /></a><br />
+      <{if !$xoops_isuser}>
+	  <!-- Commented out for a while in order to promote the login block use.
+	  <form style="margin:0px;" action="<{$xoops_url}>/modules/xoonips/user.php" method="post">
+        ID:
+	  	<input type="text" name="uname" value="<{$block.unamevalue}>" maxlength="25" style="width:60px; height:12px;" />
+		Pass:
+		<input type="password" name="pass" maxlength="32" style="width:60px; height:12px;" />
+          <input type="hidden" name="xoops_redirect" value="<{$xoops_requesturi}>" />
+          <input type="hidden" name="op" value="login" />
+          <input type="submit" value="Login" style=" font-size:12px;" />
+          <a href="<{$xoops_url}>/modules/xoonips/user.php#lost">Lost Password?</a> / <a href="<{$xoops_url}>/modules/xoonips/registeruser.php">Register Now!</a>
+      </form>
+	  -->
+		  <a href="<{$xoops_url}>/" onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_01','','<{$xoops_imageurl}>images/icon_home_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_home.gif" title="HOME" alt="HOME"
+	 name="icon_01" vspace="3" border="0" align="middle" id="icon_01" /></a>
+          <a href="<{$xoops_url}>/modules/contact/"
+	 onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_02','','<{$xoops_imageurl}>images/icon_inquiry_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_inquiry.gif" alt="Contact Us"
+	 name="icon_02" vspace="3" border="0" align="middle" id="icon_02" /></a>
+          <!--<a href="<{$xoops_url}>/modules/xoonips/advanced_search.php"
+	 onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_03','','<{$xoops_imageurl}>images/icon_search_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_search.gif" title="Advanced Search"
+	 alt="Advanced Search" name="icon_03" vspace="3" border="0" align="middle"
+	 id="icon_03" /></a>-->
+	  <{else}>
+		<a href="<{$xoops_url}>" onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_01','','<{$xoops_imageurl}>images/icon_home_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_home.gif" title="HOME" alt="HOME"
+	 name="icon_01" vspace="3" border="0" align="middle" id="icon_01" /></a>
+        <!--<a href="<{$xoops_url}>/modules/contact/"
+	 onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_02','','<{$xoops_imageurl}>images/icon_inquiry_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_inquiry.gif" alt="Contact Us"
+	 name="icon_02" vspace="3" border="0" align="middle" id="icon_02"
+	 /></a>-->
+		<a href="<{$xoops_url}>/modules/xoonips/userlist.php"
+	 onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_04','','<{$xoops_imageurl}>images/icon_userinfo_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_userinfo.gif" title="User List"
+	 alt="User List" name="icon_04" vspace="3" border="0" align="middle"
+	 id="icon_04" /></a>
+		<a href="<{$xoops_url}>/notifications.php"
+	 onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_05','','<{$xoops_imageurl}>images/icon_notification_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_notification.gif"
+	 title="Notifications" alt="Notifications" name="icon_05" vspace="3"
+	 border="0" align="middle" id="icon_05" /></a>
+		<{if $ex_new_messages > 0}><a class="highlight"
+	 style="text-decoration:none;" href="<{$xoops_url}>/viewpmsg.php"
+	 onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_06','','<{$xoops_imageurl}>images/icon_inbox_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_inbox.gif" title="Inbox" alt="Inbox"
+	 name="icon_06" vspace="3" border="0" align="middle" id="icon_06" />[<span
+	 style="color:#ff0000;"><{$ex_new_messages}></span>]</a><{else}><a
+	 href="<{$xoops_url}>/viewpmsg.php" onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_06','','<{$xoops_imageurl}>images/icon_inbox_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_inbox.gif" title="Inbox" alt="Inbox"
+	 name="icon_06" vspace="3" border="0" align="middle" id="icon_06"
+	 /></a><{/if}>
+		<{if $xoops_isadmin}><a href="<{$xoops_url}>/admin.php"
+	 onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_07','','<{$xoops_imageurl}>images/icon_admin_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_admin.gif" title="Admin" alt="Admin"
+	 name="icon_07" vspace="3" border="0" align="middle" id="icon_07"
+	 /></a><{/if}>
+		<a href="<{$xoops_url}>/modules/xoonips/listitem.php"
+	 onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_08','','<{$xoops_imageurl}>images/icon_listing_item_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_listing_item.gif" title="Listing Item" 
+	 alt="Listing Item" name="icon_08" vspace="3" border="0"
+	 align="middle" id="icon_08" /></a> 
+		<a href="<{$xoops_url}>/modules/xoonips/editindex.php?op=open"
+	 onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_09','','<{$xoops_imageurl}>images/icon_edit_keyword_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_edit_keyword.gif" title="Edit Private Tree" 
+	 alt="Edit Private Tree" name="icon_09" vspace="3"
+	 border="0" align="middle" id="icon_09" /></a>
+		<a href="<{$xoops_url}>/modules/xoonips/register.php"
+	 onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_10','','<{$xoops_imageurl}>images/icon_new_item_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_new_item.gif" title="Add New Item"
+	 alt="Add New Item" name="icon_10" vspace="3" border="0" align="middle"
+	 id="icon_10" /></a>
+<!--		<a href="<{$xoops_url}>/modules/xoonips/advanced_search.php"
+	 onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_03','','<{$xoops_imageurl}>images/icon_search_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_search.gif" title="Advanced Search"
+	 alt="Advanced Search" name="icon_03" vspace="3" border="0" align="middle"
+	 id="icon_03" /></a>-->
+		<a href="<{$xoops_url}>/modules/xoonips/user.php?op=logout"
+	 onmouseout="MM_swapImgRestore()"
+	 onmouseover="MM_swapImage('icon_11','','<{$xoops_imageurl}>images/icon_logoff_h.gif',1)"><img
+	 src="<{$xoops_imageurl}>images/icon_logoff.gif" title="Logout"
+	 alt="Logout" name="icon_11" vspace="3" border="0" align="middle"
+	 id="icon_11" /></a>
+		<{/if}>
+	  </td>
+  </tr>
+</table>
+<{*<{if $ex_moduledir }><br />*}>
+<{if !$xoops_isuser }>
+<div id="header_top_l">
+  <div id="header_top_r">
+	<table border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+		<td style="width:10px;"><img src="<{$xoops_imageurl}>images/header_top_left.gif" alt="|" width="10" height="152" align="left" /></td>
+		<td style="vertical-align:middle; "><p id="discription">The NI technologies for the collection and sharing of Neuro-related data are important for the brain understanding.
+	These information include electrical resources, papers, experimental data, mathematical models, simulations, 
+	URLs, etc. Hence, it is necessary to develop a database system to integrate these disparate resources into a single base named XooNIps, 
+	which serves as the Base Platform for each research fields.</p></td>
+	  </tr>
+	</table>
+  </div>
+</div>
+<br />
+<{else}><br />
+<{/if}>
+<table border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td style="width:10px;">
+		<img src="<{$xoops_imageurl}>images/vertical_menu_left.gif" alt="|" height="32" width="10" class="vml" />
+	</td>
+    <td id="vertical_menu"><span class="menu_link">
+	 <{if !$xoops_isuser}> <a href="<{$xoops_url}>/"> Home</a> 
+	 <a href="<{$xoops_url}>/modules/news/"> News</a>
+	 <a href="<{$xoops_url}>/modules/newbb/"> Forum</a> 
+	 <!--<a href="<{$xoops_url}>/modules/xoonips/advanced_search.php">
+	 Advanced Search</a>--> 
+	 <a href="<{$xoops_url}>/modules/xoonips/user.php"> Login</a> 
+	 <{else}> 
+	 <a href="<{$xoops_url}>/">Home</a> 
+	 <a href="<{$xoops_url}>/modules/news/"> News</a>
+	 <a href="<{$xoops_url}>/modules/newbb/"> Forum</a> 
+	 <!--<a href="<{$xoops_url}>/modules/xoonips/advanced_search.php"> Advanced Search</a>--> 
+	 <a href="<{$xoops_url}>/modules/xoonips/listitem.php"> Listing Item</a> 
+	 <a href="<{$xoops_url}>/modules/xoonips/editindex.php?op=open"> Edit Private Tree</a>
+	 <a href="<{$xoops_url}>/modules/xoonips/register.php"> Add New Item</a> <{/if}></span></td>
+    <td style="width:10px;"><img src="<{$xoops_imageurl}>images/vertical_menu_right.gif" alt="|" width="10" height="32" class="vmr" /></td>
+  </tr>
+</table>
+<br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <{if count($xoops_lblocks) > 0}>
+    <td id="left_side_navi" class="left_side_navi"><div id="leftcolumn" <{php}>
+  $resize_cookie = 'XooNIpsThemeJS_ResizableColumn_left';
+  if ( isset( $_COOKIE[$resize_cookie] ) )
+    echo 'style="width:'.$_COOKIE[$resize_cookie].'px;"';
+<{/php}>>
+<{foreach item=block from=$xoops_lblocks}>
+	<{if $block.title|regex_replace:"/.*none/":"none" ne "none"}>
+          <div class="blockTitle"><{$block.title}></div><{/if}>
+          <div class="blockContent"><{$block.content}></div>
+          <br />
+		<{/foreach}> </div>
+    </td><td id="leftResizeBar" style="width: 1px;"></td><{/if}>
+    <td id="centercolumn">
+	<!--main contents-->
+	  <!-- Commented out for a while in order to promote the login block use.
+	  <{if isset($search_block) }>
+	    <{if !empty($search_block.url)}>
+	      <form style="margin-top: 0px;" action="<{$search_block.url}>" method="post">
+	    <{else}>
+	      <form style="margin-top: 0px;" action="<{$xoops_url}>/modules/xoonips/itemselect.php" method="post"<{$search_block.accept_charset}>>
+	    <{/if}>
+	    <img src="<{$xoops_imageurl}>images/icon_search.gif" alt="search" hspace="5" align="left" />
+	    <input type="hidden" name="op" value="quicksearch" />
+	    <input type="text" name="keyword" size="16" value="<{$search_block.keyword}>" />
+	    <select name="search_itemtype">
+		  <{html_options options=$search_block.search_itemtypes selected=$search_block.search_itemtypes_selected}>
+	    </select>
+	    <input type="submit" value="<{$search_block.lang_search}>" />
+	    </form>
+	  <{/if}>
+      -->
+	 <div id="content"><{$xoops_contents}></div>
+      <{if $xoops_showcblock == 1}>
+      <!--center center for 2 start-->
+      <div class="centerCcolumn"><{foreach key=key item=block from=$xoops_ccblocks}> <{if $key < 2 }> <{if $block.title|regex_replace:"/.*none/":"none" ne "none"}>
+          <div class="blockTitleBack"><img src="<{$xoops_imageurl}>images/vertical_menu_left.gif" alt="|" height="32" width="10" class="vml" />
+            <div class="blockTitle"><{$block.title}></div>
+            <img src="<{$xoops_imageurl}>images/vertical_menu_right.gif" alt="|" width="10" height="32" class="vmr" /></div>
+        <{/if}>
+          <div class="blockContent"><{$block.content}></div>
+        <{/if}> <{/foreach}> </div>
+      <!--center center for 2 end-->
+      <!--center Left colum start-->
+      <div class="centerLcolumn"> <{foreach item=block from=$xoops_clblocks}> <{if $block.title|regex_replace:"/.*none/":"none" ne "none"}>
+          <div class="blockTitle"><{$block.title}></div>
+        <{/if}>
+          <div class="blockContent"><{$block.content}></div>
+        <{/foreach}> </div>
+      <!--center Left colum end-->
+      <!--center Right colum start-->
+      <div class="centerRcolumn"> <{foreach item=block from=$xoops_crblocks}> <{if $block.title|regex_replace:"/.*none/":"none" ne "none"}>
+          <div class="blockTitle"><{$block.title}></div>
+        <{/if}>
+          <div class="blockContent"><{$block.content}></div>
+        <{/foreach}> </div>
+      <!--center Right colum end-->
+      <!--center center over 2 start-->
+      <div class="centerCcolumn" style="clear:both; "> <{foreach key=key item=block from=$xoops_ccblocks}> <{if $key >= 2 }> <{if $block.title|regex_replace:"/.*none/":"none" ne "none"}>
+          <div class="blockTitleBack"><img src="<{$xoops_imageurl}>images/vertical_menu_left.gif" alt="|" height="32" width="10" class="vml" />
+            <div class="blockTitle"><{$block.title}></div>
+            <img src="<{$xoops_imageurl}>images/vertical_menu_right.gif" alt="|" width="10" height="32" class="vmr" /></div>
+        <{/if}>
+          <div class="blockContent"><{$block.content}></div>
+        <{/if}> <{/foreach}> </div>
+      <!--center center over 2 end-->
+	<{/if}>
+	<!--main contents end-->
+	<{if count($xoops_rblocks) > 0}>
+    <td id="rightResizeBar" style="width:1px;"></td>
+    <td id="right_side_navi" class="right_side_navi"><div id="rightcolumn" <{php}>
+  $resize_cookie = 'XooNIpsThemeJS_ResizableColumn_right';
+  if ( isset( $_COOKIE[$resize_cookie] ) )
+    echo 'style="width:'.$_COOKIE[$resize_cookie].'px;"';
+<{/php}>>
+ <{foreach item=block from=$xoops_rblocks}>
+	  <{if $block.title|regex_replace:"/.*none/":"none" ne "none"}>
+          <div class="blockTitle"><{$block.title}></div><{/if}>
+          <div class="blockContent"><{$block.content}></div>
+        <{/foreach}></div>
+    </td>
+    <{/if}>
+  </tr>
+</table>
+
+<p align="right" id="footer">
+<a href="http://www.riken.jp/" target="_blank"><img
+src="<{$xoops_imageurl}>images/RIKEN.gif"
+title="RIKEN" alt="RIKEN"/></a>
+
+<a href="http://xoonips.sourceforge.jp/" target="_blank"><img
+src="<{$xoops_imageurl}>images/XooNIps.gif"
+title="The XooNIps Project" alt="The XooNIps Project"/></a>
+
+</p>
+
+</div>
+</body>
+</html>

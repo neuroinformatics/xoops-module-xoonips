@@ -1,0 +1,76 @@
+<patTemplate:tmpl name="main">
+<patTemplate:tmpl name="header_include" src="adminheader.tmpl.html" parse="on"/>
+<patTemplate:tmpl name="submit_javascript" whitespace="">
+<script type="text/javascript">
+<!--//
+function xoonips_admin_maintenance_ranking_submit( mode ) {
+  var prefix = 'xoonips_admin_maintenance_ranking';
+  var form = document.getElementById( prefix + '_form' );
+  var action = document.getElementById( prefix + '_action' );
+  if ( mode == 'download' ) {
+    action.value = 'download';
+  } else if ( mode == 'upload' ) {
+    action.value = 'upload';
+  } else if ( mode == 'clear' ) {
+    action.value = 'clear';
+  }
+  form.submit();
+  return false;
+}
+//--></script>
+</patTemplate:tmpl>
+<form id="xoonips_admin_maintenance_ranking_form" name="xoonips_admin_maintenance_ranking_form" action="maintenance.php?page=ranking" method="post" enctype="multipart/form-data">
+<input id="xoonips_admin_maintenance_ranking_action" name="action" value="default" type="hidden"/>
+<input type="hidden" name="MAX_FILE_SIZE" value="{MAX_FILE_SIZE}"/>
+{TOKEN_TICKET}
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th colspan="3">{FILE_TITLE}</th>
+  </tr>
+  <tr>
+    <td class="head" style="width: 35%; vertical-align: top;">
+      {DOWNLOAD_TITLE}
+      <br /><br />
+      <span style="font-weight: normal;">{DOWNLOAD_DESC}</span>
+    </td>
+    <td class="even" style="width: 50%; vertical-align: top;">
+      <input name="ranking_download_file" type="text" value="{DOWNLOAD_FNAME}" size="50" maxlength="255"/>
+    </td>
+    <td class="even" style="width: 15%; vertical-align: top;">
+      <input name="submit_download" type="button" value="{DOWNLOAD}" onclick="return xoonips_admin_maintenance_ranking_submit( 'download' );"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 35%; vertical-align: top;">
+      {UPLOAD_TITLE}
+      <br /><br />
+      <span style="font-weight: normal;">{UPLOAD_DESC}</span>
+    </td>
+    <td class="even" style="width: 50%; vertical-align: top;">
+      <input name="ranking_upload_file" type="file" size="50"/>
+    </td>
+    <td class="even" style="width: 15%; vertical-align: top;">
+      <input name="submit_upload" type="button" value="{UPLOAD}" onclick="return xoonips_admin_maintenance_ranking_submit( 'upload' );"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 35%; vertical-align: top;">
+      {CLEAR_TITLE}
+      <br /><br />
+      <span style="font-weight: normal;">{CLEAR_DESC}</span>
+    </td>
+    <td class="even" style="width: 50%; vertical-align: top;">
+      {CLEAR_MESSAGE}
+    </td>
+    <td class="even" style="width: 15%; vertical-align: top;">
+      <input name="submit_clear" type="button" value="{CLEAR}" onclick="return xoonips_admin_maintenance_ranking_submit( 'clear' );"/>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</form>
+<br />
+<div style="margin-left: 10px; margin-bottom: 5px;">{NOTE}</div>
+<patTemplate:tmpl name="footer_include" src="adminfooter.tmpl.html" parse="on"/>
+</patTemplate:tmpl>

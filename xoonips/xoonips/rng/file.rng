@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <define name="file">
+
+    <element name="file">
+    
+      <attribute name="item_id">
+
+        <data type="integer"/>
+
+      </attribute>
+
+      <attribute name="file_type_name">
+
+        <data type="string"/>
+
+      </attribute>
+
+      <attribute name="original_file_name">
+
+        <data type="string"/>
+
+      </attribute>
+
+      <optional>
+
+        <attribute name="file_name">
+
+          <data type="string"/>
+
+        </attribute>
+
+      </optional>
+
+      <attribute name="file_size">
+
+        <data type="integer"/>
+
+      </attribute>
+
+      <attribute name="mime_type">
+
+        <data type="string"/>
+
+      </attribute>
+
+      <interleave>
+
+        <optional>
+
+          <element name="thumbnail">
+
+            <data type="string"/>
+
+          </element>
+
+        </optional>
+
+        <optional>
+
+          <element name="caption">
+
+            <data type="string"/>
+
+          </element>
+
+        </optional>
+
+      </interleave>
+      
+    </element>
+
+  </define>
+
+</grammar>

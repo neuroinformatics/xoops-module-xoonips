@@ -1,0 +1,144 @@
+<patTemplate:tmpl name="main">
+<patTemplate:tmpl name="header_include" src="adminheader.tmpl.html" parse="on"/>
+<patTemplate:tmpl name="javascript" whitespace="">
+<script type="text/javascript" src="../js/prototype.js">
+</script>
+<script type="text/javascript">
+
+function do_file_rescan( mode, num ) {
+  var url = '{MYURL}';
+  var params = 'action=rescan' + '&' + 'mode=' + mode + '&' + 'num=' + num;
+  var myAjax = new Ajax.Request( url, {
+    method: 'post',
+    parameters: params,
+    asynchronous: false,
+    requestHeaders: ['Referer', '{MYURL}'],
+    onComplete: oncomplete_file
+  } );
+}
+
+function oncomplete_file( request ) {
+  if ( request.responseText.isJSON() ) {
+    var json = eval( '(' + request.responseText + ')' );
+    var mode = json.mode;
+    var num = json.num;
+    update_file_count( mode, num );
+  } else {
+    alert( 'unexpected error occured.' );
+  }
+}
+
+function start_file_rescan( mode ) {
+  var prefix = 'xoonips_admin_file_';
+  var postfix = '_rescan_';
+  var bt = $( prefix + mode + postfix + 'button' );
+  var work = $( prefix + mode + postfix + 'working' );
+  work.show();
+  bt.hide();
+  Element.update( prefix + mode + postfix + 'field', '' );
+}
+
+function stop_file_rescan( mode ) {
+  var prefix = 'xoonips_admin_file_';
+  var postfix = '_rescan_';
+  var bt = $( prefix + mode + postfix + 'button' );
+  var work = $( prefix + mode + postfix + 'working' );
+  work.hide();
+  bt.show();
+}
+
+function update_file_count( mode, num ) {
+  var prefix = 'xoonips_admin_file_';
+  var postfix = '_rescan_';
+  var field = $( prefix + mode + postfix + 'field' );
+  var mes = field.innerHTML;
+  if ( num == 1 ) {
+    mes += ' 1 ';
+  } else if ( num % 10 == 0 ) {
+    mes += ' ' + num + ' ';
+  } else {
+    mes += ' . ';
+  }
+  Element.update( prefix + mode + postfix + 'field', mes );
+}
+
+function onclick_file_rescan( mode ) {
+  if ( {FILE_COUNT} > 0 ) {
+    start_file_rescan( mode );
+    for ( var num = 1; num <= {FILE_COUNT}; num++ ) {
+      do_file_rescan( mode, num );
+    }
+    stop_file_rescan( mode );
+  }
+}
+
+</script>
+</patTemplate:tmpl>
+<h4 style="margin-top: 20px; margin-bottom: 10px;">&raquo;&nbsp;{PLUGINS_TITLE}</h4>
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th style="width: 20%; text-align: left;">{PLUGIN}</th>
+    <th style="width: 40%; text-align: left;">{MIMETYPE}</th>
+    <th style="width: 30%; text-align: left;">{SUFFIX}</th>
+    <th style="width: 10%; text-align: left;">{VERSION}</th>
+  </tr>
+  <patTemplate:tmpl name="plugins">
+  <tr>
+    <td class="{EVENODD}" style="width: 20%; vertical-align: top; text-align: left;">
+      {PLUGIN}
+    </td>
+    <td class="{EVENODD}" style="width: 40%; vertical-align: top; text-align: left;">
+      {MIMETYPE}
+    </td>
+    <td class="{EVENODD}" style="width: 30%; vertical-align: top; text-align: left;">
+      {SUFFIXES}
+    </td>
+    <td class="{EVENODD}" style="width: 10%; vertical-align: top; text-align: left;">
+      {VERSION}
+    </td>
+  </tr>
+  </patTemplate:tmpl>
+  <patTemplate:tmpl name="plugins_empty" visibility="hidden">
+  <tr>
+    <td class="odd" colspan="2" style="text-align: center;">
+      <span style="color: red; font-weight: bold;">{EMPTY}</span>
+    </td>
+  </tr>
+  </patTemplate:tmpl>
+  </tbody>
+</table>
+<h4 style="margin-top: 20px; margin-bottom: 10px;">&raquo;&nbsp;{RESCAN_TITLE}</h4>
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th colspan="2">{FILE_COUNT_LABEL} : {FILE_COUNT}</th>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%;">
+    <span style="font-weight: bold;">{RESCAN_INFO_TITLE}</span>
+    <br /><br />
+    {RESCAN_INFO_DESC}
+    </td>
+    <td style="width: 60%;">
+    <div id="xoonips_admin_file_info_rescan_field"></div>
+    <div id="xoonips_admin_file_info_rescan_working" style="font-weight: bold; color: red; text-decoration: blink; display: none;">{RESCANNING}</div>
+    <button id="xoonips_admin_file_info_rescan_button" onclick="return onclick_file_rescan( 'info' );">{RESCAN}</button>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%;">
+    <span style="font-weight: bold;">{RESCAN_INDEX_TITLE}</span>
+    <br /><br />
+    {RESCAN_INDEX_DESC}
+    </td>
+    <td style="width: 60%;">
+    <div id="xoonips_admin_file_index_rescan_field"></div>
+    <div id="xoonips_admin_file_index_rescan_working" style="font-weight: bold; color: red; text-decoration: blink; display: none;">{RESCANNING}</div>
+    <button id="xoonips_admin_file_index_rescan_button" onclick="return onclick_file_rescan( 'index' );">{RESCAN}</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<patTemplate:tmpl name="footer_include" src="adminfooter.tmpl.html" parse="on"/>
+</patTemplate:tmpl>

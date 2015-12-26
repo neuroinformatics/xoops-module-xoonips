@@ -1,0 +1,8 @@
+<tr>
+  <td class="head"><{$smarty.const._MD_XOONIPS_ITEM_CHANGELOGS_LABEL}></td>
+  <td class="<{cycle name="oddeven"}>">
+<{section name=i loop=$xoonips_item.changelogs}>
+    <{$xoonips_item.changelogs[i].log_date|date_format:"%b %e, %Y"}>&nbsp;&nbsp;<{$xoonips_item.changelogs[i].log}><br />
+<{/section}>
+  </td>
+</tr>

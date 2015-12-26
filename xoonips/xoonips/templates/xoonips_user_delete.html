@@ -1,0 +1,22 @@
+<{* xoonips_user_delete.html *}>
+<p>
+<{$smarty.const._MI_XOONIPS_ACCOUNT_PANKUZU_PLATFORM_USER}>
+<{$smarty.const._MI_XOONIPS_ACCOUNT_PANKUZU_SEPARATOR}>
+<{$smarty.const._MI_XOONIPS_ITEM_PANKUZU_VIEW_ACCOUNT}>
+<{$smarty.const._MI_XOONIPS_ACCOUNT_PANKUZU_SEPARATOR}>
+<{$smarty.const._MD_XOONIPS_ACCOUNT_DELETE_TITLE}>
+</p>
+
+<h3><{$smarty.const._MD_XOONIPS_ACCOUNT_DELETE_TITLE}></h3>
+
+<p>
+<{$smarty.const._MD_XOONIPS_ACCOUNT_DELETE_DESC}>
+</p>
+
+<form name="delete_confirm" action="user.php" method="post">
+  <{$token_ticket}>
+  <input type="hidden" name="op" value="delete" />
+  <input type="hidden" name="delete_uid" value="<{$delete_uid}>" />
+  <input type="submit" name='is_cancel' value="<{$smarty.const._MD_XOONIPS_ACCOUNT_DELETE_CANCEL_LABEL}>" />
+  <input type="submit" name='is_exec' value="<{$smarty.const._MD_XOONIPS_ACCOUNT_DELETE_EXECUTE_LABEL}>" />
+</form>
