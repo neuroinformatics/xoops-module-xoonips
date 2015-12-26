@@ -38,7 +38,7 @@ define('XOONIPS_METADATA_CATEGORY_CREATION_DATE', 'CREATION_DATE' );
 define('XOONIPS_METADATA_CATEGORY_DATE', 'DATE' );
 
 // class files
-$xoonips_class_path = dirname( __FILE__ );
+$xoonips_class_path = __DIR__;
 include_once $xoonips_class_path.'/oaipmh_base.class.php';
 include_once $xoonips_class_path.'/oaipmh_oaidc.class.php';
 include_once $xoonips_class_path.'/oaipmh_junii.class.php';

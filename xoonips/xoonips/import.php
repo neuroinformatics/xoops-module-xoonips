@@ -28,7 +28,7 @@
 include 'include/common.inc.php';
 include 'include/AL.php';
 
-include_once dirname( __FILE__ ) . '/class/base/actionfactory.class.php';
+include_once __DIR__ . '/class/base/actionfactory.class.php';
 
 $formdata =& xoonips_getutility( 'formdata' );
 $op = $formdata->getValue( 'get', 'action', 's', false );

@@ -710,7 +710,7 @@ function _xoonips_import_index( $parent_index_id, &$indexes, &$id_table ) {
       $id_table[$index['index_id']] = $index_id;
       
       // record event log
-      $mydirname = basename( dirname( dirname( __FILE__ ) ) );
+      $mydirname = basename( dirname( __DIR__ ) );
       $event_handler =& xoonips_getormhandler( 'xoonips', 'event_log' );
       $event_handler->recordInsertIndexEvent( $index_id );
     }

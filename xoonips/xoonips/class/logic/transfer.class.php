@@ -25,9 +25,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname( dirname( __FILE__ ) ) . '/base/logic.class.php';
-include_once dirname( dirname( __FILE__ ) ) . '/base/transaction.class.php';
-include_once dirname( dirname( __FILE__ ) ) . '/xoonipserror.class.php';
+include_once dirname( __DIR__ ) . '/base/logic.class.php';
+include_once dirname( __DIR__ ) . '/base/transaction.class.php';
+include_once dirname( __DIR__ ) . '/xoonipserror.class.php';
 
 /**
  * base class of XooNIpsLogicTransfer*

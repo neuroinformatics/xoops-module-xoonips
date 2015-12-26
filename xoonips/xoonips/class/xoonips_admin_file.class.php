@@ -28,7 +28,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
   exit();
 }
 
-require_once dirname( __FILE__ ).'/xoonips_file.class.php';
+require_once __DIR__.'/xoonips_file.class.php';
 
 /**
  * XooNIps File Admin Handler Class
@@ -255,8 +255,8 @@ class XooNIpsAdminFileHandler extends XooNIpsFileHandler {
    */
   function _load_file_search_plugins() {
     $this->fsearch_plugins = array();
-    require_once dirname( __FILE__ ).'/base/filesearchplugin.class.php';
-    $fs_path = dirname( dirname( __FILE__ ) ).'/filesearch';
+    require_once __DIR__.'/base/filesearchplugin.class.php';
+    $fs_path = dirname( __DIR__ ).'/filesearch';
     $plugins = array();
     if ( $dir = opendir( $fs_path ) ) {
       while ( $file = readdir( $dir ) ) {

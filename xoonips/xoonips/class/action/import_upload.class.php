@@ -25,9 +25,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname( dirname( __FILE__ ) ).'/base/action.class.php';
-include_once dirname( dirname( __FILE__ ) ).'/base/logicfactory.class.php';
-include_once dirname( dirname( __FILE__ ) ).'/base/gtickets.php';
+include_once dirname( __DIR__ ).'/base/action.class.php';
+include_once dirname( __DIR__ ).'/base/logicfactory.class.php';
+include_once dirname( __DIR__ ).'/base/gtickets.php';
 
 
 class XooNIpsActionImportUpload extends XooNIpsAction{
@@ -66,7 +66,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction{
     function doAction(){
         global $xoopsUser;
         
-        include_once dirname( dirname( dirname( __FILE__ ) ) ) 
+        include_once dirname( dirname( __DIR__ ) )
             . '/include/imexport.php';
         
         $filetype = $this->_formdata->getValue( 'post', 'filetype', 's', false );

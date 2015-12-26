@@ -43,8 +43,8 @@ xoonips_deny_guest_access();
 xnpEncodeMacSafariPost();
 xnpEncodeMacSafariGet();
 
-include_once dirname( __FILE__ ) . '/include/extra_param.inc.php';
-include_once dirname( __FILE__ ) . '/include/item_list_header.inc.php';
+include_once __DIR__ . '/include/extra_param.inc.php';
+include_once __DIR__ . '/include/item_list_header.inc.php';
 
 $itemselect_private_only = true;
 $xoonipsTree['private_only'] = true;

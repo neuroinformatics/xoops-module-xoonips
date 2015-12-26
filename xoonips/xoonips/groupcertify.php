@@ -119,7 +119,7 @@ include XOOPS_ROOT_PATH.'/footer.php';
 
 function certify( $to_index_ids, $group_index_id ) {
   // transaction
-  require_once dirname( __FILE__ ).'/class/base/transaction.class.php';
+  require_once __DIR__.'/class/base/transaction.class.php';
   $transaction =& XooNIpsTransaction::getInstance();
   $transaction->start();
 
@@ -141,7 +141,7 @@ function certify( $to_index_ids, $group_index_id ) {
 
 function uncertify( $to_index_ids, $group_index_id ) {
   // transaction
-  require_once dirname( __FILE__ ).'/class/base/transaction.class.php';
+  require_once __DIR__.'/class/base/transaction.class.php';
   $transaction =& XooNIpsTransaction::getInstance();
   $transaction->start();
 

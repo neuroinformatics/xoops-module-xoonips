@@ -25,9 +25,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname( dirname( __FILE__ ) ) . '/base/action.class.php';
-include_once dirname( dirname( __FILE__ ) ) . '/base/logicfactory.class.php';
-require_once dirname( dirname( __FILE__ ) ).'/base/gtickets.php';
+include_once dirname( __DIR__ ) . '/base/action.class.php';
+include_once dirname( __DIR__ ) . '/base/logicfactory.class.php';
+require_once dirname( __DIR__ ).'/base/gtickets.php';
 
 class XooNIpsActionImportResolveConflict extends XooNIpsAction{
     

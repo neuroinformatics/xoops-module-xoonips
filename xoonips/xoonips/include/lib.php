@@ -544,7 +544,7 @@ function xnpGetDownloadConfirmationBlock( $item_id, $download_file_id, $attachme
   if ( !$attachment_dl_notify && !$use_license && !$download_file_id )
     return "";
 
-  require_once dirname( dirname( __FILE__ ) ).'/class/base/gtickets.php';
+  require_once dirname( __DIR__ ).'/class/base/gtickets.php';
   $files = xnpGetFileInfo( "t_file.file_id, t_file.original_file_name, t_file.file_size, t_file.mime_type, unix_timestamp(t_file.timestamp) ",
     "sess_id is NULL and is_deleted=0", $item_id );
 
@@ -3923,7 +3923,7 @@ class XooNIpsItemLibraryObject {
    */
   function getItemDetailUrl() {
     $doi = $this->_item_basic_obj->get( 'doi' );
-    $mydirname = basename( dirname( dirname( __FILE__ ) ) );
+    $mydirname = basename( dirname( __DIR__ ) );
     if ( $doi != '' && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '' ) {
       $opt = XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode( $doi );
     } else {

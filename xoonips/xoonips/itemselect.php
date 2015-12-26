@@ -50,7 +50,7 @@ if( ! is_object( $xoopsUser ) ) {
 xnpEncodeMacSafariPost();
 xnpEncodeMacSafariGet();
 
-include_once dirname( __FILE__ ) . '/include/extra_param.inc.php';
+include_once __DIR__ . '/include/extra_param.inc.php';
 
 $requested_vars = array( 
   'op' => array( 's', '' ),

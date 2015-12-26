@@ -156,7 +156,7 @@ function xoonips_admin_system_check_xoonips( &$category ) {
       $ans['message'] = 'Invalid magic file path';
       $ans['error'] = _XASC_STATUS_FAIL;
     } else {
-      $val = @finfo_file( $finfo, dirname( __FILE__ ).'/index.html' );
+      $val = @finfo_file( $finfo, __DIR__.'/index.html' );
       $val = preg_replace( array( '/;.*$/', '/ +.*$/' ), array( '', '' ), $val );
       if ( ! in_array( $val, array( 'text/html', 'text/plain' ) ) ) {
         $ans['status'] = _XASC_STATUS_FAIL;

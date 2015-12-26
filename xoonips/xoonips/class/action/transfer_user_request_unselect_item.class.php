@@ -26,9 +26,9 @@
 // ------------------------------------------------------------------------- //
 
 include_once 'transfer.class.php';
-include_once dirname( dirname( dirname( __FILE__ ) ) )
+include_once dirname( dirname( __DIR__ ) )
     . '/include/transfer.inc.php';
-include_once dirname( dirname( dirname( __FILE__ ) ) )
+include_once dirname( dirname( __DIR__ ) )
     . '/include/extra_param.inc.php';
 
 class XooNIpsActionTransferUserRequestUnselectItem 

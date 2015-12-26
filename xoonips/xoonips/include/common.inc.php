@@ -24,10 +24,10 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-$mydirname = basename( dirname( dirname( __FILE__ ) ) );
+$mydirname = basename( dirname( __DIR__ ) );
 
 // load mainfile.php
-include dirname( dirname( dirname( dirname( __FILE__ ) ) ) ).'/mainfile.php';
+include dirname( dirname( dirname( __DIR__ ) ) ).'/mainfile.php';
 
 // set other D3 variables
 $mod_path = XOOPS_ROOT_PATH.'/modules/'.$mydirname;
