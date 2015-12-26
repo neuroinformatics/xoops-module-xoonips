@@ -1,0 +1,22 @@
+<{foreach item=ranking from=$block.rankings name=rankings}>
+  <{$ranking.title}><br />
+  <{if count($ranking.items) }>
+    <{foreach item=item from=$ranking.items name=rank}>
+      <{$item.rank_str}> 
+      <{if $item.url}>
+        <a href="<{$item.url}>"><{$item.title}></a> (<{$item.num}>)
+      <{else}>
+        <{$item.title}> <{$item.num}>
+      <{/if}>
+      <{if $smarty.foreach.rank.iteration == 1}>
+        <span style='background-image: url(<{$smarty.const.XOOPS_URL}>/uploads/rank3dbf8edf15093.gif); background-repeat: no-repeat; background-position: 0% 100%;'><img src='<{$smarty.const.XOOPS_URL}>/uploads/blank.gif' width='15' height='14' alt='1st' /></span>
+      <{/if}>
+      <br />
+    <{/foreach}>
+  <{else }>
+    <{$smarty.const._MB_XOONIPS_RANKING_EMPTY}>
+  <{/if}>
+  <{if !$smarty.foreach.rankings.last}>
+    <hr />
+  <{/if}>
+<{/foreach}>

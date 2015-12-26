@@ -1,0 +1,90 @@
+<{*
+
+$i: general
+$item_htmls: information of items (association array).
+    array( 'html' => (summary of item in HTML) )
+$order_by_select
+$page
+$pages
+$url_for_get: url for displaying this page directly
+*}>
+<div style='margin-left: 10%; margin-right: 10%;'>
+<br />
+<{$printer_friendly_header}>
+
+<h3><{$title}></h3>
+
+<table>
+ <tr>
+  <td><{$date}></td>
+<{if $page_no_label && $order_by_select[$order_by]}>
+  <td>( <{$page_no_label}>, ordered by <{ $order_by_select[$order_by] }> )</td>
+<{/if}>
+<{if $page and $maxpage}>
+  <td><{$page}> of <{$maxpage}> Pages</td>
+<{/if}>
+ </tr>
+</table>
+
+<{if isset( $quick_search_keyword ) }>
+<table>
+ <tr>
+  <td><{$smarty.const._MD_XOONIPS_ITEM_SEARCH_KEYWORD}> : <{$quick_search_keyword}></td>
+  <td><{$smarty.const._MD_XOONIPS_ITEM_SEARCH_ITEMTYPE}> : <{$quick_search_itemtype}></td>
+ </tr>
+</table>
+<{/if}>
+
+<{if isset( $index_path ) }>
+<table>
+ <tr>
+  <td>
+<{foreach item=index from=$index_path}>
+ / <{$index.html_title}>
+<{/foreach}>
+  </td>
+ </tr>
+</table>
+<{* index list *}>
+<{foreach item=idx from=$my_indexes name=my_idx}>
+<{if $smarty.foreach.my_idx.first}>
+<table width="100%" border="0" cellspacing="5">
+<{/if}>
+  <tr valign="top">
+    <td class="<{cycle values="odd,even"}>">
+     <{$idx}>
+    </td>
+  </tr>
+<{if $smarty.foreach.my_idx.last}>
+</table>
+<{/if}>
+<{/foreach}>
+<{/if}>
+
+<{if $item_htmls || $metadata }>
+<table width="100%" border="0" cellspacing="5">
+<{foreach item=i from=$item_htmls}>
+  <tr valign="top">
+    <td class="<{cycle values="odd,even"}>">
+     <{$i.html}>
+    </td>
+  </tr>
+<{/foreach}>
+<{* metadata List *}>
+<{foreach item=i from=$metadata}>
+  <tr style="vertical-align: top;">
+    <td class="<{cycle values="odd,even" name="cycle2"}>">
+     <{$i.title}>
+    </td>
+  </tr>
+<{/foreach}>
+</table>
+<{else}>
+<{$page_no_label}>
+<{/if}>
+
+<div style='text-align: center'>
+<{$meta_copyright}>, <{$sitename}>, <{$meta_author}>
+</div>
+</div>
+<!-- end module search results loop -->

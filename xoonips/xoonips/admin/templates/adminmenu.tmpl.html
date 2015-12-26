@@ -1,0 +1,13 @@
+<patTemplate:tmpl name="main">
+<patTemplate:tmpl name="header_include" src="adminheader.tmpl.html" parse="on"/>
+<table width="100%" border="0" cellspacing="1" class="outer">
+  <tr class="odd">
+    <td><ul style="margin: 5px;">
+      <patTemplate:tmpl name="menu">
+        <li style="padding: 5px;"><a href="{URL}">{LABEL}</a></li>
+      </patTemplate:tmpl>
+    </ul></td>
+  </tr>
+</table>
+<patTemplate:tmpl name="footer_include" src="adminfooter.tmpl.html" parse="on"/>
+</patTemplate:tmpl>

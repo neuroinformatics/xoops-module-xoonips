@@ -1,0 +1,136 @@
+The List of the third vendor provided modules and libraries.
+$Revision: 1.1.4.1.2.7 $
+
+  a) Product name / Version number
+  b) Copyright
+  c) Contact information
+  d) License
+  e) Site url
+  f) Original file name
+  g) File location in the XooNIps
+  h) Modification Logs
+
+
+1. Prototype JavaScript framework
+  a) Prototype JavaScript framework version 1.6.0.3
+  b) (c) 2005-2008 Sam Stephenson
+  c) sam AT conio.net
+  d) MIT-style License - prototype/LICENSE
+  e) http://www.prototypejs.org/
+  f) prototype-1.6.0.3.js
+  g) xoonips/js/prototype.js
+  h) --
+
+
+2. Service_JSON
+ a) Services_JSON - Converts to and from JSON format
+ b) 2005 Michal Migurski
+ c) http://pear.php.net/pepr/pepr-proposal-show.php?id=198
+ d) Revised BSD - JSON/LICENSE
+ e) http://pear.php.net/pepr/pepr-proposal-show.php?id=198
+ f) JSON.tar.gz - JSON.php
+ g) xoonips/class/base/JSON.php
+ h) --
+ 
+
+3. Graph Drawing Class 2
+ a) Graph Class 1.6.4 - PHP Class to draw line, point, bar, and area graphs,
+    including numeric x-axis and double y-axis.
+ b) Copyright (C) 2000  Herman Veluwenkamp
+ c) hveluwenkamp AT myrealbox.com
+ d) LGPL v2.1 - graph2/lesser.txt 
+ e) http://www.phpclasses.org/browse/package/176.html
+ f) graph2-2005-08-28.tar.gz - graph.php
+ g) xoonips/class/base/graphlib.class.php
+ h) - renamed class name from 'graph' to 'XooNIpsGraphLib'.
+    - hack to avoid division by zero in graph::init_data().
+    - hack for single data point in graph::init_x_ticks().
+    - hack to avoid some weird rounding errors in graph::find_range().
+
+
+4. Free UCS Outline Fonts
+  a) Free UCS Outline Fonts 20060126 - FreeMono, FreeSans, and FreeSerif
+  b) -- see freefont-ttf/README
+  c) http://savannah.nongnu.org/projects/freefont/
+  d) GPL v2 - freefont-ttf/COPYING
+  e) http://www.nongnu.org/freefont/
+  f) freefont-ttf-20060126.tar.gz - FreeSans.ttf
+  g) xoonips/language/english/default.ttf
+  h) --
+
+
+5. VL Gothic font family
+  a) VL Gothic font family 20070328
+  b) Copyright (c) 1990-2003 Wada Laboratory, the University of Tokyo.
+     Copyright (c) 2003-2004 Electronic Font Open Laboratory (/efont/).
+     Copyright (C) 2003-2007 M+ FONTS PROJECT
+     Copyright (C) 2006-2007 Daisuke SUZUKI .
+     Copyright (C) 2006-2007 Project Vine .
+  c) daisuke AT linux.or.jp
+  d) Revised BSD License - vlgothic/LICENSE.en
+  e) http://dicey.org/vlgothic/
+  f) VLGothic-20070328.tar.bz2 - VL-PGothic-Regular.ttf
+  g) xoonips/language/japanese/default.ttf
+  h) --
+
+
+6. patTemplate
+  a) patTemplate 2.4 - powerful template engine
+  b) Copyright (c) 2001 by Stephan Schmidt
+  c) schst AT php-tools.de
+  d) LGPL v2.1 - patTemplate/lgpl.txt
+  e) http://www.php-tools.de/
+  f) patTemplate-2.4.zip - patTemplate.php
+  g) xoonips/class/base/pattemplate.class.php
+  h) fixed many Notice warnings for the recent PHP versions.
+
+
+7. Snoopy
+  a) Snoopy 1.2.4 - the web client class for PHP
+  b) Copyright(c) 1999-2008 New Digital Group, all rights reserved
+  c) http://sourceforge.net/projects/snoopy/
+  d) LGPL v2.1 - Snoopy/COPYING.lib
+  e) http://sourceforge.net/projects/snoopy/
+  f) Snoopy-1.2.4.tar.gz - Snoopy.class.php
+  g) xoonips/class/utility/snoopy.class.php
+  h) - renamed class name from 'Snoopy' to 'XooNIpsSnoopy'.
+     - supported the submission content type text/xml.
+     - added automatically proxy configuration.
+
+
+8. GIJOE's Ticket Class
+  a) GIJOE's Ticket Class 2
+  b) GIJ=CHECKMATE PEAK Corp. http://www.peak.ne.jp/
+  c) gij AT peak.ne.jp
+  d) GPL v2 - gticket/COPYING
+  e) http://xoops.peak.ne.jp/
+  f) pico-1.3.tar.gz - gticket.php
+  g) xoonips/class/base/gticket.php
+  h) --
+
+
+9. Zip file creation class
+  a) phpMyAdmin 2.11.6 (zip.lib.php)
+  b) Copyright (C) 1998-2000 Tobias Ratschiller
+     Copyright (C) 2001-2008 Marc Delisle, Olivier Muller, Robin Johnson,
+         Alexander M. Turek, Michal Cihar, Garvin Hicking, Michael Keck,
+         Sebastian Mendel. (see phpMyAdmin/Documentation.txt)
+  c) http://www.phpmyadmin.net/
+  d) GPL v2 - phpMyAdmin/LICENSE
+  e) http://www.phpmyadmin.net/
+  f) phpMyAdmin-2.11.6-all-languages.tar.bz2 - zip.lib.php
+  g) xoonips/class/utility/zip.class.php
+  h) - renamed class name from 'zipfile' to 'XooNIpsZip'.
+     - modified for runtime memory saving.
+
+10. PHP backward compatibility functions for hash_hmac().
+  a) PHP Compat Hash (2009/8/13)
+  b) 2004-2007 Aidan Lister, Arpad Ray
+  c) http://www.revulo.com/blog/20090811.html#p01
+     http://pear.php.net/package/PHP_Compat
+  d) PHP License - PHP_Compat/LICENSE
+  e) http://www.revulo.com/blog/20090811.html#p01
+     http://pear.php.net/package/PHP_Compat
+  f) PHP_Compat_Hash.tgz
+  g) xnpbook/include/compat/*.php
+  h) --

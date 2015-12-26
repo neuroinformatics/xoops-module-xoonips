@@ -1,0 +1,134 @@
+<{* tree-block *}>
+<{* input: block.indexes, block.mode *}>
+<{* $Revision: 1.21.2.1 $ *}>
+<script type="text/javascript">
+<!--
+
+var  xoonipsDocTreeView = 0;
+
+function xoonipsGetDocTreeView(){
+	var treeFrames = window.document.getElementsByName( 'treeFrame' );
+	if ( treeFrames.length == 1 ){
+		var treeFrame = treeFrames.item(0);
+		xoonipsDocTreeView = treeFrame.contentDocument;
+	}
+	
+	if ( xoonipsDocTreeView == undefined ){  // for IE
+		xoonipsDocTreeView = window.document.treeFrame.document;
+	}
+}
+
+function xoonipsOpenAll(){
+    if ( xoonipsDocTreeView == 0 )
+        xoonipsGetDocTreeView();
+    var treeHere = xoonipsDocTreeView.getElementById('xoonipsTreeHere');
+    if ( treeHere )
+        treeHere.openAll();
+}
+
+function xoonipsCloseAll(){
+    if ( xoonipsDocTreeView == 0 )
+        xoonipsGetDocTreeView();
+    var treeHere = xoonipsDocTreeView.getElementById('xoonipsTreeHere');
+    if ( treeHere )
+        treeHere.closeAll();
+}
+
+function xoonipsClearCheck(){
+    if ( xoonipsDocTreeView == 0 )
+        xoonipsGetDocTreeView();
+    var treeHere = xoonipsDocTreeView.getElementById('xoonipsTreeHere');
+    if ( treeHere )
+        treeHere.clearCheck();
+}
+
+function xoonipsOpenTab(index_id){
+    var id = 'xoonipsTab' + index_id;
+    if ( xoonipsDocTreeView == 0 )
+        xoonipsGetDocTreeView();
+    var xoonipsTreeHere = xoonipsDocTreeView.getElementById('xoonipsTreeHere');
+    var tops = new Array();
+<{foreach item=x from=$block.indexes name=xx}>
+    tops[<{$smarty.foreach.xx.iteration}>-1] = <{$x.item_id}>;
+<{/foreach}>
+    for ( i = 0; i < tops.length; i++ ){
+        var xid = tops[i];
+        var name = 'xoonipsTab' + xid;
+        var la = window.document.getElementById( name +'a' );
+        var lb = window.document.getElementById( name +'b' );
+        var lc = window.document.getElementById( name +'c' );
+        var ld = window.document.getElementById( name +'d' );
+        var le = window.document.getElementById( name +'e' );
+        var lf = window.document.getElementById( name +'f' );
+        var l  = window.document.getElementById( name      );
+        if ( index_id == xid ){
+            la.style.backgroundImage = "url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/a1.gif)";
+            lb.style.backgroundImage = "url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/b1.gif)";
+            lc.style.backgroundImage = "url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/c1.gif)";
+            ld.style.backgroundImage = "url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/d1.gif)";
+            le.style.backgroundImage = "url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/e1.gif)";
+            lf.style.backgroundImage = "url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/f1.gif)";
+            l .style.zIndex=1;
+            if ( xoonipsTreeHere )
+                xoonipsTreeHere.selectTab( xid );
+        }
+        else {
+            la.style.backgroundImage = "url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/a0.gif)";
+            lb.style.backgroundImage = "url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/b0.gif)";
+            lc.style.backgroundImage = "url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/c0.gif)";
+            ld.style.backgroundImage = "url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/d0.gif)";
+            le.style.backgroundImage = "url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/e0.gif)";
+            lf.style.backgroundImage = "url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/f0.gif)";
+            l .style.zIndex=0;
+        }
+    }
+    return false;
+}
+
+document.xoonipsOpenTab = xoonipsOpenTab;
+
+//-->
+</script>
+<div style="border: 0px solid #b7d0d5; padding: 0px; margin: 0px; width: 100%;">
+<div style="float: none; clear: both; margin: 0px 0px 3px 0px; padding: 0px;">
+<button class="formButton" onclick="xoonipsOpenAll();">open all</button>
+<button class="formButton" onclick="xoonipsCloseAll();">close all</button>
+<{if $block.checkbox }>
+<button class="formButton" onclick="xoonipsClearCheck();">clear</button>
+<{/if}>
+</div>
+<div style="margin: 0px; padding: 0px;" id="xoonips_tree_tab">
+<{foreach item=index from=$block.indexes}>
+<{if $block.isKHTML }>
+  <table id="xoonipsTab<{$index.item_id}>" cellspacing="0" style="display: inline-table; border-collapse: separate; border-spacing: 0px; width: auto; margin: 0px -1px; position: relative; z-index: 0;">
+<{else}>
+  <table id="xoonipsTab<{$index.item_id}>" cellspacing="0" style="display: inline; border-collapse: separate; border-spacing: 0px; width: auto; margin: 0px -1px; position: relative; z-index: 0;">
+<{/if}>
+   <tr>
+    <td id="xoonipsTab<{$index.item_id}>a" style="background-image: url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/a1.gif);  width: 5px; height: 3px;"></td>
+    <td id="xoonipsTab<{$index.item_id}>b" style="background-image: url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/b1.gif);  width: auto;"></td>
+    <td id="xoonipsTab<{$index.item_id}>c" style="background-image: url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/c1.gif);  width: 6px; height: 3px;"></td>
+   </tr>
+   <tr>
+    <td id="xoonipsTab<{$index.item_id}>d" style="background-image: url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/d1.gif);  width: 5px;"></td>
+    <td id="xoonipsTab<{$index.item_id}>e" style="background-image: url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/e1.gif);  width: auto;"><a href="#" onclick="return xoonipsOpenTab('<{$index.item_id}>')"><{$index.title}></a>
+     <input type="hidden" name="xoonipsTabId" value="<{$index.item_id}>"/>
+    </td>
+    <td id="xoonipsTab<{$index.item_id}>f" style="background-image: url(<{$smarty.const.XOOPS_URL}>/modules/xoonips/images/f1.gif);  width: 6px;"></td>
+   </tr>
+  </table>
+<{/foreach}>
+</div>
+<div style="border-bottom: 1px solid #404040; border-right: 1px solid #404040;">
+<div style="border-top: 1px solid #e4e4e4; border-left: 1px solid #e4e4e4;
+            border-bottom: 1px solid #858585; border-right: 1px solid #858585; padding: 0px; margin: 0px;">
+<iframe src="<{$xoops_url}>/modules/xoonips/tree.php?<{$block.query}>" 
+  name="treeFrame"
+  width="<{$block.tree_frame_width}>" height="<{$block.tree_frame_height}>" 
+  marginwidth="0" marginheight="0" frameborder="0" scrolling="auto">
+To view this page, your browser must support inline frames.
+</iframe>
+</div>
+</div>
+
+</div>

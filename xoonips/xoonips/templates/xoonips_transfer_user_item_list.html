@@ -1,0 +1,108 @@
+<script type="text/javascript" src="js/prototype.js">
+</script>
+<script type="text/javascript">
+<!--
+// for xoonips_select_item_menu.html
+function xnpSubmitForm(){
+    $('xoonips_form_transfer_item_list').submit();
+}
+//-->
+</script>
+
+<div class='xoonips_page_title'>
+<{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_PAGE_TITLE}>
+</div>
+
+<{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_PAGE_DESCRIPTION}>
+<form id='xoonips_form_transfer_item_list' action='transfer_item.php?action=request_check' method='post'>
+
+<br />
+
+<input id='xoonips_hidden_op' type='hidden' name='op' value=''/>
+<{include file='db:xoonips_select_item_menu_transfer.html' submit_url='transfer_item.php?action=request_select_item'}>
+
+<input id='xoonips_hidden_item_id_to_unselect' type='hidden' name='item_id_to_unselect' value=''/>
+
+<br />
+
+<table class='outer'>
+ <thead>
+  <tr>
+   <th><{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_ITEM_ID}></th>
+   <th><{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_ITEM_TYPE}></th>
+   <th><{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_TITLE}></th>
+   <th></th>
+  </tr>
+ </thead>
+ <tbody>
+<{if !empty( $transfer_items ) }>
+<{foreach item=i from=$transfer_items}>
+  <tr class='<{cycle values="odd,even"}>'>
+   <td><{$i.item_id}></td>
+   <td><{$i.item_type_name}></td>
+   <td>
+    <a href="transfer_item.php?action=detail_item&amp;item_id=<{$i.item_id}>"
+       target="xoonips_windows_transfer_user_item_detail">
+<{$i.title}>
+    </a>
+<{if $i.lock_type == $smarty.const.XOONIPS_LOCK_TYPE_CERTIFY_REQUEST}>
+    <br /><{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_LOCK_TYPE_CERTIFY_REQUEST_EXPLANATION}>
+<{elseif $i.lock_type == $smarty.const.XOONIPS_LOCK_TYPE_TRANSFER_REQUEST}>
+    <br /><{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_LOCK_TYPE_TRANSFER_REQUEST_EXPLANATION}>
+<{/if}>
+<{foreach item=j from=$i.child_items}>
+    <br /><{$j.title|indent:1:"&nbsp;&nbsp;"}>
+<{if $j.lock_type == $smarty.const.XOONIPS_LOCK_TYPE_CERTIFY_REQUEST}>
+    <br />&nbsp;&nbsp;<{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_LOCK_TYPE_CERTIFY_REQUEST_EXPLANATION}>
+<{elseif $j.lock_type == $smarty.const.XOONIPS_LOCK_TYPE_TRANSFER_REQUEST}>
+    <br />&nbsp;&nbsp;<{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_LOCK_TYPE_TRANSFER_REQUEST_EXPLANATION}>
+<{/if}>
+<{/foreach}>
+<{if !$i.transfer_enable && $i.have_another_parent}>
+    <br /><{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_CAN_NOT_TRANSFER_THIS_ITEM_HAVE_ANOTHER_PARENT}>
+<{/if}>
+   </td>
+   <td>
+    <input id='xoonips_button_unselect_<{$i.item_id}>' type='button'
+     onclick="$('xoonips_hidden_item_id_to_unselect').value=<{$i.item_id}>;
+              $('xoonips_form_transfer_item_list').action='transfer_item.php?action=request_unselect_item';
+              $('xoonips_form_transfer_item_list').submit();"
+     value='<{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_UNSELECT}>'/>
+   </td>
+  </tr>
+<{/foreach}>
+<{else}>
+ <tr>
+  <td class="even" style="text-align: center;" colspan="4"><span style="font-weight: bold; color: red;"><{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_NO_TRANSFER_ITEMS}></span></td>
+ </tr>
+<{/if}>
+ </tbody>
+</table>
+
+
+<br />
+<{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_TO}>
+
+<select id='xoonips_select_to_user' name='to_uid'>
+<{foreach item=uname key=uid from=$to_user_options}>
+ <option id='xoonips_select_to_uid_<{$uid}>' value='<{$uid}>' <{if $uid==$to_uid}>selected="selected"<{/if}>><{$uname}></option>
+<{/foreach}>
+</select>
+
+<br />
+<br />
+
+<input id='xoonips_button_submit' type='submit' value='<{$smarty.const._MD_XOONIPS_TRANSFER_USER_ITEM_LIST_SUBMIT}>' 
+<{if !$transfer_enable || empty($transfer_items) }>disabled="disabled"<{/if}>/>
+
+<{foreach item=i from=$items_to_transfer}>
+<input type='hidden' name='item_ids_to_transfer[]' value='<{$i.item_id}>'/>
+<{/foreach}>
+
+<{foreach item=i from=$items_to_transfer}>
+<input type='hidden' name='selected_original[]' value='<{$i.item_id}>'/>
+<{/foreach}>
+
+<input type='hidden' name='extra_param_name[]' value='to_uid' />
+
+</form>

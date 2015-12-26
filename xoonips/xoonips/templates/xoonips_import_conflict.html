@@ -1,0 +1,160 @@
+<!-- begin of xoonips_import_conflict.html -->
+
+<script type="text/javascript">
+function go_to_page(page){
+    document.getElementById('xoonips_page_resolve_conflict').value=page;
+    document.getElementById('xoonips_resolve_conflict_flag').value=0;
+    document.getElementById('xoonips_form_resolve_conflict').action='import.php?action=resolve_conflict';
+    document.getElementById('xoonips_form_resolve_conflict').submit( );
+}
+</script>
+
+<form id="xoonips_form_resolve_conflict" action="import.php?action=resolve_conflict" method="post">
+<input id="xoonips_page_resolve_conflict" type="hidden" name="page" value="<{$page}>" />
+<input id="xoonips_resolve_conflict_flag" type="hidden" name="resolve_conflict_flag" value="1" />
+
+<p>
+<{$smarty.const._MD_XOONIPS_IMPORT_PANKUZU_IMPORT}>
+<{$smarty.const._MI_XOONIPS_ACCOUNT_PANKUZU_SEPARATOR}>
+<{$smarty.const._MD_XOONIPS_IMPORT_PANKUZU_RESOLVE_CONFLICT}>
+</p>
+
+<h3><{$smarty.const._MD_XOONIPS_IMPORT_TITLE_RESOLVE_CONFLICT}></h3>
+
+<{if $private_item_number_limit_over}>
+<{$smarty.const._MD_XOONIPS_ITEM_WARNING_ITEM_NUMBER_LIMIT}><br />
+<{/if}>
+<{if $private_item_storage_limit_over}>
+<{$smarty.const._MD_XOONIPS_ITEM_WARNING_ITEM_STORAGE_LIMIT}><br />
+<{/if}>
+
+
+<p><{$smarty.const._MD_XOONIPS_IMPORT_NUMBER_OF_CONFLICT_ITEMS}><{$number_of_conflict_items}></p>
+
+<{if $page_max > 1}>
+<{if 0 < $page-1 }>
+<a id="xoonips_a_prevpage" href="javascript:void(0);" onclick="go_to_page(<{$page-1}>); return false;"><{$smarty.const._MD_XOONIPS_ITEM_SHOW_ITEMLIST_PREV}></a>&nbsp;
+<{else}>
+<{$smarty.const._MD_XOONIPS_ITEM_SHOW_ITEMLIST_PREV}>
+<{/if}>
+<{if 0 < $page-6 && $page+1 > $page_max }><a id="xoonips_a_6_pages_prev" href="javascript:void(0);" onclick="go_to_page(<{$page-6}>); return false;"><{$page-6}></a>&nbsp;<{/if}>
+<{if 0 < $page-5 && $page+2 > $page_max }><a id="xoonips_a_5_pages_prev" href="javascript:void(0);" onclick="go_to_page(<{$page-5}>); return false;"><{$page-5}></a>&nbsp;<{/if}>
+<{if 0 < $page-4 && $page+3 > $page_max }><a id="xoonips_a_4_pages_prev" href="javascript:void(0);" onclick="go_to_page(<{$page-4}>); return false;"><{$page-4}></a>&nbsp;<{/if}>
+<{if 0 < $page-3 }><a id="xoonips_a_3_pages_prev" href="javascript:void(0);" onclick="go_to_page(<{$page-3}>); return false;"><{$page-3}></a>&nbsp;<{/if}>
+<{if 0 < $page-2 }><a id="xoonips_a_2_pages_prev" href="javascript:void(0);" onclick="go_to_page(<{$page-2}>); return false;"><{$page-2}></a>&nbsp;<{/if}>
+<{if 0 < $page-1 }><a id="xoonips_a_1_pages_prev" href="javascript:void(0);" onclick="go_to_page(<{$page-1}>); return false;"><{$page-1}></a>&nbsp;<{/if}>
+<{$page}>&nbsp;
+<{if $page+1 <= $page_max }><a id="xoonips_a_1_pages_next" href="javascript:void(0);" onclick="go_to_page(<{$page+1}>); return false;"><{$page+1}></a>&nbsp;<{/if}>
+<{if $page+2 <= $page_max }><a id="xoonips_a_2_pages_next" href="javascript:void(0);" onclick="go_to_page(<{$page+2}>); return false;"><{$page+2}></a>&nbsp;<{/if}>
+<{if $page+3 <= $page_max }><a id="xoonips_a_3_pages_next" href="javascript:void(0);" onclick="go_to_page(<{$page+3}>); return false;"><{$page+3}></a>&nbsp;<{/if}>
+<{if $page+4 <= $page_max && 0 >= $page-3 }><a id="xoonips_a_4_pages_next" href="javascript:void(0);" onclick="go_to_page(<{$page+4}>); return false;"><{$page+4}></a>&nbsp;<{/if}>
+<{if $page+5 <= $page_max && 0 >= $page-2 }><a id="xoonips_a_5_pages_next" href="javascript:void(0);" onclick="go_to_page(<{$page+5}>); return false;"><{$page+5}></a>&nbsp;<{/if}>
+<{if $page+6 <= $page_max && 0 >= $page-1 }><a id="xoonips_a_6_pages_next" href="javascript:void(0);" onclick="go_to_page(<{$page+6}>); return false;"><{$page+6}></a>&nbsp;<{/if}>
+<{if $page+1 <= $page_max }>
+<a id="xoonips_a_nextpage" href="javascript:void(0);" onclick="go_to_page(<{$page+1}>); return false;"><{$smarty.const._MD_XOONIPS_ITEM_SHOW_ITEMLIST_NEXT}></a>&nbsp;
+<{else}>
+<{$smarty.const._MD_XOONIPS_ITEM_SHOW_ITEMLIST_NEXT}>
+<{/if}>
+<br />
+<{/if}>
+
+<p><input class="formButton" id="xoonips_submit_import_top" type="submit" value="<{$smarty.const._MD_XOONIPS_IMPORT_TITLE}>"
+ onclick="document.getElementById('xoonips_op_resolve_conflict').value='import'; document.getElementById('xoonips_form_resolve_conflict').submit( ); return false;" /></p>
+
+<div style="float:left; width:5%;">
+<input id="xoonips_check_import_as_new" type="checkbox" name="import_as_new" value="1"<{if $import_as_new_flag}> checked="checked"<{/if}> />
+</div>
+<div style="float:right; width:95%;">
+<{$smarty.const._MD_XOONIPS_IMPORT_IMPORT_ALL_AS_NEW|nl2br}>
+</div>
+
+<div style="width: 100%; clear:both;">
+
+<table width="100%" class="outer" cellspacing="1">
+ 
+<!-- conflict item bellow-->
+<{foreach item=i from=$conflict_items}>
+ <tr valign="top" align="left" class="<{cycle name="class1" values="odd,even"}>">
+  <td class="head">
+   <table>
+    <tr valign="top" align="left">
+     <th><{$smarty.const._MD_XOONIPS_IMPORT_FOLLOWING_ITEM_CONFLICT}></th>
+    </tr>
+    <tr>
+     <td width="90%"><{$i.import_item.item_text|nl2br}></td>
+    </tr>
+    <tr valign="top" align="left">
+     <td>
+<{if count($i.conflict_updatable_items) > 0}>
+      <table width="100%" class="outer" cellspacing="1" style="margin-left:10px;">
+       <tr>
+        <th>
+         <input type="hidden" name="updatable_pseudo_id[]" value="<{$i.import_item.pseudo_id}>" />
+         <input id="xoonips_check_import_update_<{$i.import_item.pseudo_id}>"
+         type="checkbox" name="update_pseudo_id[]"
+         value="<{$i.import_item.pseudo_id}>" <{if
+         $i.import_item.update_flag}>checked<{/if}>
+         /><{$smarty.const._MD_XOONIPS_IMPORT_IMPORT_MODIFY}></th>
+       </tr>
+<{foreach item=j from=$i.conflict_updatable_items}>
+       <tr valign="top" align="left" class="<{cycle name="class2" values="odd,even"}>">
+        <td width="90%"><{$j.item_text|nl2br}></td>
+       </tr>
+<{/foreach}>
+      </table>
+<{/if}>
+
+<{if count($i.conflict_unupdatable_items) > 0}>
+      <table width="100%" class="outer" cellspacing="1" style="margin-left:10px;">
+       <tr>
+        <th><{$smarty.const._MD_XOONIPS_IMPORT_CONFLICT_ITEMS_IN_OTHER_INDEXES}></th>
+       </tr>
+<{foreach item=j from=$i.conflict_unupdatable_items}>
+       <tr valign="top" align="left" class="<{cycle name="class2" values="odd,even"}>">
+        <td width="90%"><{$j.item_text|nl2br}></td>
+       </tr>
+<{/foreach}>
+      </table>
+<{/if}>
+
+<{if count($i.conflict_certify_request_locked_items) > 0}>
+      <table width="100%" class="outer" cellspacing="1" style="margin-left:10px;">
+       <tr>
+        <th><{$smarty.const._MD_XOONIPS_IMPORT_CONFLICT_ITEMS_LOCKED_CERTIFY_REQUEST}></th>
+       </tr>
+<{foreach item=j from=$i.conflict_certify_request_locked_items}>
+       <tr valign="top" align="left" class="<{cycle name="class2" values="odd,even"}>">
+        <td width="90%"><{$j.item_text|nl2br}></td>
+       </tr>
+<{/foreach}>
+      </table>
+<{/if}>
+
+<{if count($i.conflict_import_items) > 0}>
+      <table width="100%" class="outer" cellspacing="1" style="margin-left:10px;">
+       <tr>
+        <th><{$smarty.const._MD_XOONIPS_IMPORT_CONFLICT_ITEMS_IN_THE_SAME_FILE}></th>
+       </tr>
+<{foreach item=j from=$i.conflict_import_items}>
+       <tr valign="top" align="left" class="<{cycle name="class2" values="odd,even"}>">
+        <td width="90%"><{$j.item_text|nl2br}></td>
+       </tr>
+<{/foreach}>
+      </table>
+<{/if}>
+
+     </td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+<{/foreach}> 
+</table>
+
+</div>
+
+<p><input class="formButton" id="xoonips_submit_import_bottom" type="submit" value="<{$smarty.const._MD_XOONIPS_IMPORT_TITLE}>"
+ onclick="document.getElementById('xoonips_form_resolve_conflict').submit( ); return false;" /></p>
+</form>
+
+<!-- end of xoonips_import_conflict.html -->

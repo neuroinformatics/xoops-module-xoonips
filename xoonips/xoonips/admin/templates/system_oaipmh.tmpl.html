@@ -1,0 +1,112 @@
+<patTemplate:tmpl name="main">
+<patTemplate:tmpl name="header_include" src="adminheader.tmpl.html" parse="on"/>
+<form name="xoonips_admin_system_oaipmh_repository" action="system.php?page=oaipmh" method="post">
+<input name="action" value="rupdate" type="hidden"/>
+{TOKEN_TICKET}
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th colspan="2">{REPOSITORY_TITLE}</th>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">
+      <span style="font-weight: bold;">{REPOSITORY_NAME_TITLE}</span>
+<!--
+      <br /><br />
+      <span style="font-weight: normal;">{REPOSITORY_NAME_DESC}</span>
+-->
+    </td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <input name="repository_name" type="text" size="50" value="{REPOSITORY_NAME}"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">
+      <span style="font-weight: bold;">{REPOSITORY_NIJC_CODE_TITLE}</span>
+<!--
+      <br /><br />
+      <span style="font-weight: normal;">{REPOSITORY_NIJC_CODE_DESC}</span>
+-->
+    </td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <input name="repository_nijc_code" type="text" size="50" value="{REPOSITORY_NIJC_CODE}"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">
+      <span style="font-weight: bold;">{REPOSITORY_DELETION_TRACK_TITLE}</span>
+<!--
+      <br /><br />
+      <span style="font-weight: normal;">{REPOSITORY_DELETION_TRACK_DESC}</span>
+-->
+    </td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <input name="repository_deletion_track" type="text" size="5" maxlength="5" value="{REPOSITORY_DELETION_TRACK}"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">
+      <span style="font-weight: bold;">{REPOSITORY_INSTITUTION_TITLE}</span>
+<!--
+      <br /><br />
+      <span style="font-weight: normal;">{REPOSITORY_INSTITUTION_DESC}</span>
+-->
+    </td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <input name="repository_institution" type="text" size="50" value="{REPOSITORY_INSTITUTION}"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">
+      <span style="font-weight: bold;">{REPOSITORY_PUBLISHER_TITLE}</span>
+<!--
+      <br /><br />
+      <span style="font-weight: normal;">{REPOSITORY_PUBLISHER_DESC}</span>
+-->
+    </td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <input name="repository_publisher" type="text" size="50" value="{REPOSITORY_PUBLISHER}"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">&nbsp;</td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <input name="submit" type="submit" value="{SUBMIT}"/>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</form>
+<!-- harvester -->
+<br /><br />
+<form name="xoonips_admin_system_oaipmh_harvester" action="system.php?page=oaipmh" method="post">
+<input name="action" value="hupdate" type="hidden"/>
+{TOKEN_TICKET}
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th colspan="2">{HARVESTER_TITLE}</th>
+  </tr>
+  <tr>
+    <td class="head" style="width: 30%; vertical-align: top;">
+      <span style="font-weight: bold;">{HARVESTER_REPOSITORIES_TITLE}</span>
+      <br /><br />
+      <span style="font-weight: normal;">{HARVESTER_REPOSITORIES_DESC}</span>
+    </td>
+    <td class="even" style="width: 70%; vertical-align: top;">
+      <textarea name="repositories" rows="10" cols="40">
+        {HARVESTER_REPOSITORIES}
+      </textarea>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 30%; vertical-align: top;">&nbsp;</td>
+    <td class="even" style="width: 70%; vertical-align: top;">
+      <input name="submit" type="submit" value="{SUBMIT}"/>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</form>
+<patTemplate:tmpl name="footer_include" src="adminfooter.tmpl.html" parse="on"/>
+</patTemplate:tmpl>

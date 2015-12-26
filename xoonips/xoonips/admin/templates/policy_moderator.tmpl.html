@@ -1,0 +1,40 @@
+<patTemplate:tmpl name="main">
+<patTemplate:tmpl name="header_include" src="adminheader.tmpl.html" parse="on"/>
+<form name="xoonips_admin_policy_moderator" action="policy.php?page=moderator" method="post">
+<input name="action" value="update" type="hidden"/>
+{TOKEN_TICKET}
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th colspan="2">{MODERATOR_TITLE}</th>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">
+      <span style="font-weight: bold;">{MODERATOR_MODIFY_TITLE}</span>
+      <br /><br />
+      <span style="font-weight: normal;">{MODERATOR_MODIFY_DESC}</span>
+    </td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <patTemplate:tmpl name="moderator_modify" type="Condition" conditionvar="CHECKED">
+        <patTemplate:sub condition="on">
+          <input name="{NAME}" type="radio" value="on" checked="checked"/>{YES}&nbsp;
+          <input name="{NAME}" type="radio" value="off"/>{NO}
+        </patTemplate:sub>
+        <patTemplate:sub condition="off">
+          <input name="{NAME}" type="radio" value="on"/>{YES}&nbsp;
+          <input name="{NAME}" type="radio" value="off" checked="checked"/>{NO}
+        </patTemplate:sub>
+      </patTemplate:tmpl>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">&nbsp;</td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <input name="submit" type="submit" value="{SUBMIT}"/>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</form>
+<patTemplate:tmpl name="footer_include" src="adminfooter.tmpl.html" parse="on"/>
+</patTemplate:tmpl>

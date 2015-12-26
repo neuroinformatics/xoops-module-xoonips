@@ -1,0 +1,56 @@
+<{* $Revision: 1.1.2.4 $ *}>
+<table class="outer">
+  <!-- Basic Information -->
+<{include file="db:xoonips_transfer_detail_doi.html"}>
+<{include file="db:xoonips_transfer_detail_lang.html"}>
+<{include file="db:xoonips_transfer_detail_titles.html"}>
+<{include file="db:xoonips_transfer_detail_keywords.html"}>
+<{include file="db:xoonips_transfer_detail_description.html"}>
+<{include file="db:xoonips_transfer_detail_publication_ymd.html" name=$smarty.const._MD_XNPPRESENTATION_DATE_LABEL}>
+<{include file="db:xoonips_transfer_detail_update_date.html"}>
+<{include file="db:xoonips_transfer_detail_creation_date.html"}>
+<{include file="db:xoonips_transfer_detail_contributor.html"}>
+<{include file="db:xoonips_transfer_detail_item_type.html"}>
+<{include file="db:xoonips_transfer_detail_changelogs.html"}>
+  <!-- Presentation Item Detail Information -->
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPPRESENTATION_PRESENTATION_TYPE_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$xoonips_item.detail.presentation_type}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPPRESENTATION_CREATOR_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>" >
+<{include file='db:xoonips_confirm_multiple_field.html' vars=$xoonips_item.xnppresentation_creator}>
+    </td>
+  </tr>
+
+  <!-- file -->
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPPRESENTATION_PREVIEW_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>">
+<{if isset( $xoonips_item.detail.previews )}>
+<{include file="db:xoonips_transfer_detail_previews.html" previews=$xoonips_item.detail.previews}>
+<{/if}>
+    </td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPPRESENTATION_PRESENTATION_FILE_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>">
+<{if isset( $xoonips_item.detail.presentation_file )}>
+<{include file="db:xoonips_transfer_detail_file.html" fileinfo=$xoonips_item.detail.presentation_file}>
+<{/if}>
+    </td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XOONIPS_ITEM_README_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$xoonips_item.detail.readme}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XOONIPS_ITEM_RIGHTS_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$xoonips_item.detail.rights}></td>
+  </tr>
+  <!-- index -->
+<{include file="db:xoonips_transfer_detail_indexes.html"}>
+  <!-- related_to -->
+<{include file="db:xoonips_transfer_detail_related_tos.html"}>
+</table>

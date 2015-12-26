@@ -1,0 +1,54 @@
+<{*
+generate item select form.
+
+Usage: in parent Smarty template.
+ <form action="foo.php">
+ <{include file='db:xoonips_select_item_menu.html' submit_url="foo.php" query_var_name[]=...}>
+ ....
+ <input type='submit' .../>
+ </form>
+
+@param useritem_enabled boolean true if select item by user is
+enabled.(optional default is enabled)
+@param index_enabled boolean true if select item by specified index.(optional default is enabled)
+@param search_enabled boolean true if select item by advanced search
+results.(optional default is enabled)
+
+@return submit_url
+*}>
+
+<div style="text-align: center;">
+ <input type="hidden" name="submit_url" value="<{$submit_url}>"/>
+ <input type="hidden" name="index_id" value=""/>
+ 
+ <table class="outer">
+  <tr>
+   <th colspan="3">
+    <{$smarty.const._MD_XOONIPS_ADD_FROM_COLUMN_LABEL}>
+   </th>
+  </tr>
+  <tr>
+<{if !isset($useritem_enabled) || isset($useritem_enabled) && $useritem_enabled}>
+   <td>
+    <input class="formButton" type="button" name="add_from_item_list"
+    value="<{$smarty.const._MD_XOONIPS_ADD_FROM_ITEM_LIST_BUTTON_LABEL}>"
+    onclick="op.value='select_item_useritem'; submit_url.value='<{$submit_url}>'; action='<{$smarty.const.XOOPS_URL}>/modules/xoonips/itemselect_transfer.php'; xnpSubmitForm();"/>
+   </td>
+<{/if}>
+<{if !isset($index_enabled) || isset($index_enabled) && $index_enabled}>
+   <td>
+    <input class="formButton" type="button" name="add_from_index"
+    value="<{$smarty.const._MD_XOONIPS_ADD_FROM_INDEX_BUTTON_LABEL}>"
+    onclick="index_id.value=<{$smarty.const.IID_PUBLIC}>; op.value='select_item_index'; submit_url.value='<{$submit_url}>'; action='<{$smarty.const.XOOPS_URL}>/modules/xoonips/itemselect_transfer.php'; xnpSubmitForm();"/>
+   </td>
+<{/if}>
+<{if !isset($search_enabled) || isset($search_enabled) && $search_enabled}>
+   <td>
+    <input class="formButton" type="button" name="add_from_search"
+    value="<{$smarty.const._MD_XOONIPS_ADD_FROM_SEARCH_BUTTON_LABEL}>"
+    onclick="submit_url.value='<{$submit_url}>'; action='<{$smarty.const.XOOPS_URL}>/modules/xoonips/advanced_search_itemselect_transfer.php'; xnpSubmitForm();"/>
+   </td>
+<{/if}>
+  </tr>
+ </table>
+</div>

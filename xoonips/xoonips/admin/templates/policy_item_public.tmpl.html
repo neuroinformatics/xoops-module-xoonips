@@ -1,0 +1,115 @@
+<patTemplate:tmpl name="main">
+<patTemplate:tmpl name="header_include" src="adminheader.tmpl.html" parse="on"/>
+<form name="xoonips_admin_policy_item_public_main" action="policy.php?page=item" method="post">
+<input name="action" value="pmupdate" type="hidden"/>
+{TOKEN_TICKET}
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th colspan="2">{PUBLIC_TITLE}</th>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">
+      <span style="font-weight: bold;">{CERTIFY_ITEM_TITLE}</span>
+      <br /><br />
+      <span style="font-weight: normal;">{CERTIFY_ITEM_DESC}</span>
+    </td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <select name="certify_item" size="1">
+      <patTemplate:tmpl name="certify_item" type="Condition" conditionvar="SELECTED">
+        <patTemplate:sub condition="yes">
+          <option value="{VALUE}" selected="selected">{LABEL}</option>
+        </patTemplate:sub>
+        <patTemplate:sub condition="no">
+          <option value="{VALUE}">{LABEL}</option>
+        </patTemplate:sub>
+      </patTemplate:tmpl>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">
+      <span style="font-weight: bold;">{TARGET_USER_TITLE}</span>
+      <br /><br />
+      <span style="font-weight: normal;">{TARGET_USER_DESC}</span>
+    </td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <select name="public_item_target_user" size="1">
+      <patTemplate:tmpl name="target_user" type="Condition" conditionvar="SELECTED">
+        <patTemplate:sub condition="yes">
+          <option value="{VALUE}" selected="selected">{LABEL}</option>
+        </patTemplate:sub>
+        <patTemplate:sub condition="no">
+          <option value="{VALUE}">{LABEL}</option>
+        </patTemplate:sub>
+      </patTemplate:tmpl>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">&nbsp;</td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <input name="submit" type="submit" value="{SUBMIT}"/>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</form>
+<br />
+<form name="xoonips_admin_policy_item_public_other" action="policy.php?page=item" method="post">
+<input name="action" value="poupdate" type="hidden"/>
+{TOKEN_TICKET}
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th colspan="2">{OTHER_TITLE}</th>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">
+      <span style="font-weight: bold;">{DOWNLOAD_FILE_TITLE}</span>
+      <br /><br />
+      <span style="font-weight: normal;">{DOWNLOAD_FILE_DESC}</span>
+    </td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <select name="download_file_compression" size="1">
+      <patTemplate:tmpl name="download_file" type="Condition" conditionvar="SELECTED">
+        <patTemplate:sub condition="yes">
+          <option value="{VALUE}" selected="selected">{LABEL}</option>
+        </patTemplate:sub>
+        <patTemplate:sub condition="no">
+          <option value="{VALUE}">{LABEL}</option>
+        </patTemplate:sub>
+      </patTemplate:tmpl>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">
+      <span style="font-weight: bold;">{ITEM_SHOW_TITLE}</span>
+      <br /><br />
+      <span style="font-weight: normal;">{ITEM_SHOW_DESC}</span>
+    </td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <patTemplate:tmpl name="item_show" type="Condition" conditionvar="CHECKED">
+        <patTemplate:sub condition="on">
+          <input name="item_show_optional" type="radio" value="on" checked="checked"/>{YES}&nbsp;
+          <input name="item_show_optional" type="radio" value="off"/>{NO}
+        </patTemplate:sub>
+        <patTemplate:sub condition="off">
+          <input name="item_show_optional" type="radio" value="on"/>{YES}&nbsp;
+          <input name="item_show_optional" type="radio" value="off" checked="checked"/>{NO}
+        </patTemplate:sub>
+      </patTemplate:tmpl>
+    </td>
+  </tr>
+  <tr>
+    <td class="head" style="width: 40%; vertical-align: top;">&nbsp;</td>
+    <td class="even" style="width: 60%; vertical-align: top;">
+      <input name="submit" type="submit" value="{SUBMIT}"/>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</form>
+<patTemplate:tmpl name="footer_include" src="adminfooter.tmpl.html" parse="on"/>
+</patTemplate:tmpl>

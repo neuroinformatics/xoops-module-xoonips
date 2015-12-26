@@ -1,0 +1,53 @@
+<patTemplate:tmpl name="main">
+<patTemplate:tmpl name="header_include" src="adminheader.tmpl.html" parse="on"/>
+<h4 style="margin-top: 20px; margin-bottom: 10px;">&raquo;&nbsp;{ITEMTYPE_VIEWCONFIG_TITLE}</h4>
+<div style="margin-left: 10px; margin-bottom: 5px;">{ITEMTYPE_VIEWCONFIG_DESC}</div>
+<form name="xoonips_admin_policy_item_type" action="policy.php?page=item" method="post">
+<input name="action" value="tupdate" type="hidden"/>
+{TOKEN_TICKET}
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th style="width: 50%; text-align: left;">{ITEMTYPE}</th>
+    <th style="width: 30%; text-align: left;">{MODULENAME}</th>
+    <th style="width: 10%; text-align: center;">{WEIGHT}</th>
+    <th style="width: 10%; text-align: center;">{ACTION}</th>
+  </tr>
+  <patTemplate:tmpl name="itemtypes" type="condition" conditionvar="NOITEMTYPES">
+  <patTemplate:sub condition="1">
+  <tr>
+    <td colspan="4" class="odd" style="text-align: center;">
+      <span style="font-weight:bold; color: red;">{NOITEMTYPES_LABEL}</span>
+    </td>
+  </tr>
+  </patTemplate:sub>
+  <patTemplate:sub condition="default">
+  <patTemplate:tmpl name="itemtype_order">
+  <tr>
+    <td class="{EVENODD}" style="width: 50%; vertical-align: top;">
+      {DISPLAY_NAME_S}<br />
+      <input name="display_name[{ITEM_TYPE_ID}]" type="text" value="{DISPLAY_NAME_E}" size="50" maxlength="255" style="text-align: left;"/>
+    </td>
+    <td class="{EVENODD}" style="width: 30%; vertical-align: top;">
+      {MODNAME}
+    </td>
+    <td class="{EVENODD}" style="width: 10%; text-align: center;">
+      <input name="weight[{MID}]" type="text" value="{WEIGHT}" size="3" maxlength="3" style="text-align: right;"/>
+    </td>
+    <td class="{EVENODD}" style="width: 10%; text-align: center;">
+      {ADMIN_LINK}
+    </td>
+  </tr>
+  </patTemplate:tmpl>
+  <tr>
+    <td colspan="4" class="head" style="text-align: center;">
+      <input name="submit" type="submit" value="{SUBMIT}"/>
+    </td>
+  </tr>
+  </patTemplate:sub>
+  </patTemplate:tmpl>
+  </tbody>
+</table>
+</form>
+<patTemplate:tmpl name="footer_include" src="adminfooter.tmpl.html" parse="on"/>
+</patTemplate:tmpl>

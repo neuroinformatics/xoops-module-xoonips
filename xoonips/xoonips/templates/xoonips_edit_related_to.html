@@ -1,0 +1,51 @@
+<{* form to input link related to items (a part of edit page) *}>
+<{* $Revision: 1.5.4.1.2.3 $ *}>
+<{* 
+
+display text area to input item_id, and summary (in HTML) in linked (registered) items in edit
+
+PARAMETERS
+    $related_to_check: array of item's id (checked in default)
+                        ( item_id => true/false, ...repeat... )
+    $item_htmls: array of registered item's summary (in HTML)
+                  ( item_id => array('html'=> summary (in HTML), 'check'=> true/false, ...repeat...)
+
+*}>
+
+<!-- begin of xoonips_confirm_related_to.html -->
+<p>
+<{$smarty.const._MD_XOONIPS_ITEM_RELATED_TO_ADD_ID}>
+<br />
+<textarea cols="20" rows="5" name="related_to" style="width:160px"></textarea>
+<input class="formButton" type="button"
+    value="<{$smarty.const._MD_XOONIPS_ITEM_RELATED_TO_ADD_ID_BUTTON_LABEL}>"
+    onclick="window.open('related_to_subwin.php', 'related_to_subwin', 'width=800,height=480,resizable=yes,menubar=no,directories=no,titlebar=yes,location=yes,scrollbars=yes,toolbar=no');"/>
+</p>
+
+<{if !empty( $item_htmls ) }>
+<{$smarty.const._MD_XOONIPS_ITEM_RELATED_TO_EDIT_ID}>
+<br />
+<table width="100%" border="0" cellspacing="5">
+  <tr style="vertical-align: middle; text-align: center;">
+   <th><{$smarty.const._MD_XOONIPS_ITEM_RELATED_TO_LEAVE_IT}></th>
+   <th><{$smarty.const._MD_XOONIPS_ITEM_RELATED_TO_ITEM_SUMMARY}></th>
+  </tr>
+<{foreach key=k item=v from=$item_htmls}>
+  <tr style="vertical-align: top;" class="<{cycle values="odd,even"}>">
+    <td style="vertical-align:middle; text-align:center;">
+     <input type="hidden" name="related_to_check_all[]" value="<{$k}>"/>
+     <{if $v.check}>
+     <input type="checkbox" name="related_to_check[]" value="<{$k}>" checked="checked"/>
+     <{else}>
+     <input type="checkbox" name="related_to_check[]" value="<{$k}>"/>
+     <{/if}>
+    </td>
+    <td>
+     <{$v.html}>
+    </td>
+  </tr>
+<{/foreach}>
+</table>
+<{/if}>
+<!-- end of xoonips_confirm_related_to.html -->
+

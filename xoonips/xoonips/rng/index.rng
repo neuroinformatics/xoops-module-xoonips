@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <start>
+
+    <element name="indexes">
+
+      <zeroOrMore>
+
+        <element name="index">
+
+          <attribute name="parent_id">
+
+            <data type="integer"/>
+
+          </attribute>
+
+          <attribute name="id">
+
+            <data type="integer"/>
+
+          </attribute>
+
+          <element name="title" >
+
+            <data type="string"/>
+
+          </element>
+
+        </element>
+
+      </zeroOrMore>
+
+    </element>
+
+  </start>
+
+</grammar>

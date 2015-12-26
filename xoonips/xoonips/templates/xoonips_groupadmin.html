@@ -1,0 +1,126 @@
+<{* page fo group administrator *}>
+<{* $Revision: 1.8.2.1.2.6 $ *}>
+<{include file="db:xoonips_breadcrumbs.inc.html"}>
+
+<h3><{$smarty.const._MD_XOONIPS_TITLE_GROUP_MEMBER_EDIT}></h3>
+<table class="outer" cellspacing="1" cellpadding="4">
+  <tr>
+    <th><{$smarty.const._MD_XOONIPS_LABEL_GROUP_NAME}></th>
+    <th><{$smarty.const._MD_XOONIPS_LABEL_GROUP_DESCRIPTION}></th>
+    <th><{$smarty.const._MD_XOONIPS_LABEL_GROUP_ADMINISTRATORS}></th>
+    <{if $gid == 0 }>
+    <th style="text-align: center;"><{$smarty.const._MD_XOONIPS_LABEL_ACTION}></th>
+    <{/if}>
+  </tr>
+<{if empty( $groups ) }>
+  <tr>
+    <td class="odd" colspan="4"><{$smarty.const._MD_XOONIPS_MSG_GROUP_EMPTY}></td>
+  </tr>
+<{else}>
+<{foreach from=$groups item=group}>
+  <tr>
+    <td class="head"><{$group.gname}></td>
+    <td class="<{cycle name="row1" values="even,odd"}>">
+      <{$group.gdesc}>
+      <{if $group.locked}>
+        <br /><span style="color: red;"><{$msg_locked}></span>
+      <{/if}>
+    </td>
+    <td class="<{cycle name="row2" values="even,odd"}>">
+      <{foreach name=gadmin from=$group.gadmins item=gadmin}>
+        <{if ! $smarty.foreach.gadmin.first}> / <{/if}>
+        <a href="showusers.php?uid=<{$gadmin.uid}>"><{$gadmin.uname}></a>
+      <{/foreach}>
+    </td>
+    <{if $gid == 0 }>
+    <td class="<{cycle name="row3" values="even,odd"}>" style="text-align:center;">
+      <{if $group.is_admin}>
+      <a href="groupadmin.php?op=edit&amp;gid=<{$group.gid}>"><img src="images/icon_userlist.png" title="<{$smarty.const._MD_XOONIPS_LABEL_GROUP_MEMBERS}>" alt="<{$smarty.const._MD_XOONIPS_LABEL_GROUP_MEMBERS}>"/></a>
+      <{/if}>
+    </td>
+    <{/if}>
+  </tr>
+<{/foreach}>
+<{/if}>
+</table>
+<br /><br />
+
+<{if $gid != 0 }>
+<{* member add/delete *}>
+<script type="text/javascript">
+//<!--
+function xoonips_groupadmin_submit( $mode )
+{
+  if ( $mode == 'add' ) {
+    var form = document.getElementById( 'xoonips_groupadmin_add_form' );
+  } else if ( $mode == 'delete' ) {
+    var form = document.getElementById( 'xoonips_groupadmin_delete_form' );
+  } else {
+    return false;
+  }
+  form.submit();
+  return false;
+}
+//-->
+</script>
+<table class="outer" cellspacing="1">
+  <tr>
+    <th style="width: 40%;text-align: center;"><{$smarty.const._MD_XOONIPS_LABEL_GROUPADMIN_NONMEMBERS}></th>
+    <th style="width: 20%;">&nbsp;</th>
+    <th style="width: 40%;text-align: center;"><{$smarty.const._MD_XOONIPS_LABEL_GROUPADMIN_MEMBERS}> (<{$smarty.const._MD_XOONIPS_LABEL_GROUP_NUM_OF_ITEMS}>)</th>
+  </tr>
+  <tr>
+   <td class="even">
+     <{if empty( $non_members ) }>
+     &nbsp;
+     <{else}>
+     <form id="xoonips_groupadmin_add_form" action="groupadmin.php" method="post">
+     <{$token_ticket}>
+     <input type="hidden" name="op" value="update"/>
+     <input type="hidden" name="mode" value="add"/>
+     <input type="hidden" name="gid" value="<{$gid}>"/>
+     <select name="uids[]" size="10" multiple="multiple">
+<{foreach from=$non_members item=user}>
+       <option value="<{$user.uid}>"><{$user.uname}></option>
+<{/foreach}>
+     </select>
+     </form>
+     <{/if}>
+   </td>
+   <td align="center" class="odd">
+     <{if ! empty( $non_members ) }>
+     <input class="formButton" type="button" value="<{$smarty.const._MD_XOONIPS_LABEL_GROUPADMIN_ADD}>" onclick="xoonips_groupadmin_submit( 'add' );"/>
+     <{/if}>
+     <br />
+     <{if ! empty( $members ) }>
+     <input class="formButton" type="button" value="<{$smarty.const._MD_XOONIPS_LABEL_GROUPADMIN_DELETE}>" onclick="xoonips_groupadmin_submit( 'delete' );"/>
+     <{/if}>
+   </td>
+   <td class="even">
+<{*
+     <{foreach from=$admin_members item=user}>
+     <a href="showusers.php?uid=<{$user.uid}>"><{$user.uname}></a> (<{$user.item_num}>)<br />
+     <{/foreach}>
+*}>
+     <{foreach from=$locked_members item=user}>
+     <a href="showusers.php?uid=<{$user.uid}>"><{$user.uname}></a> (<{$user.item_num}>)<br />
+     <{/foreach}>
+     <{if empty( $members ) }>
+     &nbsp;
+     <{else}>
+     <form id="xoonips_groupadmin_delete_form" action="groupadmin.php" method="post">
+     <{$token_ticket}>
+     <input type="hidden" name="op" value="update"/>
+     <input type="hidden" name="mode" value="delete"/>
+     <input type="hidden" name="gid" value="<{$gid}>"/>
+     <select name="uids[]" size="10" multiple="multiple">
+<{foreach from=$members item=user}>
+       <option value="<{$user.uid}>"><{$user.uname}></option>
+<{/foreach}>
+     </select>
+     </form>
+     <{/if}>
+    </td>
+  </tr>
+</table>
+<{/if}>

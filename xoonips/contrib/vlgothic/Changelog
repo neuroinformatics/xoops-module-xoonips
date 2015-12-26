@@ -1,0 +1,84 @@
+VLGothic(VLゴシック) フォント
+--------------------------------------------------------------------------
+
+更新履歴
+---------
+
+* 2007/03/28
+  - VL-PGothic/VL-Gothic の M+1C, M+1M 部分を 2007.03.28 の
+    CVS HEAD に更新(M+漢字グリフも収録)
+  - VL-PGothic/VL-Gothic の "℃" が freetype-2.2 で bold にならなかった
+    のを修正
+
+* 2007/03/17
+  - VL-PGothic/VL-Gothic の M+1C, M+1M 部分を 2007.03.17 の
+    CVS HEAD に更新(M+漢字グリフも収録)
+  - VL-PGothic/VL-Gothic の漢字部の百文字程度のグリフを修正
+  - 壊れたグリフ(○付き数字)を修正
+  - 記号(機種依存文字)を追加作成し収録
+
+* 2007/01/01
+  - VLGothic/VLPGothic の一部の文字が freetype-2.2.1 で bold にならな
+    かったのを修正
+
+* 2006/12/31
+  - VL-PGothic/VL-Gothic の M+1C, M+1M 部分を 2006.12.31 の
+    CVS HEAD に更新(M+漢字グリフは未収録)
+  - VL-PGothic/VL-Gothic の漢字部の数百文字程度のグリフを修正
+
+* 2006/10/26
+  - ギリシャ文字の重複パスの除去
+  - VL-PGothic のギリシャ文字のサイドベアリングを調整し、可変幅に変更
+  - ライセンスファイルを README から分割
+
+* 2006/10/21
+  - VLGothic の "o" が freetype-2.2.1 で bold にならなかったのを修正
+
+* 2006/10/20
+  - VL-PGothic/VL-Gothic の M+1C, M+1M 部を TESTFLIGHT012 ベースに更新
+  - 重複パスの除去
+  - パスの向きを修正
+  - 一部古いグリフにもどっていたのを修正
+
+* 2006/10/05
+  - 重複パスの除去
+  - パスの向きを修正
+  - 一部漢字部のグリフ修正
+
+* 2006/09/30
+  - 重複パスの除去
+  - パスの向きを修正
+
+* 2006/09/29
+  - 重複パスの除去
+  - パスの向きを修正
+  - 一部漢字部のグリフ修正
+
+* 2006/09/25
+  - 入れ忘れていた縦書用のGSUBテーブルを追加
+  - 一部漢字部のグリフ修正
+
+* 2006/09/21
+  - VL-PGothic/VL-Gothic の M+1C, M+1M 部分を 2006.09.21 の
+    CVS HEAD に更新。
+  - 一部漢字部のグリフ修正
+
+* 2006/09/13
+  - 一部グリフ修正
+  - VL-Gothic の半角スペース幅の修正
+
+* 2006/09/11
+  - VL-PGothic/VL-Gothic の M+1C, M+1M 部分を 2006.09.11 の
+    CVS HEAD に更新。
+  - 一部の縦書用グリフを更新
+
+* 2006/09/02
+  - VL-Gothic の panose 設定を monospace に変更。
+  - 日本語フォント名を追加(VLゴシック、VL Pゴシック)
+
+--------------------------------------------------------------------------
+Copyright (C) 2003-2006 M+ FONTS PROJECT
+Copyright (C) 1990-2003 Wada Laboratory, the University of Tokyo. All rights reserved.
+Copyright (C) 2003-2004 Electronic Font Open Laboratory (/efont/). All rights reserved.
+Copyright (C) 2006 Daisuke SUZUKI <daisuke@vinelinux.org>
+Copyright (C) 2006 Project Vine <Vine@vinelinux.org>

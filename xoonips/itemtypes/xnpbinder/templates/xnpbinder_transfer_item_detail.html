@@ -1,0 +1,30 @@
+<{* $Revision: 1.1.2.2 $ *}>
+<table class="outer">
+  <!-- Basic Information -->
+<{include file="db:xoonips_transfer_detail_doi.html"}>
+<{include file="db:xoonips_transfer_detail_titles.html"}>
+<{include file="db:xoonips_transfer_detail_keywords.html"}>
+<{include file="db:xoonips_transfer_detail_description.html"}>
+<{include file="db:xoonips_transfer_detail_update_date.html"}>
+<{include file="db:xoonips_transfer_detail_creation_date.html"}>
+<{include file="db:xoonips_transfer_detail_contributor.html"}>
+<{include file="db:xoonips_transfer_detail_item_type.html"}>
+<{include file="db:xoonips_transfer_detail_changelogs.html"}>
+  <!-- index -->
+<{include file="db:xoonips_transfer_detail_indexes.html"}>
+</table>
+
+<!-- Binder Item Detail Information -->
+<div class="xoonips_page_title">
+<{$smarty.const._MD_XNPBINDER_REGISTERED_ITEMS_TITLE}>
+</div>
+<table>
+<{foreach item=item from=$xoonips_item.detail.child_items}>
+<tr>
+  <td class="<{cycle name="oddeven"}>">
+<{include file=$item.filename xoonips_item=$item.var}>
+  </td>
+</tr>
+<{/foreach}>
+
+</table>

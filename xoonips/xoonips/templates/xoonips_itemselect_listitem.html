@@ -1,0 +1,79 @@
+<{*
+$ids: ids of all items to display
+$item_htmls: information of items(association array).
+    array( 'selected' => (1:checked 0:not checked),
+           'html'     => (summary of item in HTML),
+           'item_id'  => id of item )
+$submit_url URL to go when submit
+$maxpage
+$page
+$page_no_label
+$search_var[]:   array of parameter names that send in submit.
+$selected
+$search_tabs tabname of [item] [metadata] and [file] array('label'=>tab label,'count'=>nuber of result in the tab)
+$search_tab 
+$export_enabled: when items in this page can export, this parameter is defined.
+*}>
+
+<script type="text/javascript" src="js/prototype.js">
+</script>
+
+<h3><{$smarty.const._MD_XOONIPS_ITEM_LISTING_ITEM}></h3>
+
+<{if !empty($error_message) }>
+<span style='color:#ff0000;'><{$error_message}></span>
+<{else}>
+
+<form id="xoonips_item_list_header" action="<{$submit_url}>" method="post">
+<input type="hidden" name="op" value="<{$op}>" />
+<{if !empty($search_itemtype)}>
+<input type='hidden' name='search_itemtype' value='<{$search_itemtype}>' />
+<{/if}>
+<{if !empty($keyword)}>
+<input type='hidden' name='keyword' value='<{$keyword}>' />
+<{/if}>
+<{include file="db:xoonips_item_list_header.html" form_id="xoonips_item_list_header"}>
+<{include file="db:xoonips_pagenavi.html" maxpage=$maxpage page=$page pages=$pages form_id="xoonips_item_list_header"}>
+<{include file="db:xoonips_extra_param.html" extra_param=$extra_param}>
+
+<input type='hidden' id='xoonips_page' name='page' value='<{$page}>' />
+
+<{if !empty($print_enabled)}>
+ <input type='hidden' id='xoonips_print' name='print' value='0' />
+ <input type='button'
+ value='<{$smarty.const._MD_XOONIPS_ITEM_PRINT_FRIENDLY_BUTTON_LABEL}>'
+ onclick='target="_blank"; $("xoonips_print").value=1; submit(); target=""; $("xoonips_print").value=0;' />
+<{/if}>
+
+<{if !empty($export_enabled)}>
+ <input type='submit'
+ value='<{$smarty.const._MD_XOONIPS_EXPORT_BUTTON_LABEL}>'
+ onclick='action="export.php"; op.value="config"; method="post"' />
+<{foreach item=i from=$ids}>
+ <input type='hidden' name='ids[]' value='<{$i}>'/>
+<{/foreach}>
+<{/if}>
+<br />
+
+<{* item / file List *}>
+<table width="100%" border="0" cellspacing="5">
+<{foreach item=i from=$item_htmls}>
+  <tr style="vertical-align: top;">
+    <td class="<{cycle values="odd,even" name="cycle2"}>">
+     <{$i.html}>
+    </td>
+  </tr>
+<{/foreach}>
+</table>
+
+<input type="hidden" name="search_itemtype" value="<{$search_itemtype}>" />
+<input type="hidden" name="search_tab" value="<{$search_tab}>" />
+<input type="hidden" name="search_cache_id" value="<{$search_cache_id}>" />
+
+<{include file="db:xoonips_pagenavi.html" maxpage=$maxpage page=$page form_id="xoonips_item_list_header"}>
+<{include file="db:xoonips_extra_param.html" extra_param=$extra_param}>
+</form>
+
+<{/if}>
+
+<!-- end module search results loop -->

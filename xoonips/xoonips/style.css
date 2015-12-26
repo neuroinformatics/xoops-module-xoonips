@@ -1,0 +1,138 @@
+
+/* download confirmation in detail.php */
+
+#xoonips_lightbox{
+	position: absolute;
+	top: 40px;
+	left: 0;
+	width: 100%;
+	z-index: 100;
+	text-align: center;
+	}
+
+#xoonips_outerImageContainer{
+	position: relative;
+	background-color: #d8d8d8;
+	width: 250px;
+	margin: 0 auto;
+	}
+
+#xoonips_imageContainer{
+	padding: 10px;
+	}
+
+#xoonips_overlay{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 90;
+	width: 100%;
+	height: 500px;
+	background-color: #000;
+	filter:alpha(opacity=60);
+	-moz-opacity: 0.6;
+	opacity: 0.6;
+	}
+
+.xoonips_download_box{
+	background-color: #fff;
+	padding: 10px;
+}
+
+/* Index tree in tree.php */
+
+.directory { font-size: 10pt; font-weight: bold; }
+.directory p { margin: 0px; white-space: nowrap; line-height: 10pt; vertical-align: text-bottom; }
+.tree { margin: 0px; white-space: nowrap; vertical-align: text-bottom; font-size: 10pt; font-weight: bold; }
+.directory div { margin: 0px; white-space: nowrap; }
+.directory img { vertical-align: text-bottom; }
+.directory table {  border-spacing: 0px; margin: 0px; border: 0px; padding: 0px; height: 19px;}
+
+/* for view xoonips_transfer_requested_item_detail */
+
+.xoonips_list_item{
+}
+
+.xoonips_list_item_left_column{
+    clear: both;
+    width: 65px;
+    text-align: center;
+    float: left;
+}
+
+.xoonips_list_item_center_column{
+    vertical-align: middle;
+    text-align: left;
+    float: left;
+}
+
+.xoonips_list_item_right_column{
+    width: 65px;
+    vertical-align: middle;
+    text-align: center;
+    float: right;
+}
+
+.xoonips_page_title{
+    font-size: 16pt;
+    padding-top: 8pt;
+    padding-bottom: 8pt;
+}
+
+
+div.xoonips_transfer_item_detail{
+    margin: auto;
+    width: 80%;
+}
+
+div.xoonips_transfer_item_detail_buttons{
+    margin: auto;
+}
+
+div.xoonips_transfer_admin_item_list_buttons{
+    margin: auto;
+}
+
+div.xoonips_detail_preview_left{
+    padding-top: 4px;
+    padding-bottom: 4pt;
+    clear: both;
+    width: 33%;
+    vertical-align: middle;
+    text-align: center;
+    float: left;
+}
+
+div.xoonips_detail_preview_center{
+    padding-top: 4px;
+    padding-bottom: 4pt;
+    width: 33%;
+    vertical-align: middle;
+    text-align: center;
+    float: left;
+}
+
+div.xoonips_detail_preview_right{
+    padding-top: 4px;
+    padding-bottom: 4pt;
+    width: 33%;
+    vertical-align: middle;
+    text-align: center;
+    float: left;
+}
+
+
+td.xoonips_metadata_search_result_left{
+    width: 20%;
+    text-align: left;
+    white-space: nowrap; 
+}
+
+td.xoonips_metadata_search_result_right{
+    width: 80%;
+    text-align: left;
+}
+
+table.xoonips_metadata_search_result{
+     margin-top: 8px;
+}
