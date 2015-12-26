@@ -28,7 +28,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
   exit();
 }
 
-require_once dirname( __FILE__ ).'/xoonips_group.class.php';
+require_once __DIR__.'/xoonips_group.class.php';
 
 /**
  * XooNIps Admin Group Handler class

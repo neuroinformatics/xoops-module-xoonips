@@ -28,8 +28,8 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
   exit();
 }
 
-require_once dirname( __FILE__ ).'/abstract_ranking.class.php';
-require_once dirname( __FILE__ ).'/ranking_active_group.class.php';
+require_once __DIR__.'/abstract_ranking.class.php';
+require_once __DIR__.'/ranking_active_group.class.php';
 
 /**
  * @brief handler object of ranking sum active group

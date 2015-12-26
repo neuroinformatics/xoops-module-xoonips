@@ -59,7 +59,7 @@ function xoonips_ranking_show( $is_arrival ) {
   // decide maximum string length by block position
   if ( defined( 'XOOPS_CUBE_LEGACY' ) ) {
     // get xoonips module id
-    $mydirname = basename( dirname( dirname( __FILE__ ) ) );
+    $mydirname = basename( dirname( __DIR__ ) );
     $module_handler =& xoops_gethandler( 'module' );
     $module =& $module_handler->getByDirname( $mydirname );
     $mid = $module->getVar( 'mid', 's' );

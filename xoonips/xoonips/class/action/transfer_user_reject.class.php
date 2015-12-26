@@ -26,9 +26,9 @@
 // ------------------------------------------------------------------------- //
 
 include_once 'transfer.class.php';
-include_once dirname( dirname( dirname( __FILE__ ) ) )
+include_once dirname( dirname( __DIR__ ) )
     . '/include/transfer.inc.php';
-include_once  dirname( dirname( __FILE__ ) ).'/base/gtickets.php';
+include_once  dirname( __DIR__ ).'/base/gtickets.php';
 
 class XooNIpsActionTransferUserReject extends XooNIpsActionTransfer{
     

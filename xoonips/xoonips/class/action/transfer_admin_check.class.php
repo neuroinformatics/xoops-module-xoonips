@@ -26,7 +26,7 @@
 // ------------------------------------------------------------------------- //
 
 include_once 'transfer.class.php';
-include_once dirname( dirname( dirname( __FILE__ ) ) )
+include_once dirname( dirname( __DIR__ ) )
     . '/include/transfer.inc.php';
 
 class XooNIpsActionTransferAdminCheck extends XooNIpsActionTransfer{

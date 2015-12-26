@@ -38,7 +38,7 @@ require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/functions.php';
  * @return bool false if failure
  */
 function xoops_module_install_xoonips( $xoopsMod ) {
-  $mydirname = basename( dirname( __FILE__ ) );
+  $mydirname = basename( __DIR__ );
 
   $uid = $GLOBALS['xoopsUser']->getVar( 'uid', 'n' );
   $mid = $xoopsMod->getVar( 'mid', 'n' );

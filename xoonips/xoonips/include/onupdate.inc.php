@@ -189,7 +189,7 @@ function xoonips_remove_duplicated_private_item_ids() {
 }
 
 function xoops_module_update_xoonips( $xoopsMod, $oldversion ) {
-  $mydirname = basename( dirname( __FILE__ ) );
+  $mydirname = basename( __DIR__ );
 
   $uid = $GLOBALS['xoopsUser']->getVar( 'uid', 'n' );
   $mid = $xoopsMod->getVar( 'mid', 'n' );

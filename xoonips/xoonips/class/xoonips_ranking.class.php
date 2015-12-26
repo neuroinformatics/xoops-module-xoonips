@@ -28,7 +28,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
   exit();
 }
 
-require_once dirname( __FILE__ ).'/base/transaction.class.php';
+require_once __DIR__.'/base/transaction.class.php';
 
 class XooNIpsRankingHandler {
 

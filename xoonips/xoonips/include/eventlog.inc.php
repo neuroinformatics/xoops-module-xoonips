@@ -27,7 +27,7 @@
 
 if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
 
-require_once dirname( dirname( __FILE__ ) ).'/class/base/gtickets.php';
+require_once dirname( __DIR__ ).'/class/base/gtickets.php';
 
 /**
  * convert text to csv string

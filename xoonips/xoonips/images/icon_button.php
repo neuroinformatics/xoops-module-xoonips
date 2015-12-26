@@ -79,7 +79,7 @@ if ( ! is_null( $label ) ) {
   }
 }
 
-$background_image_path = dirname( __FILE__ ).'/'.$background_image_file;
+$background_image_path = __DIR__.'/'.$background_image_file;
 
 // functions
 function fatal_error( $message ) {

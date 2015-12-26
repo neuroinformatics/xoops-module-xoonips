@@ -28,7 +28,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
   exit();
 }
 
-require_once dirname( __FILE__ ).'/abstract_ranking.class.php';
+require_once __DIR__.'/abstract_ranking.class.php';
 
 /**
  * @brief data object of ranking downloaded item

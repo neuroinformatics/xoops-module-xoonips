@@ -28,7 +28,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
   exit();
 }
 
-require_once dirname( __FILE__ ).'/xoonips_ranking.class.php';
+require_once __DIR__.'/xoonips_ranking.class.php';
 
 class XooNIpsAdminRankingHandler extends XooNIpsRankingHandler {
 

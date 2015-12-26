@@ -171,7 +171,7 @@ class XooNIpsUtilityUnicode extends XooNIpsUtility {
       return true;
       // already loaded
     }
-    $include_path = dirname( dirname( dirname( __FILE__ ) ) ).'/include';
+    $include_path = dirname( dirname( __DIR__ ) ).'/include';
     $mapfile_path = $include_path.'/unicode/'.$charset.'.TXT';
     $lines = @file_get_contents( $mapfile_path );
     if ( empty( $lines ) ) {

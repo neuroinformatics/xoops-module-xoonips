@@ -16,8 +16,8 @@ class XoopsGTicket {
 
 		// language file
 		if( defined( 'XOOPS_ROOT_PATH' ) && ! empty( $myxoopsConfig['language'] ) && ! strstr( $myxoopsConfig['language'] , '/' ) ) {
-			if( file_exists( dirname( dirname( __FILE__ ) ) . '/language/' . $myxoopsConfig['language'] . '/gticket_messages.phtml' ) ) {
-				include dirname( dirname( __FILE__ ) ) . '/language/' . $myxoopsConfig['language'] . '/gticket_messages.phtml' ;
+			if( file_exists( dirname( __DIR__ ) . '/language/' . $myxoopsConfig['language'] . '/gticket_messages.phtml' ) ) {
+				include dirname( __DIR__ ) . '/language/' . $myxoopsConfig['language'] . '/gticket_messages.phtml' ;
 			}
 		}
 

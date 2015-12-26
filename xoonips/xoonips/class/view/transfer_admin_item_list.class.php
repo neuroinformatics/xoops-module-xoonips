@@ -26,8 +26,8 @@
 // ------------------------------------------------------------------------- //
 
 include_once XOOPS_ROOT_PATH . '/class/template.php';
-include_once dirname( __FILE__ ) . '/transfer.class.php';
-include_once dirname( dirname( __FILE__ ) ).'/base/gtickets.php';
+include_once __DIR__ . '/transfer.class.php';
+include_once dirname( __DIR__ ).'/base/gtickets.php';
 
 /**
  * 

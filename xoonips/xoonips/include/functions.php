@@ -27,8 +27,8 @@
 
 if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
 
-include_once dirname( dirname( __FILE__ ) ).'/class/base/tableobject.class.php';
-include_once dirname( dirname( __FILE__ ) ).'/class/base/criteria.class.php';
+include_once dirname( __DIR__ ).'/class/base/tableobject.class.php';
+include_once dirname( __DIR__ ).'/class/base/criteria.class.php';
 
 /**
  * get xoonips version
@@ -37,7 +37,7 @@ include_once dirname( dirname( __FILE__ ) ).'/class/base/criteria.class.php';
  * @return int version
  */
 function xoonips_get_version() {
-  $mydirname = basename( dirname( dirname( __FILE__ ) ) );
+  $mydirname = basename( dirname( __DIR__ ) );
   $module_handler =& xoops_gethandler( 'module' );
   $module_obj =& $module_handler->getByDirname( $mydirname );
   if ( ! is_object( $module_obj ) ) {
@@ -178,7 +178,7 @@ function &xoonips_getutility( $name ) {
   // load class file
   $cname = 'XooNIpsUtility'.ucfirst( $name );
   if ( ! class_exists( $cname ) ) {
-    $cpath = dirname( dirname( __FILE__ ) ).'/class';
+    $cpath = dirname( __DIR__ ).'/class';
     if ( ! class_exists( 'XooNIpsUtility' ) ) {
       require_once $cpath.'/base/utility.class.php';
     }
@@ -710,7 +710,7 @@ function xoonips_get_cc_license( $cc_commercial_use, $cc_modification, $version,
     return $cc_cache[$region][$version][$condtion];
   }
   $fname = sprintf( 'CC-%s-%s-%s.html', $condtion, $version, $region );
-  $fpath = dirname( __FILE__ ).'/creativecommons/'.$fname;
+  $fpath = __DIR__.'/creativecommons/'.$fname;
   if ( ! file_exists( $fpath ) ) {
     // file not found
     return false;
