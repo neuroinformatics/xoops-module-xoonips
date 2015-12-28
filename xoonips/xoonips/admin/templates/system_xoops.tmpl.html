@@ -1,0 +1,121 @@
+<patTemplate:tmpl name="main">
+<patTemplate:tmpl name="header_include" src="adminheader.tmpl.html" parse="on"/>
+<patTemplate:tmpl name="confirm_javascript" whitespace="">
+<script type="text/javascript">
+<!--//
+/**
+ * submit pickup xoops user
+ */
+function xoonips_admin_system_xoops_useradd_submit( uid, uname ) {
+  /* confirmation */
+  var myret = confirm( '{REGISTER_CONFIRM}' + '\n\n' + '{LABEL_UNAME} : ' + uname );
+  if ( myret == false ) {
+    return false;
+  }
+  /* pickup */
+  var prefix = 'xoonips_admin_system_xoops_useradd';
+  var form = document.getElementById( prefix + '_form' );
+  var action = document.getElementById( prefix + '_action' );
+  var user_id = document.getElementById( prefix + '_uid' );
+  action.value = 'pickup';
+  user_id.value = uid;
+  form.submit();
+  return false;
+}
+
+/**
+ * submit delete zombie user
+ */
+function xoonips_admin_system_xoops_zombielist_submit( uid ) {
+  /* delete */
+  var prefix = 'xoonips_admin_system_xoops_zombielist';
+  var form = document.getElementById( prefix + '_form' );
+  var action = document.getElementById( prefix + '_action' );
+  var user_id = document.getElementById( prefix + '_uid' );
+  action.value = 'zudelete';
+  user_id.value = uid;
+  form.submit();
+  return false;
+}
+//--></script>
+</patTemplate:tmpl>
+<form id="xoonips_admin_system_xoops_useradd_form" name="xoonips_admin_system_xoops_useradd_form" action="system.php?page=xoops" method="post">
+<input id="xoonips_admin_system_xoops_useradd_action" name="action" value="default" type="hidden"/>
+<input id="xoonips_admin_system_xoops_useradd_uid" name="uid" value="" type="hidden"/>
+{USERADD_TOKEN_TICKET}
+<h4 style="margin-top: 20px; margin-bottom: 10px;">&raquo;&nbsp;{USERADD_TITLE}</h4>
+<div style="margin-left: 10px; margin-bottom: 5px;">
+ {USERADD_DESC}
+</div>
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th style="width: 20%; text-align: left;">{LABEL_UNAME}</th>
+    <th style="width: 30%; text-align: left;">{LABEL_NAME}</th>
+    <th style="width: 40%; text-align: left;">{LABEL_EMAIL}</th>
+    <th style="width: 10%; text-align: center;">{LABEL_ACTION}</th>
+  </tr>
+  <patTemplate:tmpl name="users">
+  <tr>
+    <td class="{EVENODD}" style="width: 20%; text-align: left;">{UNAME}</td>
+    <td class="{EVENODD}" style="width: 30%; text-align: left;">{NAME}</td>
+    <td class="{EVENODD}" style="width: 40%; text-align: left;">{EMAIL}</td>
+    <td class="{EVENODD}" style="width: 10%; text-align: center;">
+      <a href="#" onclick="return xoonips_admin_system_xoops_useradd_submit( '{UID}', '{UNAME_JS}' );"><img src="../images/icon_useradd.png" alt="{REGISTER}" title="{REGISTER}"/></a>
+    </td>
+  </tr>
+  </patTemplate:tmpl>
+  <patTemplate:tmpl name="users_empty" visibility="hidden">
+  <tr>
+   <td class="odd" colspan="4" style="text-align: center;">
+      <span style="color: red; font-weight: bold;">{USERADD_MSG_EMPTY}</span>
+    </td>
+  </tr>
+  </patTemplate:tmpl>
+  </tbody>
+</table>
+</form>
+
+<form id="xoonips_admin_system_xoops_zombielist_form" name="xoonips_admin_system_xoops_zombielist_form" action="system.php?page=xoops" method="post">
+<input id="xoonips_admin_system_xoops_zombielist_action" name="action" value="default" type="hidden"/>
+<input id="xoonips_admin_system_xoops_zombielist_uid" name="uid" value="" type="hidden"/>
+{ZOMBIELIST_TOKEN_TICKET}
+<h4 style="margin-top: 20px; margin-bottom: 10px;">
+  &raquo;&nbsp;{ZOMBIELIST_TITLE}
+</h4>
+
+<div style="margin-left: 10px; margin-bottom: 5px;">
+ {ZOMBIELIST_DESC}
+</div>
+
+<table width="100%" cellspacing="1" class="outer">
+  <tbody>
+  <tr>
+    <th style="width: 10%; text-align: left;">{LABEL_UID}</th>
+    <th style="width: 20%; text-align: left;">{LABEL_UNAME}</th>
+    <th style="width: 60%; text-align: center;">{ZOMBIELIST_LABEL_ITEMCOUNT}</th>
+    <th style="width: 10%; text-align: center;">{LABEL_ACTION}</th>
+  </tr>
+  <patTemplate:tmpl name="zombies">
+  <tr>
+    <td class="{EVENODD}" style="width: 10%; text-align: left;">{UID}</td>
+    <td class="{EVENODD}" style="width: 20%; text-align: left;">{UNAME}</td>
+    <td class="{EVENODD}" style="width: 60%; text-align: left;">{ITEMCOUNT}</td>
+    <td class="{EVENODD}" style="width: 10%; text-align: center;">
+      <a href="javascript:void(0);" onclick="return xoonips_admin_system_xoops_zombielist_submit( '{UID}' );"><img src="../images/icon_delete.png" alt="{DELETE}" title="{DELETE}"/></a>
+    </td>
+  </tr>
+  </patTemplate:tmpl>
+  <patTemplate:tmpl name="zombies_empty" visibility="hidden">
+  <tr>
+   <td class="odd" colspan="4" style="text-align: center;">
+      <span style="color: red; font-weight: bold;">{ZOMBIELIST_MSG_EMPTY}</span>
+    </td>
+  </tr>
+  </patTemplate:tmpl>
+  </tbody>
+</table>
+</form>
+
+<patTemplate:tmpl name="footer_include" src="adminfooter.tmpl.html" parse="on"/>
+</patTemplate:tmpl>

@@ -1,0 +1,53 @@
+VLGothic(VLゴシック) フォントファミリ
+                                                               2007.03.28
+--------------------------------------------------------------------------
+
+
+本フォントは、M+ FONTS PROJECT による M+1C および M+1M フォントを英数字、
+かなおよび一部の漢字に使用し、不足部分として Electronic Font Open
+Laboratory によるさざなみゴシックを Project Vine が改変し漢字部に使用した
+ゴシック体の日本語 TrueType フォントです。
+
+M+ FONTS 由来の部分は未改変ですが、さざなみフォント由来の部分には常用漢字
+を中心に Project Vine および Daisuke SUZUKI により2000文字程度のグリフに改
+変を加えています。また全角英数、記号およびギリシャ文字の大文字は M+1P のア
+ルファベットをベースに改変したものを使用しました。また、ギリシャ文字の小
+文字はサンセリフ風にデザインしなおしたものに置き換えてあります。
+
+
+VLゴシックフォントファミリ
+--------------------------
+
+VLGothic には M+ 1C Regular と組み合わせたプロポーショナルフォントである
+VL PGothic フォントと、M+ 1M Regular と組み合わせた固定幅フォントである
+VL Gothic フォントが含まれます。
+- 可変幅フォント VL-Gothic-Regular.ttf
+- 固定幅フォント VL-PGothic-Regular.ttf
+
+
+ライセンス
+----------
+
+M+ FONTS 由来の部分については、M+ FONTS PROJECT のライセンスが適用されます。
+添付の LICENSE_J.mplus を参照してください。
+
+さざなみゴシックフォント由来の部分については、さざなみフォントと同様に修正
+BSDライセンスとします。オリジナルのさざなみフォントのライセンスについては添
+付の README.sazanami を参照してください。
+
+VLゴシックフォントファミリ全体のライセンスは添付の LICENSE を参照してくだ
+さい。
+
+
+変更履歴
+--------
+
+添付の Changelog を参照してください。
+
+
+--------------------------------------------------------------------------
+Copyright (C) 2003-2007 M+ FONTS PROJECT
+Copyright (C) 1990-2003 Wada Laboratory, the University of Tokyo. All rights reserved.
+Copyright (C) 2003-2004 Electronic Font Open Laboratory (/efont/). All rights reserved.
+Copyright (C) 2006-2007 Daisuke SUZUKI <daisuke@vinelinux.org>
+Copyright (C) 2006-2007 Project Vine <Vine@vinelinux.org>

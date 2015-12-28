@@ -1,0 +1,50 @@
+<{*
+@param form boolean true if it needs <form> element
+@param form_id string id of this form(required only if $form is true)
+@param form_name(available if $form is true)
+@param submit_url string 
+@param order_by string title, doi, last_update_date, creation_date or publication_date
+@param order_dir string defined in _MD_XOONIPS_ITEM_ASCEND or _MD_XOONIPS_ITEM_DESCEND
+@param item_per_page integer 20, 50 or 100
+*}>
+
+<{if $form}>
+<form id="<{$form_id}>"
+ <{if !empty($form_name)}>name="<{$form_name}>"<{/if}>
+ action="<{$submit_url}>" method="post">
+<{/if}>
+<div style='text-align: center;'>
+<table width="100%" border="0" cellspacing="5">
+  <tr style="vertical-align: top;">
+    <td class="odd">
+     <{$smarty.const._MD_XOONIPS_ITEM_ORDER_BY}>
+     <select name="order_by" onchange="$('<{$form_id}>').action.value='itemselect.php'; $('<{$form_id}>').submit();">
+      <option value="title" <{if "title"==$order_by}> selected="selected" <{/if}> ><{$smarty.const._MD_XOONIPS_ITEM_TITLE_LABEL}></option>
+      <option value="doi"   <{if "doi"==$order_by}> selected="selected" <{/if}> ><{$smarty.const._MD_XOONIPS_ITEM_DOI_LABEL}></option>
+      <option value="last_update_date" <{if "last_update_date"==$order_by}> selected="selected" <{/if}> ><{$smarty.const._MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL}></option>
+      <option value="creation_date"    <{if "creation_date"==$order_by}> selected="selected" <{/if}> > <{$smarty.const._MD_XOONIPS_ITEM_CREATION_DATE_LABEL}></option>
+      <option value="publication_date" <{if "publication_date"==$order_by}> selected="selected" <{/if}> ><{$smarty.const._MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL}></option>
+     </select>
+    <input type="hidden" id="xoonips_item_list_header_order_dir" name="order_dir" value="<{$order_dir}>" />
+<{if $order_dir == $smarty.const.ASC }>
+    <{$smarty.const._MD_XOONIPS_ITEM_ASCEND}>
+    <a href="javascript:void(0);" onclick="$('xoonips_item_list_header_order_dir').value=<{$smarty.const.DESC}>;$('<{$form_id}>').submit(); return false;"><{$smarty.const._MD_XOONIPS_ITEM_DESCEND}></a>
+<{else}>
+    <a href="javascript:void(0);" onclick="$('xoonips_item_list_header_order_dir').value=<{$smarty.const.ASC}>;$('<{$form_id}>').submit(); return false;"><{$smarty.const._MD_XOONIPS_ITEM_ASCEND}></a>
+    <{$smarty.const._MD_XOONIPS_ITEM_DESCEND}>
+<{/if}>
+    </td>
+    <td class="odd">
+     <{$smarty.const._MD_XOONIPS_ITEM_NUM_OF_ITEM_PER_PAGE}>
+     <select name="item_per_page" onchange="$('<{$form_id}>').action.value='itemselect.php'; $('xoonips_page').value=1; $('<{$form_id}>').submit();">
+      <option value="20" <{if "20"==$item_per_page }> selected="selected" <{/if}> >20</option>
+      <option value="50" <{if "50"==$item_per_page }> selected="selected" <{/if}> >50</option>
+      <option value="100" <{if "100"==$item_per_page }> selected="selected" <{/if}> >100</option>
+     </select>
+    </td>
+  </tr>
+</table> 
+</div>
+<{if $form}>
+</form>
+<{/if}>

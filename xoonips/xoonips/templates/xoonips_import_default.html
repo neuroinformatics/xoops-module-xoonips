@@ -1,0 +1,124 @@
+<{*
+see also class/view/import_default.class.php .
+*}>
+
+
+<script type="text/javascript" 	src="js/xoonips_treelib.js">
+</script>
+<script type="text/javascript">
+<!--
+function getCheckedIndexes( form1 ){
+	xoonipsGetDocTreeView2();
+	xoonipsSaveTreeState2(xoonipsDocTreeView2);
+	form1.xoonipsCheckedXID.value = xoonipsCheckState2;
+	return true;
+}
+/**
+ * set enable/disable to the specified by given id
+ * 
+ * @param form of target component
+ * @param id of target comopnent
+ * @param true if set enabled.
+ * 
+ */
+function setEnabled( id, enabled )
+{
+    var comp = document.getElementById( id );
+    if ( comp != null ){
+        comp.disabled = !enabled;
+    }
+}
+//-->
+</script>
+
+<p>
+<{$smarty.const._MD_XOONIPS_IMPORT_PANKUZU_IMPORT}>
+<{$smarty.const._MI_XOONIPS_ACCOUNT_PANKUZU_SEPARATOR}>
+<{$smarty.const._MD_XOONIPS_IMPORT_PANKUZU_UPLOAD_FILE}>
+</p>
+
+<h3><{$smarty.const._MD_XOONIPS_IMPORT_TITLE}></h3>
+
+<form id="form_import_upload" enctype="multipart/form-data" action="import.php?action=upload" method="post" onsubmit="return getCheckedIndexes(this);">
+<input type="hidden" name="MAX_FILE_SIZE" value="<{$max_file_size_bytes}>"/>
+<input type="hidden" name="op" value="upload"/>
+<input type="hidden" name="xoonipsCheckedXID" value="<{$xoonips_checked_xid}>"/>
+<{if !empty( $error_message )}>
+<span style="color: red;"><{$error_message}></span>
+<{/if}>
+<table class="outer">
+ <tr>
+  <th colspan="2"><{$smarty.const._MD_XOONIPS_IMPORT_TITLE}></th>
+ </tr>
+<{if $admin}>
+ <tr>
+  <td class="odd" nowrap="nowrap">
+   <{$smarty.const._MD_XOONIPS_IMPORT_FILE}>
+   <{if !$zipfile_is_given}>
+   <span style="color: red;"><{$smarty.const._MD_XOONIPS_IMPORT_REQUIRED}></span>
+   <{/if}><br />
+   (<{$smarty.const._MD_XOONIPS_UPLOAD_MAX_FILESIZE}><{$max_file_size}>)
+  </td>
+  <td class="odd" width="70%">
+   <input id="radio_localfile" type="radio" name="filetype" value="localfile" onclick="setEnabled('file_zipfile', true); setEnabled('text_remotefile', false);" checked="checked"/><{$smarty.const._MD_XOONIPS_IMPORT_LOCAL_FILE}><br />
+   <input id="file_zipfile" name="zipfile" type="file" size="40"/><br /><br />
+   <input id="radio_remotefile" type="radio" name="filetype" value="remotefile" onclick="setEnabled('file_zipfile', false); setEnabled('text_remotefile', true);"/><{$smarty.const._MD_XOONIPS_IMPORT_REMOTE_FILE}><br />
+   <input id="text_remotefile" name="remotefile" type="text" size="40" disabled="disabled"/>(ex /path/to/import/file)<br />
+  </td>
+ </tr>
+ <tr>
+  <td class="even" nowrap="nowrap">
+   <{$smarty.const._MD_XOONIPS_IMPORT_CERTIFY_AUTO}>
+  </td>
+  <td class="odd" width="70%">
+   <input id="check_certify_auto" type="checkbox" name="certify_auto"/>
+  </td>
+ </tr>
+<{else}>
+ <tr>
+  <td class="odd" nowrap="nowrap">
+   <{$smarty.const._MD_XOONIPS_IMPORT_FILE}>
+   <{if !$zipfile_is_given}>
+   <span style="color: red;"><{$smarty.const._MD_XOONIPS_IMPORT_REQUIRED}></span>
+   <{/if}><br />
+   (<{$smarty.const._MD_XOONIPS_UPLOAD_MAX_FILESIZE}><{$max_file_size}>)<br />
+  </td>
+  <td class="odd" width="70%">
+   <input type="hidden" name="filetype" value="localfile"/>
+   <input id="file_zipfile" name="zipfile" type="file" size="40"/><br />
+  </td>
+ </tr>
+<{/if}>
+ <tr>
+  <td class="even" nowrap="nowrap">
+   <{$smarty.const._MD_XOONIPS_IMPORT_INDEX}>
+  </td>
+  <td class="even" width="70%">
+   <{$smarty.const._MD_XOONIPS_IMPORT_INDEX_TEXT}>
+  </td>
+ </tr>
+ <tr>
+  <td class="odd" nowrap="nowrap">
+   <{$smarty.const._MD_XOONIPS_IMPORT_ERROR_CHECK_ONLY}>
+  </td>
+  <td class="odd" width="70%">
+   <input id="check_error_ckeck_only" type="checkbox" name="error_check_only"/>
+  </td>
+ </tr>
+ <tr>
+  <td class="even" nowrap="nowrap">
+   <{$smarty.const._MD_XOONIPS_IMPORT_LOGGING}>
+  </td>
+  <td class="odd" width="70%">
+   <input id="check_logging" type="checkbox" name="logging" checked="checked"/>
+  </td>
+ </tr>
+ <tr>
+  <td class="even" colspan="2">
+   <input class="formButton" id="submit_import_upload" type="submit" value="<{$smarty.const._MD_XOONIPS_IMPORT_UPLOAD_SUBMIT}>"/>
+  </td>
+ </tr>
+</table>
+
+</form>
+

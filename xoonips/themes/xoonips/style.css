@@ -1,0 +1,130 @@
+body {color: black; background: white; margin: 0; padding: 0;}
+
+table {width: 100%; margin: 5; padding: 5; font-size: small}
+table td {padding: 0; border-width: 0; vertical-align: top; font-family: Verdana, Arial, Helvetica, sans-serif;}
+
+a {color: #0000FF; text-decoration: none; font-weight: normal; background-color: transparent;}
+a:hover {color: #ff0000; text-decoration: underline;}
+
+h1 {}
+h2 {}
+h3 {}
+h4 {}
+h5 {}
+ul { margin: 2px; padding: 2px; list-style: decimal inside; text-align: left;}
+li { margin-left: 2px; list-style: square inside; color: #2F5376}
+
+input.formButton {}
+
+/* recent news border */
+.item {border: 1px solid #cccccc;}
+/* recent news titlebar */
+.itemHead {padding: 3px; background-color: #2F5376; color: #FFFFFF;}
+/* recent news submit information field */
+.itemInfo {text-align: right; padding: 3px; background-color: #efefef}
+/* recent news title setting */
+.itemTitle a {font-size: 130%; font-weight: bold; font-variant: small-caps; color: #ffffff; background-color: transparent;}
+/* recent news poster */
+.itemPoster {font-size: 90%; font-style:italic;}
+/* recent news post date */
+.itemPostDate {font-size: 90%; font-style:italic;}
+/* recent news status */
+.itemStats {font-size: 90%; font-style:italic;}
+/* recent news contents body */
+.itemBody {padding-left: 5px;}
+.itemText {margin-top: 5px; margin-bottom: 5px; line-height: 1.5em;}
+/* recent news first character */
+.itemText:first-letter {font-size: 133%; font-weight: bold;}
+/* recent news footer */
+.itemFoot {text-align: right; padding: 3px; background-color: #efefef}
+.itemAdminLink {font-size: 90%;}
+.itemPermaLink {font-size: 90%;}
+
+th {background-color: #2F5376; color: #FFFFFF; padding : 2px; vertical-align : middle; font-family: Verdana, Arial, Helvetica, sans-serif;}
+
+/* header */
+td#headerlogo {width: 170px; background-color: #FFFFFF; vertical-align: middle; text-align: center;}
+td#headerbanner {background-color: #FFFFFF; vertical-align: middle; text-align:center;}
+td#headerbar {vertical-align: middle; text-align: center; border-bottom: 1px solid #dddddd; background-image: url(hbar.png);}
+
+/* left side block */
+td#leftcolumn {width: 170px; border-right: 1px solid #333333; font-size:11px; background-color: #FFFFFF;}
+td#leftcolumn th {background-color: #2F5376; color: #FFFFFF; vertical-align: middle;}
+td#leftcolumn div.blockTitle {padding: 5px; background-color: #000000; color: #FFFFFF; font-weight: bold;}
+td#leftcolumn div.blockContent {padding: 3px; background-color: #EEEEEE; line-height: 120%; line-height: 120%;}
+
+/* center block */
+td#centercolumn {font-size: 12px;}
+
+td#centercolumn th {background-color: #2F5376; color: #FFFFFF; vertical-align: middle;}
+td#centerCcolumn {padding: 0px 3px 1px 3px;}
+td#centerCcolumn div.blockTitle {font-size: 120%; font-weight: bold;  border-bottom: 2px solid #996699; padding: 3px; color: #0000FF; font-weight: bold; margin-top: 3px; margin-right: 0px;  margin-left: 0px;}
+td#centerCcolumn div.blockContent {padding: 3px; margin-right: 0px;  margin-left: 0px; margin-bottom: 2px; line-height: 120%;}
+
+td#centerLcolumn {width: 50%; padding: 0px 3px 0px 0px;}
+td#centerLcolumn div.blockTitle {font-size: 105%; padding: 3px; border-bottom: 2px solid #996699; color: #0000FF; font-weight: bold; margin-top: 3px;}
+td#centerLcolumn div.blockContent {padding: 3px; margin-left: 3px; margin-right: 2px; margin-bottom: 2px; line-height: 120%;}
+
+td#centerRcolumn {width: 50%; padding: 0px 3px 0px 0px;}
+td#centerRcolumn div.blockTitle {font-size: 105%; padding: 3px; border-bottom: 2px solid #996699; color: #0000FF; font-weight: bold; margin-top: 3px;}
+td#centerRcolumn div.blockContent {padding: 3px; margin-left: 2px; margin-right: 3px; margin-bottom: 2px; line-height: 120%;}
+
+div#content {text-align: left; padding: 8px;}
+
+/* right side block */
+td#rightcolumn {width: 170px; border-left: 1px solid #333333; font-size:11px; background-color: #FFFFFF;}
+td#rightcolumn th {background-color: #2F5376; color: #FFFFFF; vertical-align: middle;}
+td#rightcolumn div.blockTitle {padding: 5px; background-color: #000000; color: #FFFFFF; font-weight: bold;}
+td#rightcolumn div.blockContent {padding: 3px; background-color: #EEEEEE; line-height: 120%;}
+
+/* footer */
+tr#footerbar {text-align:center; background-image: url(hbar.png);}
+
+/* main manu */
+td#mainmenu a {margin: 0; padding: 4px;}
+td#mainmenu a.menuTop {padding-left: 3px;}
+td#mainmenu a.menuMain {padding-left: 3px;}
+td#mainmenu a.menuSub {padding-left: 9px;}
+
+/* user menu */
+td#usermenu a {margin: 0; padding: 4px;}
+td#usermenu a.menuTop {padding-left: 3px;}
+td#usermenu a.highlight {background-color: #fcc;}
+
+
+/* forum outer frame */
+.outer {border: 1px solid silver;}
+/* forum post information field */
+.head {background-color: #c2cdd6; padding: 5px; font-weight: bold;}
+/* forum odd and even lines colors */
+.even {background-color: #E6E6FA; padding: 5px;}
+.odd {background-color: #E6E6FA; padding: 5px;}
+/* forum footer */
+.foot {background-color: #c2cdd6; padding: 5px; font-weight: bold;}
+tr.even td {background-color: #dee3e7; padding: 5px;}
+tr.odd td {background-color: #E9E9E9; padding: 5px;}
+
+div.errorMsg { background-color: #FFCCCC; text-align: center; border-top: 1px solid #DDDDFF; border-left: 1px solid #DDDDFF; border-right: 1px solid #AAAAAA; border-bottom: 1px solid #AAAAAA; font-weight: bold; padding: 10px;}
+div.confirmMsg { background-color: #DDFFDF; color: #136C99; text-align: center; border-top: 1px solid #DDDDFF; border-left: 1px solid #DDDDFF; border-right: 1px solid #AAAAAA; border-bottom: 1px solid #AAAAAA; font-weight: bold; padding: 10px;}
+div.resultMsg { background-color : #CCCCCC; color: #333333; text-align: center; border-top: 1px solid silver; border-left: 1px solid silver; font-weight: bold; border-right: 1px solid #666666; border-bottom: 1px solid #666666; padding: 10px;}
+
+div.xoopsCode { background: #FFFFFF; border: 1px inset #000080; font-family: "Courier New",Courier,monospace; padding: 0px 6px 6px 6px;}
+div.xoopsQuote { background: #FFFFFF; border: 1px inset #000080; font-family: "Courier New",Courier,monospace; padding: 0px 6px 6px 6px;}
+
+
+.comTitle {font-weight: bold; margin-bottom: 2px;}
+.comText {padding: 2px;}
+.comUserStat {font-size: 10px; color: #2F5376; font-weight:bold; border: 1px solid silver; background-color: #ffffff; margin: 2px; padding: 2px;}
+.comUserStatCaption {font-weight: normal;}
+.comUserStatus {margin-left: 2px; margin-top: 10px; color: #2F5376; font-weight:bold; font-size: 10px;}
+.comUserRank {margin: 2px;}
+.comUserRankText {font-size: 10px;font-weight:bold;}
+.comUserRankImg {border: 0;}
+.comUserName {}
+.comUserImg {margin: 2px;}
+.comDate {font-weight: normal; font-style: italic; font-size: smaller}
+.comDateCaption {font-weight: bold; font-style: normal;}
+
+td#centercolumn th a {color: #E8E4E3;}
+
+table.outer th {background-color: #D8BFD8; color: #FFFFFF;}

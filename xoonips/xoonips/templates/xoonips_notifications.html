@@ -1,0 +1,8 @@
+<h3><{$lang_notifications}></h3>
+<{if $xoops_notification.show }>
+<{include file='db:system_notification_select.html' editprofile_url=$xoonips_editprofile_url}>
+<{else}>
+<div style="text-align: center; color: red; font-weight: bold;">Inline style Notification disabled</div>
+<{/if}>
+<br />
+&raquo;&raquo;&nbsp;&nbsp;<a href="<{$xoops_url}>/notifications.php">Active Notifications</a>

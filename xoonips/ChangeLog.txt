@@ -1,0 +1,242 @@
+---------------------------------------------------------------------------
+                      List of XooNIps Change Logs
+---------------------------------------------------------------------------
+3.48 released (31/Jan/2014)
++ maintenance release form ver.3.47
+
+Change Logs:
+* Bug fixes
+  - Fixed XSS security issue on item listing page.
+  - Fixed detail search bugs.
+    - Fatal error occured on full-text search of attachment file.
+    - Item is not searched if attachment file is deleted.
+  - Fixed bug for HTTPS connection with external systems.
+  - Fixed bug for login redirection.
+* Other enhancements
+  - Added new item-type interface '${xnpXXX}GetHeadMeta()'. It can provide
+    a function to output metadata into HTML head section. (experimental)
+    - In order to implement this function, we refer to the following website:
+      http://www.zuki-ebetsu.jp/blog/2011/08/10/1312980457/ (in Japanese)
+      Thanks for providing useful information.
+
+
+3.47 released (05/Jul/2013)
++ maintenance release form ver.3.46a
+
+Change Logs:
+* Bug fixes
+  - Revised OAI-PMH metadata schema of all item types
+  - Support OAI-PMH Junii2 version 3 metadata schema.
+  - Fixed other cumulative minor bugs.
+* Compatibility enhancements
+  - Support XOOPS Cube Legacy 2.2
+  - Support MySQL 5.5 (experimental)
+* Other enhancements
+  - Add reject item notification.
+  - Add sample preloads.
+
+
+3.46a released (24/May/2012)
++ maintenance release from ver.3.45
+
+Change Logs:
+* Bug fixes
+  - Fixed bug for avatar uploading.
+  - Fixed bug for page navigation on choosing related-to items.
+  - Fixed bug for online status of 'Switch User' feature.
+  - Fixed bug for advanced search criteria.
+  - Fixed bug for 'Edit Profile' links for site administrator.
+* Compatibility enhancements
+  - Added fall-back function for 'MIME-Type' detection of uploaded file.
+  - Added DB clean-up function to update routine from version 3.3X.
+
+
+3.45 released (03/Mar/2011)
++ maintenance release from ver.3.44
+
+Change Logs:
+* Bug fixes
+  - Fixed bug for 'Content-Type' header of file downloading.
+  - Fixed bug for update from version 3.24.
+  - Fixed bug for item deletion of 'Related To' items.
+  - Fixed bug for extracting zip archive.
+  - Fixed bug for 'Add Item' function.
+    - Others' items can be added into Private index.
+    - Item editing lock does't come off when pending item selected.
+  - Fixed 'setSpec' related problems of OAI-PMH repository function.
+    - 'setSpec' values in 'ListSets' response are not compatible.
+    - Invalid response returned by selective harvesting using 'set'
+      parameter.
+  - Fixed import failure when specified conditions.
+  - Fixed other cumulative minor bugs.
+* Compatibility enhancements
+  - Enhanced compatibility with IIS on Windows.
+  - Enhanced compatibility with PHP 5.3.
+    - Fixed 'Notice' messages.
+    - Fixed 'Deprecated' functions such as 'ereg', 'split', etc.
+    - Supported embedded magic database for 'Fileinfo' extension.
+  - Fixed some item type module installation error when
+    'STRICT_TRANS_TABLES' sql-mode setting into MySQL configuration.
+* New features
+  - Advanced search by 'item_id'
+
+
+3.44 released (27/Jan/2010)
++ maintenance release from ver.3.43
+
+Change Logs:
+  - fixed bug for 404 not found at downloading file using user defined ID.
+  - fixed bug for the existing related to items will be disappear on
+    update item
+
+
+3.43 released (21/Aug/2009)
++ maintenance release from ver.3.42a
+
+Change Logs:
+  - fixed wrong variable name of template for comment function by d3forum.
+  - fixed to create thumbnail images on import items.
+  - fixed fatal error at item editing of Paper item type.
+  - fixed bug for publication date become 1970 by editing items.
+  - fixed attachement file search for UTF-8 language environment.
+  - fixed dead link from the search result of account information page
+    "userinfo.php".
+  - fixed bug for approval status on update item.
+  - fixed bug for last modified date of OAI-PMH on updte item.
+  - support Amazon Product Advertising API for Book item type.
+
+
+3.42a released (06/Feb/2009)
++ maintenance release from ver.3.42
+
+Change Logs:
+  - fixed broken zip file extraction bug
+  - fixed to show printer friendly page of Book item type.
+  - fixed to invalid character 'k' output bug on Data item type.
+
+
+3.42 released (21/Jan/2009)
++ maintenance release from ver.3.41
+
+Change Logs:
+* Bug fixes
+  - fixed infiniate loop bug when an item has cross-reference related to
+    items.
+  - fixed bug for user profile updating.
+  - fixed bug for search cache garbage collecting.
+  - fixed bug for search index creation of Japanese written MS-Word
+    attachment on UNIX/Linux platform.
+  - fixed bug for item type modules updating. (Book, Conference, Data, Model,
+    Paper, Presentaion, Simulator, Stimulus and Tool)
+  - fixed html validation error on listing page of Book items.
+  - fixed linking count bug for Url items.
+* Performance and compatibility enhancements
+  - increased showing speed of listing items and transferring items.
+  - increased backward compatibility of import file.
+* UI improvements
+  - changed index tree folder images.
+  - changed tab images.
+  - revised group management pages (Edit Groups, Edit Group Members and
+    Group List).
+  - revised user publication list management page.
+
+
+3.41 released (12/Dec/2008)
++ maintenance release from ver.3.40
+
+Change Logs:
+* Increased import file backward compatibility
+* Fixed bug for item certification on XOOPS 2.0.16a-JP
+
+
+3.40 released (28/Nov/2008)
++ major update for FY2007's new feature implementation
+
+Change Logs:
+* Implement the function for transferring the item's right of property
+* Support to delete user accounts
+* Separate Binder item type from the XooNIps itself, and modularize the
+  item type
+* Implement the function for releasing items in the group area collectively
+* Have URL/E-mail on the context of comments linked
+* Increase the speed on displaying the index-trees
+* Implement the function for users to make comments on items
+* Handle XOOPS Cube Legacy 2.1
+* Simplify the RSS feeds
+* Others
+  - Handle the keywords when supplementing the paper items by PubMed fill-in
+  - Handle multiple registrations of information about the author, creator,
+    experimenter of the following item types: Book, Data, Model, Simulator,
+    Stimulus and Tool
+  - Improve the notifications on certificating items/users
+  - Handle the ISBN 13 digits of Book item type
+  - Expand the metadata retrieval function by OAI-PMH
+  - Improve the function in order to obtain the displayed name of the items
+    on XooNIps XML-RPC API XooNIps. getltemType
+  - Rename the language resource of Japanese UTF-8 from japaneseutf to
+    ja_utf8
+  - Delete the language resource of English UTF-8, englishutf
+
+
+3.32 released (14/Apr/2008)
++ maintenance release from ver.3.31
+
+Change Logs:
+* Fixed critical bugs for XooNIps XML-RPC API.
+* Fixed ranking data count up bug.
+* Fixed session variable overflow problem for item registration.
+* Fixed invalid resource name for some item types. 
+
+
+3.31 released (02/Nov/2007)
++ maintenance release from ver.3.30
+
+Change Logs:
+* It corresponds to the print the retrieval result of metadata.
+* Notice message of listitem.php 323line is corrected.
+* The violation of the HTML format by the item list of binder is corrected.
+* When file upload dir is a sub directory of /tmp and /var/tmp, in a set 
+  test,it is corrected to NG that it was OK.
+* It is corrected that the title of a browser of the item list was garbled
+  when the index is Japanese.
+* It is corrected that it becomes the one that ID was made a radical linking
+  ahead when there is ID in the item on the list screen.
+* OK corrects no operation of fileinfo occasionally by a set check.
+* When it is three row design when the page of the event log is displayed in
+  Japanese, it is too narrow and corrects the crumble of the layout.
+* It is corrected that the download of the event log according to the item
+  doesn't operate normally.
+* Error message of conference view.php 424line is corrected.
+* The violation of the format of the response of the OAI-PMH repository is
+  corrected.
+* It is corrected that the link of most searched keywords of ranking is
+  strange.
+* It is corrected to fail in download in the change of the language of
+  sysutil use.
+* It is corrected that the retrieval operates by paper PublicationYear in
+  a detailed retrieval.
+
+
+3.30 released (02/Jul/2007)
++ initial release from RIKEN BSI Neuroinformatics Japan Center.
+
+Change Logs:
+* revised the user registration work flow.
+* revised the XooNIps administration pages.
+* implemented OAI-PMH verb 'ListSets' response.
+* implemented graph plotting of the access logs for the site statistics.
+* implemented item management pages into the XooNIps administration page.
+* modified the download process of attachment files.
+* modified the item detail page for the access URL fixation.
+* enabled to use proxy connection for the access to external web sites.
+* showed the index tree node into the item listing page.
+* added SEO code for the browser title and the attachment file downloading.
+* implemented XML-RPC API for the client applications.
+* updated logo icons.
+* fixed many invalid HTML grammars.
+* fixed many serious security problems.
+* fixed other cumulative bugs.
+
+
+3.24 released (08/Mar/2007)
++ final release from RIKEN BSI Neuroinformatics Laboratory.

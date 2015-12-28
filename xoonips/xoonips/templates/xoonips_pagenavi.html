@@ -1,0 +1,50 @@
+<{*
+@param form boolean true if it needs <form> element
+@param form_id string id of this form(required only if $form is true)
+@param form_name(available if $form is true)
+@param submit_url string 
+@param page_no_label string
+@param maxpage integer
+@param page integer
+@param pages array of integer page No.
+@param pagenavi_extra_onclick string extra onclick command for page navi link(for NEXT,PREV,each page number)
+*}>
+
+
+<{if $form}>
+<form id="<{$form_id}>"
+ <{if !empty($form_name)}>name="<{$form_name}>"<{/if}>
+ action="<{$submit_url}>" method="post">
+<{/if}>
+<table width="100%" border="0">
+ <tr>
+  <td>
+    <{$page_no_label}>
+  </td>
+  <td style="text-align: right;">
+    <{if $maxpage > 1}>
+      <{if $page > 1}>
+        <a href="javascript:void(0);" onclick="$('xoonips_page').value=<{$page-1}>;<{$pagenavi_extra_onclick}>$('<{$form_id}>').submit(); return false;" ><{$smarty.const._MD_XOONIPS_PAGENAVI_PREV}></a>&nbsp;
+      <{else}>
+        <{$smarty.const._MD_XOONIPS_PAGENAVI_PREV}>&nbsp;
+      <{/if}>
+      <{foreach item=i from=$pages}>
+        <{if $i==$page}>
+          <{$i}>
+        <{else}>
+          <a href="javascript:void(0);" onclick="$('xoonips_page').value=<{$i}>;<{$pagenavi_extra_onclick}>$('<{$form_id}>').submit(); return false;" ><{$i}></a>
+        <{/if}>
+        &nbsp;
+      <{/foreach}>
+      <{if $page < $maxpage }>
+        <a href="javascript:void(0);" onclick="$('xoonips_page').value=<{$page+1}>;<{$pagenavi_extra_onclick}>$('<{$form_id}>').submit(); return false;" ><{$smarty.const._MD_XOONIPS_PAGENAVI_NEXT}></a>
+      <{else}>
+        <{$smarty.const._MD_XOONIPS_PAGENAVI_NEXT}>
+      <{/if}>
+    <{/if}>
+  </td>
+ </tr>
+</table>
+<{if $form}>
+</form>
+<{/if}>

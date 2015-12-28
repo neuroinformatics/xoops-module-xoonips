@@ -1,0 +1,111 @@
+<{* xnpbinder register block
+$detail: informatin of item to register in binder
+         array('html'=>HTML of item, 'item_id' => id of item)
+*}>
+<{* $Revision: 1.1.1.5 $ *}>
+<!-- begin of xnpbinder_register_block.html -->
+
+<script type="text/javascript">
+<!--
+// return true if all required parameters are filled
+function onSubmitItemType( ){
+  return true;
+}
+//-->
+</script>
+
+<table class="outer">
+  <!-- Basic Information -->
+  <tr>
+    <td class="head"><{$basic.doi.name}></td>
+    <td class="<{cycle name="oddeven" values="odd,even"}>"><{$basic.doi.value}></td>
+  </tr>
+  <tr>
+    <td width="30%" class="head"><{$basic.title.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.title.value}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$basic.keywords.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.keywords.value}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$basic.description.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.description.value}></td>
+  </tr>
+<{if !empty( $basic.last_update_date.value ) }>
+  <tr>
+    <td class="head"><{$basic.last_update_date.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.last_update_date.value}></td>
+  </tr>
+<{/if}>
+<{if !empty( $basic.creation_date.value ) }>
+  <tr>
+    <td class="head"><{$basic.creation_date.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.creation_date.value}></td>
+  </tr>
+<{/if}>
+<{if !empty( $basic.contributor.value ) }>
+  <tr>
+    <td class="head"><{$basic.contributor.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.contributor.value}></td>
+  </tr>
+<{/if}>
+<{if !empty( $basic.item_type.value ) }>
+  <tr>
+    <td class="head"><{$basic.item_type.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.item_type.value}></td>
+  </tr>
+<{/if}>
+<{if !empty( $basic.change_log.value ) }>
+  <tr>
+    <td class="head"><{$basic.change_log.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.change_log.value}></td>
+  </tr>
+<{/if}>
+<{if !empty( $basic.change_logs.value ) }>
+  <tr>
+    <td class="head"><{$basic.change_logs.name}></td>
+    <td class="<{cycle name="oddeven"}>"><{$basic.change_logs.value}></td>
+  </tr>
+<{/if}>
+</table>
+
+<h4><{$smarty.const._MD_XNPBINDER_ITEMS_TO_REGISTER_TITLE}></h4>
+<{include file="db:xoonips_select_item_menu.html" submit_url=$submit_url}>
+
+<input type="hidden" name="extra_param_name[]" value="item_id"/>
+<input type="hidden" name="extra_param_name[]" value="xoonipsCheckedXID"/>
+<input type="hidden" name="extra_param_name[]" value="title"/>
+<input type="hidden" name="extra_param_name[]" value="keywords"/>
+<input type="hidden" name="extra_param_name[]" value="description"/>
+<input type="hidden" name="extra_param_name[]" value="doi"/>
+<input type="hidden" name="extra_param_name[]" value="change_log"/>
+<input type="hidden" name="extra_param_name[]" value="xoonips_item_id"/>
+
+<!-- Binder Item Detail Information -->
+<table width="100%" border="0" cellspacing="5">
+<{foreach item=i from=$detail}>
+  <tr style="vertical-align: top;">
+    <td class="<{cycle values="odd,even" name="cycle1"}>" style="text-align: center;">
+     <input type="checkbox" name="xnpbinder_selected_to_delete[]" value="<{$i.item_id}>"/>
+    </td>
+    <td class="<{cycle values="odd,even" name="cycle2"}>">
+     <{$i.html}>
+    </td>
+  </tr>
+<{/foreach}>
+</table>
+<{foreach item=i from=$detail}>
+<input type="hidden" name="xoonips_item_id[]" value="<{$i.item_id}>"/>
+<{/foreach}>
+<{foreach item=i from=$detail}>
+<input type="hidden" name="selected_original[]" value="<{$i.item_id}>"/>
+<{/foreach}>
+<input type="hidden" name="op"/>
+<{if !empty($item_id)}>
+<input type="hidden" name="item_id" value="<{$item_id}>"/>
+<{/if}>
+<input class="formButton" type="button" name="delete_item"
+ value="<{$smarty.const._MD_XNPBINDER_DELETE_CHECKED_ITEM_BUTTON_LABEL}>" onclick="op.value='delete'; action='<{$submit_url}>'; xnpSubmitForm();"/>
+
+<!-- end of xnpbinder_register_block.html -->

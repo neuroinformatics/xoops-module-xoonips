@@ -1,0 +1,64 @@
+<script type="text/javascript" src="js/prototype.js">
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+function alertIllegalCondition( ){
+    if( 0 == $('xoonips_select_repository').options[$('xoonips_select_repository').selectedIndex].value
+        && $('xoonips_textbox_keyword').value.replace(/^\s+|\s+$/g,"") == "" ){
+        alert( '<{$smarty.const._MD_XOONIPS_OAIPMH_SEARCH_DEFAULT_ILLEGAL_CONDITION}>' );
+        return false;
+    }
+    return true;
+}
+//]]>
+</script>
+
+
+<div class='xoonips_page_title'>
+<{$smarty.const._MD_XOONIPS_OAIPMH_SEARCH_DEFAULT_PAGE_TITLE}>
+</div>
+
+<br />
+<{$smarty.const._MD_XOONIPS_OAIPMH_SEARCH_DEFAULT_REPOSITORY_COUNT}><{$total_repository_count}><br />
+<{$smarty.const._MD_XOONIPS_OAIPMH_SEARCH_DEFAULT_METADATA_COUNT}><{$total_metadata_count}><br />
+<br />
+
+<form id='xoonips_form_oampmh_search_default'
+      action='oaipmh_search.php?action=search'
+      onsubmit='return alertIllegalCondition();' 
+      method='post'>
+
+<table>
+<tr>
+<td>
+<{$smarty.const._MD_XOONIPS_OAIPMH_SEARCH_DEFAULT_REPOSITORY_NAME}>
+</td>
+<td>
+<select id='xoonips_select_repository' name='repository_id'>
+ <option id='xoonips_select_repository_id_0' value='0' <{if $repository_id==0}>selected="selected"<{/if}>><{$smarty.const._MD_XOONIPS_OAIPMH_SEARCH_DEFAULT_REPOSITORY_NOT_SPECIFIED}></option>
+<{foreach item=i from=$repositories}>
+ <option id='xoonips_select_repository_id_<{$i.repository_id}>' value='<{$i.repository_id}>'  <{if $repository_id==$i.repository_id}>selected="selected"    <{/if}>><{$i.repository_name}> (<{$i.metadata_count}>)</option>
+<{/foreach}>
+</select>
+</td>
+</tr>
+
+<tr>
+<td>
+<{$smarty.const._MD_XOONIPS_OAIPMH_SEARCH_DEFAULT_KEYWORD}>
+</td>
+<td>
+<input id='xoonips_textbox_keyword' name='keyword' size='50' maxlength='100' value='<{$keyword}>' />
+<input type='hidden' name='order_by' value='title' />
+<input type='hidden' name='order_dir' value='asc' />
+<input type='hidden' name='metadata_per_page' value='20' />
+<input type='hidden' name='page' value='1' />
+<input type='hidden' name='search_flag' value='1' />
+</td>
+</tr>
+</table>
+
+<input id='xoonips_button_submit' type='submit'
+       value='<{$smarty.const._MD_XOONIPS_OAIPMH_SEARCH_DEFAULT_SUBMIT}>' />
+</form>

@@ -1,0 +1,59 @@
+<{* xnppaper detail block *}>
+<{* $Revision: 1.1.2.4 $ *}>
+<table class="outer">
+<{include file="db:xoonips_transfer_detail_doi.html"}>
+<{include file="db:xoonips_transfer_detail_lang.html"}>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPPAPER_PUBMED_ID_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$xoonips_item.detail.pubmed_link}></td>
+  </tr>
+<{include file="db:xoonips_transfer_detail_titles.html"}>
+<{include file="db:xoonips_transfer_detail_keywords.html"}>
+<{include file="db:xoonips_transfer_detail_description.html"}>
+<{include file="db:xoonips_transfer_detail_update_date.html"}>
+<{include file="db:xoonips_transfer_detail_creation_date.html"}>
+<{include file="db:xoonips_transfer_detail_contributor.html"}>
+<{include file="db:xoonips_transfer_detail_item_type.html"}>
+<{include file="db:xoonips_transfer_detail_changelogs.html"}>
+
+  <!-- Paper Item Detail Information -->
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPPAPER_AUTHOR_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>">
+<{include file='db:xoonips_confirm_multiple_field.html' vars=$xoonips_item.xnppaper_author}>
+    </td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPPAPER_JOURNAL_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$xoonips_item.detail.journal}></td>
+  </tr>
+<{include file="db:xoonips_transfer_detail_publication_y.html" name=$smarty.const._MD_XNPPAPER_YEAR_OF_PUBLICATION_LABEL}>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPPAPER_VOLUME_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$xoonips_item.detail.volume}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPPAPER_NUMBER_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$xoonips_item.detail.number}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPPAPER_PAGE_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$xoonips_item.detail.page}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPPAPER_ABSTRACT_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>"><{$xoonips_item.detail.abstract|nl2br}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPPAPER_PDF_REPRINT_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>">
+<{if isset( $xoonips_item.detail.paper_pdf_reprint )}>
+<{include file="db:xoonips_transfer_detail_file.html" fileinfo=$xoonips_item.detail.paper_pdf_reprint}>
+<{/if}>
+    </td>
+  </tr>
+  <!-- index -->
+<{include file="db:xoonips_transfer_detail_indexes.html"}>
+  <!-- related_to -->
+<{include file="db:xoonips_transfer_detail_related_tos.html"}>
+</table>

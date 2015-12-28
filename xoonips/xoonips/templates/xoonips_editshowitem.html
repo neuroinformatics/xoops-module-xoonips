@@ -1,0 +1,113 @@
+<{* edit users publication list *}>
+<{include file="db:xoonips_breadcrumbs.inc.html"}>
+<script type="text/javascript">
+<!--//
+function xoonips_editshowitem_navi( item_type_id, page ) {
+  var form = document.getElementById( 'xoonips_editshowitem_form' );
+  form.op.value = 'navi';
+  var page_el = document.getElementById( 'xoonips_editshowitem_page_' + item_type_id );
+  page_el.value = page;
+  form.submit();
+  return false;
+}
+function xoonips_editshowitem_select_itemtype( item_type_id ) {
+  var form = document.getElementById( 'xoonips_editshowitem_form' );
+  form.op.value = 'navi';
+  form.item_type_id.value = item_type_id;
+  form.submit();
+  return false;
+}
+//--></script>
+
+<h3><{$smarty.const._MD_XOONIPS_ITEM_SHOW_EDIT_TITLE}></h3>
+
+Selected Items : <{$checked_item_num}> / <{$total_item_num}>
+
+<form id="xoonips_editshowitem_form" name="xoonips_editshowitem_form" action="editshowitem.php" method="post">
+<div style="margin: 10px;">
+<ul>
+<{foreach from=$item_types item=item_type}>
+  <li style="float:left; padding: 0px 1px; list-style:none; height:21px;"><a href="javascript:void(0);" onclick="return xoonips_editshowitem_select_itemtype(<{$item_type.item_type_id}>);" style="background: url( <{$xoops_url}>/modules/xoonips/images/tab_<{if $item_type.item_type_id == $item_type_id }>active<{else}>inactive<{/if}>_left.gif ) no-repeat left top; height 21px; float:left; padding-left: 5px; text-decoration:none;"><span style="background: url( <{$xoops_url}>/modules/xoonips/images/tab_<{if $item_type.item_type_id == $item_type_id }>active<{else}>inactive<{/if}>_right.gif) no-repeat right top; padding: 5px 5px 0px 0px;height: 21px; float:left; white-space: nowrap;"><{$item_type.name}><{if $item_type.navi.total != 0}>(<{$item_type.navi.total}>)<{/if}></span></a></li>
+<{/foreach}>
+</ul>
+<div style="clear:both;"></div>
+<div style="border-right: 1px solid rgb(64, 64, 64); border-bottom: 1px solid rgb(64, 64, 64);">
+<div style="border-style: solid; border-color: rgb(228, 228, 228) rgb(133, 133, 133) rgb(133, 133, 133) rgb(228, 228, 228); border-width: 1px; margin: 0px; padding: 0px;">
+  <{if $item_types[$item_type_id].navi.total > 1}>
+  <div style="margin: 5px;">
+  <div style="float: left;">
+    <{$item_types[$item_type_id].navi.start}> - <{$item_types[$item_type_id].navi.end}> of <{$item_types[$item_type_id].navi.total}> Items
+  </div>
+  <{if $item_types[$item_type_id].navi.maxpage > 1}>
+  <div style="float: right; white-space: nowrap;">
+  <{if $item_types[$item_type_id].navi.prev}><a href="javascript:void(0);" onclick="xoonips_editshowitem_navi(<{$item_type_id}>,<{$item_types[$item_type_id].navi.prev}>)">PREV</a><{else}>PREV<{/if}>&nbsp;
+  <{foreach from=$item_types[$item_type_id].navi.navi item=page}>
+    <{if $item_types[$item_type_id].navi.page != $page}><a href="javascript:void(0);" onclick="xoonips_editshowitem_navi(<{$item_type_id}>,<{$page}>)"><{$page}></a><{else}><{$page}><{/if}>&nbsp;
+  <{/foreach}>
+  <{if $item_types[$item_type_id].navi.next}><a href="javascript:void(0);" onclick="xoonips_editshowitem_navi(<{$item_type_id}>,<{$item_types[$item_type_id].navi.next}>)">NEXT</a><{else}>NEXT<{/if}>
+  </div>
+  <{/if}>
+  <div style="clear: both;"></div>
+  </div>
+  <{/if}>
+  <table width="100%" border="0" cellspacing="3">
+    <tr>
+      <th width="50" style="text-align: center;">
+        <{$smarty.const._MD_XOONIPS_ITEM_SHOW_ITEMLIST_CHECK}>
+      </th>
+      <th style="text-align: center;">
+        <{$smarty.const._MD_XOONIPS_ITEM_SHOW_ITEMLIST_ITEMS}>
+      </th>
+    </tr>
+    <{if $item_types[$item_type_id].navi.total == 0 }>
+    <tr class="<{cycle values="odd,even"}>">
+      <td colspan="2" style="text-align: center;">
+        <span style="font-weight: bold; color: red;"><{$smarty.const._MD_XOONIPS_NO_PUBLICATION_ITEM_DATA}></span>
+      </td>
+    </tr>
+    <{/if}>
+    <{foreach from=$item_types[$item_type_id].items item=item}>
+    <tr class="<{cycle values="odd,even"}>">
+      <td style="text-align: center;">
+        <input type="checkbox" name="checked_item_ids[]" value="<{$item.item_id}>"<{if $item.checked}> checked="checked"<{/if}>/>
+      </td>
+      <td>
+       <{$item.html}>
+      </td>
+    </tr>
+    <{/foreach}>
+  </table>
+  <{if $item_types[$item_type_id].navi.total > 1}>
+  <div style="margin: 5px;">
+  <div style="float: left;">
+    <{$item_types[$item_type_id].navi.start}> - <{$item_types[$item_type_id].navi.end}> of <{$item_types[$item_type_id].navi.total}> Items
+  </div>
+  <{if $item_types[$item_type_id].navi.maxpage > 1}>
+  <div style="float: right; white-space: nowrap;">
+  <{if $item_types[$item_type_id].navi.prev}><a href="javascript:void(0);" onclick="xoonips_editshowitem_navi(<{$item_type_id}>,<{$item_types[$item_type_id].navi.prev}>)">PREV</a><{else}>PREV<{/if}>&nbsp;
+  <{foreach from=$item_types[$item_type_id].navi.navi item=page}>
+    <{if $item_types[$item_type_id].navi.page != $page}><a href="javascript:void(0);" onclick="xoonips_editshowitem_navi(<{$item_type_id}>,<{$page}>)"><{$page}></a><{else}><{$page}><{/if}>&nbsp;
+  <{/foreach}>
+  <{if $item_types[$item_type_id].navi.next}><a href="javascript:void(0);" onclick="xoonips_editshowitem_navi(<{$item_type_id}>,<{$item_types[$item_type_id].navi.next}>)">NEXT</a><{else}>NEXT<{/if}>
+  </div>
+  <{/if}>
+  <div style="clear: both;"></div>
+  </div>
+  <{/if}>
+</div>
+</div>
+</div>
+<div style="text-align: center;">
+  <input type="submit" value="<{$smarty.const._SUBMIT}>"/>
+</div>
+<{$token_ticket}>
+<input type="hidden" name="uid" value="<{$uid}>"/>
+<input type="hidden" name="op" value="update"/>
+<input type="hidden" name="item_type_id" value="<{$item_type_id}>"/>
+<{foreach from=$item_types item=item_type}>
+<input id="xoonips_editshowitem_page_<{$item_type.item_type_id}>" type="hidden" name="page[<{$item_type.item_type_id}>]" value="<{$item_type.navi.page}>"/>
+<{/foreach}>
+<{foreach from=$hidden_checked_item_ids item=item_id}>
+<input type="hidden" name="checked_item_ids[]" value="<{$item_id}>"/>
+<{/foreach}>
+</form>

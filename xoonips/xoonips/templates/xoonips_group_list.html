@@ -1,0 +1,35 @@
+<{* $Revision: 1.4.4.1.2.4 $ *}>
+<{include file="db:xoonips_breadcrumbs.inc.html"}>
+
+<h3><{$smarty.const._MD_XOONIPS_TITLE_GROUP_LIST}></h3>
+
+<{* display of group *}>
+<table class="outer" cellspacing="1" cellpadding="4">
+  <tr>
+    <th><{$smarty.const._MD_XOONIPS_LABEL_GROUP_NAME}></th>
+    <th><{$smarty.const._MD_XOONIPS_LABEL_GROUP_DESCRIPTION}></th>
+    <th><{$smarty.const._MD_XOONIPS_LABEL_GROUP_ADMINISTRATORS}></th>
+  </tr>
+<{if empty( $groups ) }>
+  <tr>
+    <td class="odd" colspan="3"><{$smarty.const._MD_XOONIPS_MSG_GROUP_EMPTY}></td>
+  </tr>
+<{else}>
+<{foreach from=$groups item=group}>
+  <tr>
+    <td class="head">
+      <{$group.gname}>
+    </td>
+    <td class="<{cycle name="row1" values="even,odd"}>">
+      <{$group.gdesc}>
+    </td>
+    <td class="<{cycle name="row2" values="even,odd"}>">
+      <{foreach name=gadmin from=$group.gadmins item=gadmin}>
+        <{if ! $smarty.foreach.gadmin.first}> / <{/if}>
+        <a href="showusers.php?uid=<{$gadmin.uid}>"><{$gadmin.uname}></a>
+      <{/foreach}>
+    </td>
+  </tr>
+<{/foreach}>
+<{/if}>
+</table>

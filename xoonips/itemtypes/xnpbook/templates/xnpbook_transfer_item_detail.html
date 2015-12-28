@@ -1,0 +1,50 @@
+<table class="outer">
+<{include file="db:xoonips_transfer_detail_doi.html"}>
+<{include file="db:xoonips_transfer_detail_lang.html"}>
+<{include file="db:xoonips_transfer_detail_titles.html"}>
+<{include file="db:xoonips_transfer_detail_keywords.html"}>
+<{include file="db:xoonips_transfer_detail_description.html"}>
+<{include file="db:xoonips_transfer_detail_update_date.html"}>
+<{include file="db:xoonips_transfer_detail_creation_date.html"}>
+<{include file="db:xoonips_transfer_detail_contributor.html"}>
+<{include file="db:xoonips_transfer_detail_item_type.html"}>
+<{include file="db:xoonips_transfer_detail_changelogs.html"}>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPBOOK_AUTHOR_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>" >
+<{include file='db:xoonips_confirm_multiple_field.html' vars=$xoonips_item.xnpbook_author}>
+    </td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPBOOK_EDITOR_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>" ><{$xoonips_item.detail.editor}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPBOOK_PUBLISHER_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>" ><{$xoonips_item.detail.publisher}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPBOOK_YEAR_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>" ><{$xoonips_item.basic.publication_year}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPBOOK_URL_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>" ><{if $xoonips_item.detail.url != ""}><a title="<{$xoonips_item_detail.url}>" href="<{$xoonips_item.detail.url}>" target="_blank"><{$xoonips_item.detail.url|truncate:60}></a><{/if}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPBOOK_ISBN_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>" ><{$xoonips_item.detail.isbn}></td>
+  </tr>
+  <tr>
+    <td class="head"><{$smarty.const._MD_XNPBOOK_PDF_LABEL}></td>
+    <td class="<{cycle name="oddeven"}>" >
+<{if isset( $xoonips_item.detail.book_pdf )}>
+<{include file="db:xoonips_transfer_detail_file.html" fileinfo=$xoonips_item.detail.book_pdf}>
+<{/if}>
+    </td>
+  </tr>
+<!-- index -->
+<{include file="db:xoonips_transfer_detail_indexes.html"}>
+<!-- related_to -->
+<{include file="db:xoonips_transfer_detail_related_tos.html"}>
+</table>

@@ -1,0 +1,43 @@
+<script type="text/javascript">
+//<![CDATA[
+function showhide(id){
+  if(document.getElementById){
+    if(document.getElementById(id).style.display == "block")
+      document.getElementById(id).style.display = "none";
+    else
+      document.getElementById(id).style.display = "block";
+  }
+}
+
+document.write('<style type="text/css"><!--');
+document.write('.xoonips_padding{ padding: 2pt; }');
+document.write('.xoonips_search_block{ display:none; }');
+document.write('--><\/style>');
+//]]>
+</script>
+
+<div style="text-align: center;">
+ <input class="formButton" type="submit" value="<{$smarty.const._MD_XOONIPS_ITEM_SEARCH_BUTTON_LABEL}>"/>
+<{if !empty($back_form) }>
+ <input class="formButton" type="button" value="<{$smarty.const._MD_XOONIPS_ITEM_SEARCH_BACK_BUTTON_LABEL}>" onclick="document.getElementById('<{$back_form}>').submit();" />
+<{/if}>
+</div>
+<br />
+
+<{foreach item=block from=$search_blocks}>
+<div class="xoonips_padding">
+<{$block}>
+</div>
+<{/foreach}>
+
+<div style="text-align: center;">
+ <input class="formButton" type="submit" value="<{$smarty.const._MD_XOONIPS_ITEM_SEARCH_BUTTON_LABEL}>"/>
+<{if !empty($back_form) }>
+ <input class="formButton" type="button" value="<{$smarty.const._MD_XOONIPS_ITEM_SEARCH_BACK_BUTTON_LABEL}>" onclick="document.getElementById('<{$back_form}>').submit();" />
+<{/if}>
+</div>
+
+<input type="hidden" name="jumpto_url" value="<{$jumpto_url}>" />
+<{foreach item=i from=$search_var}>
+ <input type="hidden" name="search_var[]" value="<{$i}>" />
+<{/foreach}>

@@ -1,0 +1,57 @@
+<metadata>
+<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title><{foreach from=$basic.titles item='title' name='title'}><{if !$smarty.foreach.title.first}> <{/if}><{$title|xoonips_escape:'xml'}><{/foreach}></dc:title>
+<{foreach name='experimenters' from=$detail.experimenters item='experimenter'}>
+  <dc:creator><{$experimenter|xoonips_escape:'xml'}></dc:creator>
+<{/foreach}>
+<{foreach name='keywords' from=$basic.keywords item='keyword'}>
+  <dc:subject><{$keyword|xoonips_escape:'xml'}></dc:subject>
+<{/foreach}>
+<{foreach name='indexes' from=$indexes item='index'}>
+  <dc:subject><{$index|xoonips_escape:'xml'}></dc:subject>
+<{/foreach}>
+<{if !empty($basic.description)}>
+  <dc:description><{$basic.description|xoonips_escape:'xml'}></dc:description>
+<{/if}>
+<{if !empty($detail.readme)}>
+  <dc:description><{$detail.readme|xoonips_escape:'xml'}></dc:description>
+<{/if}>
+<{if !empty($repository.publisher) && $repository.publisher ne 'none'}>
+  <dc:publisher><{if $repository.publisher eq 'meta_author'}><{$repository.meta_author|xoonips_escape:'xml'}><{elseif $repository.publisher eq 'creator'}><{if $basic.uid|xoops_user:'name' == ''}><{$basic.uid|xoops_user:'uname'}><{else}><{$basic.uid|xoops_user:'name'}><{/if}><{else}><{$repository.publisher|xoonips_escape:'xml'}><{/if}></dc:publisher>
+<{/if}>
+  <dc:date><{$basic.publication_date_iso8601|xoonips_escape:'xml'}></dc:date>
+  <dc:type>itemType:xnpdata</dc:type>
+  <dc:type>dataType:<{$detail.data_type_display|xoonips_escape:'xml'}></dc:type>
+  <dc:type>NIItype:Data or Dataset</dc:type>
+<{if !empty($files)}>
+<{if $repository.download_file_compression == 'on'}>
+  <dc:format>application/zip</dc:format>
+<{else}>
+<{foreach name='mimetypes' from=$mimetypes item='mimetype'}>
+  <dc:format><{$mimetype|xoonips_escape:'xml'}></dc:format>
+<{/foreach}>
+<{/if}>
+<{/if}>
+  <dc:identifier><{$basic.item_url|xoonips_escape:'xml'}></dc:identifier>
+  <dc:identifier><{$repository.nijc_code|xoonips_escape:'xml'}>/<{$basic.item_type_id|xoonips_escape:'xml'}>.<{$basic.item_id|xoonips_escape:'xml'}></dc:identifier>
+<{if !empty($basic.doi)}>
+  <dc:identifier><{$repository.nijc_code|xoonips_escape:'xml'}>:<{$smarty.const.XNP_CONFIG_DOI_FIELD_PARAM_NAME}>/<{$basic.doi|xoonips_escape:'xml'}></dc:identifier>
+<{/if}>
+<{foreach name='files' from=$files item='file'}>
+  <dc:identifier>fullTextURL:<{$file.file_url|xoonips_escape:'xml'}></dc:identifier>
+<{/foreach}>
+  <dc:language><{$basic.lang|xoonips_escape:'xml'}></dc:language>
+<{foreach name='previews' from=$previews item='preview'}>
+  <dc:relation><{$preview.image_url|xoonips_escape:'xml'}></dc:relation>
+<{/foreach}>
+<{foreach name='related_tos' from=$related_tos item='related_to'}>
+  <dc:relation><{$related_to.item_url|xoonips_escape:'xml'}></dc:relation>
+<{/foreach}>
+<{if !empty($detail.rights)}>
+  <dc:rights><{if $detail.use_cc == 0}><{$detail.rights|xoonips_escape:'xml'}><{else}><{$detail.rights_cc_url|xoonips_escape:'xml'}><{/if}></dc:rights>
+<{/if}>
+</oai_dc:dc>
+</metadata>
