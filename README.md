@@ -1,4 +1,4 @@
-xcl-module-xoonips
+xoops-module-xoonips
 ==================
 
-Next generation XooNIps
+Base Platform System XooNIps
