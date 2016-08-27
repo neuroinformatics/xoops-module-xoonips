@@ -264,8 +264,9 @@ if ( ! $download->check_pathinfo( $pathinfo_filename ) ) {
 
 $dl_filepath = FALSE;
 
-XCube_DelegateUtils::call('Module.Xoonips.FileDownload.Prepare',
-      $file_id, $item_id, $itemtype_name ,new XCube_Ref($dl_filepath));
+if (class_exists('XCube_DelegateUtils')) {
+  XCube_DelegateUtils::call('Module.Xoonips.FileDownload.Prepare', $file_id, $item_id, $itemtype_name, new XCube_Ref($dl_filepath));
+}
 
 if ( $do_compress ) {
   // get metadata of attachment file
