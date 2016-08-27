@@ -1,5 +1,5 @@
 <?php
-// $Revision: 1.1.4.1.2.26 $
+// $Revision: 1.1.4.1.2.27 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
 //  Copyright (C) 2005-2013 RIKEN, Japan All rights reserved.                //
@@ -519,7 +519,7 @@ class XooNIpsOrmEventLogHandler extends XooNIpsTableObjectHandler {
    */
   function recordDeleteGroupMemberEvent( $uid, $gid ) {
     $obj =& $this->create();
-    $obj->set( 'event_type_id', ETID_INSERT_GROUP_MEMBER );
+    $obj->set( 'event_type_id', ETID_DELETE_GROUP_MEMBER );
     $obj->set( 'exec_uid', $this->getExecUid() );
     $obj->set( 'uid', $uid );
     $obj->set( 'gid', $gid );

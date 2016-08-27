@@ -1,5 +1,5 @@
 <?php
-// $Revision: 1.1.4.1.2.17 $
+// $Revision: 1.1.4.1.2.18 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
 //  Copyright (C) 2005-2011 RIKEN, Japan All rights reserved.                //
@@ -42,36 +42,38 @@ function b_xoonips_tree_show() {
   $textutil =& xoonips_getutility( 'text' );
   $formdata =& xoonips_getutility( 'formdata' );
 
-  // view page hook
-  // http://foo.bar/register.php
-  //   -> http://foo.bar/modules/xoonips/registeruser.php
-  // http://foo.bar/userinfo.php
-  //   -> http://foo.bar/modules/xoonips/userinfo.php
-  // http://foo.bar/user.php
-  //   -> http://foo.bar/modules/xoonips/user.php
-  $site_url = XOOPS_URL.'/';
-  $site_url_base = '/';
-  if ( preg_match( '/^(\\S+):\\/\\/([^\\/]+)((\\/[^\\/]+)*\\/)$/', $site_url, $matches ) ) {
-    $site_url_base = $matches[3];
-  }
-  $current_script = ( isset( $_SERVER['SCRIPT_NAME'] ) ) ? $_SERVER['SCRIPT_NAME'] : '';
-  if ( $current_script == $site_url_base.'register.php' ) {
-    header( 'Location: modules/xoonips/registeruser.php' );
-    exit();
-  }
-  if ( $current_script == $site_url_base.'userinfo.php' ) {
-    $uid = $formdata->getValue( 'get', 'uid', 'i', false );
-    $uid = isset( $uid ) ? '?uid='.$uid : '';
-    header( 'Location: modules/xoonips/userinfo.php'.$uid );
-    exit();
-  }
-  if ( $current_script == $site_url_base.'user.php' ) {
-    $op = $formdata->getValue( 'both', 'op', 's', false );
-    if ( is_null( $op ) ) {
-      $xoops_redirect = $formdata->getValue( 'get', 'xoops_redirect', 's', false );
-      $redirect = !empty($xoops_redirect) ? '?xoops_redirect='.urlencode($xoops_redirect) :'';
-      header( 'Location: modules/xoonips/user.php'.$redirect );
+  if (!class_exists('Xoonips_UserPreload')) {
+    // view page hook
+    // http://foo.bar/register.php
+    //   -> http://foo.bar/modules/xoonips/registeruser.php
+    // http://foo.bar/userinfo.php
+    //   -> http://foo.bar/modules/xoonips/userinfo.php
+    // http://foo.bar/user.php
+    //   -> http://foo.bar/modules/xoonips/user.php
+    $site_url = XOOPS_URL.'/';
+    $site_url_base = '/';
+    if ( preg_match( '/^(\\S+):\\/\\/([^\\/]+)((\\/[^\\/]+)*\\/)$/', $site_url, $matches ) ) {
+      $site_url_base = $matches[3];
+    }
+    $current_script = ( isset( $_SERVER['SCRIPT_NAME'] ) ) ? $_SERVER['SCRIPT_NAME'] : '';
+    if ( $current_script == $site_url_base.'register.php' ) {
+      header( 'Location: modules/xoonips/registeruser.php' );
       exit();
+    }
+    if ( $current_script == $site_url_base.'userinfo.php' ) {
+      $uid = $formdata->getValue( 'get', 'uid', 'i', false );
+      $uid = isset( $uid ) ? '?uid='.$uid : '';
+      header( 'Location: modules/xoonips/userinfo.php'.$uid );
+      exit();
+    }
+    if ( $current_script == $site_url_base.'user.php' ) {
+      $op = $formdata->getValue( 'both', 'op', 's', false );
+      if ( is_null( $op ) ) {
+        $xoops_redirect = $formdata->getValue( 'get', 'xoops_redirect', 's', false );
+        $redirect = !empty($xoops_redirect) ? '?xoops_redirect='.urlencode($xoops_redirect) :'';
+        header( 'Location: modules/xoonips/user.php'.$redirect );
+        exit();
+      }
     }
   }
 

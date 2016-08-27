@@ -1,5 +1,5 @@
 <?php
-// $Revision: 1.1.2.14 $
+// $Revision: 1.1.2.15 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
 //  Copyright (C) 2005-2011 RIKEN, Japan All rights reserved.                //
@@ -257,7 +257,7 @@ class XooNIpsUtilityDownload extends XooNIpsUtility {
    * @return string generated file name
    */
   function _content_disposition_filename( $file_name ) {
-    if ( strstr( $this->ua, 'MSIE' ) ) {
+    if ( strstr( $this->ua, 'MSIE' ) || strstr( $this->ua, 'Trident' ) ) {
       // Microsoft Internet Explorer
       // - utf8 + x-www-form-url
       $client_filename = $this->_convert_encoding( $file_name, $this->browser_encoding, 'u' );

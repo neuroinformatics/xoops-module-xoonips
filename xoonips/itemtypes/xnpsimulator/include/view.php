@@ -28,7 +28,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
   exit();
 }
 
-$itemtype_path = dirname( dirname( __FILE__ ) );
+$itemtype_path = dirname( __DIR__ );
 $itemtype_dirname = basename( $itemtype_path );
 $xoonips_path = dirname( $itemtype_path ).'/xoonips';
 
@@ -630,7 +630,7 @@ function xnpsimulatorGetAdvancedSearchBlock( &$search_var ) {
   $tpl->assign( 'module_name', 'xnpsimulator' );
   $simulator_type = xnpsimulator_get_type_array();
   $tpl->assign( 'simulator_type_option', $simulator_type );
-  $tpl->assign( 'module_display_name', xnpGetItemTypeDisplayNameByDirname( basename( dirname( dirname( __FILE__ ) ) ), 's' ) );
+  $tpl->assign( 'module_display_name', xnpGetItemTypeDisplayNameByDirname( basename( dirname( __DIR__ ) ), 's' ) );
 
   // return HTML content
   return $tpl->fetch( 'db:xnpsimulator_search_block.html' );

@@ -29,7 +29,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
 
 include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xoonips_compo_item.class.php';
 include_once XOOPS_ROOT_PATH . '/modules/xnpconference/iteminfo.php';
-include_once dirname( dirname( __FILE__ ) ) . '/include/view.php';
+include_once dirname( __DIR__ ) . '/include/view.php';
 
 /**
  *

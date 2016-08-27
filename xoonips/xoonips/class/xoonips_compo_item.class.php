@@ -1,5 +1,5 @@
 <?php
-// $Revision: 1.1.2.14 $
+// $Revision: 1.1.2.15 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
 //  Copyright (C) 2005-2011 RIKEN, Japan All rights reserved.                //
@@ -529,7 +529,7 @@ if ( $type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_
         $basic_handler =& xoonips_getormhandler( 'xoonips', 'item_basic' );
         foreach( $item -> getVar( 'related_tos' ) as $related_to ){
             $related_basic =& $basic_handler -> get( $related_to ->get( 'item_id' ) );
-            if (is_null($related_basic))
+            if (empty($related_basic))
               continue; // ignore invalid item id
             $related_item_type =& $item_type_handler -> get( $related_basic -> get( 'item_type_id' ) );
             $related_item_type_id = $related_item_type->get('item_type_id');

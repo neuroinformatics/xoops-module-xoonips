@@ -1,5 +1,5 @@
 <?php
-// $Revision: 1.1.4.2 $
+// $Revision: 1.1.4.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
 //  Copyright (C) 2005-2011 RIKEN, Japan All rights reserved.                //
@@ -259,6 +259,40 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility {
   }
 
   /**
+   * tells whether the filename is writable
+   *
+   * @access private
+   * @param string $path
+   * @return bool false if writable
+   * @see: http://www.php.net/manual/en/function.is-writable.php
+   */
+  function _is_writable($path) {
+    if (!$this->is_windows) {
+      // it works if not IIS
+      return is_writable($path);
+    }
+    //will work in despite of Windows ACLs bug
+    //NOTE: use a trailing slash for folders!!!
+    //see http://bugs.php.net/bug.php?id=27609
+    //see http://bugs.php.net/bug.php?id=30931
+    if ($path{strlen($path)-1} == '/') {
+      // recursively return a temporary file path
+      return $this->_is_writable($path.uniqid(mt_rand()).'.tmp');
+    } else if (is_dir($path)) {
+      return $this->_is_writable($path.'/'.uniqid(mt_rand()).'.tmp');
+    }
+    // check tmp file for read/write capabilities
+    $rm = file_exists($path);
+    $f = @fopen($path, 'a');
+    if ($f === false)
+      return false;
+    fclose($f);
+    if (!$rm)
+      unlink($path);
+    return true;
+  }
+
+  /**
    * check writable directory permission
    *
    * @access private
@@ -276,7 +310,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility {
       // not direcotry
       return false;
     }
-    if ( ! is_writable( $path ) || ! is_readable( $path ) || ( ! $this->is_windows && ! is_executable( $path ) ) ) {
+    if ( ! $this->_is_writable( $path ) || ( ! $this->is_windows && ( ! is_readable( $path ) || ! is_executable( $path ) ) ) ) {
       // not operatable permission
       return false;
     }

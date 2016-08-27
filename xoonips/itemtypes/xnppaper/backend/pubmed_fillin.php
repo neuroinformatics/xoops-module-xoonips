@@ -1,5 +1,5 @@
 <?php
-// $Revision: 1.2.2.1.2.5 $
+// $Revision: 1.2.2.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
 //  Copyright (C) 2005-2011 RIKEN, Japan All rights reserved.                //
@@ -30,7 +30,7 @@ if ( ! defined( 'XOONIPS_PATH' ) ) {
 
 // class file
 require_once XOONIPS_PATH.'/class/base/JSON.php';
-require_once dirname( dirname( __FILE__ ) ).'/class/pubmed.class.php';
+require_once dirname( __DIR__ ).'/class/pubmed.class.php';
 
 // change internal encoding to UTF-8
 if ( extension_loaded( 'mbstring' ) ) {
@@ -41,8 +41,7 @@ if ( extension_loaded( 'mbstring' ) ) {
 
 $is_error = false;
 $error_message = '';
-// if ( ! isset( $_SERVER['HTTP_REFERER'] ) || strpos( $_SERVER['HTTP_REFERER'], XOOPS_URL.'/modules/xoonips/' ) !== 0 ) {
-if ( ! isset( $_SERVER['HTTP_REFERER'] ) || preg_match( '/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER'] ) == 0 ) {
+if ( ! isset( $_SERVER['HTTP_REFERER'] ) || preg_match('/' . preg_quote(XOOPS_URL, '/') . '/', $_SERVER['HTTP_REFERER'] ) == 0 ) {
   $is_error = true;
   $error_message = 'Turn REFERER on';
 }

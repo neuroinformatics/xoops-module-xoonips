@@ -25,7 +25,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname( dirname( dirname( __FILE__ ) ) )
+include_once dirname( dirname( __DIR__ ) )
     . '/xoonips/class/xoonips_import_item.class.php';
 
 class XNPSimulatorImportItem extends XooNIpsImportItem{

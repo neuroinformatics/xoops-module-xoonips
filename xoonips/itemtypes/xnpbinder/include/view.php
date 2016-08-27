@@ -28,7 +28,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
   exit();
 }
 
-$itemtype_path = dirname( dirname( __FILE__ ) );
+$itemtype_path = dirname( __DIR__ );
 $itemtype_dirname = basename( $itemtype_path );
 $xoonips_path = dirname( $itemtype_path ).'/xoonips';
 
@@ -37,7 +37,7 @@ $langman->read( 'main.php', $itemtype_dirname );
 
 include_once $xoonips_path.'/include/extra_param.inc.php';
 include_once $xoonips_path.'/class/xoonips_item_event_dispatcher.class.php';
-include_once dirname( dirname( __FILE__ ) ).'/class/item_event_listener.class.php';
+include_once dirname( __DIR__ ).'/class/item_event_listener.class.php';
 
 $dispatcher =& XooNIpsItemEventDispatcher::getInstance();
 $dispatcher->registerEvent( new XNPBinderItemEventListener() );
@@ -431,7 +431,7 @@ function xnpbinderGetAdvancedSearchBlock( &$search_var ) {
   // copy variables in $xoopsTpl to $tpl
   $tpl->assign( 'basic', xnpGetBasicInformationAdvancedSearchBlock( 'xnpbinder', $search_var ) );
   $tpl->assign( 'module_name', 'xnpbinder' );
-  $tpl->assign( 'module_display_name', xnpGetItemTypeDisplayNameByDirname( basename( dirname( dirname( __FILE__ ) ) ), 's' ) );
+  $tpl->assign( 'module_display_name', xnpGetItemTypeDisplayNameByDirname( basename( dirname( __DIR__ ) ), 's' ) );
   // return as HTML
   return $tpl->fetch( 'db:xnpbinder_search_block.html' );
 }
@@ -602,7 +602,7 @@ function xnpbinderGetMetadata($prefix, $item_id) {
  * @reutrn array string of URL of child items
  */
 function xnpbidner_get_child_item_urls( $binder_item_id ) {
-  include_once dirname( dirname( dirname( __FILE__ ) ) ).'/xoonips/include/lib.php';
+  include_once dirname( dirname( __DIR__ ) ).'/xoonips/include/lib.php';
 
   $binder_item_link_handler =& xoonips_getormhandler( 'xnpbinder', 'binder_item_link' );
   $criteria = new Criteria( 'binder_id', $binder_item_id );

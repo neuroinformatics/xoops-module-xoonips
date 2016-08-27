@@ -26,7 +26,7 @@
 // ------------------------------------------------------------------------- //
 
 
-include_once dirname( dirname( dirname( __FILE__ ) ) )
+include_once dirname( dirname( __DIR__ ) )
     . '/xoonips/class/xoonips_import_item.class.php';
 
 class XNPBookImportItem extends XooNIpsImportItem{

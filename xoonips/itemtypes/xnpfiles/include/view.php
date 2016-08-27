@@ -28,7 +28,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
   exit();
 }
 
-$itemtype_path = dirname( dirname( __FILE__ ) );
+$itemtype_path = dirname( __DIR__ );
 $itemtype_dirname = basename( $itemtype_path );
 $xoonips_path = dirname( $itemtype_path ).'/xoonips';
 
@@ -609,7 +609,7 @@ function xnpfilesGetAdvancedSearchBlock( &$search_var ) {
   $tpl->assign( 'data_file_name', $data_file_name );
   $tpl->assign( 'data_file_mimetype', $data_file_mimetype );
   $tpl->assign( 'data_file_filetype', $data_file_filetype );
-  $tpl->assign( 'module_display_name', xnpGetItemTypeDisplayNameByDirname( basename( dirname( dirname( __FILE__ ) ) ), 's' ) );
+  $tpl->assign( 'module_display_name', xnpGetItemTypeDisplayNameByDirname( basename( dirname( __DIR__ ) ), 's' ) );
 
   // return as HTML
   return $tpl->fetch( 'db:xnpfiles_search_block.html' );

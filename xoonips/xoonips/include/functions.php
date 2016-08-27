@@ -1,5 +1,5 @@
 <?php
-// $Revision: 1.1.4.1.2.36 $
+// $Revision: 1.1.4.1.2.37 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
 //  Copyright (C) 2005-2011 RIKEN, Japan All rights reserved.                //
@@ -686,7 +686,7 @@ function xoonips_get_cc_license( $cc_commercial_use, $cc_modification, $version,
   );
   static $cc_region_map = array(
     // php-indent: disable
-    'GENERIC' => array( '25' ),
+    'INTERNATIONAL' => array( '40' ),
     // php-indent: enable
   );
   static $cc_cache = array();

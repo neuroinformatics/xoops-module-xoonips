@@ -1,5 +1,5 @@
 <?php
-// $Revision: 1.15.2.1.2.20 $
+// $Revision: 1.15.2.1.2.21 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
 //  Copyright (C) 2005-2011 RIKEN, Japan All rights reserved.                //
@@ -53,9 +53,11 @@ function download_error( $num, $msg = '' ) {
   exit();
 }
 
-function download_create_zipfile( $file_id, $item_id, $file_name, $metadata ) {
+function download_create_zipfile( $file_id, $item_id, $file_name, $metadata ,$file_path) {
   $file_handler =& xoonips_gethandler( 'xoonips', 'file' );
-  $file_path = $file_handler->getFilePath( $file_id );
+  if($file_path === FALSE){
+    $file_path = $file_handler->getFilePath( $file_id );
+  }
   if ( ! file_exists( $file_path ) ) {
     // file not found
     return false;
@@ -260,20 +262,30 @@ if ( ! $download->check_pathinfo( $pathinfo_filename ) ) {
   }
 }
 
+$dl_filepath = FALSE;
+
+XCube_DelegateUtils::call('Module.Xoonips.FileDownload.Prepare',
+      $file_id, $item_id, $itemtype_name ,new XCube_Ref($dl_filepath));
+
 if ( $do_compress ) {
   // get metadata of attachment file
   $meta_func = $itemtype_name.'GetMetaInformation';
   $metadata = $meta_func( $item_id );
   // create zip file
   $filename = $download->convert_to_client( $filename, 'u' );
-  $dl_filepath = download_create_zipfile( $file_id, $item_id, $filename, $metadata );
+  $dl_filepath = download_create_zipfile( $file_id, $item_id, $filename, $metadata,$dl_filepath );
+
   if ( $dl_filepath === false ) {
     download_error( 500, _MD_XOONIPS_ITEM_CANNOT_CREATE_TMPFILE );
   }
-  $dl_filename = $zip_filename;
+  if(is_null($dl_filename)){
+    $dl_filename = $zip_filename;
+  }
   $dl_mimetype = 'application/x-zip';
 } else {
-  $dl_filepath = $file_handler->getFilePath( $file_id );
+  if($dl_filepath === FALSE){
+    $dl_filepath = $file_handler->getFilePath( $file_id );
+  }
   $dl_filename = $download->convert_to_client( $filename, 'u' );
   $dl_mimetype = $xf_obj->get( 'mime_type' );
 }

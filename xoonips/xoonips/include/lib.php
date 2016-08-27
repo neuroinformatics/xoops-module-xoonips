@@ -1,5 +1,5 @@
 <?php
-// $Revision: 1.147.2.1.2.83 $
+// $Revision: 1.147.2.1.2.84 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
 //  Copyright (C) 2005-2011 RIKEN, Japan All rights reserved.                //
@@ -2811,8 +2811,7 @@ function xnpGetRightsConfirmBlock( $item_id, $maxlen=65535 ) {
   $rightsCCCommercialUse = $formdata->getValue( 'post', 'rightsCCCommercialUse', 'i', false, 0 );
   $rightsCCModification = $formdata->getValue( 'post', 'rightsCCModification', 'i', false, 0 );
   if ( $rightsUseCC == 1 ) {
-    global $xnp_cc_licenses;
-    $htmlText = xoonips_get_cc_license( $rightsCCCommercialUse, $rightsCCModification, 2.5, 'GENERIC' );
+    $htmlText = xoonips_get_cc_license($rightsCCCommercialUse, $rightsCCModification, 4.0, 'INTERNATIONAL');
     $within = $htmlText;
     $without = "";
   }

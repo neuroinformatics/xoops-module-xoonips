@@ -28,7 +28,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
   exit();
 }
 
-$itemtype_path = dirname( dirname( __FILE__ ) );
+$itemtype_path = dirname( __DIR__ );
 $itemtype_dirname = basename( $itemtype_path );
 
 $langman =& xoonips_getutility( 'languagemanager' );
@@ -199,7 +199,7 @@ function xnpbookGetRegisterBlock() {
   }
 
   // check amazon access key and secret access key
-  $mydirname = basename( dirname( dirname( __FILE__ ) ) );
+  $mydirname = basename( dirname( __DIR__ ) );
   $mhandler =& xoops_gethandler( 'module' );
   $module =& $mhandler->getByDirname( $mydirname );
   $chandler =& xoops_gethandler( 'config' );
@@ -252,7 +252,7 @@ function xnpbookGetEditBlock( $item_id ) {
   }
 
   // check amazon access key and secret access key
-  $mydirname = basename( dirname( dirname( __FILE__ ) ) );
+  $mydirname = basename( dirname( __DIR__ ) );
   $mhandler =& xoops_gethandler( 'module' );
   $module =& $mhandler->getByDirname( $mydirname );
   $chandler =& xoops_gethandler( 'config' );
@@ -515,7 +515,7 @@ function xnpbookGetAdvancedSearchBlock( &$search_var ) {
   // copy variables in $xoopsTpl to $tpl
   $tpl->assign( 'basic', $basic );
   $tpl->assign( 'module_name', 'xnpbook' );
-  $tpl->assign( 'module_display_name', xnpGetItemTypeDisplayNameByDirname( basename( dirname( dirname( __FILE__ ) ) ), 's' ) );
+  $tpl->assign( 'module_display_name', xnpGetItemTypeDisplayNameByDirname( basename( dirname( __DIR__ ) ), 's' ) );
 
   // return as HTML
   return $tpl->fetch( 'db:xnpbook_search_block.html' );

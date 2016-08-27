@@ -30,7 +30,7 @@ if ( ! defined( 'XOONIPS_PATH' ) ) {
 
 // class file
 require_once XOONIPS_PATH.'/class/base/JSON.php';
-require_once dirname( dirname( __FILE__ ) ).'/class/amazon.class.php';
+require_once dirname( __DIR__ ).'/class/amazon.class.php';
 
 // change internal encoding to UTF-8
 if ( extension_loaded( 'mbstring' ) ) {

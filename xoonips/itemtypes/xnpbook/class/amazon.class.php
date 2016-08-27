@@ -69,7 +69,7 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser {
 
   function XooNIps_Amazon_ECS40() {
     // get module config
-    $mydirname = basename( dirname( dirname( __FILE__ ) ) );
+    $mydirname = basename( dirname( __DIR__ ) );
     $mhandler =& xoops_gethandler( 'module' );
     $module =& $mhandler->getByDirname( $mydirname );
     $chandler =& xoops_gethandler( 'config' );
@@ -174,7 +174,7 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser {
   function create_url( $url, $arguments ) {
     // load 'hash_hmac()' compatibility function for PHP 4
     if ( ! function_exists( 'hash_hmac' ) ) {
-      require_once( dirname( dirname( __FILE__ ) ).'/include/compat/hash_hmac.php' );
+      require_once( dirname( __DIR__ ).'/include/compat/hash_hmac.php' );
     }
     // create sigunature
     sort( $arguments );

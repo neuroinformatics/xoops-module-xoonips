@@ -25,8 +25,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname( dirname( dirname( __FILE__ ) ) ) . '/xoonips/class/base/itemeventlistener.class.php';
-include_once dirname( dirname( dirname( __FILE__ ) ) ) . '/xoonips/include/notification.inc.php';
+include_once dirname( dirname( __DIR__ ) ) . '/xoonips/class/base/itemeventlistener.class.php';
+include_once dirname( dirname( __DIR__ ) ) . '/xoonips/include/notification.inc.php';
 
 class XNPBinderItemEventListener extends XooNIpsItemEventListener{
     function onDelete( $item_id ){

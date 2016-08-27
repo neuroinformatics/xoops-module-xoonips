@@ -27,7 +27,7 @@
 
 if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
 
-include_once dirname( dirname( dirname( __FILE__ ) ) ) . '/include/view.php';
+include_once dirname( dirname( __DIR__ ) ) . '/include/view.php';
 
 /**
  *

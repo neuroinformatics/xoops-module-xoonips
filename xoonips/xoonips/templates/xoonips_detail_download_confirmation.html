@@ -1,5 +1,5 @@
 <{* form to display download confirmation (a part of detail page) *}>
-<{* $Revision: 1.1.2.1.2.2 $ *}>
+<{* $Revision: 1.1.2.1.2.3 $ *}>
 <{* 
 
 // some codes are from lightbox v2.02
@@ -228,7 +228,7 @@ function xoonips_hideSelectBoxes(){
             <div class='xoonips_download_box'>
               <{$smarty.const._MD_XOONIPS_ITEM_ATTACHMENT_LICENSE_QUERY_LABEL}>
               <{if $use_cc}>
-                  <{$rights}>
+                <div class="creativecommons"><{$rights}></div>
               <{else}>
                 <textarea readonly='readonly' rows='10' cols='60' style="width:480px;"><{$rights}></textarea><br />
               <{/if}>
