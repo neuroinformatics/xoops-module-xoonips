@@ -170,7 +170,7 @@ class XooNIps_UserPreloadFunctions {
    * @param string $script
    */
   static private function _doRedirect($script) {
-    $mydirname = basename(dirname(dirname(__FILE__)));
+    $mydirname = basename(dirname(__DIR__));
     $url = sprintf('%s/modules/%s/%s', XOOPS_URL, $mydirname, $script);
     $root =& XCube_Root::getSingleton();
     $root->mController->executeForward($url);
@@ -180,7 +180,7 @@ class XooNIps_UserPreloadFunctions {
    * load xoonips features
    */
   static private function _loadXooNIps() {
-    $mydirname = basename(dirname(dirname(__FILE__)));
+    $mydirname = basename(dirname(__DIR__));
     require_once XOOPS_ROOT_PATH.'/modules/'.$mydirname.'/condefs.php';
     require_once XOOPS_ROOT_PATH.'/modules/'.$mydirname.'/include/functions.php';
   }

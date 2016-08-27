@@ -29,7 +29,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
 
 if ( ! class_exists( 'XooNIpsGraphLib' ) ) {
 
-include dirname(__FILE__).'/graphlib.class.php';
+include __DIR__.'/graphlib.class.php';
 
 /**
  * basic data class for graph drawing
@@ -806,7 +806,7 @@ class XooNIpsGraph
    */
   function XooNIpsGraph( $width, $height )
   {
-    $this->module_path = dirname( dirname( dirname(__FILE__) ) );
+    $this->module_path = dirname( dirname( __DIR__ ) );
     $this->graph = new XooNIpsGraphLib( $width, $height );
     foreach ( array( 'bottom', 'left', 'right' ) as $ax ) {
       $this->axis[$ax] = new XooNIpsGraphAxis();

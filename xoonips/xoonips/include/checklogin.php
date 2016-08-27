@@ -69,7 +69,7 @@ if (false != $user) {
     $user->setVar('last_login', time());
     if (!$member_handler->insertUser($user)) {
     }
-    require_once dirname(__FILE__).'/session.php';
+    require_once __DIR__.'/session.php';
     xoonips_session_regenerate();
     $_SESSION = array();
     $_SESSION['xoopsUserId'] = $user->getVar('uid');

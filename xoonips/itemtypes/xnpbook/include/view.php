@@ -704,7 +704,7 @@ function xnpbookSupportMetadataFormat( $metadataPrefix, $item_id ) {
 }
 
 function xnpbookGetMetadata($prefix, $item_id) {
-  $mydirpath = dirname(dirname(__FILE__));
+  $mydirpath = dirname(__DIR__);
   $mydirname = basename($mydirpath);
   if (!in_array($prefix, array('oai_dc', 'junii2')))
     return false;

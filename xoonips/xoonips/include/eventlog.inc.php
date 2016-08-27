@@ -864,7 +864,7 @@ function xoonips_eventlog_download( $is_post, $log_type_id ) {
  */
 function _xoonips_eventlog_graph_draw( &$xdata, &$ydata, $title, $xlabel, $mode  ) {
   // load graph library
-  include_once dirname(dirname(__FILE__)).'/class/base/graph.class.php';
+  include_once dirname(__DIR__).'/class/base/graph.class.php';
   $unicode =& xoonips_getutility( 'unicode' );
 
   // count number of data
