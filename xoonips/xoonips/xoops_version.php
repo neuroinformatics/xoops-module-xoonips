@@ -26,7 +26,7 @@
 // ------------------------------------------------------------------------- //
 
 $modversion['name'] = _MI_XOONIPS_NAME;
-$modversion['version'] = 3.48;
+$modversion['version'] = 3.49;
 $modversion['description'] = _MI_XOONIPS_DESC;
 $modversion['credits'] =
   "RIKEN, Japan (http://www.riken.jp/)";

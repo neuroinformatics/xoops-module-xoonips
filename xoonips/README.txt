@@ -1,6 +1,6 @@
-xoonips 3.48 : Neuroinformatics Base Platform System 
+xoonips 3.49 : Neuroinformatics Base Platform System 
 
-Copyright (C) 2005-2014 RIKEN, Japan All rights reserved.
+Copyright (C) 2005-2016 RIKEN, Japan All rights reserved.
 
 Managed by Neuroinformatics Japan Center, RIKEN Brain Science Institute.
 
