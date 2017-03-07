@@ -32,6 +32,10 @@
  * 
  */
 
+// ignore protector check
+define('PROTECTOR_SKIP_DOS_CHECK', 1);
+define('PROTECTOR_SKIP_FILESCHECKER', 1);
+
 include 'include/common.inc.php';
 
 $xnpsid = $_SESSION['XNPSID'];
