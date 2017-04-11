@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /*
@@ -42,40 +43,42 @@ ALTER TABLE `x_xoonips_item_keyword` ADD UNIQUE (`item_id` ,`keyword_id` );
  * @li getVar('item_id') :
  * @li getVar('keyword_id') :
  * @li getVar('keyword') :
- *
  */
-class XooNIpsOrmKeyword extends XooNIpsTableObject {
-  function XooNIpsOrmKeyword() {
-    $this->initVar( 'seq_id', XOBJ_DTYPE_INT, 0, false );
-    $this->initVar( 'item_id', XOBJ_DTYPE_INT, null, false );
-    $this->initVar( 'keyword_id', XOBJ_DTYPE_INT, null, false );
-    $this->initVar( 'keyword', XOBJ_DTYPE_TXTBOX, null, true, 255 );
-  }
+class XooNIpsOrmKeyword extends XooNIpsTableObject
+{
+    public function XooNIpsOrmKeyword()
+    {
+        $this->initVar('seq_id', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('item_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('keyword_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('keyword', XOBJ_DTYPE_TXTBOX, null, true, 255);
+    }
 }
 
 /**
  * @brief handler object of keyword
- *
- *
  */
-class XooNIpsOrmKeywordHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmKeywordHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmKeyword', 'xoonips_item_keyword', 'seq_id' );
-  }
+class XooNIpsOrmKeywordHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmKeywordHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmKeyword', 'xoonips_item_keyword', 'seq_id');
+    }
 
   /**
-   * get keywords
+   * get keywords.
    *
-   * @access public
    * @param int $item_id
+   *
    * @return array object array
    */
-  function &getKeywords( $item_id ) {
-    $criteria = new Criteria( 'item_id', $item_id );
-    $criteria->setSort( 'keyword_id' );
-    $criteria->setOrder( 'ASC' );
-    return $this->getObjects( $criteria );
+  public function &getKeywords($item_id)
+  {
+      $criteria = new Criteria('item_id', $item_id);
+      $criteria->setSort('keyword_id');
+      $criteria->setOrder('ASC');
+
+      return $this->getObjects($criteria);
   }
 }
-?>

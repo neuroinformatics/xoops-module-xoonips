@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.9 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,24 +26,19 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
 
 /**
- *
  * @brief Class that generate response of XML-RPC getItemtype request
- *
- *
  */
 class XooNIpsXmlRpcViewGetItemtype extends XooNIpsXmlRpcViewElement
 {
-
     /**
-     *
      * @brief return XoopsXmlRpcTag that has response of this request
      *
      * @return XoopsXmlRpcTag
      */
-    function render() 
+    public function render()
     {
         $resp = new XoopsXmlRpcStruct();
         $itemtype = $this->response->getSuccess();
@@ -52,18 +48,17 @@ class XooNIpsXmlRpcViewGetItemtype extends XooNIpsXmlRpcViewElement
         $resp->add('description', new XoopsXmlRpcString($itemtype->getDescription()));
         $fields = new XoopsXmlRpcArray();
         $iteminfo = $itemtype->getIteminfo();
-        
-        // include language file of itemtype
-        $langman =& xoonips_getutility( 'languagemanager' );
-        $modulename = $iteminfo['ormcompo']['module'];
-        $langman->read( 'main.php', $modulename );
-        
-        $unicode =& xoonips_getutility( 'unicode' );
-        
-        foreach($iteminfo['io']['xmlrpc']['item'] as $i) {
 
+        // include language file of itemtype
+        $langman = &xoonips_getutility('languagemanager');
+        $modulename = $iteminfo['ormcompo']['module'];
+        $langman->read('main.php', $modulename);
+
+        $unicode = &xoonips_getutility('unicode');
+
+        foreach ($iteminfo['io']['xmlrpc']['item'] as $i) {
             // data_type mapping
-            switch( $i['xmlrpc']['type'] ){
+            switch ($i['xmlrpc']['type']) {
             case 'dateTime.iso8601':
                 $datatype = 'calendar';
                 break;
@@ -74,32 +69,32 @@ class XooNIpsXmlRpcViewGetItemtype extends XooNIpsXmlRpcViewElement
                 $datatype = $i['xmlrpc']['type'];
                 break;
             }
-            
+
             $field = new XoopsXmlRpcStruct();
             $field->add('name', new XoopsXmlRpcString(implode('.', $i['xmlrpc']['field'])));
             $field->add('display_name', new XoopsXmlRpcString(
                 $unicode->encode_utf8(
                     constant($i['xmlrpc']['display_name']),
-                    xoonips_get_server_charset() ) ) );
-            $field->add('type', new XoopsXmlRpcString($datatype) );
-            if ( isset($i['xmlrpc']['options']) ){
+                    xoonips_get_server_charset())));
+            $field->add('type', new XoopsXmlRpcString($datatype));
+            if (isset($i['xmlrpc']['options'])) {
                 $options = new XoopsXmlRpcArray();
-                foreach ( $i['xmlrpc']['options'] as $option_key => $option_val ){
+                foreach ($i['xmlrpc']['options'] as $option_key => $option_val) {
                     $option = new XoopsXmlRpcStruct();
-                    $option->add( 'option', new XoopsXmlRpcString($option_val['option']) );
-                    $option->add( 'display_name', new XoopsXmlRpcString(
+                    $option->add('option', new XoopsXmlRpcString($option_val['option']));
+                    $option->add('display_name', new XoopsXmlRpcString(
                         $unicode->encode_utf8(
-                            constant( $option_val['display_name'] ),
-                            xoonips_get_server_charset() ) ) );
-                    $options->add( $option );
-                    unset( $option );
+                            constant($option_val['display_name']),
+                            xoonips_get_server_charset())));
+                    $options->add($option);
+                    unset($option);
                 }
-                $field->add('options', $options );
-                unset( $options );
-            }else{
+                $field->add('options', $options);
+                unset($options);
+            } else {
                 $options = new XoopsXmlRpcArray();
-                $field->add('options', $options );
-                unset( $options );
+                $field->add('options', $options);
+                unset($options);
             }
             $field->add('required', new XoopsXmlRpcBoolean(isset($i['xmlrpc']['required']) ? $i['xmlrpc']['required'] : false));
             $field->add('multiple', new XoopsXmlRpcBoolean(isset($i['xmlrpc']['multiple']) ? $i['xmlrpc']['multiple'] : false));
@@ -108,31 +103,31 @@ class XooNIpsXmlRpcViewGetItemtype extends XooNIpsXmlRpcViewElement
             unset($field);
         }
         $resp->add('fields', $fields);
-        
-        if( strlen( $itemtype->getMainFileName() ) == 0 ){
+
+        if (strlen($itemtype->getMainFileName()) == 0) {
             $resp->add('mainfile', new XoopsXmlRpcString(''));
-        }else{
-            $iteminfo = $itemtype -> getIteminfo();
-            foreach( $iteminfo['io']['xmlrpc']['item'] as $f ){
-                if( $f['orm']['field'][0]['orm'] == $itemtype->getMainFileName() ){
+        } else {
+            $iteminfo = $itemtype->getIteminfo();
+            foreach ($iteminfo['io']['xmlrpc']['item'] as $f) {
+                if ($f['orm']['field'][0]['orm'] == $itemtype->getMainFileName()) {
                     $resp->add('mainfile', new XoopsXmlRpcString(implode('.', $f['xmlrpc']['field'])));
                     break;
                 }
             }
         }
 
-        if( strlen( $itemtype->getPreviewFileName() ) == 0 ){
+        if (strlen($itemtype->getPreviewFileName()) == 0) {
             $resp->add('previewfile', new XoopsXmlRpcString(''));
-        }else{
-            $iteminfo = $itemtype -> getIteminfo();
-            foreach( $iteminfo['io']['xmlrpc']['item'] as $f ){
-                if( $f['orm']['field'][0]['orm'] == $itemtype->getPreviewFileName() ){
+        } else {
+            $iteminfo = $itemtype->getIteminfo();
+            foreach ($iteminfo['io']['xmlrpc']['item'] as $f) {
+                if ($f['orm']['field'][0]['orm'] == $itemtype->getPreviewFileName()) {
                     $resp->add('previewfile', new XoopsXmlRpcString(implode('.', $f['xmlrpc']['field'])));
                     break;
                 }
             }
         }
+
         return $resp;
     }
 }
-?>

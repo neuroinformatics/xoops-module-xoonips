@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.8.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -30,19 +31,16 @@
 
 // _MI_<MODULENAME>_<STRINGNAME>
 // The name of this module
-define( '_MI_XNPBOOK_NAME', 'XooNIps Book Item Type Module' );
+define('_MI_XNPBOOK_NAME', 'XooNIps Book Item Type Module');
 // A brief description of this module
-define( '_MI_XNPBOOK_DESC', 'XooNIps Book Item Type Module' );
+define('_MI_XNPBOOK_DESC', 'XooNIps Book Item Type Module');
 
 // Names of admin menu items
-define( '_MI_XNPBOOK_CFG_DL_LIMIT', '登録者によるダウンロード制約オプションの利用を許可しますか？' );
-define( '_MI_XNPBOOK_CFG_DL_LIMIT_DESC', '' );
-define( '_MI_XNPBOOK_CFG_ACCESSKEY', 'Access key for Amazon Product Advertising API' );
-define( '_MI_XNPBOOK_CFG_ACCESSKEY_DESC', '' );
-define( '_MI_XNPBOOK_CFG_SAKEY', 'Secret access key for Amazon Product Advertising API' );
-define( '_MI_XNPBOOK_CFG_SAKEY_DESC', '' );
-define( '_MI_XNPBOOK_CFG_ASSOCIATE', 'Secret associate tag for Amazon Product Advertising API' );
-define( '_MI_XNPBOOK_CFG_ASSOCIATE_DESC', '' );
-
-
-?>
+define('_MI_XNPBOOK_CFG_DL_LIMIT', '登録者によるダウンロード制約オプションの利用を許可しますか？');
+define('_MI_XNPBOOK_CFG_DL_LIMIT_DESC', '');
+define('_MI_XNPBOOK_CFG_ACCESSKEY', 'Access key for Amazon Product Advertising API');
+define('_MI_XNPBOOK_CFG_ACCESSKEY_DESC', '');
+define('_MI_XNPBOOK_CFG_SAKEY', 'Secret access key for Amazon Product Advertising API');
+define('_MI_XNPBOOK_CFG_SAKEY_DESC', '');
+define('_MI_XNPBOOK_CFG_ASSOCIATE', 'Secret associate tag for Amazon Product Advertising API');
+define('_MI_XNPBOOK_CFG_ASSOCIATE_DESC', '');

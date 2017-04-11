@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.2 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -26,32 +27,27 @@
 // ------------------------------------------------------------------------- //
 
 /**
- *
  * @see XooNIpsApi
  *
  * @brief class that has request parameters
- *
  */
 class XooNIpsXmlRpcRequest
 {
-
     /**
-     * request name
+     * request name.
      */
-    var $request = null;
+    public $request = null;
 
     /**
      * @protected
      */
-    var $params = array();
+    public $params = array();
 
     /**
-     *
      * @param[in] string $request logic name
      * @param[in] array $params array of parameters to logic
-     *
      */
-    function XooNIpsXmlRpcRequest($request, &$params) 
+    public function XooNIpsXmlRpcRequest($request, &$params)
     {
         $this->request = $request;
         $this->params = $params;
@@ -61,20 +57,19 @@ class XooNIpsXmlRpcRequest
      * @brief get method name
      *
      * @retval string
-     *
      */
-    function getMethodName() 
+    public function getMethodName()
     {
         return $this->request;
     }
 
     /**
      * @brief get parameters at once.
+     *
      * @return array array of parameters
      */
-    function &getParams() 
+    public function &getParams()
     {
         return $this->params;
     }
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // title
@@ -52,23 +53,21 @@ $breadcrumbs = array(
 );
 
 // templates
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'system_check.tmpl.html' );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('system_check.tmpl.html');
 
 // assign template variables
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->addVar( 'main', 'TITLE', $title );
-$tmpl->setAttribute( 'description', 'visibility', 'visible' );
-$tmpl->addVar( 'description', 'DESCRIPTION', $description );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'first', 'check', _AM_XOONIPS_SYSTEM_CHECK_LABEL_CHECK );
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->addVar('main', 'TITLE', $title);
+$tmpl->setAttribute('description', 'visibility', 'visible');
+$tmpl->addVar('description', 'DESCRIPTION', $description);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('first', 'check', _AM_XOONIPS_SYSTEM_CHECK_LABEL_CHECK);
 
 // display
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,8 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-class Junii2ListRecordsHandler extends ListRecordsHandler{
-    var $_support_tags = array(
+class Junii2ListRecordsHandler extends ListRecordsHandler
+{
+    public $_support_tags = array(
         'ALTERNATIVE',
         'SUBJECT',
         'NIISUBJECT',
@@ -80,55 +82,60 @@ class Junii2ListRecordsHandler extends ListRecordsHandler{
         'TEMPORAL',
         'NIITEMPORAL',
         'RIGHTS',
-        'TEXTVERSION'
+        'TEXTVERSION',
         );
-    function Junii2ListRecordsHandler( $_parser, $_baseURL ){
-        parent::ListRecordsHandler( $_parser, $_baseURL, 'junii2' );
+
+    public function Junii2ListRecordsHandler($_parser, $_baseURL)
+    {
+        parent::ListRecordsHandler($_parser, $_baseURL, 'junii2');
     }
-    function __construct( $_parser, $_baseURL ){
-        $this->Junii2ListRecordsHandler( $_parser, $_baseURL );
+
+    public function __construct($_parser, $_baseURL)
+    {
+        $this->Junii2ListRecordsHandler($_parser, $_baseURL);
     }
-    
-    function startElementHandler( $parser, $name, $attrs ){
-        if( $this->getElementName( $name ) == 'JUNII2' ) {
-            $this -> _namespaces = $this -> getNamespaceArray( $attrs );
-            array_push( $this->tagstack, $name );
-        }else{
-            parent::startElementHandler( $parser, $name, $attrs );
+
+    public function startElementHandler($parser, $name, $attrs)
+    {
+        if ($this->getElementName($name) == 'JUNII2') {
+            $this->_namespaces = $this->getNamespaceArray($attrs);
+            array_push($this->tagstack, $name);
+        } else {
+            parent::startElementHandler($parser, $name, $attrs);
         }
     }
-    
-    function endElementHandler( $parser, $name ){
-        if( isset($this->tagstack[3])
-            && $this->getElementName( $this->tagstack[3] ) == 'HEADER'
-            || !in_array( $this->getElementName( end( $this->tagstack ) ),
-                          $this->_support_tags ) ){
-            parent::endElementHandler( $parser, $name );
-        }else if( $this->getElementName( end( $this->tagstack ) ) == 'DATE' ) {
+
+    public function endElementHandler($parser, $name)
+    {
+        if (isset($this->tagstack[3])
+            && $this->getElementName($this->tagstack[3]) == 'HEADER'
+            || !in_array($this->getElementName(end($this->tagstack)),
+                          $this->_support_tags)) {
+            parent::endElementHandler($parser, $name);
+        } elseif ($this->getElementName(end($this->tagstack)) == 'DATE') {
             $this->_creation_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
-            $this->addMetadataField(end( $this->tagstack ), $this->_cdata_buf,
-                                    XOONIPS_METADATA_CATEGORY_DATE );
-            array_pop( $this->tagstack );
-        }else if( $this->getElementName( end( $this->tagstack ) )
-                  == 'DATEOFISSUED' ) {
+            $this->addMetadataField(end($this->tagstack), $this->_cdata_buf,
+                                    XOONIPS_METADATA_CATEGORY_DATE);
+            array_pop($this->tagstack);
+        } elseif ($this->getElementName(end($this->tagstack))
+                  == 'DATEOFISSUED') {
             $this->_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
             $this->addMetadataField(
-                end( $this->tagstack ), $this->_cdata_buf,
-                XOONIPS_METADATA_CATEGORY_CREATION_DATE );
-            array_pop( $this->tagstack );
-        }else if( $this->getElementName( end( $this->tagstack ) ) == 'URI' ){
+                end($this->tagstack), $this->_cdata_buf,
+                XOONIPS_METADATA_CATEGORY_CREATION_DATE);
+            array_pop($this->tagstack);
+        } elseif ($this->getElementName(end($this->tagstack)) == 'URI') {
             $this->_resource_url[] = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
             $this->addMetadataField(
-                end( $this->tagstack ), $this->_cdata_buf,
+                end($this->tagstack), $this->_cdata_buf,
                 XOONIPS_METADATA_CATEGORY_RESOURCE_LINK);
-            array_pop( $this->tagstack );
-        }else{
-            $this->addMetadataField(end( $this->tagstack ), $this->_cdata_buf);
-            array_pop( $this->tagstack );
+            array_pop($this->tagstack);
+        } else {
+            $this->addMetadataField(end($this->tagstack), $this->_cdata_buf);
+            array_pop($this->tagstack);
         }
     }
 }
-

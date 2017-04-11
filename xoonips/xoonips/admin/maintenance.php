@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.10 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,7 +25,7 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-require_once( '../../../include/cp_header.php' );
+require_once '../../../include/cp_header.php';
 
 // load common file.
 include 'actions/common.inc.php';
@@ -81,9 +82,7 @@ $pages['filesearch'] = array(
 $pages['oaipmh'] = array();
 
 // initialize
-xoonips_admin_initialize( __FILE__, 'maintenance', $pages );
+xoonips_admin_initialize(__FILE__, 'maintenance', $pages);
 
 // call action file
 include $xoonips_admin['myaction_path'];
-
-?>

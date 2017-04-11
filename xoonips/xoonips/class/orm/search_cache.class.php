@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,35 +25,36 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
- * class of XooNIps Search Cache
+ * class of XooNIps Search Cache.
+ *
  * @li get( 'search_cache_id' ) :search cache ID
  * @li get( 'sess_id' ) : session id
  * @li get( 'timestamp' ) : timestamp(time_t)
- *
  */
-class XooNIpsOrmSearchCache extends XooNIpsTableObject {
-  function XooNIpsOrmSearchCache() {
-    parent::XooNIpsTableObject();
-    $this->initVar( 'search_cache_id', XOBJ_DTYPE_INT, null, true, null );
-    $this->initVar( 'sess_id', XOBJ_DTYPE_TXTBOX, null, true, 32 );
-    $this->initVar( 'timestamp', XOBJ_DTYPE_TXTBOX, null, false, 14 );
-  }
+class XooNIpsOrmSearchCache extends XooNIpsTableObject
+{
+    public function XooNIpsOrmSearchCache()
+    {
+        parent::XooNIpsTableObject();
+        $this->initVar('search_cache_id', XOBJ_DTYPE_INT, null, true, null);
+        $this->initVar('sess_id', XOBJ_DTYPE_TXTBOX, null, true, 32);
+        $this->initVar('timestamp', XOBJ_DTYPE_TXTBOX, null, false, 14);
+    }
 }
 
 /**
- *
- * XooNIps search cache Handler class
- *
+ * XooNIps search cache Handler class.
  */
-class XooNIpsOrmSearchCacheHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmSearchCacheHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmSearchCache', 'xoonips_search_cache', 'search_cache_id', true );
-  }
+class XooNIpsOrmSearchCacheHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmSearchCacheHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmSearchCache', 'xoonips_search_cache', 'search_cache_id', true);
+    }
 }
-?>

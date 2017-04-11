@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,38 +26,37 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 /**
- *
- * XmlRpcTransform composer class for Presentation type
- *
- *
+ * XmlRpcTransform composer class for Presentation type.
  */
 class XNPPresentationXmlRpcTransformCompo extends XooNIpsXmlRpcTransformCompo
 {
-    function XNPPresentationXmlRpcTransformCompo() 
+    public function XNPPresentationXmlRpcTransformCompo()
     {
         parent::XooNIpsXmlRpcTransformCompo('xnppresentation');
     }
-    
+
     /**
      * override getObject to order creator.
-     * 
+     *
      * @see XooNIpsXmlRpcTransformCompo::getObject
      *
      * @param array associative array of XML-RPC argument
+     *
      * @return XNPPresentationOrmCreator
      */
-    function getObject($in_array) 
+    public function getObject($in_array)
     {
-        $obj=parent::getObject($in_array);
-        $creators=&$obj->getVar('creator');
-        for( $i=0; $i < count($creators); $i++){
+        $obj = parent::getObject($in_array);
+        $creators = &$obj->getVar('creator');
+        for ($i = 0; $i < count($creators); ++$i) {
             $creators[$i]->set('creator_order', $i);
         }
+
         return $obj;
     }
 }
-
-?>

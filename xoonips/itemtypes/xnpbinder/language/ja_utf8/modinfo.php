@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,10 +25,9 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-define("_MI_XNPBINDER_NAME","XooNIps Binder Item Type Module");
-define("_MI_XNPBINDER_DESC","XooNIps Binder Item Type Module");
-define( "_MI_XNPBINDER_CONTENT_EMPTY_NOTIFY", "空のバインダーを通知" );
-define( "_MI_XNPBINDER_CONTENT_EMPTY_NOTIFYCAP", "公開バインダーが空になった場合に通知する" );
-define( "_MI_XNPBINDER_CONTENT_EMPTY_NOTIFYDSC", "公開バインダーに登録されたアイテムが0個になった場合に通知を受け取る．" );
-define( "_MI_XNPBINDER_CONTENT_EMPTY_NOTIFYSBJ", "公開バインダーが空になりました" );
-?>
+define('_MI_XNPBINDER_NAME', 'XooNIps Binder Item Type Module');
+define('_MI_XNPBINDER_DESC', 'XooNIps Binder Item Type Module');
+define('_MI_XNPBINDER_CONTENT_EMPTY_NOTIFY', '空のバインダーを通知');
+define('_MI_XNPBINDER_CONTENT_EMPTY_NOTIFYCAP', '公開バインダーが空になった場合に通知する');
+define('_MI_XNPBINDER_CONTENT_EMPTY_NOTIFYDSC', '公開バインダーに登録されたアイテムが0個になった場合に通知を受け取る．');
+define('_MI_XNPBINDER_CONTENT_EMPTY_NOTIFYSBJ', '公開バインダーが空になりました');

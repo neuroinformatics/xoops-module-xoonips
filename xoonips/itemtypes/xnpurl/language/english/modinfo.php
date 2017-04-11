@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.3.14.2 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -31,10 +32,8 @@
 // _MI_<MODULENAME>_<STRINGNAME>
 
 // The name of this module
-define("_MI_XNPURL_NAME","XooNIps Url Item Type Module");
+define('_MI_XNPURL_NAME', 'XooNIps Url Item Type Module');
 // A brief description of this module
-define("_MI_XNPURL_DESC","XooNIps Url Item Type Module");
+define('_MI_XNPURL_DESC', 'XooNIps Url Item Type Module');
 
 // Names of admin menu items
-
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.52.2.1.2.7 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,21 +25,21 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // functions to display blocks and edit blocks.
 // load global definitions and functions
-require_once dirname( __DIR__ ).'/condefs.php';
-require_once dirname( __DIR__ ).'/include/functions.php';
+require_once dirname(__DIR__).'/condefs.php';
+require_once dirname(__DIR__).'/include/functions.php';
 
 // initialize xoonips session
-$uid = is_object( $GLOBALS['xoopsUser'] ) ? $GLOBALS['xoopsUser']->getVar( 'uid', 'n' ) : UID_GUEST;
-$xsession_handler =& xoonips_getormhandler( 'xoonips', 'session' );
-$xsession_handler->initSession( $uid );
-unset( $uid );
-unset( $xsession_handler );
+$uid = is_object($GLOBALS['xoopsUser']) ? $GLOBALS['xoopsUser']->getVar('uid', 'n') : UID_GUEST;
+$xsession_handler = &xoonips_getormhandler('xoonips', 'session');
+$xsession_handler->initSession($uid);
+unset($uid);
+unset($xsession_handler);
 
 // load xoonips login block
 require_once __DIR__.'/xoonips_login.php';
@@ -66,5 +67,3 @@ require_once __DIR__.'/xoonips_userlist.php';
 
 // load ranking block
 require_once __DIR__.'/xoonips_ranking.php';
-
-?>

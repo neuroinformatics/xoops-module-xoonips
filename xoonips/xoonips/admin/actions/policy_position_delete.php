@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,16 +25,16 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // check token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_policy_position';
-if ( ! $xoopsGTicket->check( true, $ticket_area, false ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors() );
-  exit();
+if (!$xoopsGTicket->check(true, $ticket_area, false)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors());
+    exit();
 }
 
 // get variables
@@ -44,12 +45,10 @@ $post_keys = array(
     true,
   ),
 );
-$post_vals = xoonips_admin_get_requests( 'post', $post_keys );
+$post_vals = xoonips_admin_get_requests('post', $post_keys);
 
 // delete db value
-$posi_handler =& xoonips_getormhandler( 'xoonips', 'positions' );
-$posi_handler->deleteById( $post_vals['delete_id'] );
+$posi_handler = &xoonips_getormhandler('xoonips', 'positions');
+$posi_handler->deleteById($post_vals['delete_id']);
 
-redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_DBUPDATED );
-
-?>
+redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_DBUPDATED);

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,99 +26,100 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once __DIR__ . '/xoonipserror.class.php';
+include_once __DIR__.'/xoonipserror.class.php';
 
 /**
- *
  * @brief Class that have results of a logic
+ *
  * @see XooNIpsError
  *
  * @li set or get a result(success or fault) using get/setResult methods
  * @li set or get error informations using get/setError methods(only if failed)
  * @li set or get response of logic using set/getSuccess(only if succeed)
- *
  */
 class XooNIpsResponse
 {
+    /**
+     * result of logic.
+     */
+    public $result = false;
 
     /**
-     *
-     * result of logic
+     * response of logic.
      */
-    var $result = false;
+    public $success = false;
 
     /**
-     *
-     * response of logic
+     * error information of logic.
      */
-    var $success = false;
+    public $error = false;
 
     /**
-     *
-     * error information of logic
+     * create XooNIpsResponse.
      */
-    var $error = false;
-
-    /**
-     * create XooNIpsResponse
-     */
-    function XooNIpsResponse() 
+    public function XooNIpsResponse()
     {
         $this->error = new XooNIpsError();
     }
 
     /**
      * @brief get result
-     * @return boolean false if failed
+     *
+     * @return bool false if failed
      */
-    function getResult() 
+    public function getResult()
     {
         return $this->result;
     }
 
     /**
      * @brief get response of logic if succeed.
+     *
      * @return mixed response of logic
      */
-    function &getSuccess() 
+    public function &getSuccess()
     {
         return $this->success;
     }
 
     /**
      * @brief get error informatino of logic if failed.
+     *
      * @return XooNIpsError error
      */
-    function &getError() 
+    public function &getError()
     {
         return $this->error;
     }
-    
+
     /**
      * @brief add error code and error message
-     * @param int $code error code
+     *
+     * @param int    $code  error code
      * @param string $extra extra information of err(null if omitted)
      */
-    function addError($code, $extra = null){
-        $this->error -> add( $code, $extra);
+    public function addError($code, $extra = null)
+    {
+        $this->error->add($code, $extra);
     }
-    
+
     /**
      * @brief set error informatino of logic if failed.
-     * @param boolean $result
+     *
+     * @param bool $result
      */
-    function setResult($result) 
+    public function setResult($result)
     {
         $this->result = $result;
     }
 
     /**
      * @brief set error informatino of logic if failed.
+     *
      * @param mixed $success
      */
-    function setSuccess(&$success) 
+    public function setSuccess(&$success)
     {
         $this->success = &$success;
     }
 }
-?>

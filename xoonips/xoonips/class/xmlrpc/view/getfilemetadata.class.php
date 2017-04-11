@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.8 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -26,42 +27,37 @@
 // ------------------------------------------------------------------------- //
 
 include_once XOOPS_ROOT_PATH
-. '/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
+.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
 include_once XOOPS_ROOT_PATH
-. '/modules/xoonips/class/xmlrpc/xmlrpcfault.class.php';
+.'/modules/xoonips/class/xmlrpc/xmlrpcfault.class.php';
 
 /**
- *
  * @brief Class that generate response of XML-RPC getFileMetadata request
- *
- *
  */
 class XooNIpsXmlRpcViewGetFileMetadata extends XooNIpsXmlRpcViewElement
 {
-
     /**
-     *
      * @brief return XoopsXmlRpcTag that has response of this request
      *
      * @return XoopsXmlRpcTag
      */
-    function render() 
+    public function render()
     {
         $metadata = $this->response->getSuccess();
         $resp = new XoopsXmlRpcStruct();
-        $unicode =& xoonips_getutility( 'unicode' );
+        $unicode = &xoonips_getutility('unicode');
         $resp->add('id',
                    new XoopsXmlRpcInt($metadata['id']));
         $resp->add('filetype',
                    new XoopsXmlRpcString($metadata['filetype']));
         $resp->add('originalname',
-                   new XoopsXmlRpcString(htmlspecialchars( $unicode->encode_utf8($metadata['originalname'], xoonips_get_server_charset()), ENT_QUOTES,'UTF-8')));
+                   new XoopsXmlRpcString(htmlspecialchars($unicode->encode_utf8($metadata['originalname'], xoonips_get_server_charset()), ENT_QUOTES, 'UTF-8')));
         $resp->add('size',
                    new XoopsXmlRpcInt($metadata['size']));
         $resp->add('mimetype',
                    new XoopsXmlRpcString($metadata['mimetype']));
         $resp->add('caption',
-                   new XoopsXmlRpcString(htmlspecialchars( $unicode->encode_utf8($metadata['caption'], xoonips_get_server_charset()), ENT_QUOTES,'UTF-8')));
+                   new XoopsXmlRpcString(htmlspecialchars($unicode->encode_utf8($metadata['caption'], xoonips_get_server_charset()), ENT_QUOTES, 'UTF-8')));
         $resp->add('thumbnail',
                    new XoopsXmlRpcBase64($metadata['thumbnail']));
         $resp->add('registration_date',
@@ -72,7 +68,7 @@ class XooNIpsXmlRpcViewGetFileMetadata extends XooNIpsXmlRpcViewElement
                    new XoopsXmlRpcInt($metadata['download_count']));
         $resp->add('download_count_sum',
                    new XoopsXmlRpcInt($metadata['download_count_sum']));
+
         return $resp;
     }
 }
-?>

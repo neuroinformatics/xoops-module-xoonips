@@ -31,9 +31,9 @@ include_once 'include/lib.php';
 include_once 'include/AL.php';
 
 // If not a user, redirect
-if ( ! $xoopsUser ) {
- redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_ITEM_FORBIDDEN );
- exit();
+if (!$xoopsUser) {
+    redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_ITEM_FORBIDDEN);
+    exit();
 }
 
 xoops_header(false);
@@ -45,30 +45,30 @@ xoops_header(false);
  <tr>
   <td id="leftcolumn">	          
 <?php
-$xoopsConfig['nocommon']='';
+$xoopsConfig['nocommon'] = '';
 include XOOPS_ROOT_PATH.'/header.php';
 
 require_once '../../class/template.php';
 require_once 'blocks/xoonips_blocks.php';
 
-$xoopsModule =& XoopsModule::getByDirname("xoonips");
+$xoopsModule = &XoopsModule::getByDirname('xoonips');
 //print_r($xoopsModule);
 
-$mod_blocks =& XoopsBlock::getByModule($xoopsModule->getVar('mid'));
+$mod_blocks = &XoopsBlock::getByModule($xoopsModule->getVar('mid'));
 //print_r($blocks);
 $blocks = array();
 //copy only necessary block from mod_block to blocks.
-foreach( $mod_blocks as $b ){
-    if( $b -> getVar( 'mid' ) == $xoopsModule -> getVar( 'mid' ) ){
-        if( $b -> getVar( 'show_func' ) == 'b_xoonips_quick_search_show'
-            || $b -> getVar( 'show_func' ) == 'b_xoonips_tree_show' ){
-            $blocks[$b -> getVar( 'show_func' )] = $b;
+foreach ($mod_blocks as $b) {
+    if ($b->getVar('mid') == $xoopsModule->getVar('mid')) {
+        if ($b->getVar('show_func') == 'b_xoonips_quick_search_show'
+            || $b->getVar('show_func') == 'b_xoonips_tree_show') {
+            $blocks[$b->getVar('show_func')] = $b;
         }
     }
 }
 
 ?>
-   <div class="blockTitle"><?php echo $blocks['b_xoonips_tree_show'] -> getVar('title'); ?></div>
+   <div class="blockTitle"><?php echo $blocks['b_xoonips_tree_show']->getVar('title'); ?></div>
    <div class="blockContent">
    <table cellspacing="0">
     <tr>
@@ -76,39 +76,39 @@ foreach( $mod_blocks as $b ){
 <?php
 
 $tpl = new XoopsTpl();
-$block = $blocks['b_xoonips_tree_show'] -> buildBlock();
-$block['query'] = "url=related_to_subwin.php";
-$tpl->assign('block', $block );
-echo $tpl->fetch( "db:xoonips_block_tree.html" );
+$block = $blocks['b_xoonips_tree_show']->buildBlock();
+$block['query'] = 'url=related_to_subwin.php';
+$tpl->assign('block', $block);
+echo $tpl->fetch('db:xoonips_block_tree.html');
 ?>
      </td>
     </tr>
    </table>
    </div>
 
-   <div class="blockTitle"><?php echo $blocks['b_xoonips_quick_search_show'] -> getVar('title'); ?></div>
+   <div class="blockTitle"><?php echo $blocks['b_xoonips_quick_search_show']->getVar('title'); ?></div>
    <div class="blockContent">
    <table cellspacing="0">
     <tr>
      <td>
 <?php
 $tpl = new XoopsTpl();
-$bl = $blocks['b_xoonips_quick_search_show'] -> buildBlock();
-$bl['submit_url'] = XOOPS_URL . '/modules/xoonips/related_to_subwin.php';
+$bl = $blocks['b_xoonips_quick_search_show']->buildBlock();
+$bl['submit_url'] = XOOPS_URL.'/modules/xoonips/related_to_subwin.php';
 $bl['advanced_search_enable'] = false;
-$bl['search_itemtypes'] = array( 'all'=>_MD_XOONIPS_SEARCH_ALL,
-                                 'basic'=>_MD_XOONIPS_SEARCH_TITLE_AND_KEYWORD );
-$itemtype_handler=&xoonips_getormhandler('xoonips', 'item_type');
-foreach ( $itemtype_handler->getObjects(new Criteria('item_type_id',
-                                                     ITID_INDEX, '!=' ))
-          as $itemtype ){
-    if ( $itemtype->getVar('item_type_id', 'n') != ITID_INDEX ){
+$bl['search_itemtypes'] = array('all' => _MD_XOONIPS_SEARCH_ALL,
+                                 'basic' => _MD_XOONIPS_SEARCH_TITLE_AND_KEYWORD, );
+$itemtype_handler = &xoonips_getormhandler('xoonips', 'item_type');
+foreach ($itemtype_handler->getObjects(new Criteria('item_type_id',
+                                                     ITID_INDEX, '!='))
+          as $itemtype) {
+    if ($itemtype->getVar('item_type_id', 'n') != ITID_INDEX) {
         $bl['search_itemtypes'][$itemtype->getVar('name', 's')]
             = $itemtype->getVar('display_name', 's');
     }
 }
-$tpl->assign('block', $bl );
-echo $tpl->fetch(  "db:xoonips_block_quick_search.html" );
+$tpl->assign('block', $bl);
+echo $tpl->fetch('db:xoonips_block_quick_search.html');
 ?>
      </td>
     </tr>
@@ -118,15 +118,15 @@ echo $tpl->fetch(  "db:xoonips_block_quick_search.html" );
   <td id='centercolumn'>
 <?php
 
-$formdata =& xoonips_getutility( 'formdata' );
-$op = $formdata->getValue( 'post', 'op', 'n', false );
+$formdata = &xoonips_getutility('formdata');
+$op = $formdata->getValue('post', 'op', 'n', false);
 if (!isset($op) || empty($op)) {
-  $formdata->set( 'post', 'op', 'related_to_from_index' );
+    $formdata->set('post', 'op', 'related_to_from_index');
 }
-$formdata->set( 'post', 'index_id', $formdata->getValue('both', 'index_id', 'i', false) );
+$formdata->set('post', 'index_id', $formdata->getValue('both', 'index_id', 'i', false));
 
-include "include/itemselect.inc.php";
-$xoopsTpl->display( 'db:xoonips_related_to_itemselect.html' );
+include 'include/itemselect.inc.php';
+$xoopsTpl->display('db:xoonips_related_to_itemselect.html');
 
 ?>
   </td>

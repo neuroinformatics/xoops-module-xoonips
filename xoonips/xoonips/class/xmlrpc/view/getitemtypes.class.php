@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,27 +26,22 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
 
 /**
- *
  * @brief Class that generate response of XML-RPC getItemtypes request
- *
- *
  */
 class XooNIpsXmlRpcViewGetItemtypes extends XooNIpsXmlRpcViewElement
 {
-
     /**
-     *
      * @brief return XoopsXmlRpcTag that has response of this request
      *
      * @return XoopsXmlRpcTag
      */
-    function render() 
+    public function render()
     {
         $resp = new XoopsXmlRpcArray();
-        foreach($this->response->getSuccess() as $i) {
+        foreach ($this->response->getSuccess() as $i) {
             $struct = new XoopsXmlRpcStruct();
             $struct->add('id', new XoopsXmlRpcInt($i->get('item_type_id')));
             $struct->add('name', new XoopsXmlRpcString($i->get('name')));
@@ -54,7 +50,7 @@ class XooNIpsXmlRpcViewGetItemtypes extends XooNIpsXmlRpcViewElement
             $resp->add($struct);
             unset($struct);
         }
+
         return $resp;
     }
 }
-?>

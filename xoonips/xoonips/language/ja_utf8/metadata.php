@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -66,7 +67,7 @@
 82 : 広報資料—下部組織トップページ,
 83 : 広報資料—機関広報資料
 */
-define( '_MD_XOONIPS_METADATA_JUNII','
+define('_MD_XOONIPS_METADATA_JUNII', '
 研究成果,
 研究成果—論文,
 研究成果—論文以外,/
@@ -118,7 +119,7 @@ define( '_MD_XOONIPS_METADATA_JUNII','
 20 : Data or Dataset
 30 : Software
  */
-define( '_MD_XOONIPS_METADATA_JUNII2','
+define('_MD_XOONIPS_METADATA_JUNII2', '
 Journal Article,
 Thesis or Dissertation,
 Departmental Bulletin Paper,
@@ -133,4 +134,3 @@ Learning Material,/
 Data or Dataset,/
 Software
 ');
-?>

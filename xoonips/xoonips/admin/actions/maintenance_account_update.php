@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.7 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,16 +25,16 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // check token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_maintenance_account_edit';
-if ( ! $xoopsGTicket->check( true, $ticket_area, false ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors() );
-  exit();
+if (!$xoopsGTicket->check(true, $ticket_area, false)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors());
+    exit();
 }
 
 // get variables
@@ -210,17 +211,18 @@ $keys['groups'] = array(
 );
 
 // get requests
-$vals['extra'] = xoonips_admin_get_requests( 'post', $keys['extra'] );
-$vals['xoops'] = xoonips_admin_get_requests( 'post', $keys['xoops'] );
-$vals['xoonips'] = xoonips_admin_get_requests( 'post', $keys['xoonips'] );
-$vals['groups'] = xoonips_admin_get_requests( 'post', $keys['groups'] );
+$vals['extra'] = xoonips_admin_get_requests('post', $keys['extra']);
+$vals['xoops'] = xoonips_admin_get_requests('post', $keys['xoops']);
+$vals['xoonips'] = xoonips_admin_get_requests('post', $keys['xoonips']);
+$vals['groups'] = xoonips_admin_get_requests('post', $keys['groups']);
 
 $uid = $vals['extra']['uid'];
-$is_newuser = ( $uid == 0 ) ? true : false;
+$is_newuser = ($uid == 0) ? true : false;
 
 // check requirement variables
-function check_variables( &$vals ) {
-  $requirements['xoops'] = array(
+function check_variables(&$vals)
+{
+    $requirements['xoops'] = array(
     'uname',
     'email',
     'umode',
@@ -230,7 +232,7 @@ function check_variables( &$vals ) {
     'notify_mode',
     'user_mailok',
   );
-  $requirements['xoonips'] = array(
+    $requirements['xoonips'] = array(
     'private_item_number_limit',
     'private_index_number_limit',
     'private_item_storage_limit',
@@ -241,7 +243,7 @@ function check_variables( &$vals ) {
     // config key => post variable
     'account_realname_optional' => 'name',
   );
-  $check_keys['xoonips'] = array(
+    $check_keys['xoonips'] = array(
     // config key => post variable
     'account_company_name_optional' => 'company_name',
     'account_division_optional' => 'division',
@@ -251,49 +253,49 @@ function check_variables( &$vals ) {
     'account_tel_optional' => 'tel',
     'account_fax_optional' => 'fax',
   );
-  foreach ( $check_keys as $type => $keys ) {
-    $config_keys = array();
-    foreach ( $keys as $key => $name ) {
-      $config_keys[$key] = 's';
-    }
-    $config_vals = xoonips_admin_get_configs( $config_keys, 'n' );
-    foreach ( $keys as $key => $name ) {
-      if ( $config_vals[$key] == 'off' ) {
-        // 'optional off' means required
+    foreach ($check_keys as $type => $keys) {
+        $config_keys = array();
+        foreach ($keys as $key => $name) {
+            $config_keys[$key] = 's';
+        }
+        $config_vals = xoonips_admin_get_configs($config_keys, 'n');
+        foreach ($keys as $key => $name) {
+            if ($config_vals[$key] == 'off') {
+                // 'optional off' means required
         $requirements[$type][] = $name;
-      }
+            }
+        }
     }
-  }
 
   // check missing fields
   $missing_fields = array();
-  foreach ( $requirements as $type => $reqs ) {
-    foreach ( $reqs as $name ) {
-      $value = trim( strval( $vals[$type][$name] ) );
-      if ( $value === '' ) {
-        $missing_fields = $name;
-      }
+    foreach ($requirements as $type => $reqs) {
+        foreach ($reqs as $name) {
+            $value = trim(strval($vals[$type][$name]));
+            if ($value === '') {
+                $missing_fields = $name;
+            }
+        }
     }
-  }
-  if ( count( $missing_fields ) > 0 ) {
-    xoops_cp_header();
-    echo 'You must complete all required fields';
-    xoops_cp_footer();
-    exit();
-  }
+    if (count($missing_fields) > 0) {
+        xoops_cp_header();
+        echo 'You must complete all required fields';
+        xoops_cp_footer();
+        exit();
+    }
 
   // check password
-  if ( $vals['extra']['pass2'] != '' ) {
-    if ( $vals['extra']['pass'] != $vals['extra']['pass2'] ) {
-      xoops_cp_header();
-      echo _AM_XOONIPS_MSG_PASSWORD_MISMATCH;
-      xoops_cp_footer();
-      exit();
-    } else {
-      if ( ! empty( $vals['extra']['pass'] ) ) {
-        $vals['xoops']['pass'] = md5( $vals['extra']['pass'] );
+  if ($vals['extra']['pass2'] != '') {
+      if ($vals['extra']['pass'] != $vals['extra']['pass2']) {
+          xoops_cp_header();
+          echo _AM_XOONIPS_MSG_PASSWORD_MISMATCH;
+          xoops_cp_footer();
+          exit();
+      } else {
+          if (!empty($vals['extra']['pass'])) {
+              $vals['xoops']['pass'] = md5($vals['extra']['pass']);
+          }
       }
-    }
   }
 
   // checkboxes
@@ -301,107 +303,110 @@ function check_variables( &$vals ) {
     'user_viewemail',
     'attachsig',
   );
-  foreach ( $checkboxes as $type => $key ) {
-    $vals['xoops'][$key] = ( is_null( $vals['xoops'][$key] ) ? 0 : 1 );
-  }
+    foreach ($checkboxes as $type => $key) {
+        $vals['xoops'][$key] = (is_null($vals['xoops'][$key]) ? 0 : 1);
+    }
 
   // item storage limit
   $vals['xoonips']['private_item_storage_limit'] *= 1000000.0;
 }
 
-function update_groups( $uid, $new_groups ) {
-  global $xoopsUser;
-  $member_handler =& xoops_gethandler( 'member' );
-  $edit_user =& $member_handler->getUser( $uid );
-  $old_groups = $edit_user->getGroups();
-  if ( $uid == $xoopsUser->getVar( 'uid' ) && ( in_array( XOOPS_GROUP_ADMIN, $old_groups ) ) && ! ( in_array( XOOPS_GROUP_ADMIN, $new_groups ) ) ) {
-    array_push( $new_groups, XOOPS_GROUP_ADMIN );
-  }
-  foreach ( $old_groups as $gid ) {
-    $member_handler->removeUsersFromGroup( $gid, array( $uid ) );
-  }
-  foreach ( $new_groups as $gid ) {
-    $member_handler->addUserToGroup( $gid, $uid );
-  }
-  return true;
+function update_groups($uid, $new_groups)
+{
+    global $xoopsUser;
+    $member_handler = &xoops_gethandler('member');
+    $edit_user = &$member_handler->getUser($uid);
+    $old_groups = $edit_user->getGroups();
+    if ($uid == $xoopsUser->getVar('uid') && (in_array(XOOPS_GROUP_ADMIN, $old_groups)) && !(in_array(XOOPS_GROUP_ADMIN, $new_groups))) {
+        array_push($new_groups, XOOPS_GROUP_ADMIN);
+    }
+    foreach ($old_groups as $gid) {
+        $member_handler->removeUsersFromGroup($gid, array($uid));
+    }
+    foreach ($new_groups as $gid) {
+        $member_handler->addUserToGroup($gid, $uid);
+    }
+
+    return true;
 }
 
-function pickup_user( $uid ) {
-  // get user certification mode
+function pickup_user($uid)
+{
+    // get user certification mode
   $config_keys = array(
     'certify_user' => 's',
   );
-  $config_values = xoonips_admin_get_configs( $config_keys, 'n' );
-  $is_certified = ( $config_values['certify_user'] == 'on' ) ? false : true;
+    $config_values = xoonips_admin_get_configs($config_keys, 'n');
+    $is_certified = ($config_values['certify_user'] == 'on') ? false : true;
   // pickup
-  $xm_handler =& xoonips_gethandler( 'xoonips', 'member' );
-  return $xm_handler->pickupXoopsUser( $uid, $is_certified );
+  $xm_handler = &xoonips_gethandler('xoonips', 'member');
+
+    return $xm_handler->pickupXoopsUser($uid, $is_certified);
 }
 
-function check_user_exists( $uname ) {
-  $u_handler =& xoonips_getormhandler( 'xoonips', 'xoops_users' );
-  $criteria = new Criteria( 'uname', addslashes( $uname ) );
-  $u_count = $u_handler->getCount( $criteria );
-  if ( $u_count != 0 ) {
-    xoops_cp_header();
-    echo 'User name '.$uname.' already exists';
-    xoops_cp_footer();
-    exit();
-  }
+function check_user_exists($uname)
+{
+    $u_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
+    $criteria = new Criteria('uname', addslashes($uname));
+    $u_count = $u_handler->getCount($criteria);
+    if ($u_count != 0) {
+        xoops_cp_header();
+        echo 'User name '.$uname.' already exists';
+        xoops_cp_footer();
+        exit();
+    }
 }
 
 // check variables
-check_variables( $vals );
+check_variables($vals);
 
 // check user exists
-if ( $uid == 0 ) {
-  check_user_exists( $vals['xoops']['uname'] );
+if ($uid == 0) {
+    check_user_exists($vals['xoops']['uname']);
 }
 
 // update db values
 // >> xoops user information
-$u_handler =& xoonips_getormhandler( 'xoonips', 'xoops_users' );
-if ( $uid == 0 ) {
-  $u_obj =& $u_handler->create();
+$u_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
+if ($uid == 0) {
+    $u_obj = &$u_handler->create();
 } else {
-  $u_obj =& $u_handler->get( $uid );
+    $u_obj = &$u_handler->get($uid);
 }
-if ( ! is_object( $u_obj ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_UNEXPECTED_ERROR );
-  exit();
+if (!is_object($u_obj)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_UNEXPECTED_ERROR);
+    exit();
 }
-foreach ( $vals['xoops'] as $key => $val ) {
-  $u_obj->set( $key, $val );
+foreach ($vals['xoops'] as $key => $val) {
+    $u_obj->set($key, $val);
 }
-if ( ! $u_handler->insert( $u_obj ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_UNEXPECTED_ERROR );
-  exit();
+if (!$u_handler->insert($u_obj)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_UNEXPECTED_ERROR);
+    exit();
 }
-$uid = $u_obj->getVar( 'uid', 'n' );
+$uid = $u_obj->getVar('uid', 'n');
 
 // >> xoops group information
-if ( ! update_groups( $uid, $vals['groups']['groups'] ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_UNEXPECTED_ERROR );
-  exit();
+if (!update_groups($uid, $vals['groups']['groups'])) {
+    redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_UNEXPECTED_ERROR);
+    exit();
 }
 
 // xoonips user information
-if ( $is_newuser ) {
-  if ( ! pickup_user( $uid ) ) {
-    redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_UNEXPECTED_ERROR );
+if ($is_newuser) {
+    if (!pickup_user($uid)) {
+        redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_UNEXPECTED_ERROR);
+        exit();
+    }
+}
+$xu_handler = &xoonips_getormhandler('xoonips', 'users');
+$xu_obj = &$xu_handler->get($uid);
+foreach ($vals['xoonips'] as $key => $val) {
+    $xu_obj->set($key, $val);
+}
+if (!$xu_handler->insert($xu_obj)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_UNEXPECTED_ERROR);
     exit();
-  }
-}
-$xu_handler =& xoonips_getormhandler( 'xoonips', 'users' );
-$xu_obj =& $xu_handler->get( $uid );
-foreach ( $vals['xoonips'] as $key => $val ) {
-  $xu_obj->set( $key, $val );
-}
-if ( ! $xu_handler->insert( $xu_obj ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_UNEXPECTED_ERROR );
-  exit();
 }
 
-redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_DBUPDATED );
-
-?>
+redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_DBUPDATED);

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -29,36 +30,34 @@
  */
 
 // _MD_<MODULENAME>_<STRINGNAME>
-define( "_MD_XNPPAPER_AUTHOR_LABEL", "著者" );
+define('_MD_XNPPAPER_AUTHOR_LABEL', '著者');
 // define( "_MD_XNPPAPER_SOURCE_LABEL", "Source" );
-define( "_MD_XNPPAPER_URL_LABEL", "URL" );
-define( "_MD_XNPPAPER_JOURNAL_LABEL", "ジャーナル名" );
-define( "_MD_XNPPAPER_YEAR_OF_PUBLICATION_LABEL", "出版年" );
-define( "_MD_XNPPAPER_VOLUME_LABEL", "巻" );
-define( "_MD_XNPPAPER_NUMBER_LABEL", "号" );
-define( "_MD_XNPPAPER_PAGE_LABEL", "ページ" );
-define( "_MD_XNPPAPER_ABSTRACT_LABEL", "アブストラクト" );
-define( "_MD_XNPPAPER_PDF_REPRINT_LABEL", "PDFリプリント" );
-define( "_MD_XNPPAPER_PUBMED_ID_LABEL", "PubMedID" );
+define('_MD_XNPPAPER_URL_LABEL', 'URL');
+define('_MD_XNPPAPER_JOURNAL_LABEL', 'ジャーナル名');
+define('_MD_XNPPAPER_YEAR_OF_PUBLICATION_LABEL', '出版年');
+define('_MD_XNPPAPER_VOLUME_LABEL', '巻');
+define('_MD_XNPPAPER_NUMBER_LABEL', '号');
+define('_MD_XNPPAPER_PAGE_LABEL', 'ページ');
+define('_MD_XNPPAPER_ABSTRACT_LABEL', 'アブストラクト');
+define('_MD_XNPPAPER_PDF_REPRINT_LABEL', 'PDFリプリント');
+define('_MD_XNPPAPER_PUBMED_ID_LABEL', 'PubMedID');
 
-define( "_MD_XNPPAPER_AUTHOR_REQUIRED", "'著者' を入力してください" );
-define( "_MD_XNPPAPER_JOURNAL_REQUIRED", "'ジャーナル名' を入力してください" );
-define( "_MD_XNPPAPER_YEAR_OF_PUBLICATION_REQUIRED", "'出版年' を入力してください" );
-define( '_MD_XNPPAPER_VOLUME_BADSTRING', "'巻' には数字を入力してください" );
-define( '_MD_XNPPAPER_NUMBER_BADSTRING', "'号' には数字を入力してください" );
-define( "_MD_XNPPAPER_EXPLANATION", "関連論文" );
+define('_MD_XNPPAPER_AUTHOR_REQUIRED', "'著者' を入力してください");
+define('_MD_XNPPAPER_JOURNAL_REQUIRED', "'ジャーナル名' を入力してください");
+define('_MD_XNPPAPER_YEAR_OF_PUBLICATION_REQUIRED', "'出版年' を入力してください");
+define('_MD_XNPPAPER_VOLUME_BADSTRING', "'巻' には数字を入力してください");
+define('_MD_XNPPAPER_NUMBER_BADSTRING', "'号' には数字を入力してください");
+define('_MD_XNPPAPER_EXPLANATION', '関連論文');
 
-define( '_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_PAPER_ID'          , 'アイテムID' );
-define( '_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_AUTHOR'            , '著者' );
-define( '_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_JOURNAL'           , 'ジャーナル名' );
-define( '_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_VOLUME'            , '巻' );
-define( '_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_NUMBER'            , '号' );
-define( '_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_PAGE'              , 'ページ' );
-define( '_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_ABSTRACT'          , 'アブストラクト' );
-define( '_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_PUBMED_ID'         , 'PubMedID' );
-define( '_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_PAPER_PDF_REPRINT' , 'PDFリプリント' );
-define( '_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_CREATION_YEAR'     , '出版年' );
-define( '_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_CREATION_MONTH'    , '出版月' );
-define( '_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_CREATION_MDAY'     , '出版日' );
-
-?>
+define('_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_PAPER_ID', 'アイテムID');
+define('_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_AUTHOR', '著者');
+define('_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_JOURNAL', 'ジャーナル名');
+define('_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_VOLUME', '巻');
+define('_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_NUMBER', '号');
+define('_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_PAGE', 'ページ');
+define('_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_ABSTRACT', 'アブストラクト');
+define('_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_PUBMED_ID', 'PubMedID');
+define('_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_PAPER_PDF_REPRINT', 'PDFリプリント');
+define('_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_CREATION_YEAR', '出版年');
+define('_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_CREATION_MONTH', '出版月');
+define('_MD_XNPPAPER_XMLRPC_DISPLAY_NAME_CREATION_MDAY', '出版日');

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,16 +26,18 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/orm/item_type.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/orm/item_type.class.php';
 
 /**
  * @brief Data object of Data detail information
  */
 class XNPDataOrmItemType extends XooNIpsOrmItemType
 {
-    function XNPDataOrmItemType() 
+    public function XNPDataOrmItemType()
     {
         parent::XooNIpsOrmItemType('xnpdata');
     }
@@ -42,15 +45,12 @@ class XNPDataOrmItemType extends XooNIpsOrmItemType
 
 /**
  * @brief handler of item type
- *
- *
  */
 class XNPDataOrmItemTypeHandler extends XooNIpsOrmItemTypeHandler
 {
-    function XNPDataOrmItemTypeHandler(&$db) 
+    public function XNPDataOrmItemTypeHandler(&$db)
     {
         parent::XooNIpsOrmItemTypeHandler($db);
         $this->__initHandler('XNPDataOrmItemType', 'xoonips_item_type', 'item_type_id', false);
     }
 }
-?>

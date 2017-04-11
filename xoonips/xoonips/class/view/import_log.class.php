@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.10 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,84 +26,88 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname( __DIR__ ) . '/base/view.class.php';
+include_once dirname(__DIR__).'/base/view.class.php';
 
-class XooNIpsViewImportLog extends XooNIpsView{
-    
-    function XooNIpsViewImportLog($params){
+class XooNIpsViewImportLog extends XooNIpsView
+{
+    public function XooNIpsViewImportLog($params)
+    {
         parent::XooNIpsView($params);
     }
-    
-    function render(){
+
+    public function render()
+    {
         global $xoopsOption, $xoopsConfig, $xoopsUser, $xoopsUserIsAdmin, $xoopsLogger, $xoopsTpl;
-        
-	$textutil =& xoonips_getutility( 'text' );
+
+        $textutil = &xoonips_getutility('text');
         $xoopsOption['template_main'] = 'xoonips_import_log.html';
-        if( $this -> _params['result'] ){
+        if ($this->_params['result']) {
             include XOOPS_ROOT_PATH.'/header.php';
-            $xoopsTpl -> assign( 'result', $this -> _params['result'] );
-            $xoopsTpl -> assign( 'filename', $textutil->html_special_chars( $this->_params['filename'] ) );
-            $xoopsTpl -> assign( 'number_of_items',
-                                 $this -> _number_of_items() );
-            $xoopsTpl -> assign( 'uname', $textutil->html_special_chars( $this->_params['uname'] ) );
-            $xoopsTpl -> assign( 'errors', $this -> _params['errors'] );
-            $xoopsTpl -> assign( 'log', $textutil->html_special_chars( $this->_get_item_log() ) );
+            $xoopsTpl->assign('result', $this->_params['result']);
+            $xoopsTpl->assign('filename', $textutil->html_special_chars($this->_params['filename']));
+            $xoopsTpl->assign('number_of_items',
+                                 $this->_number_of_items());
+            $xoopsTpl->assign('uname', $textutil->html_special_chars($this->_params['uname']));
+            $xoopsTpl->assign('errors', $this->_params['errors']);
+            $xoopsTpl->assign('log', $textutil->html_special_chars($this->_get_item_log()));
             include XOOPS_ROOT_PATH.'/footer.php';
-        }else{
+        } else {
             include XOOPS_ROOT_PATH.'/header.php';
-            $xoopsTpl -> assign( 'result', false );
-            $xoopsTpl -> assign( 'filename', $this -> _params['filename'] );
-            $xoopsTpl -> assign( 'number_of_items',
-                                 $this -> _number_of_items() );
-            $xoopsTpl -> assign( 'uname', $this -> _params['uname'] );
-            $xoopsTpl -> assign( 'errors', $this -> _params['errors'] );
-            $xoopsTpl -> assign( 'log', $this -> _get_item_log());
+            $xoopsTpl->assign('result', false);
+            $xoopsTpl->assign('filename', $this->_params['filename']);
+            $xoopsTpl->assign('number_of_items',
+                                 $this->_number_of_items());
+            $xoopsTpl->assign('uname', $this->_params['uname']);
+            $xoopsTpl->assign('errors', $this->_params['errors']);
+            $xoopsTpl->assign('log', $this->_get_item_log());
             include XOOPS_ROOT_PATH.'/footer.php';
         }
     }
-    
-    function _get_item_log(){
+
+    public function _get_item_log()
+    {
         $log = '';
-        $item_type_handler =& xoonips_getormhandler( 'xoonips', 'item_type' );
-        foreach( $this -> _params['import_items'] as $item ){
-            $basic =& $item -> getVar( 'basic' );
+        $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
+        foreach ($this->_params['import_items'] as $item) {
+            $basic = &$item->getVar('basic');
             $itemtype
-                =& $item_type_handler -> get( $basic -> get( 'item_type_id' ) );
+                = &$item_type_handler->get($basic->get('item_type_id'));
             $handler
-                =& xoonips_gethandler( $itemtype -> get( 'name' ),
-                                       'import_item' );
-            $log .= "\n\n[item]\n" . $handler -> getImportLog( $item );
-            foreach( $item -> getErrors() as $e ){
+                = &xoonips_gethandler($itemtype->get('name'),
+                                       'import_item');
+            $log .= "\n\n[item]\n".$handler->getImportLog($item);
+            foreach ($item->getErrors() as $e) {
                 $log .= "\nerror $e";
             }
-            
-            foreach( array_merge( $item -> getDuplicateUnupdatableItemId(),
-                                  $item -> getDuplicateUpdatableItemId(),
-                                  $item -> getDuplicateLockedItemId() )
-                     as $item_id ){
-                $log .= "\nwarning conflict with " 
-                    . xnpGetItemDetailURL( $item_id );
+
+            foreach (array_merge($item->getDuplicateUnupdatableItemId(),
+                                  $item->getDuplicateUpdatableItemId(),
+                                  $item->getDuplicateLockedItemId())
+                     as $item_id) {
+                $log .= "\nwarning conflict with "
+                    .xnpGetItemDetailURL($item_id);
             }
         }
-        
+
         return $log;
     }
 
-    function _number_of_items(){
-        return count( $this -> _params['import_items'] );
+    public function _number_of_items()
+    {
+        return count($this->_params['import_items']);
     }
 
-    function _get_result_log(){
-        $log='';
-        $item_type_handler =& xoonips_getormhandler( 'xoonips', 'item_type' );
-        foreach( $this -> _params['import_items'] as $item ){
-            foreach( array_unique( $item -> getErrorCodes() ) as $code ){
-                $log .= "\nerror " . $code . " " 
-                    . $item -> getVar( 'pseudo_id' );
+    public function _get_result_log()
+    {
+        $log = '';
+        $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
+        foreach ($this->_params['import_items'] as $item) {
+            foreach (array_unique($item->getErrorCodes()) as $code) {
+                $log .= "\nerror ".$code.' '
+                    .$item->getVar('pseudo_id');
             }
         }
+
         return $log;
     }
 }
-
-?>

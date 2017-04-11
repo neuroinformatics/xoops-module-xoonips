@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.2.2.1.2.7 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,14 +25,13 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
-if ( ! class_exists( 'XooNIps_PubMed_ArticleSet' ) ) {
-
-  // class files
-  require_once( XOOPS_ROOT_PATH.'/modules/xoonips/class/base/xmlparser.class.php' );
+if (!class_exists('XooNIps_PubMed_ArticleSet')) {
+    // class files
+  require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/xmlparser.class.php';
 
   /**
    * The PubMed ArticleSet data handling class
@@ -40,77 +40,82 @@ if ( ! class_exists( 'XooNIps_PubMed_ArticleSet' ) ) {
    *  http://www.ncbi.nlm.nih.gov/entrez/query/DTD/nlmmedline_080101.dtd
    *  http://www.ncbi.nlm.nih.gov/entrez/query/DTD/nlmmedlinecitation_080101.dtd
    *  http://www.ncbi.nlm.nih.gov/entrez/query/DTD/nlmsharedcatcit_080101.dtd
-   *  http://www.ncbi.nlm.nih.gov/entrez/query/DTD/nlmcommon_080101.dtd
-   * @package xnppaper
+   *  http://www.ncbi.nlm.nih.gov/entrez/query/DTD/nlmcommon_080101.dtd.
+   *
    * @author  Yoshihiro OKUMURA <orrisroot@users.sourceforge.jp>
    */
-  class XooNIps_PubMed_ArticleSet extends XooNIpsXMLParser {
-    /**
-     * parsed data
+  class XooNIps_PubMed_ArticleSet extends XooNIpsXMLParser
+  {
+      /**
+     * parsed data.
+     *
      * @var array
-     * @access private
      */
-    var $_data;
+    public $_data;
 
     /**
-     * parsing condition
+     * parsing condition.
+     *
      * @var array
-     * @access private
      */
-    var $_condition = array();
+    public $_condition = array();
 
     /**
-     * pubmed ids
+     * pubmed ids.
+     *
      * @var array
-     * @access private
      */
-    var $_pmids = array();
+    public $_pmids = array();
 
-    function XooNIps_PubMed_ArticleSet() {
-      // call parent constructor
+      public function XooNIps_PubMed_ArticleSet()
+      {
+          // call parent constructor
       parent::XooNIpsXMLParser();
       // set fetcher conditions
       $this->_fetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi';
-      $this->_fetch_arguments['db'] = 'pubmed';
-      $this->_fetch_arguments['retmode'] = 'xml';
+          $this->_fetch_arguments['db'] = 'pubmed';
+          $this->_fetch_arguments['retmode'] = 'xml';
       // set parser conditions
       $this->_parser_doctype = 'PubmedArticleSet';
       // comment out next line for yearly update by PubMed site
       // $this->_parser_public_id = '-//NLM//DTD PubMedArticle, 1st January 2008//EN';
-    }
+      }
 
     /**
-     * set the pubmed id
+     * set the pubmed id.
      *
-     * @access public
      * @return bool TRUE if success
      */
-    function set_pmid( $pmid ) {
-      if ( in_array( $pmid, $this->_pmids ) ) {
-        $this->_error_message = 'pubmed id '.$pmid.' is already set';
-        return FALSE;
-      }
-      if ( count( $this->_pmids ) >= 20 ) {
-        $this->_error_message = 'too match register pubmed ids (>=20)';
-        return FALSE;
-      }
-      if ( isset( $this->_fetch_arguments['id'] ) ) {
-        $this->_fetch_arguments['id'] .= ','.$pmid;
-      } else {
-        $this->_fetch_arguments['id'] = $pmid;
-      }
-      return TRUE;
+    public function set_pmid($pmid)
+    {
+        if (in_array($pmid, $this->_pmids)) {
+            $this->_error_message = 'pubmed id '.$pmid.' is already set';
+
+            return false;
+        }
+        if (count($this->_pmids) >= 20) {
+            $this->_error_message = 'too match register pubmed ids (>=20)';
+
+            return false;
+        }
+        if (isset($this->_fetch_arguments['id'])) {
+            $this->_fetch_arguments['id'] .= ','.$pmid;
+        } else {
+            $this->_fetch_arguments['id'] = $pmid;
+        }
+
+        return true;
     }
 
     /**
-     * override function of start element handler
+     * override function of start element handler.
      *
-     * @access private
      * @param resource $parser parser resource
-     * @param string $tag xml tag
+     * @param string   $tag    xml tag
      */
-    function parser_start_element( $attribs ) {
-      switch ( $this->_parser_condition ) {
+    public function parser_start_element($attribs)
+    {
+        switch ($this->_parser_condition) {
       case '/PubmedArticleSet/PubmedArticle':
         $this->_condition['article'] = array(
           'PMID' => '',
@@ -154,14 +159,14 @@ if ( ! class_exists( 'XooNIps_PubMed_ArticleSet' ) ) {
     }
 
     /**
-     * override function of end element handler
+     * override function of end element handler.
      *
-     * @access private
      * @param resource $parser parser resource
-     * @param string $tag xml tag
+     * @param string   $tag    xml tag
      */
-    function parser_end_element() {
-      switch ( $this->_parser_condition ) {
+    public function parser_end_element()
+    {
+        switch ($this->_parser_condition) {
       case '/PubmedArticleSet/PubmedArticle':
         $pmid = $this->_condition['article']['PMID'];
         $this->_data[$pmid] = $this->_condition['article'];
@@ -179,14 +184,14 @@ if ( ! class_exists( 'XooNIps_PubMed_ArticleSet' ) ) {
     }
 
     /**
-     * override function of character data handler
+     * override function of character data handler.
      *
-     * @access private
      * @param resource $parser parser resource
-     * @param string $cdata character data
+     * @param string   $cdata  character data
      */
-    function parser_character_data( $cdata ) {
-      switch ( $this->_parser_condition ) {
+    public function parser_character_data($cdata)
+    {
+        switch ($this->_parser_condition) {
       case '/PubmedArticleSet/PubmedArticle/MedlineCitation/PMID':
         // PMID
         $this->_condition['article']['PMID'] .= $cdata;
@@ -265,7 +270,7 @@ if ( ! class_exists( 'XooNIps_PubMed_ArticleSet' ) ) {
         break;
       case '/PubmedArticleSet/PubmedArticle/MedlineCitation/Article/Language':
         // Language+
-        $this->_condition['language'] .= strtolower( $cdata );
+        $this->_condition['language'] .= strtolower($cdata);
         break;
       case '/PubmedArticleSet/PubmedArticle/MedlineCitation/MeshHeadingList/MeshHeading/DescriptorName':
         // (DescriptorName, QualifierName*)
@@ -280,73 +285,77 @@ if ( ! class_exists( 'XooNIps_PubMed_ArticleSet' ) ) {
   }
 
   /**
-  /**
-   * The class for the PubMed eSearch data of the Journal Title Abbreviation
+   /**
+   * The class for the PubMed eSearch data of the Journal Title Abbreviation.
    *
    * this class will works under following DTDs
    *  http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd
-   * @package xnppaper
+   *
    * @author  Yoshihiro OKUMURA <orrisroot@users.sourceforge.jp>
    */
-  class XooNIps_PubMed_JournalEsearch extends XooNIpsXMLParser {
-    /**
-     * parsed data
+  class XooNIps_PubMed_JournalEsearch extends XooNIpsXMLParser
+  {
+      /**
+     * parsed data.
+     *
      * @var array
-     * @access private
      */
-    var $_data;
+    public $_data;
 
     /**
-     * parsing condition
+     * parsing condition.
+     *
      * @var array
-     * @access private
      */
-    var $_condition = array();
+    public $_condition = array();
 
     /**
-     * jornal title abbreviation
+     * jornal title abbreviation.
+     *
      * @var string
-     * @access private
      */
-    var $_title_abbreviation = '';
+    public $_title_abbreviation = '';
 
-    function XooNIps_PubMed_JournalEsearch() {
-      // call parent constructor
+      public function XooNIps_PubMed_JournalEsearch()
+      {
+          // call parent constructor
       parent::XooNIpsXMLParser();
       // set fetcher conditions
       $this->_fetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi';
-      $this->_fetch_arguments['db'] = 'journals';
-      $this->_fetch_arguments['retmode'] = 'xml';
+          $this->_fetch_arguments['db'] = 'journals';
+          $this->_fetch_arguments['retmode'] = 'xml';
       // set parser conditions
       $this->_parser_doctype = 'eSearchResult';
-      $this->_parser_public_id = '-//NLM//DTD eSearchResult, 11 May 2002//EN';
-    }
+          $this->_parser_public_id = '-//NLM//DTD eSearchResult, 11 May 2002//EN';
+      }
 
     /**
-     * set the journal title abbreviation
+     * set the journal title abbreviation.
      *
-     * @access public
      * @return bool TRUE if success
      */
-    function set_journal_ta( $ta ) {
-      if ( ! empty( $this->_title_abbreviation ) ) {
-        $this->_error_message = 'journal title abbreviaion "'.$ta.'" is already set';
-        return FALSE;
-      }
-      $this->_title_abbreviation = $ta;
-      $this->_fetch_arguments['term'] = '"'.$ta.'"[Title Abbreviation]';
-      return TRUE;
+    public function set_journal_ta($ta)
+    {
+        if (!empty($this->_title_abbreviation)) {
+            $this->_error_message = 'journal title abbreviaion "'.$ta.'" is already set';
+
+            return false;
+        }
+        $this->_title_abbreviation = $ta;
+        $this->_fetch_arguments['term'] = '"'.$ta.'"[Title Abbreviation]';
+
+        return true;
     }
 
     /**
-     * override function of start element handler
+     * override function of start element handler.
      *
-     * @access private
      * @param resource $parser parser resource
-     * @param string $tag xml tag
+     * @param string   $tag    xml tag
      */
-    function parser_start_element( $attribs ) {
-      switch ( $this->_parser_condition ) {
+    public function parser_start_element($attribs)
+    {
+        switch ($this->_parser_condition) {
       case '/eSearchResult/IdList/Id':
         $this->_condition['Id'] = '';
         break;
@@ -354,14 +363,14 @@ if ( ! class_exists( 'XooNIps_PubMed_ArticleSet' ) ) {
     }
 
     /**
-     * override function of character data handler
+     * override function of character data handler.
      *
-     * @access private
      * @param resource $parser parser resource
-     * @param string $cdata character data
+     * @param string   $cdata  character data
      */
-    function parser_character_data( $cdata ) {
-      switch ( $this->_parser_condition ) {
+    public function parser_character_data($cdata)
+    {
+        switch ($this->_parser_condition) {
       case '/eSearchResult/IdList/Id':
         // Id*
         $this->_condition['Id'] .= $cdata;
@@ -370,14 +379,14 @@ if ( ! class_exists( 'XooNIps_PubMed_ArticleSet' ) ) {
     }
 
     /**
-     * override function of end element handler
+     * override function of end element handler.
      *
-     * @access private
      * @param resource $parser parser resource
-     * @param string $tag xml tag
+     * @param string   $tag    xml tag
      */
-    function parser_end_element() {
-      switch ( $this->_parser_condition ) {
+    public function parser_end_element()
+    {
+        switch ($this->_parser_condition) {
       case '/eSearchResult/IdList/Id':
         $this->_data['id'][] = $this->_condition['Id'];
         break;
@@ -386,79 +395,84 @@ if ( ! class_exists( 'XooNIps_PubMed_ArticleSet' ) ) {
   }
 
   /**
-   * The class for the PubMed eSummary data of the Journal Title Abbreviation
+   * The class for the PubMed eSummary data of the Journal Title Abbreviation.
    *
    * this class will works under following DTDs
    *  http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSummary_041029.dtd
-   * @package xnppaper
+   *
    * @author  Yoshihiro OKUMURA <orrisroot@users.sourceforge.jp>
    */
-  class XooNIps_PubMed_JournalEsummary extends XooNIpsXMLParser {
-    /**
-     * parsed data
+  class XooNIps_PubMed_JournalEsummary extends XooNIpsXMLParser
+  {
+      /**
+     * parsed data.
+     *
      * @var array
-     * @access private
      */
-    var $_data;
+    public $_data;
 
     /**
-     * parsing condition
+     * parsing condition.
+     *
      * @var array
-     * @access private
      */
-    var $_condition = array();
+    public $_condition = array();
 
     /**
-     * jornal ids
+     * jornal ids.
+     *
      * @var array
-     * @access private
      */
-    var $_journal_ids = array();
+    public $_journal_ids = array();
 
-    function XooNIps_PubMed_JournalEsummary() {
-      // call parent constructor
+      public function XooNIps_PubMed_JournalEsummary()
+      {
+          // call parent constructor
       parent::XooNIpsXMLParser();
       // set fetcher conditions
       $this->_fetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi';
-      $this->_fetch_arguments['db'] = 'journals';
-      $this->_fetch_arguments['retmode'] = 'xml';
+          $this->_fetch_arguments['db'] = 'journals';
+          $this->_fetch_arguments['retmode'] = 'xml';
       // set parser conditions
       $this->_parser_doctype = 'eSummaryResult';
-      $this->_parser_public_id = '-//NLM//DTD eSummaryResult, 29 October 2004//EN';
-    }
+          $this->_parser_public_id = '-//NLM//DTD eSummaryResult, 29 October 2004//EN';
+      }
 
     /**
-     * set the journal id
+     * set the journal id.
      *
-     * @access public
      * @return bool TRUE if success
      */
-    function set_journal_id( $jid ) {
-      if ( in_array( $jid, $this->_journal_ids ) ) {
-        $this->_error_message = 'journal id '.$jid.' is already set';
-        return FALSE;
-      }
-      if ( count( $this->_journal_ids ) >= 20 ) {
-        $this->_error_message = 'too match register journal ids (>=20)';
-        return FALSE;
-      }
-      if ( isset( $this->_fetch_arguments['id'] ) ) {
-        $this->_fetch_arguments['id'] .= ','.$jid;
-      } else {
-        $this->_fetch_arguments['id'] = $jid;
-      }
-      return TRUE;
+    public function set_journal_id($jid)
+    {
+        if (in_array($jid, $this->_journal_ids)) {
+            $this->_error_message = 'journal id '.$jid.' is already set';
+
+            return false;
+        }
+        if (count($this->_journal_ids) >= 20) {
+            $this->_error_message = 'too match register journal ids (>=20)';
+
+            return false;
+        }
+        if (isset($this->_fetch_arguments['id'])) {
+            $this->_fetch_arguments['id'] .= ','.$jid;
+        } else {
+            $this->_fetch_arguments['id'] = $jid;
+        }
+
+        return true;
     }
 
     /**
-     * override function of start element handler
+     * override function of start element handler.
      *
-     * @access private
      * @param resource $parser parser resource
-     * @param string $tag xml tag
+     * @param string   $tag    xml tag
      */
-    function parser_start_element( $attribs ) {
-      switch ( $this->_parser_condition ) {
+    public function parser_start_element($attribs)
+    {
+        switch ($this->_parser_condition) {
       case '/eSummaryResult/DocSum':
         $this->_condition['docsum'] = array(
           'Id' => '',
@@ -473,14 +487,14 @@ if ( ! class_exists( 'XooNIps_PubMed_ArticleSet' ) ) {
     }
 
     /**
-     * override function of end element handler
+     * override function of end element handler.
      *
-     * @access private
      * @param resource $parser parser resource
-     * @param string $tag xml tag
+     * @param string   $tag    xml tag
      */
-    function parser_end_element() {
-      switch ( $this->_parser_condition ) {
+    public function parser_end_element()
+    {
+        switch ($this->_parser_condition) {
       case '/eSummaryResult/DocSum':
         $jid = $this->_condition['docsum']['Id'];
         $this->_data[$jid] = $this->_condition['docsum'];
@@ -489,20 +503,20 @@ if ( ! class_exists( 'XooNIps_PubMed_ArticleSet' ) ) {
     }
 
     /**
-     * override function of character data handler
+     * override function of character data handler.
      *
-     * @access private
      * @param resource $parser parser resource
-     * @param string $cdata character data
+     * @param string   $cdata  character data
      */
-    function parser_character_data( $cdata ) {
-      switch ( $this->_parser_condition ) {
+    public function parser_character_data($cdata)
+    {
+        switch ($this->_parser_condition) {
       case '/eSummaryResult/DocSum/Id':
         // Id*
         $this->_condition['docsum']['Id'] .= $cdata;
         break;
       case '/eSummaryResult/DocSum/Item':
-        switch ( $this->_condition['name'] ) {
+        switch ($this->_condition['name']) {
         case 'Title':
           $this->_condition['docsum']['Title'] .= $cdata;
           break;
@@ -558,4 +572,3 @@ if ( ! class_exists( 'XooNIps_PubMed_ArticleSet' ) ) {
 // }
 // $data =& $pubmed->_data;
 // var_dump( $data );
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,38 +26,34 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/class/xml/rpc/xmlrpcapi.php';
+include_once XOOPS_ROOT_PATH.'/class/xml/rpc/xmlrpcapi.php';
 // for RSS update
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/include/lib.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/include/AL.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/AL.php';
 
 /**
- *
- * base class of Business View
- *
+ * base class of Business View.
  */
 class XooNIpsView
 {
-    var $_params = null;
+    public $_params = null;
 
     /**
-     * 
      * @param $params associative array
-     * 
      */
-    function XooNIpsView($params)
+    public function XooNIpsView($params)
     {
-        $this -> _params = $params;
+        $this->_params = $params;
     }
 
     /**
-     * implement of view
+     * implement of view.
+     *
      * @abstract
      */
-    function render() 
+    public function render()
     {
         /* abstract */
         return false;
     }
 }
-?>

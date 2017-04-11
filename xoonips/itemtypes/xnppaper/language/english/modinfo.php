@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.4.12.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -31,14 +32,12 @@
 // _MI_<MODULENAME>_<STRINGNAME>
 
 // The name of this module
-define("_MI_XNPPAPER_NAME","XooNIps Paper Item Type Module");
+define('_MI_XNPPAPER_NAME', 'XooNIps Paper Item Type Module');
 // A brief description of this module
-define("_MI_XNPPAPER_DESC","XooNIps Paper Item Type Module");
+define('_MI_XNPPAPER_DESC', 'XooNIps Paper Item Type Module');
 
 // Names of admin menu items
-define("_MI_XNPPAPER_CFG_SHOW_PDF",     "show PDF Reprint");
-define("_MI_XNPPAPER_CFG_SHOW_PDF_DESC","");
-define("_MI_XNPPAPER_CFG_SHOW_ABST",     "show Abstract");
-define("_MI_XNPPAPER_CFG_SHOW_ABST_D","");
-
-?>
+define('_MI_XNPPAPER_CFG_SHOW_PDF', 'show PDF Reprint');
+define('_MI_XNPPAPER_CFG_SHOW_PDF_DESC', '');
+define('_MI_XNPPAPER_CFG_SHOW_ABST', 'show Abstract');
+define('_MI_XNPPAPER_CFG_SHOW_ABST_D', '');

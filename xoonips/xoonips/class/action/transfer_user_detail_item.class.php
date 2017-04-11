@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.13 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -26,83 +27,85 @@
 // ------------------------------------------------------------------------- //
 
 include_once 'transfer.class.php';
-include_once dirname( dirname( __DIR__ ) )
-    . '/include/transfer.inc.php';
+include_once dirname(dirname(__DIR__))
+    .'/include/transfer.inc.php';
 
-class XooNIpsActionTransferUserDetailItem extends XooNIpsActionTransfer{
-    
-    function XooNIpsActionTransferUserDetailItem(){
+class XooNIpsActionTransferUserDetailItem extends XooNIpsActionTransfer
+{
+    public function XooNIpsActionTransferUserDetailItem()
+    {
         parent::XooNIpsAction();
     }
-    
-    function _get_logic_name(){
+
+    public function _get_logic_name()
+    {
         return null;
     }
-    
-    function _get_view_name(){
-        return "transfer_user_requested_item_detail";
+
+    public function _get_view_name()
+    {
+        return 'transfer_user_requested_item_detail';
     }
-    
-    function preAction(){
+
+    public function preAction()
+    {
         xoonips_deny_guest_access();
         xoonips_allow_get_method();
     }
-    
-    function doAction(){
+
+    public function doAction()
+    {
         global $xoopsUser;
-        
+
         // get item_id
-        $item_id = $this->_formdata->getValue( 'get', 'item_id', 'i', false );
-        
+        $item_id = $this->_formdata->getValue('get', 'item_id', 'i', false);
+
         // permission check
-        $item_compo_handler =& xoonips_getormcompohandler( 'xoonips', 'item' );
-        if ( !$item_compo_handler->getPerm( $item_id,
-                                            $xoopsUser -> getVar( 'uid' ),
-                                            'read' ) )
-        {
+        $item_compo_handler = &xoonips_getormcompohandler('xoonips', 'item');
+        if (!$item_compo_handler->getPerm($item_id,
+                                            $xoopsUser->getVar('uid'),
+                                            'read')) {
             $this->show_no_permission_error_page();
         }
-        
+
         // get item_info_compo of $item_id
-        $item_basic_handler =& xoonips_getormhandler( 'xoonips', 'item_basic' );
-        $item_basic = $item_basic_handler->get( $item_id );
-        
-        $item_type_handler = &xoonips_getormhandler( 'xoonips', 'item_type' );
+        $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
+        $item_basic = $item_basic_handler->get($item_id);
+
+        $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
         $item_type = $item_type_handler->get(
-            $item_basic->get( 'item_type_id' ) );
-        
+            $item_basic->get('item_type_id'));
+
         $info_compo_handler = &xoonips_getormcompohandler(
-            $item_type->get( 'name' ), 'item' );
-        $info_compo = $info_compo_handler->get( $item_id );
-        
+            $item_type->get('name'), 'item');
+        $info_compo = $info_compo_handler->get($item_id);
+
         // read language file of item
-        $langman =& xoonips_getutility( 'languagemanager' );
-        $langman->read( 'main.php', $item_type->get( 'name' ) );
-        
+        $langman = &xoonips_getutility('languagemanager');
+        $langman->read('main.php', $item_type->get('name'));
+
         // set params
-        $this -> _view_params['template_file_name']
-            = $info_compo_handler -> getTemplateFileName(
-                XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL );
-        
-        $this -> _view_params['template_vars']
-            = $info_compo_handler -> getTemplateVar(
+        $this->_view_params['template_file_name']
+            = $info_compo_handler->getTemplateFileName(
+                XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL);
+
+        $this->_view_params['template_vars']
+            = $info_compo_handler->getTemplateVar(
                 XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL,
                 $item_id,
-                $xoopsUser -> getVar( 'uid' ) );
+                $xoopsUser->getVar('uid'));
     }
-    
+
     /**
-     * show error message and close button
+     * show error message and close button.
      */
-    function show_no_permission_error_page()
+    public function show_no_permission_error_page()
     {
         xoops_header();
-        echo  _MD_XOONIPS_ITEM_FORBIDDEN 
-            . '<br /><input type="button"'
-            . ' onclick="javascript:window.close();" value="'._CLOSE.'" />';
+        echo  _MD_XOONIPS_ITEM_FORBIDDEN
+            .'<br /><input type="button"'
+            .' onclick="javascript:window.close();" value="'._CLOSE.'" />';
         xoops_footer();
         exit;
     }
 }
-
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // title
@@ -52,9 +53,9 @@ $breadcrumbs = array(
 );
 
 // token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_system_oaipmh';
-$token_ticket = $xoopsGTicket->getTicketHtml( __LINE__, 1800, $ticket_area );
+$token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // repository
 // repository title
@@ -68,7 +69,7 @@ $config_keys = array(
   'repository_institution' => 's',
   'repository_publisher' => 's',
 );
-$config_values = xoonips_admin_get_configs( $config_keys, 'e' );
+$config_values = xoonips_admin_get_configs($config_keys, 'e');
 // >> repository instatution
 $repository_institution_title = _AM_XOONIPS_SYSTEM_OAIPMH_REPOSITORY_INSTITUTION_TITLE;
 $repository_institution_desc = _AM_XOONIPS_SYSTEM_OAIPMH_REPOSITORY_INSTITUTION_DESC;
@@ -92,70 +93,70 @@ $repository_deletion_track = $config_values['repository_deletion_track'];
 
 // harvester
 $harvester_title = _AM_XOONIPS_SYSTEM_OAIPMH_HARVESTER_TITLE;
-function &get_harvester_repositories() {
-  $repositories_handler =& xoonips_getormhandler( 'xoonips', 'oaipmh_repositories' );
-  $urls =& $repositories_handler->getRepositories( 'e' );
-  $ret = '';
-  $is_first = true;
-  foreach ( $urls as $url ) {
-    if ( $is_first ) {
-      $ret = $url['URL'];
-      $is_first = false;
-    } else {
-      $ret .= "\n".$url['URL'];
+function &get_harvester_repositories()
+{
+    $repositories_handler = &xoonips_getormhandler('xoonips', 'oaipmh_repositories');
+    $urls = &$repositories_handler->getRepositories('e');
+    $ret = '';
+    $is_first = true;
+    foreach ($urls as $url) {
+        if ($is_first) {
+            $ret = $url['URL'];
+            $is_first = false;
+        } else {
+            $ret .= "\n".$url['URL'];
+        }
     }
-  }
-  return $ret;
+
+    return $ret;
 }
 $harvester_repositories_title = _AM_XOONIPS_SYSTEM_OAIPMH_HARVESTER_REPOSITORIES_TITLE;
 $harvester_repositories_desc = _AM_XOONIPS_SYSTEM_OAIPMH_HARVESTER_REPOSITORIES_DESC;
-$harvester_repositories =& get_harvester_repositories();
+$harvester_repositories = &get_harvester_repositories();
 
 // templates
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'system_oaipmh.tmpl.html' );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('system_oaipmh.tmpl.html');
 
 // assign template variables
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->setAttribute( 'description', 'visibility', 'visible' );
-$tmpl->addVar( 'description', 'DESCRIPTION', $description );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'main', 'token_ticket', $token_ticket );
-$tmpl->addVar( 'main', 'submit', _AM_XOONIPS_LABEL_UPDATE );
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->setAttribute('description', 'visibility', 'visible');
+$tmpl->addVar('description', 'DESCRIPTION', $description);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('main', 'token_ticket', $token_ticket);
+$tmpl->addVar('main', 'submit', _AM_XOONIPS_LABEL_UPDATE);
 
-$tmpl->addVar( 'main', 'repository_title', $repository_title );
-$tmpl->addVar( 'main', 'harvester_title', $harvester_title );
+$tmpl->addVar('main', 'repository_title', $repository_title);
+$tmpl->addVar('main', 'harvester_title', $harvester_title);
 // >> repository instatution
-$tmpl->addVar( 'main', 'repository_institution_title', $repository_institution_title );
-$tmpl->addVar( 'main', 'repository_institution_desc', $repository_institution_desc );
-$tmpl->addVar( 'main', 'repository_institution', $repository_institution );
+$tmpl->addVar('main', 'repository_institution_title', $repository_institution_title);
+$tmpl->addVar('main', 'repository_institution_desc', $repository_institution_desc);
+$tmpl->addVar('main', 'repository_institution', $repository_institution);
 // >> repository publisher
-$tmpl->addVar( 'main', 'repository_publisher_title', $repository_publisher_title );
-$tmpl->addVar( 'main', 'repository_publisher_desc', $repository_publisher_desc );
-$tmpl->addVar( 'main', 'repository_publisher', $repository_publisher );
+$tmpl->addVar('main', 'repository_publisher_title', $repository_publisher_title);
+$tmpl->addVar('main', 'repository_publisher_desc', $repository_publisher_desc);
+$tmpl->addVar('main', 'repository_publisher', $repository_publisher);
 // >> repository name
-$tmpl->addVar( 'main', 'repository_name_title', $repository_name_title );
-$tmpl->addVar( 'main', 'repository_name_desc', $repository_name_desc );
-$tmpl->addVar( 'main', 'repository_name', $repository_name );
+$tmpl->addVar('main', 'repository_name_title', $repository_name_title);
+$tmpl->addVar('main', 'repository_name_desc', $repository_name_desc);
+$tmpl->addVar('main', 'repository_name', $repository_name);
 // >> repository nijc code
-$tmpl->addVar( 'main', 'repository_nijc_code_title', $repository_nijc_code_title );
-$tmpl->addVar( 'main', 'repository_nijc_code_desc', $repository_nijc_code_desc );
-$tmpl->addVar( 'main', 'repository_nijc_code', $repository_nijc_code );
+$tmpl->addVar('main', 'repository_nijc_code_title', $repository_nijc_code_title);
+$tmpl->addVar('main', 'repository_nijc_code_desc', $repository_nijc_code_desc);
+$tmpl->addVar('main', 'repository_nijc_code', $repository_nijc_code);
 // >> repository deletion track
-$tmpl->addVar( 'main', 'repository_deletion_track_title', $repository_deletion_track_title );
-$tmpl->addVar( 'main', 'repository_deletion_track_desc', $repository_deletion_track_desc );
-$tmpl->addVar( 'main', 'repository_deletion_track', $repository_deletion_track );
+$tmpl->addVar('main', 'repository_deletion_track_title', $repository_deletion_track_title);
+$tmpl->addVar('main', 'repository_deletion_track_desc', $repository_deletion_track_desc);
+$tmpl->addVar('main', 'repository_deletion_track', $repository_deletion_track);
 // >> harvester repositories
-$tmpl->addVar( 'main', 'harvester_repositories_title', $harvester_repositories_title );
-$tmpl->addVar( 'main', 'harvester_repositories_desc', $harvester_repositories_desc );
-$tmpl->addVar( 'main', 'harvester_repositories', $harvester_repositories );
+$tmpl->addVar('main', 'harvester_repositories_title', $harvester_repositories_title);
+$tmpl->addVar('main', 'harvester_repositories_desc', $harvester_repositories_desc);
+$tmpl->addVar('main', 'harvester_repositories', $harvester_repositories);
 
 // display
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

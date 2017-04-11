@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,7 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 /**
  * @brief Data object of Conference detail information
@@ -35,7 +38,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
 class XNPConferenceOrmItemDetail extends XooNIpsTableObject
 {
     // for column length check
-    var $lengths = array(
+    public $lengths = array(
         'conference_id' => 10,
         'presentation_type' => 30,
         'conference_title' => 255,
@@ -48,9 +51,10 @@ class XNPConferenceOrmItemDetail extends XooNIpsTableObject
         'conference_to_month' => 10,
         'conference_to_mday' => 10,
         'attachment_dl_limit' => 1,
-        'attachment_dl_notify' => 1
+        'attachment_dl_notify' => 1,
     );
-    function XNPConferenceOrmItemDetail() 
+
+    public function XNPConferenceOrmItemDetail()
     {
         parent::XooNIpsTableObject();
         $this->initVar('conference_id', XOBJ_DTYPE_INT, 0, false);
@@ -67,35 +71,34 @@ class XNPConferenceOrmItemDetail extends XooNIpsTableObject
         $this->initVar('attachment_dl_limit', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('attachment_dl_notify', XOBJ_DTYPE_INT, 0, false);
     }
-    
+
     /**
-     * get author objects of this item
-     * @return XNPConferenceOrmAuthor[] 
+     * get author objects of this item.
+     *
+     * @return XNPConferenceOrmAuthor[]
      */
-    function getAuthors()
+    public function getAuthors()
     {
-        $handler=&xoonips_getormhandler('xnpconference', 'author');
-        $criteria=new Criteria('conference_id', $this->get('conference_id'));
+        $handler = &xoonips_getormhandler('xnpconference', 'author');
+        $criteria = new Criteria('conference_id', $this->get('conference_id'));
         $criteria->setSort('author_order');
-        $result=&$handler->getObjects($criteria);
-        if($result){
+        $result = &$handler->getObjects($criteria);
+        if ($result) {
             return $result;
         }
+
         return array();
     }
 }
 
 /**
  * @brief Handler class that create, insert, update, get and delete detail information
- *
- *
  */
 class XNPConferenceOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    function XNPConferenceOrmItemDetailHandler(&$db) 
+    public function XNPConferenceOrmItemDetailHandler(&$db)
     {
         parent::XooNIpsTableObjectHandler($db);
         $this->__initHandler('XNPConferenceOrmItemDetail', 'xnpconference_item_detail', 'conference_id', false);
     }
 }
-?>

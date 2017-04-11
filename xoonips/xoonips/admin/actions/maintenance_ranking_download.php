@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.8 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,11 +25,11 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 
 // get requests
 $request_keys = array(
@@ -38,51 +39,50 @@ $request_keys = array(
     true,
   ),
 );
-$request_vals = xoonips_admin_get_requests( 'both', $request_keys );
+$request_vals = xoonips_admin_get_requests('both', $request_keys);
 $filename = $request_vals['ranking_download_file'];
-if ( $filename == '' ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_ILLACCESS );
-  exit();
+if ($filename == '') {
+    redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_ILLACCESS);
+    exit();
 }
 
 // check token ticket for pathinfo
 $ticket_area = 'xoonips_admin_maintenance_ranking';
-if ( $_SERVER['REQUEST_METHOD'] == 'GET' ) {
-  if ( ! $xoopsGTicket->check( false, $ticket_area, false ) ) {
-    redirect_header( $xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors() );
-    exit();
-  }
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    if (!$xoopsGTicket->check(false, $ticket_area, false)) {
+        redirect_header($xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors());
+        exit();
+    }
 }
 
-$download =& xoonips_getutility( 'download' );
-if ( ! $download->check_pathinfo( $filename ) ) {
-  // reload for KHTML based browser
+$download = &xoonips_getutility('download');
+if (!$download->check_pathinfo($filename)) {
+    // reload for KHTML based browser
   $url = $xoonips_admin['mypage_url'];
-  $url .= '&action=download';
-  $url .= '&ranking_download_file='.$filename;
-  $url .= '&'.$xoopsGTicket->getTicketParamString( __LINE__, true, 10, $ticket_area );
-  $url = $download->append_pathinfo( $url, $filename );
-  header( 'Location: '.$url );
-  exit();
+    $url .= '&action=download';
+    $url .= '&ranking_download_file='.$filename;
+    $url .= '&'.$xoopsGTicket->getTicketParamString(__LINE__, true, 10, $ticket_area);
+    $url = $download->append_pathinfo($url, $filename);
+    header('Location: '.$url);
+    exit();
 }
 
 // logic
-$admin_ranking_handler =& xoonips_gethandler( 'xoonips', 'admin_ranking' );
+$admin_ranking_handler = &xoonips_gethandler('xoonips', 'admin_ranking');
 $zipfile_path = $admin_ranking_handler->create_sum_file();
 
-if ( $zipfile_path === false ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MAINTENANCE_RANKING_LOCKED );
-  exit();
+if ($zipfile_path === false) {
+    redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MAINTENANCE_RANKING_LOCKED);
+    exit();
 }
 
 // set file removing on shutdown
-function on_shutdown() {
-  global $zipfile_path;
-  unlink( $zipfile_path );
+function on_shutdown()
+{
+    global $zipfile_path;
+    unlink($zipfile_path);
 }
-register_shutdown_function( 'on_shutdown' );
+register_shutdown_function('on_shutdown');
 
 // download
-$download->download_file( $zipfile_path, $filename, 'application/x-zip' );
-
-?>
+$download->download_file($zipfile_path, $filename, 'application/x-zip');

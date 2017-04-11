@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.9 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,69 +26,81 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once __DIR__ . '/viewfactory.class.php';
-include_once __DIR__ . '/logicfactory.class.php';
-include_once dirname( __DIR__ ) . '/xoonipsresponse.class.php';
+include_once __DIR__.'/viewfactory.class.php';
+include_once __DIR__.'/logicfactory.class.php';
+include_once dirname(__DIR__).'/xoonipsresponse.class.php';
 
-class XooNIpsAction{
-    
-    var $_params = null;
-    var $_response = null;
-    var $_error = null;
-    var $_view_params = null;
-    var $_formdata = null;
-    
-    function XooNIpsAction(){
-        $this -> _params = array();
-        $this -> _response = new XooNIpsResponse();
-        $this -> _error =& $this -> _response->getError();
-        $this -> _view_params = array();
-        $this -> _formdata =& xoonips_getutility( 'formdata' );
+class XooNIpsAction
+{
+    public $_params = null;
+    public $_response = null;
+    public $_error = null;
+    public $_view_params = null;
+    public $_formdata = null;
+
+    public function XooNIpsAction()
+    {
+        $this->_params = array();
+        $this->_response = new XooNIpsResponse();
+        $this->_error = &$this->_response->getError();
+        $this->_view_params = array();
+        $this->_formdata = &xoonips_getutility('formdata');
     }
-    
-    function _get_logic_name(){
+
+    public function _get_logic_name()
+    {
         return null;
     }
-    
-    function _get_view_name(){
+
+    public function _get_view_name()
+    {
         return null;
     }
-    
-    function action(){
-        $this -> preAction();
-        $this -> doAction();
-        $this -> postAction();
-        $this -> render();
+
+    public function action()
+    {
+        $this->preAction();
+        $this->doAction();
+        $this->postAction();
+        $this->render();
     }
-    
-    function preAction(){}
-    
-    function doAction(){
+
+    public function preAction()
+    {
+    }
+
+    public function doAction()
+    {
         $factory = &XooNIpsLogicFactory::getInstance();
-        $logic =& $factory->create($this->_get_logic_name());
+        $logic = &$factory->create($this->_get_logic_name());
         if (!is_object($logic)) {
-            $this -> _response->setResult(false);
-            $this -> _error->add(XNPERR_SERVER_ERROR,
+            $this->_response->setResult(false);
+            $this->_error->add(XNPERR_SERVER_ERROR,
                                  "can't create a logic:"
-                                 . $this->_get_logic_name());
+                                 .$this->_get_logic_name());
+
             return;
         }
-        $logic->execute($this -> _params, $this -> _response);
+        $logic->execute($this->_params, $this->_response);
     }
-    
-    function postAction(){}
-    
-    function render(){
-        if( is_null( $this->_get_view_name() ) ) return;
-        
+
+    public function postAction()
+    {
+    }
+
+    public function render()
+    {
+        if (is_null($this->_get_view_name())) {
+            return;
+        }
+
         $factory = &XooNIpsViewFactory::getInstance();
         $view = &$factory->create($this->_get_view_name(),
-                                  $this -> _view_params);
+                                  $this->_view_params);
         if (!is_object($view)) {
-            die( "can't create view:".$this->_get_view_name() );
+            die("can't create view:".$this->_get_view_name());
         } else {
             $view->render();
         }
     }
 }
-?>

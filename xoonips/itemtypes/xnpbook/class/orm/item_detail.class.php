@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.7 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,7 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 /**
  * @brief Data object of Book detail information
@@ -41,7 +44,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
 class XNPBookOrmItemDetail extends XooNIpsTableObject
 {
     // for column length check
-    var $lengths = array(
+    public $lengths = array(
         'book_id' => 10,
         'classification' => 30,
         'editor' => 255,
@@ -49,9 +52,10 @@ class XNPBookOrmItemDetail extends XooNIpsTableObject
         'isbn' => 13,
         'url' => 65535,
         'attachment_dl_limit' => 1,
-        'attachment_dl_notify' => 1
+        'attachment_dl_notify' => 1,
     );
-    function XNPBookOrmItemDetail() 
+
+    public function XNPBookOrmItemDetail()
     {
         parent::XooNIpsTableObject();
         $this->initVar('book_id', XOBJ_DTYPE_INT, 0, false);
@@ -62,35 +66,34 @@ class XNPBookOrmItemDetail extends XooNIpsTableObject
         $this->initVar('attachment_dl_limit', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('attachment_dl_notify', XOBJ_DTYPE_INT, 0, false);
     }
-    
+
     /**
-     * get author objects of this item
-     * @return XNPBookOrmAuthor[] 
+     * get author objects of this item.
+     *
+     * @return XNPBookOrmAuthor[]
      */
-    function getAuthors()
+    public function getAuthors()
     {
-        $handler=&xoonips_getormhandler('xnpbook', 'author');
-        $criteria=new Criteria('book_id', $this->get('book_id'));
+        $handler = &xoonips_getormhandler('xnpbook', 'author');
+        $criteria = new Criteria('book_id', $this->get('book_id'));
         $criteria->setSort('author_order');
-        $result=&$handler->getObjects($criteria);
-        if($result){
+        $result = &$handler->getObjects($criteria);
+        if ($result) {
             return $result;
         }
+
         return array();
     }
 }
 
 /**
  * @brief Handler class that create, insert, update, get and delete detail information
- *
- *
  */
 class XNPBookOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    function XNPBookOrmItemDetailHandler(&$db) 
+    public function XNPBookOrmItemDetailHandler(&$db)
     {
         parent::XooNIpsTableObjectHandler($db);
         $this->__initHandler('XNPBookOrmItemDetail', 'xnpbook_item_detail', 'book_id', false);
     }
 }
-?>

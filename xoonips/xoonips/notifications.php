@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -28,16 +29,14 @@
 $xoopsOption['pagetype'] = 'notification';
 include 'include/common.inc.php';
 
-if ( ! is_object( $xoopsUser ) ) {
-  redirect_header( 'user.php', 3, _NOPERM );
-  exit();
+if (!is_object($xoopsUser)) {
+    redirect_header('user.php', 3, _NOPERM);
+    exit();
 }
 
-$uid = $xoopsUser->getVar( 'uid' );
+$uid = $xoopsUser->getVar('uid');
 $xoopsOption['template_main'] = 'xoonips_notifications.html';
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsTpl->assign( 'lang_notifications', _MD_XOONIPS_ACCOUNT_NOTIFICATIONS );
-$xoopsTpl->assign( 'xoonips_editprofile_url', XOOPS_URL.'/modules/xoonips/edituser.php?uid=' . $uid );
+$xoopsTpl->assign('lang_notifications', _MD_XOONIPS_ACCOUNT_NOTIFICATIONS);
+$xoopsTpl->assign('xoonips_editprofile_url', XOOPS_URL.'/modules/xoonips/edituser.php?uid='.$uid);
 include XOOPS_ROOT_PATH.'/footer.php';
-
-?>

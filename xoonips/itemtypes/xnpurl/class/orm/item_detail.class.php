@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,7 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 /**
  * @brief Data object of Url detail information
@@ -35,12 +38,13 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
 class XNPUrlOrmItemDetail extends XooNIpsTableObject
 {
     // for column length check
-    var $lengths = array(
+    public $lengths = array(
         'url_id' => 10,
         'url' => 255,
-        'url_count' => 10
+        'url_count' => 10,
     );
-    function XNPUrlOrmItemDetail() 
+
+    public function XNPUrlOrmItemDetail()
     {
         parent::XooNIpsTableObject();
         $this->initVar('url_id', XOBJ_DTYPE_INT, 0, false);
@@ -51,15 +55,12 @@ class XNPUrlOrmItemDetail extends XooNIpsTableObject
 
 /**
  * @brief Handler class that create, insert, update, get and delete detail information
- *
- *
  */
 class XNPUrlOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    function XNPUrlOrmItemDetailHandler(&$db) 
+    public function XNPUrlOrmItemDetailHandler(&$db)
     {
         parent::XooNIpsTableObjectHandler($db);
         $this->__initHandler('XNPUrlOrmItemDetail', 'xnpurl_item_detail', 'url_id', false);
     }
 }
-?>

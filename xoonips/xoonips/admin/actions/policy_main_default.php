@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,12 +25,12 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // class files
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 
 // title
 $title = _AM_XOONIPS_POLICY_TITLE;
@@ -79,17 +80,15 @@ $menu = array(
 
 // templates
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'adminmenu.tmpl.html' );
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->setAttribute( 'description', 'visibility', 'visible' );
-$tmpl->addVar( 'description', 'DESCRIPTION', $description );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addRows( 'menu', $menu );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('adminmenu.tmpl.html');
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->setAttribute('description', 'visibility', 'visible');
+$tmpl->addVar('description', 'DESCRIPTION', $description);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addRows('menu', $menu);
 
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

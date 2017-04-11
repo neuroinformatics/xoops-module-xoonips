@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,38 +26,37 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 /**
- *
- * XmlRpcTransform composer class for Simulator type
- *
- *
+ * XmlRpcTransform composer class for Simulator type.
  */
 class XNPSimulatorXmlRpcTransformCompo extends XooNIpsXmlRpcTransformCompo
 {
-    function XNPSimulatorXmlRpcTransformCompo() 
+    public function XNPSimulatorXmlRpcTransformCompo()
     {
         parent::XooNIpsXmlRpcTransformCompo('xnpsimulator');
     }
-    
+
     /**
      * override getObject to order creator.
-     * 
+     *
      * @see XooNIpsXmlRpcTransformCompo::getObject
      *
      * @param array associative array of XML-RPC argument
+     *
      * @return XNPSimulatorOrmDeveloper
      */
-    function getObject($in_array) 
+    public function getObject($in_array)
     {
-        $obj=parent::getObject($in_array);
-        $developers=&$obj->getVar('developer');
-        for( $i=0; $i < count($developers); $i++){
+        $obj = parent::getObject($in_array);
+        $developers = &$obj->getVar('developer');
+        for ($i = 0; $i < count($developers); ++$i) {
             $developers[$i]->set('developer_order', $i);
         }
+
         return $obj;
     }
 }
-
-?>

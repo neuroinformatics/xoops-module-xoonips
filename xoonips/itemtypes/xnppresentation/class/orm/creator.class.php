@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,15 +26,16 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 /**
  * @brief Data object of Presentation creator information
- *
  */
 class XNPPresentationOrmCreator extends XooNIpsTableObject
 {
-    function XNPPresentationOrmCreator()
+    public function XNPPresentationOrmCreator()
     {
         parent::XooNIpsTableObject();
         $this->initVar('presentation_creator_id', XOBJ_DTYPE_INT, 0, true);
@@ -45,15 +47,12 @@ class XNPPresentationOrmCreator extends XooNIpsTableObject
 
 /**
  * @brief Handler class that create, insert, update, get and delete detail information
- *
- *
  */
 class XNPPresentationOrmCreatorHandler extends XooNIpsTableObjectHandler
 {
-    function XNPPresentationOrmCreatorHandler(&$db) 
+    public function XNPPresentationOrmCreatorHandler(&$db)
     {
         parent::XooNIpsTableObjectHandler($db);
         $this->__initHandler('XNPPresentationOrmCreator', 'xnppresentation_creator', 'presentation_creator_id', false);
     }
 }
-?>

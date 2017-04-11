@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // this file will include from maintenance_account_modify.php
@@ -57,38 +58,36 @@ $breadcrumbs = array(
 );
 
 // token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_maintenance_account_aconfirm';
-$token_ticket = $xoopsGTicket->getTicketHtml( __LINE__, 1800, $ticket_area );
+$token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // templates
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'maintenance_account_confirm.tmpl.html' );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('maintenance_account_confirm.tmpl.html');
 
 // assign template variables
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'main', 'token_ticket', $token_ticket );
-$tmpl->addVar( 'main', 'confirm_msg', _AM_XOONIPS_MSG_ACTIVATE_CONFIRM );
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('main', 'token_ticket', $token_ticket);
+$tmpl->addVar('main', 'confirm_msg', _AM_XOONIPS_MSG_ACTIVATE_CONFIRM);
 // >> user inforamtion from
-$tmpl->addVar( 'main', 'action', 'activate' );
-$tmpl->addVar( 'main', 'uid_title', _AM_XOONIPS_LABEL_UID );
-$tmpl->addVar( 'main', 'uid_value', $user['xoops']['uid'] );
-$tmpl->addVar( 'main', 'uname_title', _AM_XOONIPS_LABEL_UNAME );
-$tmpl->addVar( 'main', 'uname_value', $user['xoops']['uname'] );
-$tmpl->addVar( 'main', 'name_title', _AM_XOONIPS_LABEL_NAME );
-$tmpl->addVar( 'main', 'name_value', $user['xoops']['name'] );
-$tmpl->addVar( 'main', 'email_title', _AM_XOONIPS_LABEL_EMAIL );
-$tmpl->addVar( 'main', 'email_value', $user['xoops']['email'] );
-$tmpl->addVar( 'submit', 'yes', _AM_XOONIPS_LABEL_YES );
-$tmpl->addVar( 'main', 'no', _AM_XOONIPS_LABEL_NO );
+$tmpl->addVar('main', 'action', 'activate');
+$tmpl->addVar('main', 'uid_title', _AM_XOONIPS_LABEL_UID);
+$tmpl->addVar('main', 'uid_value', $user['xoops']['uid']);
+$tmpl->addVar('main', 'uname_title', _AM_XOONIPS_LABEL_UNAME);
+$tmpl->addVar('main', 'uname_value', $user['xoops']['uname']);
+$tmpl->addVar('main', 'name_title', _AM_XOONIPS_LABEL_NAME);
+$tmpl->addVar('main', 'name_value', $user['xoops']['name']);
+$tmpl->addVar('main', 'email_title', _AM_XOONIPS_LABEL_EMAIL);
+$tmpl->addVar('main', 'email_value', $user['xoops']['email']);
+$tmpl->addVar('submit', 'yes', _AM_XOONIPS_LABEL_YES);
+$tmpl->addVar('main', 'no', _AM_XOONIPS_LABEL_NO);
 
 // display
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

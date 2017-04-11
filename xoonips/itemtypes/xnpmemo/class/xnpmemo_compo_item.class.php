@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,38 +26,42 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xoonips_compo_item.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xnpmemo/iteminfo.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xnpmemo/iteminfo.php';
 
 /**
- *
  * @brief Handler object that create,insert,update,get,delete XNPMemoCompo object.
- *
  */
 class XNPMemoCompoHandler extends XooNIpsItemInfoCompoHandler
 {
-    function XNPMemoCompoHandler(&$db) 
+    public function XNPMemoCompoHandler(&$db)
     {
         parent::XooNIpsItemInfoCompoHandler($db, 'xnpmemo');
     }
-    function &create() 
+
+    public function &create()
     {
         $memo = new XNPMemoCompo();
+
         return $memo;
     }
 
     /**
-     * return template filename
-     * 
-     * @param string $type defined symbol 
-     *  XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
-     *  or XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LISTL
+     * return template filename.
+     *
+     * @param string $type defined symbol
+     *                     XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
+     *                     or XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LISTL
+     *
      * @return template filename
      */
-    function getTemplateFileName($type){
-        switch( $type ){
+    public function getTemplateFileName($type)
+    {
+        switch ($type) {
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
             return 'xnpmemo_transfer_item_detail.html';
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
@@ -65,57 +70,59 @@ class XNPMemoCompoHandler extends XooNIpsItemInfoCompoHandler
             return '';
         }
     }
-    
+
     /**
-     * return template variables of item
-     * 
-     * @param string $type defined symbol 
-     *  XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
-     *  , XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST
-     *  or XOONIPS_TEMPLATE_TYPE_ITEM_LIST
-     * @param int $item_id
-     * @param int $uid user id who get item
+     * return template variables of item.
+     *
+     * @param string $type    defined symbol
+     *                        XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
+     *                        , XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST
+     *                        or XOONIPS_TEMPLATE_TYPE_ITEM_LIST
+     * @param int    $item_id
+     * @param int    $uid     user id who get item
+     *
      * @return array of template variables
      */
-    function getTemplateVar($type, $item_id, $uid){
-        $memo =& $this->get( $item_id );
-        if ( ! is_object( $memo ) ) {
-          return array();
+    public function getTemplateVar($type, $item_id, $uid)
+    {
+        $memo = &$this->get($item_id);
+        if (!is_object($memo)) {
+            return array();
         }
         $result = $this->getBasicTemplateVar($type, $memo, $uid);
 
-        $detail =& $memo -> getVar( 'detail' );
-        switch( $type ){
+        $detail = &$memo->getVar('detail');
+        switch ($type) {
         case XOONIPS_TEMPLATE_TYPE_ITEM_LIST:
-            $result['detail']=$detail->getVarArray('s');
+            $result['detail'] = $detail->getVarArray('s');
             $result['detail']['item_link'] = $detail->getVar('item_link', 's');
-            $result['detail']['item_link_href'] = preg_replace( '/javascript:/i', '', preg_replace( '/[\\x00-\\x20\\x22\\x27]/', '', $detail->getVar('item_link', 'n')));
+            $result['detail']['item_link_href'] = preg_replace('/javascript:/i', '', preg_replace('/[\\x00-\\x20\\x22\\x27]/', '', $detail->getVar('item_link', 'n')));
+
             return $result;
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
-            $result['detail'] = array('item_link' => $detail -> getVar( 'item_link', 's' ),
+            $result['detail'] = array('item_link' => $detail->getVar('item_link', 's'),
                 );
-            $memo_file = $memo -> getVar( 'memo_file' );
-            if( $memo_file -> get( 'item_id' ) == $item_id ){
-                $result['detail']['memo_file'] = $this -> getAttachmentTemplateVar($memo -> getVar( 'memo_file' ) );
+            $memo_file = $memo->getVar('memo_file');
+            if ($memo_file->get('item_id') == $item_id) {
+                $result['detail']['memo_file'] = $this->getAttachmentTemplateVar($memo->getVar('memo_file'));
             }
+
             return $result;
         }
+
         return $result;
     }
 }
 
 /**
- *
  * @brief Data object that have one ore more XooNIpsTableObject for Memo type.
- *
  */
 class XNPMemoCompo extends XooNIpsItemInfoCompo
 {
-    function XNPMemoCompo() 
+    public function XNPMemoCompo()
     {
         parent::XooNIpsItemInfoCompo('xnpmemo');
     }
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.7 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,17 +26,19 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 // class files loader for OAI-PMH
 
-define('XOONIPS_METADATA_CATEGORY_ID', 'ID' );
-define('XOONIPS_METADATA_CATEGORY_TITLE', 'TITLE' );
-define('XOONIPS_METADATA_CATEGORY_CREATOR', 'CREATOR' );
-define('XOONIPS_METADATA_CATEGORY_RESOURCE_LINK', 'RESOURCE_LINK' );
-define('XOONIPS_METADATA_CATEGORY_LAST_UPDATE_DATE', 'LAST_UPDATE_DATE' );
-define('XOONIPS_METADATA_CATEGORY_CREATION_DATE', 'CREATION_DATE' );
-define('XOONIPS_METADATA_CATEGORY_DATE', 'DATE' );
+define('XOONIPS_METADATA_CATEGORY_ID', 'ID');
+define('XOONIPS_METADATA_CATEGORY_TITLE', 'TITLE');
+define('XOONIPS_METADATA_CATEGORY_CREATOR', 'CREATOR');
+define('XOONIPS_METADATA_CATEGORY_RESOURCE_LINK', 'RESOURCE_LINK');
+define('XOONIPS_METADATA_CATEGORY_LAST_UPDATE_DATE', 'LAST_UPDATE_DATE');
+define('XOONIPS_METADATA_CATEGORY_CREATION_DATE', 'CREATION_DATE');
+define('XOONIPS_METADATA_CATEGORY_DATE', 'DATE');
 
 // class files
 $xoonips_class_path = __DIR__;
@@ -47,5 +50,3 @@ include_once $xoonips_class_path.'/oaipmh_handler.class.php';
 include_once $xoonips_class_path.'/oaipmh_identify_handler.class.php';
 include_once $xoonips_class_path.'/oaipmh_list_metadata_formats_handler.class.php';
 include_once $xoonips_class_path.'/oaipmh_list_records_handler.class.php';
-
-?>

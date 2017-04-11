@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.9 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -31,9 +32,7 @@
 //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-
 /**
- *
  * @brief handler class of an object that composite of data objects.
  *
  * @li get/insert/delete primary table and dependent table
@@ -41,23 +40,20 @@
  * @li handler name corresponds to a field name of a data object.
  * @li set handler of primary table and primary key using __init_handler
  * @li set handler of dependent table,freign key and multiple attribute(optional) using addHandler
- *
  */
 class XooNIpsRelatedObjectHandler
 {
+    /**
+     * associative array.
+     */
+    public $handlers = array();
 
     /**
-     *
-     * associative array
+     * handler's name of primary table.
      */
-    var $handlers = array();
+    public $primary_handler_name = null;
 
-    /**
-     *
-     * handler's name of primary table
-     */
-    var $primary_handler_name = null;
-    function XooNIpsRelatedObjectHandler() 
+    public function XooNIpsRelatedObjectHandler()
     {
     }
 
@@ -68,24 +64,23 @@ class XooNIpsRelatedObjectHandler
      *
      * @param string $primary_handler_name handler name of primary table data object(corresponding to variable name of XooNIpsTableObject)
      * @param string $primary_handler_name handler name of data object of primary table
-     * @param string $primary_handler reference of handler
-     * @param string $primary_key_name primary key
-     *
+     * @param string $primary_handler      reference of handler
+     * @param string $primary_key_name     primary key
      */
-    function __init_handler($primary_handler_name, &$primary_handler, $primary_key_name) 
+    public function __init_handler($primary_handler_name, &$primary_handler, $primary_key_name)
     {
         $this->addHandler($primary_handler_name, $primary_handler, $primary_key_name);
         $this->primary_handler_name = $primary_handler_name;
     }
 
     /**
-     * get data object
+     * get data object.
      */
-    function &get($id) 
+    public function &get($id)
     {
         $obj = &$this->create();
         $falseVar = false;
-        foreach(array_keys($this->handlers) as $key) {
+        foreach (array_keys($this->handlers) as $key) {
             $foreign_key = $this->handlers[$key]['foreign_key'];
             if ($this->handlers[$key]['criteria'] && (is_subclass_of($criteria, 'CriteriaElement') || strtolower(get_class($criteria)) == 'CriteriaElement')) {
                 $criteria = new CriteriaCompo();
@@ -98,51 +93,60 @@ class XooNIpsRelatedObjectHandler
             } else {
                 $criteria = new Criteria($foreign_key, $id);
             }
-            //
-            //
+
             $objs = &$this->handlers[$key]['handler']->getObjects($criteria);
             if (false == $objs && $key == $this->primary_handler_name) {
                 // return false if primary object is not found
                 return $falseVar;
             }
-            foreach($objs as $k => $v) {
+            foreach ($objs as $k => $v) {
                 $objs[$k]->unsetNew();
             }
             if ($this->handlers[$key]['multiple'] /*is_array($obj->getVar($key))*/) {
-                if (false !== $objs) $obj->setVar($key, $objs);
+                if (false !== $objs) {
+                    $obj->setVar($key, $objs);
+                }
             } else {
-                if (false !== $objs && count($objs) == 1) $obj->setVar($key, $objs[0]);
+                if (false !== $objs && count($objs) == 1) {
+                    $obj->setVar($key, $objs[0]);
+                }
             }
         }
-        //
-        //
+
         return $obj;
     }
 
     /**
      * @brief insert specified object
+     *
      * @param XooNIpsRelatedObject object to insert
+     *
      * @return bool false if failure
      */
-    function insert(&$obj) 
+    public function insert(&$obj)
     {
         if (isset($this->primary_handler_name)) {
             // insert data object using primary handler
             $primary_obj = &$obj->getVar($this->primary_handler_name);
             if (!$this->handlers[$this->primary_handler_name]['handler']->insert($primary_obj)) {
-                trigger_error("failure in insert primary table");
+                trigger_error('failure in insert primary table');
+
                 return false;
             }
             $primary_id = $primary_obj->get($this->handlers[$this->primary_handler_name]['foreign_key']);
         } else {
-            trigger_error("no primary handler");
+            trigger_error('no primary handler');
+
             return false;
         }
-        foreach(array_keys($obj->getVars()) as $key) {
-            if ($key == $this->primary_handler_name) continue; //no need to insert(already inserted)
+        foreach (array_keys($obj->getVars()) as $key) {
+            if ($key == $this->primary_handler_name) {
+                continue;
+            } //no need to insert(already inserted)
             //
             if (!isset($this->handlers[$key])) {
                 trigger_error("unknown handlers index $key");
+
                 return false;
             }
             $foreign_key = $this->handlers[$key]['foreign_key'];
@@ -151,31 +155,38 @@ class XooNIpsRelatedObjectHandler
                 //
                 // delete orm that is not in $objs and is in database.
                 $is_in_ids = array();
-                foreach($objs as $o) if (!$o->isNew()) $is_in_ids[] = $o->get($this->handlers[$key]['handler']->getKeyName());
-                
-                if (count($is_in_ids) > 0) { //
+                foreach ($objs as $o) {
+                    if (!$o->isNew()) {
+                        $is_in_ids[] = $o->get($this->handlers[$key]['handler']->getKeyName());
+                    }
+                }
+
+                if (count($is_in_ids) > 0) {
                     $cri = new CriteriaCompo(new Criteria($foreign_key, $primary_id));
-                    $cri->add(new Criteria($this->handlers[$key]['handler']->getKeyName() , '(' . implode(',', $is_in_ids) . ')', 'NOT IN'));
+                    $cri->add(new Criteria($this->handlers[$key]['handler']->getKeyName(), '('.implode(',', $is_in_ids).')', 'NOT IN'));
                 } else { //all of orm is deleted
                     $cri = new CriteriaCompo(new Criteria($foreign_key, $primary_id));
                 }
-                if( isset( $this->handlers[$key]['criteria'] ) ){
+                if (isset($this->handlers[$key]['criteria'])) {
                     // add handler's criteria
-                    $cri -> add( $this->handlers[$key]['criteria'] );
+                    $cri->add($this->handlers[$key]['criteria']);
                 }
 
                 $del_objs = &$this->handlers[$key]['handler']->getObjects($cri);
-                foreach($del_objs as $o) {
+                foreach ($del_objs as $o) {
                     $this->handlers[$key]['handler']->delete($o);
                 }
                 //
                 // insert each orms in array
                 $insert_ids = array(); //array of ids that is inserted below
-                foreach($objs as $k => $v) {
-                    if (!$objs[$k]->isDirty()) continue; // no need to insert
+                foreach ($objs as $k => $v) {
+                    if (!$objs[$k]->isDirty()) {
+                        continue;
+                    } // no need to insert
                     $objs[$k]->set($foreign_key, $primary_id);
                     if (!$this->handlers[$key]['handler']->insert($objs[$k])) {
                         trigger_error("failure in insert: $key");
+
                         return false;
                     }
                     // add value of primary_key to insert_ids
@@ -184,174 +195,202 @@ class XooNIpsRelatedObjectHandler
             } else {
                 // insert orm
                 $var = &$obj->getVar($key);
-                if (empty($var)) continue; // no orm object
-                if (!$var->isDirty()) continue; // no need to insert
+                if (empty($var)) {
+                    continue;
+                } // no orm object
+                if (!$var->isDirty()) {
+                    continue;
+                } // no need to insert
                 $var->set($foreign_key, $primary_id);
                 if (!$this->handlers[$key]['handler']->insert($var)) {
                     trigger_error("failure in insert: $key");
+
                     return false;
                 }
             }
         }
+
         return true;
     }
 
     /**
      * @brief delete object of specified key
+     *
      * @param mixed primary key of object to delete
+     *
      * @return bool false if failure
      */
-    function deleteByKey($key)
+    public function deleteByKey($key)
     {
         return $this->delete($this->get($key));
     }
-    
+
     /**
      * @brief delete specified object
+     *
      * @param XooNIpsRelatedObject object to delete
+     *
      * @return bool false if failure
      */
-    function delete(&$obj) 
+    public function delete(&$obj)
     {
-        foreach(array_keys($obj->getVars()) as $key) {
+        foreach (array_keys($obj->getVars()) as $key) {
             if (!isset($this->handlers[$key])) {
                 trigger_error("unknown handlers index $key");
+
                 return false;
             }
             if ($this->handlers[$key]['multiple'] && is_array($obj->getVar($key))) {
                 $objs = &$obj->getVar($key);
-                for ($i = 0; $i < count($objs); $i++) {
+                for ($i = 0; $i < count($objs); ++$i) {
                     if (!$this->handlers[$key]['handler']->delete($objs[$i])) {
                         trigger_error("failure in delete $key");
+
                         return false;
                     }
                 }
-            } else if ( $obj->getVar($key) ){
+            } elseif ($obj->getVar($key)) {
                 if (!$this->handlers[$key]['handler']->delete($obj->getVar($key))) {
                     trigger_error("failure in delete $key");
+
                     return false;
                 }
             }
         }
+
         return true;
     }
 
     /**
-     * gets objects
+     * gets objects.
      *
-     * @access public
      * @param object $criteria
-     * @param bool $id_as_key
+     * @param bool   $id_as_key
      * @param string $fieldlist fieldlist for distinct select
-     * @param bool $distinct
+     * @param bool   $distinct
+     *
      * @return array objects
      */
-    function &getObjects($criteria = null, $id_as_key = false, $fieldlist = '', $distinct = false, $joindef = null) 
+    public function &getObjects($criteria = null, $id_as_key = false, $fieldlist = '', $distinct = false, $joindef = null)
     {
         $ret_objs = array();
         static $falseVar = false;
         if (isset($this->primary_handler_name)) {
             $primary_objs = &$this->handlers[$this->primary_handler_name]['handler']->getObjects($criteria, false, $this->handlers[$this->primary_handler_name]['foreign_key'], $distinct, $joindef);
-            if (false === $primary_objs) return $falseVar;
-            //
-            foreach($primary_objs as $k => $v) {
+            if (false === $primary_objs) {
+                return $falseVar;
+            }
+
+            foreach ($primary_objs as $k => $v) {
                 $primary_objs[$k]->unsetNew();
             }
             // insert data object using primary handler
-            foreach($primary_objs as $o) {
+            foreach ($primary_objs as $o) {
                 $id = $o->get($this->handlers[$this->primary_handler_name]['foreign_key']);
-                if (!$id) continue;
+                if (!$id) {
+                    continue;
+                }
                 $obj = &$this->create();
-                foreach($obj->getVars() as $key=>$value) {
+                foreach ($obj->getVars() as $key => $value) {
                     if (!isset($this->handlers[$key])) {
                         trigger_error("unknown handlers index $key");
+
                         return $falseVar;
                     }
                     $objs = &$this->handlers[$key]['handler']->getObjects(new Criteria($this->handlers[$key]['foreign_key'], $id));
-                    if( $value['required'] && empty($objs)){
-                      continue 2;
+                    if ($value['required'] && empty($objs)) {
+                        continue 2;
                     }
-                    foreach($objs as $k => $v) {
+                    foreach ($objs as $k => $v) {
                         $objs[$k]->unsetNew();
                     }
                     if ($this->handlers[$key]['multiple']) {
                         $obj->setVar($key, $objs);
                     } else {
                         // skip this object if incomplete(related row is not found)
-                        if (count($objs) != 1) continue;
+                        if (count($objs) != 1) {
+                            continue;
+                        }
                         $obj->setVar($key, $objs[0]);
                     }
                 }
-                if( $id_as_key ){
+                if ($id_as_key) {
                     $ret_objs[$id] = $obj;
-                }else{
+                } else {
                     $ret_objs[] = $obj;
                 }
             }
+
             return $ret_objs;
         }
+
         return $falseVar;
     }
 
     /**
-     * add handler
+     * add handler.
+     *
      * @param string handler name(must be same of item field name)
      * @param XooNIpsRelatedObjectHandler handler
      * @param string key name to be joined to xoonips_item_basic.item_id
-     * @param bool $multiple true if this field has more than one data objects
+     * @param bool     $multiple true if this field has more than one data objects
      * @param Criteria $criteria
      */
-    function addHandler($key, &$handler, $foreign_key, $multiple = false, $criteria = null) 
+    public function addHandler($key, &$handler, $foreign_key, $multiple = false, $criteria = null)
     {
         $this->handlers[$key] = array(
             'name' => $key,
             'handler' => &$handler,
             'foreign_key' => $foreign_key,
             'multiple' => $multiple,
-            'criteria' => &$criteria
+            'criteria' => &$criteria,
         );
     }
 
     /**
-     *
      * @get attachment download limitation.
      * if no attachment, return false.
      *
      * @param XooNIpsItem $item
      * @retval true login user only(limited)
      * @retval false all user(not limited)
-     *
      */
-    function getDownloadLimitation($item) 
+    public function getDownloadLimitation($item)
     {
         return false;
     }
-    function setNew(&$obj) 
+
+    public function setNew(&$obj)
     {
         $this->callForeachVars($obj, 'setNew');
     }
-    function unsetNew(&$obj) 
+
+    public function unsetNew(&$obj)
     {
         $this->callForeachVars($obj, 'unsetNew');
     }
-    function setDirty(&$obj) 
+
+    public function setDirty(&$obj)
     {
         $this->callForeachVars($obj, 'setDirty');
     }
-    function unsetDirty(&$obj) 
+
+    public function unsetDirty(&$obj)
     {
         $this->callForeachVars($obj, 'unsetDirty');
     }
-    function callForeachVars(&$obj, $methodName) 
+
+    public function callForeachVars(&$obj, $methodName)
     {
-        foreach(array_keys($obj->getVars()) as $key) {
+        foreach (array_keys($obj->getVars()) as $key) {
             if (!isset($this->handlers[$key])) {
                 trigger_error("unknown handlers index $key");
+
                 return;
             }
             if ($this->handlers[$key]['multiple'] && is_array($obj->getVar($key))) {
                 $objs = &$obj->getVar($key);
-                for ($i = 0; $i < count($objs); $i++) {
+                for ($i = 0; $i < count($objs); ++$i) {
                     if (is_subclass_of($objs[$i], 'XoopsObject')) {
                         $objs[$i]->$methodName();
                     }
@@ -371,45 +410,40 @@ class XooNIpsRelatedObjectHandler
 //
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-
 /**
- *
  * @brief data object of xoonips item(basic fields)
- *
- *
  */
 class XooNIpsRelatedObject
 {
-    var $vars = array();
-    function XooNIpsRelatedObject() 
+    public $vars = array();
+
+    public function XooNIpsRelatedObject()
     {
     }
 
     /**
-     *
      * @brief initialize variable.
      *
      * @param[in] string $key
      * @param[in] mixed $val
      * @param[in] boolean $required true if required in insert(default is false)
      */
-    function initVar($key, &$val, $required = false) 
+    public function initVar($key, &$val, $required = false)
     {
         $this->vars[$key] = array(
             'key' => $key,
             'value' => &$val,
-            'required' => $required
+            'required' => $required,
         );
     }
 
     /**
-     * assign a value to a variable
+     * assign a value to a variable.
      *
-     * @access public
-     * @param string $key name of the variable to assign
-     * @param mixed $value value to assign
+     * @param string $key   name of the variable to assign
+     * @param mixed  $value value to assign
      */
-    function setVar($key, $val) 
+    public function setVar($key, $val)
     {
         if (!empty($key) && isset($val) && isset($this->vars[$key])) {
             $this->vars[$key]['value'] = &$val;
@@ -417,24 +451,23 @@ class XooNIpsRelatedObject
     }
 
     /**
-     * returns all variables for the object
+     * returns all variables for the object.
      *
-     * @access public
      * @return array array of associative array( 'key' => $key, 'value' => &$val, 'required' => $required );
      */
-    function &getVars() 
+    public function &getVars()
     {
         return $this->vars;
     }
 
     /**
-     * returns a specific variable for the object
+     * returns a specific variable for the object.
      *
-     * @access public
      * @param string $key key of the object's variable to be returned
+     *
      * @return mixed a value of the variable
      */
-    function &getVar($key) 
+    public function &getVar($key)
     {
         return $this->vars[$key]['value'];
     }
@@ -447,55 +480,61 @@ class XooNIpsRelatedObject
      * @retval ture filled
      * @retval false not filled
      */
-    function isFilledRequired(&$missing) 
+    public function isFilledRequired(&$missing)
     {
-        if (!isset($missing) || !is_array($missing)) $missing = array();
-        foreach($this->vars as $field => $value) {
-            if (!$value['required']) continue; //skip not required field
+        if (!isset($missing) || !is_array($missing)) {
+            $missing = array();
+        }
+        foreach ($this->vars as $field => $value) {
+            if (!$value['required']) {
+                continue;
+            } //skip not required field
             //
             $var = &$this->getVar($field);
             if (is_array($var)) {
-                if (0 == count($var)) $missing[] = $field;
-                else {
-                    for ($i = 0; $i < count($var); $i++) {
+                if (0 == count($var)) {
+                    $missing[] = $field;
+                } else {
+                    for ($i = 0; $i < count($var); ++$i) {
                         $var[$i]->isFilledRequired($miss);
-                        $missing+= $miss;
+                        $missing += $miss;
                     }
                 }
             } else {
                 $var->isFilledRequired($miss);
-                $missing+= $miss;
+                $missing += $miss;
             }
         }
+
         return 0 == count($missing);
     }
-    
-    function &xoopsClone(){
+
+    public function &xoopsClone()
+    {
         $class = get_class($this);
         $clone = new $class();
-        foreach(array_keys($this->getVars()) as $key) {
-            $ret =& $this->getVar($key);
+        foreach (array_keys($this->getVars()) as $key) {
+            $ret = &$this->getVar($key);
             if (!isset($ret)) {
                 continue;
             }
             if (is_array($this->getVar($key))) {
                 $objs = &$this->getVar($key);
                 $clone_objs = array();
-                for ($i = 0; $i < count($objs); $i++) {
+                for ($i = 0; $i < count($objs); ++$i) {
                     if (is_subclass_of($objs[$i], 'XoopsObject')) {
-                        $clone_objs[$i] =& $objs[$i]->xoopsClone();
+                        $clone_objs[$i] = &$objs[$i]->xoopsClone();
                     }
                 }
-                $clone -> setVar( $key, $clone_objs );
+                $clone->setVar($key, $clone_objs);
             } else {
                 $o = &$this->getVar($key);
                 if (is_subclass_of($o, 'XoopsObject')) {
-                    $clone -> setVar( $key, $o->xoopsClone() );
+                    $clone->setVar($key, $o->xoopsClone());
                 }
             }
         }
+
         return $clone;
     }
 }
-
-?>

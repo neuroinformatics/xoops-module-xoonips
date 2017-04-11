@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.12.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -31,12 +32,10 @@
 // _MI_<MODULENAME>_<STRINGNAME>
 
 // The name of this module
-define("_MI_XNPSIMULATOR_NAME","XooNIps Simulator Item Type Module");
+define('_MI_XNPSIMULATOR_NAME', 'XooNIps Simulator Item Type Module');
 // A brief description of this module
-define("_MI_XNPSIMULATOR_DESC","XooNIps Simulator Item Type Module");
+define('_MI_XNPSIMULATOR_DESC', 'XooNIps Simulator Item Type Module');
 
 // Names of admin menu items
-define("_MI_XNPSIMULATOR_CFG_DLIMIT","Allow contributor to specify download limitation option?");
-define("_MI_XNPSIMULATOR_CFG_DLIMIT_D","");
-
-?>
+define('_MI_XNPSIMULATOR_CFG_DLIMIT', 'Allow contributor to specify download limitation option?');
+define('_MI_XNPSIMULATOR_CFG_DLIMIT_D', '');

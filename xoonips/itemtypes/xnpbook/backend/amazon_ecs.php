@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.8 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,79 +25,86 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOONIPS_PATH' ) ) {
-  exit();
+if (!defined('XOONIPS_PATH')) {
+    exit();
 }
 
 // class file
 require_once XOONIPS_PATH.'/class/base/JSON.php';
-require_once dirname( __DIR__ ).'/class/amazon.class.php';
+require_once dirname(__DIR__).'/class/amazon.class.php';
 
 // change internal encoding to UTF-8
-if ( extension_loaded( 'mbstring' ) ) {
-  mb_language( 'uni' );
-  mb_internal_encoding( 'UTF-8' );
-  mb_http_output( 'pass' );
+if (extension_loaded('mbstring')) {
+    mb_language('uni');
+    mb_internal_encoding('UTF-8');
+    mb_http_output('pass');
 }
 
 $is_error = false;
 $error_message = '';
-if ( ! isset( $_SERVER['HTTP_REFERER'] ) || preg_match( '/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER'] ) == 0 ) {
-  $is_error = true;
-  $error_message = 'Turn REFERER on';
+if (!isset($_SERVER['HTTP_REFERER']) || preg_match('/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER']) == 0) {
+    $is_error = true;
+    $error_message = 'Turn REFERER on';
 }
 
-if ( ! $is_error && ! isset( $_GET['asin'] ) ) {
-  $is_error = true;
-  $error_message = 'asin required';
+if (!$is_error && !isset($_GET['asin'])) {
+    $is_error = true;
+    $error_message = 'asin required';
 }
 
-if ( ! $is_error ) {
-  $asin = trim( $_GET['asin'] );
+if (!$is_error) {
+    $asin = trim($_GET['asin']);
 }
 
-function get_simplified_url($url) {
-  $durl = urldecode($url);
-  $ret = parse_url($durl);
-  if ($ret === false)
-    return $url;
-  $host = $ret['host'];
-  if ($host == 'www.amazon.co.jp')
-    $host = 'amazon.jp';
-  $asin = false;
-  if (isset($ret['path']) && preg_match('/\/dp\/([0-9a-zA-Z]+)/', $ret['path'], $matches))
-    $asin = $matches[1];
-  if (empty($asin) && isset($ret['query'])) {
-    $queries = explode('&', $ret['query']);
-    foreach ($queries as $query) {
-       list($key, $value) = explode('=', $query);
-       if ($key == 'ASIN') {
-         $asin = $value;
-         break;
-       }
+function get_simplified_url($url)
+{
+    $durl = urldecode($url);
+    $ret = parse_url($durl);
+    if ($ret === false) {
+        return $url;
     }
-  }
-  if ($asin !== false)
-    return sprintf('%s://%s/dp/%s', $ret['scheme'], $host, $asin);
-  return $url;
+    $host = $ret['host'];
+    if ($host == 'www.amazon.co.jp') {
+        $host = 'amazon.jp';
+    }
+    $asin = false;
+    if (isset($ret['path']) && preg_match('/\/dp\/([0-9a-zA-Z]+)/', $ret['path'], $matches)) {
+        $asin = $matches[1];
+    }
+    if (empty($asin) && isset($ret['query'])) {
+        $queries = explode('&', $ret['query']);
+        foreach ($queries as $query) {
+            list($key, $value) = explode('=', $query);
+            if ($key == 'ASIN') {
+                $asin = $value;
+                break;
+            }
+        }
+    }
+    if ($asin !== false) {
+        return sprintf('%s://%s/dp/%s', $ret['scheme'], $host, $asin);
+    }
+
+    return $url;
 }
 
-function &get_amazon_data( $asin ) {
-  $ret = array();
-  $amazon = new XooNIps_Amazon_ECS40();
-  if ( ! $amazon->set_isbn( $asin ) ) {
-    return $ret;
-  }
-  if ( ! $amazon->fetch() ) {
-    return $ret;
-  }
-  if ( ! $amazon->parse() ) {
-    return $ret;
-  }
-  if ( ! isset( $amazon->_data[$asin] ) ) {
-    return $ret;
-  }
-  $item =& $amazon->_data[$asin];
+function &get_amazon_data($asin)
+{
+    $ret = array();
+    $amazon = new XooNIps_Amazon_ECS40();
+    if (!$amazon->set_isbn($asin)) {
+        return $ret;
+    }
+    if (!$amazon->fetch()) {
+        return $ret;
+    }
+    if (!$amazon->parse()) {
+        return $ret;
+    }
+    if (!isset($amazon->_data[$asin])) {
+        return $ret;
+    }
+    $item = &$amazon->_data[$asin];
   // asin
   $ret['asin'] = $item['ASIN'];
   // isbn
@@ -110,34 +118,33 @@ function &get_amazon_data( $asin ) {
   // year
   $ret['year'] = '';
   // - PublicationDate is yyyy-mm-dd or yyyy-mm form
-  $pdate = explode( '-', $item['PublicationDate'] );
-  $pdate_count = count( $pdate );
-  if ( $pdate_count == 2 || $pdate_count == 3 ) {
-    $ret['year'] = sscanf( $pdate[0], '%d' );
-  }
+  $pdate = explode('-', $item['PublicationDate']);
+    $pdate_count = count($pdate);
+    if ($pdate_count == 2 || $pdate_count == 3) {
+        $ret['year'] = sscanf($pdate[0], '%d');
+    }
   // publisher
   $ret['publisher'] = $item['Publisher'];
   // title
   $ret['title'] = $item['Title'];
 
-  return $ret;
+    return $ret;
 }
 
-if ( ! $is_error ) {
-  $data =& get_amazon_data( $asin );
-  if ( empty( $data ) ) {
-    $data['error'] = 'failed to get amazon resources';
-  }
+if (!$is_error) {
+    $data = &get_amazon_data($asin);
+    if (empty($data)) {
+        $data['error'] = 'failed to get amazon resources';
+    }
 } else {
-  $data = array();
-  $data['error'] = $error_message;
+    $data = array();
+    $data['error'] = $error_message;
 }
 
 // json
 $json = new Services_JSON();
-$encode = $json->encode( $data );
+$encode = $json->encode($data);
 
 // output
-header( 'Content-Type: text/javascript+json; charset=utf-8' );
+header('Content-Type: text/javascript+json; charset=utf-8');
 echo $encode;
-

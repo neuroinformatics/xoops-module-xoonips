@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,33 +25,34 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
- * class of XooNIps Search Cache File
+ * class of XooNIps Search Cache File.
+ *
  * @li getVar( 'search_cache_id' ) :search cache ID
  * @li getVar( 'file_id' ) : file id
- *
  */
-class XooNIpsOrmSearchCacheFile extends XooNIpsTableObject {
-  function XooNIpsOrmSearchCacheFile() {
-    parent::XooNIpsTableObject();
-    $this->initVar( 'search_cache_id', XOBJ_DTYPE_TXTBOX, null, true, null );
-    $this->initVar( 'file_id', XOBJ_DTYPE_INT, null, true, null );
-  }
+class XooNIpsOrmSearchCacheFile extends XooNIpsTableObject
+{
+    public function XooNIpsOrmSearchCacheFile()
+    {
+        parent::XooNIpsTableObject();
+        $this->initVar('search_cache_id', XOBJ_DTYPE_TXTBOX, null, true, null);
+        $this->initVar('file_id', XOBJ_DTYPE_INT, null, true, null);
+    }
 }
 
 /**
- *
- * XooNIps search cache item Handler class
- *
+ * XooNIps search cache item Handler class.
  */
-class XooNIpsOrmSearchCacheFileHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmSearchCacheFileHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmSearchCacheFile', 'xoonips_search_cache_file', 'search_cache_id', false );
-  }
+class XooNIpsOrmSearchCacheFileHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmSearchCacheFileHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmSearchCacheFile', 'xoonips_search_cache_file', 'search_cache_id', false);
+    }
 }
-?>

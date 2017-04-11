@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -30,16 +31,15 @@
 
 // _MD_<MODULENAME>_<STRINGNAME>
 
-define( "_MD_XNPFILES_DATE_LABEL", "日付" );
-define( "_MD_XNPFILES_DATA_FILE_LABEL", "ファイル" );
-define( "_MD_XNPFILES_DATA_FILE_NAME", "- ファイル名" );
-define( "_MD_XNPFILES_DATA_FILE_MIMETYPE", "- MIMEタイプ" );
-define( "_MD_XNPFILES_DATA_FILE_FILETYPE", "- ファイルタイプ" );
-define( "_MD_XNPFILES_DATA_FILE_REQUIRED", "'データファイル' を入力して下さい" );
-define( '_MD_XNPFILES_EXPLANATION' , "ファイル" );
-define( '_MD_XNPFILES_XMLRPC_DISPLAY_NAME_FILES_ID'           , 'アイテムID' );
-define( '_MD_XNPFILES_XMLRPC_DISPLAY_NAME_DATA_FILE_NAME'     , 'ファイル名' );
-define( '_MD_XNPFILES_XMLRPC_DISPLAY_NAME_DATA_FILE_MIMETYPE' , 'MIMEタイプ' );
-define( '_MD_XNPFILES_XMLRPC_DISPLAY_NAME_DATA_FILE_FILETYPE' , 'ファイルタイプ' );
-define( '_MD_XNPFILES_XMLRPC_DISPLAY_NAME_FILES_FILE'         , 'ファイル' );
-
+define('_MD_XNPFILES_DATE_LABEL', '日付');
+define('_MD_XNPFILES_DATA_FILE_LABEL', 'ファイル');
+define('_MD_XNPFILES_DATA_FILE_NAME', '- ファイル名');
+define('_MD_XNPFILES_DATA_FILE_MIMETYPE', '- MIMEタイプ');
+define('_MD_XNPFILES_DATA_FILE_FILETYPE', '- ファイルタイプ');
+define('_MD_XNPFILES_DATA_FILE_REQUIRED', "'データファイル' を入力して下さい");
+define('_MD_XNPFILES_EXPLANATION', 'ファイル');
+define('_MD_XNPFILES_XMLRPC_DISPLAY_NAME_FILES_ID', 'アイテムID');
+define('_MD_XNPFILES_XMLRPC_DISPLAY_NAME_DATA_FILE_NAME', 'ファイル名');
+define('_MD_XNPFILES_XMLRPC_DISPLAY_NAME_DATA_FILE_MIMETYPE', 'MIMEタイプ');
+define('_MD_XNPFILES_XMLRPC_DISPLAY_NAME_DATA_FILE_FILETYPE', 'ファイルタイプ');
+define('_MD_XNPFILES_XMLRPC_DISPLAY_NAME_FILES_FILE', 'ファイル');

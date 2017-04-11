@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -28,6 +29,4 @@
 // _AM_<MODULENAME>_<STRINGNAME>
 
 // main title
-define( '_AM_XNPDATA_TITLE', 'XooNIps Data Item Type Configuration' );
-
-?>
+define('_AM_XNPDATA_TITLE', 'XooNIps Data Item Type Configuration');

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // title
@@ -57,9 +58,9 @@ $breadcrumbs = array(
 );
 
 // token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_policy_item_imexport';
-$token_ticket = $xoopsGTicket->getTicketHtml( __LINE__, 1800, $ticket_area );
+$token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // get configs
 $config_keys = array(
@@ -67,7 +68,7 @@ $config_keys = array(
   'export_attachment' => 's',
   'private_import_enabled' => 's',
 );
-$config_values = xoonips_admin_get_configs( $config_keys, 'e' );
+$config_values = xoonips_admin_get_configs($config_keys, 'e');
 
 // >> export enabled
 $export_enabled = array();
@@ -89,39 +90,37 @@ $ie['checked'] = $config_values['private_import_enabled'];
 $import_enabled[] = $ie;
 
 // templates
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'policy_item_imexport.tmpl.html' );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('policy_item_imexport.tmpl.html');
 
 // assign template variables
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->setAttribute( 'description', 'visibility', 'visible' );
-$tmpl->addVar( 'description', 'DESCRIPTION', $description );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'main', 'TOKEN_TICKET', $token_ticket );
-$tmpl->addVar( 'main', 'SUBMIT', _AM_XOONIPS_LABEL_UPDATE );
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->setAttribute('description', 'visibility', 'visible');
+$tmpl->addVar('description', 'DESCRIPTION', $description);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('main', 'TOKEN_TICKET', $token_ticket);
+$tmpl->addVar('main', 'SUBMIT', _AM_XOONIPS_LABEL_UPDATE);
 // export
-$tmpl->addVar( 'main', 'EXPORT_TITLE', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_EXPORT_TITLE );
+$tmpl->addVar('main', 'EXPORT_TITLE', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_EXPORT_TITLE);
 // >> export enabled
-$tmpl->addVar( 'main', 'EXPORT_ENABLED_TITLE', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_EXPORT_ENABLED_TITLE );
-$tmpl->addVar( 'main', 'EXPORT_ENABLED_DESC', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_EXPORT_ENABLED_DESC );
-$tmpl->addRows( 'export_enabled', $export_enabled );
+$tmpl->addVar('main', 'EXPORT_ENABLED_TITLE', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_EXPORT_ENABLED_TITLE);
+$tmpl->addVar('main', 'EXPORT_ENABLED_DESC', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_EXPORT_ENABLED_DESC);
+$tmpl->addRows('export_enabled', $export_enabled);
 // >> export attachment
-$tmpl->addVar( 'main', 'EXPORT_ATTACHMENT_TITLE', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_EXPORT_ATTACHMENT_TITLE );
-$tmpl->addVar( 'main', 'EXPORT_ATTACHMENT_DESC', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_EXPORT_ATTACHMENT_DESC );
-$tmpl->addRows( 'export_attachment', $export_attachment );
+$tmpl->addVar('main', 'EXPORT_ATTACHMENT_TITLE', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_EXPORT_ATTACHMENT_TITLE);
+$tmpl->addVar('main', 'EXPORT_ATTACHMENT_DESC', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_EXPORT_ATTACHMENT_DESC);
+$tmpl->addRows('export_attachment', $export_attachment);
 // import
-$tmpl->addVar( 'main', 'IMPORT_TITLE', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_IMPORT_TITLE );
+$tmpl->addVar('main', 'IMPORT_TITLE', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_IMPORT_TITLE);
 // >> private import enabled
-$tmpl->addVar( 'main', 'IMPORT_ENABLED_TITLE', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_IMPORT_ENABLED_TITLE );
-$tmpl->addVar( 'main', 'IMPORT_ENABLED_DESC', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_IMPORT_ENABLED_DESC );
-$tmpl->addRows( 'import_enabled', $import_enabled );
+$tmpl->addVar('main', 'IMPORT_ENABLED_TITLE', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_IMPORT_ENABLED_TITLE);
+$tmpl->addVar('main', 'IMPORT_ENABLED_DESC', _AM_XOONIPS_POLICY_ITEM_IMEXPORT_IMPORT_ENABLED_DESC);
+$tmpl->addRows('import_enabled', $import_enabled);
 
 // display
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

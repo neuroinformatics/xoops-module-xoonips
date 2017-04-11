@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,18 +25,18 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 require_once XOOPS_ROOT_PATH.'/class/xoopsblock.php';
 
 // check token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_system_basic';
-if ( ! $xoopsGTicket->check( true, $ticket_area, false ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors() );
-  exit();
+if (!$xoopsGTicket->check(true, $ticket_area, false)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors());
+    exit();
 }
 
 // get requests
@@ -56,55 +57,54 @@ $post_keys = array(
     true,
   ),
 );
-$post_vals = xoonips_admin_get_requests( 'post', $post_keys );
+$post_vals = xoonips_admin_get_requests('post', $post_keys);
 
 // set config keys
 $config_keys = array();
-foreach ( $post_keys as $key => $attributes ) {
-  list( $data_type, $is_array, $required ) = $attributes;
-  $config_keys[$key] = $data_type;
+foreach ($post_keys as $key => $attributes) {
+    list($data_type, $is_array, $required) = $attributes;
+    $config_keys[$key] = $data_type;
 }
 // get old configs
-$config_vals = xoonips_admin_get_configs( $config_keys, 'e' );
+$config_vals = xoonips_admin_get_configs($config_keys, 'e');
 
-function update_block_permissions( $old_gid, $new_gid ) {
-  // get handlers
-  $gperm_handler =& xoops_gethandler( 'groupperm' );
-  $module_handler =& xoops_gethandler( 'module' );
-  $module =& $module_handler->getByDirname( 'xoonips' );
-  $mid = $module->getVar( 'mid' );
-  $block_objs =& XoopsBlock::getByModule( $mid );
-  foreach ( $block_objs as $block_obj ) {
-    // find moderator menu block
-    if ( $block_obj->getVar( 'show_func' ) == 'b_xoonips_moderator_show' ) {
-      $bid = $block_obj->getVar( 'bid' );
+function update_block_permissions($old_gid, $new_gid)
+{
+    // get handlers
+  $gperm_handler = &xoops_gethandler('groupperm');
+    $module_handler = &xoops_gethandler('module');
+    $module = &$module_handler->getByDirname('xoonips');
+    $mid = $module->getVar('mid');
+    $block_objs = &XoopsBlock::getByModule($mid);
+    foreach ($block_objs as $block_obj) {
+        // find moderator menu block
+    if ($block_obj->getVar('show_func') == 'b_xoonips_moderator_show') {
+        $bid = $block_obj->getVar('bid');
       // if old_gid don't have module admin right,
       // delete the right to access from old_gid.
-      if ( ! $gperm_handler->checkRight( 'module_admin', $mid, $old_gid ) ) {
-        $criteria = new CriteriaCompo();
-        $criteria->add( new Criteria( 'gperm_groupid', $old_gid ) );
-        $criteria->add( new Criteria( 'gperm_itemid', $bid ) );
-        $criteria->add( new Criteria( 'gperm_name', 'block_read' ) );
-        $gperm_handler->deleteAll( $criteria );
+      if (!$gperm_handler->checkRight('module_admin', $mid, $old_gid)) {
+          $criteria = new CriteriaCompo();
+          $criteria->add(new Criteria('gperm_groupid', $old_gid));
+          $criteria->add(new Criteria('gperm_itemid', $bid));
+          $criteria->add(new Criteria('gperm_name', 'block_read'));
+          $gperm_handler->deleteAll($criteria);
       }
       // if there is no right to access moderator block in new_gid,
       // the right gives new_gid.
-      if ( ! $gperm_handler->checkRight( 'block_read', $bid, $new_gid ) ) {
-        $gperm_handler->addRight( 'block_read', $bid, $new_gid );
+      if (!$gperm_handler->checkRight('block_read', $bid, $new_gid)) {
+          $gperm_handler->addRight('block_read', $bid, $new_gid);
       }
-      break;
+        break;
     }
-  }
+    }
 }
 
 // update db values
-foreach ( $config_keys as $key => $type ) {
-  xoonips_admin_set_config( $key, $post_vals[$key], $type );
+foreach ($config_keys as $key => $type) {
+    xoonips_admin_set_config($key, $post_vals[$key], $type);
 }
 
 // update block permissions
-update_block_permissions( $config_vals['moderator_gid'], $post_vals['moderator_gid'] );
+update_block_permissions($config_vals['moderator_gid'], $post_vals['moderator_gid']);
 
-redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_DBUPDATED );
-
-?>
+redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_DBUPDATED);

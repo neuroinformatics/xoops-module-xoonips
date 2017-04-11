@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,41 +26,47 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-class ListMetadataFormatsHandler extends HarvesterHandler {
-    var $metadataPrefix;
-    var $tagstack;
+class ListMetadataFormatsHandler extends HarvesterHandler
+{
+    public $metadataPrefix;
+    public $tagstack;
 
-    function ListMetadataFormatsHandler( $_parser ) {
-        parent::HarvesterHandler( $_parser );
+    public function ListMetadataFormatsHandler($_parser)
+    {
+        parent::HarvesterHandler($_parser);
 
-        $this->metadataPrefix = "oai_dc";
-        $this->tagstack = array( );
-    }
-    function __construct( $_parser ) {
-        $this->ListMetadataFormatsHandler( $_parser );
-    }
-
-    function startElementHandler( $parser, $name, $attribs ) {
-        array_push( $this->tagstack, $name );
+        $this->metadataPrefix = 'oai_dc';
+        $this->tagstack = array();
     }
 
-    function endElementHandler( $parser, $name ) {
-        array_pop( $this->tagstack );
+    public function __construct($_parser)
+    {
+        $this->ListMetadataFormatsHandler($_parser);
     }
 
-    function characterDataHandler( $parser, $data ) {
-        if( end( $this->tagstack ) == 'METADATAPREFIX' ) {
-            if( $data == "junii" && $this->metadataPrefix == "oai_dc") {
+    public function startElementHandler($parser, $name, $attribs)
+    {
+        array_push($this->tagstack, $name);
+    }
+
+    public function endElementHandler($parser, $name)
+    {
+        array_pop($this->tagstack);
+    }
+
+    public function characterDataHandler($parser, $data)
+    {
+        if (end($this->tagstack) == 'METADATAPREFIX') {
+            if ($data == 'junii' && $this->metadataPrefix == 'oai_dc') {
                 $this->metadataPrefix = $data;
-            }
-            else if( $data == "junii2" ) {
+            } elseif ($data == 'junii2') {
                 $this->metadataPrefix = $data;
             }
         }
     }
 
-    function getMetadataPrefix( ) {
+    public function getMetadataPrefix()
+    {
         return $this->metadataPrefix;
     }
 }
-

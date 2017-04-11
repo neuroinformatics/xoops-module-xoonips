@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,24 +25,22 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // check token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_maintenance_ranking';
-if ( ! $xoopsGTicket->check( true, $ticket_area, false ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors() );
-  exit();
+if (!$xoopsGTicket->check(true, $ticket_area, false)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors());
+    exit();
 }
 
-$admin_ranking_handler =& xoonips_gethandler( 'xoonips', 'admin_ranking' );
-if ( ! $admin_ranking_handler->clear_sum_data() ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MAINTENANCE_RANKING_LOCKED );
-  exit();
+$admin_ranking_handler = &xoonips_gethandler('xoonips', 'admin_ranking');
+if (!$admin_ranking_handler->clear_sum_data()) {
+    redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MAINTENANCE_RANKING_LOCKED);
+    exit();
 }
 
-redirect_header( $xoonips_admin['mypage_url'], 1, _AM_XOONIPS_MSG_DBUPDATED );
-
-?>
+redirect_header($xoonips_admin['mypage_url'], 1, _AM_XOONIPS_MSG_DBUPDATED);

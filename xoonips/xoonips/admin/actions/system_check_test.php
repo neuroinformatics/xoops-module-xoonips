@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,43 +25,52 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // status
-define( '_XASC_STATUS_OK', 0 );
-define( '_XASC_STATUS_NOTICE', 1 );
-define( '_XASC_STATUS_FAIL', 2 );
+define('_XASC_STATUS_OK', 0);
+define('_XASC_STATUS_NOTICE', 1);
+define('_XASC_STATUS_FAIL', 2);
 // error type
-define( '_XASC_ERRORTYPE_NONE', 0 );
-define( '_XASC_ERRORTYPE_PHP', 1 );
-define( '_XASC_ERRORTYPE_MYSQL', 2 );
-define( '_XASC_ERRORTYPE_COMMAND', 4 );
-define( '_XASC_ERRORTYPE_XOONIPS', 8 );
+define('_XASC_ERRORTYPE_NONE', 0);
+define('_XASC_ERRORTYPE_PHP', 1);
+define('_XASC_ERRORTYPE_MYSQL', 2);
+define('_XASC_ERRORTYPE_COMMAND', 4);
+define('_XASC_ERRORTYPE_XOONIPS', 8);
 
-class XooNIpsAdminSystemCheckResult {
-  var $name;
-  var $status;
-  var $label;
-  var $result;
-  var $messages = array();
-  function XooNIpsAdminSystemCheckResult( $name ) {
-    $this->name = $name;
-  }
-  function setResult( $status, $label, $result ) {
-    $this->status = $status;
-    $this->label = $label;
-    $this->result = $result;
-  }
-  function setMessage( $message ) {
-    $this->messages[] = $message;
-  }
-  function render() {
-    $textutil =& xoonips_getutility( 'text' );
+class XooNIpsAdminSystemCheckResult
+{
+    public $name;
+    public $status;
+    public $label;
+    public $result;
+    public $messages = array();
 
-    $arrow = '<span style="font-weight: bold;">&raquo;</span>';
-    $stat = array(
+    public function XooNIpsAdminSystemCheckResult($name)
+    {
+        $this->name = $name;
+    }
+
+    public function setResult($status, $label, $result)
+    {
+        $this->status = $status;
+        $this->label = $label;
+        $this->result = $result;
+    }
+
+    public function setMessage($message)
+    {
+        $this->messages[] = $message;
+    }
+
+    public function render()
+    {
+        $textutil = &xoonips_getutility('text');
+
+        $arrow = '<span style="font-weight: bold;">&raquo;</span>';
+        $stat = array(
       _XASC_STATUS_OK => array(
         'image' => 'icon_ok.png',
         'color' => 'black',
@@ -76,60 +86,78 @@ class XooNIpsAdminSystemCheckResult {
     );
     // status
     $html = '<img src="../images/'.$stat[$this->status]['image'].'" alt=""/>';
-    $html .= '&nbsp;';
+        $html .= '&nbsp;';
     // name
-    $html .= $textutil->html_special_chars( $this->name ).' : ';
+    $html .= $textutil->html_special_chars($this->name).' : ';
     // label
-    if ( $this->label != '' ) {
-      $html .= $textutil->html_special_chars( $this->label ).' : ';
+    if ($this->label != '') {
+        $html .= $textutil->html_special_chars($this->label).' : ';
     }
     // result
-    $html .= '<span style="font-weight: bold; color: '.$stat[$this->status]['color'].';">'.$textutil->html_special_chars( $this->result ).'</span>';
+    $html .= '<span style="font-weight: bold; color: '.$stat[$this->status]['color'].';">'.$textutil->html_special_chars($this->result).'</span>';
     // message
-    foreach ( $this->messages as $message ) {
-      $html .= '<br />&nbsp;&nbsp;'.$arrow.'&nbsp;&nbsp;';
-      $html .= $textutil->html_special_chars( $message );
+    foreach ($this->messages as $message) {
+        $html .= '<br />&nbsp;&nbsp;'.$arrow.'&nbsp;&nbsp;';
+        $html .= $textutil->html_special_chars($message);
     }
-    return $html;
-  }
-}
-class XooNIpsAdminSystemCheckCategory {
-  var $name;
-  var $results = array();
-  var $errortype = _XASC_ERRORTYPE_NONE;
-  var $errorlevel = _XASC_STATUS_OK;
-  function XooNIpsAdminSystemCheckCategory( $name ) {
-    $this->name = $name;
-  }
-  function registerResult( &$result ) {
-    $this->results[] = $result;
-  }
-  function setError( $type, $level ) {
-    $this->errortype |= $type;
-    $this->errorlevel = max( $this->errorlevel, $level );
-  }
-  function renderResults() {
-    $html = '';
-    foreach ( $this->results as $result ) {
-      if ( ! empty( $html ) ) {
-        $html .= '<br />';
-      }
-      $html .= $result->render();
+
+        return $html;
     }
-    return $html;
-  }
 }
-class XooNIpsAdminSystemCheck {
-  var $categories = array();
-  function XooNIpsAdminSystemCheck() {
-  }
-  function registerCategory( &$category ) {
-    $this->categories[] = $category;
-  }
-  function renderTotalResult( $errortype, $errorlevel ) {
-    $textutil =& xoonips_getutility( 'text' );
-    $arrow = '<span style="font-weight: bold;">&raquo;</span>';
-    $stat = array(
+class XooNIpsAdminSystemCheckCategory
+{
+    public $name;
+    public $results = array();
+    public $errortype = _XASC_ERRORTYPE_NONE;
+    public $errorlevel = _XASC_STATUS_OK;
+
+    public function XooNIpsAdminSystemCheckCategory($name)
+    {
+        $this->name = $name;
+    }
+
+    public function registerResult(&$result)
+    {
+        $this->results[] = $result;
+    }
+
+    public function setError($type, $level)
+    {
+        $this->errortype |= $type;
+        $this->errorlevel = max($this->errorlevel, $level);
+    }
+
+    public function renderResults()
+    {
+        $html = '';
+        foreach ($this->results as $result) {
+            if (!empty($html)) {
+                $html .= '<br />';
+            }
+            $html .= $result->render();
+        }
+
+        return $html;
+    }
+}
+class XooNIpsAdminSystemCheck
+{
+    public $categories = array();
+
+    public function XooNIpsAdminSystemCheck()
+    {
+    }
+
+    public function registerCategory(&$category)
+    {
+        $this->categories[] = $category;
+    }
+
+    public function renderTotalResult($errortype, $errorlevel)
+    {
+        $textutil = &xoonips_getutility('text');
+        $arrow = '<span style="font-weight: bold;">&raquo;</span>';
+        $stat = array(
       _XASC_STATUS_OK => array(
         'image' => 'icon_ok.png',
         'color' => 'black',
@@ -146,7 +174,7 @@ class XooNIpsAdminSystemCheck {
         'label' => _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL,
       ),
     );
-    $messages = array(
+        $messages = array(
       _XASC_ERRORTYPE_PHP => _AM_XOONIPS_SYSTEM_CHECK_MSG_PHP,
       _XASC_ERRORTYPE_MYSQL => _AM_XOONIPS_SYSTEM_CHECK_MSG_MYSQL,
       _XASC_ERRORTYPE_COMMAND => _AM_XOONIPS_SYSTEM_CHECK_MSG_COMMAND,
@@ -154,37 +182,41 @@ class XooNIpsAdminSystemCheck {
     );
     // status
     $html = '<img src="../images/'.$stat[$errorlevel]['image'].'" alt=""/>';
-    $html .= '&nbsp;';
+        $html .= '&nbsp;';
     // name
-    $html .= '<span style="font-weight: bold; color: '.$stat[$errorlevel]['color'].';">'.$textutil->html_special_chars( $stat[$errorlevel]['label'] ).'</span>';
+    $html .= '<span style="font-weight: bold; color: '.$stat[$errorlevel]['color'].';">'.$textutil->html_special_chars($stat[$errorlevel]['label']).'</span>';
     // message
-    foreach ( array( 1, 2, 4, 8 ) as $type ) {
-      if ( $errortype&$type ) {
-        $html .= '<br />&nbsp;&nbsp;'.$arrow.'&nbsp;&nbsp;';
-        $html .= $textutil->html_special_chars( $messages[$type] );
-      }
+    foreach (array(1, 2, 4, 8) as $type) {
+        if ($errortype & $type) {
+            $html .= '<br />&nbsp;&nbsp;'.$arrow.'&nbsp;&nbsp;';
+            $html .= $textutil->html_special_chars($messages[$type]);
+        }
     }
-    return $html;
-  }
-  function getResults() {
-    $ret = array();
-    $errortype = _XASC_ERRORTYPE_NONE;
-    $errorlevel = _XASC_STATUS_OK;
-    foreach ( $this->categories as $category ) {
-      $ret[] = array(
+
+        return $html;
+    }
+
+    public function getResults()
+    {
+        $ret = array();
+        $errortype = _XASC_ERRORTYPE_NONE;
+        $errorlevel = _XASC_STATUS_OK;
+        foreach ($this->categories as $category) {
+            $ret[] = array(
         'name' => $category->name,
         'result' => $category->renderResults(),
       );
-      $errortype |= $category->errortype;
-      $errorlevel = max( $category->errorlevel, $errorlevel );
-    }
+            $errortype |= $category->errortype;
+            $errorlevel = max($category->errorlevel, $errorlevel);
+        }
     // total result
     $ret[] = array(
       'name' => _AM_XOONIPS_SYSTEM_CHECK_LABEL_RESULTS,
-      'result' => $this->renderTotalResult( $errortype, $errorlevel ),
+      'result' => $this->renderTotalResult($errortype, $errorlevel),
     );
-    return $ret;
-  }
+
+        return $ret;
+    }
 }
 
 $check_categories = array(
@@ -196,13 +228,13 @@ $check_categories = array(
 );
 
 $check_results_obj = new XooNIpsAdminSystemCheck();
-foreach ( $check_categories as $category => $label ) {
-  $category_obj = new XooNIpsAdminSystemCheckCategory( $label );
-  include 'actions/system_check_test_'.$category.'.php';
-  $funcname = 'xoonips_admin_system_check_'.$category;
-  $funcname( $category_obj );
-  $check_results_obj->registerCategory( $category_obj );
-  unset( $category_obj );
+foreach ($check_categories as $category => $label) {
+    $category_obj = new XooNIpsAdminSystemCheckCategory($label);
+    include 'actions/system_check_test_'.$category.'.php';
+    $funcname = 'xoonips_admin_system_check_'.$category;
+    $funcname($category_obj);
+    $check_results_obj->registerCategory($category_obj);
+    unset($category_obj);
 }
 
 $results = $check_results_obj->getResults();
@@ -231,33 +263,31 @@ $breadcrumbs = array(
 );
 
 // token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_system_check';
-$token_ticket = $xoopsGTicket->getTicketHtml( __LINE__, 1800, $ticket_area );
+$token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // templates
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'system_check.tmpl.html' );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('system_check.tmpl.html');
 
 // assign template variables
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->addVar( 'main', 'TITLE', $title );
-$tmpl->setAttribute( 'description', 'visibility', 'visible' );
-$tmpl->addVar( 'description', 'DESCRIPTION', $description );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'main', 'token_ticket', $token_ticket );
-$tmpl->setAttribute( 'first', 'visibility', 'hidden' );
-$tmpl->setAttribute( 'results_table', 'visibility', 'visible' );
-$tmpl->addVar( 'results_table', 'title', _AM_XOONIPS_SYSTEM_CHECK_FORM_TITLE );
-$tmpl->addVar( 'results_table', 'recheck', _AM_XOONIPS_SYSTEM_CHECK_LABEL_RECHECK );
-$tmpl->addRows( 'results', $results );
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->addVar('main', 'TITLE', $title);
+$tmpl->setAttribute('description', 'visibility', 'visible');
+$tmpl->addVar('description', 'DESCRIPTION', $description);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('main', 'token_ticket', $token_ticket);
+$tmpl->setAttribute('first', 'visibility', 'hidden');
+$tmpl->setAttribute('results_table', 'visibility', 'visible');
+$tmpl->addVar('results_table', 'title', _AM_XOONIPS_SYSTEM_CHECK_FORM_TITLE);
+$tmpl->addVar('results_table', 'recheck', _AM_XOONIPS_SYSTEM_CHECK_LABEL_RECHECK);
+$tmpl->addRows('results', $results);
 
 // display
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

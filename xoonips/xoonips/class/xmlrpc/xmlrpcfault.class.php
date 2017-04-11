@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.2 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,11 +26,11 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/class/xml/rpc/xmlrpctag.php';
+include_once XOOPS_ROOT_PATH.'/class/xml/rpc/xmlrpctag.php';
 
 class XooNIpsXmlRpcFault extends XoopsXmlRpcFault
 {
-    function render()
+    public function render()
     {
         switch ($this->_code) {
         case 101:
@@ -70,7 +71,7 @@ class XooNIpsXmlRpcFault extends XoopsXmlRpcFault
             break;
         }
         $string .= "\n".$this->_extra;
+
         return '<fault><value><struct><member><name>faultCode</name><value><int>'.$this->_code.'</int></value></member><member><name>faultString</name><value><string>'.$this->encode($string).'</string></value></member></struct></value></fault>';
     }
 }
-?>

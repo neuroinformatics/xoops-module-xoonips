@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.8 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,30 +25,33 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
-function xoops_module_update_xnpmodel( $xoopsMod, $oldversion ) {
-  global $xoopsDB;
-  $table = $xoopsDB->prefix( 'xnpmodel_item_detail' );
+function xoops_module_update_xnpmodel($xoopsMod, $oldversion)
+{
+    global $xoopsDB;
+    $table = $xoopsDB->prefix('xnpmodel_item_detail');
 
-  echo '<code>Updating modules...</code><br />';
-  switch ( $oldversion ) {
+    echo '<code>Updating modules...</code><br />';
+    switch ($oldversion) {
   case 200:
   case 310:
-    $sql = 'ALTER TABLE '.$xoopsDB->prefix( 'xnpmodel_item_detail' ).' TYPE = innodb';
-    $result = $xoopsDB->query( $sql );
-    if ( ! $result ) {
-      echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
-      return false;
+    $sql = 'ALTER TABLE '.$xoopsDB->prefix('xnpmodel_item_detail').' TYPE = innodb';
+    $result = $xoopsDB->query($sql);
+    if (!$result) {
+        echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
+
+        return false;
     }
   case 311:
-    $sql = 'ALTER TABLE '.$xoopsDB->prefix( 'xnpmodel_item_detail' ).' ADD COLUMN attachment_dl_notify int(1) unsigned default 0 ';
-    $result = $xoopsDB->query( $sql );
-    if ( ! $result ) {
-      echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
-      return false;
+    $sql = 'ALTER TABLE '.$xoopsDB->prefix('xnpmodel_item_detail').' ADD COLUMN attachment_dl_notify int(1) unsigned default 0 ';
+    $result = $xoopsDB->query($sql);
+    if (!$result) {
+        echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
+
+        return false;
     }
   case 312:
   case 330:
@@ -65,47 +69,49 @@ function xoops_module_update_xnpmodel( $xoopsMod, $oldversion ) {
     $table_detail = 'xnpmodel_item_detail';
     $table_creator = 'xnpmodel_creator';
 
-    $sql = 'CREATE TABLE '.$xoopsDB->prefix( $table_creator ).' (';
+    $sql = 'CREATE TABLE '.$xoopsDB->prefix($table_creator).' (';
     $sql .= '`model_creator_id` int(10) unsigned NOT NULL auto_increment,';
     $sql .= '`model_id` int(10) unsigned NOT NULL,';
     $sql .= '`creator` varchar(255) NOT NULL,';
     $sql .= '`creator_order` int(10) unsigned NOT NULL default \'0\',';
     $sql .= '  PRIMARY KEY  (`model_creator_id`)';
     $sql .= ') TYPE=InnoDB';
-    $result = $xoopsDB->query( $sql );
-    if ( ! $result ) {
-      echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
-      return false;
+    $result = $xoopsDB->query($sql);
+    if (!$result) {
+        echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
+
+        return false;
     }
 
-    $result = $xoopsDB->query( 'select '.$key_name.',creator from '.$xoopsDB->prefix( $table_detail ).' where creator!=\'\'' );
-    while ( list( $id, $creator ) = $xoopsDB->fetchRow( $result ) ) {
-      $creator_array = array_map( 'trim', explode( ',', $creator ) );
-      $i = 0;
-      foreach ( $creator_array as $creator ) {
-        if ( empty( $creator ) ) {
-          continue;
+    $result = $xoopsDB->query('select '.$key_name.',creator from '.$xoopsDB->prefix($table_detail).' where creator!=\'\'');
+    while (list($id, $creator) = $xoopsDB->fetchRow($result)) {
+        $creator_array = array_map('trim', explode(',', $creator));
+        $i = 0;
+        foreach ($creator_array as $creator) {
+            if (empty($creator)) {
+                continue;
+            }
+            $sql = 'insert into '.$xoopsDB->prefix($table_creator);
+            $sql .= '('.$key_name.',creator,creator_order) values (';
+            $sql .= $id.','.$xoopsDB->quoteString($creator).','.$i.')';
+            if ($xoopsDB->queryF($sql) == false) {
+                echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
+
+                return false;
+            }
+            ++$i;
         }
-        $sql = 'insert into '.$xoopsDB->prefix( $table_creator );
-        $sql .= '('.$key_name.',creator,creator_order) values (';
-        $sql .= $id.','.$xoopsDB->quoteString( $creator ).','.$i.')';
-        if ( $xoopsDB->queryF( $sql ) == false ) {
-          echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
-          return false;
-        }
-        $i++;
-      }
     }
-    $sql = 'ALTER TABLE '.$xoopsDB->prefix( $table_detail ).' DROP COLUMN creator';
-    $result = $xoopsDB->query( $sql );
-    if ( ! $result ) {
-      echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
-      return false;
+    $sql = 'ALTER TABLE '.$xoopsDB->prefix($table_detail).' DROP COLUMN creator';
+    $result = $xoopsDB->query($sql);
+    if (!$result) {
+        echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
+
+        return false;
     }
   case 340:
   default:
   }
-  return true;
-}
 
-?>
+    return true;
+}

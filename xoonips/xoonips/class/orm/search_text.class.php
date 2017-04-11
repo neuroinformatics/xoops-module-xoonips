@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.8 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,37 +25,39 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
 include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/AL.php';
 
 /**
- *
  * @brief data object of searchtext
  *
  * @li getVar('file_id') :
  * @li getVar('search_text') :
- *
  */
-class XooNIpsOrmSearchText extends XooNIpsTableObject {
-  function XooNIpsOrmSearchText() {
-    parent::XooNIpsTableObject();
-    $this->initVar( 'file_id', XOBJ_DTYPE_INT, 0, false );
-    $this->initVar( 'search_text', XOBJ_DTYPE_TXTBOX, null, false );
-  }
+class XooNIpsOrmSearchText extends XooNIpsTableObject
+{
+    public function XooNIpsOrmSearchText()
+    {
+        parent::XooNIpsTableObject();
+        $this->initVar('file_id', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('search_text', XOBJ_DTYPE_TXTBOX, null, false);
+    }
 }
 
 /**
  * @brief data object of searchtext
  */
-class XooNIpsOrmSearchTextHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmSearchTextHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmSearchText', 'xoonips_search_text', 'file_id', false );
-  }
+class XooNIpsOrmSearchTextHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmSearchTextHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmSearchText', 'xoonips_search_text', 'file_id', false);
+    }
 
   /**
    * @brief search file
@@ -63,40 +66,42 @@ class XooNIpsOrmSearchTextHandler extends XooNIpsTableObjectHandler {
    * @param limit the maximum number of rows to return
    * @param offset the offset of the first row to return
    * @param uid user ID
+   *
    * @return array of item id
    */
-  function search( $query, $limit, $offset, $uid ) {
-    $msg = false;
-    $iids = false;
-    $dummy = false;
-    $search_cache_id = false;
-    $_SESSION['XNPSID'] = session_id();
-    $member_handler =& xoops_gethandler( 'member' );
-    if ( empty( $GLOBALS['xoopsUser'] ) ) {
-      $GLOBALS['xoopsUser'] = $member_handler->getUser( $uid );
-    }
-    if ( xnpSearchExec( 'quicksearch', $query, 'all', false, $dummy, $dummy, $dummy, $search_cache_id, false, 'file' ) ) {
-      // search_cache_id -> file_ids
-      $criteria = new Criteria( 'search_cache_id', $search_cache_id );
-      $criteria->setSort( 'item_id' );
-      $criteria->setStart( $offset );
-      if ( $limit ) {
-        $criteria->setLimit( $limit );
+  public function search($query, $limit, $offset, $uid)
+  {
+      $msg = false;
+      $iids = false;
+      $dummy = false;
+      $search_cache_id = false;
+      $_SESSION['XNPSID'] = session_id();
+      $member_handler = &xoops_gethandler('member');
+      if (empty($GLOBALS['xoopsUser'])) {
+          $GLOBALS['xoopsUser'] = $member_handler->getUser($uid);
       }
-      $join = new XooNIpsJoinCriteria( 'xoonips_search_cache_file', 'file_id', 'file_id', 'LEFT' );
-      $file_handler =& xoonips_getormhandler( 'xoonips', 'file' );
-      $files =& $file_handler->getObjects( $criteria, false, 'item_id', true, $join );
-      if ( false === $files ) {
-        return false;
+      if (xnpSearchExec('quicksearch', $query, 'all', false, $dummy, $dummy, $dummy, $search_cache_id, false, 'file')) {
+          // search_cache_id -> file_ids
+      $criteria = new Criteria('search_cache_id', $search_cache_id);
+          $criteria->setSort('item_id');
+          $criteria->setStart($offset);
+          if ($limit) {
+              $criteria->setLimit($limit);
+          }
+          $join = new XooNIpsJoinCriteria('xoonips_search_cache_file', 'file_id', 'file_id', 'LEFT');
+          $file_handler = &xoonips_getormhandler('xoonips', 'file');
+          $files = &$file_handler->getObjects($criteria, false, 'item_id', true, $join);
+          if (false === $files) {
+              return false;
+          }
+          $item_ids = array();
+          foreach ($files as $file) {
+              $item_ids[] = $file->get('item_id');
+          }
+
+          return $item_ids;
+      } else {
+          return false;
       }
-      $item_ids = array();
-      foreach ( $files as $file ) {
-        $item_ids[] = $file->get( 'item_id' );
-      }
-      return $item_ids;
-    } else {
-      return false;
-    }
   }
 }
-?>

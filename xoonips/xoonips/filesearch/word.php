@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.4.2.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,86 +25,88 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-class XooNIpsFileSearchPluginWORD extends XooNIpsFileSearchPlugin {
-
-  /**
-   * temporary file path for wv output data
-   * @access private
+class XooNIpsFileSearchPluginWORD extends XooNIpsFileSearchPlugin
+{
+    /**
+   * temporary file path for wv output data.
+   *
    * @var string temporary file path
    */
-  var $tmpfile = '';
+  public $tmpfile = '';
 
   /**
-   * flag to use antiword for file reader
-   * @access private
+   * flag to use antiword for file reader.
+   *
    * @var bool true if use antiword
    */
-  var $use_antiword = false;
+  public $use_antiword = false;
 
   /**
-   * environemnt variable for antword 'ANTIWORDHOME'
-   * @access private
+   * environemnt variable for antword 'ANTIWORDHOME'.
+   *
    * @var string
    */
-  var $antiwordhome = '/usr/local/antiword';
+  public $antiwordhome = '/usr/local/antiword';
 
   /**
-   * constractor
+   * constractor.
    */
-  function XooNIpsFileSearchPluginWORD() {
-    parent::XooNIpsFileSearchPlugin();
-    $this->is_xml = false;
-    $this->is_utf8 = true;
+  public function XooNIpsFileSearchPluginWORD()
+  {
+      parent::XooNIpsFileSearchPlugin();
+      $this->is_xml = false;
+      $this->is_utf8 = true;
     // for antiword
     // $this->use_antiword = true;
     // $this->antiwordhome = '/foo/bar';
   }
 
   /**
-   * open file resource
+   * open file resource.
    *
    * @acccess protected
+   *
    * @param string $filename file name
    */
-  function _open_file( $filename ) {
-    if ( $this->use_antiword ) {
-      // for antiword
-      putenv( 'ANTIWORDHOME='.$this->antiwordhome );
-      $cmd = sprintf( 'antiword -t -m UTF-8.txt %s', $filename );
-      $this->handle = @popen( $cmd, 'rb' );
-    } else {
-      // for wv
-      $dirutil =& xoonips_getutility( 'directory' );
-      $this->tmpfile = $dirutil->tempnam( $dirutil->get_tempdir(), 'XooNIpsFileSearchPluginWord' );
-      $cmd = sprintf( 'wvText %s %s', escapeshellarg( $filename ), escapeshellarg( $this->tmpfile ) );
+  public function _open_file($filename)
+  {
+      if ($this->use_antiword) {
+          // for antiword
+      putenv('ANTIWORDHOME='.$this->antiwordhome);
+          $cmd = sprintf('antiword -t -m UTF-8.txt %s', $filename);
+          $this->handle = @popen($cmd, 'rb');
+      } else {
+          // for wv
+      $dirutil = &xoonips_getutility('directory');
+          $this->tmpfile = $dirutil->tempnam($dirutil->get_tempdir(), 'XooNIpsFileSearchPluginWord');
+          $cmd = sprintf('wvText %s %s', escapeshellarg($filename), escapeshellarg($this->tmpfile));
       // set LANG to UTF-8 for wvText(elinks)
-      $lang = getenv( 'LANG' );
-      putenv( 'LANG=en_US.UTF-8' );
+      $lang = getenv('LANG');
+          putenv('LANG=en_US.UTF-8');
       // execute wvText command
-      @system( $cmd );
+      @system($cmd);
       // restore original lang
-      putenv( 'LANG='.( ( $lang === false ) ? '' : $lang ) );
-      $this->handle = @fopen( $this->tmpfile, 'rb' );
-    }
+      putenv('LANG='.(($lang === false) ? '' : $lang));
+          $this->handle = @fopen($this->tmpfile, 'rb');
+      }
   }
 
   /**
-   * close file resource
+   * close file resource.
    *
    * @acccess protected
    */
-  function _close_file() {
-    if ( $this->use_antiword ) {
-      // for antiword
-      @pclose( $this->handle );
-      putenv( 'ANTWORDHOME=' );
-    } else {
-      // for wv
+  public function _close_file()
+  {
+      if ($this->use_antiword) {
+          // for antiword
+      @pclose($this->handle);
+          putenv('ANTWORDHOME=');
+      } else {
+          // for wv
       parent::_close_file();
-      @unlink( $this->tmpfile );
-      $this->tmpfile = '';
-    }
+          @unlink($this->tmpfile);
+          $this->tmpfile = '';
+      }
   }
 }
-
-?>

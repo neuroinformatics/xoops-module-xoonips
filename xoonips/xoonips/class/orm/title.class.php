@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /*
@@ -42,40 +43,42 @@ ALTER TABLE `x_xoonips_item_title` ADD UNIQUE (`item_id` ,`title_id` );
  * @li getVar('item_id') :
  * @li getVar('title_id') :
  * @li getVar('title') :
- *
  */
-class XooNIpsOrmTitle extends XooNIpsTableObject {
-  function XooNIpsOrmTitle() {
-    $this->initVar( 'seq_id', XOBJ_DTYPE_INT, 0, false );
-    $this->initVar( 'item_id', XOBJ_DTYPE_INT, null, false );
-    $this->initVar( 'title_id', XOBJ_DTYPE_INT, null, false );
-    $this->initVar( 'title', XOBJ_DTYPE_TXTBOX, null, true, 255 );
-  }
+class XooNIpsOrmTitle extends XooNIpsTableObject
+{
+    public function XooNIpsOrmTitle()
+    {
+        $this->initVar('seq_id', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('item_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('title_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('title', XOBJ_DTYPE_TXTBOX, null, true, 255);
+    }
 }
 
 /**
  * @brief handler object of title
- *
- *
  */
-class XooNIpsOrmTitleHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmTitleHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmTitle', 'xoonips_item_title', 'seq_id' );
-  }
+class XooNIpsOrmTitleHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmTitleHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmTitle', 'xoonips_item_title', 'seq_id');
+    }
 
   /**
-   * get titles
+   * get titles.
    *
-   * @access public
    * @param int $item_id
+   *
    * @return array object array
    */
-  function &getTitles( $item_id ) {
-    $criteria = new Criteria( 'item_id', $item_id );
-    $criteria->setSort( 'title_id' );
-    $criteria->setOrder( 'ASC' );
-    return $this->getObjects( $criteria );
+  public function &getTitles($item_id)
+  {
+      $criteria = new Criteria('item_id', $item_id);
+      $criteria->setSort('title_id');
+      $criteria->setOrder('ASC');
+
+      return $this->getObjects($criteria);
   }
 }
-?>

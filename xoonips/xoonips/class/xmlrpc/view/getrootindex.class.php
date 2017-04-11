@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,34 +26,30 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/xmlrpcfault.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcfault.class.php';
 
 /**
- *
  * @brief Class that generate response of XML-RPC getRootIndex request
- *
- *
  */
 class XooNIpsXmlRpcViewGetRootIndex extends XooNIpsXmlRpcViewElement
 {
     /**
-     *
      * @brief return XoopsXmlRpcTag that has response of this request
      *
      * @return XoopsXmlRpcTag
      */
-    function render() 
+    public function render()
     {
-        $unicode =& xoonips_getutility( 'unicode' );
+        $unicode = &xoonips_getutility('unicode');
         $index = $this->response->getSuccess();
         $struct = new XoopsXmlRpcStruct();
         $struct->add('id', new XoopsXmlRpcInt($index['id']));
-        $struct->add('name', new XoopsXmlRpcString(htmlspecialchars($unicode->encode_utf8($index['name'],xoonips_get_server_charset()),ENT_QUOTES,'UTF-8')));
+        $struct->add('name', new XoopsXmlRpcString(htmlspecialchars($unicode->encode_utf8($index['name'], xoonips_get_server_charset()), ENT_QUOTES, 'UTF-8')));
         $struct->add('parent', new XoopsXmlRpcInt($index['parent']));
-        $struct->add('open_level', new XoopsXmlRpcString(htmlspecialchars($unicode->encode_utf8($index['open_level'],xoonips_get_server_charset()),ENT_QUOTES,'UTF-8')));
-        $struct->add('path', new XoopsXmlRpcString(htmlspecialchars($unicode->encode_utf8($index['path'],xoonips_get_server_charset()),ENT_QUOTES,'UTF-8')));
+        $struct->add('open_level', new XoopsXmlRpcString(htmlspecialchars($unicode->encode_utf8($index['open_level'], xoonips_get_server_charset()), ENT_QUOTES, 'UTF-8')));
+        $struct->add('path', new XoopsXmlRpcString(htmlspecialchars($unicode->encode_utf8($index['path'], xoonips_get_server_charset()), ENT_QUOTES, 'UTF-8')));
+
         return $struct;
     }
 }
-?>

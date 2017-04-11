@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.11 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -26,33 +27,32 @@
 // ------------------------------------------------------------------------- //
 
 /**
- * 
  * @return array associative array of extra parameters
  */
-function xoonips_extra_param_restore(){
-  $formdata =& xoonips_getutility( 'formdata' );
-  $extra_param_name = $formdata->getValueArray( 'post', 'extra_param_name', 's', false );
-  $extra_params = array();
-  foreach ( $extra_param_name as $name ) {
-    if(!isset($_POST[$name])){
-      continue;
+function xoonips_extra_param_restore()
+{
+    $formdata = &xoonips_getutility('formdata');
+    $extra_param_name = $formdata->getValueArray('post', 'extra_param_name', 's', false);
+    $extra_params = array();
+    foreach ($extra_param_name as $name) {
+        if (!isset($_POST[$name])) {
+            continue;
+        }
+        if (is_array($_POST[$name])) {
+            $extra_params[$name] = $formdata->getValueArray('post', $name, 's', false);
+        } else {
+            $extra_params[$name] = $formdata->getValue('post', $name, 's', false);
+        }
     }
-    if(is_array($_POST[$name])){
-      $extra_params[$name] = $formdata->getValueArray( 'post', $name, 's', false );
-    }else{
-      $extra_params[$name] = $formdata->getValue( 'post', $name, 's', false );
+    if (!empty($extra_params)) {
+        return $extra_params;
     }
-  }
-  if ( ! empty( $extra_params ) ) {
-    return $extra_params;
-  }
   // try to get serialized extra_param request
-  $extra_param = $formdata->getValue( 'post', 'extra_param', 's', false );
-  $extra_params = @unserialize( $extra_param );
-  if ( is_array( $extra_params ) ) {
-    return $extra_params;
-  }
-  return array();
-}
+  $extra_param = $formdata->getValue('post', 'extra_param', 's', false);
+    $extra_params = @unserialize($extra_param);
+    if (is_array($extra_params)) {
+        return $extra_params;
+    }
 
-?>
+    return array();
+}

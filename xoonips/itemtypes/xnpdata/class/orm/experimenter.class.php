@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 //  ------------------------------------------------------------------------ //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,15 +26,16 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 //  ------------------------------------------------------------------------ //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 /**
  * @brief Data object of Data experimenter information
- *
  */
 class XNPDataOrmExperimenter extends XooNIpsTableObject
 {
-    function XNPDataOrmExperimenter()
+    public function XNPDataOrmExperimenter()
     {
         parent::XooNIpsTableObject();
         $this->initVar('data_experimenter_id', XOBJ_DTYPE_INT, 0, true);
@@ -45,15 +47,12 @@ class XNPDataOrmExperimenter extends XooNIpsTableObject
 
 /**
  * @brief Handler class that create, insert, update, get and delete detail information
- *
- *
  */
 class XNPDataOrmExperimenterHandler extends XooNIpsTableObjectHandler
 {
-    function XNPDataOrmExperimenterHandler(&$db) 
+    public function XNPDataOrmExperimenterHandler(&$db)
     {
         parent::XooNIpsTableObjectHandler($db);
         $this->__initHandler('XNPDataOrmExperimenter', 'xnpdata_experimenter', 'data_experimenter_id', false);
     }
 }
-?>

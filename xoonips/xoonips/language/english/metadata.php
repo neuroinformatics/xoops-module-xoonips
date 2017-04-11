@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.4.8.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -66,7 +67,7 @@
 82 : Koho shiryo - Kabu soshiki top page,
 83 : Koho shiryo - Kikan Koho shiryo
 */
-define( '_MD_XOONIPS_METADATA_JUNII','
+define('_MD_XOONIPS_METADATA_JUNII', '
 &#30740;&#31350;&#25104;&#26524;,
 &#30740;&#31350;&#25104;&#26524;&#8213;&#35542;&#25991;,
 &#30740;&#31350;&#25104;&#26524;&#8213;&#35542;&#25991;&#20197;&#22806;,/
@@ -118,7 +119,7 @@ define( '_MD_XOONIPS_METADATA_JUNII','
 20 : Data or Dataset
 30 : Software
  */
-define( '_MD_XOONIPS_METADATA_JUNII2','
+define('_MD_XOONIPS_METADATA_JUNII2', '
 Journal Article,
 Thesis or Dissertation,
 Departmental Bulletin Paper,
@@ -133,4 +134,3 @@ Learning Material,/
 Data or Dataset,/
 Software
 ');
-?>

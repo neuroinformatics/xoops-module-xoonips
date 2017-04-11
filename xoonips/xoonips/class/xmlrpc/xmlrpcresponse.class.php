@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.2 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -26,7 +27,6 @@
 // ------------------------------------------------------------------------- //
 
 /**
- *
  * @see XooNIpsApi
  *
  * @brief Class that has result of logic
@@ -35,16 +35,15 @@
  * @li set/get error information using get/setError
  * @li set/get result of logic using set/getSuccess
  * @li content of setError¡¢setSuccess is not defined here(depends each logics)
- *
  */
 class XooNIpsXmlRpcResponse
 {
-
     /**
      * @protected
      */
-    var $vars = array();
-    function XooNIpsXmlRpcResponse() 
+    public $vars = array();
+
+    public function XooNIpsXmlRpcResponse()
     {
         $this->set('result', false);
         $this->set('error', new XooNIpsError());
@@ -55,9 +54,8 @@ class XooNIpsXmlRpcResponse
      * @brief set success or failure
      *
      * @param[in] result true:success, false:failure
-     *
      */
-    function setResult($result) 
+    public function setResult($result)
     {
         $this->set('result', $result);
     }
@@ -68,66 +66,60 @@ class XooNIpsXmlRpcResponse
      * @retval true success
      * @retval false failure
      */
-    function getResult() 
+    public function getResult()
     {
         return $this->get('result');
     }
 
     /**
      * @brief set error infomation
+     *
      * @param XooNIpsError error
      */
-    function setError(&$error) 
+    public function setError(&$error)
     {
         $this->set('error', $error);
     }
 
     /**
      * @brief get error infomation
+     *
      * @return XooNIpsError
      */
-    function &getError() 
+    public function &getError()
     {
         return $this->get('error');
     }
 
     /**
      * @brief set result of logic
-     *
      */
-    function setSuccess(&$success) 
+    public function setSuccess(&$success)
     {
         $this->set('success', $success);
     }
 
     /**
      * @brief get result of logic
-     *
      */
-    function &getSuccess() 
+    public function &getSuccess()
     {
         return $this->get('success');
     }
 
-    /**
-     *
-     * @access protected
-     */
-    function &get($key) 
+    public function &get($key)
     {
         return $this->vars[$key];
     }
 
-    /**
-     *
-     *
-     * @access protected
-     */
-    function set($key, $value) 
+    public function set($key, $value)
     {
-        if (empty($key)) return;
-        if (!isset($value)) return;
+        if (empty($key)) {
+            return;
+        }
+        if (!isset($value)) {
+            return;
+        }
         $this->vars[$key] = &$value;
     }
 }
-?>

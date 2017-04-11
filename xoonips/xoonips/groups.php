@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.7.4.1.2.12 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -28,29 +29,28 @@ include 'include/common.inc.php';
 include 'include/group.inc.php';
 
 // privileges check : user
-$uid = is_object( $xoopsUser ) ? $xoopsUser->getVar( 'uid', 'n' ) : UID_GUEST;
-if ( $uid == UID_GUEST ) {
-  redirect_header( XOOPS_URL.'/', 3, _MD_XOONIPS_MODERATOR_SHULD_BE_MODERATOR );
-  exit();
+$uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
+if ($uid == UID_GUEST) {
+    redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_MODERATOR_SHULD_BE_MODERATOR);
+    exit();
 }
 
 $breadcrumbs = array(
   array(
-    'name' => _MD_XOONIPS_BREADCRUMBS_USER
+    'name' => _MD_XOONIPS_BREADCRUMBS_USER,
   ),
   array(
     'name' => _MD_XOONIPS_TITLE_GROUP_LIST,
-    'url' => 'groups.php'
+    'url' => 'groups.php',
   ),
 );
 
-$xgroup_handler =& xoonips_gethandler( 'xoonips', 'group' );
+$xgroup_handler = &xoonips_gethandler('xoonips', 'group');
 $gids = $xgroup_handler->getGroupIds();
-$groups = xoonips_group_get_groups( $uid, $gids );
+$groups = xoonips_group_get_groups($uid, $gids);
 
 $xoopsOption['template_main'] = 'xoonips_group_list.html';
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsTpl->assign( 'xoops_breadcrumbs', $breadcrumbs );
-$xoopsTpl->assign( 'groups', $groups );
+$xoopsTpl->assign('xoops_breadcrumbs', $breadcrumbs);
+$xoopsTpl->assign('groups', $groups);
 include XOOPS_ROOT_PATH.'/footer.php';
-?>

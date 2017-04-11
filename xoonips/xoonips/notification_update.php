@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.6.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -27,5 +28,3 @@
 
 include 'include/common.inc.php';
 include XOOPS_ROOT_PATH.'/include/notification_update.php';
-
-?>

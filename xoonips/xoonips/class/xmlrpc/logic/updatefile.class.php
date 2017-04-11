@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,27 +26,22 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xoonipserror.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xoonipsresponse.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipserror.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipsresponse.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
 
 /**
  * @brief Class that executes logic specified by XML-RPC updateFile request
- *
- *
- *
  */
 class XooNIpsXmlRpcLogicUpdateFile extends XooNIpsXmlRpcLogic
 {
-
     /**
-     *
      * @param[in] XooNIpsXmlRpcRequest $request
      * @param[out] XooNIpsXmlRpcResponse $response result of logic(success/fault, response, error)
      */
-    function execute(&$request, &$response) 
+    public function execute(&$request, &$response)
     {
         $error = &$response->getError();
         // load logic instance
@@ -56,19 +52,21 @@ class XooNIpsXmlRpcLogicUpdateFile extends XooNIpsXmlRpcLogic
             $error = &$response->getError();
             $logic = $request->getMethodName();
             $error->add(XNPERR_SERVER_ERROR, "can't create a logic of $logic");
+
             return false;
         }
-        //
+
         $params = &$request->getParams();
         $vars = array();
-        if ( count($params) < 5 ){
+        if (count($params) < 5) {
             $response->setResult(false);
             $error->add(XNPERR_MISSING_PARAM);
+
             return false;
-        }
-        else if ( count($params) > 5 ){
+        } elseif (count($params) > 5) {
             $response->setResult(false);
             $error->add(XNPERR_EXTRA_PARAM);
+
             return false;
         }
         //
@@ -76,8 +74,8 @@ class XooNIpsXmlRpcLogicUpdateFile extends XooNIpsXmlRpcLogic
         $vars[0] = $params[0];
         //
         // parameter 2(itemid)
-        $unicode =& xoonips_getutility( 'unicode' );
-        $vars[1] = $unicode->decode_utf8($params[1],xoonips_get_server_charset(),'h');
+        $unicode = &xoonips_getutility('unicode');
+        $vars[1] = $unicode->decode_utf8($params[1], xoonips_get_server_charset(), 'h');
         //
         // parameter 3(id_type)
         $vars[2] = $params[2];
@@ -96,17 +94,19 @@ class XooNIpsXmlRpcLogicUpdateFile extends XooNIpsXmlRpcLogic
         if (!$fileobj) {
             $response->setResult(false);
             $error->add(XNPERR_INVALID_PARAM, 'can not get file from parameter #5');
+
             return false;
         }
-        $tmpfile = tempnam("/tmp", "FOO");
-        $h = fopen( $tmpfile, "wb" );
-        if ( $h ){
-            $len = fwrite( $h,  $params[4]['data'] );
-            fclose( $h );
+        $tmpfile = tempnam('/tmp', 'FOO');
+        $h = fopen($tmpfile, 'wb');
+        if ($h) {
+            $len = fwrite($h, $params[4]['data']);
+            fclose($h);
         }
         if (!$h || $len != strlen($params[4]['data'])) {
             $response->setResult(false);
             $error->add(XNPERR_SERVER_ERROR, "can't write to file $tmpfile");
+
             return false;
         }
         $fileobj->setFilepath($tmpfile);
@@ -114,10 +114,9 @@ class XooNIpsXmlRpcLogicUpdateFile extends XooNIpsXmlRpcLogic
         // execute logic
         $xoonips_response = new XooNIpsResponse();
         $logic->execute($vars, $xoonips_response);
-        //
+
         $response->setResult($xoonips_response->getResult());
         $response->setError($xoonips_response->getError());
         $response->setSuccess($xoonips_response->getSuccess());
     }
 }
-?>

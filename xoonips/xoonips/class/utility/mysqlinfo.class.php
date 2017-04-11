@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.8 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,50 +25,49 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
- * The MySQL Information class
+ * The MySQL Information class.
  *
- * @package xoonips_utility
  * @copyright copyright &copy; 2005-2008 RIKEN Japan
  */
-class XooNIpsUtilityMysqlinfo extends XooNIpsUtility {
-
-  /**
-   * database instance
+class XooNIpsUtilityMysqlinfo extends XooNIpsUtility
+{
+    /**
+   * database instance.
+   *
    * @var object
-   * @access private
    */
-  var $_db;
+  public $_db;
 
   /**
-   * mysql version
+   * mysql version.
+   *
    * @var array
-   * @access private
    */
-  var $_version = array();
+  public $_version = array();
 
   /**
-   * mysql acceptable charsets
+   * mysql acceptable charsets.
+   *
    * @var array
-   * @access private
    */
-  var $_charsets = array();
+  public $_charsets = array();
 
   /**
-   * constructor
+   * constructor.
    *
    * this class is singleton
-   * @access public
    */
-  function XooNIpsUtilityMysqlinfo() {
-    $this->setSingleton();
+  public function XooNIpsUtilityMysqlinfo()
+  {
+      $this->setSingleton();
 
-    $this->_db = $GLOBALS['xoopsDB'];
-    $support_http_charset = array(
+      $this->_db = $GLOBALS['xoopsDB'];
+      $support_http_charset = array(
       'EUC-JP',
       'Shift_JIS',
       'ISO-8859-1',
@@ -76,16 +76,16 @@ class XooNIpsUtilityMysqlinfo extends XooNIpsUtility {
 
     // get server version
     $sql = 'SHOW VARIABLES LIKE \'version\'';
-    $res = $this->_db->queryF( $sql );
-    list( $key, $value ) = $this->_db->fetchRow( $res );
-    $this->_version['full'] = $value;
-    if ( ! preg_match( '/^(\\d+)\\.(\\d+)\\.(\\d+)(.*)$/', $this->_version['full'], $regs ) ) {
-      die( 'Could not get version number : '.$this->_version['full'] );
-    }
-    $this->_version['major'] = intval( $regs[1] );
-    $this->_version['minor'] = intval( $regs[2] );
-    $this->_version['micro'] = intval( $regs[3] );
-    $this->_version['additional'] = $regs[4];
+      $res = $this->_db->queryF($sql);
+      list($key, $value) = $this->_db->fetchRow($res);
+      $this->_version['full'] = $value;
+      if (!preg_match('/^(\\d+)\\.(\\d+)\\.(\\d+)(.*)$/', $this->_version['full'], $regs)) {
+          die('Could not get version number : '.$this->_version['full']);
+      }
+      $this->_version['major'] = intval($regs[1]);
+      $this->_version['minor'] = intval($regs[2]);
+      $this->_version['micro'] = intval($regs[3]);
+      $this->_version['additional'] = $regs[4];
 
     // get acceptable charsets
     $this->_charsets['client'] = array(
@@ -100,7 +100,7 @@ class XooNIpsUtilityMysqlinfo extends XooNIpsUtility {
       ),
       'UTF-8' => array(),
     );
-    $this->_charsets['database'] = array(
+      $this->_charsets['database'] = array(
       'EUC-JP' => array(
         'ujis',
       ),
@@ -113,99 +113,104 @@ class XooNIpsUtilityMysqlinfo extends XooNIpsUtility {
       'UTF-8' => array(),
     );
     // -- set version depending charsets
-    if ( $this->isVersion41orHigher() ) {
-      // for 4.1 or higher
-      foreach ( $support_http_charset as $http_charset ) {
-        $this->_charsets['database'][$http_charset][] = 'utf8';
+    if ($this->isVersion41orHigher()) {
+        // for 4.1 or higher
+      foreach ($support_http_charset as $http_charset) {
+          $this->_charsets['database'][$http_charset][] = 'utf8';
       }
-      $this->_charsets['database']['EUC-JP'][] = 'sjis';
-      $this->_charsets['client']['UTF-8'][] = 'utf8';
-      if ( $this->isMSJapaneseSupport() ) {
-        // for 5.0.3 or higher
+        $this->_charsets['database']['EUC-JP'][] = 'sjis';
+        $this->_charsets['client']['UTF-8'][] = 'utf8';
+        if ($this->isMSJapaneseSupport()) {
+            // for 5.0.3 or higher
         $japanese_http_charsets = array(
           'EUC-JP',
           'Shift_JIS',
         );
-        $japanese_mysql_charsets = array(
+            $japanese_mysql_charsets = array(
           'cp932',
           'eucjpms',
         );
-        foreach ( $japanese_http_charsets as $http_charset ) {
-          foreach ( $japanese_mysql_charsets as $mysql_charset ) {
-            $this->_charsets['database'][$http_charset][] = $mysql_charset;
-          }
+            foreach ($japanese_http_charsets as $http_charset) {
+                foreach ($japanese_mysql_charsets as $mysql_charset) {
+                    $this->_charsets['database'][$http_charset][] = $mysql_charset;
+                }
+            }
+            $this->_charsets['client']['EUC-JP'][] = 'eucjpms';
+            $this->_charsets['client']['Shift_JIS'][] = 'cp932';
         }
-        $this->_charsets['client']['EUC-JP'][] = 'eucjpms';
-        $this->_charsets['client']['Shift_JIS'][] = 'cp932';
-      }
     }
   }
 
   /**
-   * get the mysql version
+   * get the mysql version.
    *
-   * @access public
    * @param string $name what kind of version (full, major, minor, micro, additional)
    *
    * @return mixed version number of string
    */
-  function getVersion( $name ) {
-    return $this->_version[$name];
+  public function getVersion($name)
+  {
+      return $this->_version[$name];
   }
 
   /**
-   * get the mysql variable
+   * get the mysql variable.
    *
-   * @access public
    * @param string name variable name
+   *
    * @return string variable
    */
-  function getVariable( $name ) {
-    $sql = 'SHOW VARIABLES LIKE \''.$name.'\'';
-    $res = $this->_db->queryF( $sql );
-    while ( list( $key, $value ) = $this->_db->fetchRow( $res ) ) {
-      $variable[$key] = $value;
-    }
-    return $variable[$name];
+  public function getVariable($name)
+  {
+      $sql = 'SHOW VARIABLES LIKE \''.$name.'\'';
+      $res = $this->_db->queryF($sql);
+      while (list($key, $value) = $this->_db->fetchRow($res)) {
+          $variable[$key] = $value;
+      }
+
+      return $variable[$name];
   }
 
   /**
-   * check the mysql version 4.1 or higher
+   * check the mysql version 4.1 or higher.
    *
-   * @access public
    * @return bool TRUE if 4.1 or higher
    */
-  function isVersion41orHigher() {
-    if ( $this->_version['major'] >= 5 || ( $this->_version['major'] == 4 && $this->_version['minor'] >= 1 ) ) {
-      return true;
-    }
-    return false;
+  public function isVersion41orHigher()
+  {
+      if ($this->_version['major'] >= 5 || ($this->_version['major'] == 4 && $this->_version['minor'] >= 1)) {
+          return true;
+      }
+
+      return false;
   }
 
   /**
-   * check the Microsoft extended Japanese suportments
+   * check the Microsoft extended Japanese suportments.
    *
-   * @access public
    * @return bool FALSE if unsupported
    */
-  function isMSJapaneseSupport() {
-    if ( ( $this->_version['major'] >= 5 && $this->_version['minor'] >= 1 ) || ( $this->_version['major'] == 5 && $this->_version['minor'] == 0 && $this->_version['micro'] >= 3 ) ) {
-      return true;
-    }
-    return false;
+  public function isMSJapaneseSupport()
+  {
+      if (($this->_version['major'] >= 5 && $this->_version['minor'] >= 1) || ($this->_version['major'] == 5 && $this->_version['minor'] == 0 && $this->_version['micro'] >= 3)) {
+          return true;
+      }
+
+      return false;
   }
 
   /**
-   * get acceptable charsets
+   * get acceptable charsets.
    *
    * @param bool is_database TRUE if check for database charset
    * @param string http_charset http charset
+   *
    * @return array mysql charset array
    */
-  function getAcceptableCharsets( $is_database, $http_charset ) {
-    $name = ( $is_database ) ? 'database' : 'client';
-    return $this->_charsets[$name][$http_charset];
+  public function getAcceptableCharsets($is_database, $http_charset)
+  {
+      $name = ($is_database) ? 'database' : 'client';
+
+      return $this->_charsets[$name][$http_charset];
   }
 }
-
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.12 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,20 +25,20 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // resources
 // get _MD_XOONIPS_NOTIFICATION_*SBJ
-$langman->read( 'main.php' );
+$langman->read('main.php');
 
 // check token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_maintenance_item_withdraw';
-if ( ! $xoopsGTicket->check( true, $ticket_area, false ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors() );
-  exit();
+if (!$xoopsGTicket->check(true, $ticket_area, false)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors());
+    exit();
 }
 
 // load libraries
@@ -52,102 +53,101 @@ $get_keys = array(
     false,
   ),
 );
-$get_vals = xoonips_admin_get_requests( 'post', $get_keys );
+$get_vals = xoonips_admin_get_requests('post', $get_keys);
 $tree_ids = $get_vals['tree'];
 
 // logic
 $empty_tree_ids = true;
 $results = array();
 $xnpsid = $_SESSION['XNPSID'];
-if ( count( $tree_ids ) > 0 ) {
-  $textutil =& xoonips_getutility( 'text' );
+if (count($tree_ids) > 0) {
+    $textutil = &xoonips_getutility('text');
 
-  $treelist = xnpitmgrListIndexTree( XNPITMGR_LISTMODE_PUBLICONLY );
-  $treemap = array();
-  foreach ( $treelist as $tree ) {
-    $treemap[$tree['id']] = $tree['fullpath'];
-  }
-  $empty_tree_ids = false;
-  $evenodd = 'odd';
-  $index_item_link_handler =& xoonips_getormhandler( 'xoonips', 'index_item_link' );
-  $event_log_handler =& xoonips_getormhandler( 'xoonips', 'event_log' );
-  $item_lock_handler =& xoonips_getormhandler( 'xoonips', 'item_lock' );
-  $item_basic_handler =& xoonips_getormhandler( 'xoonips', 'item_basic' );
-  $item_show_handler =& xoonips_getormhandler( 'xoonips', 'item_show' );
-  $item_status_handler =& xoonips_getormhandler( 'xoonips', 'item_status' );
+    $treelist = xnpitmgrListIndexTree(XNPITMGR_LISTMODE_PUBLICONLY);
+    $treemap = array();
+    foreach ($treelist as $tree) {
+        $treemap[$tree['id']] = $tree['fullpath'];
+    }
+    $empty_tree_ids = false;
+    $evenodd = 'odd';
+    $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
+    $event_log_handler = &xoonips_getormhandler('xoonips', 'event_log');
+    $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
+    $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
+    $item_show_handler = &xoonips_getormhandler('xoonips', 'item_show');
+    $item_status_handler = &xoonips_getormhandler('xoonips', 'item_status');
 
-  $modified_item_ids = array();
+    $modified_item_ids = array();
 
   // execute item withdraw
-  foreach ( $tree_ids as $xid ) {
-    $succeed = 0;
-    $failed = 0;
-    $uncertified = 0;
+  foreach ($tree_ids as $xid) {
+      $succeed = 0;
+      $failed = 0;
+      $uncertified = 0;
 
-    $index_item_links =& $index_item_link_handler->getObjects( new Criteria( 'index_id', $xid ) );
-    if ( $index_item_links === false ) {
-      // no item in tree
+      $index_item_links = &$index_item_link_handler->getObjects(new Criteria('index_id', $xid));
+      if ($index_item_links === false) {
+          // no item in tree
       continue;
-    }
-    foreach ( $index_item_links as $index_item_link ) {
-      $item_id = $index_item_link->get( 'item_id' );
-      if ( $item_lock_handler->isLocked( $item_id ) ) {
-        // item is not certified
-        $uncertified++;
-      } else {
-        if ( $index_item_link_handler->delete( $index_item_link ) ) {
-          // succeed
-          $succeed++;
-          $event_log_handler->recordRejectItemEvent( $item_id, $xid );
-          $modified_item_ids[$item_id] = $item_id;
-          xoonips_notification_item_rejected( $item_id, $xid );
-        } else {
-          // error occured
-          $failed++;
-        }
       }
-    }
+      foreach ($index_item_links as $index_item_link) {
+          $item_id = $index_item_link->get('item_id');
+          if ($item_lock_handler->isLocked($item_id)) {
+              // item is not certified
+        ++$uncertified;
+          } else {
+              if ($index_item_link_handler->delete($index_item_link)) {
+                  // succeed
+          ++$succeed;
+                  $event_log_handler->recordRejectItemEvent($item_id, $xid);
+                  $modified_item_ids[$item_id] = $item_id;
+                  xoonips_notification_item_rejected($item_id, $xid);
+              } else {
+                  // error occured
+          ++$failed;
+              }
+          }
+      }
 
-
-    $results[] = array(
+      $results[] = array(
       'id' => $xid,
       'evenodd' => $evenodd,
-      'index' => $textutil->html_special_chars( $treemap[$xid] ),
+      'index' => $textutil->html_special_chars($treemap[$xid]),
       'succeed' => $succeed,
       'uncertified' => $uncertified,
       'failed' => $failed,
     );
-    $evenodd = ( $evenodd == 'even' ) ? 'odd' : 'even';
+      $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
   }
 
   // update item_status and item_basic. delete item_show
-  foreach ( $modified_item_ids as $item_id ) {
-    // update last_update
-    $item_basic = $item_basic_handler->get( $item_id );
-    $item_basic->set( 'last_update_date', time() );
-    $item_basic_handler->insert( $item_basic );
+  foreach ($modified_item_ids as $item_id) {
+      // update last_update
+    $item_basic = $item_basic_handler->get($item_id);
+      $item_basic->set('last_update_date', time());
+      $item_basic_handler->insert($item_basic);
 
     // if item becomes not public...
     $criteria = new CriteriaCompo();
-    $criteria->add( new Criteria( 'item_id', $item_id ) );
-    $criteria->add( new Criteria( 'open_level', OL_PUBLIC ) );
-    $criteria->add( new Criteria( 'certify_state', CERTIFIED ) );
-    $join = new XooNIpsJoinCriteria( 'xoonips_index', 'index_id', 'index_id' );
-    $index_item_links =& $index_item_link_handler->getObjects( $criteria, false, '', false, $join );
-    if ( count( $index_item_links ) === 0 ) {
-      // update item_status
-      $item_status = $item_status_handler->get( $item_id );
-      if ( $item_status !== false ) {
-        $item_status->set( 'is_deleted', 1 );
-        $item_status->set( 'deleted_timestamp', time() );
-        $item_status_handler->insert( $item_status );
-      }
+      $criteria->add(new Criteria('item_id', $item_id));
+      $criteria->add(new Criteria('open_level', OL_PUBLIC));
+      $criteria->add(new Criteria('certify_state', CERTIFIED));
+      $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id');
+      $index_item_links = &$index_item_link_handler->getObjects($criteria, false, '', false, $join);
+      if (count($index_item_links) === 0) {
+          // update item_status
+      $item_status = $item_status_handler->get($item_id);
+          if ($item_status !== false) {
+              $item_status->set('is_deleted', 1);
+              $item_status->set('deleted_timestamp', time());
+              $item_status_handler->insert($item_status);
+          }
       // delete item_show
-      $item_shows =& $item_show_handler->getObjects( new Criteria( 'item_id', $item_id ) );
-      foreach ( $item_shows as $item_show ) {
-        $item_show_handler->delete( $item_show );
+      $item_shows = &$item_show_handler->getObjects(new Criteria('item_id', $item_id));
+          foreach ($item_shows as $item_show) {
+              $item_show_handler->delete($item_show);
+          }
       }
-    }
   }
 }
 
@@ -185,30 +185,28 @@ $breadcrumbs = array(
 );
 
 // templates
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'maintenance_item_wupdate.tmpl.html' );
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->setAttribute( 'description', 'visibility', 'visible' );
-$tmpl->addVar( 'description', 'DESCRIPTION', $description );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'main', 'index', _AM_XOONIPS_MAINTENANCE_ITEM_LABEL_INDEX );
-$tmpl->addVar( 'main', 'succeed', _AM_XOONIPS_MAINTENANCE_ITEM_LABEL_SUCCEED );
-$tmpl->addVar( 'main', 'uncertified', _AM_XOONIPS_MAINTENANCE_ITEM_LABEL_UNCERTIFIED );
-$tmpl->addVar( 'main', 'failed', _AM_XOONIPS_MAINTENANCE_ITEM_LABEL_FAILED );
-if ( $empty_tree_ids ) {
-  $tmpl->setAttribute( 'empty_results', 'visibility', 'visible' );
-  $tmpl->setAttribute( 'results', 'visibility', 'hidden' );
-  $tmpl->addVar( 'empty_results', 'empty', _AM_XOONIPS_MAINTENANCE_ITEM_INDEX_EMPTY );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('maintenance_item_wupdate.tmpl.html');
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->setAttribute('description', 'visibility', 'visible');
+$tmpl->addVar('description', 'DESCRIPTION', $description);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('main', 'index', _AM_XOONIPS_MAINTENANCE_ITEM_LABEL_INDEX);
+$tmpl->addVar('main', 'succeed', _AM_XOONIPS_MAINTENANCE_ITEM_LABEL_SUCCEED);
+$tmpl->addVar('main', 'uncertified', _AM_XOONIPS_MAINTENANCE_ITEM_LABEL_UNCERTIFIED);
+$tmpl->addVar('main', 'failed', _AM_XOONIPS_MAINTENANCE_ITEM_LABEL_FAILED);
+if ($empty_tree_ids) {
+    $tmpl->setAttribute('empty_results', 'visibility', 'visible');
+    $tmpl->setAttribute('results', 'visibility', 'hidden');
+    $tmpl->addVar('empty_results', 'empty', _AM_XOONIPS_MAINTENANCE_ITEM_INDEX_EMPTY);
 } else {
-  $tmpl->addRows( 'results', $results );
+    $tmpl->addRows('results', $results);
 }
-$tmpl->addVar( 'main', 'back', _AM_XOONIPS_LABEL_BACK );
+$tmpl->addVar('main', 'back', _AM_XOONIPS_LABEL_BACK);
 
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

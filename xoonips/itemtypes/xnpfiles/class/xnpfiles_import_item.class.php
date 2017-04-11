@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,133 +26,146 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname( dirname( __DIR__ ) )
-    . '/xoonips/class/xoonips_import_item.class.php';
+include_once dirname(dirname(__DIR__))
+    .'/xoonips/class/xoonips_import_item.class.php';
 
-class XNPFilesImportItem extends XooNIpsImportItem{
-    var $_has_files_file = false;
-    
-    function XNPFilesImportItem(){
-        $handler =& xoonips_getormcompohandler( 'xnpfiles', 'item' );
-        $this -> _item =& $handler -> create();
+class XNPFilesImportItem extends XooNIpsImportItem
+{
+    public $_has_files_file = false;
+
+    public function XNPFilesImportItem()
+    {
+        $handler = &xoonips_getormcompohandler('xnpfiles', 'item');
+        $this->_item = &$handler->create();
     }
-    
-    function setHasFilesFile( ){
-        $this -> _has_files_file = true;
+
+    public function setHasFilesFile()
+    {
+        $this->_has_files_file = true;
     }
-    
-    function unsetHasFilesFile( ){
-        $this -> _has_files_file = false;
+
+    public function unsetHasFilesFile()
+    {
+        $this->_has_files_file = false;
     }
-    
-    function hasFilesFile( ){
-        return $this -> _has_files_file;
+
+    public function hasFilesFile()
+    {
+        return $this->_has_files_file;
     }
-    
+
     /**
-     * get total file size(bytes) of this item
-     * @return integer file size in bytes.
+     * get total file size(bytes) of this item.
+     *
+     * @return int file size in bytes
      */
-    function getTotalFileSize(){
-        $file =& $this -> getVar( 'files_file' );
-        if( !$file ) return 0;
-        return $file -> get( 'file_size' );
+    public function getTotalFileSize()
+    {
+        $file = &$this->getVar('files_file');
+        if (!$file) {
+            return 0;
+        }
+
+        return $file->get('file_size');
     }
-    
-    function &getClone( ){
-        $clone =& parent::getClone();
-        $clone -> _has_files_file = $this -> _has_files_file;
+
+    public function &getClone()
+    {
+        $clone = &parent::getClone();
+        $clone->_has_files_file = $this->_has_files_file;
+
         return $clone;
     }
 }
 
-class XNPFilesImportItemHandler extends XooNIpsImportItemHandler{
-    
+class XNPFilesImportItemHandler extends XooNIpsImportItemHandler
+{
     /**
-     * array of supported version of import file
+     * array of supported version of import file.
      */
-    var $_import_file_version = array( "1.00", "1.01", "1.02" );
+    public $_import_file_version = array('1.00', '1.01', '1.02');
 
     /**
-     * version string of detail information
+     * version string of detail information.
      */
-    var $_detail_version = null;
+    public $_detail_version = null;
 
     /**
-     * attachment file object(XooNIpsAttachment)
+     * attachment file object(XooNIpsAttachment).
      */
-    var $_files_file = null;
-    
+    public $_files_file = null;
+
     /**
-     * flag of attachment file parsed
+     * flag of attachment file parsed.
      */
-    var $_files_file_flag = false;
-    
+    public $_files_file_flag = false;
+
     /**
-     * attachment_dl_limit flag
+     * attachment_dl_limit flag.
      */
-    var $_attachment_dl_limit_flag = false;
-    
+    public $_attachment_dl_limit_flag = false;
+
     /**
-     * attachment_dl__notify_limit flag
+     * attachment_dl__notify_limit flag.
      */
-    var $_attachment_dl_notify_limit_flag = false;
-    
-    function XNPFilesImportItemHandler(){
+    public $_attachment_dl_notify_limit_flag = false;
+
+    public function XNPFilesImportItemHandler()
+    {
         parent::XooNIpsImportItemHandler();
     }
 
-    function create(){
+    public function create()
+    {
         return new XNPFilesImportItem();
     }
 
     /**
-     * 
      * @param
-     * @return void
      */
-    function xmlStartElementHandler( $parser , $name , $attribs ){
+    public function xmlStartElementHandler($parser, $name, $attribs)
+    {
         global $xoopsDB;
         parent::xmlStartElementHandler($parser, $name, $attribs);
-        
-        switch( implode( '/', $this -> _tag_stack ) ){
-        case "ITEM/DETAIL":
+
+        switch (implode('/', $this->_tag_stack)) {
+        case 'ITEM/DETAIL':
             break;
-        case "ITEM/DETAIL/FILE":
-            if( $this -> _files_file_flag ){
-                $this -> _import_item -> setErrors( 
+        case 'ITEM/DETAIL/FILE':
+            if ($this->_files_file_flag) {
+                $this->_import_item->setErrors(
                     E_XOONIPS_ATTACHMENT_HAS_REDUNDANT,
-                    "multiple $name attachments is not allowed" 
-                    . $this -> _get_parser_error_at( ) );
+                    "multiple $name attachments is not allowed"
+                    .$this->_get_parser_error_at());
                 break;
             }
-            $file_type_handler =& xoonips_getormhandler( 'xoonips', 
-                                                         'file_type' );
-            $file_handler =& xoonips_getormhandler( 'xoonips', 'file' );
+            $file_type_handler = &xoonips_getormhandler('xoonips',
+                                                         'file_type');
+            $file_handler = &xoonips_getormhandler('xoonips', 'file');
             $criteria = new Criteria(
-                'name', addslashes( $attribs['FILE_TYPE_NAME'] ) );
-            $file_type =& $file_type_handler -> getObjects( $criteria );
-            if( count( $file_type ) == 0 ){
-                $this -> _import_item -> setErrors( 
+                'name', addslashes($attribs['FILE_TYPE_NAME']));
+            $file_type = &$file_type_handler->getObjects($criteria);
+            if (count($file_type) == 0) {
+                $this->_import_item->setErrors(
                     E_XOONIPS_ATTR_NOT_FOUND,
-                    "file_type_id is not found:" . $attribs['FILE_TYPE_NAME'] 
-                    . $this -> _get_parser_error_at( ) );
+                    'file_type_id is not found:'.$attribs['FILE_TYPE_NAME']
+                    .$this->_get_parser_error_at());
                 break;
             }
-            
-            $unicode =& xoonips_getutility( 'unicode' );
-            $this -> _files_file =& $file_handler -> create();
-            $this -> _files_file -> setFilepath(
-                $this -> _attachment_dir . '/' . $attribs['FILE_NAME'] );
-            $this -> _files_file -> set(
+
+            $unicode = &xoonips_getutility('unicode');
+            $this->_files_file = &$file_handler->create();
+            $this->_files_file->setFilepath(
+                $this->_attachment_dir.'/'.$attribs['FILE_NAME']);
+            $this->_files_file->set(
                 'original_file_name',
                 $unicode->decode_utf8($attribs['ORIGINAL_FILE_NAME'],
-                                      xoonips_get_server_charset(),'h') );
-            $this -> _files_file -> set( 'mime_type', $attribs['MIME_TYPE'] );
-            $this -> _files_file -> set( 'file_size', $attribs['FILE_SIZE'] );
-            $this -> _files_file -> set( 'sess_id', session_id() );
-            $this -> _files_file -> set(
-                'file_type_id', $file_type[0] -> get( 'file_type_id' ) );
+                                      xoonips_get_server_charset(), 'h'));
+            $this->_files_file->set('mime_type', $attribs['MIME_TYPE']);
+            $this->_files_file->set('file_size', $attribs['FILE_SIZE']);
+            $this->_files_file->set('sess_id', session_id());
+            $this->_files_file->set(
+                'file_type_id', $file_type[0]->get('file_type_id'));
             break;
         case 'ITEM/DETAIL/FILE/CAPTION':
         case 'ITEM/DETAIL/FILE/THUMBNAIL':
@@ -160,163 +174,178 @@ class XNPFilesImportItemHandler extends XooNIpsImportItemHandler{
     }
 
     /**
-     * 
      * @param
-     * @return void
      */
-    function xmlEndElementHandler( $parser ,$name ){
+    public function xmlEndElementHandler($parser, $name)
+    {
         global $xoopsDB;
-        $detail =& $this -> _import_item -> getVar( 'detail' );
-        $unicode =& xoonips_getutility( 'unicode' );
-        
-        switch( implode( '/', $this -> _tag_stack ) ){
-        case "ITEM/DETAIL":
+        $detail = &$this->_import_item->getVar('detail');
+        $unicode = &xoonips_getutility('unicode');
+
+        switch (implode('/', $this->_tag_stack)) {
+        case 'ITEM/DETAIL':
             $keys = array(
-                'data_file_name'    ,
+                'data_file_name',
                 'data_file_mimetype',
                 'data_file_filetype',
                 );
-            foreach ( $keys as $key )
-                if ( is_null($detail -> get($key,'n')) )
-                    $this -> _import_item -> setErrors( 
+            foreach ($keys as $key) {
+                if (is_null($detail->get($key, 'n'))) {
+                    $this->_import_item->setErrors(
                         E_XOONIPS_TAG_NOT_FOUND,
-                        " no $key" 
-                        . $this -> _get_parser_error_at( ) );
+                        " no $key"
+                        .$this->_get_parser_error_at());
+                }
+            }
             break;
-        case "ITEM/DETAIL/DATA_FILE_NAME":
-            $detail -> set( 'data_file_name', 
+        case 'ITEM/DETAIL/DATA_FILE_NAME':
+            $detail->set('data_file_name',
                             $unicode->decode_utf8(
-                                $this -> _cdata ,
-                                xoonips_get_server_charset(),'h'), true );
+                                $this->_cdata,
+                                xoonips_get_server_charset(), 'h'), true);
             break;
-        case "ITEM/DETAIL/DATA_FILE_MIMETYPE": 
-            $detail -> set( 'data_file_mimetype', 
+        case 'ITEM/DETAIL/DATA_FILE_MIMETYPE':
+            $detail->set('data_file_mimetype',
                             $unicode->decode_utf8(
-                                $this -> _cdata ,
-                                xoonips_get_server_charset(),'h'), true );
+                                $this->_cdata,
+                                xoonips_get_server_charset(), 'h'), true);
             break;
-        case "ITEM/DETAIL/DATA_FILE_FILETYPE": 
-            $detail -> set( 'data_file_filetype', 
+        case 'ITEM/DETAIL/DATA_FILE_FILETYPE':
+            $detail->set('data_file_filetype',
                             $unicode->decode_utf8(
-                                $this -> _cdata ,
-                                xoonips_get_server_charset(),'h'), true );
+                                $this->_cdata,
+                                xoonips_get_server_charset(), 'h'), true);
             break;
-        case "ITEM/DETAIL/FILE":
-            $this -> _files_file_flag = true;
-            $file_handler =& xoonips_getormhandler( 'xoonips', 'file' );
-            if( !$file_handler -> insert( $this -> _files_file ) ){
-                $this -> _import_item -> setErrors( 
+        case 'ITEM/DETAIL/FILE':
+            $this->_files_file_flag = true;
+            $file_handler = &xoonips_getormhandler('xoonips', 'file');
+            if (!$file_handler->insert($this->_files_file)) {
+                $this->_import_item->setErrors(
                     E_XOONIPS_DB_QUERY,
                     "can't insert attachment file:"
-                    . $this -> _files_file -> get( 'original_file_name' ) 
-                    . $this -> _get_parser_error_at() );
+                    .$this->_files_file->get('original_file_name')
+                    .$this->_get_parser_error_at());
             }
-            $this -> _files_file = $file_handler -> get( 
-                $this -> _files_file -> get( 'file_id' ) );
-            $this -> _import_item -> setVar(
-                'files_file', $this -> _files_file );
-            $this -> _import_item -> setHasFilesFile();
-            break; 
+            $this->_files_file = $file_handler->get(
+                $this->_files_file->get('file_id'));
+            $this->_import_item->setVar(
+                'files_file', $this->_files_file);
+            $this->_import_item->setHasFilesFile();
+            break;
         case 'ITEM/DETAIL/FILE/CAPTION':
-            $this -> _files_file -> set(
-                'caption', 
+            $this->_files_file->set(
+                'caption',
                 $unicode->decode_utf8(
-                    $this -> _cdata ,
-                    xoonips_get_server_charset(),'h') );
-            break; 
+                    $this->_cdata,
+                    xoonips_get_server_charset(), 'h'));
+            break;
         case 'ITEM/DETAIL/FILE/THUMBNAIL':
-            $this -> _files_file -> set( 'thumbnail_file',
-                                         base64_decode( $this -> _cdata ) );
+            $this->_files_file->set('thumbnail_file',
+                                         base64_decode($this->_cdata));
             break;
         }
 
         parent::xmlEndElementHandler($parser, $name);
     }
-    
+
     /**
-     * 
      * Update item_id and sess_id of xoonips_file.
-     * 
-     * @param $item XooNIpsImportItem that is imported.
+     *
+     * @param $item xooNIpsImportItem that is imported
      * @param $import_items array of all of XooNIpsImportItems
      */
-    function onImportFinished( &$item, &$import_items ){
-        if( 'xnpfilesimportitem' != strtolower( get_class($item) ) ) return;
-        
-        $this -> _set_file_delete_flag($item);
-        
-        // nothing to do if no file
-        if( $item -> hasFilesFile( ) ){
-            $files_file =& $item -> getVar( 'files_file' );
-            $this -> _fix_item_id_of_file( $item, $files_file );
-            $this -> _create_text_search_index( $files_file );
+    public function onImportFinished(&$item, &$import_items)
+    {
+        if ('xnpfilesimportitem' != strtolower(get_class($item))) {
+            return;
         }
-        
-        parent::onImportFinished( $item, $import_items );
+
+        $this->_set_file_delete_flag($item);
+
+        // nothing to do if no file
+        if ($item->hasFilesFile()) {
+            $files_file = &$item->getVar('files_file');
+            $this->_fix_item_id_of_file($item, $files_file);
+            $this->_create_text_search_index($files_file);
+        }
+
+        parent::onImportFinished($item, $import_items);
     }
-    
-    function insert( &$item ){
-        $handler =& xoonips_getormcompohandler( 'xnpfiles', 'item' );
-        return $handler -> insert($item);
+
+    public function insert(&$item)
+    {
+        $handler = &xoonips_getormcompohandler('xnpfiles', 'item');
+
+        return $handler->insert($item);
     }
-    
-    function setNew( &$item ){
-        $handler =& xoonips_getormcompohandler( 'xnpfiles', 'item' );
-        return $handler -> setNew($item);
+
+    public function setNew(&$item)
+    {
+        $handler = &xoonips_getormcompohandler('xnpfiles', 'item');
+
+        return $handler->setNew($item);
     }
-    
-    function unsetNew( &$item ){
-        $handler =& xoonips_getormcompohandler( 'xnpfiles', 'item' );
-        return $handler -> unsetNew($item);
+
+    public function unsetNew(&$item)
+    {
+        $handler = &xoonips_getormcompohandler('xnpfiles', 'item');
+
+        return $handler->unsetNew($item);
     }
-    
-    function setDirty( &$item ){
-        $handler =& xoonips_getormcompohandler( 'xnpfiles', 'item' );
-        return $handler -> setDirty($item);
+
+    public function setDirty(&$item)
+    {
+        $handler = &xoonips_getormcompohandler('xnpfiles', 'item');
+
+        return $handler->setDirty($item);
     }
-    
-    function unsetDirty( &$item ){
-        $handler =& xoonips_getormcompohandler( 'xnpfiles', 'item' );
-        return $handler -> unsetDirty($item);
+
+    public function unsetDirty(&$item)
+    {
+        $handler = &xoonips_getormcompohandler('xnpfiles', 'item');
+
+        return $handler->unsetDirty($item);
     }
-    
+
     /**
      * reeturn import log text of import item.
+     *
      * @param $import_item reference of XooNIpsImportItem object
+     *
      * @return string import log text
      */
-    function getImportLog($import_item){
+    public function getImportLog($import_item)
+    {
         $text = parent::getImportLog($import_item);
-        $detail =& $import_item -> getVar( 'detail' );
-        $text .= "\ndetail.data_file_name " 
-            . $detail -> get( "data_file_name" );
+        $detail = &$import_item->getVar('detail');
+        $text .= "\ndetail.data_file_name "
+            .$detail->get('data_file_name');
         $text .= "\ndetail.data_file_mimetype "
-            . $detail -> get( "data_file_mimetype" );
-        $text .= "\ndetail.data_file_filetype " 
-            . $detail -> get( "data_file_filetype" );
-        
+            .$detail->get('data_file_mimetype');
+        $text .= "\ndetail.data_file_filetype "
+            .$detail->get('data_file_filetype');
+
         return $text;
     }
 
-    function import(&$item){
-        if ( $item -> getUpdateFlag() ) {
-            $detail =& $item -> getVar( 'detail' );
-            $detail -> unsetNew();
-            $detail -> setDirty();
-            
+    public function import(&$item)
+    {
+        if ($item->getUpdateFlag()) {
+            $detail = &$item->getVar('detail');
+            $detail->unsetNew();
+            $detail->setDirty();
+
             //copy attachment file
-            $files_file =& $item -> getVar( 'files_file' );
-            if( $item -> hasFilesFile() ){
-                $file_handler =& xoonips_getormhandler( 'xoonips', 'file' );
-                $clonefile =& $file_handler -> fileClone( $files_file );
-                $clonefile -> setDirty();
-                $item -> setVar( 'files_file', $clonefile );
-                
-                $files_file =& $item -> getVar( 'files_file' );
+            $files_file = &$item->getVar('files_file');
+            if ($item->hasFilesFile()) {
+                $file_handler = &xoonips_getormhandler('xoonips', 'file');
+                $clonefile = &$file_handler->fileClone($files_file);
+                $clonefile->setDirty();
+                $item->setVar('files_file', $clonefile);
+
+                $files_file = &$item->getVar('files_file');
             }
         }
         parent::import($item);
     }
 }
-
-?>

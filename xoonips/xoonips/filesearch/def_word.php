@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.2.2.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,15 +26,14 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 /**
- * definition file of MS-Word 2003 file search
+ * definition file of MS-Word 2003 file search.
  */
 // php-indent: disable
-$module['class_name']    = 'XooNIpsFileSearchPluginWORD';
+$module['class_name'] = 'XooNIpsFileSearchPluginWORD';
 $module['php_file_name'] = 'word.php';
-$module['name']          = 'word';
-$module['display_name']  = 'MS-Word 95/97/2000/XP/2003';
-$module['mime_type']     = array( 'application/msword' );
-$module['extensions']    = array( 'doc' );
-$module['version']       = '2.0';
+$module['name'] = 'word';
+$module['display_name'] = 'MS-Word 95/97/2000/XP/2003';
+$module['mime_type'] = array('application/msword');
+$module['extensions'] = array('doc');
+$module['version'] = '2.0';
 // php-indent: enable
-?>

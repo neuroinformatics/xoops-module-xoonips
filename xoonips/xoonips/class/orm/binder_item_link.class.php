@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
@@ -34,26 +35,26 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
  * @li getVar('binder_item_link_id') :
  * @li getVar('binder_id') :
  * @li getVar('item_id') :
- *
  */
-class XooNIpsOrmBinderItemLink extends XooNIpsTableObject {
-  function XooNIpsOrmBinderItemLink() {
-    parent::XooNIpsTableObject();
-    $this->initVar( 'binder_item_link_id', XOBJ_DTYPE_INT, null, false );
-    $this->initVar( 'binder_id', XOBJ_DTYPE_INT, null, true );
-    $this->initVar( 'item_id', XOBJ_DTYPE_INT, null, false );
-  }
+class XooNIpsOrmBinderItemLink extends XooNIpsTableObject
+{
+    public function XooNIpsOrmBinderItemLink()
+    {
+        parent::XooNIpsTableObject();
+        $this->initVar('binder_item_link_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('binder_id', XOBJ_DTYPE_INT, null, true);
+        $this->initVar('item_id', XOBJ_DTYPE_INT, null, false);
+    }
 }
 
 /**
  * @brief handler object of binder item link
- *
- *
  */
-class XooNIpsOrmBinderItemLinkHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmBinderItemLinkHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmBinderItemLink', 'xoonips_binder_item_link', 'binder_item_link_id', true );
-  }
+class XooNIpsOrmBinderItemLinkHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmBinderItemLinkHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmBinderItemLink', 'xoonips_binder_item_link', 'binder_item_link_id', true);
+    }
 }
-?>

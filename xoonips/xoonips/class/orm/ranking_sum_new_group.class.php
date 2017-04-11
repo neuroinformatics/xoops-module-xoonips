@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 require_once __DIR__.'/abstract_ranking.class.php';
@@ -33,15 +34,14 @@ require_once __DIR__.'/ranking_new_group.class.php';
 
 /**
  * @brief handler object of ranking sum new group
- *
  */
-class XooNIpsOrmRankingSumNewGroupHandler extends XooNIpsOrmRankingNewGroupHandler {
-  function XooNIpsOrmRankingSumNewGroupHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmRankingNewGroup', 'xoonips_ranking_sum_new_group', 'gid', false );
-    $this->_set_columns( array( 'gid', 'timestamp' ) );
-    $this->_set_sum_table();
-  }
+class XooNIpsOrmRankingSumNewGroupHandler extends XooNIpsOrmRankingNewGroupHandler
+{
+    public function XooNIpsOrmRankingSumNewGroupHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmRankingNewGroup', 'xoonips_ranking_sum_new_group', 'gid', false);
+        $this->_set_columns(array('gid', 'timestamp'));
+        $this->_set_sum_table();
+    }
 }
-
-?>

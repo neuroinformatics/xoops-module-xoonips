@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -30,13 +31,11 @@
 
 // _MD_<MODULENAME>_<STRINGNAME>
 
-define( "_MD_XNPMEMO_ITEM_LINK_LABEL", "リンク" );
-define( "_MD_XNPMEMO_MEMO_FILE_LABEL", "ファイル" );
+define('_MD_XNPMEMO_ITEM_LINK_LABEL', 'リンク');
+define('_MD_XNPMEMO_MEMO_FILE_LABEL', 'ファイル');
 
-define( "_MD_XNPMEMO_EXPLANATION", "汎用メモパッド" );
+define('_MD_XNPMEMO_EXPLANATION', '汎用メモパッド');
 
-define( '_MD_XNPMEMO_XMLRPC_DISPLAY_NAME_MEMO_ID'   , 'アイテムID' );
-define( '_MD_XNPMEMO_XMLRPC_DISPLAY_NAME_ITEM_LINK' , 'リンク' );
-define( '_MD_XNPMEMO_XMLRPC_DISPLAY_NAME_MEMO_FILE' , 'ファイル' );
-
-?>
+define('_MD_XNPMEMO_XMLRPC_DISPLAY_NAME_MEMO_ID', 'アイテムID');
+define('_MD_XNPMEMO_XMLRPC_DISPLAY_NAME_ITEM_LINK', 'リンク');
+define('_MD_XNPMEMO_XMLRPC_DISPLAY_NAME_MEMO_FILE', 'ファイル');

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.4.2.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,38 +26,40 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 /**
- * file search plugin class for PowerPoint
+ * file search plugin class for PowerPoint.
  */
-class XooNIpsFileSearchPluginPPT extends XooNIpsFileSearchPlugin {
-
-  /**
-   * constractor
+class XooNIpsFileSearchPluginPPT extends XooNIpsFileSearchPlugin
+{
+    /**
+   * constractor.
    */
-  function XooNIpsFileSearchPluginPPT() {
-    parent::XooNIpsFileSearchPlugin();
-    $this->is_xml = true;
-    $this->is_utf8 = true;
+  public function XooNIpsFileSearchPluginPPT()
+  {
+      parent::XooNIpsFileSearchPlugin();
+      $this->is_xml = true;
+      $this->is_utf8 = true;
   }
 
   /**
-   * open file resource
+   * open file resource.
    *
    * @acccess protected
+   *
    * @param string $filename file name
    */
-  function _open_file( $filename ) {
-    $cmd = sprintf( 'ppthtml %s', escapeshellarg( $filename ) );
-    $this->handle = @popen( $cmd, 'rb' );
+  public function _open_file($filename)
+  {
+      $cmd = sprintf('ppthtml %s', escapeshellarg($filename));
+      $this->handle = @popen($cmd, 'rb');
   }
 
   /**
-   * close file resource
+   * close file resource.
    *
    * @acccess protected
    */
-  function _close_file() {
-    @pclose( $this->handle );
+  public function _close_file()
+  {
+      @pclose($this->handle);
   }
 }
-
-?>

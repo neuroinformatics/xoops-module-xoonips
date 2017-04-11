@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,30 +25,33 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
- * Data object of Tool developer information
+ * Data object of Tool developer information.
  */
-class XNPToolOrmDeveloper extends XooNIpsTableObject {
-  function XNPToolOrmDeveloper() {
-    parent::XooNIpsTableObject();
-    $this->initVar( 'tool_developer_id', XOBJ_DTYPE_INT, 0, true );
-    $this->initVar( 'tool_id', XOBJ_DTYPE_INT, 0, true );
-    $this->initVar( 'developer', XOBJ_DTYPE_TXTBOX, '', true );
-    $this->initVar( 'developer_order', XOBJ_DTYPE_INT, 0, true );
-  }
+class XNPToolOrmDeveloper extends XooNIpsTableObject
+{
+    public function XNPToolOrmDeveloper()
+    {
+        parent::XooNIpsTableObject();
+        $this->initVar('tool_developer_id', XOBJ_DTYPE_INT, 0, true);
+        $this->initVar('tool_id', XOBJ_DTYPE_INT, 0, true);
+        $this->initVar('developer', XOBJ_DTYPE_TXTBOX, '', true);
+        $this->initVar('developer_order', XOBJ_DTYPE_INT, 0, true);
+    }
 }
 
 /**
- * Handler class that create, insert, update, get and delete detail information
+ * Handler class that create, insert, update, get and delete detail information.
  */
-class XNPToolOrmDeveloperHandler extends XooNIpsTableObjectHandler {
-  function XNPToolOrmDeveloperHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XNPToolOrmDeveloper', 'xnptool_developer', 'tool_developer_id', false );
-  }
+class XNPToolOrmDeveloperHandler extends XooNIpsTableObjectHandler
+{
+    public function XNPToolOrmDeveloperHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XNPToolOrmDeveloper', 'xnptool_developer', 'tool_developer_id', false);
+    }
 }
-?>

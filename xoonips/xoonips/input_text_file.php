@@ -28,67 +28,69 @@
 include 'include/common.inc.php';
 
 // If not a user, redirect
-$uid = is_object( $xoopsUser ) ? $xoopsUser->getVar( 'uid', 'n' ) : UID_GUEST;
-if ( $uid == UID_GUEST ) {
-  redirect_header( XOOPS_URL.'/', 3, _MD_XOONIPS_ITEM_FORBIDDEN );
-  exit();
+$uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
+if ($uid == UID_GUEST) {
+    redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_ITEM_FORBIDDEN);
+    exit();
 }
 
-$textutil =& xoonips_getutility( 'text' );
-$formdata =& xoonips_getutility( 'formdata' );
+$textutil = &xoonips_getutility('text');
+$formdata = &xoonips_getutility('formdata');
 
-$name = $formdata->getValue( 'get', 'name', 's', true );
+$name = $formdata->getValue('get', 'name', 's', true);
 
 // name -> get names to display
-$ft_handler =& xoonips_getormhandler( 'xoonips', 'file_type' );
-$criteria = new Criteria( 'name', addslashes( $name ) );
-$ft_objs =& $ft_handler->getObjects( $criteria );
-if ( count( $ft_objs ) != 1 ) {
-  die( 'invalid name' );
+$ft_handler = &xoonips_getormhandler('xoonips', 'file_type');
+$criteria = new Criteria('name', addslashes($name));
+$ft_objs = &$ft_handler->getObjects($criteria);
+if (count($ft_objs) != 1) {
+    die('invalid name');
 }
-$displayName = $ft_objs[0]->getVar( 'display_name', 's' );
-unset( $ft_objs );
+$displayName = $ft_objs[0]->getVar('display_name', 's');
+unset($ft_objs);
 
 //var_dump( $_POST );
 //var_dump( $_FILES );
 $text = false;
-$file = $formdata->getFile( 'file', false );
+$file = $formdata->getFile('file', false);
 $errorMessage = false;
-if ( ! is_null( $file ) ) {
-  // file was uploaded
+if (!is_null($file)) {
+    // file was uploaded
   $originalFileName = $file['name'];
-  $mimeType         = $file['type'];
-  $fileName         = $file['tmp_name'];
-  $error = (int)$file['error'];
-  if ( $error != 0 ) {
-    if ( $error == UPLOAD_ERR_INI_SIZE ) {
-      $errorMessage = _MD_XOONIPS_ITEM_UPLOAD_FILE_TOO_LARGE;
+    $mimeType = $file['type'];
+    $fileName = $file['tmp_name'];
+    $error = (int) $file['error'];
+    if ($error != 0) {
+        if ($error == UPLOAD_ERR_INI_SIZE) {
+            $errorMessage = _MD_XOONIPS_ITEM_UPLOAD_FILE_TOO_LARGE;
+        } else {
+            $errorMessage = _MD_XOONIPS_ITEM_UPLOAD_FILE_FAILED;
+        }
+        $getTextFromOpener = true;
     } else {
-      $errorMessage = _MD_XOONIPS_ITEM_UPLOAD_FILE_FAILED;
-    }
-    $getTextFromOpener = true;
-  } else {
-    // check mime type
-    if ( strstr( $mimeType, 'text/plain' ) === false ) {
-      $errorMessage = 'unsupported file type : '.$mimeType;
-      $getTextFromOpener = true;
+        // check mime type
+    if (strstr($mimeType, 'text/plain') === false) {
+        $errorMessage = 'unsupported file type : '.$mimeType;
+        $getTextFromOpener = true;
     } else {
-      $text = file_get_contents( $fileName );
+        $text = file_get_contents($fileName);
       // convert encoding to _CHARSET
-      $unicode =& xoonips_getutility( 'unicode' );
-      $text = $unicode->convert_encoding( $text, _CHARSET, 'h' );
-      $getTextFromOpener = false;
+      $unicode = &xoonips_getutility('unicode');
+        $text = $unicode->convert_encoding($text, _CHARSET, 'h');
+        $getTextFromOpener = false;
     }
-  }
+    }
 } else {
-  $getTextFromOpener = true;
+    $getTextFromOpener = true;
 }
 
 xoops_header(false);
 
 ?>
 </head>
-<body <?php if ( $getTextFromOpener ) echo 'onload="getTextFromOpener()"'; ?> >
+<body <?php if ($getTextFromOpener) {
+    echo 'onload="getTextFromOpener()"';
+} ?> >
 <form  method="post" action='' enctype="multipart/form-data">
 <table class="outer">
 <tr>
@@ -96,21 +98,21 @@ xoops_header(false);
   <?php echo $displayName; ?>
 </td>
 <td class="even">
-<input type="hidden" name="name" value="<?php echo $textutil->html_special_chars( $name );?>" id="xoonipsName"/>
+<input type="hidden" name="name" value="<?php echo $textutil->html_special_chars($name); ?>" id="xoonipsName"/>
 <input type="file" name="file"/>
-<input class="formButton" type="submit" name="" value="<?php echo _MD_XOONIPS_ITEM_UPLOAD_LABEL;?>"/>
+<input class="formButton" type="submit" name="" value="<?php echo _MD_XOONIPS_ITEM_UPLOAD_LABEL; ?>"/>
 <br />
 <?php
-if ( $errorMessage ) {
-  echo '<div style="color:red; font-weight:bold;">';
-  echo $textutil->html_special_chars( $errorMessage );
-  echo '</div>';
+if ($errorMessage) {
+    echo '<div style="color:red; font-weight:bold;">';
+    echo $textutil->html_special_chars($errorMessage);
+    echo '</div>';
 }
 ?>
 <br />
 
 <textarea name="text" id="xoonipsText" cols="37" rows="8" style="width:296px;">
-<?php echo $textutil->html_special_chars( $text ); ?>
+<?php echo $textutil->html_special_chars($text); ?>
 </textarea>
 
 <br />
@@ -186,13 +188,14 @@ function clickCancel(){
 
 
 
-<?php if ( $getTextFromOpener ) { ?>
+<?php if ($getTextFromOpener) {
+    ?>
 
 function resizer(){
 <?php 
-	/* resize window to prefered height
-		see : http://www.quirksmode.org/viewport/compatibility.html
-	*/
+    /* resize window to prefered height
+        see : http://www.quirksmode.org/viewport/compatibility.html
+    */
 ?>
 	
 	window.resizeTo( 500, 400 );
@@ -231,7 +234,8 @@ function getTextFromOpener(){
 	tarea.value = encText;
 	resizer();
 }
-<?php } ?>
+<?php 
+} ?>
 
 
 //-->

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,37 +25,37 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // get requests
-$formdata =& xoonips_getutility( 'formdata' );
-$uid = $formdata->getValue( 'get', 'uid', 'i', true );
+$formdata = &xoonips_getutility('formdata');
+$uid = $formdata->getValue('get', 'uid', 'i', true);
 
 // is uid really xoonips user ?
-$u_handler =& xoonips_getormhandler( 'xoonips', 'xoops_users' );
-$xu_handler =& xoonips_getormhandler( 'xoonips', 'users' );
-$u_obj =& $u_handler->get( $uid );
-$xu_obj =& $xu_handler->get( $uid );
-if ( ! is_object( $u_obj ) || ! is_object( $xu_obj ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_ILLACCESS );
-  exit();
+$u_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
+$xu_handler = &xoonips_getormhandler('xoonips', 'users');
+$u_obj = &$u_handler->get($uid);
+$xu_obj = &$xu_handler->get($uid);
+if (!is_object($u_obj) || !is_object($xu_obj)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_ILLACCESS);
+    exit();
 }
 
 // is uid really not system admin or moderator or group admin user ?
-$xmember_handler =& xoonips_gethandler( 'xoonips', 'member' );
-$xgroup_handler =& xoonips_gethandler( 'xoonips', 'group' );
-if ( $xmember_handler->isAdmin( $uid ) || $xmember_handler->isModerator( $uid ) || $xgroup_handler->isGroupAdmin( $uid ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MAINTENANCE_ACCOUNT_DCONFIRM_MSG_IGNORE_USER );
-  exit();
+$xmember_handler = &xoonips_gethandler('xoonips', 'member');
+$xgroup_handler = &xoonips_gethandler('xoonips', 'group');
+if ($xmember_handler->isAdmin($uid) || $xmember_handler->isModerator($uid) || $xgroup_handler->isGroupAdmin($uid)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MAINTENANCE_ACCOUNT_DCONFIRM_MSG_IGNORE_USER);
+    exit();
 }
 
 // is uid really has not public/group items ?
-$index_item_link_handler =& xoonips_getormhandler( 'xoonips', 'index_item_link' );
-if ( count( $index_item_link_handler->getNonPrivateItemIds( $uid ) ) > 0 ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MAINTENANCE_ACCOUNT_DCONFIRM_MSG_ITEM_HANDOVER );
-  exit();
+$index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
+if (count($index_item_link_handler->getNonPrivateItemIds($uid)) > 0) {
+    redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MAINTENANCE_ACCOUNT_DCONFIRM_MSG_ITEM_HANDOVER);
+    exit();
 }
 
 // title
@@ -87,36 +88,34 @@ $breadcrumbs = array(
 // token ticket
 require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_maintenance_account_delete';
-$token_ticket = $xoopsGTicket->getTicketHtml( __LINE__, 1800, $ticket_area );
+$token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // templates
 require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'maintenance_account_confirm.tmpl.html' );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('maintenance_account_confirm.tmpl.html');
 
 // assign template variables
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'main', 'TOKEN_TICKET', $token_ticket );
-$tmpl->addVar( 'main', 'ACTION', 'delete' );
-$tmpl->addVar( 'main', 'CONFIRM_MSG', _AM_XOONIPS_MSG_DELETE_CONFIRM );
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('main', 'TOKEN_TICKET', $token_ticket);
+$tmpl->addVar('main', 'ACTION', 'delete');
+$tmpl->addVar('main', 'CONFIRM_MSG', _AM_XOONIPS_MSG_DELETE_CONFIRM);
 // >> user inforamtion from
-$tmpl->addVar( 'main', 'UID_TITLE', _AM_XOONIPS_LABEL_UID );
-$tmpl->addVar( 'main', 'UID_VALUE', $uid );
-$tmpl->addVar( 'main', 'UNAME_TITLE', _AM_XOONIPS_LABEL_UNAME );
-$tmpl->addVar( 'main', 'UNAME_VALUE', $u_obj->getVar( 'uname', 's' ) );
-$tmpl->addVar( 'main', 'NAME_TITLE', _AM_XOONIPS_LABEL_NAME );
-$tmpl->addVar( 'main', 'NAME_VALUE', $u_obj->getVar( 'name', 's' ) );
-$tmpl->addVar( 'main', 'EMAIL_TITLE', _AM_XOONIPS_LABEL_EMAIL );
-$tmpl->addVar( 'main', 'EMAIL_VALUE', $u_obj->getVar( 'email', 's' ) );
-$tmpl->addVar( 'main', 'NO', _AM_XOONIPS_LABEL_BACK );
-$tmpl->addVar( 'submit', 'YES', _AM_XOONIPS_LABEL_DELETE );
+$tmpl->addVar('main', 'UID_TITLE', _AM_XOONIPS_LABEL_UID);
+$tmpl->addVar('main', 'UID_VALUE', $uid);
+$tmpl->addVar('main', 'UNAME_TITLE', _AM_XOONIPS_LABEL_UNAME);
+$tmpl->addVar('main', 'UNAME_VALUE', $u_obj->getVar('uname', 's'));
+$tmpl->addVar('main', 'NAME_TITLE', _AM_XOONIPS_LABEL_NAME);
+$tmpl->addVar('main', 'NAME_VALUE', $u_obj->getVar('name', 's'));
+$tmpl->addVar('main', 'EMAIL_TITLE', _AM_XOONIPS_LABEL_EMAIL);
+$tmpl->addVar('main', 'EMAIL_VALUE', $u_obj->getVar('email', 's'));
+$tmpl->addVar('main', 'NO', _AM_XOONIPS_LABEL_BACK);
+$tmpl->addVar('submit', 'YES', _AM_XOONIPS_LABEL_DELETE);
 
 // display
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

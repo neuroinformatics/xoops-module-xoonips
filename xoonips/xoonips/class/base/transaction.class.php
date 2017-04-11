@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
@@ -33,58 +34,56 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
  *
  * Don't call constructor. Use {@link XooNIpsTransaction::getInstance()} to get instance.
  */
-class XooNIpsTransaction {
-  var $db;
+class XooNIpsTransaction
+{
+    public $db;
 
   /**
-   * constractor
+   * constractor.
    *
-   * @access public
    * @param object &$db XoopsDatabase
    */
-  function XooNIpsTransaction( &$db ) {
-    $this->db =& $db;
+  public function XooNIpsTransaction(&$db)
+  {
+      $this->db = &$db;
   }
 
   /**
-   * start transaction
-   *
-   * @access public
+   * start transaction.
    */
-  function start() {
-    $this->db->queryF( 'START TRANSACTION' );
+  public function start()
+  {
+      $this->db->queryF('START TRANSACTION');
   }
 
   /**
-   * commit
-   *
-   * @access public
+   * commit.
    */
-  function commit() {
-    $this->db->queryF( 'COMMIT' );
+  public function commit()
+  {
+      $this->db->queryF('COMMIT');
   }
 
   /**
-   * rollback
-   *
-   * @access public
+   * rollback.
    */
-  function rollback() {
-    $this->db->queryF( 'ROLLBACK' );
+  public function rollback()
+  {
+      $this->db->queryF('ROLLBACK');
   }
 
   /**
-   * get object instance
-   * 
-   * @access public
+   * get object instance.
+   *
    * @return object instance of XooNIpsTransaction
    */
-  function &getInstance() {
-    static $singleton = null;
-    if ( ! isset( $singleton ) ) {
-      $singleton = new XooNIpsTransaction( $GLOBALS['xoopsDB'] );
-    }
-    return $singleton;
+  public function &getInstance()
+  {
+      static $singleton = null;
+      if (!isset($singleton)) {
+          $singleton = new self($GLOBALS['xoopsDB']);
+      }
+
+      return $singleton;
   }
 }
-?>

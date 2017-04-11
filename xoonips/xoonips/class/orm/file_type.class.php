@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,36 +25,37 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
- *
  * @brief Data object of file type
  *
  * @li getVar('file_type_id') :
  * @li getVar('name') :
  * @li getVar('mid') :
  * @li getVar('display_name') :
- *
  */
-class XooNIpsOrmFileType extends XooNIpsTableObject {
-  function XooNIpsOrmFileType() {
-    $this->initVar( 'file_type_id', XOBJ_DTYPE_INT, null, false );
-    $this->initVar( 'name', XOBJ_DTYPE_TXTBOX, null, true, 30 );
-    $this->initVar( 'mid', XOBJ_DTYPE_INT, null, true );
-    $this->initVar( 'display_name', XOBJ_DTYPE_TXTBOX, null, true, 30 );
-  }
+class XooNIpsOrmFileType extends XooNIpsTableObject
+{
+    public function XooNIpsOrmFileType()
+    {
+        $this->initVar('file_type_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('name', XOBJ_DTYPE_TXTBOX, null, true, 30);
+        $this->initVar('mid', XOBJ_DTYPE_INT, null, true);
+        $this->initVar('display_name', XOBJ_DTYPE_TXTBOX, null, true, 30);
+    }
 }
 
 /**
  * @brief Handler object of file type
  */
-class XooNIpsOrmFileTypeHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmFileTypeHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmFileType', 'xoonips_file_type', 'file_type_id' );
-  }
+class XooNIpsOrmFileTypeHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmFileTypeHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmFileType', 'xoonips_file_type', 'file_type_id');
+    }
 }
-?>

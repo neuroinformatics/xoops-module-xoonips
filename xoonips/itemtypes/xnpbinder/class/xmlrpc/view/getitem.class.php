@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.1.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,9 +26,10 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 class XNPBinderXmlRpcItemViewGetItem extends XooNIpsXmlRpcItemView
 {
 }
-?>

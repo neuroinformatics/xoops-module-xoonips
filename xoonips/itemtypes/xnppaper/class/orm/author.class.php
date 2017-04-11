@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,15 +26,16 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 /**
  * @brief Data object of Paper author information
- *
  */
 class XNPPaperOrmAuthor extends XooNIpsTableObject
 {
-    function XNPPaperOrmAuthor()
+    public function XNPPaperOrmAuthor()
     {
         parent::XooNIpsTableObject();
         $this->initVar('paper_author_id', XOBJ_DTYPE_INT, 0, true);
@@ -45,15 +47,12 @@ class XNPPaperOrmAuthor extends XooNIpsTableObject
 
 /**
  * @brief Handler class that create, insert, update, get and delete detail information
- *
- *
  */
 class XNPPaperOrmAuthorHandler extends XooNIpsTableObjectHandler
 {
-    function XNPPaperOrmAuthorHandler(&$db) 
+    public function XNPPaperOrmAuthorHandler(&$db)
     {
         parent::XooNIpsTableObjectHandler($db);
         $this->__initHandler('XNPPaperOrmAuthor', 'xnppaper_author', 'paper_author_id', false);
     }
 }
-?>

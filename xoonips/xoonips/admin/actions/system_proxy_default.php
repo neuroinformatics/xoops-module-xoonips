@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // title
@@ -52,9 +53,9 @@ $breadcrumbs = array(
 );
 
 // token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_system_proxy';
-$token_ticket = $xoopsGTicket->getTicketHtml( __LINE__, 1800, $ticket_area );
+$token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // get configs
 $config_keys = array(
@@ -63,7 +64,7 @@ $config_keys = array(
   'proxy_user' => 's',
   'proxy_pass' => 's',
 );
-$config_values = xoonips_admin_get_configs( $config_keys, 'e' );
+$config_values = xoonips_admin_get_configs($config_keys, 'e');
 // >> proxy_host
 $proxy_host_title = _AM_XOONIPS_SYSTEM_PROXY_PROXY_HOST_TITLE;
 $proxy_host_desc = _AM_XOONIPS_SYSTEM_PROXY_PROXY_HOST_DESC;
@@ -82,41 +83,39 @@ $proxy_pass_desc = _AM_XOONIPS_SYSTEM_PROXY_PROXY_PASS_DESC;
 $proxy_pass = $config_values['proxy_pass'];
 
 // templates
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'system_proxy.tmpl.html' );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('system_proxy.tmpl.html');
 
 // assign template variables
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->addVar( 'main', 'TITLE', $title );
-$tmpl->setAttribute( 'description', 'visibility', 'visible' );
-$tmpl->addVar( 'description', 'DESCRIPTION', $description );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'main', 'token_ticket', $token_ticket );
-$tmpl->addVar( 'main', 'submit', _AM_XOONIPS_LABEL_UPDATE );
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->addVar('main', 'TITLE', $title);
+$tmpl->setAttribute('description', 'visibility', 'visible');
+$tmpl->addVar('description', 'DESCRIPTION', $description);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('main', 'token_ticket', $token_ticket);
+$tmpl->addVar('main', 'submit', _AM_XOONIPS_LABEL_UPDATE);
 
 // >> proxy host
-$tmpl->addVar( 'main', 'proxy_host_title', $proxy_host_title );
-$tmpl->addVar( 'main', 'proxy_host_desc', $proxy_host_desc );
-$tmpl->addVar( 'main', 'proxy_host', $proxy_host );
+$tmpl->addVar('main', 'proxy_host_title', $proxy_host_title);
+$tmpl->addVar('main', 'proxy_host_desc', $proxy_host_desc);
+$tmpl->addVar('main', 'proxy_host', $proxy_host);
 // >> proxy port
-$tmpl->addVar( 'main', 'proxy_port_title', $proxy_port_title );
-$tmpl->addVar( 'main', 'proxy_port_desc', $proxy_port_desc );
-$tmpl->addVar( 'main', 'proxy_port', $proxy_port );
+$tmpl->addVar('main', 'proxy_port_title', $proxy_port_title);
+$tmpl->addVar('main', 'proxy_port_desc', $proxy_port_desc);
+$tmpl->addVar('main', 'proxy_port', $proxy_port);
 // >> proxy user
-$tmpl->addVar( 'main', 'proxy_user_title', $proxy_user_title );
-$tmpl->addVar( 'main', 'proxy_user_desc', $proxy_user_desc );
-$tmpl->addVar( 'main', 'proxy_user', $proxy_user );
+$tmpl->addVar('main', 'proxy_user_title', $proxy_user_title);
+$tmpl->addVar('main', 'proxy_user_desc', $proxy_user_desc);
+$tmpl->addVar('main', 'proxy_user', $proxy_user);
 // >> proxy password
-$tmpl->addVar( 'main', 'proxy_pass_title', $proxy_pass_title );
-$tmpl->addVar( 'main', 'proxy_pass_desc', $proxy_pass_desc );
-$tmpl->addVar( 'main', 'proxy_pass', $proxy_pass );
+$tmpl->addVar('main', 'proxy_pass_title', $proxy_pass_title);
+$tmpl->addVar('main', 'proxy_pass_desc', $proxy_pass_desc);
+$tmpl->addVar('main', 'proxy_pass', $proxy_pass);
 
 // display
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

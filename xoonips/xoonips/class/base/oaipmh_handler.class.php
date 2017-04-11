@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.9 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,17 +26,19 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-class OAIPMHHarvester {
-    var $_dateFormat;
-    var $_earliestDatestamp;
-    var $_baseUrl;
-    var $_metadataPrefix;
-    var $_lastError;
-    var $_lastStatus;
-    var $_repositoryName;
+class OAIPMHHarvester
+{
+    public $_dateFormat;
+    public $_earliestDatestamp;
+    public $_baseUrl;
+    public $_metadataPrefix;
+    public $_lastError;
+    public $_lastStatus;
+    public $_repositoryName;
 
     //public
-    function OAIPMHHarvester( $_baseUrl ) {
+    public function OAIPMHHarvester($_baseUrl)
+    {
         $this->_baseUrl = $_baseUrl;
         $this->_lastError = null;
         $this->_lastStatus = null;
@@ -44,264 +47,300 @@ class OAIPMHHarvester {
         $this->_earliestDatestamp = null;
         $this->_repositoryName = '';
     }
-    function __construct( $_baseUrl ) {
+
+    public function __construct($_baseUrl)
+    {
         /* constructer for PHP5 */
-        $this->OAIPMHHarvester( $_baseUrl );
+        $this->OAIPMHHarvester($_baseUrl);
     }
-    function harvest( ) {
+
+    public function harvest()
+    {
         global $xoopsDB;
-        $handler =& xoonips_getormhandler( 'xoonips', 'oaipmh_repositories');
+        $handler = &xoonips_getormhandler('xoonips', 'oaipmh_repositories');
 
-        $ts =& MyTextSanitizer::getInstance( );
+        $ts = &MyTextSanitizer::getInstance();
 
-        $criteria = new Criteria( 'URL' , $this->_baseUrl );
-        $repository =& $handler->getObjects( $criteria );
-        if( !$repository ) {
+        $criteria = new Criteria('URL', $this->_baseUrl);
+        $repository = &$handler->getObjects($criteria);
+        if (!$repository) {
             return false;
         }
-        $repository[0] -> set( 'last_access_date', time() );
-        $repository[0] -> set( 'last_access_result', null );
-        if( $handler -> insert( $repository[0], true ) ) {
-            if( $this->Identify( ) ) {
-                $unicode =& xoonips_getutility( 'unicode' );
+        $repository[0]->set('last_access_date', time());
+        $repository[0]->set('last_access_result', null);
+        if ($handler->insert($repository[0], true)) {
+            if ($this->Identify()) {
+                $unicode = &xoonips_getutility('unicode');
                 $repository[0]
-                    -> set( 'repository_name',
+                    ->set('repository_name',
                             $unicode->decode_utf8(
-                                $this -> _repositoryName,
-                                xoonips_get_server_charset(),'h') );
-                $handler -> insert( $repository[0], true );
-                if( $this->ListMetadataFormats( ) ) {
-                    $args = array( 'metadataPrefix' => $this->_metadataPrefix );
-                    if( '' == $repository[0]->get( 'last_success_date' ) )
-                        $args['from'] = gmdate( $this->_dateFormat,
-                                                $this->_earliestDatestamp );
-                    else
+                                $this->_repositoryName,
+                                xoonips_get_server_charset(), 'h'));
+                $handler->insert($repository[0], true);
+                if ($this->ListMetadataFormats()) {
+                    $args = array('metadataPrefix' => $this->_metadataPrefix);
+                    if ('' == $repository[0]->get('last_success_date')) {
+                        $args['from'] = gmdate($this->_dateFormat,
+                                                $this->_earliestDatestamp);
+                    } else {
                         $args['from']
-                            = gmdate( $this->_dateFormat,
+                            = gmdate($this->_dateFormat,
                                       $repository[0]->get('last_success_date'));
-                    
-                    if( $this->ListRecords( $args ) ) {
+                    }
+
+                    if ($this->ListRecords($args)) {
                         //update repositories table
-                        $repository[0] -> set( 'last_access_result',
-                                               $this->_lastStatus );
-                        $repository[0] -> set( 'last_success_date', time( ) );
-                        $repository[0] -> set('metadata_count',
+                        $repository[0]->set('last_access_result',
+                                               $this->_lastStatus);
+                        $repository[0]->set('last_success_date', time());
+                        $repository[0]->set('metadata_count',
                                               $this->getMetadataCount(
-                                                  $repository[0] -> get(
-                                                      'repository_id' ) ) );
-                        return $handler -> insert( $repository[0], true );
+                                                  $repository[0]->get(
+                                                      'repository_id')));
+
+                        return $handler->insert($repository[0], true);
                     }
                 }
             }
-        } else
-            $this->_lastError = $xoopsDB->error( );
-        
+        } else {
+            $this->_lastError = $xoopsDB->error();
+        }
+
         //update repositories table(last_access_result)
-        $repository[0] -> set( 'last_access_result', $this->_lastError );
-        $handler -> insert( $repository[0], true );
+        $repository[0]->set('last_access_result', $this->_lastError);
+        $handler->insert($repository[0], true);
+
         return false;
     }
-    function last_error( ) {
+
+    public function last_error()
+    {
         return $this->_lastError;
     }
 
     //private
-    function Identify( ) {
-        $snoopy =& xoonips_getutility( 'snoopy' );
-        if ( ! is_object( $snoopy ) ) {
+    public function Identify()
+    {
+        $snoopy = &xoonips_getutility('snoopy');
+        if (!is_object($snoopy)) {
             $this->_lastError = 'snoopy object is null';
+
             return false;
         }
-        $url = $this->_baseUrl."?verb=Identify";
-        if ( ! $snoopy->fetch( $url ) ) {
+        $url = $this->_baseUrl.'?verb=Identify';
+        if (!$snoopy->fetch($url)) {
             $this->_lastError = "can't retrieve ".$url;
+
             return false;
         }
         $this->_lastError = $http_status = $snoopy->response_code;
 
-        $this->parser = xml_parser_create( 'UTF-8' );
-        if( !$this->parser ) {
+        $this->parser = xml_parser_create('UTF-8');
+        if (!$this->parser) {
             $this->_lastError = "can't create XML parser";
+
             return false;
         }
-        $handler = new IdentifyHandler( $this->parser );
+        $handler = new IdentifyHandler($this->parser);
 
-        $result = $this->parse( $snoopy->results );
-        if( !$result )
+        $result = $this->parse($snoopy->results);
+        if (!$result) {
             // some error has occured in parse( $snoopy->results );
             return false;
-        xml_parser_free( $this->parser );
+        }
+        xml_parser_free($this->parser);
 
-        $this->_dateFormat = $handler->getDateFormat( );
-        if( !$this->_dateFormat ) {
-            $this->_lastError = "value of <granularity> is wrong";
+        $this->_dateFormat = $handler->getDateFormat();
+        if (!$this->_dateFormat) {
+            $this->_lastError = 'value of <granularity> is wrong';
+
             return false;
         }
 
-        $this->_earliestDatestamp = $handler->getEarliestDatestamp( );
-        $this->_repositoryName = $handler->getRepositoryName( );
+        $this->_earliestDatestamp = $handler->getEarliestDatestamp();
+        $this->_repositoryName = $handler->getRepositoryName();
 
         return true;
     }
 
-    function ListMetadataFormats( ) {
-        $snoopy =& xoonips_getutility( 'snoopy' );
-        if ( ! is_object( $snoopy ) ) {
+    public function ListMetadataFormats()
+    {
+        $snoopy = &xoonips_getutility('snoopy');
+        if (!is_object($snoopy)) {
             $this->_lastError = 'snoopy object is null';
+
             return false;
         }
-        $url = $this->_baseUrl."?verb=ListMetadataFormats";
-        if ( ! $snoopy->fetch( $url ) ) {
+        $url = $this->_baseUrl.'?verb=ListMetadataFormats';
+        if (!$snoopy->fetch($url)) {
             $this->_lastError = "can't retrieve ".$url;
+
             return false;
         }
         $this->_lastError = $http_status = $snoopy->response_code;
 
-        $this->parser = xml_parser_create( 'UTF-8' );
-        if( !$this->parser ) {
+        $this->parser = xml_parser_create('UTF-8');
+        if (!$this->parser) {
             $this->_lastError = "can't create XML parser";
+
             return false;
         }
-        $handler = new ListMetadataFormatsHandler( $this->parser );
+        $handler = new ListMetadataFormatsHandler($this->parser);
 
-        $result = $this->parse( $snoopy->results );
-        if( !$result )
+        $result = $this->parse($snoopy->results);
+        if (!$result) {
             // some error has occured in parse( $snoopy->results );
-            return false;   
-        xml_parser_free( $this->parser );
+            return false;
+        }
+        xml_parser_free($this->parser);
 
-        $this->_metadataPrefix = $handler->getMetadataPrefix( );
-        if( !$this->_metadataPrefix ) {
+        $this->_metadataPrefix = $handler->getMetadataPrefix();
+        if (!$this->_metadataPrefix) {
             $this->_metadataPrefix = null;
             $this->_lastError = "can't retrieve <metadataPrefix>";
+
             return false;
         }
+
         return true;
     }
 
-    function ListRecords( $args ) {
+    public function ListRecords($args)
+    {
         global $xoopsDB;
-        if( !isset( $args['metadataPrefix'] ) ) {
+        if (!isset($args['metadataPrefix'])) {
             $this->_lastError = "'metadataPrefix' is not specified.";
+
             return false;
         }
         $resumptionToken = null;
         do {
-            $url = $this->_baseUrl."?verb=ListRecords";
-            if( $resumptionToken == null )
-                foreach( array( 'metadataPrefix',
+            $url = $this->_baseUrl.'?verb=ListRecords';
+            if ($resumptionToken == null) {
+                foreach (array('metadataPrefix',
                                 'from',
                                 'until',
-                                'set' ) as $k ) {
-                if( isset( $args[$k] ) )
-                    $url .= "&".urlencode( $k )."=".urlencode( $args[$k] );
+                                'set', ) as $k) {
+                    if (isset($args[$k])) {
+                        $url .= '&'.urlencode($k).'='.urlencode($args[$k]);
+                    }
+                }
             } else {
-                $url .= "&resumptionToken="
-                    .htmlspecialchars( $resumptionToken, ENT_QUOTES );
+                $url .= '&resumptionToken='
+                    .htmlspecialchars($resumptionToken, ENT_QUOTES);
             }
-            $snoopy =& xoonips_getutility( 'snoopy' );
-            if ( ! is_object( $snoopy ) ) {
+            $snoopy = &xoonips_getutility('snoopy');
+            if (!is_object($snoopy)) {
                 $this->_lastError = "can't retrieve ${url}";
-                $xoopsDB -> setLogger( XoopsLogger::instance() );
+                $xoopsDB->setLogger(XoopsLogger::instance());
+
                 return false;
             }
-            if ( ! $snoopy->fetch( $url ) ) {
+            if (!$snoopy->fetch($url)) {
                 $this->_lastError = "can't retrieve ${url}";
-                $xoopsDB -> setLogger( XoopsLogger::instance() );
+                $xoopsDB->setLogger(XoopsLogger::instance());
+
                 return false;
             }
             $this->_lastError = $this->_lastStatus = $snoopy->response_code;
 
-            $this->parser = xml_parser_create( 'UTF-8' );
-            if( !$this->parser ) {
+            $this->parser = xml_parser_create('UTF-8');
+            if (!$this->parser) {
                 $this->_lastError = "can't create XML parser";
-                $xoopsDB -> setLogger( XoopsLogger::instance() );
+                $xoopsDB->setLogger(XoopsLogger::instance());
+
                 return false;
             }
-            
+
             $listRecordsHandler
-                =& $this -> createListRecordsHandler( $this->parser,
+                = &$this->createListRecordsHandler($this->parser,
                                                       $this->_baseUrl,
-                                                      $args['metadataPrefix'] );
-            $result = $this->parse( $snoopy->results );
-            if( !$result ) {
+                                                      $args['metadataPrefix']);
+            $result = $this->parse($snoopy->results);
+            if (!$result) {
                 //some erorr has occured
-                if( $listRecordsHandler->getIdentifier( ) != null )
-                    $this->_lastError .= "[identifier]"
-                        .$listRecordsHandler->getIdentifier( );
-                $xoopsDB -> setLogger( XoopsLogger::instance() );
+                if ($listRecordsHandler->getIdentifier() != null) {
+                    $this->_lastError .= '[identifier]'
+                        .$listRecordsHandler->getIdentifier();
+                }
+                $xoopsDB->setLogger(XoopsLogger::instance());
                 //some error has occured in parse( $snoopy->results );
                 return false;
             }
-            xml_parser_free( $this->parser );
-            $resumptionToken = $listRecordsHandler->getResumptionToken( );
-        } while( $resumptionToken != null );
-        $xoopsDB -> setLogger( XoopsLogger::instance() );
+            xml_parser_free($this->parser);
+            $resumptionToken = $listRecordsHandler->getResumptionToken();
+        } while ($resumptionToken != null);
+        $xoopsDB->setLogger(XoopsLogger::instance());
+
         return true;
     }
 
-    function parse( &$data ) {
-        if( !xml_parse( $this->parser, $data ) ) {
-            $this->_lastError = "[XMLParser]"
-                .xml_error_string( xml_get_error_code( $this->parser ) )
-                ." at line ".xml_get_current_line_number( $this->parser )
-                .", column ".xml_get_current_column_number( $this->parser );
-            xml_parser_free( $this->parser );
+    public function parse(&$data)
+    {
+        if (!xml_parse($this->parser, $data)) {
+            $this->_lastError = '[XMLParser]'
+                .xml_error_string(xml_get_error_code($this->parser))
+                .' at line '.xml_get_current_line_number($this->parser)
+                .', column '.xml_get_current_column_number($this->parser);
+            xml_parser_free($this->parser);
+
             return false;
         }
+
         return true;
     }
 
     /**
-     * return number of metadata of repository
-     * @access private 
-     * @param int $repository_id id of repository to get metadata count.
-     * @return integer number of metadata or zero if failure.
+     * return number of metadata of repository.
+     *
+     * @param int $repository_id id of repository to get metadata count
+     *
+     * @return int number of metadata or zero if failure
      */
-    function getMetadataCount( $repository_id ){
-        $metadata_handler =& xoonips_getormhandler( 'xoonips',
+    public function getMetadataCount($repository_id)
+    {
+        $metadata_handler = &xoonips_getormhandler('xoonips',
                                                     'oaipmh_metadata');
-        
-        $metadata_criteria = new Criteria( 'repository_id' ,
-                                           intval($repository_id) );
-        $rows =& $metadata_handler->getObjects( $metadata_criteria,
-                                               false, 'count(*)' );
-        if( !$rows ){
+
+        $metadata_criteria = new Criteria('repository_id',
+                                           intval($repository_id));
+        $rows = &$metadata_handler->getObjects($metadata_criteria,
+                                               false, 'count(*)');
+        if (!$rows) {
             return 0;
-        }else{
-            return $rows[0] -> getExtraVar( 'count(*)' );
+        } else {
+            return $rows[0]->getExtraVar('count(*)');
         }
     }
 
     /**
-     * 
-     * @access private
-     * @param 
-     * @param 
-     * @param 
-     * @return 
-     * 
+     * @param
+     * @param
+     * @param
+     *
+     * @return
      */
-    function& createListRecordsHandler( $parser, $baseUrl, $metadataPrefix ){
+    public function &createListRecordsHandler($parser, $baseUrl, $metadataPrefix)
+    {
         $result = false;
-        switch( $metadataPrefix ){
+        switch ($metadataPrefix) {
         case 'oai_dc':
             include_once __DIR__
                 .'/oaipmh_oaidc_list_records_handler.class.php';
-            $result = new OaidcListRecordsHandler( $parser, $baseUrl );
+            $result = new OaidcListRecordsHandler($parser, $baseUrl);
             break;
         case 'junii':
             include_once __DIR__
                 .'/oaipmh_junii_list_records_handler.class.php';
-            $result = new JuniiListRecordsHandler( $parser, $baseUrl );
+            $result = new JuniiListRecordsHandler($parser, $baseUrl);
             break;
         case 'junii2':
             include_once __DIR__
                 .'/oaipmh_junii2_list_records_handler.class.php';
-            $result = new Junii2ListRecordsHandler( $parser, $baseUrl );
+            $result = new Junii2ListRecordsHandler($parser, $baseUrl);
             break;
         }
+
         return $result;
     }
 }
-

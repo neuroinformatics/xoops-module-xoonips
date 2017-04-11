@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -31,23 +32,22 @@ error_reporting(0);
 include 'include/common.inc.php';
 restore_error_handler();
 
-include_once XOOPS_ROOT_PATH . '/class/xml/rpc/xmlrpctag.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/xmlrpcparser.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/base/logicfactory.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/xmlrpcfault.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/xmlrpcrequest.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/view/xmlrpcviewfactory.class.php';
+include_once XOOPS_ROOT_PATH.'/class/xml/rpc/xmlrpctag.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcparser.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logicfactory.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcfault.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcrequest.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcviewfactory.class.php';
 
 error_reporting(E_ALL & ~E_NOTICE);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 ini_set('error_log', 'syslog');
 
-
-$allow_methods=array( 'XooNIps.getChildIndexes',
+$allow_methods = array('XooNIps.getChildIndexes',
                       'XooNIps.getFile',
                       'XooNIps.getFileMetadata',
                       'XooNIps.getIndex',
@@ -63,13 +63,13 @@ $allow_methods=array( 'XooNIps.getChildIndexes',
                       'XooNIps.putItem',
                       'XooNIps.removeItem',
                       'XooNIps.searchItem',
-                      'XooNIps.updateItem2' );
+                      'XooNIps.updateItem2', );
 
 $rpc_response = new XoopsXmlRpcResponse();
-$parser = new XooNIpsXmlRpcParser(file_get_contents("php://input"));
+$parser = new XooNIpsXmlRpcParser(file_get_contents('php://input'));
 if (!$parser->parse()) {
     $rpc_response->add(new XooNIpsXmlRpcFault(102));
-}else if( !in_array($parser->getMethodName(), $allow_methods) ){
+} elseif (!in_array($parser->getMethodName(), $allow_methods)) {
     $rpc_response->add(new XooNIpsXmlRpcFault(107));
 } else {
     global $xoopsModule;
@@ -108,6 +108,5 @@ if (!$parser->parse()) {
 $payload = $rpc_response->render();
 header('Server: XooNIps XML-RPC Server');
 header('Content-type: text/xml');
-header('Content-Length: ' . strlen($payload));
+header('Content-Length: '.strlen($payload));
 echo $payload;
-?>

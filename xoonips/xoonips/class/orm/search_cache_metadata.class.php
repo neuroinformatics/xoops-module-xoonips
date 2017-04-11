@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.7 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /*
@@ -38,30 +39,31 @@ ALTER TABLE `x_xoonips_search_cache_metadata`
  ADD UNIQUE (`search_cache_id`,`identifier`);
 */
 /**
- * class of XooNIps Search Cache Metadata
+ * class of XooNIps Search Cache Metadata.
+ *
  * @li getVar( 'search_cache_metadata_id' ) : primary key
  * @li getVar( 'search_cache_id' ) :search cache ID
  * @li getVar( 'identifier' ) : metadata identifier
- *
  */
-class XooNIpsOrmSearchCacheMetadata extends XooNIpsTableObject {
-  function XooNIpsOrmSearchCacheMetadata() {
-    parent::XooNIpsTableObject();
-    $this->initVar( 'search_cache_metadata_id', XOBJ_DTYPE_INT, null, true, null );
-    $this->initVar( 'search_cache_id', XOBJ_DTYPE_INT, null, true, null );
-    $this->initVar( 'identifier', XOBJ_DTYPE_TXTBOX, null, true, null );
-  }
+class XooNIpsOrmSearchCacheMetadata extends XooNIpsTableObject
+{
+    public function XooNIpsOrmSearchCacheMetadata()
+    {
+        parent::XooNIpsTableObject();
+        $this->initVar('search_cache_metadata_id', XOBJ_DTYPE_INT, null, true, null);
+        $this->initVar('search_cache_id', XOBJ_DTYPE_INT, null, true, null);
+        $this->initVar('identifier', XOBJ_DTYPE_TXTBOX, null, true, null);
+    }
 }
 
 /**
- *
- * XooNIps search cache item Handler class
- *
+ * XooNIps search cache item Handler class.
  */
-class XooNIpsOrmSearchCacheMetadataHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmSearchCacheMetadataHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmSearchCacheMetadata', 'xoonips_search_cache_metadata', 'search_cache_metadata_id', true );
-  }
+class XooNIpsOrmSearchCacheMetadataHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmSearchCacheMetadataHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmSearchCacheMetadata', 'xoonips_search_cache_metadata', 'search_cache_metadata_id', true);
+    }
 }
-?>

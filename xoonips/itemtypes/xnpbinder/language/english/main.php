@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.1.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -28,14 +29,12 @@ define('_MD_XNPBINDER_ITEMS_TO_REGISTER_TITLE', 'Items to be registered');
 define('_MD_XNPBINDER_DELETE_CHECKED_ITEM_BUTTON_LABEL', 'Delete checked items');
 define('_MD_XNPBINDER_REGISTERED_ITEMS_TITLE', 'Registerd items');
 define('_MD_XNPBINDER_ITEM_REQUIRED', 'At least one item is required');
-define('_MD_XNPBINDER_ITEM_LABEL', "Items");
-define("_MD_XNPBINDER_REMOVE_NONPUBLIC_ITEM", "This binder cannot be public binder because it contains %d non-public items. Do you want to remove them from binder?");
-define("_MD_XNPBINDER_REMOVE_PRIVATE_ITEM", "This binder cannot be group binder because it contains %d private items. Do you want to remove them from binder?");
+define('_MD_XNPBINDER_ITEM_LABEL', 'Items');
+define('_MD_XNPBINDER_REMOVE_NONPUBLIC_ITEM', 'This binder cannot be public binder because it contains %d non-public items. Do you want to remove them from binder?');
+define('_MD_XNPBINDER_REMOVE_PRIVATE_ITEM', 'This binder cannot be group binder because it contains %d private items. Do you want to remove them from binder?');
 define('_MD_XNPBINDER_EXPLANATION', 'Binder');
 define('_MD_XNPBINDER_GROUP_BINDER_HAS_PRIVATE_ITEM', 'This group binder contains some private items.');
 define('_MD_XNPBINDER_PUBLIC_BINDER_HAS_NOT_PUBLIC_ITEM', 'This public binder contains some group or private items.');
 define('_MD_XNPBINDER_USER_CONTENT_EMPTY_NOTIFYSBJ', 'Public or group-shared binder became empty');
-define( '_MD_XNPBINDER_XMLRPC_DISPLAY_NAME_BINDER_ID', 'Item ID' );
-define( '_MD_XNPBINDER_XMLRPC_DISPLAY_NAME_ITEM_ID'  , 'Binder Items' );
-
-?>
+define('_MD_XNPBINDER_XMLRPC_DISPLAY_NAME_BINDER_ID', 'Item ID');
+define('_MD_XNPBINDER_XMLRPC_DISPLAY_NAME_ITEM_ID', 'Binder Items');

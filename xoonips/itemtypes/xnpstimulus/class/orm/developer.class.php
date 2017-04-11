@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,15 +26,16 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 /**
  * @brief Data object of Stimulus developer information
- *
  */
 class XNPStimulusOrmDeveloper extends XooNIpsTableObject
 {
-    function XNPStimulusOrmDeveloper()
+    public function XNPStimulusOrmDeveloper()
     {
         parent::XooNIpsTableObject();
         $this->initVar('stimulus_developer_id', XOBJ_DTYPE_INT, 0, true);
@@ -45,15 +47,12 @@ class XNPStimulusOrmDeveloper extends XooNIpsTableObject
 
 /**
  * @brief Handler class that create, insert, update, get and delete detail information
- *
- *
  */
 class XNPStimulusOrmDeveloperHandler extends XooNIpsTableObjectHandler
 {
-    function XNPStimulusOrmDeveloperHandler(&$db) 
+    public function XNPStimulusOrmDeveloperHandler(&$db)
     {
         parent::XooNIpsTableObjectHandler($db);
         $this->__initHandler('XNPStimulusOrmDeveloper', 'xnpstimulus_developer', 'stimulus_developer_id', false);
     }
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.13 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,25 +25,24 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
- * text utlities
+ * text utlities.
  *
- * @package xoonips_utility
  * @copyright copyright &copy; 2005-2009 RIKEN Japan
  */
-class XooNIpsUtilityText extends XooNIpsUtility {
-
-  // php-indent: disable
+class XooNIpsUtilityText extends XooNIpsUtility
+{
+    // php-indent: disable
   /**
-   * html character entity references
-   * @access private
+   * html character entity references.
+   *
    * @var array strings of html character entity reference
    */
-  var $_html_char_entity_ref = array(
+  public $_html_char_entity_ref = array(
     '&quot;',     '&amp;',      '&apos;',     '&lt;',       '&gt;',
     '&nbsp;',     '&iexcl;',    '&cent;',     '&pound;',    '&curren;',
     '&yen;',      '&brvbar;',   '&sect;',     '&uml;',      '&copy;',
@@ -97,11 +97,11 @@ class XooNIpsUtilityText extends XooNIpsUtility {
    );
 
   /**
-   * html numeric character references
-   * @access private
+   * html numeric character references.
+   *
    * @var array strings of html numeric character reference
    */
-  var $_html_numeric_char_ref = array(
+  public $_html_numeric_char_ref = array(
     '&#34;',   '&#38;',   '&#39;',   '&#60;',   '&#62;',
     '&#160;',  '&#161;',  '&#162;',  '&#163;',  '&#164;',
     '&#165;',  '&#166;',  '&#167;',  '&#168;',  '&#169;',
@@ -155,126 +155,133 @@ class XooNIpsUtilityText extends XooNIpsUtility {
     '&#9827;', '&#9829;', '&#9830;',
   );
   // php-indent: enable
+
   /**
-   * constructor
-   *
-   * @access public
+   * constructor.
    */
-  function XooNIpsUtilityText() {
-    $this->setSingleton();
+  public function XooNIpsUtilityText()
+  {
+      $this->setSingleton();
   }
 
   /**
-   * convert plain text to url/email link tag embeded text
+   * convert plain text to url/email link tag embeded text.
    *
-   * @access public
    * @param string $text src
+   *
    * @return string dist
    */
-  function convert_link( $text ) {
-    static $pattern = null;
-    static $replace = null;
-    if ( is_null( $pattern ) ) {
-      // patterns
+  public function convert_link($text)
+  {
+      static $pattern = null;
+      static $replace = null;
+      if (is_null($pattern)) {
+          // patterns
       $_numalpha = '[a-zA-Z0-9]';
-      $_hex = '[a-fA-F0-9]';
-      $_escape = '%'.$_hex.'{2}';
-      $_safe = '[\\$\\-_\\.+]';
-      $_extra = '[!\\*\'\\(\\),]';
+          $_hex = '[a-fA-F0-9]';
+          $_escape = '%'.$_hex.'{2}';
+          $_safe = '[\\$\\-_\\.+]';
+          $_extra = '[!\\*\'\\(\\),]';
       // $_unreserved = '('.$_numalpha.'|'.$_safe.'|'.$_extra.')';
       $_unreserved = '(?:'.$_numalpha.'|'.$_safe.')';
-      $_uchar = '(?:'.$_unreserved.'|'.$_escape.')';
-      $_hsegment = '(?:'.$_uchar.'|[;:@&=])*';
-      $_search = '(?:'.$_uchar.'|[;:@&=])*';
-      $_hpath = '~?'.$_hsegment.'(\\/'.$_hsegment.')*';
-      $_domain = '(?:'.$_numalpha.'+(?:[\\.\\-]'.$_numalpha.'+)*)+\\.[a-zA-Z]{2,}';
-      $_hostport = $_domain.'(?::[0-9]+)?';
+          $_uchar = '(?:'.$_unreserved.'|'.$_escape.')';
+          $_hsegment = '(?:'.$_uchar.'|[;:@&=])*';
+          $_search = '(?:'.$_uchar.'|[;:@&=])*';
+          $_hpath = '~?'.$_hsegment.'(\\/'.$_hsegment.')*';
+          $_domain = '(?:'.$_numalpha.'+(?:[\\.\\-]'.$_numalpha.'+)*)+\\.[a-zA-Z]{2,}';
+          $_hostport = $_domain.'(?::[0-9]+)?';
       // email
       $email_pattern = '/[a-zA-Z0-9]+(?:[_\\.\\-][a-zA-Z0-9]+)*@'.$_domain.'/e';
-      $email_replace = '$this->_make_javascript( \'<a href="mailto:\\0">\\0</a>\' )';
+          $email_replace = '$this->_make_javascript( \'<a href="mailto:\\0">\\0</a>\' )';
       // url
       $url_pattern = '/(?:http|https|ftp):\\/\\/'.$_hostport.'(?:\\/'.$_hpath.'(?:\\?'.$_search.')?)?/';
-      $url_replace = '<a href="\\0" target="_blank">\\0</a>';
-      $pattern = array(
+          $url_replace = '<a href="\\0" target="_blank">\\0</a>';
+          $pattern = array(
         $email_pattern,
         $url_pattern,
       );
-      $replace = array(
+          $replace = array(
         $email_replace,
         $url_replace,
       );
-    }
-    $text = preg_replace( $pattern, $replace, $text );
-    return $text;
+      }
+      $text = preg_replace($pattern, $replace, $text);
+
+      return $text;
   }
 
   /**
-   * truncate text
+   * truncate text.
    *
-   * @access public
-   * @param string $text src
-   * @param int $length maximum char width
-   * @param string $etc appending text if $text truncated
+   * @param string $text   src
+   * @param int    $length maximum char width
+   * @param string $etc    appending text if $text truncated
+   *
    * @return string dist
    */
-  function truncate( $text, $length, $etc = '...' ) {
-    // multi language extension support - strip ml tags
-    if ( defined( 'XOOPS_CUBE_LEGACY' ) ) {
-      // cubeutil module
-      if ( isset( $GLOBALS['cubeUtilMlang'] ) ) {
-        $text = $GLOBALS['cubeUtilMlang']->obFilter( $text );
+  public function truncate($text, $length, $etc = '...')
+  {
+      // multi language extension support - strip ml tags
+    if (defined('XOOPS_CUBE_LEGACY')) {
+        // cubeutil module
+      if (isset($GLOBALS['cubeUtilMlang'])) {
+          $text = $GLOBALS['cubeUtilMlang']->obFilter($text);
       }
     } else {
-      // sysutil module
-      if ( function_exists( 'sysutil_get_xoops_option' ) ) {
-        if ( sysutil_get_xoops_option( 'sysutil', 'sysutil_use_ml' ) ) {
-          if ( function_exists( 'sysutil_ml_filter' ) ) {
-            $text = sysutil_ml_filter( $text );
+        // sysutil module
+      if (function_exists('sysutil_get_xoops_option')) {
+          if (sysutil_get_xoops_option('sysutil', 'sysutil_use_ml')) {
+              if (function_exists('sysutil_ml_filter')) {
+                  $text = sysutil_ml_filter($text);
+              }
           }
-        }
       }
     }
 
-    $olen = strlen( $text );
+      $olen = strlen($text);
     // trim width
-    if ( XOOPS_USE_MULTIBYTES ) {
-      $text = mb_strimwidth( $text, 0, $length, '', mb_detect_encoding( $text ) );
+    if (XOOPS_USE_MULTIBYTES) {
+        $text = mb_strimwidth($text, 0, $length, '', mb_detect_encoding($text));
     } else {
-      $text = substr( $text, 0, $length );
+        $text = substr($text, 0, $length);
     }
     // remove broken html entity from trimed strig
-    $text = preg_replace( '/&#[^;]*$/s', '', $text );
+    $text = preg_replace('/&#[^;]*$/s', '', $text);
     // append $etc char if text is trimed
-    if ( $olen != strlen( $text ) ) {
-      $text .= $etc;
+    if ($olen != strlen($text)) {
+        $text .= $etc;
     }
-    return $text;
+
+      return $text;
   }
 
   /**
-   * create html with javascript encoded mailto link
+   * create html with javascript encoded mailto link.
    *
-   * @access public
-   * @param string $text text body
+   * @param string $text  text body
    * @param string $email mail address
+   *
    * @return string created html
    */
-  function mail_to( $text, $email ) {
-    $mailto = $this->_make_javascript( '<a href="mailto:'.$email.'">' );
-    $mailto .= $text;
-    $mailto .= $this->_make_javascript( '</a>' );
-    return $mailto;
+  public function mail_to($text, $email)
+  {
+      $mailto = $this->_make_javascript('<a href="mailto:'.$email.'">');
+      $mailto .= $text;
+      $mailto .= $this->_make_javascript('</a>');
+
+      return $mailto;
   }
 
   /**
-   * convert text to numeric entities
+   * convert text to numeric entities.
    *
-   * @access public
    * @param string $text input string
+   *
    * @return string converted string
    */
-  function html_numeric_entities( $text ) {
-    return str_replace( $this->_html_char_entity_ref, $this->_html_numeric_char_ref, $text );
+  public function html_numeric_entities($text)
+  {
+      return str_replace($this->_html_char_entity_ref, $this->_html_numeric_char_ref, $text);
   }
 
   /**
@@ -287,128 +294,136 @@ class XooNIpsUtilityText extends XooNIpsUtility {
    * - '>' => '&gt;'
    * - numeric entity reference => (pass)
    * - character entity reference => (pass)
-   * - '&nbsp;' => '&amp;nbsp;'
+   * - '&nbsp;' => '&amp;nbsp;'.
    *
-   * @access public
    * @param string $text text string
+   *
    * @return string escaped text string
    */
-  function html_special_chars( $text ) {
-    static $s = array(
+  public function html_special_chars($text)
+  {
+      static $s = array(
       '/&amp;#([xX][0-9a-fA-F]+|[0-9]+);/',
       '/&amp;([a-zA-Z][0-9a-zA-Z]+);/e',
       '/&nbsp;/',
     );
-    static $r = array(
+      static $r = array(
       '&#\\1;',
       'in_array( "&$1;", $this->_html_char_entity_ref ) ? "&$1;" : "&amp;$1;"',
       '&amp;nbsp;',
     );
-    return preg_replace( $s, $r, htmlspecialchars( $text, ENT_QUOTES ) );
+
+      return preg_replace($s, $r, htmlspecialchars($text, ENT_QUOTES));
   }
 
   /**
    * convert text to UTF-8 string with predefined five xml entitities
-   * - predefined five xml entities are: &amp; &lt; &gt; &apos; &quot;
+   * - predefined five xml entities are: &amp; &lt; &gt; &apos; &quot;.
    *
-   * @access public
    * @param string $text input string
-   * @param string $enc text encoding
+   * @param string $enc  text encoding
+   *
    * @return string UTF-8 string with predefined five xml entities
    */
-  function xml_special_chars( $text, $enc = '' ) {
-    $unicode =& xoonips_getutility( 'unicode' );
-    $text = $unicode->encode_utf8( $text, $enc );
+  public function xml_special_chars($text, $enc = '')
+  {
+      $unicode = &xoonips_getutility('unicode');
+      $text = $unicode->encode_utf8($text, $enc);
     // html character entity reference to html numeric entity reference
-    $text = str_replace( $this->_html_char_entity_ref, $this->_html_numeric_char_ref, $text );
+    $text = str_replace($this->_html_char_entity_ref, $this->_html_numeric_char_ref, $text);
     // convert '&' to '&amp;' for mb_decode_numericentity()
-    $text = preg_replace( '/&/', '&amp;', $text );
+    $text = preg_replace('/&/', '&amp;', $text);
     // convert numeric entity of hex type to dec type
-    $text = preg_replace( array( '/&amp;#[xX]([0-9a-fA-F]+);/e', '/&amp;#([0-9]+);/' ), array( '"&#".hexdec("$1").";"', '&#$1;' ), $text );
+    $text = preg_replace(array('/&amp;#[xX]([0-9a-fA-F]+);/e', '/&amp;#([0-9]+);/'), array('"&#".hexdec("$1").";"', '&#$1;'), $text);
     // decode numeric entity
-    $text = mb_decode_numericentity( $text, array( 0x0, 0x10000, 0, 0xfffff ), 'UTF-8' );
+    $text = mb_decode_numericentity($text, array(0x0, 0x10000, 0, 0xfffff), 'UTF-8');
     // convert &amp; to '&' for htmlspecialchars()
-    $text = preg_replace( '/&amp;/', '&', $text );
+    $text = preg_replace('/&amp;/', '&', $text);
     // eacape html special character
-    $text = htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' );
+    $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     // trim control character and convert &#039; to &apos;
-    return preg_replace( array( '/[\\x00-\\x09\\x0b\\x0c\\x0e-\\x1f\\x7f]/', '/&#039;/' ), array( '', '&apos;' ), $text );
+    return preg_replace(array('/[\\x00-\\x09\\x0b\\x0c\\x0e-\\x1f\\x7f]/', '/&#039;/'), array('', '&apos;'), $text);
   }
 
   /**
-   * convert text to javascript encoding characters
+   * convert text to javascript encoding characters.
    *
-   * @access public
    * @param string $text text string
+   *
    * @return string encoded text string
    */
-  function javascript_special_chars( $text ) {
-    // php-indent: disable
-    static $searches = array( '\\', '"', '\'', '<', '>', "\r", "\n" );
-    static $replaces = array( '\\\\', '\\x22', '\\x27', '\\x3c', '\\x3e', '\\r', '\\n' );
+  public function javascript_special_chars($text)
+  {
+      // php-indent: disable
+    static $searches = array('\\', '"', '\'', '<', '>', "\r", "\n");
+      static $replaces = array('\\\\', '\\x22', '\\x27', '\\x3c', '\\x3e', '\\r', '\\n');
     // php-indent: enable
     // trim control character
-    $text = mb_ereg_replace( '/[\\x00-\\x09\\x0b\\x0c\\x0e-\\x1f]/', '', $text );
+    $text = mb_ereg_replace('/[\\x00-\\x09\\x0b\\x0c\\x0e-\\x1f]/', '', $text);
     // convert \"'<>\r\n" char to escaped chars
-    $text = str_replace( $searches, $replaces, $text );
+    $text = str_replace($searches, $replaces, $text);
     // convert character entity reference to numeric entity reference
-    $text = $this->html_numeric_entities( $text );
+    $text = $this->html_numeric_entities($text);
     // convert numeric entity of dec type to hex type
-    $text = preg_replace( '/&#x([0-9a-f]+);/ie', '"&#".hexdec("$1").";"', $text );
+    $text = preg_replace('/&#x([0-9a-f]+);/ie', '"&#".hexdec("$1").";"', $text);
     // convert numeric entity to javascript '\uXX' char
-    return preg_replace( '/&#([0-9]+);/e', '"\\u".sprintf("%04x","$1")', $text );
+    return preg_replace('/&#([0-9]+);/e', '"\\u".sprintf("%04x","$1")', $text);
   }
 
   /**
    * filters text form data
-   * XooNIps specific $myts->displayTarea() function
+   * XooNIps specific $myts->displayTarea() function.
    *
    * @param string $text
-   * @param bool $html
-   * @param bool $smily
-   * @param bool $xcode
-   * @param bool $image
-   * @param bool $br
+   * @param bool   $html
+   * @param bool   $smily
+   * @param bool   $xcode
+   * @param bool   $image
+   * @param bool   $br
+   *
    * @return string
    */
-  function display_text_area( $text, $html, $smiley, $xcode, $image, $br ) {
-    $myts =& MyTextSanitizer::getInstance();
-    if ( ! $html ) {
-      // html not allowed
-      $text = $this->html_special_chars( $text );
-    }
-    if ( $br ) {
-      $text = $myts->nl2Br( $text );
-    }
-    $text = $myts->codePreConv( $text, $xcode );
-    $text = $this->convert_link( $text );
-    if ( $smiley ) {
-      // process smiley
-      $text = $myts->smiley( $text );
-    }
-    if ( $xcode ) {
-      // decode xcode
-      if ( $image ) {
-        // image allowed
-        $text = $myts->xoopsCodeDecode( $text, 1 );
-      } else {
-        // image not allowed
-        $text = $myts->xoopsCodeDecode( $text, 0 );
+  public function display_text_area($text, $html, $smiley, $xcode, $image, $br)
+  {
+      $myts = &MyTextSanitizer::getInstance();
+      if (!$html) {
+          // html not allowed
+      $text = $this->html_special_chars($text);
       }
-    }
-    $text = $myts->codeConv( $text, $xcode, $image );
-    return $text;
+      if ($br) {
+          $text = $myts->nl2Br($text);
+      }
+      $text = $myts->codePreConv($text, $xcode);
+      $text = $this->convert_link($text);
+      if ($smiley) {
+          // process smiley
+      $text = $myts->smiley($text);
+      }
+      if ($xcode) {
+          // decode xcode
+      if ($image) {
+          // image allowed
+        $text = $myts->xoopsCodeDecode($text, 1);
+      } else {
+          // image not allowed
+        $text = $myts->xoopsCodeDecode($text, 0);
+      }
+      }
+      $text = $myts->codeConv($text, $xcode, $image);
+
+      return $text;
   }
 
   /**
-   * convert timestamp to iso8601 string
+   * convert timestamp to iso8601 string.
    *
-   * @access private
    * @param int $value input timestamp
+   *
    * @return encoded string
    */
-  function timestamp_to_iso8601( $value ) {
-    return gmstrftime( '%Y%m%dT%H:%M:%S', $value );
+  public function timestamp_to_iso8601($value)
+  {
+      return gmstrftime('%Y%m%dT%H:%M:%S', $value);
   }
 
   /**
@@ -425,82 +440,84 @@ class XooNIpsUtilityText extends XooNIpsUtility {
    *      2004-W14-4, 2004W144
    *      2004W144T09:00+09:00
    *      2004-092, 2004092
-   *      2004-092T09:00:00+09:00
+   *      2004-092T09:00:00+09:00.
    *
-   * @access private
    * @param string $value iso8601 string
+   *
    * @return int decoded timestamp
    */
-  function iso8601_to_timestamp( $value ) {
-    $tz_offset = 0;
-    $tm = false;
-    if ( preg_match( '/^(-?\\d{4}|[+-]\\d{6})(?:-?(?:(\\d{2})(?:-?(\\d{2})?)?|W([0-5]\\d)-?([1-7])|([0-3]\\d\\d)))?(?:T(\\d{2})(?::(\\d{2})(?::(\\d{2}))?)?(?:Z|([-+])(\\d{2})(?::?(\\d{2}))?)?)?$/', $value, $matches ) ) {
-      $year = intval( $matches[1] );
-      if ( $year < 1970 || $year > 2038 ) {
-        // unsupported year
+  public function iso8601_to_timestamp($value)
+  {
+      $tz_offset = 0;
+      $tm = false;
+      if (preg_match('/^(-?\\d{4}|[+-]\\d{6})(?:-?(?:(\\d{2})(?:-?(\\d{2})?)?|W([0-5]\\d)-?([1-7])|([0-3]\\d\\d)))?(?:T(\\d{2})(?::(\\d{2})(?::(\\d{2}))?)?(?:Z|([-+])(\\d{2})(?::?(\\d{2}))?)?)?$/', $value, $matches)) {
+          $year = intval($matches[1]);
+          if ($year < 1970 || $year > 2038) {
+              // unsupported year
         return false;
-      }
-      $month = intval( isset( $matches[2] ) ? $matches[2] : 1 );
-      $mday = intval( isset( $matches[3] ) ? $matches[3] : 1 );
-      $week = intval( isset( $matches[4] ) ? $matches[4] : 0 );
-      $wday = intval( isset( $matches[5] ) ? $matches[5] : 0 );
-      $oday = intval( isset( $matches[6] ) ? $matches[6] : 0 );
-      $hour = intval( isset( $matches[7] ) ? $matches[7] : 0 );
-      $min = intval( isset( $matches[8] ) ? $matches[8] : 0 );
-      $sec = intval( isset( $matches[9] ) ? $matches[9] : 0 );
-      $pm = intval( isset( $matches[10] ) ? $matches[10].'1' : 1 );
-      $tz_hour = intval( isset( $matches[11] ) ? $matches[11] : 0 );
-      $tz_min = intval( isset( $matches[12] ) ? $matches[12] : 0 );
-      $tz_offset = $pm * ( $tz_hour * 3600 + $tz_min * 60 );
-      if ( $week == 0 && $wday == 0 && $oday == 0 ) {
-        // calendar dates
-        $tm = intval( gmmktime( $hour, $min, $sec, $month, $mday, $year ) );
-      } else {
-        $tsm = intval( gmmktime( 0, 0, 0, 1, 1, $year ) );
-        if ( $week != 0 && $wday != 0 ) {
-          // week dates
-          $days = ( $week - 1 ) * 7 - intval( gmdate( 'w', $tsm ) ) + $wday;
-        } else {
-          // ordinal dates
+          }
+          $month = intval(isset($matches[2]) ? $matches[2] : 1);
+          $mday = intval(isset($matches[3]) ? $matches[3] : 1);
+          $week = intval(isset($matches[4]) ? $matches[4] : 0);
+          $wday = intval(isset($matches[5]) ? $matches[5] : 0);
+          $oday = intval(isset($matches[6]) ? $matches[6] : 0);
+          $hour = intval(isset($matches[7]) ? $matches[7] : 0);
+          $min = intval(isset($matches[8]) ? $matches[8] : 0);
+          $sec = intval(isset($matches[9]) ? $matches[9] : 0);
+          $pm = intval(isset($matches[10]) ? $matches[10].'1' : 1);
+          $tz_hour = intval(isset($matches[11]) ? $matches[11] : 0);
+          $tz_min = intval(isset($matches[12]) ? $matches[12] : 0);
+          $tz_offset = $pm * ($tz_hour * 3600 + $tz_min * 60);
+          if ($week == 0 && $wday == 0 && $oday == 0) {
+              // calendar dates
+        $tm = intval(gmmktime($hour, $min, $sec, $month, $mday, $year));
+          } else {
+              $tsm = intval(gmmktime(0, 0, 0, 1, 1, $year));
+              if ($week != 0 && $wday != 0) {
+                  // week dates
+          $days = ($week - 1) * 7 - intval(gmdate('w', $tsm)) + $wday;
+              } else {
+                  // ordinal dates
           $days = $oday - 1;
-        }
-        $tm = $tsm + $days * 86400 + $hour * 3600 + $min * 60 + $sec;
+              }
+              $tm = $tsm + $days * 86400 + $hour * 3600 + $min * 60 + $sec;
+          }
       }
-    }
-    $tm = intval( $tm ) - $tz_offset;
-    return $tm;
+      $tm = intval($tm) - $tz_offset;
+
+      return $tm;
   }
 
   /**
-   * convert text to javascript tag
+   * convert text to javascript tag.
    *
-   * @access private
    * @param string $text src
+   *
    * @return string dist
    */
-  function _make_javascript( $text ) {
-    static $code_prefix = null;
-    static $code_postfix = null;
-    if ( is_null( $code_prefix ) ) {
-      $code_prefix = '<script type="text/javascript"><!--'."\n";
-      $code_prefix .= 'document.write(String.fromCharCode(';
-      $code_postfix = '));'."\n";
-      $code_postfix .= '//--></script>';
-    }
-    $chars = unpack( 'C*', $text );
-    $first = true;
-    $code = $code_prefix;
-    foreach ( $chars as $k ) {
-      if ( $first ) {
-        $first = false;
-      } else {
-        $code .= ',';
+  public function _make_javascript($text)
+  {
+      static $code_prefix = null;
+      static $code_postfix = null;
+      if (is_null($code_prefix)) {
+          $code_prefix = '<script type="text/javascript"><!--'."\n";
+          $code_prefix .= 'document.write(String.fromCharCode(';
+          $code_postfix = '));'."\n";
+          $code_postfix .= '//--></script>';
       }
-      $code .= $k;
-    }
-    $code .= $code_postfix;
-    return $code;
+      $chars = unpack('C*', $text);
+      $first = true;
+      $code = $code_prefix;
+      foreach ($chars as $k) {
+          if ($first) {
+              $first = false;
+          } else {
+              $code .= ',';
+          }
+          $code .= $k;
+      }
+      $code .= $code_postfix;
+
+      return $code;
   }
 }
-
-?>

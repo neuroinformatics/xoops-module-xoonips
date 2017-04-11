@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.2 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,45 +26,45 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
 
 /**
- *
  * @brief Class that generate response of XML-RPC getSimpleItems request
- *
- *
  */
 class XooNIpsXmlRpcViewGetSimpleItems extends XooNIpsXmlRpcViewElement
 {
-    function XooNIpsXmlRpcViewGetSimpleItems(&$response) 
+    public function XooNIpsXmlRpcViewGetSimpleItems(&$response)
     {
         parent::XooNIpsXmlRpcViewElement($response);
         $factory = &XooNIpsXmlRpcItemViewFactory::getInstance();
         $items = $response->getSuccess();
         $len = count($items);
-        for ( $i = 0; $i < $len; $i++ ){
+        for ($i = 0; $i < $len; ++$i) {
             $view = &$factory->create('getSimpleItems', $items[$i]);
-            if ($view) $this->addView($view);
+            if ($view) {
+                $this->addView($view);
+            }
         }
     }
 
     /**
-     *
      * @brief return XoopsXmlRpcTag that has response of this request
      *
      * @return XoopsXmlRpcTag
      */
-    function render() 
+    public function render()
     {
         $resp = new XoopsXmlRpcArray();
-        if ( $this->views ){
-            foreach($this->views as $view){
+        if ($this->views) {
+            foreach ($this->views as $view) {
                 $ret = $view->render();
-                if( $ret ) $resp -> add( $ret );
-                unset( $ret ); // because $resp->add() holds a reference to $ret, we must unbind ret for the next iteration.
+                if ($ret) {
+                    $resp->add($ret);
+                }
+                unset($ret); // because $resp->add() holds a reference to $ret, we must unbind ret for the next iteration.
             }
         }
+
         return $resp;
     }
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.2.2.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,15 +26,14 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 /**
- * definition file of TEXT file search
+ * definition file of TEXT file search.
  */
 // php-indent: disable
-$module['class_name']    = 'XooNIpsFileSearchPluginTEXT';
+$module['class_name'] = 'XooNIpsFileSearchPluginTEXT';
 $module['php_file_name'] = 'text.php';
-$module['name']          = 'text';
-$module['display_name']  = 'Plain Text';
-$module['mime_type']     = array( 'text/plain' );
-$module['extensions']    = array( 'txt', 'text' );
-$module['version']       = '2.0';
+$module['name'] = 'text';
+$module['display_name'] = 'Plain Text';
+$module['mime_type'] = array('text/plain');
+$module['extensions'] = array('txt', 'text');
+$module['version'] = '2.0';
 // php-indent: enable
-?>

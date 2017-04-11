@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,38 +26,42 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xoonips_compo_item.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xnpurl/iteminfo.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xnpurl/iteminfo.php';
 
 /**
- *
  * @brief Handler object that create,insert,update,get,delete XNPUrlCompo object.
- *
  */
 class XNPUrlCompoHandler extends XooNIpsItemInfoCompoHandler
 {
-    function XNPUrlCompoHandler(&$db) 
+    public function XNPUrlCompoHandler(&$db)
     {
         parent::XooNIpsItemInfoCompoHandler($db, 'xnpurl');
     }
-    function &create() 
+
+    public function &create()
     {
         $url = new XNPUrlCompo();
+
         return $url;
     }
 
     /**
-     * return template filename
-     * 
-     * @param string $type defined symbol 
-     *  XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
-     *  or XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LISTL
+     * return template filename.
+     *
+     * @param string $type defined symbol
+     *                     XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
+     *                     or XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LISTL
+     *
      * @return template filename
      */
-    function getTemplateFileName($type){
-        switch( $type ){
+    public function getTemplateFileName($type)
+    {
+        switch ($type) {
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
             return 'xnpurl_transfer_item_detail.html';
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
@@ -65,48 +70,47 @@ class XNPUrlCompoHandler extends XooNIpsItemInfoCompoHandler
             return '';
         }
     }
-    
+
     /**
-     * return template variables of item
-     * 
-     * @param string $type defined symbol 
-     *  XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
-     *  , XOONIPS_TEMPLATE_TYPE_ITEM_LIST
-     *  , XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL
-     *  or XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LISTL
+     * return template variables of item.
+     *
+     * @param string $type defined symbol
+     *                     XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
+     *                     , XOONIPS_TEMPLATE_TYPE_ITEM_LIST
+     *                     , XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL
+     *                     or XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LISTL
+     *
      * @return array of template variables
      */
-    function getTemplateVar($type, $item_id, $uid){
-        $url =& $this->get( $item_id );
-        if ( ! is_object( $url ) ) {
-          return array();
+    public function getTemplateVar($type, $item_id, $uid)
+    {
+        $url = &$this->get($item_id);
+        if (!is_object($url)) {
+            return array();
         }
         $result = $this->getBasicTemplateVar($type, $url, $uid);
-        
-        $detail =& $url -> getVar( 'detail' );
+
+        $detail = &$url->getVar('detail');
         $result['detail'] = $detail->getVarArray('s');
-        $result['detail']['url'] = preg_replace( '/[\\x00-\\x20\\x22\\x27]/', '', $detail -> getVar( 'url', 's' ));
-        $url_banner_file = $url -> getVar( 'url_banner_file' );
-        if( $url_banner_file -> get( 'item_id' ) == $item_id ){
+        $result['detail']['url'] = preg_replace('/[\\x00-\\x20\\x22\\x27]/', '', $detail->getVar('url', 's'));
+        $url_banner_file = $url->getVar('url_banner_file');
+        if ($url_banner_file->get('item_id') == $item_id) {
             $result['detail']['banner_image_url'] = XOOPS_URL
-                . '/modules/xoonips/image.php?file_id='
-                . $url_banner_file -> get( 'file_id' );
+                .'/modules/xoonips/image.php?file_id='
+                .$url_banner_file->get('file_id');
         }
-        
+
         return $result;
     }
 }
 
 /**
- *
  * @brief Data object that have one ore more XooNIpsTableObject for Url type.
- *
  */
 class XNPUrlCompo extends XooNIpsItemInfoCompo
 {
-    function XNPUrlCompo() 
+    public function XNPUrlCompo()
     {
         parent::XooNIpsItemInfoCompo('xnpurl');
     }
 }
-?>

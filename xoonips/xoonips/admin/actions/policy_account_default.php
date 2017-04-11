@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // title
@@ -52,9 +53,9 @@ $breadcrumbs = array(
 );
 
 // token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_policy_account';
-$token_ticket = $xoopsGTicket->getTicketHtml( __LINE__, 1800, $ticket_area );
+$token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // get configs
 $config_keys = array(
@@ -87,99 +88,97 @@ $initvals_config_keys = array(
     'type' => 'f',
   ),
 );
-foreach ( array_keys( $userinfo_config_keys ) as $key ) {
-  $config_keys[$key] = 's';
+foreach (array_keys($userinfo_config_keys) as $key) {
+    $config_keys[$key] = 's';
 }
-foreach ( $initvals_config_keys as $key => $value ) {
-  $config_keys[$key] = $value['type'];
+foreach ($initvals_config_keys as $key => $value) {
+    $config_keys[$key] = $value['type'];
 }
-$config_values = xoonips_admin_get_configs( $config_keys, 'e' );
+$config_values = xoonips_admin_get_configs($config_keys, 'e');
 
 // >> activate user
-$myxoopsConfigUser =& xoonips_get_xoops_configs( XOOPS_CONF_USER );
+$myxoopsConfigUser = &xoonips_get_xoops_configs(XOOPS_CONF_USER);
 $au['label'] = _AM_XOONIPS_POLICY_ACCOUNT_ACTIVATE_USER_USER;
 $au['value'] = '0';
-$au['selected'] = ( $myxoopsConfigUser['activation_type'] == 0 ) ? 'yes' : 'no';
+$au['selected'] = ($myxoopsConfigUser['activation_type'] == 0) ? 'yes' : 'no';
 $activate_user[] = $au;
 $au['label'] = _AM_XOONIPS_POLICY_ACCOUNT_ACTIVATE_USER_AUTO;
 $au['value'] = '1';
-$au['selected'] = ( $myxoopsConfigUser['activation_type'] == 1 ) ? 'yes' : 'no';
+$au['selected'] = ($myxoopsConfigUser['activation_type'] == 1) ? 'yes' : 'no';
 $activate_user[] = $au;
 $au['label'] = _AM_XOONIPS_POLICY_ACCOUNT_ACTIVATE_USER_ADMIN;
 $au['value'] = '2';
-$au['selected'] = ( $myxoopsConfigUser['activation_type'] == 2 ) ? 'yes' : 'no';
+$au['selected'] = ($myxoopsConfigUser['activation_type'] == 2) ? 'yes' : 'no';
 $activate_user[] = $au;
 // >> certify user
 $cu['label'] = _AM_XOONIPS_POLICY_ACCOUNT_CERTIFY_USER_MANUAL;
 $cu['value'] = 'on';
-$cu['selected'] = ( $config_values['certify_user'] == 'on' ) ? 'yes' : 'no';
+$cu['selected'] = ($config_values['certify_user'] == 'on') ? 'yes' : 'no';
 $certify_user[] = $cu;
 $cu['label'] = _AM_XOONIPS_POLICY_ACCOUNT_CERTIFY_USER_AUTO;
 $cu['value'] = 'auto';
-$cu['selected'] = ( $config_values['certify_user'] == 'auto' ) ? 'yes' : 'no';
+$cu['selected'] = ($config_values['certify_user'] == 'auto') ? 'yes' : 'no';
 $certify_user[] = $cu;
 
 // user information requirements
 $info_requirement = array();
-foreach ( $userinfo_config_keys as $name => $label ) {
-  $ir = array();
-  $ir['title'] = $label;
-  $ir['name'] = $name;
-  $ir['require'] = _AM_XOONIPS_LABEL_REQUIRED;
-  $ir['optional'] = _AM_XOONIPS_LABEL_OPTIONAL;
-  $ir['checked'] = ( $config_values[$name] == 'on' ) ? 'yes' : 'no';
-  $info_requirement[] = $ir;
+foreach ($userinfo_config_keys as $name => $label) {
+    $ir = array();
+    $ir['title'] = $label;
+    $ir['name'] = $name;
+    $ir['require'] = _AM_XOONIPS_LABEL_REQUIRED;
+    $ir['optional'] = _AM_XOONIPS_LABEL_OPTIONAL;
+    $ir['checked'] = ($config_values[$name] == 'on') ? 'yes' : 'no';
+    $info_requirement[] = $ir;
 }
 
 // initial values
 $initil_values = array();
-foreach ( $initvals_config_keys as $name => $value ) {
-  $iv = array();
-  $iv['title'] = $value['title'];
-  $iv['desc'] = $value['desc'];
-  $iv['name'] = $name;
-  if ( $value['type'] == 'f' ) {
-    $iv['value'] = $config_values[$name] / 1000000.0;
-  } else {
-    $iv['value'] = $config_values[$name];
-  }
-  $initial_values[] = $iv;
+foreach ($initvals_config_keys as $name => $value) {
+    $iv = array();
+    $iv['title'] = $value['title'];
+    $iv['desc'] = $value['desc'];
+    $iv['name'] = $name;
+    if ($value['type'] == 'f') {
+        $iv['value'] = $config_values[$name] / 1000000.0;
+    } else {
+        $iv['value'] = $config_values[$name];
+    }
+    $initial_values[] = $iv;
 }
 
 // templates
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'policy_account.tmpl.html' );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('policy_account.tmpl.html');
 
 // assign template variables
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->setAttribute( 'description', 'visibility', 'visible' );
-$tmpl->addVar( 'description', 'DESCRIPTION', $description );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'main', 'token_ticket', $token_ticket );
-$tmpl->addVar( 'main', 'submit', _AM_XOONIPS_LABEL_UPDATE );
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->setAttribute('description', 'visibility', 'visible');
+$tmpl->addVar('description', 'DESCRIPTION', $description);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('main', 'token_ticket', $token_ticket);
+$tmpl->addVar('main', 'submit', _AM_XOONIPS_LABEL_UPDATE);
 // register user
-$tmpl->addVar( 'main', 'register_user_title', _AM_XOONIPS_POLICY_ACCOUNT_REGISTER_USER_TITLE );
+$tmpl->addVar('main', 'register_user_title', _AM_XOONIPS_POLICY_ACCOUNT_REGISTER_USER_TITLE);
 // >> activate user
-$tmpl->addVar( 'main', 'activate_user_title', _AM_XOONIPS_POLICY_ACCOUNT_ACTIVATE_USER_TITLE );
-$tmpl->addVar( 'main', 'activate_user_desc', _AM_XOONIPS_POLICY_ACCOUNT_ACTIVATE_USER_DESC );
-$tmpl->addRows( 'activate_user', $activate_user );
+$tmpl->addVar('main', 'activate_user_title', _AM_XOONIPS_POLICY_ACCOUNT_ACTIVATE_USER_TITLE);
+$tmpl->addVar('main', 'activate_user_desc', _AM_XOONIPS_POLICY_ACCOUNT_ACTIVATE_USER_DESC);
+$tmpl->addRows('activate_user', $activate_user);
 // >> certify user
-$tmpl->addVar( 'main', 'certify_user_title', _AM_XOONIPS_POLICY_ACCOUNT_CERTIFY_USER_TITLE );
-$tmpl->addVar( 'main', 'certify_user_desc', _AM_XOONIPS_POLICY_ACCOUNT_CERTIFY_USER_DESC );
-$tmpl->addRows( 'certify_user', $certify_user );
+$tmpl->addVar('main', 'certify_user_title', _AM_XOONIPS_POLICY_ACCOUNT_CERTIFY_USER_TITLE);
+$tmpl->addVar('main', 'certify_user_desc', _AM_XOONIPS_POLICY_ACCOUNT_CERTIFY_USER_DESC);
+$tmpl->addRows('certify_user', $certify_user);
 // user information requirements
-$tmpl->addVar( 'main', 'info_requirement_title', _AM_XOONIPS_POLICY_ACCOUNT_INFO_REQUIREMENT_TITLE );
-$tmpl->addRows( 'info_requirement', $info_requirement );
+$tmpl->addVar('main', 'info_requirement_title', _AM_XOONIPS_POLICY_ACCOUNT_INFO_REQUIREMENT_TITLE);
+$tmpl->addRows('info_requirement', $info_requirement);
 // initial values
-$tmpl->addVar( 'main', 'initial_values_title', _AM_XOONIPS_POLICY_ACCOUNT_INITIAL_VALUES_TITLE );
-$tmpl->addRows( 'initial_values', $initial_values );
+$tmpl->addVar('main', 'initial_values_title', _AM_XOONIPS_POLICY_ACCOUNT_INITIAL_VALUES_TITLE);
+$tmpl->addRows('initial_values', $initial_values);
 
 // display
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

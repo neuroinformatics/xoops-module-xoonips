@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /*
@@ -38,36 +39,37 @@ ALTER TABLE `x_xoonips_search_cache_item` ADD `matchfor_item`  TINYINT( 1 ) NOT 
 ALTER TABLE `x_xoonips_search_cache_item` ADD `matchfor_file`  TINYINT( 1 ) NOT NULL DEFAULT 0 ;
 */
 /**
- * class of XooNIps Search Cache Item
+ * class of XooNIps Search Cache Item.
+ *
  * @li getVar( 'search_cache_item_id' ) : primary key
  * @li getVar( 'search_cache_id' ) :search cache ID
  * @li getVar( 'item_id' ) : item id
  * @li getVar( 'matchfor_index' ) : match for index
  * @li getVar( 'matchfor_item' )  : match for item
  * @li getVar( 'matchfor_file' )  : match for file
- *
  */
-class XooNIpsOrmSearchCacheItem extends XooNIpsTableObject {
-  function XooNIpsOrmSearchCacheItem() {
-    parent::XooNIpsTableObject();
-    $this->initVar( 'search_cache_item_id', XOBJ_DTYPE_INT, null, false, null );
-    $this->initVar( 'search_cache_id', XOBJ_DTYPE_INT, null, true, null );
-    $this->initVar( 'item_id', XOBJ_DTYPE_INT, null, true, null );
-    $this->initVar( 'matchfor_index', XOBJ_DTYPE_INT, null, true, null );
-    $this->initVar( 'matchfor_item', XOBJ_DTYPE_INT, null, true, null );
-    $this->initVar( 'matchfor_file', XOBJ_DTYPE_INT, null, true, null );
-  }
+class XooNIpsOrmSearchCacheItem extends XooNIpsTableObject
+{
+    public function XooNIpsOrmSearchCacheItem()
+    {
+        parent::XooNIpsTableObject();
+        $this->initVar('search_cache_item_id', XOBJ_DTYPE_INT, null, false, null);
+        $this->initVar('search_cache_id', XOBJ_DTYPE_INT, null, true, null);
+        $this->initVar('item_id', XOBJ_DTYPE_INT, null, true, null);
+        $this->initVar('matchfor_index', XOBJ_DTYPE_INT, null, true, null);
+        $this->initVar('matchfor_item', XOBJ_DTYPE_INT, null, true, null);
+        $this->initVar('matchfor_file', XOBJ_DTYPE_INT, null, true, null);
+    }
 }
 
 /**
- *
- * XooNIps search cache item Handler class
- *
+ * XooNIps search cache item Handler class.
  */
-class XooNIpsOrmSearchCacheItemHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmSearchCacheItemHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmSearchCacheItem', 'xoonips_search_cache_item', 'search_cache_item_id', true );
-  }
+class XooNIpsOrmSearchCacheItemHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmSearchCacheItemHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmSearchCacheItem', 'xoonips_search_cache_item', 'search_cache_item_id', true);
+    }
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,16 +25,16 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // check token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_maintenance_account_aconfirm';
-if ( ! $xoopsGTicket->check( true, $ticket_area, false ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors() );
-  exit();
+if (!$xoopsGTicket->check(true, $ticket_area, false)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors());
+    exit();
 }
 
 // get requests
@@ -44,32 +45,31 @@ $keys = array(
     true,
   ),
 );
-$vals = xoonips_admin_get_requests( 'post', $keys );
+$vals = xoonips_admin_get_requests('post', $keys);
 
-function user_reactivate( $uid ) {
-  global $xoonips_admin;
+function user_reactivate($uid)
+{
+    global $xoonips_admin;
   // get user information
-  $u_handler =& xoonips_getormhandler( 'xoonips', 'xoops_users' );
-  $xu_handler =& xoonips_getormhandler( 'xoonips', 'users' );
-  $u_obj =& $u_handler->get( $uid );
-  $xu_obj =& $xu_handler->get( $uid );
-  if ( ! is_object( $u_obj ) || ! is_object( $xu_obj ) ) {
-    redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_ILLACCESS );
-    exit();
-  }
+  $u_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
+    $xu_handler = &xoonips_getormhandler('xoonips', 'users');
+    $u_obj = &$u_handler->get($uid);
+    $xu_obj = &$xu_handler->get($uid);
+    if (!is_object($u_obj) || !is_object($xu_obj)) {
+        redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_ILLACCESS);
+        exit();
+    }
 
   // update db values
-  $u_obj->set( 'level', 1 );
-  if ( ! $u_handler->insert( $u_obj ) ) {
-    redirect_header( $xoonips_admin['mypage_url'], 1, _AM_XOONIPS_MSG_UNEXPECTED_ERROR );
-    exit();
-  }
+  $u_obj->set('level', 1);
+    if (!$u_handler->insert($u_obj)) {
+        redirect_header($xoonips_admin['mypage_url'], 1, _AM_XOONIPS_MSG_UNEXPECTED_ERROR);
+        exit();
+    }
 }
 
-user_reactivate( $vals['uid'] );
+user_reactivate($vals['uid']);
 
 // load modify panel.
 $_GET['uid'] = $_POST['uid'];
 include 'actions/maintenance_account_modify.php';
-
-?>

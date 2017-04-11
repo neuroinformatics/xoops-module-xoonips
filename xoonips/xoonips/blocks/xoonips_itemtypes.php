@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.10 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,61 +25,60 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // xoonips itemtypes block
-function b_xoonips_itemtypes_show() {
-  global $xoopsUser;
+function b_xoonips_itemtypes_show()
+{
+    global $xoopsUser;
 
   // hide block if user is guest and public index viewing policy is 'platform'
-  if ( ! is_object( $xoopsUser ) ) {
-    $xconfig_handler =& xoonips_getormhandler( 'xoonips', 'config' );
-    $target_user = $xconfig_handler->getValue( 'public_item_target_user' );
-    if ( $target_user != 'all' ) {
-      // 'platform'
+  if (!is_object($xoopsUser)) {
+      $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+      $target_user = $xconfig_handler->getValue('public_item_target_user');
+      if ($target_user != 'all') {
+          // 'platform'
       return false;
-    }
+      }
   }
 
-  $uid = is_object( $xoopsUser ) ? $xoopsUser->getVar( 'uid', 'n' ) : UID_GUEST;
+    $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
   // hide block if user is invalid xoonips user
-  $xsession_handler =& xoonips_getormhandler( 'xoonips', 'session' );
-  if ( ! $xsession_handler->validateUser( $uid, false ) ) {
-    return false;
-  }
+  $xsession_handler = &xoonips_getormhandler('xoonips', 'session');
+    if (!$xsession_handler->validateUser($uid, false)) {
+        return false;
+    }
 
-  require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
+    require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
 
   // get installed itemtypes
   $block = array();
-  $block['explain'] = array();
-  $item_type_handler =& xoonips_getormhandler( 'xoonips', 'item_type' );
-  $item_type_objs =& $item_type_handler->getObjectsSortByWeight();
-  foreach ( $item_type_objs as $item_type_obj ) {
-    $name = $item_type_obj->get( 'name' );
-    $file = XOOPS_ROOT_PATH.'/modules/'.$item_type_obj->get( 'viewphp' );
-    if ( file_exists( $file ) ) {
-      require_once $file;
+    $block['explain'] = array();
+    $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
+    $item_type_objs = &$item_type_handler->getObjectsSortByWeight();
+    foreach ($item_type_objs as $item_type_obj) {
+        $name = $item_type_obj->get('name');
+        $file = XOOPS_ROOT_PATH.'/modules/'.$item_type_obj->get('viewphp');
+        if (file_exists($file)) {
+            require_once $file;
+        }
+        $fname = $name.'GetTopBlock';
+        if (function_exists($fname)) {
+            // call xxxGetTopBlock function in view.php
+      $itemtype = $item_type_obj->getVarArray('s');
+            $html = $fname($itemtype);
+            if (!empty($html)) {
+                $block['explain'][] = $html;
+            }
+        }
     }
-    $fname = $name.'GetTopBlock';
-    if ( function_exists( $fname ) ) {
-      // call xxxGetTopBlock function in view.php
-      $itemtype = $item_type_obj->getVarArray( 's' );
-      $html = $fname( $itemtype );
-      if ( ! empty( $html ) ) {
-        $block['explain'][] = $html;
-      }
-    }
-  }
-  if ( empty( $block['explain'] ) ) {
-    // visible itemtype not found
+    if (empty($block['explain'])) {
+        // visible itemtype not found
     return false;
-  }
+    }
 
-  return $block;
+    return $block;
 }
-
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,75 +25,78 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
  * @brief data object of cvitaes
- *
  */
-class XooNIpsOrmCvitaes extends XooNIpsTableObject {
-  function XooNIpsOrmCvitaes() {
-    $this->initVar( 'cvitae_id', XOBJ_DTYPE_INT, 0, false );
-    $this->initVar( 'uid', XOBJ_DTYPE_INT, 0, true );
-    $this->initVar( 'from_month', XOBJ_DTYPE_INT, 0, false );
-    $this->initVar( 'from_year', XOBJ_DTYPE_INT, 0, false );
-    $this->initVar( 'to_month', XOBJ_DTYPE_INT, 0, false );
-    $this->initVar( 'to_year', XOBJ_DTYPE_INT, 0, false );
-    $this->initVar( 'cvitae_title', XOBJ_DTYPE_TXTBOX, '', true, 65535 );
-    $this->initVar( 'cvitae_order', XOBJ_DTYPE_INT, 0, true );
-  }
+class XooNIpsOrmCvitaes extends XooNIpsTableObject
+{
+    public function XooNIpsOrmCvitaes()
+    {
+        $this->initVar('cvitae_id', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('uid', XOBJ_DTYPE_INT, 0, true);
+        $this->initVar('from_month', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('from_year', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('to_month', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('to_year', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('cvitae_title', XOBJ_DTYPE_TXTBOX, '', true, 65535);
+        $this->initVar('cvitae_order', XOBJ_DTYPE_INT, 0, true);
+    }
 }
 
 /**
  * @brief handler class of cvitaes
- *
- *
  */
-class XooNIpsOrmCvitaesHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmCvitaesHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmCvitaes', 'xoonips_cvitaes', 'cvitae_id' );
-  }
+class XooNIpsOrmCvitaesHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmCvitaesHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmCvitaes', 'xoonips_cvitaes', 'cvitae_id');
+    }
 
   /**
-   * insert/update/replace object
+   * insert/update/replace object.
    *
-   * @access public
    * @param object $obj
-   * @param bool $force force operation
+   * @param bool   $force force operation
+   *
    * @return bool FALSE if failed
    */
-  function insert( &$obj, $force = false ) {
-    if ( $obj->isNew() && ! $obj->doReplace() ) {
-      // set cvitae_order
-      $uid = $obj->get( 'uid' );
-      $criteria = new Criteria( 'uid', $uid );
-      $tmp =& $this->getObjects( $criteria, false, 'MAX(`cvitae_order`) AS `max`' );
-      if ( is_object( $tmp ) ) {
-        $max = $tmp->getExtraVar( 'max' );
-      } else {
-        $max = 0;
+  public function insert(&$obj, $force = false)
+  {
+      if ($obj->isNew() && !$obj->doReplace()) {
+          // set cvitae_order
+      $uid = $obj->get('uid');
+          $criteria = new Criteria('uid', $uid);
+          $tmp = &$this->getObjects($criteria, false, 'MAX(`cvitae_order`) AS `max`');
+          if (is_object($tmp)) {
+              $max = $tmp->getExtraVar('max');
+          } else {
+              $max = 0;
+          }
+          $obj->set('cvitae_order', $max + 1);
       }
-      $obj->set( 'cvitae_order', $max + 1 );
-    }
-    return parent::insert( $obj, $force );
+
+      return parent::insert($obj, $force);
   }
 
   /**
-   * get curriculum vitae list
+   * get curriculum vitae list.
    *
-   * @access public
    * @param int $uid user id
+   *
    * @return array object instance array
    */
-  function &getCVs( $uid ) {
-    $criteria = new Criteria( 'uid', $uid );
-    $criteria->setSort( 'cvitae_order' );
-    $criteria->setOrder( 'ASC' );
-    return $this->getObjects( $criteria );
+  public function &getCVs($uid)
+  {
+      $criteria = new Criteria('uid', $uid);
+      $criteria->setSort('cvitae_order');
+      $criteria->setOrder('ASC');
+
+      return $this->getObjects($criteria);
   }
 }
-
-?>

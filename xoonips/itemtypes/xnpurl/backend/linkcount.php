@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,26 +25,24 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOONIPS_PATH' ) ) {
-  exit();
+if (!defined('XOONIPS_PATH')) {
+    exit();
 }
 
-if ( ! isset( $_SERVER['HTTP_REFERER'] ) || preg_match( '/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER'] ) == 0 ) {
-  die( 'Turn REFERER on' );
+if (!isset($_SERVER['HTTP_REFERER']) || preg_match('/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER']) == 0) {
+    die('Turn REFERER on');
 }
 
-if ( ! isset( $_POST['item_id'] ) ) {
-  die( 'illegal request' );
+if (!isset($_POST['item_id'])) {
+    die('illegal request');
 }
 
-$item_id = intval( $_POST['item_id'] );
-$detail_handler =& xoonips_getormhandler( 'xnpurl', 'item_detail' );
-$detail_obj =& $detail_handler->get( $item_id );
-if ( ! is_object( $detail_obj ) ) {
-  die( 'invalid item id' );
+$item_id = intval($_POST['item_id']);
+$detail_handler = &xoonips_getormhandler('xnpurl', 'item_detail');
+$detail_obj = &$detail_handler->get($item_id);
+if (!is_object($detail_obj)) {
+    die('invalid item id');
 }
-$url_count = $detail_obj->get( 'url_count' );
-$detail_obj->set( 'url_count', $url_count + 1 );
-$detail_handler->insert( $detail_obj );
-
-?>
+$url_count = $detail_obj->get('url_count');
+$detail_obj->set('url_count', $url_count + 1);
+$detail_handler->insert($detail_obj);

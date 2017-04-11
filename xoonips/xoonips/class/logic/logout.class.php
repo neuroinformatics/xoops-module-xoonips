@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,37 +26,42 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/base/logic.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
 
 /**
- *
- * subclass of XooNIpsLogic(logout)
- *
+ * subclass of XooNIpsLogic(logout).
  */
 class XooNIpsLogicLogout extends XooNIpsLogic
 {
-
     /**
-     * execute logout
+     * execute logout.
      *
      * @param[in] $vars[0] sessionid
      * @param[out] $response->result true:success, false:failed
      * @param[out] $response->error error information
-     * @return true logged out
+     *
+     * @return true  logged out
      * @return false if error
      */
-    function execute(&$vars, &$response) 
+    public function execute(&$vars, &$response)
     {
         // parameter check
         $error = &$response->getError();
-        if (count($vars) > 1) $error->add(XNPERR_EXTRA_PARAM);
-        if (count($vars) < 1) $error->add(XNPERR_MISSING_PARAM);
-        //
-        if (isset($vars[0]) && strlen($vars[0]) > 32) $error->add(XNPERR_INVALID_PARAM, 'too long parameter 1');
-        //
+        if (count($vars) > 1) {
+            $error->add(XNPERR_EXTRA_PARAM);
+        }
+        if (count($vars) < 1) {
+            $error->add(XNPERR_MISSING_PARAM);
+        }
+
+        if (isset($vars[0]) && strlen($vars[0]) > 32) {
+            $error->add(XNPERR_INVALID_PARAM, 'too long parameter 1');
+        }
+
         if ($error->get(0)) {
             // return if parameter error
             $response->setResult(false);
+
             return;
         } else {
             $sessionid = $vars[0];
@@ -64,12 +70,13 @@ class XooNIpsLogicLogout extends XooNIpsLogic
         if (!$result) {
             $response->setResult(false);
             $error->add(XNPERR_INVALID_SESSION);
+
             return false;
         }
         if ($uid != UID_GUEST) {
             // insert logout event
             $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
-            $eventlog_handler->recordLogoutEvent( $uid );
+            $eventlog_handler->recordLogoutEvent($uid);
             // delete XooNIps session
             $session_handler = &xoonips_getormhandler('xoonips', 'session');
             $session_handler->delete($session);
@@ -78,7 +85,7 @@ class XooNIpsLogicLogout extends XooNIpsLogic
         $_SESSION = array();
         session_destroy();
         $response->setResult(true);
+
         return true;
     }
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.9 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -27,26 +28,24 @@
 
 include 'include/common.inc.php';
 
-include_once __DIR__ . '/class/base/actionfactory.class.php';
+include_once __DIR__.'/class/base/actionfactory.class.php';
 
-$formdata =& xoonips_getutility( 'formdata' );
-$op = $formdata->getValue( 'get', 'action', 'n', false );
-if ( is_null( $op ) ) {
-  header( 'Location: '.XOOPS_URL.'/modules/xoonips/oaipmh_search.php?action=default' );
+$formdata = &xoonips_getutility('formdata');
+$op = $formdata->getValue('get', 'action', 'n', false);
+if (is_null($op)) {
+    header('Location: '.XOOPS_URL.'/modules/xoonips/oaipmh_search.php?action=default');
 }
 
-xoonips_validate_request( in_array( $op, array( 'default', 'detail', 'search', 'metadata_detail' ) ) );
+xoonips_validate_request(in_array($op, array('default', 'detail', 'search', 'metadata_detail')));
 
-$factory =& XooNIpsActionFactory::getInstance();
-if( $op == 'metadata_detail' ){
-    $action =& $factory->create( 'xoonips_search_metadata_detail' );
-}else{
-    $action =& $factory->create( 'oaipmh_search_'.$op );
+$factory = &XooNIpsActionFactory::getInstance();
+if ($op == 'metadata_detail') {
+    $action = &$factory->create('xoonips_search_metadata_detail');
+} else {
+    $action = &$factory->create('oaipmh_search_'.$op);
 }
-if ( ! $action ) {
-  header( 'Location: '.XOOPS_URL.'/' );
+if (!$action) {
+    header('Location: '.XOOPS_URL.'/');
 }
 $action->action();
 exit();
-
-?>

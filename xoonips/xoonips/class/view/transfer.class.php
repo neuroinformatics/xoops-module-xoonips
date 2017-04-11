@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.8 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,84 +26,94 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname( __DIR__ ) . '/base/view.class.php';
+include_once dirname(__DIR__).'/base/view.class.php';
 
 /**
- * 
  * base class of transfer view.
- * 
- * 
  */
-class XooNIpsViewTransfer extends XooNIpsView{
+class XooNIpsViewTransfer extends XooNIpsView
+{
     /**
-     * create view
+     * create view.
      */
-    function XooNIpsViewTransfer($params){
+    public function XooNIpsViewTransfer($params)
+    {
         parent::XooNIpsView($params);
     }
-    
+
     /**
-     * 
      * add link element to smarty template
-     *  to $xoopsTpl to include style.css 
-     * 
-     * @access protected
-     * 
+     *  to $xoopsTpl to include style.css.
      */
-    function setXooNIpsStyleSheet(&$xoopsTpl){
-        if( !is_object( $xoopsTpl ) ) return;
-        
+    public function setXooNIpsStyleSheet(&$xoopsTpl)
+    {
+        if (!is_object($xoopsTpl)) {
+            return;
+        }
+
         $header = '<link rel="stylesheet" type="text/css" href="style.css" />';
         $header .= $xoopsTpl->get_template_vars('xoops_module_header');
-        $xoopsTpl->assign('xoops_module_header', $header );
+        $xoopsTpl->assign('xoops_module_header', $header);
     }
-    
+
     /**
      * get concatenated title string.
-     * @param array $titles array of XooNIpsTitle
+     *
+     * @param array  $titles    array of XooNIpsTitle
      * @param string $delimiter delimieter string of each titles
+     *
      * @return string
      */
-    function concatenate_titles( $titles, $delimiter = '/' ){
+    public function concatenate_titles($titles, $delimiter = '/')
+    {
         $result = array();
-        foreach( $titles as $t ){
-            $result[] = $t -> getVar( 'title', 's' );
+        foreach ($titles as $t) {
+            $result[] = $t->getVar('title', 's');
         }
-        return implode( $delimiter, $result );
+
+        return implode($delimiter, $result);
     }
-    
+
     /**
-     * get uname by uid
-     * @param integer $uid
+     * get uname by uid.
+     *
+     * @param int $uid
+     *
      * @return user's uname(login name) or empty string(if illegal uid)
      */
-    function get_uname_by_uid( $uid ){
-        $handler =& xoops_gethandler( 'user' );
-        $user =& $handler -> get( $uid );
-        if( false === $user ) return '';
-        return $user -> getVar( 'uname' );
+    public function get_uname_by_uid($uid)
+    {
+        $handler = &xoops_gethandler('user');
+        $user = &$handler->get($uid);
+        if (false === $user) {
+            return '';
+        }
+
+        return $user->getVar('uname');
     }
-    
+
     /**
-     * get index path string
-     * @param integer $index_id
+     * get index path string.
+     *
+     * @param int $index_id
+     *
      * @return index path string like '/user/foo/bar'
      */
-    function get_index_path_by_index_id( $index_id ){
-        $user_handler =& xoonips_getormhandler( 'xoonips', 'users' );
-        
-        $index_handler =& xoonips_getormhandler( 'xoonips', 'index' );
-        $index = $index_handler->get( $index_id );
-        if ( $index == false ){
-            return "";
+    public function get_index_path_by_index_id($index_id)
+    {
+        $user_handler = &xoonips_getormhandler('xoonips', 'users');
+
+        $index_handler = &xoonips_getormhandler('xoonips', 'index');
+        $index = $index_handler->get($index_id);
+        if ($index == false) {
+            return '';
         }
-        $user =& $user_handler -> get( $index -> get( 'uid' ) );
-        
-        $handler =& xoonips_getormcompohandler( 'xoonips', 'index' );
-        $index_names = $handler -> getIndexPathNames(
-            $index_id, $user -> get( 'private_index_id' ), 's' );
-        return '/' . implode( '/', $index_names );
+        $user = &$user_handler->get($index->get('uid'));
+
+        $handler = &xoonips_getormcompohandler('xoonips', 'index');
+        $index_names = $handler->getIndexPathNames(
+            $index_id, $user->get('private_index_id'), 's');
+
+        return '/'.implode('/', $index_names);
     }
-    
 }
-?>

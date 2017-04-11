@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.4.8.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -66,7 +67,7 @@
 82 : ¹­Êó»ñÎÁ¡½²¼ÉôÁÈ¿¥¥È¥Ã¥×¥Ú¡¼¥¸,
 83 : ¹­Êó»ñÎÁ¡½µ¡´Ø¹­Êó»ñÎÁ
 */
-define( '_MD_XOONIPS_METADATA_JUNII','
+define('_MD_XOONIPS_METADATA_JUNII', '
 ¸¦µæÀ®²Ì,
 ¸¦µæÀ®²Ì¡½ÏÀÊ¸,
 ¸¦µæÀ®²Ì¡½ÏÀÊ¸°Ê³°,/
@@ -118,7 +119,7 @@ define( '_MD_XOONIPS_METADATA_JUNII','
 20 : Data or Dataset
 30 : Software
  */
-define( '_MD_XOONIPS_METADATA_JUNII2','
+define('_MD_XOONIPS_METADATA_JUNII2', '
 Journal Article,
 Thesis or Dissertation,
 Departmental Bulletin Paper,
@@ -133,4 +134,3 @@ Learning Material,/
 Data or Dataset,/
 Software
 ');
-?>

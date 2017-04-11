@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // title
@@ -52,15 +53,15 @@ $breadcrumbs = array(
 );
 
 // token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_policy_moderator';
-$token_ticket = $xoopsGTicket->getTicketHtml( __LINE__, 1800, $ticket_area );
+$token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // get configs
 $config_keys = array(
   'moderator_modify_any_items' => 's',
 );
-$config_values = xoonips_admin_get_configs( $config_keys, 'e' );
+$config_values = xoonips_admin_get_configs($config_keys, 'e');
 
 // >> moderator modify nay items
 $moderator_modify = array();
@@ -72,29 +73,27 @@ $mm['checked'] = $config_values[$key];
 $moderator_modify[] = $mm;
 
 // templates
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'policy_moderator.tmpl.html' );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('policy_moderator.tmpl.html');
 
 // assign template variables
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->setAttribute( 'description', 'visibility', 'visible' );
-$tmpl->addVar( 'description', 'DESCRIPTION', $description );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'main', 'token_ticket', $token_ticket );
-$tmpl->addVar( 'main', 'submit', _AM_XOONIPS_LABEL_UPDATE );
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->setAttribute('description', 'visibility', 'visible');
+$tmpl->addVar('description', 'DESCRIPTION', $description);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('main', 'token_ticket', $token_ticket);
+$tmpl->addVar('main', 'submit', _AM_XOONIPS_LABEL_UPDATE);
 
 // >> moderator modify any items
-$tmpl->addVar( 'main', 'moderator_title', _AM_XOONIPS_POLICY_MODERATOR_TITLE );
-$tmpl->addVar( 'main', 'moderator_modify_title', _AM_XOONIPS_POLICY_MODERATOR_MODIFY_TITLE );
-$tmpl->addVar( 'main', 'moderator_modify_desc', _AM_XOONIPS_POLICY_MODERATOR_MODIFY_DESC );
-$tmpl->addRows( 'moderator_modify', $moderator_modify );
+$tmpl->addVar('main', 'moderator_title', _AM_XOONIPS_POLICY_MODERATOR_TITLE);
+$tmpl->addVar('main', 'moderator_modify_title', _AM_XOONIPS_POLICY_MODERATOR_MODIFY_TITLE);
+$tmpl->addVar('main', 'moderator_modify_desc', _AM_XOONIPS_POLICY_MODERATOR_MODIFY_DESC);
+$tmpl->addRows('moderator_modify', $moderator_modify);
 
 // display
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

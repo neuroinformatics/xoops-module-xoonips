@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.8 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 require_once __DIR__.'/abstract_ranking.class.php';
@@ -36,61 +37,66 @@ require_once __DIR__.'/abstract_ranking.class.php';
  * @li getVar('gid') :
  * @li getVar('count') :
  */
-class XooNIpsOrmRankingActiveGroup extends XooNIpsTableObject {
-  function XooNIpsOrmRankingActiveGroup() {
-    parent::XooNIpsTableObject();
-    $this->initVar( 'gid', XOBJ_DTYPE_INT, 0, true );
-    $this->initVar( 'count', XOBJ_DTYPE_INT, 0, true );
-  }
+class XooNIpsOrmRankingActiveGroup extends XooNIpsTableObject
+{
+    public function XooNIpsOrmRankingActiveGroup()
+    {
+        parent::XooNIpsTableObject();
+        $this->initVar('gid', XOBJ_DTYPE_INT, 0, true);
+        $this->initVar('count', XOBJ_DTYPE_INT, 0, true);
+    }
 }
 
 /**
  * @brief handler object of ranking active group
- *
  */
-class XooNIpsOrmRankingActiveGroupHandler extends XooNIpsOrmAbstractRankingHandler {
-  function XooNIpsOrmRankingActiveGroupHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmRankingActiveGroup', 'xoonips_ranking_active_group', 'gid', false );
-    $this->_set_columns( array( 'gid', 'count' ) );
-  }
+class XooNIpsOrmRankingActiveGroupHandler extends XooNIpsOrmAbstractRankingHandler
+{
+    public function XooNIpsOrmRankingActiveGroupHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmRankingActiveGroup', 'xoonips_ranking_active_group', 'gid', false);
+        $this->_set_columns(array('gid', 'count'));
+    }
 
   /**
-   * insert/upldate/replace object
+   * insert/upldate/replace object.
    *
-   * @access public
    * @param object &$obj
-   * @param bool $force force operation
+   * @param bool   $force force operation
+   *
    * @return bool false if failed
    */
-  function insert( &$obj, $force = false ) {
-    $gid = $obj->get( 'gid' );
-    if ( $gid == 0 ) {
-      // ignore if group id is zero
+  public function insert(&$obj, $force = false)
+  {
+      $gid = $obj->get('gid');
+      if ($gid == 0) {
+          // ignore if group id is zero
       return true;
-    }
-    return parent::insert( $obj, $force );
+      }
+
+      return parent::insert($obj, $force);
   }
 
   /**
-   * increment active group counter for updating/rebuilding rankings
+   * increment active group counter for updating/rebuilding rankings.
    *
-   * @param int $gid group id
+   * @param int $gid   group id
    * @param int $delta counter delta
+   *
    * @return bool FALSE if failed
    */
-  function increment( $gid, $delta ) {
-    $obj =& $this->get( $gid );
-    if ( is_object( $obj ) ) {
-      $delta += $obj->get( 'count' );
-    } else {
-      $obj =& $this->create();
-      $obj->set( 'gid', $gid );
-    }
-    $obj->set( 'count', $delta );
+  public function increment($gid, $delta)
+  {
+      $obj = &$this->get($gid);
+      if (is_object($obj)) {
+          $delta += $obj->get('count');
+      } else {
+          $obj = &$this->create();
+          $obj->set('gid', $gid);
+      }
+      $obj->set('count', $delta);
     // force insertion
-    return $this->insert( $obj, true );
+    return $this->insert($obj, true);
   }
 }
-
-?>

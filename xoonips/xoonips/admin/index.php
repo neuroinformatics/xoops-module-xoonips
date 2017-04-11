@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.11.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -34,9 +35,7 @@ $pages = array();
 $pages['main'] = array();
 
 // initialize
-xoonips_admin_initialize( __FILE__, 'index', $pages );
+xoonips_admin_initialize(__FILE__, 'index', $pages);
 
 // call action file
 include $xoonips_admin['myaction_path'];
-
-?>

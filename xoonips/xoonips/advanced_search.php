@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.6.2.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -27,8 +28,8 @@
 
 //  advanced search(standard)
 
-session_cache_limiter( 'none' );
-session_cache_expire( 5 );
+session_cache_limiter('none');
+session_cache_expire(5);
 
 $xoopsOption['pagetype'] = 'user';
 include 'include/common.inc.php';
@@ -38,18 +39,17 @@ include 'include/AL.php';
 $xnpsid = $_SESSION['XNPSID'];
 
 // If not a user, redirect
-if( $xnpsid != 0 ){
-    if ( !$xoopsUser ) {
-        redirect_header( 'user.php',3,_MD_XOONIPS_ITEM_FORBIDDEN);
+if ($xnpsid != 0) {
+    if (!$xoopsUser) {
+        redirect_header('user.php', 3, _MD_XOONIPS_ITEM_FORBIDDEN);
         exit();
     }
 
     $uid = $_SESSION['xoopsUserId'];
-}
-else {
-    if( !xnp_is_valid_session_id($xnpsid) ){
+} else {
+    if (!xnp_is_valid_session_id($xnpsid)) {
         // Uncertified user can't access(except XOOPS administrator).
-        redirect_header(XOOPS_URL.'/',3,_MD_XOONIPS_ITEM_FORBIDDEN);
+        redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_ITEM_FORBIDDEN);
         exit();
     }
     $uid = 0;
@@ -62,4 +62,3 @@ include XOOPS_ROOT_PATH.'/header.php';
 include 'include/advanced_search.inc.php';
 
 include XOOPS_ROOT_PATH.'/footer.php';
-?>

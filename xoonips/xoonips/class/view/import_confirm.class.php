@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.9 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,22 +26,22 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname( __DIR__ ) . '/base/view.class.php';
+include_once dirname(__DIR__).'/base/view.class.php';
 
-class XooNIpsViewImportConfirm extends XooNIpsView{
-    
-    function XooNIpsViewImportConfirm($response){
+class XooNIpsViewImportConfirm extends XooNIpsView
+{
+    public function XooNIpsViewImportConfirm($response)
+    {
         parent::XooNIpsView($response);
     }
-    
-    function render(){
+
+    public function render()
+    {
         global $xoopsOption, $xoopsConfig, $xoopsUser, $xoopsUserIsAdmin, $xoopsLogger, $xoopsTpl;
-        
+
         $xoopsOption['template_main'] = 'xoonips_import_confirm.html';
         include XOOPS_ROOT_PATH.'/header.php';
-        $xoopsTpl -> assign( 'token_hidden', $this -> _params['ticket_html'] );
+        $xoopsTpl->assign('token_hidden', $this->_params['ticket_html']);
         include XOOPS_ROOT_PATH.'/footer.php';
     }
 }
-
-?>

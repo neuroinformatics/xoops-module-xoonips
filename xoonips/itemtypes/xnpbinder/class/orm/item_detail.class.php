@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.1.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,7 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 /**
  * @brief Data object of Binder detail information
@@ -34,25 +37,22 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
  */
 class XNPBinderOrmItemDetail extends XooNIpsTableObject
 {
-    function XNPBinderOrmItemDetail() 
+    public function XNPBinderOrmItemDetail()
     {
         parent::XooNIpsTableObject();
         $this->initVar('binder_id', XOBJ_DTYPE_INT, 0, false);
-        $this->initVar('extra', XOBJ_DTYPE_TXTBOX, '', false,255);
+        $this->initVar('extra', XOBJ_DTYPE_TXTBOX, '', false, 255);
     }
 }
 
 /**
  * @brief Handler class that create, insert, update, get and delete detail information
- *
- *
  */
 class XNPBinderOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    function XNPBinderOrmItemDetailHandler(&$db) 
+    public function XNPBinderOrmItemDetailHandler(&$db)
     {
         parent::XooNIpsTableObjectHandler($db);
         $this->__initHandler('XNPBinderOrmItemDetail', 'xnpbinder_item_detail', 'binder_id', false);
     }
 }
-?>

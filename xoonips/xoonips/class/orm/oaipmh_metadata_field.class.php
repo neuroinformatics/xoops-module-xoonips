@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.7 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
@@ -39,46 +40,48 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
  * @li category_name
  * @li value
  */
-class XooNIpsOrmOaipmhMetadataField extends XooNIpsTableObject {
-  function XooNIpsOrmOaipmhMetadataField() {
-    $this->initVar( 'metadata_field_id', XOBJ_DTYPE_INT, 0, false, 10 );
-    $this->initVar( 'metadata_id', XOBJ_DTYPE_INT, 0, true, 10 );
-    $this->initVar( 'format', XOBJ_DTYPE_TXTBOX, '', true, 100 );
-    $this->initVar( 'name', XOBJ_DTYPE_TXTBOX, '', true, 255 );
-    $this->initVar( 'ordernum', XOBJ_DTYPE_INT, 0, true, 10 );
-    $this->initVar( 'category_name', XOBJ_DTYPE_TXTBOX, '', false, 255 );
-    $this->initVar( 'value', XOBJ_DTYPE_TXTBOX, '', true );
-    $this->initVar( 'namespace', XOBJ_DTYPE_TXTBOX, '', false, 255 );
-    $this->initVar( 'namespace_uri', XOBJ_DTYPE_TXTBOX, '', false );
-  }
+class XooNIpsOrmOaipmhMetadataField extends XooNIpsTableObject
+{
+    public function XooNIpsOrmOaipmhMetadataField()
+    {
+        $this->initVar('metadata_field_id', XOBJ_DTYPE_INT, 0, false, 10);
+        $this->initVar('metadata_id', XOBJ_DTYPE_INT, 0, true, 10);
+        $this->initVar('format', XOBJ_DTYPE_TXTBOX, '', true, 100);
+        $this->initVar('name', XOBJ_DTYPE_TXTBOX, '', true, 255);
+        $this->initVar('ordernum', XOBJ_DTYPE_INT, 0, true, 10);
+        $this->initVar('category_name', XOBJ_DTYPE_TXTBOX, '', false, 255);
+        $this->initVar('value', XOBJ_DTYPE_TXTBOX, '', true);
+        $this->initVar('namespace', XOBJ_DTYPE_TXTBOX, '', false, 255);
+        $this->initVar('namespace_uri', XOBJ_DTYPE_TXTBOX, '', false);
+    }
 }
 
 /**
- *
  * @brief handler object of OAI-PMH metadata
- *
  */
-class XooNIpsOrmOaipmhMetadataFieldHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmOaipmhMetadataFieldHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmOaipmhMetadataField', 'xoonips_oaipmh_metadata_field', 'metadata_field_id', true );
-  }
+class XooNIpsOrmOaipmhMetadataFieldHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmOaipmhMetadataFieldHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmOaipmhMetadataField', 'xoonips_oaipmh_metadata_field', 'metadata_field_id', true);
+    }
 
   /**
-   * get metadata field objects array
+   * get metadata field objects array.
    *
-   * @access public
    * @param string $identifier identifier string of OAI-PMH
-   * @return array of XooNIpsOrmOaipmhMetadataField object or false.
+   *
+   * @return array of XooNIpsOrmOaipmhMetadataField object or false
    */
-  function getByIdentifier( $identifier ) {
-    $criteria = new Criteria( 'identifier', $identifier );
-    $result =& $this->getObjects( $criteria );
-    if ( ! $result ) {
-      return false;
-    }
-    return $result[0];
+  public function getByIdentifier($identifier)
+  {
+      $criteria = new Criteria('identifier', $identifier);
+      $result = &$this->getObjects($criteria);
+      if (!$result) {
+          return false;
+      }
+
+      return $result[0];
   }
 }
-
-?>

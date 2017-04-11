@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.37 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -29,12 +30,13 @@ require_once XOOPS_ROOT_PATH.'/modules/xoonips/condefs.php';
 require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/functions.php';
 
 /**
- * insert default configs
+ * insert default configs.
  *
  * @param int $ver affected xoonips version
  */
-function xoonips_insert_default_configs( $ver ) {
-  $configs = array(
+function xoonips_insert_default_configs($ver)
+{
+    $configs = array(
     330 => array(
       // --------------------------------------------
       // System Configurations
@@ -111,29 +113,30 @@ function xoonips_insert_default_configs( $ver ) {
       'item_comment_forum_id' => '0',
     ),
   );
-  if ( ! isset( $configs[$ver] ) ) {
-    return;
-  }
-  $xconfig_handler =& xoonips_getormhandler( 'xoonips', 'config' );
-  foreach ( $configs[$ver] as $key => $val ) {
-    $xconfig_obj =& $xconfig_handler->getConfig( $key );
-    // insert default config if not found
-    if ( ! is_object( $xconfig_obj ) ) {
-      $xconfig_obj =& $xconfig_handler->create();
-      $xconfig_obj->setVar( 'name', $key, true );
-      $xconfig_obj->setVar( 'value', $val, true );
-      $xconfig_handler->insert( $xconfig_obj );
+    if (!isset($configs[$ver])) {
+        return;
     }
-  }
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+    foreach ($configs[$ver] as $key => $val) {
+        $xconfig_obj = &$xconfig_handler->getConfig($key);
+    // insert default config if not found
+    if (!is_object($xconfig_obj)) {
+        $xconfig_obj = &$xconfig_handler->create();
+        $xconfig_obj->setVar('name', $key, true);
+        $xconfig_obj->setVar('value', $val, true);
+        $xconfig_handler->insert($xconfig_obj);
+    }
+    }
 }
 
 /**
- * remove obsolete configs
+ * remove obsolete configs.
  *
  * @param int $ver affected xoonips version
  */
-function xoonips_delete_obsolete_configs( $ver ) {
-  $configs = array(
+function xoonips_delete_obsolete_configs($ver)
+{
+    $configs = array(
     330 => array(
       'amazon_associates_id',
     ),
@@ -141,70 +144,75 @@ function xoonips_delete_obsolete_configs( $ver ) {
       'rss_file_path',
     ),
   );
-  if ( ! isset( $configs[$ver] ) ) {
-    return;
-  }
-  $xconfig_handler =& xoonips_getormhandler( 'xoonips', 'config' );
-  foreach ( $configs[$ver] as $key ) {
-    $xconfig_obj =& $xconfig_handler->getConfig( $key );
-    if ( is_object( $xconfig_obj ) ) {
-      $xconfig_handler->delete( $xconfig_obj );
+    if (!isset($configs[$ver])) {
+        return;
     }
-  }
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+    foreach ($configs[$ver] as $key) {
+        $xconfig_obj = &$xconfig_handler->getConfig($key);
+        if (is_object($xconfig_obj)) {
+            $xconfig_handler->delete($xconfig_obj);
+        }
+    }
 }
 
-function xoonips_remove_zombie_related_to_ids() {
-  // get broken related_to ids
-  $rto_handler =& xoonips_getormhandler('xoonips', 'related_to');
-  $criteria = new Criteria('ISNULL(`ib`.`item_id`)', 1);
-  $join = new XooNIpsJoinCriteria('xoonips_item_basic', 'item_id', 'item_id', 'LEFT', 'ib');
-  $res =& $rto_handler->open($criteria, 'related_to_id', false, $join);
-  $rto_ids = array();
-  while ($obj =& $rto_handler->getNext($res)) {
-    $rto_ids[] = $obj->get('related_to_id');
-  }
-  $rto_handler->close($res);
+function xoonips_remove_zombie_related_to_ids()
+{
+    // get broken related_to ids
+  $rto_handler = &xoonips_getormhandler('xoonips', 'related_to');
+    $criteria = new Criteria('ISNULL(`ib`.`item_id`)', 1);
+    $join = new XooNIpsJoinCriteria('xoonips_item_basic', 'item_id', 'item_id', 'LEFT', 'ib');
+    $res = &$rto_handler->open($criteria, 'related_to_id', false, $join);
+    $rto_ids = array();
+    while ($obj = &$rto_handler->getNext($res)) {
+        $rto_ids[] = $obj->get('related_to_id');
+    }
+    $rto_handler->close($res);
   // remove broken related_to entries
   if (!empty($rto_ids)) {
-    $criteria = new Criteria('related_to_id', '('.implode(',',$rto_ids).')', 'IN');
-    $rto_handler->deleteAll($criteria);
+      $criteria = new Criteria('related_to_id', '('.implode(',', $rto_ids).')', 'IN');
+      $rto_handler->deleteAll($criteria);
   }
 }
 
-function xoonips_remove_duplicated_private_item_ids() {
-  $ixil_handler =& xoonips_getormhandler('xoonips', 'index_item_link');
-  $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id', 'INNER', 'idx');
-  $join->cascade(new XooNIpsJoinCriteria('xoonips_item_basic', 'item_id', 'item_id', 'INNER', 'ib'));
-  $criteria = new CriteriaCompo();
-  $criteria->add(new Criteria('open_level', OL_PRIVATE, '=', 'idx'));
-  $criteria->add(new Criteria('ib.uid', '(idx.uid)', 'NOT IN'));
-  $ixil_objs =& $ixil_handler->getObjects($criteria, false, '', false, $join);
-  $ixil_ids = array();
-  foreach ($ixil_objs as $ixil_obj)
-    $ixil_ids[] = $ixil_obj->get('index_item_link_id');
-  if (!empty($ixil_ids)) {
-    $criteria = new Criteria('index_item_link_id', '('.implode(',',$ixil_ids).')', 'IN');
-    $ixil_handler->deleteAll($criteria);
-  }
+function xoonips_remove_duplicated_private_item_ids()
+{
+    $ixil_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
+    $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id', 'INNER', 'idx');
+    $join->cascade(new XooNIpsJoinCriteria('xoonips_item_basic', 'item_id', 'item_id', 'INNER', 'ib'));
+    $criteria = new CriteriaCompo();
+    $criteria->add(new Criteria('open_level', OL_PRIVATE, '=', 'idx'));
+    $criteria->add(new Criteria('ib.uid', '(idx.uid)', 'NOT IN'));
+    $ixil_objs = &$ixil_handler->getObjects($criteria, false, '', false, $join);
+    $ixil_ids = array();
+    foreach ($ixil_objs as $ixil_obj) {
+        $ixil_ids[] = $ixil_obj->get('index_item_link_id');
+    }
+    if (!empty($ixil_ids)) {
+        $criteria = new Criteria('index_item_link_id', '('.implode(',', $ixil_ids).')', 'IN');
+        $ixil_handler->deleteAll($criteria);
+    }
 }
 
-function xoops_module_update_xoonips( $xoopsMod, $oldversion ) {
-  $mydirname = basename( __DIR__ );
+function xoops_module_update_xoonips($xoopsMod, $oldversion)
+{
+    $mydirname = basename(__DIR__);
 
-  $uid = $GLOBALS['xoopsUser']->getVar( 'uid', 'n' );
-  $mid = $xoopsMod->getVar( 'mid', 'n' );
+    $uid = $GLOBALS['xoopsUser']->getVar('uid', 'n');
+    $mid = $xoopsMod->getVar('mid', 'n');
 
-  global $xoopsDB;
+    global $xoopsDB;
 
-  if ( $oldversion < 324 ) {
-    echo '<code>The update does not supported before ver 3.24.</code><br />';
-    return false;
-  }
+    if ($oldversion < 324) {
+        echo '<code>The update does not supported before ver 3.24.</code><br />';
 
-  echo '<code>Updating modules...</code><br />';
-  switch ( $oldversion ) {
+        return false;
+    }
+
+    echo '<code>Updating modules...</code><br />';
+    switch ($oldversion) {
   case 324:
-    xoonips_insert_default_configs( 330 );
+    xoonips_insert_default_configs(330);
     $sqls = <<<SQL
 -- xoonips_changelog
 ALTER TABLE `xoonips_changelog`
@@ -321,24 +329,24 @@ ALTER TABLE `xoonips_session`
   MODIFY uid int(10) unsigned NOT NULL default '0';
 SQL;
     // queries
-    if ( ! xoonips_sql_queries( $sqls ) ) {
-      return false;
+    if (!xoonips_sql_queries($sqls)) {
+        return false;
     }
 
     // fixed unlinked item bug.
-    $sql = sprintf( 'DELETE FROM `%s` WHERE `item_id`=0', $xoopsDB->prefix( 'xoonips_related_to' ) );
-    $xoopsDB->query( $sql );
-    $sql = sprintf( 'DELETE FROM `%s` WHERE `item_id`=0', $xoopsDB->prefix( 'xoonips_index_item_link' ) );
-    $xoopsDB->query( $sql );
+    $sql = sprintf('DELETE FROM `%s` WHERE `item_id`=0', $xoopsDB->prefix('xoonips_related_to'));
+    $xoopsDB->query($sql);
+    $sql = sprintf('DELETE FROM `%s` WHERE `item_id`=0', $xoopsDB->prefix('xoonips_index_item_link'));
+    $xoopsDB->query($sql);
 
-    xoonips_delete_obsolete_configs( 330 );
+    xoonips_delete_obsolete_configs(330);
   case 330:
   case 331:
     // fixed default xoonips group bug.
     // if xoonips was installed before 3.24, then the administrator have
     // joined to group id 0. this group id have to be GID_DEFAULT(1).
-    $sql = sprintf( 'UPDATE `%s` SET `gid`=1 WHERE `gid`=0', $xoopsDB->prefix( 'xoonips_groups_users_link' ) );
-    $xoopsDB->query( $sql );
+    $sql = sprintf('UPDATE `%s` SET `gid`=1 WHERE `gid`=0', $xoopsDB->prefix('xoonips_groups_users_link'));
+    $xoopsDB->query($sql);
 
     $sqls = <<<SQL
 -- xoonips_config
@@ -387,8 +395,8 @@ ALTER TABLE `xoonips_ranking_viewed_item`
   ENGINE=INNODB;
 SQL;
     // queries
-    if ( ! xoonips_sql_queries( $sqls ) ) {
-      return false;
+    if (!xoonips_sql_queries($sqls)) {
+        return false;
     }
   case 332:
     // Notice:
@@ -402,10 +410,10 @@ SQL;
   case 337:
   case 338:
   case 339:
-    xoonips_insert_default_configs( 340 );
+    xoonips_insert_default_configs(340);
     // delete all harvested metadata, because table design has been changed.
-    $sql = sprintf( 'DELETE FROM `%s`', $xoopsDB->prefix( 'xoonips_oaipmh_metadata' ) );
-    $xoopsDB->query( $sql );
+    $sql = sprintf('DELETE FROM `%s`', $xoopsDB->prefix('xoonips_oaipmh_metadata'));
+    $xoopsDB->query($sql);
     $sqls = <<<SQL
 -- xoonips_search_cache_metadata
 ALTER TABLE xoonips_search_cache_metadata
@@ -499,23 +507,23 @@ CREATE TABLE `xoonips_index_group_index_link` (
 ) TYPE=InnoDB;
 SQL;
     // queries
-    if ( ! xoonips_sql_queries( $sqls ) ) {
-      return false;
+    if (!xoonips_sql_queries($sqls)) {
+        return false;
     }
 
     // fixed old update script bugs.
     // from too old to 324
-    if ( xoonips_sql_has_index( 'xoonips_file', 'sid' ) ) {
-      $sql = sprintf( 'ALTER TABLE `%s` DROP INDEX `sid`, ADD INDEX (`sess_id`)', $xoopsDB->prefix( 'xoonips_file' ) );
-      $xoopsDB->query( $sql );
+    if (xoonips_sql_has_index('xoonips_file', 'sid')) {
+        $sql = sprintf('ALTER TABLE `%s` DROP INDEX `sid`, ADD INDEX (`sess_id`)', $xoopsDB->prefix('xoonips_file'));
+        $xoopsDB->query($sql);
     }
-    if ( xoonips_sql_has_index( 'xoonips_search_cache', 'sess_id' ) ) {
-      $sql = sprintf( 'ALTER TABLE `%s` DROP INDEX `sess_id`', $xoopsDB->prefix( 'xoonips_search_cache' ) );
-      $xoopsDB->query( $sql );
+    if (xoonips_sql_has_index('xoonips_search_cache', 'sess_id')) {
+        $sql = sprintf('ALTER TABLE `%s` DROP INDEX `sess_id`', $xoopsDB->prefix('xoonips_search_cache'));
+        $xoopsDB->query($sql);
     }
-    if ( xoonips_sql_has_index( 'xoonips_search_text', 'search' ) ) {
-      $sql = sprintf( 'ALTER TABLE `%s` DROP INDEX `search`, ADD FULLTEXT `search_text`', $xoopsDB->prefix( 'xoonips_search_text' ) );
-      $xoopsDB->query( $sql );
+    if (xoonips_sql_has_index('xoonips_search_text', 'search')) {
+        $sql = sprintf('ALTER TABLE `%s` DROP INDEX `search`, ADD FULLTEXT `search_text`', $xoopsDB->prefix('xoonips_search_text'));
+        $xoopsDB->query($sql);
     }
     // from 324 to 330
     $sqls = <<<SQL
@@ -530,12 +538,12 @@ ALTER TABLE `xoonips_ranking_sum_searched_keyword`
   MODIFY `keyword` varchar(255) binary NOT NULL default '';
 SQL;
     // queries
-    if ( ! xoonips_sql_queries( $sqls ) ) {
-      return false;
+    if (!xoonips_sql_queries($sqls)) {
+        return false;
     }
 
     // remove obsolete configs
-    xoonips_delete_obsolete_configs( 340 );
+    xoonips_delete_obsolete_configs(340);
   case 340:
   case 341:
   case 342:
@@ -551,9 +559,9 @@ SQL;
   }
 
   // enable available notifications
-  $admin_xoops_handler =& xoonips_gethandler( 'xoonips', 'admin_xoops' );
-  $member_handler =& xoops_gethandler( 'member' );
-  $uids = array_keys( $member_handler->getUsers( null, true ) );
+  $admin_xoops_handler = &xoonips_gethandler('xoonips', 'admin_xoops');
+    $member_handler = &xoops_gethandler('member');
+    $uids = array_keys($member_handler->getUsers(null, true));
   // php-indent: disable
   $notifications = array(
     'administrator' => array(
@@ -576,105 +584,110 @@ SQL;
     ),
   );
   // php-indent: enable
-  foreach ( $notifications as $category => $events ) {
-    // enable module event
-    foreach ( $events['subscribe'] as $event ) {
-      $admin_xoops_handler->enableNotification( $mid, $category, $event );
+  foreach ($notifications as $category => $events) {
+      // enable module event
+    foreach ($events['subscribe'] as $event) {
+        $admin_xoops_handler->enableNotification($mid, $category, $event);
     }
   }
   // subscribe all notifications to all users
-  foreach ( $uids as $uid ) {
-    foreach ( $notifications as $category => $events ) {
-      foreach ( $events['subscribe'] as $event ) {
-        $admin_xoops_handler->subscribeNotification( $mid, $uid, $category, $event );
+  foreach ($uids as $uid) {
+      foreach ($notifications as $category => $events) {
+          foreach ($events['subscribe'] as $event) {
+              $admin_xoops_handler->subscribeNotification($mid, $uid, $category, $event);
+          }
       }
-    }
   }
   // unsubscribe obsolete notifications from all users
-  foreach ( $notifications as $category => $events ) {
-    foreach ( $events['unsubscribe'] as $event ) {
-      $admin_xoops_handler->unsubscribeNotification( $mid, 0, $category, $event );
-    }
+  foreach ($notifications as $category => $events) {
+      foreach ($events['unsubscribe'] as $event) {
+          $admin_xoops_handler->unsubscribeNotification($mid, 0, $category, $event);
+      }
   }
-  return true;
+
+    return true;
 }
 
 /**
  * @split $sqls to individual queries, add prefix to table, and query sqls
  * output some informations to stdout.
  *
- * @param string $sqls string of sqls.
- * @return boolean true if succeed
+ * @param string $sqls string of sqls
  *
+ * @return bool true if succeed
  */
-function xoonips_sql_queries( $sqls ) {
-  global $xoopsDB;
-  $textutil =& xoonips_getutility( 'text' );
-  $pieces = array();
-  SqlUtility::splitMySqlFile( $pieces, $sqls );
-  $created_tables = array();
-  $errs = array();
-  $msgs = array();
-  $error = false;
-  $ret = '';
-  foreach ( $pieces as $piece ) {
-    // [0] contains the prefixed query
+function xoonips_sql_queries($sqls)
+{
+    global $xoopsDB;
+    $textutil = &xoonips_getutility('text');
+    $pieces = array();
+    SqlUtility::splitMySqlFile($pieces, $sqls);
+    $created_tables = array();
+    $errs = array();
+    $msgs = array();
+    $error = false;
+    $ret = '';
+    foreach ($pieces as $piece) {
+        // [0] contains the prefixed query
     // [4] contains unprefixed table name
-    $prefixed_query = SqlUtility::prefixQuery( $piece, $xoopsDB->prefix() );
-    if ( ! $prefixed_query ) {
-      $errs[] = '<b>'.$piece.'</b> is not a valid SQL!';
-      $error = true;
-      break;
+    $prefixed_query = SqlUtility::prefixQuery($piece, $xoopsDB->prefix());
+        if (!$prefixed_query) {
+            $errs[] = '<b>'.$piece.'</b> is not a valid SQL!';
+            $error = true;
+            break;
+        }
+        if (!$xoopsDB->query($prefixed_query[0])) {
+            $errs[] = $xoopsDB->error().' of SQL '.$textutil->html_special_chars($prefixed_query[0]);
+            $error = true;
+            break;
+        }
+        if (strncmp('CREATE', strtoupper($prefixed_query[0]), 6) == 0 && !in_array($prefixed_query[4], $created_tables)) {
+            $msgs[] = '&nbsp;&nbsp;Table <b>'.$xoopsDB->prefix($prefixed_query[4]).'</b> created.';
+            $created_tables[] = $prefixed_query[4];
+        }
     }
-    if ( ! $xoopsDB->query( $prefixed_query[0] ) ) {
-      $errs[] = $xoopsDB->error().' of SQL '.$textutil->html_special_chars( $prefixed_query[0] );
-      $error = true;
-      break;
-    }
-    if ( strncmp( 'CREATE', strtoupper( $prefixed_query[0] ), 6 ) == 0 && ! in_array( $prefixed_query[4], $created_tables ) ) {
-      $msgs[] = '&nbsp;&nbsp;Table <b>'.$xoopsDB->prefix( $prefixed_query[4] ).'</b> created.';
-      $created_tables[] = $prefixed_query[4];
-    }
-  }
-  if ( $error ) {
-    // if there was an error, delete the tables created so far,
+    if ($error) {
+        // if there was an error, delete the tables created so far,
     // so the next installation will not fail
-    foreach ( $created_tables as $ct ) {
-      $xoopsDB->query( 'DROP TABLE '.$xoopsDB->prefix( $ct ) );
+    foreach ($created_tables as $ct) {
+        $xoopsDB->query('DROP TABLE '.$xoopsDB->prefix($ct));
     }
     // set error messages
-    foreach ( $errs as $er ) {
-      $ret .= '&nbsp;&nbsp;'.$er.'<br />';
+    foreach ($errs as $er) {
+        $ret .= '&nbsp;&nbsp;'.$er.'<br />';
     }
-    unset( $msgs );
-    unset( $errs );
-  }
-  echo $ret;
-  return ! $error;
+        unset($msgs);
+        unset($errs);
+    }
+    echo $ret;
+
+    return !$error;
 }
 
-function xoonips_sql_has_index( $table, $name ) {
-  global $xoopsDB;
-  $sql = sprintf( 'SHOW INDEX FROM `%s` WHERE `Key_name`=%s', $xoopsDB->prefix( $table ), $xoopsDB->quoteString( $name ) );
-  $result = $xoopsDB->query( $sql );
-  if ( ! $result ) {
-    return false;
-  }
-  $num = $xoopsDB->getRowsNum( $result );
-  $xoopsDB->freeRecordSet( $result );
-  return( $num != 0 );
+function xoonips_sql_has_index($table, $name)
+{
+    global $xoopsDB;
+    $sql = sprintf('SHOW INDEX FROM `%s` WHERE `Key_name`=%s', $xoopsDB->prefix($table), $xoopsDB->quoteString($name));
+    $result = $xoopsDB->query($sql);
+    if (!$result) {
+        return false;
+    }
+    $num = $xoopsDB->getRowsNum($result);
+    $xoopsDB->freeRecordSet($result);
+
+    return  $num != 0;
 }
 
-function xoonips_sql_fetch_column( $table, $name ) {
-  global $xoopsDB;
-  $sql = sprintf( 'SHOW COLUMNS FROM `%s` WHERE `Field`=%s', $xoopsDB->prefix( $table ), $xoopsDB->quoteString( $name ) );
-  $result = $xoopsDB->query( $sql );
-  if ( ! $result ) {
-    return false;
-  }
-  $ret = $xoopsDB->fetchArray( $result );
-  $xoopsDB->freeRecordSet( $result );
-  return $ret;
-}
+function xoonips_sql_fetch_column($table, $name)
+{
+    global $xoopsDB;
+    $sql = sprintf('SHOW COLUMNS FROM `%s` WHERE `Field`=%s', $xoopsDB->prefix($table), $xoopsDB->quoteString($name));
+    $result = $xoopsDB->query($sql);
+    if (!$result) {
+        return false;
+    }
+    $ret = $xoopsDB->fetchArray($result);
+    $xoopsDB->freeRecordSet($result);
 
-?>
+    return $ret;
+}

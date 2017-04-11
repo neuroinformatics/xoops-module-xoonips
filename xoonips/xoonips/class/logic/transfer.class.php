@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.9 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,243 +26,258 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname( __DIR__ ) . '/base/logic.class.php';
-include_once dirname( __DIR__ ) . '/base/transaction.class.php';
-include_once dirname( __DIR__ ) . '/xoonipserror.class.php';
+include_once dirname(__DIR__).'/base/logic.class.php';
+include_once dirname(__DIR__).'/base/transaction.class.php';
+include_once dirname(__DIR__).'/xoonipserror.class.php';
 
 /**
- * base class of XooNIpsLogicTransfer*
+ * base class of XooNIpsLogicTransfer*.
  */
 class XooNIpsLogicTransfer extends XooNIpsLogic
 {
-    function XooNIpsLogicTransfer(){
+    public function XooNIpsLogicTransfer()
+    {
         parent::XooNIpsLogic();
     }
-    
-    function execute(&$vars, &$response){
+
+    public function execute(&$vars, &$response)
+    {
         $transaction = XooNIpsTransaction::getInstance();
         $transaction->start();
-        
-        $error =& $response->getError();
-        if ( $this->execute_without_transaction($vars, $error) ){
+
+        $error = &$response->getError();
+        if ($this->execute_without_transaction($vars, $error)) {
             $transaction->commit();
             $response->setResult(true);
-        }
-        else {
+        } else {
             $transaction->rollback();
             $response->setResult(false);
         }
     }
-    
-    function execute_without_transaction(&$vars, &$error){
+
+    public function execute_without_transaction(&$vars, &$error)
+    {
         // abstract
         return false;
     }
-    
+
     /**
      * remove item from achievements of item owner if needed.
      * call this before update uid of item_basic table.
      *
-     * @access protected
      * @param XooNIpsError error
      * @param int item_id
+     *
      * @return bool true if succeeded
      */
-    function remove_item_from_achievements_if_needed( &$error, $item_id )
+    public function remove_item_from_achievements_if_needed(&$error, $item_id)
     {
-        $xconfig_handler =& xoonips_getormhandler( 'xoonips', 'config' );
-        $item_show_optional = $xconfig_handler->getValue( 'item_show_optional' );
-        if ( $item_show_optional == 'on' ){
-            return true; // can use someone's item as my achievements. 
+        $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+        $item_show_optional = $xconfig_handler->getValue('item_show_optional');
+        if ($item_show_optional == 'on') {
+            return true; // can use someone's item as my achievements.
         }
-        
-        $item_show_handler =& xoonips_getormhandler( 'xoonips', 'item_show' );
-        $item_basic_handler =& xoonips_getormhandler( 'xoonips', 'item_basic' );
-        $item_basic = $item_basic_handler->get( $item_id );
+
+        $item_show_handler = &xoonips_getormhandler('xoonips', 'item_show');
+        $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
+        $item_basic = $item_basic_handler->get($item_id);
         $criteria = new CriteriaCompo();
-        $criteria->add( new Criteria( 'item_id', $item_id ) );
-        $criteria->add( new Criteria( 'uid', $item_basic->get( 'uid' ) ) );
-        if ( false ==  $item_show_handler->deleteAll( $criteria ) ){
-             $error->add(XNPERR_SERVER_ERROR, "cannot remove item_show");
-             return false;
+        $criteria->add(new Criteria('item_id', $item_id));
+        $criteria->add(new Criteria('uid', $item_basic->get('uid')));
+        if (false == $item_show_handler->deleteAll($criteria)) {
+            $error->add(XNPERR_SERVER_ERROR, 'cannot remove item_show');
+
+            return false;
         }
+
         return true;
     }
-    
+
     /**
      * remove item from all private indexes and add item to $index_id.
-     * @access protected
+     *
      * @param XooNIpsError error
      * @param int item_id
      * @param int index_id
+     *
      * @return bool true if succeeded
      */
-    function move_item_to_other_private_index( &$error, $item_id, $index_id )
+    public function move_item_to_other_private_index(&$error, $item_id, $index_id)
     {
         // remove from private index
-        $index_item_link_handler =& xoonips_getormhandler( 'xoonips', 
-                                                           'index_item_link' );
+        $index_item_link_handler = &xoonips_getormhandler('xoonips',
+                                                           'index_item_link');
         $index_item_links
-            = $index_item_link_handler->getByItemId( $item_id,
-                                                     array( OL_PRIVATE ) );
-        foreach ( $index_item_links as $index_item_link ){
-            if ( false
-                 == $index_item_link_handler->delete( $index_item_link ) ){
+            = $index_item_link_handler->getByItemId($item_id,
+                                                     array(OL_PRIVATE));
+        foreach ($index_item_links as $index_item_link) {
+            if (false
+                 == $index_item_link_handler->delete($index_item_link)) {
                 $error->add(XNPERR_SERVER_ERROR,
-                            "cannot remove from private index");
+                            'cannot remove from private index');
+
                 return false;
             }
         }
-        
+
         // add to private index
         $index_item_link = $index_item_link_handler->create();
-        $index_item_link->set( 'index_id', $index_id );
-        $index_item_link->set( 'item_id', $item_id );
-        $index_item_link->set( 'certify_state', NOT_CERTIFIED );
-        if ( false == $index_item_link_handler->insert( $index_item_link ) ){
-            $error->add(XNPERR_SERVER_ERROR, "cannot add to private index");
+        $index_item_link->set('index_id', $index_id);
+        $index_item_link->set('item_id', $item_id);
+        $index_item_link->set('certify_state', NOT_CERTIFIED);
+        if (false == $index_item_link_handler->insert($index_item_link)) {
+            $error->add(XNPERR_SERVER_ERROR, 'cannot add to private index');
+
             return false;
         }
+
         return true;
     }
-    
+
     /**
      * is item public and certified ?
      *
-     * @access private
      * @param int item_id
+     *
      * @return bool true if succeeded
      */
-    function _is_public_certified_item( $item_id )
+    public function _is_public_certified_item($item_id)
     {
-        $index_item_link_handler =& xoonips_getormhandler( 'xoonips',
-                                                           'index_item_link' );
+        $index_item_link_handler = &xoonips_getormhandler('xoonips',
+                                                           'index_item_link');
         $index_item_links
-            = $index_item_link_handler->getByItemId( $item_id,
-                                                     array( OL_PUBLIC ) );
-        foreach ( $index_item_links as $index_item_link ){
-            if ( $index_item_link->get( 'certify_state' ) == CERTIFIED ){
+            = $index_item_link_handler->getByItemId($item_id,
+                                                     array(OL_PUBLIC));
+        foreach ($index_item_links as $index_item_link) {
+            if ($index_item_link->get('certify_state') == CERTIFIED) {
                 return true;
             }
         }
+
         return false;
     }
-    
+
     /**
      * update modified_timestamp of item_status table
-     * if item is public and certified
+     * if item is public and certified.
      *
-     * @access protected
      * @param XooNIpsError error
      * @param int item_id
+     *
      * @return bool true if succeeded
      */
-    function update_item_status_if_public_certified( &$error, $item_id )
+    public function update_item_status_if_public_certified(&$error, $item_id)
     {
-        $item_status_handler =& xoonips_getormhandler( 'xoonips',
-                                                       'item_status' );
-        if ( $this->_is_public_certified_item( $item_id ) ){
-            $item_status = $item_status_handler->get( $item_id );
-            if ( $item_status ){
-                $item_status->set( 'modified_timestamp', time() );
-                if ( false == $item_status_handler->insert( $item_status ) ){
+        $item_status_handler = &xoonips_getormhandler('xoonips',
+                                                       'item_status');
+        if ($this->_is_public_certified_item($item_id)) {
+            $item_status = $item_status_handler->get($item_id);
+            if ($item_status) {
+                $item_status->set('modified_timestamp', time());
+                if (false == $item_status_handler->insert($item_status)) {
                     $error->add(XNPERR_SERVER_ERROR,
-                                "cannot update item status");
+                                'cannot update item status');
+
                     return false;
                 }
             }
         }
+
         return true;
     }
-    
+
     /**
      * remove item from transfer_request table.
      *
-     * @access protected
      * @param XooNIpsError error
      * @param int item_id
+     *
      * @return bool true if succeeded
      */
-    function remove_item_from_transfer_request( &$error, $item_id )
+    public function remove_item_from_transfer_request(&$error, $item_id)
     {
         $transfer_request_handler
-            =& xoonips_getormhandler( 'xoonips', 'transfer_request' );
-        $transfer_request = $transfer_request_handler->get( $item_id );
-        if ( $transfer_request == false ){
-            $error->add(XNPERR_SERVER_ERROR, "cannot get transfer_request");
+            = &xoonips_getormhandler('xoonips', 'transfer_request');
+        $transfer_request = $transfer_request_handler->get($item_id);
+        if ($transfer_request == false) {
+            $error->add(XNPERR_SERVER_ERROR, 'cannot get transfer_request');
+
             return false;
         }
-        if ( false == $transfer_request_handler->delete( $transfer_request ) ){
-            $error->add(XNPERR_SERVER_ERROR, "cannot delete transfer_request");
+        if (false == $transfer_request_handler->delete($transfer_request)) {
+            $error->add(XNPERR_SERVER_ERROR, 'cannot delete transfer_request');
+
             return false;
         }
+
         return true;
     }
-    
+
     /**
-     * remove relatedto if user lose read permission because of transfer
+     * remove relatedto if user lose read permission because of transfer.
      *
-     * @access protected
      * @param int item_id
      * @param int from_uid
      * @param int to_uid
+     *
      * @return bool true if succeeded
      */
-    function remove_related_to_if_no_read_permission( $item_id,
-                                                      $from_uid, $to_uid )
+    public function remove_related_to_if_no_read_permission($item_id,
+                                                      $from_uid, $to_uid)
     {
-        $related_to_handler =& xoonips_getormhandler( 'xoonips', 'related_to' );
-        $item_compo_handler =& xoonips_getormcompohandler( 'xoonips', 'item' );
-        $item_basic_handler =& xoonips_getormhandler( 'xoonips', 'item_basic' );
-        
+        $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
+        $item_compo_handler = &xoonips_getormcompohandler('xoonips', 'item');
+        $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
+
         // relation from $item_id to items of $from_uid
-        $related_tos =& $related_to_handler->getObjects(
-            new Criteria( 'parent_id', $item_id ) );
-        if ( false === $related_tos ){
+        $related_tos = &$related_to_handler->getObjects(
+            new Criteria('parent_id', $item_id));
+        if (false === $related_tos) {
             return false;
         }
-        foreach ( $related_tos as $related_to ){
-            if ( !$item_compo_handler->getPerm(
-                $related_to->get( 'item_id' ), $to_uid, 'read' ) ){
-                if ( false == $related_to_handler->delete( $related_to ) ){
+        foreach ($related_tos as $related_to) {
+            if (!$item_compo_handler->getPerm(
+                $related_to->get('item_id'), $to_uid, 'read')) {
+                if (false == $related_to_handler->delete($related_to)) {
                     return false;
                 }
             }
         }
-        
+
         // relation from items of $from_uid to $item_id
-        if ( !$item_compo_handler->getPerm( $item_id, $from_uid, 'read' ) ){
-            $related_tos =& $related_to_handler->getObjects(
-                new Criteria( 'item_id', $item_id ) );
-            if ( false === $related_tos ){
+        if (!$item_compo_handler->getPerm($item_id, $from_uid, 'read')) {
+            $related_tos = &$related_to_handler->getObjects(
+                new Criteria('item_id', $item_id));
+            if (false === $related_tos) {
                 return false;
             }
-            foreach ( $related_tos as $related_to ){
+            foreach ($related_tos as $related_to) {
                 $item_basic = $item_basic_handler->get(
-                    $related_to->get( 'parent_id' ) );
-                if ( false === $item_basic ){
+                    $related_to->get('parent_id'));
+                if (false === $item_basic) {
                     return false;
                 }
-                if ( $item_basic->get( 'uid' ) == $from_uid ){
-                    if ( false == $related_to_handler->delete( $related_to ) ){
+                if ($item_basic->get('uid') == $from_uid) {
+                    if (false == $related_to_handler->delete($related_to)) {
                         return false;
                     }
                 }
             }
         }
+
         return true;
     }
-    
-    function is_private_index_id_of( $index_id, $uid )
+
+    public function is_private_index_id_of($index_id, $uid)
     {
-        $index_handler =& xoonips_getormhandler( 'xoonips', 'index' );
-        $index = $index_handler->get( $index_id );
-        if ( $index == false ||
-            $index->get( 'open_level' ) != OL_PRIVATE ||
-            $index->get( 'uid' ) != $uid ){
+        $index_handler = &xoonips_getormhandler('xoonips', 'index');
+        $index = $index_handler->get($index_id);
+        if ($index == false ||
+            $index->get('open_level') != OL_PRIVATE ||
+            $index->get('uid') != $uid) {
             return false;
         }
+
         return true;
     }
 }
-?>

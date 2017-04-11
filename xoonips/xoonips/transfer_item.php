@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.10 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -29,30 +30,31 @@ include 'include/common.inc.php';
 
 include_once 'class/base/actionfactory.class.php';
 
-$formdata =& xoonips_getutility( 'formdata' );
-$op = $formdata->getValue( 'get', 'action', 'n', false );
-if( empty( $op ) ){
-    header( 'Location: '.XOOPS_URL 
-            .'/modules/xoonips/transfer_item.php?action=request_initialize' );
+$formdata = &xoonips_getutility('formdata');
+$op = $formdata->getValue('get', 'action', 'n', false);
+if (empty($op)) {
+    header('Location: '.XOOPS_URL
+            .'/modules/xoonips/transfer_item.php?action=request_initialize');
     exit(0);
 }
 
-xoonips_validate_request( is_valid_action( $op ) );
+xoonips_validate_request(is_valid_action($op));
 
 // disable to link index tree
 $xoonipsURL = '';
 
-$factory =& XooNIpsActionFactory::getInstance();
-$action =& $factory -> create( 'transfer_user_'.$op );
-if ( ! $action ) {
-  header( 'Location: '.XOOPS_URL.'/' );
-  exit(0);
+$factory = &XooNIpsActionFactory::getInstance();
+$action = &$factory->create('transfer_user_'.$op);
+if (!$action) {
+    header('Location: '.XOOPS_URL.'/');
+    exit(0);
 }
 $action->action();
 exit(0);
 
-function is_valid_action( $action ){
-    return in_array( $action, array( 'accept',
+function is_valid_action($action)
+{
+    return in_array($action, array('accept',
                                      'detail_item',
                                      'list_item',
                                      'reject',
@@ -60,5 +62,5 @@ function is_valid_action( $action ){
                                      'request_check',
                                      'request_initialize',
                                      'request_select_item',
-                                     'request_unselect_item' ) );
+                                     'request_unselect_item', ));
 }

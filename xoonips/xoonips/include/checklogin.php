@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.9.2.1.2.10 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,29 +26,31 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
-$formdata =& xoonips_getutility( 'formdata' );
-$uname = $formdata->getValue( 'post', 'uname', 's', false, '' );
-$pass = $formdata->getValue( 'post', 'pass', 's', false, '' );
-$xoops_redirect = $formdata->getValue( 'post', 'xoops_redirect', 's', false, '' );
+$formdata = &xoonips_getutility('formdata');
+$uname = $formdata->getValue('post', 'uname', 's', false, '');
+$pass = $formdata->getValue('post', 'pass', 's', false, '');
+$xoops_redirect = $formdata->getValue('post', 'xoops_redirect', 's', false, '');
 $redirect = !empty($xoops_redirect) ? '?xoops_redirect='.urlencode($xoops_redirect) : '';
 
-$myts =& MyTextsanitizer::getInstance();
+$myts = &MyTextsanitizer::getInstance();
 
 if ($uname == '' || $pass == '') {
     // Record events (login failure)
-    $event_handler =& xoonips_getormhandler( 'xoonips', 'event_log' );
-    $event_handler->recordLoginFailureEvent( $myts->stripSlashesGPC( $uname ) );
+    $event_handler = &xoonips_getormhandler('xoonips', 'event_log');
+    $event_handler->recordLoginFailureEvent($myts->stripSlashesGPC($uname));
 
     redirect_header(XOOPS_URL.'/modules/xoonips/user.php'.$redirect, 1, _US_INCORRECTLOGIN, false);
     exit();
 }
 
-$myxoopsConfig =& xoonips_get_xoops_configs( XOOPS_CONF );
+$myxoopsConfig = &xoonips_get_xoops_configs(XOOPS_CONF);
 
-$member_handler =& xoops_gethandler('member');
-$user =& $member_handler->loginUser(addslashes($myts->stripSlashesGPC($uname)), $myts->stripSlashesGPC($pass));
+$member_handler = &xoops_gethandler('member');
+$user = &$member_handler->loginUser(addslashes($myts->stripSlashesGPC($uname)), $myts->stripSlashesGPC($pass));
 if (false != $user) {
     if (0 == $user->getVar('level')) {
         redirect_header(XOOPS_URL.'/', 5, _US_NOACTTPADM);
@@ -75,7 +78,7 @@ if (false != $user) {
     $_SESSION['xoopsUserId'] = $user->getVar('uid');
     $_SESSION['xoopsUserGroups'] = $user->getGroups();
     if ($myxoopsConfig['use_mysession'] && $myxoopsConfig['session_name'] != '') {
-        setcookie($myxoopsConfig['session_name'], session_id(), time()+(60 * $myxoopsConfig['session_expire']), '/',  '', 0);
+        setcookie($myxoopsConfig['session_name'], session_id(), time() + (60 * $myxoopsConfig['session_expire']), '/', '', 0);
     }
     $user_theme = $user->getVar('theme');
     if (in_array($user_theme, $myxoopsConfig['theme_set_allowed'])) {
@@ -85,8 +88,8 @@ if (false != $user) {
         $parsed = parse_url(XOOPS_URL);
         $url = isset($parsed['scheme']) ? $parsed['scheme'].'://' : 'http://';
         if (isset($parsed['host'])) {
-            $xoops_redirect = $formdata->getValue( 'post', 'xoops_redirect', 's', false );
-            $url .= isset($parsed['port']) ?$parsed['host'].':'.$parsed['port'].trim($xoops_redirect): $parsed['host'].$xoops_redirect;
+            $xoops_redirect = $formdata->getValue('post', 'xoops_redirect', 's', false);
+            $url .= isset($parsed['port']) ? $parsed['host'].':'.$parsed['port'].trim($xoops_redirect) : $parsed['host'].$xoops_redirect;
         } else {
             $url .= xoops_getenv('HTTP_HOST').$xoops_redirect;
         }
@@ -103,32 +106,31 @@ if (false != $user) {
 
     // RMV-NOTIFY
     // Perform some maintenance of notification records
-    $notification_handler =& xoops_gethandler('notification');
+    $notification_handler = &xoops_gethandler('notification');
     $notification_handler->doLoginMaintenance($user->getVar('uid'));
 
     // init xoonips session
-    $uid = $user->getVar( 'uid', 'n' );
-    $session_handler =& xoonips_getormhandler( 'xoonips', 'session' );
-    $session_handler->initSession( $uid );
+    $uid = $user->getVar('uid', 'n');
+    $session_handler = &xoonips_getormhandler('xoonips', 'session');
+    $session_handler->initSession($uid);
 
     // validate xoonips user
     // if user is not xoonips user or not certified user then logout now
-    $session_handler->validateUser( $uid, true );
+    $session_handler->validateUser($uid, true);
 
     // Record events(login success)
-    $event_handler =& xoonips_getormhandler( 'xoonips', 'event_log' );
-    $event_handler->recordLoginSuccessEvent( $uid );
+    $event_handler = &xoonips_getormhandler('xoonips', 'event_log');
+    $event_handler->recordLoginSuccessEvent($uid);
 
     // garbage collect expired sessions
     $session_handler->gcSession();
 
     redirect_header($url, 1, sprintf(_US_LOGGINGU, $user->getVar('uname')));
- } else {
+} else {
     // Record events(login failure)
-    $event_handler =& xoonips_getormhandler( 'xoonips', 'event_log' );
-    $event_handler->recordLoginFailureEvent( $myts->stripSlashesGPC( $uname ) );
+    $event_handler = &xoonips_getormhandler('xoonips', 'event_log');
+    $event_handler->recordLoginFailureEvent($myts->stripSlashesGPC($uname));
 
-    redirect_header(XOOPS_URL.'/modules/xoonips/user.php'.$redirect,1,_US_INCORRECTLOGIN,false);
+    redirect_header(XOOPS_URL.'/modules/xoonips/user.php'.$redirect, 1, _US_INCORRECTLOGIN, false);
 }
 exit();
-?>

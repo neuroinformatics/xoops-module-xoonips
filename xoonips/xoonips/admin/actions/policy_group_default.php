@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // title
@@ -52,9 +53,9 @@ $breadcrumbs = array(
 );
 
 // token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_policy_group';
-$token_ticket = $xoopsGTicket->getTicketHtml( __LINE__, 1800, $ticket_area );
+$token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // get configs
 $config_keys = array();
@@ -75,48 +76,46 @@ $initvals_config_keys = array(
     'type' => 'f',
   ),
 );
-foreach ( $initvals_config_keys as $key => $value ) {
-  $config_keys[$key] = $value['type'];
+foreach ($initvals_config_keys as $key => $value) {
+    $config_keys[$key] = $value['type'];
 }
-$config_values = xoonips_admin_get_configs( $config_keys, 'e' );
+$config_values = xoonips_admin_get_configs($config_keys, 'e');
 
 // initial values
 $initil_values = array();
-foreach ( $initvals_config_keys as $name => $value ) {
-  $iv = array();
-  $iv['title'] = $value['title'];
-  $iv['desc'] = $value['desc'];
-  $iv['name'] = $name;
-  if ( $value['type'] == 'f' ) {
-    $iv['value'] = $config_values[$name] / 1000000.0;
-  } else {
-    $iv['value'] = $config_values[$name];
-  }
-  $initial_values[] = $iv;
+foreach ($initvals_config_keys as $name => $value) {
+    $iv = array();
+    $iv['title'] = $value['title'];
+    $iv['desc'] = $value['desc'];
+    $iv['name'] = $name;
+    if ($value['type'] == 'f') {
+        $iv['value'] = $config_values[$name] / 1000000.0;
+    } else {
+        $iv['value'] = $config_values[$name];
+    }
+    $initial_values[] = $iv;
 }
 
 // templates
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'policy_group.tmpl.html' );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('policy_group.tmpl.html');
 
 // assign template variables
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->setAttribute( 'description', 'visibility', 'visible' );
-$tmpl->addVar( 'description', 'DESCRIPTION', $description );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'main', 'token_ticket', $token_ticket );
-$tmpl->addVar( 'main', 'submit', _AM_XOONIPS_LABEL_UPDATE );
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->setAttribute('description', 'visibility', 'visible');
+$tmpl->addVar('description', 'DESCRIPTION', $description);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('main', 'token_ticket', $token_ticket);
+$tmpl->addVar('main', 'submit', _AM_XOONIPS_LABEL_UPDATE);
 
 // initial values
-$tmpl->addVar( 'main', 'initial_values_title', _AM_XOONIPS_POLICY_GROUP_INITIAL_VALUES_TITLE );
-$tmpl->addRows( 'initial_values', $initial_values );
+$tmpl->addVar('main', 'initial_values_title', _AM_XOONIPS_POLICY_GROUP_INITIAL_VALUES_TITLE);
+$tmpl->addRows('initial_values', $initial_values);
 
 // display
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

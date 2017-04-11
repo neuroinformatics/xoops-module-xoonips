@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.2 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,18 +26,15 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/base/logic.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
 
 /**
- *
- * subclass of XooNIpsLogic(getItemtype)
- *
+ * subclass of XooNIpsLogic(getItemtype).
  */
 class XooNIpsLogicGetItemtype extends XooNIpsLogic
 {
-
     /**
-     * execute getItemtype
+     * execute getItemtype.
      *
      * @param[in]  $vars[0] session ID
      * @param[in]  $vars[1] item type ID
@@ -44,30 +42,42 @@ class XooNIpsLogicGetItemtype extends XooNIpsLogic
      * @param[out] $response->error  error information
      * @param[out] $response->success item type structure 2
      */
-    function execute(&$vars, &$response) 
+    public function execute(&$vars, &$response)
     {
         // parameter check
         $error = &$response->getError();
-        if (count($vars) > 2) $error->add(XNPERR_EXTRA_PARAM);
-        if (count($vars) < 2) $error->add(XNPERR_MISSING_PARAM);
-        //
-        if (isset($vars[0]) && strlen($vars[0]) > 32) $error->add(XNPERR_INVALID_PARAM, 'too long parameter 1');
-        if (!isset($vars[1])) $error->add(XNPERR_MISSING_PARAM, 'parameter 2 missing');
-        if (!ctype_digit($vars[1]) && !is_int($vars[1])) $error->add(XNPERR_INVALID_PARAM, 'not integer parameter 2');
-        //
+        if (count($vars) > 2) {
+            $error->add(XNPERR_EXTRA_PARAM);
+        }
+        if (count($vars) < 2) {
+            $error->add(XNPERR_MISSING_PARAM);
+        }
+
+        if (isset($vars[0]) && strlen($vars[0]) > 32) {
+            $error->add(XNPERR_INVALID_PARAM, 'too long parameter 1');
+        }
+        if (!isset($vars[1])) {
+            $error->add(XNPERR_MISSING_PARAM, 'parameter 2 missing');
+        }
+        if (!ctype_digit($vars[1]) && !is_int($vars[1])) {
+            $error->add(XNPERR_INVALID_PARAM, 'not integer parameter 2');
+        }
+
         if ($error->get(0)) {
             // return if parameter error
             $response->setResult(false);
+
             return;
         } else {
             $response->setResult(false);
             $sessionid = $vars[0];
-            $item_type_id = (int)$vars[1];
+            $item_type_id = (int) $vars[1];
         }
         list($result, $uid, $session) = $this->restoreSession($sessionid);
         if (!$result) {
             $response->setResult(false);
             $error->add(XNPERR_INVALID_SESSION);
+
             return false;
         }
         // item_type_id -> detail_item_type
@@ -76,6 +86,7 @@ class XooNIpsLogicGetItemtype extends XooNIpsLogic
         if (!$item_type) {
             $response->setResult(false);
             $error->add(XNPERR_NOT_FOUND, "cannot get itemtype(item_type_id=$item_type_id)");
+
             return false;
         }
         $item_type_name = $item_type->get('name');
@@ -83,17 +94,19 @@ class XooNIpsLogicGetItemtype extends XooNIpsLogic
         if (!$detail_item_type_handler) {
             $response->setResult(false);
             $error->add(XNPERR_ERROR, "unsupported itemtype($item_type_id)");
+
             return false;
         }
         $detail_item_type = $detail_item_type_handler->get($item_type_id);
         if (!$detail_item_type) {
             $response->setResult(false);
             $error->add(XNPERR_ERROR, "unsupported itemtype($item_type_id)");
+
             return false;
         }
         $response->setSuccess($detail_item_type);
         $response->setResult(true);
+
         return true;
     }
 }
-?>

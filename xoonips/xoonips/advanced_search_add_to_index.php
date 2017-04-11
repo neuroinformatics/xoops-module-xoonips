@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.10.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -31,11 +32,11 @@ include 'include/common.inc.php';
 
 // access permission check
 if (!$xoopsUser) {
-  redirect_header('user.php',3,_MD_XOONIPS_ITEM_FORBIDDEN);
-  exit();
+    redirect_header('user.php', 3, _MD_XOONIPS_ITEM_FORBIDDEN);
+    exit();
 }
 
-$pankuzu = "";
+$pankuzu = '';
 
 // disable to link index tree
 $xoonipsURL = '';
@@ -47,5 +48,3 @@ include XOOPS_ROOT_PATH.'/header.php';
 include 'include/advanced_search.inc.php';
 
 include XOOPS_ROOT_PATH.'/footer.php';
-
-?>

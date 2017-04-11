@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,18 +26,15 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/base/logic.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
 
 /**
- *
- * subclass of XooNIpsLogic(getChildIndexes)
- *
+ * subclass of XooNIpsLogic(getChildIndexes).
  */
 class XooNIpsLogicGetChildIndexes extends XooNIpsLogic
 {
-
     /**
-     * execute getChildIndexes
+     * execute getChildIndexes.
      *
      * @param[in]  $vars[0] session ID
      * @param[in]  $vars[1] parent index ID
@@ -44,19 +42,26 @@ class XooNIpsLogicGetChildIndexes extends XooNIpsLogic
      * @param[out] $response->error  error information
      * @param[out] $response->success array of child indexes(XooNIpsIndexCompo[], empty if no child)
      */
-    function execute(&$vars, &$response) 
+    public function execute(&$vars, &$response)
     {
         // parameter check
         $error = &$response->getError();
-        if (count($vars) > 2) $error->add(XNPERR_EXTRA_PARAM);
-        else if (count($vars) < 2) $error->add(XNPERR_MISSING_PARAM);
-        else {
-            if (isset($vars[0]) && strlen($vars[0]) > 32) $error->add(XNPERR_INVALID_PARAM, 'too long parameter 1');
-            if (!is_int($vars[1]) && !ctype_digit($vars[1])) $error->add(XNPERR_INVALID_PARAM, 'not integer parameter 2 ');
+        if (count($vars) > 2) {
+            $error->add(XNPERR_EXTRA_PARAM);
+        } elseif (count($vars) < 2) {
+            $error->add(XNPERR_MISSING_PARAM);
+        } else {
+            if (isset($vars[0]) && strlen($vars[0]) > 32) {
+                $error->add(XNPERR_INVALID_PARAM, 'too long parameter 1');
+            }
+            if (!is_int($vars[1]) && !ctype_digit($vars[1])) {
+                $error->add(XNPERR_INVALID_PARAM, 'not integer parameter 2 ');
+            }
         }
         if ($error->get(0)) {
             // return if parameter error
             $response->setResult(false);
+
             return;
         } else {
             $sessionid = $vars[0];
@@ -66,15 +71,17 @@ class XooNIpsLogicGetChildIndexes extends XooNIpsLogic
         if (!$result) {
             $response->setResult(false);
             $error->add(XNPERR_INVALID_SESSION);
+
             return false;
         }
-        //
+
         $sessionid = $vars[0];
         $parent_index_id = $vars[1];
         list($result, $uid, $session) = $this->restoreSession($sessionid);
         if (!$result) {
             $response->setResult(false);
             $error->add(XNPERR_INVALID_SESSION);
+
             return false;
         }
         // not found?
@@ -83,28 +90,31 @@ class XooNIpsLogicGetChildIndexes extends XooNIpsLogic
         if ($index == false) {
             $response->setResult(false);
             $response->error->add(XNPERR_NOT_FOUND);
+
             return false;
         }
         // check permission
         if (!$index_handler->getPerm($parent_index_id, $uid, 'read')) {
             $response->setResult(false);
-            $error->add(XNPERR_ACCESS_FORBIDDEN, "no permission");
+            $error->add(XNPERR_ACCESS_FORBIDDEN, 'no permission');
+
             return false;
         }
         // get child index_id from index_id
-        $join=new XooNIpsJoinCriteria('xoonips_index', 'item_id', 'index_id');
+        $join = new XooNIpsJoinCriteria('xoonips_index', 'item_id', 'index_id');
         $criteria = new Criteria('parent_index_id', $parent_index_id);
         $criteria->setSort('sort_number');
         $index_compo_handler = &xoonips_getormcompohandler('xoonips', 'index');
-        $indexes =& $index_compo_handler->getObjects($criteria, false, '', false, $join);
+        $indexes = &$index_compo_handler->getObjects($criteria, false, '', false, $join);
         if (false === $indexes) {
             $response->setResult(false);
-            $error->add(XNPERR_SERVER_ERROR, "cannot get child indexes");
+            $error->add(XNPERR_SERVER_ERROR, 'cannot get child indexes');
+
             return false;
         }
         $response->setSuccess($indexes);
         $response->setResult(true);
+
         return true;
     }
 }
-?>

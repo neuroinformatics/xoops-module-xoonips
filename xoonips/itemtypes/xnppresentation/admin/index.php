@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.10.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -29,16 +30,16 @@ include '../../../include/cp_header.php';
 
 $title = _AM_XNPPRESENTATION_TITLE;
 
-$mid = $xoopsModule->getVar( 'mid' );
-if ( defined( 'XOOPS_CUBE_LEGACY' ) ) {
-  // for XOOPS Cube 2.1 Legacy
+$mid = $xoopsModule->getVar('mid');
+if (defined('XOOPS_CUBE_LEGACY')) {
+    // for XOOPS Cube 2.1 Legacy
   $pref_url = XOOPS_URL.'/modules/legacy/admin/index.php?action=PreferenceEdit&confmod_id='.$mid;
 } else {
-  // for XOOPS 2.0
+    // for XOOPS 2.0
   $pref_url = XOOPS_URL.'/modules/system/admin.php?fct=preferences&op=showmod&mod='.$mid;
 }
 $pref_title = _PREFERENCES;
-$pref_url = htmlspecialchars( $pref_url, ENT_QUOTES );
+$pref_url = htmlspecialchars($pref_url, ENT_QUOTES);
 
 xoops_cp_header();
 
@@ -50,8 +51,7 @@ echo '<li style="padding: 5px;">';
 echo '<a href="'.$pref_url.'">'.$pref_title.'</a>'."\n";
 echo '</li>';
 echo '</ul>';
-echo "</td></tr>";
-echo "</table>";
+echo '</td></tr>';
+echo '</table>';
 
 xoops_cp_footer();
-

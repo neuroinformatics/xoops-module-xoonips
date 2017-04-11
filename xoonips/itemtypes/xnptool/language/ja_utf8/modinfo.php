@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -31,12 +32,10 @@
 // _MI_<MODULENAME>_<STRINGNAME>
 
 // The name of this module
-define("_MI_XNPTOOL_NAME","XooNIps Tool Item Type Module");
+define('_MI_XNPTOOL_NAME', 'XooNIps Tool Item Type Module');
 // A brief description of this module
-define("_MI_XNPTOOL_DESC","XooNIps Tool Item Type Module");
+define('_MI_XNPTOOL_DESC', 'XooNIps Tool Item Type Module');
 
 // Names of admin menu items
-define("_MI_XNPTOOL_CFG_DL_LIMIT","登録者によるダウンロード制約オプションの利用を許可しますか？");
-define("_MI_XNPTOOL_CFG_DL_LIMIT_DESC","");
-
-?>
+define('_MI_XNPTOOL_CFG_DL_LIMIT', '登録者によるダウンロード制約オプションの利用を許可しますか？');
+define('_MI_XNPTOOL_CFG_DL_LIMIT_DESC', '');

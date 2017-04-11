@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,34 +26,29 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH 
-. '/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
-include_once XOOPS_ROOT_PATH 
-. '/modules/xoonips/class/xmlrpc/xmlrpcfault.class.php';
+include_once XOOPS_ROOT_PATH
+.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
+include_once XOOPS_ROOT_PATH
+.'/modules/xoonips/class/xmlrpc/xmlrpcfault.class.php';
 
 /**
- *
  * @brief Class that generate response of XML-RPC getItemPermission request
- *
- *
  */
 class XooNIpsXmlRpcViewGetItemPermission extends XooNIpsXmlRpcViewElement
 {
-
     /**
-     *
      * @brief return XoopsXmlRpcTag that has response of this request
      *
      * @return XoopsXmlRpcTag
      */
-    function render() 
+    public function render()
     {
         $permission = $this->response->getSuccess();
         $resp = new XoopsXmlRpcStruct();
         $resp->add('read', new XoopsXmlRpcBoolean($permission['read']));
         $resp->add('write', new XoopsXmlRpcBoolean($permission['write']));
         $resp->add('delete', new XoopsXmlRpcBoolean($permission['delete']));
+
         return $resp;
     }
 }
-?>

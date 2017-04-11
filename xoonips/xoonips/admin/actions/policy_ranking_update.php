@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,16 +25,16 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // check token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_policy_ranking';
-if ( ! $xoopsGTicket->check( true, $ticket_area, false ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors() );
-  exit();
+if (!$xoopsGTicket->check(true, $ticket_area, false)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors());
+    exit();
 }
 
 // get requests
@@ -72,45 +73,43 @@ $post_keys = array(
   ),
   // checkbox,
 );
-$post_vals = xoonips_admin_get_requests( 'post', $post_keys );
+$post_vals = xoonips_admin_get_requests('post', $post_keys);
 
 // set config keys
 $config_keys = array();
-foreach ( $post_keys as $key => $attributes ) {
-  list( $data_type, $is_array, $required ) = $attributes;
-  $config_keys[$key] = $data_type;
+foreach ($post_keys as $key => $attributes) {
+    list($data_type, $is_array, $required) = $attributes;
+    $config_keys[$key] = $data_type;
 }
 
 // >> ranking_days_enabled 'on' or null
-if ( is_null( $post_vals['ranking_days_enabled'] ) ) {
-  $post_vals['ranking_days_enabled'] = '';
+if (is_null($post_vals['ranking_days_enabled'])) {
+    $post_vals['ranking_days_enabled'] = '';
 }
 // >> visible
 $post_array_keys = array(
   'ranking_visible' => 5,
   'ranking_new_visible' => 2,
 );
-foreach ( $post_array_keys as $key => $max_num ) {
-  $val = $post_vals[$key];
-  for ( $i = 0; $i < $max_num; $i++ ) {
-    if ( ! isset( $val[$i] ) ) {
-      $val[$i] = 0;
+foreach ($post_array_keys as $key => $max_num) {
+    $val = $post_vals[$key];
+    for ($i = 0; $i < $max_num; ++$i) {
+        if (!isset($val[$i])) {
+            $val[$i] = 0;
+        }
     }
-  }
-  ksort( $val );
-  $post_vals[$key] = implode( ',', $val );
-  $config_keys[$key] = 's';
+    ksort($val);
+    $post_vals[$key] = implode(',', $val);
+    $config_keys[$key] = 's';
 }
 
 // update db values
-foreach ( $config_keys as $key => $type ) {
-  xoonips_admin_set_config( $key, $post_vals[$key], $type );
+foreach ($config_keys as $key => $type) {
+    xoonips_admin_set_config($key, $post_vals[$key], $type);
 }
 
 // recalc ranking data
-$admin_ranking_handler =& xoonips_gethandler( 'xoonips', 'admin_ranking' );
+$admin_ranking_handler = &xoonips_gethandler('xoonips', 'admin_ranking');
 $admin_ranking_handler->rebuild();
 
-redirect_header( $xoonips_admin['mypage_url'], 1, _AM_XOONIPS_MSG_DBUPDATED );
-
-?>
+redirect_header($xoonips_admin['mypage_url'], 1, _AM_XOONIPS_MSG_DBUPDATED);

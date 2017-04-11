@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -29,40 +30,38 @@
  */
 
 // _MD_<MODULENAME>_<STRINGNAME>
-define( '_MD_XNPMODEL_MODEL_TYPE_LABEL', 'モデルタイプ' );
-define( '_MD_XNPMODEL_CREATOR_LABEL', '作成者' );
-define( '_MD_XNPMODEL_MODEL_FILE_LABEL', 'モデルファイル' );
-define( '_MD_XNPMODEL_CAPTION_LABEL', 'キャプション' );
-define( '_MD_XNPMODEL_PREVIEW_LABEL', 'プレビュー' );
+define('_MD_XNPMODEL_MODEL_TYPE_LABEL', 'モデルタイプ');
+define('_MD_XNPMODEL_CREATOR_LABEL', '作成者');
+define('_MD_XNPMODEL_MODEL_FILE_LABEL', 'モデルファイル');
+define('_MD_XNPMODEL_CAPTION_LABEL', 'キャプション');
+define('_MD_XNPMODEL_PREVIEW_LABEL', 'プレビュー');
 
 //specify model types(separated by '\t')
-define( '_MD_XNPMODEL_MODEL_TYPE_SELECT', "Matlab\tNeuron\tOriginalProgram\tSatellite\tGenesis\tA-Cell\tOther" );
+define('_MD_XNPMODEL_MODEL_TYPE_SELECT', "Matlab\tNeuron\tOriginalProgram\tSatellite\tGenesis\tA-Cell\tOther");
 
-define( '_MD_XNPMODEL_CREATOR_REQUIRED', "'作成者' を入力して下さい" );
-define( '_MD_XNPMODEL_MODEL_FILE_REQUIRED', "'モデルファイル' を登録して下さい" );
+define('_MD_XNPMODEL_CREATOR_REQUIRED', "'作成者' を入力して下さい");
+define('_MD_XNPMODEL_MODEL_FILE_REQUIRED', "'モデルファイル' を登録して下さい");
 
-define( '_MD_XNPMODEL_README_REQUIRED', "'Readme' を入力して下さい" );
-define( '_MD_XNPMODEL_LICENSE_REQUIRED', "'License' を入力して下さい" );
-define( '_MD_XNPMODEL_RIGHTS_REQUIRED', "'Rights' を入力して下さい" );
-define( '_MD_XNPMODEL_EXPLANATION', "モデル プログラム/スクリプト" );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_MATLAB'           , 'Matlab' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_NEURON'           , 'Neuron' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_ORIGINAL_PROGRAM' , 'OriginalProgram' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_SATELLITE'        , 'Satellite' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_GENESIS'          , 'Genesis' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_A_CELL'           , 'A-Cell' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_OTHER'            , 'Other' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_ID'            , 'アイテムID' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE'          , 'モデルタイプ' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_CREATOR'             , '作成者' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_README'              , 'Readme' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_RIGHTS'              , 'Rights' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_USE_CC'              , 'クリエイティブコモンズを使用する' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_CC_COMMERCIAL_USE'   , '作品の営利目的利用を許可する' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_CC_MODIFICATION'     , '作品の翻案・改変を許可する' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_ATTACHMENT_DL_LIMIT' , 'ダウンロード制限' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_ATTACHMENT_DL_NOTIFY', 'ダウンロード通知' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_DATA'          , 'モデルファイル' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_PREVIEW'             , 'プレビュー' );
-
-?>
+define('_MD_XNPMODEL_README_REQUIRED', "'Readme' を入力して下さい");
+define('_MD_XNPMODEL_LICENSE_REQUIRED', "'License' を入力して下さい");
+define('_MD_XNPMODEL_RIGHTS_REQUIRED', "'Rights' を入力して下さい");
+define('_MD_XNPMODEL_EXPLANATION', 'モデル プログラム/スクリプト');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_MATLAB', 'Matlab');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_NEURON', 'Neuron');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_ORIGINAL_PROGRAM', 'OriginalProgram');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_SATELLITE', 'Satellite');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_GENESIS', 'Genesis');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_A_CELL', 'A-Cell');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_OTHER', 'Other');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_ID', 'アイテムID');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE', 'モデルタイプ');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_CREATOR', '作成者');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_README', 'Readme');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_RIGHTS', 'Rights');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_USE_CC', 'クリエイティブコモンズを使用する');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_CC_COMMERCIAL_USE', '作品の営利目的利用を許可する');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_CC_MODIFICATION', '作品の翻案・改変を許可する');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_ATTACHMENT_DL_LIMIT', 'ダウンロード制限');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_ATTACHMENT_DL_NOTIFY', 'ダウンロード通知');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_DATA', 'モデルファイル');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_PREVIEW', 'プレビュー');

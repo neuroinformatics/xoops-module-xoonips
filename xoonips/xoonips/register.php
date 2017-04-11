@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.24.2.1.2.18 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -32,9 +33,9 @@
    If cache is valid, the #8043 problem occurs. -> xnpsid is buried in URL.
 */
 
-if ( $_SERVER['REQUEST_METHOD'] == 'GET' && ( isset($_GET['item_type_id']) || isset($_GET['post_id']) ) ) {
-	session_cache_limiter( 'private' );
-	session_cache_expire( 5 );
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && (isset($_GET['item_type_id']) || isset($_GET['post_id']))) {
+    session_cache_limiter('private');
+    session_cache_expire(5);
 }
 
 $xoopsOption['pagetype'] = 'user';
@@ -49,16 +50,16 @@ xnpEncodeMacSafariPost();
 xnpEncodeMacSafariGet();
 
 // If post_id is specified, $_POST is restored.
-$formdata =& xoonips_getutility( 'formdata' );
-$post_id = $formdata->getValue( 'get', 'post_id', 'n', false );
-if ( ! is_null( $post_id ) && $_SERVER["REQUEST_METHOD"] == 'GET' ) {
-  if ( isset( $_SESSION['post_id'] ) && isset( $_SESSION['post_id'][$post_id] ) ){
-    $_POST = unserialize( $_SESSION['post_id'][$post_id] );
-  }
+$formdata = &xoonips_getutility('formdata');
+$post_id = $formdata->getValue('get', 'post_id', 'n', false);
+if (!is_null($post_id) && $_SERVER['REQUEST_METHOD'] == 'GET') {
+    if (isset($_SESSION['post_id']) && isset($_SESSION['post_id'][$post_id])) {
+        $_POST = unserialize($_SESSION['post_id'][$post_id]);
+    }
 }
 
-foreach( array( 'item_type_id' => 0, 'scrollX' => 0, 'scrollY' => 0 ) as $k => $v ){
-  $$k = $formdata->getValue( 'both', $k, 'i', false, $v );
+foreach (array('item_type_id' => 0, 'scrollX' => 0, 'scrollY' => 0) as $k => $v) {
+    $$k = $formdata->getValue('both', $k, 'i', false, $v);
 }
 
 xoonips_deny_guest_access();
@@ -66,114 +67,117 @@ xoonips_deny_guest_access();
 $uid = $_SESSION['xoopsUserId'];
 
 //Uncertified user can't access(except XOOPS administrator).
-if( !$xoopsUser->isAdmin( $xoopsModule->getVar('mid') )
-	&& !xnp_is_activated( $xnpsid, $uid ) ){
-  	redirect_header( XOOPS_URL.'/', 3, _MD_XOONIPS_MODERATOR_NOT_ACTIVATED);
-  	exit();
+if (!$xoopsUser->isAdmin($xoopsModule->getVar('mid'))
+    && !xnp_is_activated($xnpsid, $uid)) {
+    redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_MODERATOR_NOT_ACTIVATED);
+    exit();
 }
 
 $select_item_type = array();
-$item_type_handler =& xoonips_getormhandler( 'xoonips', 'item_type' );
-$item_types =& $item_type_handler->getObjectsSortByWeight();
-if( $item_types ){
-    foreach( $item_types as $i ){
-        $select_item_type[$i -> get('display_name')]=$i->get('item_type_id');
+$item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
+$item_types = &$item_type_handler->getObjectsSortByWeight();
+if ($item_types) {
+    foreach ($item_types as $i) {
+        $select_item_type[$i->get('display_name')] = $i->get('item_type_id');
     }
-}else{
-    die( 'item type is not found' );
+} else {
+    die('item type is not found');
 }
 
-if ( empty($item_type_id) ){
+if (empty($item_type_id)) {
     // set default item type id
-    if ( isset($_SESSION['xoonipsITID']) )
+    if (isset($_SESSION['xoonipsITID'])) {
         $item_type_id = $_SESSION['xoonipsITID'];
-    else
-        $item_type_id = $item_types[0] -> get( 'item_type_id' );
+    } else {
+        $item_type_id = $item_types[0]->get('item_type_id');
+    }
 }
 $_SESSION['xoonipsITID'] = $item_type_id; // setting of default value in item_type_id to display next time
 
-if ( !isset($item_type_id) && !isset($post_id) && $_SERVER['REQUEST_METHOD'] == 'GET' ){
-	header( "HTTP/1.0 303 See Other" );
-	header( "Location: " .  XOOPS_URL . "/modules/xoonips/register.php?item_type_id=$item_type_id&dummy=$xnpsid" );
-	echo sprintf( _IFNOTRELOAD, XOOPS_URL . "/modules/xoonips/register.php?item_type_id=$item_type_id&dummy=$xnpsid" );
-	exit;
+if (!isset($item_type_id) && !isset($post_id) && $_SERVER['REQUEST_METHOD'] == 'GET') {
+    header('HTTP/1.0 303 See Other');
+    header('Location: '.XOOPS_URL."/modules/xoonips/register.php?item_type_id=$item_type_id&dummy=$xnpsid");
+    echo sprintf(_IFNOTRELOAD, XOOPS_URL."/modules/xoonips/register.php?item_type_id=$item_type_id&dummy=$xnpsid");
+    exit;
 }
 
 $xoonipsTreeCheckBox = true;
 $xoonipsURL = '';
 $xoonipsCheckPrivateHandlerId = 'PrivateIndexCheckedHandler'; //see also xoonips_register.html
 
-
 $xoopsOption['template_main'] = 'xoonips_register.html';
 include XOOPS_ROOT_PATH.'/header.php';
 
 //check private_item_number_limit
-if( available_space_of_private_item( ) == 0 ){
-  if( ! isset( $system_message ) ) {
-    $system_message='';
-  }
-  $system_message .= '<span style="color: red;">'._MD_XOONIPS_ITEM_WARNING_ITEM_NUMBER_LIMIT.'</span><br />';
-  $xoopsTpl->assign( 'system_message', $system_message );
-  $xoopsTpl->assign( 'scrollX', 0 );
-  $xoopsTpl->assign( 'scrollY', 0 );
-  include XOOPS_ROOT_PATH.'/footer.php';
-  exit();
+if (available_space_of_private_item() == 0) {
+    if (!isset($system_message)) {
+        $system_message = '';
+    }
+    $system_message .= '<span style="color: red;">'._MD_XOONIPS_ITEM_WARNING_ITEM_NUMBER_LIMIT.'</span><br />';
+    $xoopsTpl->assign('system_message', $system_message);
+    $xoopsTpl->assign('scrollX', 0);
+    $xoopsTpl->assign('scrollY', 0);
+    include XOOPS_ROOT_PATH.'/footer.php';
+    exit();
 }
 
-$item_type_handler =& xoonips_getormhandler( 'xoonips', 'item_type' );
-$item_type =& $item_type_handler -> get( $item_type_id );
-if( !$item_type )
-    $item_type =& $item_type_handler-> get(
-        $item_types[0] -> get('item_type_id') );
+$item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
+$item_type = &$item_type_handler->get($item_type_id);
+if (!$item_type) {
+    $item_type = &$item_type_handler->get(
+        $item_types[0]->get('item_type_id'));
+}
 
 //select_item_type: array( 'item type name' => 'item_type_id', ... );
-$xoopsTpl->assign("select_item_type", $select_item_type );
-$xoopsTpl->assign("item_type_id", $item_type_id );
-$xoopsTpl->assign("xnpsid", $xnpsid );
-$xoopsTpl->assign("next_url", "confirm_register.php" );
-$xoopsTpl->assign("prev_url", "register.php" );
-$xoopsTpl->assign("this_url", XOOPS_URL . "/modules/xoonips/register.php" );
-$xoopsTpl->assign('accept_charset', xnpGetMacSafariAcceptCharset() );
+$xoopsTpl->assign('select_item_type', $select_item_type);
+$xoopsTpl->assign('item_type_id', $item_type_id);
+$xoopsTpl->assign('xnpsid', $xnpsid);
+$xoopsTpl->assign('next_url', 'confirm_register.php');
+$xoopsTpl->assign('prev_url', 'register.php');
+$xoopsTpl->assign('this_url', XOOPS_URL.'/modules/xoonips/register.php');
+$xoopsTpl->assign('accept_charset', xnpGetMacSafariAcceptCharset());
 
-include_once XOOPS_ROOT_PATH . '/modules/' . $item_type->get('viewphp');
-$func = $item_type->get('name')."GetRegisterBlock";
+include_once XOOPS_ROOT_PATH.'/modules/'.$item_type->get('viewphp');
+$func = $item_type->get('name').'GetRegisterBlock';
 $body = $func();
 
 $xoopsTpl->assign('body', $body);
-if( isset( $system_message ) )
-	$xoopsTpl->assign("system_message", $system_message );
-$xoonipsCheckedXID = $formdata->getValue( 'post', 'xoonipsCheckedXID', 's', false);
-if ( isset($xoonipsCheckedXID) )
-	$xoopsTpl->assign("index_checked_id", $xoonipsCheckedXID );
+if (isset($system_message)) {
+    $xoopsTpl->assign('system_message', $system_message);
+}
+$xoonipsCheckedXID = $formdata->getValue('post', 'xoonipsCheckedXID', 's', false);
+if (isset($xoonipsCheckedXID)) {
+    $xoopsTpl->assign('index_checked_id', $xoonipsCheckedXID);
+}
 
-$xoopsTpl->assign( 'scrollX', $scrollX );
-$xoopsTpl->assign( 'scrollY', $scrollY );
+$xoopsTpl->assign('scrollX', $scrollX);
+$xoopsTpl->assign('scrollY', $scrollY);
 
-$xoopsTpl->assign("invalid_doi_message", sprintf( _MD_XOONIPS_ITEM_DOI_INVALID_ID, XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN ) );
+$xoopsTpl->assign('invalid_doi_message', sprintf(_MD_XOONIPS_ITEM_DOI_INVALID_ID, XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN));
 
 $account = array();
-if( xnp_get_account( $xnpsid, $uid, $account ) == RES_OK ){
+if (xnp_get_account($xnpsid, $uid, $account) == RES_OK) {
     $iids = array();
-    if( xnp_get_private_item_id( $xnpsid, $uid, $iids ) == RES_OK ){
-        $xoopsTpl->assign( 'num_of_items_current', count( $iids ) );
-    }else{
-        $xoopsTpl->assign( 'num_of_items_current', 0 );
+    if (xnp_get_private_item_id($xnpsid, $uid, $iids) == RES_OK) {
+        $xoopsTpl->assign('num_of_items_current', count($iids));
+    } else {
+        $xoopsTpl->assign('num_of_items_current', 0);
     }
-    $xoopsTpl->assign( 'num_of_items_max', $account['item_number_limit'] );
-    $xoopsTpl->assign( 'storage_of_items_max', sprintf( "%.02lf", $account['item_storage_limit'] / 1000 / 1000 ) );
-    $xoopsTpl->assign( 'storage_of_items_current', sprintf( "%.02lf", filesize_private( ) / 1000 / 1000 ) );
+    $xoopsTpl->assign('num_of_items_max', $account['item_number_limit']);
+    $xoopsTpl->assign('storage_of_items_max', sprintf('%.02lf', $account['item_storage_limit'] / 1000 / 1000));
+    $xoopsTpl->assign('storage_of_items_current', sprintf('%.02lf', filesize_private() / 1000 / 1000));
 }
 
 // If the page is made by POST, $_POST is made to save somewhere and page redirects.
 // rfc2616 10.3.4 303 See Other
-if ( $_SERVER["REQUEST_METHOD"] == 'POST' ){
-	$post_id = uniqid('postid');
-	$_SESSION['post_id'] = array( $post_id => serialize( $_POST ) );
-	header( "HTTP/1.0 303 See Other" );
-	header( "Location: " .  XOOPS_URL . "/modules/xoonips/register.php?post_id=$post_id" );
-	echo sprintf( _IFNOTRELOAD, XOOPS_URL . "/modules/xoonips/register.php?post_id=$post_id" );
-	//redirect_header("register.php?post_id=$post_id", 5, "redirecting...");
-	exit;
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $post_id = uniqid('postid');
+    $_SESSION['post_id'] = array($post_id => serialize($_POST));
+    header('HTTP/1.0 303 See Other');
+    header('Location: '.XOOPS_URL."/modules/xoonips/register.php?post_id=$post_id");
+    echo sprintf(_IFNOTRELOAD, XOOPS_URL."/modules/xoonips/register.php?post_id=$post_id");
+    //redirect_header("register.php?post_id=$post_id", 5, "redirecting...");
+    exit;
 }
 
 // The output( header("Cache-control: no-cache") etc ) is prevented by footer.php.
@@ -181,4 +185,3 @@ header('Content-Type:text/html; charset='._CHARSET);
 //echo "\r\n"; flush();
 
 include XOOPS_ROOT_PATH.'/footer.php';
-?>

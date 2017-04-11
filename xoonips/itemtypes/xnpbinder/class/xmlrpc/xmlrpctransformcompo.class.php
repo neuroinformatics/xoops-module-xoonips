@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.1.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,69 +26,71 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
-include_once dirname( dirname( __DIR__ ) ) . '/include/view.php';
+include_once dirname(dirname(__DIR__)).'/include/view.php';
 
 /**
- *
- * XmlRpcTransform composer class for Binder type
- *
- *
+ * XmlRpcTransform composer class for Binder type.
  */
 class XNPBinderXmlRpcTransformCompo extends XooNIpsXmlRpcTransformCompo
 {
-    function XNPBinderXmlRpcTransformCompo() 
+    public function XNPBinderXmlRpcTransformCompo()
     {
         parent::XooNIpsXmlRpcTransformCompo('xnpbinder');
     }
-    
+
     /**
      * @brief check that each field has valid value.
-     * 
+     *
      * @param[in] $in_array associative array of item
      * @param[out] $error XooNIpsError to add error
      * @retval ture valid
      * @retval false some invalid fields
      */
-    function checkFields($in_array, &$error){
-        parent::checkFields( $in_array, $fields);
-        $result = true;//set false if error
-        
-        $basic_handler =& xoonips_getormhandler( 'xoonips', 'item_basic' );
+    public function checkFields($in_array, &$error)
+    {
+        parent::checkFields($in_array, $fields);
+        $result = true; //set false if error
+
+        $basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $item_ids = array();
-        foreach($in_array['detail_field'] as $field) {
-            if( trim($field['name']) != 'item_id' ) continue;
-            $basic =& $basic_handler -> get( $field['value'] );
-            if( !$basic ){
-                $error -> add( XNPERR_INVALID_PARAM, 'item('.$field['value'].') is not exists' );
+        foreach ($in_array['detail_field'] as $field) {
+            if (trim($field['name']) != 'item_id') {
+                continue;
+            }
+            $basic = &$basic_handler->get($field['value']);
+            if (!$basic) {
+                $error->add(XNPERR_INVALID_PARAM, 'item('.$field['value'].') is not exists');
                 $result = false;
                 continue;
             }
-            if( ITID_INDEX == $basic -> get( 'item_type_id' ) ){
-                $error -> add( XNPERR_INVALID_PARAM, 'binder can not have index' );
+            if (ITID_INDEX == $basic->get('item_type_id')) {
+                $error->add(XNPERR_INVALID_PARAM, 'binder can not have index');
                 $result = false;
                 continue;
             }
             $item_ids[] = $field['value'];
         }
-        
+
         $index_ids = $in_array['indexes'];
-        
+
         // use following functions defined in view.php
-        if( xnpbinder_no_binder_item($item_ids) ){
-            $error -> add( XNPERR_INVALID_PARAM, 'binder needs at least one item' );
+        if (xnpbinder_no_binder_item($item_ids)) {
+            $error->add(XNPERR_INVALID_PARAM, 'binder needs at least one item');
             $result = false;
         }
-        if( xnpbinder_public_binder_has_not_public_item($item_ids, $index_ids) ){
-            $error -> add( XNPERR_INVALID_PARAM, 'public binder cannot have private and group items' );
+        if (xnpbinder_public_binder_has_not_public_item($item_ids, $index_ids)) {
+            $error->add(XNPERR_INVALID_PARAM, 'public binder cannot have private and group items');
             $result = false;
         }
-        if( xnpbinder_group_binder_has_private_item($item_ids, $index_ids) ){
-            $error -> add( XNPERR_INVALID_PARAM, 'group binder cannot have private item ' );
+        if (xnpbinder_group_binder_has_private_item($item_ids, $index_ids)) {
+            $error->add(XNPERR_INVALID_PARAM, 'group binder cannot have private item ');
             $result = false;
         }
+
         return $result;
     }
 }
-?>

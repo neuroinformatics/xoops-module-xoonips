@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.7.14.7 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -29,40 +30,38 @@
  */
 
 // _MD_<MODULENAME>_<STRINGNAME>
-define( '_MD_XNPMODEL_MODEL_TYPE_LABEL', 'Model type' );
-define( '_MD_XNPMODEL_CREATOR_LABEL', 'Creator' );
-define( '_MD_XNPMODEL_MODEL_FILE_LABEL', 'Model file' );
-define( '_MD_XNPMODEL_CAPTION_LABEL', 'Caption' );
-define( '_MD_XNPMODEL_PREVIEW_LABEL', 'Preview' );
+define('_MD_XNPMODEL_MODEL_TYPE_LABEL', 'Model type');
+define('_MD_XNPMODEL_CREATOR_LABEL', 'Creator');
+define('_MD_XNPMODEL_MODEL_FILE_LABEL', 'Model file');
+define('_MD_XNPMODEL_CAPTION_LABEL', 'Caption');
+define('_MD_XNPMODEL_PREVIEW_LABEL', 'Preview');
 
 //specify model types(separated by '\t')
-define( '_MD_XNPMODEL_MODEL_TYPE_SELECT', "Matlab\tNeuron\tOriginalProgram\tSatellite\tGenesis\tA-Cell\tOther" );
+define('_MD_XNPMODEL_MODEL_TYPE_SELECT', "Matlab\tNeuron\tOriginalProgram\tSatellite\tGenesis\tA-Cell\tOther");
 
-define( '_MD_XNPMODEL_CREATOR_REQUIRED', "Please enter 'Creator'" );
-define( '_MD_XNPMODEL_MODEL_FILE_REQUIRED', "Please enter 'Model file'" );
+define('_MD_XNPMODEL_CREATOR_REQUIRED', "Please enter 'Creator'");
+define('_MD_XNPMODEL_MODEL_FILE_REQUIRED', "Please enter 'Model file'");
 
-define( '_MD_XNPMODEL_README_REQUIRED', "Please enter 'Readme'" );
-define( '_MD_XNPMODEL_LICENSE_REQUIRED', "Please enter 'License'" );
-define( '_MD_XNPMODEL_RIGHTS_REQUIRED', "Please enter 'Rights'" );
-define( '_MD_XNPMODEL_EXPLANATION', "Model programs/scripts." );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_MATLAB'           , 'Matlab' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_NEURON'           , 'Neuron' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_ORIGINAL_PROGRAM' , 'OriginalProgram' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_SATELLITE'        , 'Satellite' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_GENESIS'          , 'Genesis' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_A_CELL'           , 'A-Cell' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_OTHER'            , 'Other' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_ID'            , 'Item ID' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE'          , 'Model type' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_CREATOR'             , 'Creator' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_README'              , 'Readme' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_RIGHTS'              , 'Rights' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_USE_CC'              , 'Use Creative Commons' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_CC_COMMERCIAL_USE'   , 'Allow commercial uses' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_CC_MODIFICATION'     , 'Allow modifications' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_ATTACHMENT_DL_LIMIT' , 'Download Limitation' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_ATTACHMENT_DL_NOTIFY', 'Download Notification' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_DATA'          , 'Model file' );
-define( '_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_PREVIEW'             , 'Preview' );
-
-?>
+define('_MD_XNPMODEL_README_REQUIRED', "Please enter 'Readme'");
+define('_MD_XNPMODEL_LICENSE_REQUIRED', "Please enter 'License'");
+define('_MD_XNPMODEL_RIGHTS_REQUIRED', "Please enter 'Rights'");
+define('_MD_XNPMODEL_EXPLANATION', 'Model programs/scripts.');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_MATLAB', 'Matlab');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_NEURON', 'Neuron');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_ORIGINAL_PROGRAM', 'OriginalProgram');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_SATELLITE', 'Satellite');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_GENESIS', 'Genesis');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_A_CELL', 'A-Cell');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE_OTHER', 'Other');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_ID', 'Item ID');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_TYPE', 'Model type');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_CREATOR', 'Creator');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_README', 'Readme');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_RIGHTS', 'Rights');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_USE_CC', 'Use Creative Commons');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_CC_COMMERCIAL_USE', 'Allow commercial uses');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_CC_MODIFICATION', 'Allow modifications');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_ATTACHMENT_DL_LIMIT', 'Download Limitation');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_ATTACHMENT_DL_NOTIFY', 'Download Notification');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_MODEL_DATA', 'Model file');
+define('_MD_XNPMODEL_XMLRPC_DISPLAY_NAME_PREVIEW', 'Preview');

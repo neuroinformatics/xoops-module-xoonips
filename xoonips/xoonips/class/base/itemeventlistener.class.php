@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,10 +26,17 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-class XooNIpsItemEventListener{
-    function onUpdate( $item_id ){}
-    function onDelete( $item_id ){}
-    function onRegister( $item_id ){}
-}
+class XooNIpsItemEventListener
+{
+    public function onUpdate($item_id)
+    {
+    }
 
-?>
+    public function onDelete($item_id)
+    {
+    }
+
+    public function onRegister($item_id)
+    {
+    }
+}

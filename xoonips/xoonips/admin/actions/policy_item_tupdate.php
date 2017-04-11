@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,16 +25,16 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // check token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_policy_item_type';
-if ( ! $xoopsGTicket->check( true, $ticket_area, false ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors() );
-  exit();
+if (!$xoopsGTicket->check(true, $ticket_area, false)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors());
+    exit();
 }
 
 // get variables
@@ -49,28 +50,26 @@ $post_keys = array(
     false,
   ),
 );
-$post_vals = xoonips_admin_get_requests( 'post', $post_keys );
+$post_vals = xoonips_admin_get_requests('post', $post_keys);
 
 // update db values
-$module_handler =& xoops_gethandler( 'module' );
-foreach ( $post_vals['weight'] as $mid => $w ) {
-  $module =& $module_handler->get( $mid );
-  $weight_orig = $module->getVar( 'weight', 'n' );
-  if ( $w != $weight_orig ) {
-    $module->setVar( 'weight', $w, true );
-    $module_handler->insert( $module );
-  }
+$module_handler = &xoops_gethandler('module');
+foreach ($post_vals['weight'] as $mid => $w) {
+    $module = &$module_handler->get($mid);
+    $weight_orig = $module->getVar('weight', 'n');
+    if ($w != $weight_orig) {
+        $module->setVar('weight', $w, true);
+        $module_handler->insert($module);
+    }
 }
-$itemtype_handler =& xoonips_getormhandler( 'xoonips', 'item_type' );
-foreach ( $post_vals['display_name'] as $itid => $display_name ) {
-  $itemtype =& $itemtype_handler->get( $itid );
-  $display_name_orig = $itemtype->getVar( 'display_name', 'n' );
-  if ( $display_name != $display_name_orig ) {
-    $itemtype->set( 'display_name', $display_name );
-    $itemtype_handler->insert( $itemtype );
-  }
+$itemtype_handler = &xoonips_getormhandler('xoonips', 'item_type');
+foreach ($post_vals['display_name'] as $itid => $display_name) {
+    $itemtype = &$itemtype_handler->get($itid);
+    $display_name_orig = $itemtype->getVar('display_name', 'n');
+    if ($display_name != $display_name_orig) {
+        $itemtype->set('display_name', $display_name);
+        $itemtype_handler->insert($itemtype);
+    }
 }
 
-redirect_header( $xoonips_admin['mypage_url'].'&amp;action=type', 3, _AM_XOONIPS_MSG_DBUPDATED );
-
-?>
+redirect_header($xoonips_admin['mypage_url'].'&amp;action=type', 3, _AM_XOONIPS_MSG_DBUPDATED);

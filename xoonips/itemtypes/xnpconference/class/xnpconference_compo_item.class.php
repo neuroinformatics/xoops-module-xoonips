@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,39 +26,43 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xoonips_compo_item.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xnpconference/iteminfo.php';
-include_once dirname( __DIR__ ) . '/include/view.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xnpconference/iteminfo.php';
+include_once dirname(__DIR__).'/include/view.php';
 
 /**
- *
  * @brief Handler object that create,insert,update,get,delete XNPConferenceCompo object.
- *
  */
 class XNPConferenceCompoHandler extends XooNIpsItemInfoCompoHandler
 {
-    function XNPConferenceCompoHandler(&$db) 
+    public function XNPConferenceCompoHandler(&$db)
     {
         parent::XooNIpsItemInfoCompoHandler($db, 'xnpconference');
     }
-    function &create() 
+
+    public function &create()
     {
         $conference = new XNPConferenceCompo();
+
         return $conference;
     }
-    
+
     /**
-     * return template filename
-     * 
-     * @param string $type defined symbol 
-     *  XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
-     *  or XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LISTL
+     * return template filename.
+     *
+     * @param string $type defined symbol
+     *                     XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
+     *                     or XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LISTL
+     *
      * @return template filename
      */
-    function getTemplateFileName($type){
-        switch( $type ){
+    public function getTemplateFileName($type)
+    {
+        switch ($type) {
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
             return 'xnpconference_transfer_item_detail.html';
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
@@ -66,100 +71,106 @@ class XNPConferenceCompoHandler extends XooNIpsItemInfoCompoHandler
             return '';
         }
     }
-    
+
     /**
-     * return template variables of item
-     * 
-     * @param string $type defined symbol 
-     *  XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
-     *  , XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST
-     *  , XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL
-     *  or XOONIPS_TEMPLATE_TYPE_ITEM_LIST
-     * @param int $item_id
-     * @param int $uid user id who get item
+     * return template variables of item.
+     *
+     * @param string $type    defined symbol
+     *                        XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
+     *                        , XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST
+     *                        , XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL
+     *                        or XOONIPS_TEMPLATE_TYPE_ITEM_LIST
+     * @param int    $item_id
+     * @param int    $uid     user id who get item
+     *
      * @return array of template variables
      */
-    function getTemplateVar($type, $item_id, $uid){
-        $conference =& $this->get( $item_id );
-        if ( ! is_object( $conference ) ) {
-          return array();
+    public function getTemplateVar($type, $item_id, $uid)
+    {
+        $conference = &$this->get($item_id);
+        if (!is_object($conference)) {
+            return array();
         }
         $result = $this->getBasicTemplateVar($type, $conference, $uid);
 
-        $textutil=&xoonips_getutility('text');
-        $detail =& $conference -> getVar( 'detail' );
-        
-        switch( $type ){
+        $textutil = &xoonips_getutility('text');
+        $detail = &$conference->getVar('detail');
+
+        switch ($type) {
         case XOONIPS_TEMPLATE_TYPE_ITEM_LIST:
-            $result['author']=array();
-            foreach( $conference -> getVar( 'author' ) as $author ){
+            $result['author'] = array();
+            foreach ($conference->getVar('author') as $author) {
                 $result['author'][] = $author->getVarArray('s');
             }
-            $result['detail']=$detail->getVarArray('s');
-            $result['detail']['presentation_type']=$this->get_presentation_type_label( $detail -> get( 'presentation_type' ) );
+            $result['detail'] = $detail->getVarArray('s');
+            $result['detail']['presentation_type'] = $this->get_presentation_type_label($detail->get('presentation_type'));
+
             return $result;
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
             $result['xnpconference_author']
-                =xoonips_get_multiple_field_template_vars($detail->getAuthors(),
+                = xoonips_get_multiple_field_template_vars($detail->getAuthors(),
                                                           'xnpconference',
                                                           'author');
-            $result['detail']=$detail->getVarArray('s');
-            $result['detail']['presentation_type']=$textutil->html_special_chars($this -> get_presentation_type_label($detail -> get( 'presentation_type' )));
-            $result['detail']['presentation_type_value']=$detail -> get( 'presentation_type', 's');
-            
-            $tmp=$detail->getVar('conference_from_year', 'n');
-            if ( ! empty( $tmp ) ) {
-                $conference_from = date( DATE_FORMAT, mktime( 0, 0, 0, $detail->getVar('conference_from_month', 'n'), $detail->getVar('conference_from_mday', 'n'), $detail->getVar('conference_from_year', 'n') ) );
-                $conference_to = date( DATE_FORMAT, mktime( 0, 0, 0, $detail->getVar('conference_to_month', 'n'), $detail->getVar('conference_to_mday', 'n'), $detail->getVar('conference_to_year', 'n') ) );
+            $result['detail'] = $detail->getVarArray('s');
+            $result['detail']['presentation_type'] = $textutil->html_special_chars($this->get_presentation_type_label($detail->get('presentation_type')));
+            $result['detail']['presentation_type_value'] = $detail->get('presentation_type', 's');
+
+            $tmp = $detail->getVar('conference_from_year', 'n');
+            if (!empty($tmp)) {
+                $conference_from = date(DATE_FORMAT, mktime(0, 0, 0, $detail->getVar('conference_from_month', 'n'), $detail->getVar('conference_from_mday', 'n'), $detail->getVar('conference_from_year', 'n')));
+                $conference_to = date(DATE_FORMAT, mktime(0, 0, 0, $detail->getVar('conference_to_month', 'n'), $detail->getVar('conference_to_mday', 'n'), $detail->getVar('conference_to_year', 'n')));
             } else {
-                $conference_from = date( DATE_FORMAT, mktime( 0, 0, 0, $basic['publication_month']['value'], $basic['publication_mday']['value'], $basic['publication_year']['value'] ) );
+                $conference_from = date(DATE_FORMAT, mktime(0, 0, 0, $basic['publication_month']['value'], $basic['publication_mday']['value'], $basic['publication_year']['value']));
                 $conference_to = $conference_from;
             }
             $result['detail']['conference_date'] = 'From:&nbsp;'.$conference_from.'&nbsp;&nbsp;&nbsp;To:&nbsp;'.$conference_to;
-            
-            $conference_paper = $conference -> getVar( 'conference_paper' );
-            if( $conference_paper -> get( 'item_id' ) == $item_id ){
-                $result['detail']['conference_paper'] = $this -> getAttachmentTemplateVar($conference -> getVar( 'conference_paper' ) );
+
+            $conference_paper = $conference->getVar('conference_paper');
+            if ($conference_paper->get('item_id') == $item_id) {
+                $result['detail']['conference_paper'] = $this->getAttachmentTemplateVar($conference->getVar('conference_paper'));
             }
-            $conference_file = $conference -> getVar( 'conference_file' );
-            if( $conference_file -> get( 'item_id' ) == $item_id ){
-                $result['detail']['conference_file'] = $this -> getAttachmentTemplateVar($conference -> getVar( 'conference_file' ) );
+            $conference_file = $conference->getVar('conference_file');
+            if ($conference_file->get('item_id') == $item_id) {
+                $result['detail']['conference_file'] = $this->getAttachmentTemplateVar($conference->getVar('conference_file'));
             }
             break;
         }
+
         return $result;
     }
-    
-    function get_presentation_type_label( $type ){
+
+    public function get_presentation_type_label($type)
+    {
         $keyval = xnpconferenceGetTypes();
-        return $keyval[ $type ];
+
+        return $keyval[$type];
     }
-    
+
     /**
-     * 
-     * get confernece date string
+     * get confernece date string.
+     *
      * @param XooNIpsConferenceItemDetail $detai
+     *
      * @return string conference date(from and to)
      */
-    function get_conference_date($detail){
-		$conference_from = date( DATE_FORMAT, mktime(0,0,0,$detail -> get('conference_from_month'),$detail -> get('conference_from_mday'), $detail -> get('conference_from_year')) );
-		$conference_to = date( DATE_FORMAT, mktime(0,0,0,$detail -> get('conference_to_month'),$detail -> get('conference_to_mday'), $detail -> get('conference_to_year')) );
-		return "From: ".$conference_from." To: ".$conference_to;
+    public function get_conference_date($detail)
+    {
+        $conference_from = date(DATE_FORMAT, mktime(0, 0, 0, $detail->get('conference_from_month'), $detail->get('conference_from_mday'), $detail->get('conference_from_year')));
+        $conference_to = date(DATE_FORMAT, mktime(0, 0, 0, $detail->get('conference_to_month'), $detail->get('conference_to_mday'), $detail->get('conference_to_year')));
+
+        return 'From: '.$conference_from.' To: '.$conference_to;
     }
 }
 
 /**
- *
  * @brief Data object that have one ore more XooNIpsTableObject for Conference type.
- *
  */
 class XNPConferenceCompo extends XooNIpsItemInfoCompo
 {
-    function XNPConferenceCompo() 
+    public function XNPConferenceCompo()
     {
         parent::XooNIpsItemInfoCompo('xnpconference');
     }
 }
-?>

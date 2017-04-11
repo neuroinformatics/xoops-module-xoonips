@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,40 +26,38 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/xmlrpcfault.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcfault.class.php';
 
 /**
- *
  * @brief Class that generate response of XML-RPC getItem request
- *
- *
  */
 class XooNIpsXmlRpcViewGetItem extends XooNIpsXmlRpcViewElement
 {
-    function XooNIpsXmlRpcViewGetItem(&$response) 
+    public function XooNIpsXmlRpcViewGetItem(&$response)
     {
         parent::XooNIpsXmlRpcViewElement($response);
         $factory = &XooNIpsXmlRpcItemViewFactory::getInstance();
         $item = &$response->getSuccess();
         $view = &$factory->create('getItem', $item);
-        if ($view) $this->addView($view);
+        if ($view) {
+            $this->addView($view);
+        }
     }
 
     /**
-     *
      * @brief return XoopsXmlRpcTag that has response of this request
      *
      * @return XoopsXmlRpcTag
      */
-    function render() 
+    public function render()
     {
         if (isset($this->views[0])) {
             return $this->views[0]->render();
         } else {
             $resp = new XooNIpsXmlRpcFault(106);
+
             return $resp;
         }
     }
 }
-?>

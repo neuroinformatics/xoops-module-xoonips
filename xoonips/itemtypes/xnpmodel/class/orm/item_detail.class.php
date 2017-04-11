@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.8 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,7 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
+}
 
 /**
  * @brief Data object of Model detail information
@@ -35,7 +38,7 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) exit();
 class XNPModelOrmItemDetail extends XooNIpsTableObject
 {
     // for column length check
-    var $lengths = array(
+    public $lengths = array(
         'model_id' => 10,
         'model_type' => 30,
         'readme' => 65535,
@@ -44,9 +47,10 @@ class XNPModelOrmItemDetail extends XooNIpsTableObject
         'cc_commercial_use' => 3,
         'cc_modification' => 3,
         'attachment_dl_limit' => 1,
-        'attachment_dl_notify' => 1
+        'attachment_dl_notify' => 1,
     );
-    function XNPModelOrmItemDetail() 
+
+    public function XNPModelOrmItemDetail()
     {
         parent::XooNIpsTableObject();
         $this->initVar('model_id', XOBJ_DTYPE_INT, 0, false);
@@ -60,60 +64,59 @@ class XNPModelOrmItemDetail extends XooNIpsTableObject
         $this->initVar('attachment_dl_notify', XOBJ_DTYPE_INT, 0, false);
     }
 
-    
     /**
-     * get creator objects of this item
-     * @return XNPConferenceOrmCreator[] 
+     * get creator objects of this item.
+     *
+     * @return XNPConferenceOrmCreator[]
      */
-    function getCreators()
+    public function getCreators()
     {
-        $handler=&xoonips_getormhandler('xnpmodel', 'creator');
-        $criteria=new Criteria('model_id', $this->get('model_id'));
+        $handler = &xoonips_getormhandler('xnpmodel', 'creator');
+        $criteria = new Criteria('model_id', $this->get('model_id'));
         $criteria->setSort('creator_order');
-        $result=&$handler->getObjects($criteria);
-        if($result){
+        $result = &$handler->getObjects($criteria);
+        if ($result) {
             return $result;
         }
+
         return array();
     }
 }
 
 /**
  * @brief Handler class that create, insert, update, get and delete detail information
- *
- *
  */
 class XNPModelOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    function XNPModelOrmItemDetailHandler(&$db) 
+    public function XNPModelOrmItemDetailHandler(&$db)
     {
         parent::XooNIpsTableObjectHandler($db);
         $this->__initHandler('XNPModelOrmItemDetail', 'xnpmodel_item_detail', 'model_id', false);
     }
-    
-    function insert(&$obj, $force = false) {
+
+    public function insert(&$obj, $force = false)
+    {
         if (strtolower(get_class($obj)) != strtolower($this->__class_name)) {
             return false;
         }
         if (!$obj->isDirty()) {
             return true;
         }
-        
+
         $cc = $this->get_cc($obj);
-        if( $cc ){
-            $obj -> set( 'rights', $cc );
+        if ($cc) {
+            $obj->set('rights', $cc);
         }
-        
+
         return parent::insert($obj, $force);
     }
 
-
-    function get_cc( $detail ) {
-      if ( $detail->get( 'use_cc' ) == '1' ) {
-        return xoonips_get_cc_license( $detail->get( 'cc_commercial_use' ), $detail->get( 'cc_modification' ), 2.5, 'GENERIC' );
-      } else {
-        return false;
-      }
+    public function get_cc($detail)
+    {
+        if ($detail->get('use_cc') == '1') {
+            return xoonips_get_cc_license($detail->get('cc_commercial_use'), $detail->get('cc_modification'), 2.5, 'GENERIC');
+        } else {
+            return false;
+        }
     }
 }
-?>

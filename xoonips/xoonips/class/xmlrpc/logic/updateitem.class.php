@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,27 +26,22 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xoonipserror.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xoonipsresponse.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
-include_once XOOPS_ROOT_PATH . '/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipserror.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipsresponse.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
+include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
 
 /**
  * @brief Class that executes logic specified by XML-RPC updateItem request
- *
- *
- *
  */
 class XooNIpsXmlRpcLogicUpdateItem extends XooNIpsXmlRpcLogic
 {
-
     /**
-     *
      * @param[in] XooNIpsXmlRpcRequest $request
      * @param[out] XooNIpsXmlRpcResponse $response result of logic(success/fault, response, error)
      */
-    function execute(&$request, &$response) 
+    public function execute(&$request, &$response)
     {
         // load logic instance
         $factory = &XooNIpsLogicFactory::getInstance();
@@ -55,21 +51,23 @@ class XooNIpsXmlRpcLogicUpdateItem extends XooNIpsXmlRpcLogic
             $error = &$response->getError();
             $logic = $request->getMethodName();
             $error->add(XNPERR_SERVER_ERROR, "can't create a logic of $logic");
+
             return;
         }
-        //
+
         $params = &$request->getParams();
         $vars = array();
-        if ( count($params) < 2 ){
+        if (count($params) < 2) {
             $response->setResult(false);
             $error = &$response->getError();
             $error->add(XNPERR_MISSING_PARAM);
+
             return false;
-        }
-        else if ( count($params) > 2 ){
+        } elseif (count($params) > 2) {
             $response->setResult(false);
             $error = &$response->getError();
             $error->add(XNPERR_EXTRA_PARAM);
+
             return false;
         }
         //
@@ -85,32 +83,35 @@ class XooNIpsXmlRpcLogicUpdateItem extends XooNIpsXmlRpcLogic
         if (!$itemtype) {
             $response->setResult(false);
             $response->setError(new XooNIpsError(XNPERR_INVALID_PARAM, "item type of $item_type_id is not found"));
+
             return false;
         }
-        //
+
         $factory = &XooNIpsXmlRpcTransformCompoFactory::getInstance();
         $trans = &$factory->create($itemtype->get('name'));
         $missing = array();
         if (!$trans->isFilledRequired($params[1], $missing)) {
             $response->setResult(false);
             $err = &$response->getError();
-            foreach($missing as $m) {
+            foreach ($missing as $m) {
                 $err->add(XNPERR_INCOMPLETE_PARAM, $m);
             }
+
             return false;
         }
         // check mulitple of each variable
         $fields = array();
-        if( !$trans->checkMultipleFields($params[1], $fields) ){
+        if (!$trans->checkMultipleFields($params[1], $fields)) {
             $response->setResult(false);
             $err = &$response->getError();
-            foreach($fields as $m) {
+            foreach ($fields as $m) {
                 $err->add(XNPERR_INCOMPLETE_PARAM, $m);
             }
+
             return false;
         }
         // check fields
-        if( !$trans->checkFields($params[1], $response->getError()) ){
+        if (!$trans->checkFields($params[1], $response->getError())) {
             // some fields have invalid value
             return false;
         }
@@ -120,10 +121,9 @@ class XooNIpsXmlRpcLogicUpdateItem extends XooNIpsXmlRpcLogic
         // execute logic
         $xoonips_response = new XooNIpsResponse();
         $logic->execute($vars, $xoonips_response);
-        //
+
         $response->setResult($xoonips_response->getResult());
         $response->setError($xoonips_response->getError());
         $response->setSuccess($xoonips_response->getSuccess());
     }
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.8.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -30,5 +31,3 @@ $adminmenu[1]['title'] = _MI_XOONIPS_ADMENU2;
 $adminmenu[1]['link'] = 'admin/policy.php';
 $adminmenu[2]['title'] = _MI_XOONIPS_ADMENU3;
 $adminmenu[2]['link'] = 'admin/maintenance.php';
-
-?>

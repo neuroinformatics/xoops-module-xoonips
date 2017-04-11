@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,24 +26,30 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-class OaidcListRecordsHandler extends ListRecordsHandler{
-    function OaidcListRecordsHandler( $_parser, $_baseURL ){
-        parent::ListRecordsHandler( $_parser, $_baseURL, 'oai_dc' );
-    }
-    function __construct( $_parser, $_baseURL ){
-        $this->OaidcListRecordsHandler( $_parser, $_baseURL );
+class OaidcListRecordsHandler extends ListRecordsHandler
+{
+    public function OaidcListRecordsHandler($_parser, $_baseURL)
+    {
+        parent::ListRecordsHandler($_parser, $_baseURL, 'oai_dc');
     }
 
-    function startElementHandler( $parser, $name, $attrs ){
-        if( $this->getElementName( $name ) == 'DC' ) {
-            $this -> _namespaces = $this -> getNamespaceArray( $attrs );
-            array_push( $this->tagstack, $name );
-        }else{
-            parent::startElementHandler( $parser, $name, $attrs );
+    public function __construct($_parser, $_baseURL)
+    {
+        $this->OaidcListRecordsHandler($_parser, $_baseURL);
+    }
+
+    public function startElementHandler($parser, $name, $attrs)
+    {
+        if ($this->getElementName($name) == 'DC') {
+            $this->_namespaces = $this->getNamespaceArray($attrs);
+            array_push($this->tagstack, $name);
+        } else {
+            parent::startElementHandler($parser, $name, $attrs);
         }
     }
-    
-    function endElementHandler( $parser, $name ) {
+
+    public function endElementHandler($parser, $name)
+    {
         $support_tags = array(
             'SUBJECT',
             'DESCRIPTION',
@@ -56,39 +63,38 @@ class OaidcListRecordsHandler extends ListRecordsHandler{
             'LANGUAGE',
             'RELATION',
             'COVERAGE',
-            'RIGHTS'
+            'RIGHTS',
             );
-        if( isset($this->tagstack[3])
-            && $this->getElementName( $this->tagstack[3] ) == 'HEADER'
-            || !in_array( $this->getElementName( end( $this->tagstack ) ),
-                          $support_tags ) ){
-            parent::endElementHandler( $parser, $name );
-        }else if( $this->getElementName( end( $this->tagstack ) ) == 'DATE' ) {
+        if (isset($this->tagstack[3])
+            && $this->getElementName($this->tagstack[3]) == 'HEADER'
+            || !in_array($this->getElementName(end($this->tagstack)),
+                          $support_tags)) {
+            parent::endElementHandler($parser, $name);
+        } elseif ($this->getElementName(end($this->tagstack)) == 'DATE') {
             $this->_creation_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
-                $this->addMetadataField(
-                    end( $this->tagstack ), $this->_cdata_buf,
+            $this->addMetadataField(
+                    end($this->tagstack), $this->_cdata_buf,
                     XOONIPS_METADATA_CATEGORY_CREATION_DATE);
-            array_pop( $this->tagstack );
-        }else if($this->getElementName(end($this->tagstack))=='IDENTIFIER'){
+            array_pop($this->tagstack);
+        } elseif ($this->getElementName(end($this->tagstack)) == 'IDENTIFIER') {
             $result = preg_match(
-                "/^(s?https?:\\/\\/"
+                '/^(s?https?:\\/\\/'
                 ."[-_.!~*'\\(\\)a-zA-Z0-9;\\/?:\\@&=+\$,%#]+)/",
-                $this->_cdata_buf );
-            if( 1 == $result ){
+                $this->_cdata_buf);
+            if (1 == $result) {
                 $this->_resource_url[] = $this->_cdata_buf;
                 $this->addMetadataField(
-                    end( $this->tagstack ), $this->_cdata_buf,
+                    end($this->tagstack), $this->_cdata_buf,
                     XOONIPS_METADATA_CATEGORY_RESOURCE_LINK);
-            }else{
+            } else {
                 $this->addMetadataField(
-                    end( $this->tagstack ), $this->_cdata_buf);
+                    end($this->tagstack), $this->_cdata_buf);
             }
-            array_pop( $this->tagstack );
-        }else{
-            $this->addMetadataField(end( $this->tagstack ),$this->_cdata_buf);
-            array_pop( $this->tagstack );
+            array_pop($this->tagstack);
+        } else {
+            $this->addMetadataField(end($this->tagstack), $this->_cdata_buf);
+            array_pop($this->tagstack);
         }
     }
 }
-

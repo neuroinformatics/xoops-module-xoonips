@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,26 +26,23 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH . '/class/xml/rpc/xmlrpcparser.php';
+include_once XOOPS_ROOT_PATH.'/class/xml/rpc/xmlrpcparser.php';
 
 /**
- * XML-RPC Parser
- * 
+ * XML-RPC Parser.
+ *
  * use XooNIpsRpcDateTimeHandler to parse <dateTime.iso8601>
- * 
- * 
  */
 class XooNIpsXmlRpcParser extends XoopsXmlRpcParser
 {
-
     /**
-    * Constructor of the class
-    *
-    * @access
-    * @author
-    * @see
-    */
-    function XooNIpsXmlRpcParser(&$input)
+     * Constructor of the class.
+     *
+     * @author
+     *
+     * @see
+     */
+    public function XooNIpsXmlRpcParser(&$input)
     {
         $this->XoopsXmlRpcParser($input);
         $this->addTagHandler(new RpcMethodNameHandler());
@@ -64,14 +62,12 @@ class XooNIpsXmlRpcParser extends XoopsXmlRpcParser
 
 class XooNIpsRpcDateTimeHandler extends RpcDateTimeHandler
 {
-
     /**
-     * parse sISO-8601 date time string
-     *
+     * parse sISO-8601 date time string.
      */
-    function handleCharacterData(&$parser, &$data)
+    public function handleCharacterData(&$parser, &$data)
     {
-        $parser->setTempValue( ISO8601toUnixTimestamp( trim( $data ) ) );
+        $parser->setTempValue(ISO8601toUnixTimestamp(trim($data)));
     }
 }
 
@@ -83,21 +79,20 @@ class XooNIpsRpcValueHandler extends RpcValueHandler
     /**
      * content of value tag. no need to be a stack.
      */
-    var $_tempValue;
-    
-    function handleBeginElement(&$parser, &$attributes)
+    public $_tempValue;
+
+    public function handleBeginElement(&$parser, &$attributes)
     {
         $this->_tempValue = null;
         parent::handleBeginElement($parser, $attributes);
     }
 
-    function handleCharacterData(&$parser, &$data)
+    public function handleCharacterData(&$parser, &$data)
     {
         parent::handleCharacterData($parser, $data);
-        if ( is_null($this->_tempValue) ){
+        if (is_null($this->_tempValue)) {
             $this->_tempValue = $data;
-        }
-        else {
+        } else {
             $this->_tempValue .= $data;
         }
     }
@@ -105,20 +100,16 @@ class XooNIpsRpcValueHandler extends RpcValueHandler
     /**
      * set content to $parser->_tempValue if $parser->_tempValue is not set.
      */
-    function handleEndElement(&$parser)
+    public function handleEndElement(&$parser)
     {
-        if ( !isset($parser->_tempValue) ){ // maybe no tag handled in <value>...</value>
-            if ( !is_null($this->_tempValue) ){
-                $parser->setTempValue( $this->_tempValue );
-            }
-            else {
-                $parser->setTempValue( "" );
+        if (!isset($parser->_tempValue)) { // maybe no tag handled in <value>...</value>
+            if (!is_null($this->_tempValue)) {
+                $parser->setTempValue($this->_tempValue);
+            } else {
+                $parser->setTempValue('');
             }
         }
         parent::handleEndElement($parser);
         $this->_tempValue = null;
     }
 }
-
-
-?>

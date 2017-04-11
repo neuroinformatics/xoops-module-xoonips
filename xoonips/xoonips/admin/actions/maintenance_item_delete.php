@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // get requests
@@ -41,16 +42,16 @@ $get_keys = array(
     false,
   ),
 );
-$get_vals = xoonips_admin_get_requests( 'get', $get_keys );
+$get_vals = xoonips_admin_get_requests('get', $get_keys);
 $uid = $get_vals['uid'];
 $upage = $get_vals['upage'];
 
-if ( is_null( $uid ) ) {
-  // user select
+if (is_null($uid)) {
+    // user select
   $title = _AM_XOONIPS_MAINTENANCE_ITEM_DELETE_TITLE;
-  $nextaction = 'delete';
-  include 'actions/maintenance_item_uselect.php';
-  exit();
+    $nextaction = 'delete';
+    include 'actions/maintenance_item_uselect.php';
+    exit();
 }
 
 // index select
@@ -65,5 +66,3 @@ $nextaction = 'dupdate';
 $submit = _AM_XOONIPS_LABEL_DELETE;
 include 'actions/maintenance_item_idxselect.php';
 exit();
-
-?>

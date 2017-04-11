@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.11 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,99 +26,101 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once __DIR__ . '/transfer.class.php';
+include_once __DIR__.'/transfer.class.php';
 
 /**
- * 
  * HTML view to list items to transfer and show select item menu for a user.
- * 
- * 
- * 
- * 
  */
-class XooNIpsViewTransferUserItemList extends XooNIpsViewTransfer{
+class XooNIpsViewTransferUserItemList extends XooNIpsViewTransfer
+{
     /**
-     * create view
-     * 
+     * create view.
+     *
      * @param arrray $params associative array of view
-     * - $params['to_uid']: integer user id transfer to
-     * - $params['items_to_transfer']: array of item information id to transfer
-     * - $params['items_to_transfer'][]['transfer_enable']:
-     *    boolean true if it can be transfer.
-     * - $params['items_to_transfer'][]['transfer_explanation']:
-     *    string explanation why it can't be transfer.
-     * - $params['items_to_transfer'][]['item_id']: integer item id
-     * - $params['items_to_transfer'][]['lock_type']:
-     *    integer item lock type(see XooNIpsItemLock)
-     * - $params['items_to_transfer'][]['child_items']:
-     *    array of child item information
-     * - $params['items_to_transfer'][]['child_items'][]['item_id']:
-     *    integer child item id
-     * - $params['items_to_transfer'][]['child_items'][]['lock_type']:
-     *    integer item lock type(see XooNIpsItemLock)
-     * - $params['to_user_options']: associative array
-     * - $params['to_user_options'][(uid:integer)]:
-     *    string uname(login name) transfer to
-     * - $params['transfer_enable']:
-     *    boolean true if all items can be transfered.
+     *                       - $params['to_uid']: integer user id transfer to
+     *                       - $params['items_to_transfer']: array of item information id to transfer
+     *                       - $params['items_to_transfer'][]['transfer_enable']:
+     *                       boolean true if it can be transfer.
+     *                       - $params['items_to_transfer'][]['transfer_explanation']:
+     *                       string explanation why it can't be transfer.
+     *                       - $params['items_to_transfer'][]['item_id']: integer item id
+     *                       - $params['items_to_transfer'][]['lock_type']:
+     *                       integer item lock type(see XooNIpsItemLock)
+     *                       - $params['items_to_transfer'][]['child_items']:
+     *                       array of child item information
+     *                       - $params['items_to_transfer'][]['child_items'][]['item_id']:
+     *                       integer child item id
+     *                       - $params['items_to_transfer'][]['child_items'][]['lock_type']:
+     *                       integer item lock type(see XooNIpsItemLock)
+     *                       - $params['to_user_options']: associative array
+     *                       - $params['to_user_options'][(uid:integer)]:
+     *                       string uname(login name) transfer to
+     *                       - $params['transfer_enable']:
+     *                       boolean true if all items can be transfered.
      */
-    function XooNIpsViewTransferUserItemList($params){
+    public function XooNIpsViewTransferUserItemList($params)
+    {
         parent::XooNIpsView($params);
     }
-    
-    function render(){
+
+    public function render()
+    {
         global $xoopsOption, $xoopsConfig, $xoopsUser, $xoopsUserIsAdmin, $xoopsLogger, $xoopsTpl;
-        
+
         //create handler to include item_type.class.php
-        $item_lock_handler =& xoonips_getormhandler( 'xoonips', 'item_lock' );
-        
+        $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
+
         $xoopsOption['template_main'] = 'xoonips_transfer_user_item_list.html';
         include XOOPS_ROOT_PATH.'/header.php';
-        $this -> setXooNIpsStyleSheet($xoopsTpl);
-        
-        $xoopsTpl -> assign( 'transfer_items',
-                             $this -> get_transfer_item_template_vars() );
-        foreach( $this -> _params as $key => $val ){
-            $xoopsTpl -> assign( $key, $val );
+        $this->setXooNIpsStyleSheet($xoopsTpl);
+
+        $xoopsTpl->assign('transfer_items',
+                             $this->get_transfer_item_template_vars());
+        foreach ($this->_params as $key => $val) {
+            $xoopsTpl->assign($key, $val);
         }
         include XOOPS_ROOT_PATH.'/footer.php';
     }
-    
-    function get_transfer_item_template_vars(){
+
+    public function get_transfer_item_template_vars()
+    {
         $result = array();
-        
-        foreach( $this -> _params['items_to_transfer'] as $item ){
-            $item_vars = $this -> get_item_template_vars( $item['item_id'] );
+
+        foreach ($this->_params['items_to_transfer'] as $item) {
+            $item_vars = $this->get_item_template_vars($item['item_id']);
             $item_vars['transfer_enable'] = $item['transfer_enable'];
             $item_vars['lock_type'] = $item['lock_type'];
             $item_vars['have_another_parent'] = $item['have_another_parent'];
             $item_vars['child_items'] = array();
-            foreach( $item['child_items'] as $child_item ){
+            foreach ($item['child_items'] as $child_item) {
                 $child
-                    = $this -> get_item_template_vars( $child_item['item_id'] );
+                    = $this->get_item_template_vars($child_item['item_id']);
                 $child['lock_type'] = $child_item['lock_type'];
                 $item_vars['child_items'][] = $child;
             }
             $result[] = $item_vars;
         }
+
         return $result;
     }
-    
+
     /**
-     * get array of item for template vars
-     * @param integer $item_id
+     * get array of item for template vars.
+     *
+     * @param int $item_id
      */
-    function get_item_template_vars( $item_id ){
-        $item_handler =& xoonips_getormcompohandler( 'xoonips', 'item' );
-        $item_type_handler =& xoonips_getormhandler( 'xoonips', 'item_type' );
-        $item =& $item_handler -> get( $item_id );
-        $basic =& $item -> getVar( 'basic' );
+    public function get_item_template_vars($item_id)
+    {
+        $item_handler = &xoonips_getormcompohandler('xoonips', 'item');
+        $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
+        $item = &$item_handler->get($item_id);
+        $basic = &$item->getVar('basic');
         $itemtype
-            =& $item_type_handler -> get( $basic -> get( 'item_type_id' ) );
-        return array( 'item_id' => $item_id,
-                      'item_type_name' => $itemtype -> getVar( 'display_name', 's' ),
-                      'title' => $this -> concatenate_titles(
-                          $item -> getVar( 'titles' ) ) );
+            = &$item_type_handler->get($basic->get('item_type_id'));
+
+        return array('item_id' => $item_id,
+                      'item_type_name' => $itemtype->getVar('display_name', 's'),
+                      'title' => $this->concatenate_titles(
+                          $item->getVar('titles')), );
     }
 }
-?>

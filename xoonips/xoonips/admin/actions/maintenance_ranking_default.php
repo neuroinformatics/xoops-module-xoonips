@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // title
@@ -52,75 +53,73 @@ $breadcrumbs = array(
 );
 
 // token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_maintenance_ranking';
-$token_ticket = $xoopsGTicket->getTicketHtml( __LINE__, 1800, $ticket_area );
+$token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // max file size
-$max_file_size = ini_get( 'upload_max_filesize' );
-if ( ! is_numeric( $max_file_size ) ) {
-  if ( strpos( $max_file_size, 'M' ) !== false ) {
-    $max_file_size = intval( $max_file_size ) * 1024 * 1024;
-  } else if ( strpos( $max_file_size, 'K' ) !== false ) {
-    $max_file_size = intval( $max_file_size ) * 1024;
-  } else if ( strpos( $max_file_size, 'G' ) !== false ) {
-    $max_file_size = intval( $max_file_size ) * 1024 * 1024 * 1024;
-  } else {
-    exit();
-  }
+$max_file_size = ini_get('upload_max_filesize');
+if (!is_numeric($max_file_size)) {
+    if (strpos($max_file_size, 'M') !== false) {
+        $max_file_size = intval($max_file_size) * 1024 * 1024;
+    } elseif (strpos($max_file_size, 'K') !== false) {
+        $max_file_size = intval($max_file_size) * 1024;
+    } elseif (strpos($max_file_size, 'G') !== false) {
+        $max_file_size = intval($max_file_size) * 1024 * 1024 * 1024;
+    } else {
+        exit();
+    }
 }
 
 // download
-$download_fname = 'ranking'.date( 'YmdHis' ).'.zip';
+$download_fname = 'ranking'.date('YmdHis').'.zip';
 // upload
 // clear
 $config_keys = array(
   'ranking_sum_start' => 'i',
   'ranking_sum_last_update' => 'i',
 );
-$config_values = xoonips_admin_get_configs( $config_keys, 'n' );
+$config_values = xoonips_admin_get_configs($config_keys, 'n');
 $sum_start = $config_values['ranking_sum_start'];
 $sum_last_update = $config_values['ranking_sum_last_update'];
-if ( $sum_start != 0 && $sum_last_update != 0 ) {
-  $clear_message = sprintf( _AM_XOONIPS_MAINTENANCE_RANKING_CLEAR_MESSAGE, date( 'Y/m/d', $sum_start ), date( 'Y/m/d', $sum_last_update ) );
+if ($sum_start != 0 && $sum_last_update != 0) {
+    $clear_message = sprintf(_AM_XOONIPS_MAINTENANCE_RANKING_CLEAR_MESSAGE, date('Y/m/d', $sum_start), date('Y/m/d', $sum_last_update));
 } else {
-  $clear_message = _AM_XOONIPS_MAINTENANCE_RANKING_CLEAR_EMPTY;
+    $clear_message = _AM_XOONIPS_MAINTENANCE_RANKING_CLEAR_EMPTY;
 }
 
 // templates
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'maintenance_ranking.tmpl.html' );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('maintenance_ranking.tmpl.html');
 
 // assign template variables
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->setAttribute( 'description', 'visibility', 'visible' );
-$tmpl->addVar( 'description', 'DESCRIPTION', $description );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'main', 'token_ticket', $token_ticket );
-$tmpl->addVar( 'main', 'max_file_size', $max_file_size );
-$tmpl->addVar( 'main', 'download', _AM_XOONIPS_LABEL_DOWNLOAD );
-$tmpl->addVar( 'main', 'upload', _AM_XOONIPS_LABEL_UPLOAD );
-$tmpl->addVar( 'main', 'clear', _AM_XOONIPS_LABEL_CLEAR );
-$tmpl->addVar( 'main', 'file_title', _AM_XOONIPS_MAINTENANCE_RANKING_FILE_TITLE );
-$tmpl->addVar( 'main', 'note', _AM_XOONIPS_MAINTENANCE_RANKING_NOTE );
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->setAttribute('description', 'visibility', 'visible');
+$tmpl->addVar('description', 'DESCRIPTION', $description);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('main', 'token_ticket', $token_ticket);
+$tmpl->addVar('main', 'max_file_size', $max_file_size);
+$tmpl->addVar('main', 'download', _AM_XOONIPS_LABEL_DOWNLOAD);
+$tmpl->addVar('main', 'upload', _AM_XOONIPS_LABEL_UPLOAD);
+$tmpl->addVar('main', 'clear', _AM_XOONIPS_LABEL_CLEAR);
+$tmpl->addVar('main', 'file_title', _AM_XOONIPS_MAINTENANCE_RANKING_FILE_TITLE);
+$tmpl->addVar('main', 'note', _AM_XOONIPS_MAINTENANCE_RANKING_NOTE);
 // >> download
-$tmpl->addVar( 'main', 'download_title', _AM_XOONIPS_MAINTENANCE_RANKING_DOWNLOAD_TITLE );
-$tmpl->addVar( 'main', 'download_desc', _AM_XOONIPS_MAINTENANCE_RANKING_DOWNLOAD_DESC );
-$tmpl->addVar( 'main', 'download_fname', $download_fname );
+$tmpl->addVar('main', 'download_title', _AM_XOONIPS_MAINTENANCE_RANKING_DOWNLOAD_TITLE);
+$tmpl->addVar('main', 'download_desc', _AM_XOONIPS_MAINTENANCE_RANKING_DOWNLOAD_DESC);
+$tmpl->addVar('main', 'download_fname', $download_fname);
 // >> upload
-$tmpl->addVar( 'main', 'upload_title', _AM_XOONIPS_MAINTENANCE_RANKING_UPLOAD_TITLE );
-$tmpl->addVar( 'main', 'upload_desc', _AM_XOONIPS_MAINTENANCE_RANKING_UPLOAD_DESC );
+$tmpl->addVar('main', 'upload_title', _AM_XOONIPS_MAINTENANCE_RANKING_UPLOAD_TITLE);
+$tmpl->addVar('main', 'upload_desc', _AM_XOONIPS_MAINTENANCE_RANKING_UPLOAD_DESC);
 // >> clear
-$tmpl->addVar( 'main', 'clear_title', _AM_XOONIPS_MAINTENANCE_RANKING_CLEAR_TITLE );
-$tmpl->addVar( 'main', 'clear_desc', _AM_XOONIPS_MAINTENANCE_RANKING_CLEAR_DESC );
-$tmpl->addVar( 'main', 'clear_message', $clear_message );
+$tmpl->addVar('main', 'clear_title', _AM_XOONIPS_MAINTENANCE_RANKING_CLEAR_TITLE);
+$tmpl->addVar('main', 'clear_desc', _AM_XOONIPS_MAINTENANCE_RANKING_CLEAR_DESC);
+$tmpl->addVar('main', 'clear_message', $clear_message);
 
 // display
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

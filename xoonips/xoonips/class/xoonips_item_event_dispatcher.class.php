@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,33 +26,45 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-class XooNIpsItemEventDispatcher{
-    
-    var $_listeners = array();
-    
-    function &getInstance(){
+class XooNIpsItemEventDispatcher
+{
+    public $_listeners = array();
+
+    public function &getInstance()
+    {
         static $singleton_;
         if ($singleton_ == null) {
-            $singleton_ = new XooNIpsItemEventDispatcher();
+            $singleton_ = new self();
         }
+
         return $singleton_;
     }
-    
-    function registerEvent( &$instance ){
-        if (!in_array($instance, $this->_listeners))
-          $this->_listeners[] =& $instance;
-    }
-    
-    function onUpdate( $item_id ){
-        foreach( $this -> _listeners as $l ) $l -> onUpdate( $item_id );
+
+    public function registerEvent(&$instance)
+    {
+        if (!in_array($instance, $this->_listeners)) {
+            $this->_listeners[] = &$instance;
+        }
     }
 
-    function onDelete( $item_id ){
-        foreach( $this -> _listeners as $l ) $l -> onDelete( $item_id );
+    public function onUpdate($item_id)
+    {
+        foreach ($this->_listeners as $l) {
+            $l->onUpdate($item_id);
+        }
     }
 
-    function onRegister( $item_id ){
-        foreach( $this -> _listeners as $l ) $l -> onRegister( $item_id );
+    public function onDelete($item_id)
+    {
+        foreach ($this->_listeners as $l) {
+            $l->onDelete($item_id);
+        }
+    }
+
+    public function onRegister($item_id)
+    {
+        foreach ($this->_listeners as $l) {
+            $l->onRegister($item_id);
+        }
     }
 }
-?>

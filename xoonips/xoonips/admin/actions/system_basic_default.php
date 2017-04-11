@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // title
@@ -52,9 +53,9 @@ $breadcrumbs = array(
 );
 
 // token ticket
-require_once( '../class/base/gtickets.php' );
+require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_system_basic';
-$token_ticket = $xoopsGTicket->getTicketHtml( __LINE__, 1800, $ticket_area );
+$token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // get configs
 $config_keys = array(
@@ -62,16 +63,16 @@ $config_keys = array(
   'upload_dir' => 's',
   'magic_file_path' => 's',
 );
-$config_values = xoonips_admin_get_configs( $config_keys, 'e' );
+$config_values = xoonips_admin_get_configs($config_keys, 'e');
 // >> moderator_gid
 $moderator_gid_title = _AM_XOONIPS_SYSTEM_BASIC_MODERATOR_GROUP_TITLE;
 $moderator_gid_desc = _AM_XOONIPS_SYSTEM_BASIC_MODERATOR_GROUP_DESC;
-$xmember_handler =& xoops_gethandler( 'member' );
-$grouplist =& $xmember_handler->getGroupList( new Criteria( 'groupid', XOOPS_GROUP_ANONYMOUS, '!=' ) );
+$xmember_handler = &xoops_gethandler('member');
+$grouplist = &$xmember_handler->getGroupList(new Criteria('groupid', XOOPS_GROUP_ANONYMOUS, '!='));
 $moderator_gid = array();
-foreach ( $grouplist as $gid => $name ) {
-  $selected = ( $gid == $config_values['moderator_gid'] ) ? 'yes' : 'no';
-  $moderator_gid[] = array(
+foreach ($grouplist as $gid => $name) {
+    $selected = ($gid == $config_values['moderator_gid']) ? 'yes' : 'no';
+    $moderator_gid[] = array(
     'label' => $name,
     'value' => $gid,
     'selected' => $selected,
@@ -88,37 +89,35 @@ $magic_file_path_desc = _AM_XOONIPS_SYSTEM_BASIC_MAGIC_FILE_PATH_DESC;
 $magic_file_path = $config_values['magic_file_path'];
 
 // templates
-require_once( '../class/base/pattemplate.class.php' );
+require_once '../class/base/pattemplate.class.php';
 $tmpl = new PatTemplate();
-$tmpl->setBaseDir( 'templates' );
-$tmpl->readTemplatesFromFile( 'system_basic.tmpl.html' );
+$tmpl->setBaseDir('templates');
+$tmpl->readTemplatesFromFile('system_basic.tmpl.html');
 
 // assign template variables
-$tmpl->addVar( 'header', 'TITLE', $title );
-$tmpl->addVar( 'main', 'TITLE', $title );
-$tmpl->setAttribute( 'description', 'visibility', 'visible' );
-$tmpl->addVar( 'description', 'DESCRIPTION', $description );
-$tmpl->setAttribute( 'breadcrumbs', 'visibility', 'visible' );
-$tmpl->addRows( 'breadcrumbs_items', $breadcrumbs );
-$tmpl->addVar( 'main', 'token_ticket', $token_ticket );
-$tmpl->addVar( 'main', 'submit', _AM_XOONIPS_LABEL_UPDATE );
+$tmpl->addVar('header', 'TITLE', $title);
+$tmpl->addVar('main', 'TITLE', $title);
+$tmpl->setAttribute('description', 'visibility', 'visible');
+$tmpl->addVar('description', 'DESCRIPTION', $description);
+$tmpl->setAttribute('breadcrumbs', 'visibility', 'visible');
+$tmpl->addRows('breadcrumbs_items', $breadcrumbs);
+$tmpl->addVar('main', 'token_ticket', $token_ticket);
+$tmpl->addVar('main', 'submit', _AM_XOONIPS_LABEL_UPDATE);
 
 // >> moderator gid
-$tmpl->addVar( 'main', 'moderator_gid_title', $moderator_gid_title );
-$tmpl->addVar( 'main', 'moderator_gid_desc', $moderator_gid_desc );
-$tmpl->addRows( 'moderator_gid', $moderator_gid );
+$tmpl->addVar('main', 'moderator_gid_title', $moderator_gid_title);
+$tmpl->addVar('main', 'moderator_gid_desc', $moderator_gid_desc);
+$tmpl->addRows('moderator_gid', $moderator_gid);
 // >> file upload directory
-$tmpl->addVar( 'main', 'upload_dir_title', $upload_dir_title );
-$tmpl->addVar( 'main', 'upload_dir_desc', $upload_dir_desc );
-$tmpl->addVar( 'main', 'upload_dir', $upload_dir );
+$tmpl->addVar('main', 'upload_dir_title', $upload_dir_title);
+$tmpl->addVar('main', 'upload_dir_desc', $upload_dir_desc);
+$tmpl->addVar('main', 'upload_dir', $upload_dir);
 // >> magic file path for fileinfo functions
-$tmpl->addVar( 'main', 'magic_file_path_title', $magic_file_path_title );
-$tmpl->addVar( 'main', 'magic_file_path_desc', $magic_file_path_desc );
-$tmpl->addVar( 'main', 'magic_file_path', $magic_file_path );
+$tmpl->addVar('main', 'magic_file_path_title', $magic_file_path_title);
+$tmpl->addVar('main', 'magic_file_path_desc', $magic_file_path_desc);
+$tmpl->addVar('main', 'magic_file_path', $magic_file_path);
 
 // display
 xoops_cp_header();
-$tmpl->displayParsedTemplate( 'main' );
+$tmpl->displayParsedTemplate('main');
 xoops_cp_footer();
-
-?>

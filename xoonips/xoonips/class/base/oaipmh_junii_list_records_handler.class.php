@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,9 +26,10 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-class JuniiListRecordsHandler extends ListRecordsHandler{
-    var $_identifierTypeAttr;
-    var $_support_tags = array(
+class JuniiListRecordsHandler extends ListRecordsHandler
+{
+    public $_identifierTypeAttr;
+    public $_support_tags = array(
         'CODE',
         'USERID',
         'FANO',
@@ -73,80 +75,88 @@ class JuniiListRecordsHandler extends ListRecordsHandler{
         'RIGHTS',
         'COMMENT',
         'AHDNG',
-        'AID' );
-    
-    function JuniiListRecordsHandler( $_parser, $_baseURL ){
-        parent::ListRecordsHandler( $_parser, $_baseURL, 'junii' );
-        $this -> _identifierTypeAttr = '';
+        'AID', );
+
+    public function JuniiListRecordsHandler($_parser, $_baseURL)
+    {
+        parent::ListRecordsHandler($_parser, $_baseURL, 'junii');
+        $this->_identifierTypeAttr = '';
     }
-    
-    function __construct( $_parser, $_baseURL ){
-        $this->JuniiListRecordsHandler( $_parser, $_baseURL );
+
+    public function __construct($_parser, $_baseURL)
+    {
+        $this->JuniiListRecordsHandler($_parser, $_baseURL);
     }
-    
-    function startElementHandler( $parser, $name, $attribs ) {
-        if( $this->getElementName( $name ) == 'IDENTIFIER' ) {
-            if( $this->isTypeIsURL( $attribs ) ){
-                $this -> _identifierTypeAttr = 'URL';
-            }else{
-                $this -> _identifierTypeAttr = '';
+
+    public function startElementHandler($parser, $name, $attribs)
+    {
+        if ($this->getElementName($name) == 'IDENTIFIER') {
+            if ($this->isTypeIsURL($attribs)) {
+                $this->_identifierTypeAttr = 'URL';
+            } else {
+                $this->_identifierTypeAttr = '';
             }
-            $this->_cdata_buf='';
-            array_push( $this->tagstack, $name );
-        }else if( $this->getElementName( $name ) == 'META' ) {
-            $this -> _namespaces = $this -> getNamespaceArray( $attribs );
-            array_push( $this->tagstack, $name );
-        }else
-            parent::startElementHandler( $parser, $name, $attribs );
+            $this->_cdata_buf = '';
+            array_push($this->tagstack, $name);
+        } elseif ($this->getElementName($name) == 'META') {
+            $this->_namespaces = $this->getNamespaceArray($attribs);
+            array_push($this->tagstack, $name);
+        } else {
+            parent::startElementHandler($parser, $name, $attribs);
+        }
     }
-    
-    function endElementHandler( $parser, $name ){
-        if( isset($this->tagstack[3])
-            && $this->getElementName( $this->tagstack[3] ) == 'HEADER'
-            || !in_array( $this->getElementName( end( $this->tagstack ) ),
-                          $this->_support_tags ) ){
-            parent::endElementHandler( $parser, $name );
-        }else if( $this->getElementName( end( $this->tagstack ) )
-                  =='DATE.MODIFIED'){
+
+    public function endElementHandler($parser, $name)
+    {
+        if (isset($this->tagstack[3])
+            && $this->getElementName($this->tagstack[3]) == 'HEADER'
+            || !in_array($this->getElementName(end($this->tagstack)),
+                          $this->_support_tags)) {
+            parent::endElementHandler($parser, $name);
+        } elseif ($this->getElementName(end($this->tagstack))
+                  == 'DATE.MODIFIED') {
             $this->_last_update_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
             $this->addMetadataField(
-                end( $this->tagstack ), $this->_cdata_buf,
-                XOONIPS_METADATA_CATEGORY_LAST_UPDATE_DATE );
-            array_pop( $this->tagstack );
-        }else if($this->getElementName(end($this->tagstack))=='DATE.CREATED'){
+                end($this->tagstack), $this->_cdata_buf,
+                XOONIPS_METADATA_CATEGORY_LAST_UPDATE_DATE);
+            array_pop($this->tagstack);
+        } elseif ($this->getElementName(end($this->tagstack)) == 'DATE.CREATED') {
             $this->_creation_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
             $this->addMetadataField(
-                end( $this->tagstack ), $this->_cdata_buf,
-                XOONIPS_METADATA_CATEGORY_CREATION_DATE );
-            array_pop( $this->tagstack );
-        }else if( $this->getElementName( end( $this->tagstack ) ) == 'DATE' ){
+                end($this->tagstack), $this->_cdata_buf,
+                XOONIPS_METADATA_CATEGORY_CREATION_DATE);
+            array_pop($this->tagstack);
+        } elseif ($this->getElementName(end($this->tagstack)) == 'DATE') {
             $this->_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
-            $this->addMetadataField(end( $this->tagstack ), $this->_cdata_buf,
-                                    XOONIPS_METADATA_CATEGORY_DATE );
-            array_pop( $this->tagstack );
-        }else if($this->getElementName(end($this->tagstack))=='IDENTIFIER'
-                 && $this -> _identifierTypeAttr == 'URL' ){
+            $this->addMetadataField(end($this->tagstack), $this->_cdata_buf,
+                                    XOONIPS_METADATA_CATEGORY_DATE);
+            array_pop($this->tagstack);
+        } elseif ($this->getElementName(end($this->tagstack)) == 'IDENTIFIER'
+                 && $this->_identifierTypeAttr == 'URL') {
             $this->_resource_url[] = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
             $this->addMetadataField(
-                end( $this->tagstack ), $this->_cdata_buf,
+                end($this->tagstack), $this->_cdata_buf,
                 XOONIPS_METADATA_CATEGORY_RESOURCE_LINK);
-            array_pop( $this->tagstack );
-        }else{
-            $this->addMetadataField(end( $this->tagstack ), $this->_cdata_buf);
-            array_pop( $this->tagstack );
+            array_pop($this->tagstack);
+        } else {
+            $this->addMetadataField(end($this->tagstack), $this->_cdata_buf);
+            array_pop($this->tagstack);
         }
     }
-    
-    function isTypeIsURL( $attribs ){
-        foreach( $attribs as $key => $val ){
-            $tmp = preg_split( '/:/', $key );
-            if( end( $tmp ) == 'TYPE' ) return $val == 'URL';
+
+    public function isTypeIsURL($attribs)
+    {
+        foreach ($attribs as $key => $val) {
+            $tmp = preg_split('/:/', $key);
+            if (end($tmp) == 'TYPE') {
+                return $val == 'URL';
+            }
         }
+
         return false;
     }
 }
-

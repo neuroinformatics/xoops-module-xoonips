@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.7 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,45 +25,45 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // class file
 require_once XOONIPS_PATH.'/class/base/JSON.php';
 
 // change internal encoding to UTF-8
-if ( extension_loaded( 'mbstring' ) ) {
-  mb_language( 'uni' );
-  mb_internal_encoding( 'UTF-8' );
-  mb_http_output( 'pass' );
+if (extension_loaded('mbstring')) {
+    mb_language('uni');
+    mb_internal_encoding('UTF-8');
+    mb_http_output('pass');
 }
 
-if ( ! isset( $_SERVER['HTTP_REFERER'] ) || preg_match( '/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER'] ) == 0 ) {
-  die( 'Turn REFERER on' );
+if (!isset($_SERVER['HTTP_REFERER']) || preg_match('/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER']) == 0) {
+    die('Turn REFERER on');
 }
 
-$formdata =& xoonips_getutility( 'formdata' );
-$mode = $formdata->getValue( 'post', 'mode', 's', true );
-$num = $formdata->getValue( 'post', 'num', 'i', true );
+$formdata = &xoonips_getutility('formdata');
+$mode = $formdata->getValue('post', 'mode', 's', true);
+$num = $formdata->getValue('post', 'num', 'i', true);
 
-$admin_file_handler =& xoonips_gethandler( 'xoonips', 'admin_file' );
+$admin_file_handler = &xoonips_gethandler('xoonips', 'admin_file');
 
 $total = $admin_file_handler->getCountFiles();
-if ( $num < 0 || $num > $total ) {
-  die ( 'fatal error : invalid \'num\' parameter' );
+if ($num < 0 || $num > $total) {
+    die('fatal error : invalid \'num\' parameter');
 }
-$file_id = $admin_file_handler->getFileIdByCount( $num );
-if ( $file_id === false ) {
-  die ( 'fatal error : file id not found' );
+$file_id = $admin_file_handler->getFileIdByCount($num);
+if ($file_id === false) {
+    die('fatal error : file id not found');
 }
 
-if ( $mode == 'info' ) {
-  $admin_file_handler->updateFileInfo( $file_id );
-} else if ( $mode == 'index' ) {
-  $admin_file_handler->updateFileSearchText( $file_id, false );
+if ($mode == 'info') {
+    $admin_file_handler->updateFileInfo($file_id);
+} elseif ($mode == 'index') {
+    $admin_file_handler->updateFileSearchText($file_id, false);
 } else {
-  die ( 'fatal error : invalid \'mode\' parameter' );
+    die('fatal error : invalid \'mode\' parameter');
 }
 
 $data = array(
@@ -72,10 +73,9 @@ $data = array(
 
 // json
 $json = new Services_JSON();
-$encode = $json->encode( $data );
+$encode = $json->encode($data);
 
 // output
-header( 'Content-Type: text/javascript+json; charset=utf-8' );
+header('Content-Type: text/javascript+json; charset=utf-8');
 echo $encode;
 exit();
-?>

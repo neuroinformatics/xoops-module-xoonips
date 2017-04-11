@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
@@ -47,51 +48,52 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
  * @li creation_date_for_sort
  * @li date_for_sort
  */
-class XooNIpsOrmOaipmhMetadata extends XooNIpsTableObject {
-  function XooNIpsOrmOaipmhMetadata() {
-    $this->initVar( 'metadata_id', XOBJ_DTYPE_INT, 0, true, 10 );
-    $this->initVar( 'identifier', XOBJ_DTYPE_TXTBOX, '', false, 255 );
-    $this->initVar( 'repository_id', XOBJ_DTYPE_INT, 0, true, 11 );
-    $this->initVar( 'format', XOBJ_DTYPE_TXTBOX, '', true, 255 );
-    $this->initVar( 'title', XOBJ_DTYPE_TXTBOX, '', false );
-    $this->initVar( 'search_text', XOBJ_DTYPE_TXTBOX, '', false );
-    $this->initVar( 'datestamp', XOBJ_DTYPE_TXTBOX, '', false );
-    $this->initVar( 'last_update_date', XOBJ_DTYPE_TXTBOX, '', false );
-    $this->initVar( 'creation_date', XOBJ_DTYPE_TXTBOX, '', false );
-    $this->initVar( 'date', XOBJ_DTYPE_TXTBOX, '', false );
-    $this->initVar( 'creator', XOBJ_DTYPE_TXTBOX, '', false, 255 );
-    $this->initVar( 'link', XOBJ_DTYPE_TXTBOX, '', false );
-    $this->initVar( 'last_update_date_for_sort', XOBJ_DTYPE_TXTBOX, '1970-01-01 00:00:00', false );
-    $this->initVar( 'creation_date_for_sort', XOBJ_DTYPE_TXTBOX, '1970-01-01 00:00:00', false );
-    $this->initVar( 'date_for_sort', XOBJ_DTYPE_TXTBOX, '1970-01-01 00:00:00', false );
-  }
+class XooNIpsOrmOaipmhMetadata extends XooNIpsTableObject
+{
+    public function XooNIpsOrmOaipmhMetadata()
+    {
+        $this->initVar('metadata_id', XOBJ_DTYPE_INT, 0, true, 10);
+        $this->initVar('identifier', XOBJ_DTYPE_TXTBOX, '', false, 255);
+        $this->initVar('repository_id', XOBJ_DTYPE_INT, 0, true, 11);
+        $this->initVar('format', XOBJ_DTYPE_TXTBOX, '', true, 255);
+        $this->initVar('title', XOBJ_DTYPE_TXTBOX, '', false);
+        $this->initVar('search_text', XOBJ_DTYPE_TXTBOX, '', false);
+        $this->initVar('datestamp', XOBJ_DTYPE_TXTBOX, '', false);
+        $this->initVar('last_update_date', XOBJ_DTYPE_TXTBOX, '', false);
+        $this->initVar('creation_date', XOBJ_DTYPE_TXTBOX, '', false);
+        $this->initVar('date', XOBJ_DTYPE_TXTBOX, '', false);
+        $this->initVar('creator', XOBJ_DTYPE_TXTBOX, '', false, 255);
+        $this->initVar('link', XOBJ_DTYPE_TXTBOX, '', false);
+        $this->initVar('last_update_date_for_sort', XOBJ_DTYPE_TXTBOX, '1970-01-01 00:00:00', false);
+        $this->initVar('creation_date_for_sort', XOBJ_DTYPE_TXTBOX, '1970-01-01 00:00:00', false);
+        $this->initVar('date_for_sort', XOBJ_DTYPE_TXTBOX, '1970-01-01 00:00:00', false);
+    }
 }
 
 /**
  * @brief handler object of OAI-PMH metadata
- *
- *
  */
-class XooNIpsOrmOaipmhMetadataHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmOaipmhMetadataHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmOaipmhMetadata', 'xoonips_oaipmh_metadata', 'metadata_id', true );
-  }
+class XooNIpsOrmOaipmhMetadataHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmOaipmhMetadataHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmOaipmhMetadata', 'xoonips_oaipmh_metadata', 'metadata_id', true);
+    }
 
   /**
-   *
-   * @access public
    * @param string $identifier identifier string of OAI-PMH
-   * @return XooNIpsOrmOaipmhMetadata object or false.
+   *
+   * @return XooNIpsOrmOaipmhMetadata object or false
    */
-  function getByIdentifier( $identifier ) {
-    $criteria = new Criteria( 'identifier', $identifier );
-    $result =& $this->getObjects( $criteria );
-    if ( ! $result ) {
-      return false;
-    }
-    return $result[0];
+  public function getByIdentifier($identifier)
+  {
+      $criteria = new Criteria('identifier', $identifier);
+      $result = &$this->getObjects($criteria);
+      if (!$result) {
+          return false;
+      }
+
+      return $result[0];
   }
 }
-
-?>

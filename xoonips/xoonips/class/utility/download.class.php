@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.15 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,314 +25,325 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
- * file download handling class
+ * file download handling class.
  *
- * @package xoonips_utility
  * @copyright copyright &copy; 2008 RIKEN Japan
  */
-class XooNIpsUtilityDownload extends XooNIpsUtility {
-
-  /**
-   * HTTP_USER_AGENT
-   * @access private
+class XooNIpsUtilityDownload extends XooNIpsUtility
+{
+    /**
+   * HTTP_USER_AGENT.
+   *
    * @var string HTTP_USER_AGENT environment variable
    */
-  var $ua;
+  public $ua;
 
   /**
-   * HTTP_ACCEPT_LANGUAGE
-   * @access private
+   * HTTP_ACCEPT_LANGUAGE.
+   *
    * @var string HTTP_ACCEPT_LANGUAGE environment variable
    */
-  var $al;
+  public $al;
 
   /**
-   * PATH_INFO
-   * @access private
+   * PATH_INFO.
+   *
    * @var string PATH_INFO environment variable
    */
-  var $pi;
+  public $pi;
 
   /**
-   * client browser encoding
-   * @access private
+   * client browser encoding.
+   *
    * @var string client browser encoding
    */
-  var $browser_encoding;
+  public $browser_encoding;
 
   /**
-   * constractor
-   *
-   * @access public
+   * constractor.
    */
-  function XooNIpsUtilityDownload() {
-    $this->ua = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
-    $this->al = isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : '';
-    $this->pi = isset( $_SERVER['PATH_INFO'] ) ? $_SERVER['PATH_INFO'] : '';
-    if ( ! preg_match( '/^\\/.*$/', $this->pi ) ) {
-      $this->pi = '';
+  public function XooNIpsUtilityDownload()
+  {
+      $this->ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+      $this->al = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : '';
+      $this->pi = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
+      if (!preg_match('/^\\/.*$/', $this->pi)) {
+          $this->pi = '';
       // invalid path info
-    }
-    $this->browser_encoding = $this->_detect_browser_encoding();
+      }
+      $this->browser_encoding = $this->_detect_browser_encoding();
   }
 
   /**
-   * check PATH_INFO for file downloading
+   * check PATH_INFO for file downloading.
    *
-   * @access public
    * @param string $file_name downloading file name on server environment
-   * @return bool false if it will fail to get file name on client browser.
+   *
+   * @return bool false if it will fail to get file name on client browser
    */
-  function check_pathinfo( $file_name ) {
-    if ( strstr( $this->ua, 'KHTML' ) ) {
-      // KHTML based browser require PATH_INFO for file downloading
-      $file_name = $this->_encode_utf8( $file_name );
-      if ( urldecode($this->pi) != '/'.$file_name ) {
-        // does not match file name.
+  public function check_pathinfo($file_name)
+  {
+      if (strstr($this->ua, 'KHTML')) {
+          // KHTML based browser require PATH_INFO for file downloading
+      $file_name = $this->_encode_utf8($file_name);
+          if (urldecode($this->pi) != '/'.$file_name) {
+              // does not match file name.
         return false;
+          }
+
+          return true;
       }
-      return true;
-    }
     // other browsers
     return true;
   }
 
   /**
-   * append PATH_INFO to url string
+   * append PATH_INFO to url string.
    *
-   * @access public
-   * @param string $url url string
+   * @param string $url       url string
    * @param string $file_name file name on server environment
+   *
    * @return string appended url
    */
-  function append_pathinfo( $url, $file_name ) {
-    $pathinfo = '/'.urlencode( $this->_encode_utf8( $file_name ) );
-    if ( preg_match( '/^([^\\?]+)(\\?.*)$/', $url, $matches ) ) {
-      $result = $matches[1].$pathinfo.$matches[2];
-    } else {
-      $result = $url.$pathinfo;
-    }
-    return $result;
+  public function append_pathinfo($url, $file_name)
+  {
+      $pathinfo = '/'.urlencode($this->_encode_utf8($file_name));
+      if (preg_match('/^([^\\?]+)(\\?.*)$/', $url, $matches)) {
+          $result = $matches[1].$pathinfo.$matches[2];
+      } else {
+          $result = $url.$pathinfo;
+      }
+
+      return $result;
   }
 
   /**
-   * convert encoding to client environment
+   * convert encoding to client environment.
    *
-   * @access public
-   * @param string $text source text
+   * @param string $text     source text
    * @param string $fallback unmapped character encoding method
-   *   'h' : encode to HTML numeric entities
-   *   'u' : encode to UTF-8 based url string
+   *                         'h' : encode to HTML numeric entities
+   *                         'u' : encode to UTF-8 based url string
+   *
    * @return string appended url
    */
-  function convert_to_client( $text, $fallback ) {
-    $result = $this->_convert_encoding( $text, $this->browser_encoding, $fallback );
-    return $result;
+  public function convert_to_client($text, $fallback)
+  {
+      $result = $this->_convert_encoding($text, $this->browser_encoding, $fallback);
+
+      return $result;
   }
 
   /**
-   * download file
+   * download file.
    *
-   * @access public
    * @param string $file_path downloading local file path
    * @param string $file_name file name on server environment
    * @param string $mime_type mime type of downloading file
    */
-  function download_file( $file_path, $file_name, $mime_type ) {
-    // check file exists
-    if ( ! file_exists( $file_path ) || ! is_readable( $file_path ) ) {
-      die( 'Fatal Error : file not found' );
+  public function download_file($file_path, $file_name, $mime_type)
+  {
+      // check file exists
+    if (!file_exists($file_path) || !is_readable($file_path)) {
+        die('Fatal Error : file not found');
     }
 
     // get file inforamation
-    $file_size = filesize( $file_path );
+    $file_size = filesize($file_path);
 
     // output header
-    $this->output_header( $file_name, $mime_type, $file_size );
+    $this->output_header($file_name, $mime_type, $file_size);
 
     // output content body
     // readfile( $file_path );
     $chunksize = 1024 * 1024;
-    $fh = fopen( $file_path, 'rb' );
-    while ( ! feof( $fh ) ) {
-      echo fread( $fh, $chunksize );
-      flush();
-    }
-    fclose( $fh );
+      $fh = fopen($file_path, 'rb');
+      while (!feof($fh)) {
+          echo fread($fh, $chunksize);
+          flush();
+      }
+      fclose($fh);
   }
 
   /**
-   * download data
+   * download data.
    *
-   * @access public
-   * @param string $str downloading data
+   * @param string $str       downloading data
    * @param string $file_name file name on server environment
    * @param string $mime_type mime type
    */
-  function download_data( $str, $file_name, $mime_type ) {
-    // get file inforamation
-    $file_size = strlen( $str );
-    $this->output_header( $file_name, $mime_type, $file_size );
+  public function download_data($str, $file_name, $mime_type)
+  {
+      // get file inforamation
+    $file_size = strlen($str);
+      $this->output_header($file_name, $mime_type, $file_size);
     // output content body
     echo $str;
   }
 
   /**
-   * output header for file download
+   * output header for file download.
    *
-   * @access public
    * @param string $file_name file name on server environment
    * @param string $mime_type mime type
-   * @param int $file_size file size
+   * @param int    $file_size file size
    */
-  function output_header( $file_name, $mime_type, $file_size = '' ) {
-
-    $content_disposition = $this->_content_disposition_filename( $file_name );
+  public function output_header($file_name, $mime_type, $file_size = '')
+  {
+      $content_disposition = $this->_content_disposition_filename($file_name);
     // remove ob fileters
     $handlers = ob_list_handlers();
-    while ( ! empty( $handlers ) ) {
-      ob_end_clean();
-      $handlers = ob_list_handlers();
-    }
+      while (!empty($handlers)) {
+          ob_end_clean();
+          $handlers = ob_list_handlers();
+      }
 
     // unlimit time out
-    set_time_limit( 0 );
+    set_time_limit(0);
 
     // output header
-    header( 'Expires: Sat, 01 Jan 2000 00:00:00 GMT' );
-    header( 'Last-Modified: '.gmdate( 'D, d M Y H:i:s' ).' GMT' );
+    header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
+      header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
     // Cache-Control: avoid IE bug - see http://support.microsoft/kb/436605/ja
-    header( 'Cache-Control: none' );
-    if ( $content_disposition ) {
-      header( 'Content-Disposition: attachment; filename="'.$content_disposition.'"' );
-    }
-    if ( ! empty( $file_size ) ) {
-      header( 'Content-Length: '.$file_size );
-    }
-    header( 'Content-Type: '.$mime_type );
+    header('Cache-Control: none');
+      if ($content_disposition) {
+          header('Content-Disposition: attachment; filename="'.$content_disposition.'"');
+      }
+      if (!empty($file_size)) {
+          header('Content-Length: '.$file_size);
+      }
+      header('Content-Type: '.$mime_type);
   }
 
   /**
-   * detect browser encoding
+   * detect browser encoding.
    *
-   * @access private
    * @return string detected encoding
    */
-  function _detect_browser_encoding() {
-    static $windows1252_map = array(
+  public function _detect_browser_encoding()
+  {
+      static $windows1252_map = array(
       // English
       'en',
     );
-    $encoding = 'ASCII';
-    if ( strstr( $this->ua, 'Mac OS X' ) ) {
-      $encoding = 'UTF-8';
-    } else if ( strstr( $this->ua, 'Windows' ) ) {
-      if ( strstr( $this->ua, 'MSIE' ) || strstr( $this->ua, 'Gecko' ) ) {
-        if ( strstr( $this->al, 'ja' ) ) {
-          // for japanese
+      $encoding = 'ASCII';
+      if (strstr($this->ua, 'Mac OS X')) {
+          $encoding = 'UTF-8';
+      } elseif (strstr($this->ua, 'Windows')) {
+          if (strstr($this->ua, 'MSIE') || strstr($this->ua, 'Gecko')) {
+              if (strstr($this->al, 'ja')) {
+                  // for japanese
           $encoding = 'SJIS-win';
-        } else {
-          // for Western Europian : Windows-1252
-          foreach ( $windows1252_map as $lang ) {
-            if ( strstr( $this->al, $lang ) ) {
-              $encoding = 'Windows-1252';
-              break;
-            }
+              } else {
+                  // for Western Europian : Windows-1252
+          foreach ($windows1252_map as $lang) {
+              if (strstr($this->al, $lang)) {
+                  $encoding = 'Windows-1252';
+                  break;
+              }
           }
-        }
+              }
+          }
       }
-    }
-    return $encoding;
+
+      return $encoding;
   }
 
   /**
-   * generate file name for 'Content-Disposition:' header
+   * generate file name for 'Content-Disposition:' header.
    *
-   * @access private
    * @param string $filename file name on server environment
+   *
    * @return string generated file name
    */
-  function _content_disposition_filename( $file_name ) {
-    if ( strstr( $this->ua, 'MSIE' ) || strstr( $this->ua, 'Trident' ) ) {
-      // Microsoft Internet Explorer
+  public function _content_disposition_filename($file_name)
+  {
+      if (strstr($this->ua, 'MSIE') || strstr($this->ua, 'Trident')) {
+          // Microsoft Internet Explorer
       // - utf8 + x-www-form-url
-      $client_filename = $this->_convert_encoding( $file_name, $this->browser_encoding, 'u' );
-      $utf8_client_filename = $this->_encode_utf8( $client_filename, $this->browser_encoding );
-      return urlencode( $utf8_client_filename );
-    } else if ( strstr( $this->ua, 'KHTML' ) ) {
-      // KHTML based browser (e.g. Safari)
+      $client_filename = $this->_convert_encoding($file_name, $this->browser_encoding, 'u');
+          $utf8_client_filename = $this->_encode_utf8($client_filename, $this->browser_encoding);
+
+          return urlencode($utf8_client_filename);
+      } elseif (strstr($this->ua, 'KHTML')) {
+          // KHTML based browser (e.g. Safari)
       // - return empty string. this browser have to use PATH_INFO.
       return '';
-    } else if ( strstr( $this->ua, 'Gecko' ) || strstr( $this->ua, 'Mac OS X' ) ) {
-      // Gecko based browser (e.g. Mozilla FireFox)
+      } elseif (strstr($this->ua, 'Gecko') || strstr($this->ua, 'Mac OS X')) {
+          // Gecko based browser (e.g. Mozilla FireFox)
       // - rfc2047 : mime header encode
-      $client_file_name = $this->convert_to_client( $file_name, 'u' );
+      $client_file_name = $this->convert_to_client($file_name, 'u');
       // set mime encoding
       $mime_encoding = $this->browser_encoding;
       // save current internal encoding
       $internal_encoding_orig = mb_internal_encoding();
       // change internal encoding for mb_encode_mimeheader()
-      if ( ! @mb_internal_encoding( $this->browser_encoding ) ) {
-        if ( $this->browser_encoding == 'SJIS-win' ) {
-          // use fallback encoding 'Shift_JIS'
-          mb_internal_encoding( 'Shift_JIS' );
-        } else {
-          // use fallback encoding 'ASCII'
-          $client_file_name = $this->_convert_encoding( $file_name, 'ASCII', 'u' );
-          mb_internal_encoding( 'ASCII' );
-          $mime_encoding = 'ASCII';
-        }
+      if (!@mb_internal_encoding($this->browser_encoding)) {
+          if ($this->browser_encoding == 'SJIS-win') {
+              // use fallback encoding 'Shift_JIS'
+          mb_internal_encoding('Shift_JIS');
+          } else {
+              // use fallback encoding 'ASCII'
+          $client_file_name = $this->_convert_encoding($file_name, 'ASCII', 'u');
+              mb_internal_encoding('ASCII');
+              $mime_encoding = 'ASCII';
+          }
       }
       // encode mime header
-      $mimeheader = mb_encode_mimeheader( $client_file_name, $mime_encoding, 'B' );
+      $mimeheader = mb_encode_mimeheader($client_file_name, $mime_encoding, 'B');
       // restore internal encoding
-      mb_internal_encoding( $internal_encoding_orig );
+      mb_internal_encoding($internal_encoding_orig);
       // done
       return $mimeheader;
-    }
+      }
     // unknown browsers
-    return $this->_convert_encoding( $file_name, 'ASCII', 'u' );
+    return $this->_convert_encoding($file_name, 'ASCII', 'u');
   }
 
   /**
-   * convert encoding to UTF-8
-   * @access private
-   * @param string $text input text
+   * convert encoding to UTF-8.
+   *
+   * @param string $text     input text
    * @param string $encoding text encoding
+   *
    * @return string 'UTF-8' encoded text string
    */
-  function _encode_utf8( $text, $encoding = '' ) {
-    $textutil =& xoonips_getutility( 'text' );
-    if ( empty( $encoding ) ) {
-      $encoding = mb_detect_encoding( $text );
-    }
-    $text = mb_convert_encoding( $text, 'UTF-8', $encoding );
-    $text = $textutil->html_numeric_entities( $text );
-    $text = mb_decode_numericentity( $text, array( 0, 0x10ffff, 0, 0x1fffff ), 'UTF-8' );
-    return $text;
+  public function _encode_utf8($text, $encoding = '')
+  {
+      $textutil = &xoonips_getutility('text');
+      if (empty($encoding)) {
+          $encoding = mb_detect_encoding($text);
+      }
+      $text = mb_convert_encoding($text, 'UTF-8', $encoding);
+      $text = $textutil->html_numeric_entities($text);
+      $text = mb_decode_numericentity($text, array(0, 0x10ffff, 0, 0x1fffff), 'UTF-8');
+
+      return $text;
   }
 
   /**
-   * convert encoding
-   * @access private
-   * @param string $text input text
+   * convert encoding.
+   *
+   * @param string $text     input text
    * @param string $encoding output text encoding
    * @param string $fallback unmapped character encoding method
-   *   'h' : encode to HTML numeric entities
-   *   'u' : encode to UTF-8 based url string
+   *                         'h' : encode to HTML numeric entities
+   *                         'u' : encode to UTF-8 based url string
+   *
    * @return string encoding converted text string
    */
-  function _convert_encoding( $text, $encoding, $fallback ) {
-    $unicode =& xoonips_getutility( 'unicode' );
-    $text = $this->_encode_utf8( $text );
-    $text = $unicode->decode_utf8( $text, $encoding, $fallback );
-    return $text;
-    
+  public function _convert_encoding($text, $encoding, $fallback)
+  {
+      $unicode = &xoonips_getutility('unicode');
+      $text = $this->_encode_utf8($text);
+      $text = $unicode->decode_utf8($text, $encoding, $fallback);
+
+      return $text;
   }
 }
 
@@ -373,5 +385,3 @@ $mimetype = 'text/plain; charset="ASCII"';
 $download->download_data( $data, $filename, $mimetype );
 
 */
-
-?>

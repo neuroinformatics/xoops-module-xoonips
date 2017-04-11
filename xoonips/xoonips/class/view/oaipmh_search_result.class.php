@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,27 +26,29 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname( __DIR__ ) . '/base/view.class.php';
+include_once dirname(__DIR__).'/base/view.class.php';
 
-class XooNIpsViewOaipmhSearchResult extends XooNIpsView{
-    
-    function XooNIpsViewOaipmhSearchResult($params){
+class XooNIpsViewOaipmhSearchResult extends XooNIpsView
+{
+    public function XooNIpsViewOaipmhSearchResult($params)
+    {
         parent::XooNIpsView($params);
     }
-    
-    function render(){
+
+    public function render()
+    {
         global $xoopsOption, $xoopsConfig, $xoopsUser, $xoopsUserIsAdmin, $xoopsLogger, $xoopsTpl;
         $xoopsOption['template_main'] = 'xoonips_oaipmh_search_result.html';
         include XOOPS_ROOT_PATH.'/header.php';
-        foreach( $this -> _params as $key => $val ){
-            $xoopsTpl -> assign( $key, $val );
+        foreach ($this->_params as $key => $val) {
+            $xoopsTpl->assign($key, $val);
         }
 
         $xoonips_module_header =
             '<link rel="stylesheet" type="text/css" href="style.css" />'
             .$xoopsTpl->get_template_vars('xoops_module_header');
-        $xoopsTpl->assign('xoops_module_header', $xoonips_module_header );
-        
+        $xoopsTpl->assign('xoops_module_header', $xoonips_module_header);
+
         include XOOPS_ROOT_PATH.'/footer.php';
     }
 }

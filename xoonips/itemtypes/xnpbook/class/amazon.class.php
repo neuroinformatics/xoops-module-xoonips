@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,94 +25,96 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // class files
 require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/xmlparser.class.php';
 
 /**
- * The Amazon Product Advertising API data handling class
- * @package xnpbook
+ * The Amazon Product Advertising API data handling class.
+ *
  * @author  Yoshihiro OKUMURA <orrisroot@users.sourceforge.jp>,
  *          Masaya KINOSHITA
  */
-class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser {
-
-  /**
-   * parsed data
+class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
+{
+    /**
+   * parsed data.
+   *
    * @var array
-   * @access private
    */
-  var $_data;
+  public $_data;
 
   /**
-   * parsing condition
+   * parsing condition.
+   *
    * @var array
-   * @access private
    */
-  var $_condition = array();
+  public $_condition = array();
 
   /**
-   * isbn
+   * isbn.
+   *
    * @var string
-   * @access private
    */
-  var $_isbn = '';
+  public $_isbn = '';
 
   /**
-   * secret access key for amazon API
+   * secret access key for amazon API.
+   *
    * @var string
-   * @access private
    */
-  var $_secret_access_key = '';
+  public $_secret_access_key = '';
 
-  function XooNIps_Amazon_ECS40() {
-    // get module config
-    $mydirname = basename( dirname( __DIR__ ) );
-    $mhandler =& xoops_gethandler( 'module' );
-    $module =& $mhandler->getByDirname( $mydirname );
-    $chandler =& xoops_gethandler( 'config' );
-    $mconfig = $chandler->getConfigsByCat( false, $module->mid() );
+    public function XooNIps_Amazon_ECS40()
+    {
+        // get module config
+    $mydirname = basename(dirname(__DIR__));
+        $mhandler = &xoops_gethandler('module');
+        $module = &$mhandler->getByDirname($mydirname);
+        $chandler = &xoops_gethandler('config');
+        $mconfig = $chandler->getConfigsByCat(false, $module->mid());
 
     // call parent constructor
     parent::XooNIpsXMLParser();
     // set fetcher conditions
     $this->_fetch_url = 'http://ecs.amazonaws.com/onca/xml';
-    $this->_fetch_arguments['Service'] = 'AWSECommerceService';
-    $this->_fetch_arguments['Version'] = '2007-07-16';
-    $this->_fetch_arguments['Operation'] = 'ItemLookup';
-    $this->_fetch_arguments['IdType'] = 'ISBN';
-    $this->_fetch_arguments['SearchIndex'] = 'Books';
-    $this->_fetch_arguments['ResponseGroup'] = 'Medium';
-    $this->_fetch_arguments['AWSAccessKeyId'] = $mconfig['AccessKey'];
-    $this->_fetch_arguments['Timestamp'] = gmdate( 'Y-m-d\\TH:i:s\\Z' );
-    $this->_fetch_arguments['AssociateTag'] = $mconfig['AssociateTag'];
+        $this->_fetch_arguments['Service'] = 'AWSECommerceService';
+        $this->_fetch_arguments['Version'] = '2007-07-16';
+        $this->_fetch_arguments['Operation'] = 'ItemLookup';
+        $this->_fetch_arguments['IdType'] = 'ISBN';
+        $this->_fetch_arguments['SearchIndex'] = 'Books';
+        $this->_fetch_arguments['ResponseGroup'] = 'Medium';
+        $this->_fetch_arguments['AWSAccessKeyId'] = $mconfig['AccessKey'];
+        $this->_fetch_arguments['Timestamp'] = gmdate('Y-m-d\\TH:i:s\\Z');
+        $this->_fetch_arguments['AssociateTag'] = $mconfig['AssociateTag'];
     // secret access key for amazon API
     $this->_secret_access_key = $mconfig['SecretAccessKey'];
     // set parser conditions
     $this->_parser_doctype = '';
-    $this->_parser_public_id = '';
-  }
+        $this->_parser_public_id = '';
+    }
 
   /**
-   * set the isbn
+   * set the isbn.
    *
-   * @access public
    * @param string $isbn isbn10 or isbn13
+   *
    * @return bool TRUE if success
    */
-  function set_isbn( $isbn ) {
-    $tmp = preg_replace( '/[\\- ]/', '', $isbn );
-    if ( strlen( $tmp ) == 10 ) {
-      $tmp = $this->_isbn10_to_isbn13( $tmp );
-    }
-    if ( strlen( $tmp ) != 13 ) {
-      return false;
-    }
-    $char = substr( $tmp, 3, 1 );
-    switch ( $char ) {
+  public function set_isbn($isbn)
+  {
+      $tmp = preg_replace('/[\\- ]/', '', $isbn);
+      if (strlen($tmp) == 10) {
+          $tmp = $this->_isbn10_to_isbn13($tmp);
+      }
+      if (strlen($tmp) != 13) {
+          return false;
+      }
+      $char = substr($tmp, 3, 1);
+      switch ($char) {
     case '0':
     case '1':
       // us
@@ -134,70 +137,76 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser {
       $this->_fetch_url = 'http://ecs.amazonaws.com/onca/xml';
       break;
     }
-    $this->_fetch_arguments['ItemId'] = $tmp;
-    $this->_isbn = $isbn;
-    return true;
+      $this->_fetch_arguments['ItemId'] = $tmp;
+      $this->_isbn = $isbn;
+
+      return true;
   }
 
   /**
-   * override fetch()
-   *
+   * override fetch().
    */
-  function fetch() {
-    if ( empty( $this->_isbn ) ) {
-      $this->_error_message = 'ISBN does not set';
-      return false;
-    }
-    return parent::fetch();
+  public function fetch()
+  {
+      if (empty($this->_isbn)) {
+          $this->_error_message = 'ISBN does not set';
+
+          return false;
+      }
+
+      return parent::fetch();
   }
 
   /**
-   * encode url for Amazon API
+   * encode url for Amazon API.
    *
-   * @access protected
    * @param string $str encoding string
+   *
    * @return string encoded string
    */
-  function encode_url( $str ) {
-    // RFC 3986
-    return str_replace( '%7E', '~', rawurlencode( $str ) );
+  public function encode_url($str)
+  {
+      // RFC 3986
+    return str_replace('%7E', '~', rawurlencode($str));
   }
 
   /**
-   * create url string for Amazon API
+   * create url string for Amazon API.
    *
-   * @access protected
-   * @param string $url fetch url
-   * @param array $params url encoded parameters
+   * @param string $url    fetch url
+   * @param array  $params url encoded parameters
+   *
    * @return string created url string
    */
-  function create_url( $url, $arguments ) {
-    // load 'hash_hmac()' compatibility function for PHP 4
-    if ( ! function_exists( 'hash_hmac' ) ) {
-      require_once( dirname( __DIR__ ).'/include/compat/hash_hmac.php' );
+  public function create_url($url, $arguments)
+  {
+      // load 'hash_hmac()' compatibility function for PHP 4
+    if (!function_exists('hash_hmac')) {
+        require_once dirname(__DIR__).'/include/compat/hash_hmac.php';
     }
     // create sigunature
-    sort( $arguments );
-    $sign_param = implode( '&', $arguments );
-    $parsed_url = parse_url( $url );
-    $string_to_sign = "GET\n{$parsed_url['host']}\n{$parsed_url['path']}\n{$sign_param}";
-    $signature = base64_encode( hash_hmac( 'sha256', $string_to_sign, $this->_secret_access_key, true ) );
+    sort($arguments);
+      $sign_param = implode('&', $arguments);
+      $parsed_url = parse_url($url);
+      $string_to_sign = "GET\n{$parsed_url['host']}\n{$parsed_url['path']}\n{$sign_param}";
+      $signature = base64_encode(hash_hmac('sha256', $string_to_sign, $this->_secret_access_key, true));
 
     // create request url
-    $arguments[] = $this->encode_url( 'Signature' ).'='.$this->encode_url( $signature );
-    sort( $arguments );
-    return $url.'?'.implode( '&', $arguments );
+    $arguments[] = $this->encode_url('Signature').'='.$this->encode_url($signature);
+      sort($arguments);
+
+      return $url.'?'.implode('&', $arguments);
   }
 
   /**
-   * override function of start element handler
+   * override function of start element handler.
    *
-   * @access private
    * @param resource $parser parser resource
-   * @param string $tag xml tag
+   * @param string   $tag    xml tag
    */
-  function parser_start_element( $attribs ) {
-    switch ( $this->_parser_condition ) {
+  public function parser_start_element($attribs)
+  {
+      switch ($this->_parser_condition) {
     case '/ItemLookupResponse/Items/Item':
       $this->_condition['item'] = array(
         'ASIN' => '',
@@ -217,14 +226,14 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser {
   }
 
   /**
-   * override function of end element handler
+   * override function of end element handler.
    *
-   * @access private
    * @param resource $parser parser resource
-   * @param string $tag xml tag
+   * @param string   $tag    xml tag
    */
-  function parser_end_element() {
-    switch ( $this->_parser_condition ) {
+  public function parser_end_element()
+  {
+      switch ($this->_parser_condition) {
     case '/ItemLookupResponse/Items/Item':
       $this->_data[$this->_isbn] = $this->_condition['item'];
       break;
@@ -235,14 +244,14 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser {
   }
 
   /**
-   * override function of character data handler
+   * override function of character data handler.
    *
-   * @access private
    * @param resource $parser parser resource
-   * @param string $cdata character data
+   * @param string   $cdata  character data
    */
-  function parser_character_data( $cdata ) {
-    switch ( $this->_parser_condition ) {
+  public function parser_character_data($cdata)
+  {
+      switch ($this->_parser_condition) {
     case '/ItemLookupResponse/Items/Item/ASIN':
       // ASIN
       $this->_condition['item']['ASIN'] .= $cdata;
@@ -279,22 +288,24 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser {
   }
 
   /**
-   * convert isbn10 to isbn13
+   * convert isbn10 to isbn13.
    *
-   * @access private
    * @param string $isbn10
+   *
    * @return string isbn13
    */
-  function _isbn10_to_isbn13( $isbn10 ) {
-    $check = 0;
-    $tmp = substr( $isbn10, 0, 9 );
-    $ar = str_split( '978'.$tmp, 1 );
-    for ( $i = 0; $i < 12; $i++ ) {
-      $check += $ar[$i] * ( $i % 2 == 0 ? 1 : 3 );
-    }
-    $check = ( 10 - ( $check % 10 ) ) % 10;
-    $isbn13 = '978'.$tmp.$check;
-    return $isbn13;
+  public function _isbn10_to_isbn13($isbn10)
+  {
+      $check = 0;
+      $tmp = substr($isbn10, 0, 9);
+      $ar = str_split('978'.$tmp, 1);
+      for ($i = 0; $i < 12; ++$i) {
+          $check += $ar[$i] * ($i % 2 == 0 ? 1 : 3);
+      }
+      $check = (10 - ($check % 10)) % 10;
+      $isbn13 = '978'.$tmp.$check;
+
+      return $isbn13;
   }
 }
 
@@ -322,4 +333,3 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser {
 // }
 // $data =& $amazon->_data;
 // var_dump( $data );
-?>

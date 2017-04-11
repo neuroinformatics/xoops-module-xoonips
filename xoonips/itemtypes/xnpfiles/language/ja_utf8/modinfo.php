@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -31,7 +32,6 @@
 // _MI_<MODULENAME>_<STRINGNAME>
 
 // The name of this module
-define("_MI_XNPFILES_NAME","XooNIps Files Item Type Module");
+define('_MI_XNPFILES_NAME', 'XooNIps Files Item Type Module');
 // A brief description of this module
-define("_MI_XNPFILES_DESC","XooNIps Files Item Type Module");
-
+define('_MI_XNPFILES_DESC', 'XooNIps Files Item Type Module');

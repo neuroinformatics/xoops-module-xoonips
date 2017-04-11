@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.8 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 /**
@@ -51,107 +52,112 @@ if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
  * @li getVar('posi') : position id
  * @li getVar('appeal') :
  */
-class XooNIpsOrmUsers extends XooNIpsTableObject {
-  function XooNIpsOrmUsers() {
-    parent::XooNIpsTableObject();
+class XooNIpsOrmUsers extends XooNIpsTableObject
+{
+    public function XooNIpsOrmUsers()
+    {
+        parent::XooNIpsTableObject();
     // from XooNIps_users table
-    $this->initVar( 'uid', XOBJ_DTYPE_INT, 0, true, null );
-    $this->initVar( 'activate', XOBJ_DTYPE_INT, 0, true, null );
-    $this->initVar( 'address', XOBJ_DTYPE_TXTBOX, null, false, 255 );
-    $this->initVar( 'division', XOBJ_DTYPE_TXTBOX, null, false, 255 );
-    $this->initVar( 'tel', XOBJ_DTYPE_TXTBOX, '', false, 32 );
-    $this->initVar( 'company_name', XOBJ_DTYPE_TXTBOX, '', false, 255 );
-    $this->initVar( 'country', XOBJ_DTYPE_TXTBOX, '', false, 255 );
-    $this->initVar( 'zipcode', XOBJ_DTYPE_TXTBOX, '', false, 32 );
-    $this->initVar( 'fax', XOBJ_DTYPE_TXTBOX, '', false, 32 );
-    $this->initVar( 'base_url', XOBJ_DTYPE_TXTBOX, null, false, 255 );
-    $this->initVar( 'notice_mail', XOBJ_DTYPE_INT, 0, false, null );
-    $this->initVar( 'notice_mail_since', XOBJ_DTYPE_INT, 0, false, null );
-    $this->initVar( 'private_index_id', XOBJ_DTYPE_INT, 0, true, null );
-    $this->initVar( 'private_item_number_limit', XOBJ_DTYPE_INT, null, true, null );
-    $this->initVar( 'private_index_number_limit', XOBJ_DTYPE_INT, null, true, null );
+    $this->initVar('uid', XOBJ_DTYPE_INT, 0, true, null);
+        $this->initVar('activate', XOBJ_DTYPE_INT, 0, true, null);
+        $this->initVar('address', XOBJ_DTYPE_TXTBOX, null, false, 255);
+        $this->initVar('division', XOBJ_DTYPE_TXTBOX, null, false, 255);
+        $this->initVar('tel', XOBJ_DTYPE_TXTBOX, '', false, 32);
+        $this->initVar('company_name', XOBJ_DTYPE_TXTBOX, '', false, 255);
+        $this->initVar('country', XOBJ_DTYPE_TXTBOX, '', false, 255);
+        $this->initVar('zipcode', XOBJ_DTYPE_TXTBOX, '', false, 32);
+        $this->initVar('fax', XOBJ_DTYPE_TXTBOX, '', false, 32);
+        $this->initVar('base_url', XOBJ_DTYPE_TXTBOX, null, false, 255);
+        $this->initVar('notice_mail', XOBJ_DTYPE_INT, 0, false, null);
+        $this->initVar('notice_mail_since', XOBJ_DTYPE_INT, 0, false, null);
+        $this->initVar('private_index_id', XOBJ_DTYPE_INT, 0, true, null);
+        $this->initVar('private_item_number_limit', XOBJ_DTYPE_INT, null, true, null);
+        $this->initVar('private_index_number_limit', XOBJ_DTYPE_INT, null, true, null);
     // data type = double
-    $this->initVar( 'private_item_storage_limit', XOBJ_DTYPE_OTHER, null, true, null );
-    $this->initVar( 'user_order', XOBJ_DTYPE_INT, 0, false, null );
-    $this->initVar( 'posi', XOBJ_DTYPE_INT, 0, false, null );
-    $this->initVar( 'appeal', XOBJ_DTYPE_TXTBOX, '', false, 65535 );
-  }
+    $this->initVar('private_item_storage_limit', XOBJ_DTYPE_OTHER, null, true, null);
+        $this->initVar('user_order', XOBJ_DTYPE_INT, 0, false, null);
+        $this->initVar('posi', XOBJ_DTYPE_INT, 0, false, null);
+        $this->initVar('appeal', XOBJ_DTYPE_TXTBOX, '', false, 65535);
+    }
 
   /**
    * clean values of all variables of the object for storage.
-   * also add slashes whereever needed
+   * also add slashes whereever needed.
    *
    * @return bool true if successful
-   * @access public
    */
-  function cleanVars() {
-    $retval = true;
+  public function cleanVars()
+  {
+      $retval = true;
     // check required/optional values
-    $xconfig_handler =& xoonips_getormhandler( 'xoonips', 'config' );
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     // $realname_optional = $xconfig_handler->getValue('account_realname_optional');
-    $address_optional = $xconfig_handler->getValue( 'account_address_optional' );
-    $division_optional = $xconfig_handler->getValue( 'account_division_optional' );
-    $tel_optional = $xconfig_handler->getValue( 'account_tel_optional' );
-    $company_name_optional = $xconfig_handler->getValue( 'account_company_name_optional' );
-    $country_optional = $xconfig_handler->getValue( 'account_country_optional' );
-    $zipcode_optional = $xconfig_handler->getValue( 'account_zipcode_optional' );
-    $fax_optional = $xconfig_handler->getValue( 'account_fax_optional' );
+    $address_optional = $xconfig_handler->getValue('account_address_optional');
+      $division_optional = $xconfig_handler->getValue('account_division_optional');
+      $tel_optional = $xconfig_handler->getValue('account_tel_optional');
+      $company_name_optional = $xconfig_handler->getValue('account_company_name_optional');
+      $country_optional = $xconfig_handler->getValue('account_country_optional');
+      $zipcode_optional = $xconfig_handler->getValue('account_zipcode_optional');
+      $fax_optional = $xconfig_handler->getValue('account_fax_optional');
     // $this->vars['name']['required'] = ($realname_optional && $realname_optional == 'off');
-    $this->vars['address']['required'] = ( $address_optional == 'off' );
-    $this->vars['division']['required'] = ( $division_optional == 'off' );
-    $this->vars['tel']['required'] = ( $tel_optional == 'off' );
-    $this->vars['company_name']['required'] = ( $company_name_optional == 'off' );
-    $this->vars['country']['required'] = ( $country_optional == 'off' );
-    $this->vars['zipcode']['required'] = ( $zipcode_optional == 'off' );
-    $this->vars['fax']['required'] = ( $fax_optional == 'off' );
+    $this->vars['address']['required'] = ($address_optional == 'off');
+      $this->vars['division']['required'] = ($division_optional == 'off');
+      $this->vars['tel']['required'] = ($tel_optional == 'off');
+      $this->vars['company_name']['required'] = ($company_name_optional == 'off');
+      $this->vars['country']['required'] = ($country_optional == 'off');
+      $this->vars['zipcode']['required'] = ($zipcode_optional == 'off');
+      $this->vars['fax']['required'] = ($fax_optional == 'off');
     // is private_item_storage_limit double?
-    if ( ! is_numeric( $this->get( 'private_item_storage_limit' ) ) ) {
-      // todo: define constant string
-      $this->setErrors( 'private_item_storage_limit must be numeric.' );
-      $retval = false;
+    if (!is_numeric($this->get('private_item_storage_limit'))) {
+        // todo: define constant string
+      $this->setErrors('private_item_storage_limit must be numeric.');
+        $retval = false;
     }
-    return $retval && parent::cleanVars();
+
+      return $retval && parent::cleanVars();
   }
 }
 
 /**
  * handler class of XooNIps User.
  */
-class XooNIpsOrmUsersHandler extends XooNIpsTableObjectHandler {
-  function XooNIpsOrmUsersHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmUsers', 'xoonips_users', 'uid', false );
-  }
+class XooNIpsOrmUsersHandler extends XooNIpsTableObjectHandler
+{
+    public function XooNIpsOrmUsersHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmUsers', 'xoonips_users', 'uid', false);
+    }
 
   /**
-   * create a new object
+   * create a new object.
    *
-   * @access public
    * @param bool isNew mark the new object as 'new'?
+   *
    * @return object XooNIpsOrmUsers reference to the new object
    */
-  function &create( $isNew = true ) {
-    $obj = parent::create( $isNew );
-    if ( $obj === false ) {
-      return $obj;
-    }
-    if ( $isNew ) {
-      // set default private index/item/storage limit
-      $xconfig_handler =& xoonips_getormhandler( 'xoonips', 'config' );
-      $keys = array(
+  public function &create($isNew = true)
+  {
+      $obj = parent::create($isNew);
+      if ($obj === false) {
+          return $obj;
+      }
+      if ($isNew) {
+          // set default private index/item/storage limit
+      $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+          $keys = array(
         // config key name  => field name of 'xoonips_users' table
         'private_index_number_limit' => 'private_index_number_limit',
         'private_item_number_limit' => 'private_item_number_limit',
         'private_item_storage_limit' => 'private_item_storage_limit',
       );
-      foreach ( $keys as $key => $field ) {
-        $value = $xconfig_handler->getValue( $key );
-        $obj->set( $field, $value );
-        unset( $xcobj );
+          foreach ($keys as $key => $field) {
+              $value = $xconfig_handler->getValue($key);
+              $obj->set($field, $value);
+              unset($xcobj);
+          }
       }
-    }
-    return $obj;
+
+      return $obj;
   }
 }
-
-?>

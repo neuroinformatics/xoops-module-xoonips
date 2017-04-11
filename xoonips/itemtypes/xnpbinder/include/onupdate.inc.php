@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.1.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,17 +25,18 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
-function xoops_module_update_xnpbinder( $xoopsMod, $oldversion ) {
-  global $xoopsDB;
+function xoops_module_update_xnpbinder($xoopsMod, $oldversion)
+{
+    global $xoopsDB;
   // remember that version is multiplied with 100 to get an integer
-  switch ( $oldversion ) {
+  switch ($oldversion) {
   case 340:
   default:
   }
-  return true;
+
+    return true;
 }
-?>

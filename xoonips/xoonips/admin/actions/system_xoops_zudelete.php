@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.6 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,37 +25,36 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 // get uid from form request
-$formdata =& xoonips_getutility( 'formdata' );
-$uid = $formdata->getValue( 'post', 'uid', 'i', true );
+$formdata = &xoonips_getutility('formdata');
+$uid = $formdata->getValue('post', 'uid', 'i', true);
 
 // check token ticket
 require_once '../class/base/gtickets.php';
 $ticket_area = 'xoonips_admin_system_xoops_zombielist';
-if ( ! $xoopsGTicket->check( true, $ticket_area, false ) ) {
-  redirect_header( $xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors() );
-  exit();
+if (!$xoopsGTicket->check(true, $ticket_area, false)) {
+    redirect_header($xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors());
+    exit();
 }
 
 // check exists public items
-$index_item_link_handler =& xoonips_getormhandler( 'xoonips', 'index_item_link' );
-if ( count( $index_item_link_handler->getNonPrivateItemIds( $uid ) ) > 0 ) {
-  $url = sprintf( '%s&action=zilist&uid=%u', $xoonips_admin['mypage_url'], $uid );
-  redirect_header( $url, 2, _AM_XOONIPS_SYSTEM_XOOPS_ZOMBIE_DELETE_MSG_REDIRECT );
-  exit();
+$index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
+if (count($index_item_link_handler->getNonPrivateItemIds($uid)) > 0) {
+    $url = sprintf('%s&action=zilist&uid=%u', $xoonips_admin['mypage_url'], $uid);
+    redirect_header($url, 2, _AM_XOONIPS_SYSTEM_XOOPS_ZOMBIE_DELETE_MSG_REDIRECT);
+    exit();
 }
 
 // delete account
-$user_compo_handler =& xoonips_getormcompohandler( 'xoonips', 'user' );
-$user_compo_handler->deleteAccount( $uid );
+$user_compo_handler = &xoonips_getormcompohandler('xoonips', 'user');
+$user_compo_handler->deleteAccount($uid);
 
-$event_handler =& xoonips_getormhandler( 'xoonips', 'event_log' );
-$event_handler->recordDeleteAccountEvent( $uid );
+$event_handler = &xoonips_getormhandler('xoonips', 'event_log');
+$event_handler->recordDeleteAccountEvent($uid);
 
-redirect_header( $xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MAINTENANCE_ACCOUNT_DELETE_MSG_SUCCESS );
+redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MAINTENANCE_ACCOUNT_DELETE_MSG_SUCCESS);
 exit();
-?>

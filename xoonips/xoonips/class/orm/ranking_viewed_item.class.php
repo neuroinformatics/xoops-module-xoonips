@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.8 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 require_once __DIR__.'/abstract_ranking.class.php';
@@ -36,61 +37,66 @@ require_once __DIR__.'/abstract_ranking.class.php';
  * @li getVar('item_id') :
  * @li getVar('count') :
  */
-class XooNIpsOrmRankingViewedItem extends XooNIpsTableObject {
-  function XooNIpsOrmRankingViewedItem() {
-    parent::XooNIpsTableObject();
-    $this->initVar( 'item_id', XOBJ_DTYPE_INT, 0, true );
-    $this->initVar( 'count', XOBJ_DTYPE_INT, 0, true );
-  }
+class XooNIpsOrmRankingViewedItem extends XooNIpsTableObject
+{
+    public function XooNIpsOrmRankingViewedItem()
+    {
+        parent::XooNIpsTableObject();
+        $this->initVar('item_id', XOBJ_DTYPE_INT, 0, true);
+        $this->initVar('count', XOBJ_DTYPE_INT, 0, true);
+    }
 }
 
 /**
  * @brief handler object of ranking viewed item
- *
  */
-class XooNIpsOrmRankingViewedItemHandler extends XooNIpsOrmAbstractRankingHandler {
-  function XooNIpsOrmRankingViewedItemHandler( &$db ) {
-    parent::XooNIpsTableObjectHandler( $db );
-    $this->__initHandler( 'XooNIpsOrmRankingViewedItem', 'xoonips_ranking_viewed_item', 'item_id', false );
-    $this->_set_columns( array( 'item_id', 'count' ) );
-  }
+class XooNIpsOrmRankingViewedItemHandler extends XooNIpsOrmAbstractRankingHandler
+{
+    public function XooNIpsOrmRankingViewedItemHandler(&$db)
+    {
+        parent::XooNIpsTableObjectHandler($db);
+        $this->__initHandler('XooNIpsOrmRankingViewedItem', 'xoonips_ranking_viewed_item', 'item_id', false);
+        $this->_set_columns(array('item_id', 'count'));
+    }
 
   /**
-   * insert/upldate/replace object
+   * insert/upldate/replace object.
    *
-   * @access public
    * @param object &$obj
-   * @param bool $force force operation
+   * @param bool   $force force operation
+   *
    * @return bool false if failed
    */
-  function insert( &$obj, $force = false ) {
-    $item_id = $obj->get( 'item_id' );
-    if ( $item_id == 0 ) {
-      // ignore if item id is zero
+  public function insert(&$obj, $force = false)
+  {
+      $item_id = $obj->get('item_id');
+      if ($item_id == 0) {
+          // ignore if item id is zero
       return true;
-    }
-    return parent::insert( $obj, $force );
+      }
+
+      return parent::insert($obj, $force);
   }
 
   /**
-   * increment item viewed counter for updating/rebuilding rankings
+   * increment item viewed counter for updating/rebuilding rankings.
    *
    * @param int $item_id item id
-   * @param int $delta counter delta
+   * @param int $delta   counter delta
+   *
    * @return bool FALSE if failed
    */
-  function increment( $item_id, $delta ) {
-    $obj =& $this->get( $item_id );
-    if ( is_object( $obj ) ) {
-      $delta += $obj->get( 'count' );
-    } else {
-      $obj =& $this->create();
-      $obj->set( 'item_id', $item_id );
-    }
-    $obj->set( 'count', $delta );
+  public function increment($item_id, $delta)
+  {
+      $obj = &$this->get($item_id);
+      if (is_object($obj)) {
+          $delta += $obj->get('count');
+      } else {
+          $obj = &$this->create();
+          $obj->set('item_id', $item_id);
+      }
+      $obj->set('count', $delta);
     // force insertion
-    return $this->insert( $obj, true );
+    return $this->insert($obj, true);
   }
 }
-
-?>

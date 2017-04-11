@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.2 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -26,58 +27,65 @@
 // ------------------------------------------------------------------------- //
 
 /**
- * factory class to create XooNIpsLogic
+ * factory class to create XooNIpsLogic.
  */
 class XooNIpsLogicFactory
 {
-    function XooNIpsLogicFactory() 
+    public function XooNIpsLogicFactory()
     {
     }
 
     /**
-     * return XooNIpsLogicFactory instance
+     * return XooNIpsLogicFactory instance.
      *
      * @return XooNIpsLogicFactory
      */
-    function &getInstance() 
+    public function &getInstance()
     {
         static $singleton = null;
-        if (!isset($singleton)) $singleton = new XooNIpsLogicFactory();
+        if (!isset($singleton)) {
+            $singleton = new self();
+        }
+
         return $singleton;
     }
 
     /**
-     * return XooNIpsLogic corresponding to $logic
+     * return XooNIpsLogic corresponding to $logic.
      *
      * @param string $name logic name
      * @retval XooNIpsLogic corresponding to $name
      * @retval false unknown logic
      */
-    function &create($name) 
+    public function &create($name)
     {
         static $falseVar = false;
         $logic = null;
-        //
+
         $name = trim($name);
-        if (false !== strstr($name, '..')) return $falseVar;
-        $include_file = XOOPS_ROOT_PATH . "/modules/xoonips/class/logic/" . strtolower($name) . ".class.php";
+        if (false !== strstr($name, '..')) {
+            return $falseVar;
+        }
+        $include_file = XOOPS_ROOT_PATH.'/modules/xoonips/class/logic/'.strtolower($name).'.class.php';
         if (file_exists($include_file)) {
             include_once $include_file;
         } else {
             return $falseVar;
         }
-        //
-        $class = 'XooNIpsLogic' . ucfirst($name);
+
+        $class = 'XooNIpsLogic'.ucfirst($name);
         if (class_exists($class)) {
             $logic = new $class();
         }
-        //
+
         if (!isset($logic)) {
-            trigger_error('Handler does not exist. Name: ' . $name, E_USER_ERROR);
+            trigger_error('Handler does not exist. Name: '.$name, E_USER_ERROR);
         }
         // return result
-        if (isset($logic)) return $logic;
-        else return $falseVar;
+        if (isset($logic)) {
+            return $logic;
+        } else {
+            return $falseVar;
+        }
     }
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.15 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -25,127 +26,135 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once __DIR__ . '/transfer.class.php';
-include_once dirname( __DIR__ ).'/base/gtickets.php';
+include_once __DIR__.'/transfer.class.php';
+include_once dirname(__DIR__).'/base/gtickets.php';
 
 /**
- * 
  * HTML view to list items to transfer for a user.
- * 
- * 
- * 
- * 
  */
-class XooNIpsViewTransferUserItemConfirm extends XooNIpsViewTransfer{
+class XooNIpsViewTransferUserItemConfirm extends XooNIpsViewTransfer
+{
     /**
-     * create view
-     * 
+     * create view.
+     *
      * @param arrray $params associative array of view<br />
-     * - $params['to_uid']:
-     *   integer user id transfer to<br />
-     * - $params['item_ids_to_transfer']:
-     *    array of integer of item id to transfer<br />
-     * - $params['child_item_ids_to_transfer']: associative array<br />
-     * - $params['child_item_ids_to_transfer'][(item id:integer)]:
-     *    array of child item id<br />
-     * - $params['is_user_in_groups']:
-     *    boolean true if to_uid is subscribed to group
-     *    of all transfered items.<br />
-     * - $params['gids_to_subscribe']:
-     *    array group id(s) to subscribe transferee to complete transfer.<br />
+     *                       - $params['to_uid']:
+     *                       integer user id transfer to<br />
+     *                       - $params['item_ids_to_transfer']:
+     *                       array of integer of item id to transfer<br />
+     *                       - $params['child_item_ids_to_transfer']: associative array<br />
+     *                       - $params['child_item_ids_to_transfer'][(item id:integer)]:
+     *                       array of child item id<br />
+     *                       - $params['is_user_in_groups']:
+     *                       boolean true if to_uid is subscribed to group
+     *                       of all transfered items.<br />
+     *                       - $params['gids_to_subscribe']:
+     *                       array group id(s) to subscribe transferee to complete transfer.<br />
      */
-    function XooNIpsViewTransferUserItemConfirm($params){
+    public function XooNIpsViewTransferUserItemConfirm($params)
+    {
         parent::XooNIpsView($params);
     }
-    
-    function render(){
+
+    public function render()
+    {
         global $xoopsOption, $xoopsConfig, $xoopsUser, $xoopsUserIsAdmin, $xoopsLogger, $xoopsTpl;
-        $textutil=&xoonips_getutility('text');
-        
+        $textutil = &xoonips_getutility('text');
+
         //create handler to include item_type.class.php
-        $item_lock_handler =& xoonips_getormhandler( 'xoonips', 'item_lock' );
-        
+        $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
+
         $xoopsOption['template_main']
             = 'xoonips_transfer_user_item_confirm.html';
         include XOOPS_ROOT_PATH.'/header.php';
-        $this -> setXooNIpsStyleSheet($xoopsTpl);
-        
-        $xoopsTpl -> assign(
+        $this->setXooNIpsStyleSheet($xoopsTpl);
+
+        $xoopsTpl->assign(
             'token_hidden',
-            $GLOBALS['xoopsGTicket']->getTicketHtml( __LINE__, 600,
-              'xoonips_transfer_user_item_confirm' ) );
-        $xoopsTpl -> assign(
+            $GLOBALS['xoopsGTicket']->getTicketHtml(__LINE__, 600,
+              'xoonips_transfer_user_item_confirm'));
+        $xoopsTpl->assign(
             'to_uname',
-            $textutil->html_special_chars($this -> get_uname_by_uid( $this -> _params['to_uid'] )));
-        $xoopsTpl -> assign( 'transfer_items',
-                             $this -> get_transfer_item_template_vars() );
-        $xoopsTpl -> assign(
+            $textutil->html_special_chars($this->get_uname_by_uid($this->_params['to_uid'])));
+        $xoopsTpl->assign('transfer_items',
+                             $this->get_transfer_item_template_vars());
+        $xoopsTpl->assign(
             'not_subscribed_group_message',
             sprintf(
                 _MD_XOONIPS_TRANSFER_USER_ITEM_CONFIRM_USER_IS_NOT_SUBSCRIBED_TO_GROUPS,
-                $textutil->html_special_chars($this -> get_uname_by_uid( $this -> _params['to_uid'])),
-                $this -> get_gname_csv()));
-        foreach( $this -> _params as $key => $val ){
-            $xoopsTpl -> assign( $key, $val );
+                $textutil->html_special_chars($this->get_uname_by_uid($this->_params['to_uid'])),
+                $this->get_gname_csv()));
+        foreach ($this->_params as $key => $val) {
+            $xoopsTpl->assign($key, $val);
         }
         include XOOPS_ROOT_PATH.'/footer.php';
     }
-    
-    function get_child_item_ids_to_transfer(){
+
+    public function get_child_item_ids_to_transfer()
+    {
         $item_ids = array();
-        foreach( array_values( $this -> _params['child_item_ids_to_transfer'] ) 
-                 as $child_item_ids ){
-            $item_ids = array_merge( $item_ids, $child_item_ids );
+        foreach (array_values($this->_params['child_item_ids_to_transfer'])
+                 as $child_item_ids) {
+            $item_ids = array_merge($item_ids, $child_item_ids);
         }
-        return array_unique( $item_ids );
+
+        return array_unique($item_ids);
     }
 
-    function get_transfer_item_template_vars(){
+    public function get_transfer_item_template_vars()
+    {
         $result = array();
-        
-        $item_ids = array_merge( $this -> _params['item_ids_to_transfer'],
-                                 $this -> get_child_item_ids_to_transfer() );
-        sort( $item_ids );
-        
-        foreach( $item_ids as $item_id ){
-            $result[] = $this -> get_item_template_vars( $item_id );
+
+        $item_ids = array_merge($this->_params['item_ids_to_transfer'],
+                                 $this->get_child_item_ids_to_transfer());
+        sort($item_ids);
+
+        foreach ($item_ids as $item_id) {
+            $result[] = $this->get_item_template_vars($item_id);
         }
+
         return $result;
     }
-    
+
     /**
-     * get array of item for template vars
-     * @param integer $item_id
+     * get array of item for template vars.
+     *
+     * @param int $item_id
      */
-    function get_item_template_vars( $item_id ){
-        $item_handler =& xoonips_getormcompohandler( 'xoonips', 'item' );
-        $item_type_handler =& xoonips_getormhandler( 'xoonips', 'item_type' );
-        $item =& $item_handler -> get( $item_id );
-        $basic =& $item -> getVar( 'basic' );
+    public function get_item_template_vars($item_id)
+    {
+        $item_handler = &xoonips_getormcompohandler('xoonips', 'item');
+        $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
+        $item = &$item_handler->get($item_id);
+        $basic = &$item->getVar('basic');
         $itemtype
-            =& $item_type_handler -> get( $basic -> get( 'item_type_id' ) );
-        return array( 'item_id' => $item_id,
-                      'item_type_name' => $itemtype -> getVar( 'display_name', 's' ),
-                      'title' => $this -> concatenate_titles(
-                          $item -> getVar( 'titles' ) ) );
+            = &$item_type_handler->get($basic->get('item_type_id'));
+
+        return array('item_id' => $item_id,
+                      'item_type_name' => $itemtype->getVar('display_name', 's'),
+                      'title' => $this->concatenate_titles(
+                          $item->getVar('titles')), );
     }
-    
-    function get_gname_csv(){
+
+    public function get_gname_csv()
+    {
         $result = array();
         $gids = array();
-        foreach( $this -> _params['gids_to_subscribe'] as $gid ){
-            $gids[] = intval( $gid );
+        foreach ($this->_params['gids_to_subscribe'] as $gid) {
+            $gids[] = intval($gid);
         }
-        if( count( $gids ) == 0 ) return '';
-        $xgroup_handler =& xoonips_gethandler( 'xoonips', 'group' );
-        $xgroup_objs =& $xgroup_handler->getGroupObjects( $gids );
-        if ( empty( $xgroup_objs ) ) {
-          return '';
+        if (count($gids) == 0) {
+            return '';
         }
-        foreach( $xgroup_objs as $xgroup_obj ){
-            $result[] = $xgroup_obj->getVar( 'gname', 's' );
+        $xgroup_handler = &xoonips_gethandler('xoonips', 'group');
+        $xgroup_objs = &$xgroup_handler->getGroupObjects($gids);
+        if (empty($xgroup_objs)) {
+            return '';
         }
-        return implode( ',', $result );
+        foreach ($xgroup_objs as $xgroup_obj) {
+            $result[] = $xgroup_obj->getVar('gname', 's');
+        }
+
+        return implode(',', $result);
     }
 }
-?>

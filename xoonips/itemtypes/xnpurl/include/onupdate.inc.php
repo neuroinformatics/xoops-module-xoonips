@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.4.1.2.4 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,22 +25,23 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if ( ! defined( 'XOOPS_ROOT_PATH' ) ) {
-  exit();
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit();
 }
 
 //  Update script for XooNIps Url item type module
-function xoops_module_update_xnpurl( $xoopsMod, $oldversion ) {
-  global $xoopsDB;
+function xoops_module_update_xnpurl($xoopsMod, $oldversion)
+{
+    global $xoopsDB;
 
-  echo '<code>Updating modules...</code><br />';
-  switch ( $oldversion ) {
+    echo '<code>Updating modules...</code><br />';
+    switch ($oldversion) {
   case 200:
   case 310:
-    $sql = 'ALTER TABLE '.$xoopsDB->prefix( 'xnpurl_item_detail' ).' TYPE = innodb';
-    $result = $xoopsDB->query( $sql );
-    if ( ! $result ) {
-      echo 'ERROR: line='.__LINE__.' sql='.$sql.' '.$xoopsDB->error();
+    $sql = 'ALTER TABLE '.$xoopsDB->prefix('xnpurl_item_detail').' TYPE = innodb';
+    $result = $xoopsDB->query($sql);
+    if (!$result) {
+        echo 'ERROR: line='.__LINE__.' sql='.$sql.' '.$xoopsDB->error();
     }
   case 311:
   case 330:
@@ -56,15 +58,14 @@ function xoops_module_update_xnpurl( $xoopsMod, $oldversion ) {
   case 337:
   case 338:
   case 339:
-    $sql = 'ALTER TABLE '.$xoopsDB->prefix( 'xnpurl_item_detail' ).' ADD COLUMN (url_count int(10) unsigned NOT NULL default 0)';
-    $result = $xoopsDB->query( $sql );
-    if ( ! $result ) {
-      echo 'ERROR: line='.__LINE__.' sql='.$sql.' '.$xoopsDB->error();
+    $sql = 'ALTER TABLE '.$xoopsDB->prefix('xnpurl_item_detail').' ADD COLUMN (url_count int(10) unsigned NOT NULL default 0)';
+    $result = $xoopsDB->query($sql);
+    if (!$result) {
+        echo 'ERROR: line='.__LINE__.' sql='.$sql.' '.$xoopsDB->error();
     }
   case 340:
   default:
   }
-  return true;
-}
 
-?>
+    return true;
+}

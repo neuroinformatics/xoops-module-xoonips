@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.8 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -24,18 +25,18 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-$mydirname = basename( dirname( __DIR__ ) );
+$mydirname = basename(dirname(__DIR__));
 
 // load mainfile.php
-include dirname( dirname( dirname( __DIR__ ) ) ).'/mainfile.php';
+include dirname(dirname(dirname(__DIR__))).'/mainfile.php';
 
 // set other D3 variables
 $mod_path = XOOPS_ROOT_PATH.'/modules/'.$mydirname;
 $mod_url = XOOPS_URL.'/modules/'.$mydirname;
-if ( file_exists( $mod_path.'/mytrustdirname.php' ) ) {
-  include $mod_path.'/mytrustdirname.php';
+if (file_exists($mod_path.'/mytrustdirname.php')) {
+    include $mod_path.'/mytrustdirname.php';
 } else {
-  $mytrustdirname = '';
+    $mytrustdirname = '';
 }
 
 // load condition definitions
@@ -45,10 +46,8 @@ include $mod_path.'/condefs.php';
 include $mod_path.'/include/functions.php';
 
 // initialize xoonips session
-$xsession_handler =& xoonips_getormhandler( 'xoonips', 'session' );
-$uid = is_object( $xoopsUser ) ? $xoopsUser->getVar( 'uid', 'n' ) : UID_GUEST;
-$xsession_handler->initSession( $uid );
-$xsession_handler->validateUser( $uid, true );
-unset( $xsession_handler );
-
-?>
+$xsession_handler = &xoonips_getormhandler('xoonips', 'session');
+$uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
+$xsession_handler->initSession($uid);
+$xsession_handler->validateUser($uid, true);
+unset($xsession_handler);

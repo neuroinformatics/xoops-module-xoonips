@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.3 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -35,7 +36,5 @@ define('_MD_XNPBINDER_EXPLANATION', 'バインダー');
 define('_MD_XNPBINDER_GROUP_BINDER_HAS_PRIVATE_ITEM', 'グループ共有バインダーが非公開アイテムを含んでいます');
 define('_MD_XNPBINDER_PUBLIC_BINDER_HAS_NOT_PUBLIC_ITEM', '公開バインダーがグループ共有アイテムまたは非公開アイテムを含んでいます');
 define('_MD_XNPBINDER_USER_CONTENT_EMPTY_NOTIFYSBJ', '公開バインダーが空になりました');
-define( '_MD_XNPBINDER_XMLRPC_DISPLAY_NAME_BINDER_ID', 'アイテムID' );
-define( '_MD_XNPBINDER_XMLRPC_DISPLAY_NAME_ITEM_ID'  , 'バインダーアイテム' );
-
-?>
+define('_MD_XNPBINDER_XMLRPC_DISPLAY_NAME_BINDER_ID', 'アイテムID');
+define('_MD_XNPBINDER_XMLRPC_DISPLAY_NAME_ITEM_ID', 'バインダーアイテム');
