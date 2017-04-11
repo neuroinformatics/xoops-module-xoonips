@@ -31,8 +31,7 @@ include 'include/common.inc.php';
 include 'include/AL.php';
 include 'include/lib.php';
 
-$xoopsOption['template_main']
-    = 'xoonips_advanced_search_itemselect_transfer.html';
+$xoopsOption['template_main'] = 'xoonips_advanced_search_itemselect_transfer.html';
 
 // disable to link index tree
 $xoonipsURL = '';

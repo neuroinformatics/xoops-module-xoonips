@@ -68,10 +68,7 @@ foreach (array('verb', 'metadataPrefix', 'set', 'from', 'until', 'identifier', '
 header('Content-Type: application/xml');
 
 if (!isset($args['verb'])) {
-    echo $pmh->header()
-        .$pmh->request($args)
-        .$pmh->error('badVerb', 'no verb')
-        .$pmh->footer();
+    echo $pmh->header().$pmh->request($args).$pmh->error('badVerb', 'no verb').$pmh->footer();
     exit();
 }
 if ($args['verb'] == 'GetRecord') {
@@ -87,8 +84,5 @@ if ($args['verb'] == 'GetRecord') {
 } elseif ($args['verb'] == 'ListSets') {
     echo $pmh->ListSets($args);
 } else {
-    echo $pmh->header()
-        .$pmh->request($args)
-        .$pmh->error('badVerb', 'illegal verb')
-        .$pmh->footer();
+    echo $pmh->header().$pmh->request($args).$pmh->error('badVerb', 'illegal verb').$pmh->footer();
 }

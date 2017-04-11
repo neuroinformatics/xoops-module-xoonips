@@ -210,32 +210,20 @@ if ($op == 'delete_confirm') {
     $xmember_handler = &xoonips_gethandler('xoonips', 'member');
     $xgroup_handler = &xoonips_gethandler('xoonips', 'group');
     if ($xmember_handler->isAdmin($uid) || $xmember_handler->isModerator($uid) || $xgroup_handler->isGroupAdmin($uid)) {
-        redirect_header(
-            XOOPS_URL."/modules/xoonips/userinfo.php?uid={$uid}",
-            3,
-            _MD_XOONIPS_ACCOUNT_DELETE_IGNORE_USER
-        );
+        redirect_header(XOOPS_URL."/modules/xoonips/userinfo.php?uid={$uid}", 3, _MD_XOONIPS_ACCOUNT_DELETE_IGNORE_USER);
         exit();
     }
 
     $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
     if (count($index_item_link_handler->getNonPrivateItemIds($uid)) > 0) {
-        redirect_header(
-            XOOPS_URL."/modules/xoonips/userinfo.php?uid={$uid}",
-            3,
-            _MD_XOONIPS_ACCOUNT_DELETE_ITEM_HANDOVER
-        );
+        redirect_header(XOOPS_URL."/modules/xoonips/userinfo.php?uid={$uid}", 3, _MD_XOONIPS_ACCOUNT_DELETE_ITEM_HANDOVER);
         exit();
     }
 
     include '../../header.php';
     $xoopsOption['template_main'] = 'xoonips_user_delete.html';
 
-    $token_ticket = $xoopsGTicket->getTicketHtml(
-        __LINE__,
-        1800,
-        'xoonips_certify_user_uncertfy'
-    );
+    $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, 'xoonips_certify_user_uncertfy');
     $xoopsTpl->assign('token_ticket', $token_ticket);
     $xoopsTpl->assign('delete_uid', $_SESSION['xoopsUserId']);
     include '../../footer.php';
@@ -246,11 +234,7 @@ if ($op == 'delete') {
     $uid = $_SESSION['xoopsUserId'];
 
     if (!isset($_POST['is_exec'])) {
-        redirect_header(
-            XOOPS_URL."/modules/xoonips/userinfo.php?uid={$uid}",
-            3,
-            _TAKINGBACK
-        );
+        redirect_header(XOOPS_URL."/modules/xoonips/userinfo.php?uid={$uid}", 3, _TAKINGBACK);
         exit();
     }
 
@@ -288,10 +272,6 @@ if ($op == 'delete') {
 
     $result_mail = $xoopsMailer->send();
 
-    redirect_header(
-        XOOPS_URL.'/modules/xoonips/user.php?op=logout',
-        3,
-        _MD_XOONIPS_ACCOUNT_DELETE_SUCCESS
-    );
+    redirect_header(XOOPS_URL.'/modules/xoonips/user.php?op=logout', 3, _MD_XOONIPS_ACCOUNT_DELETE_SUCCESS);
     exit();
 }

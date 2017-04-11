@@ -46,13 +46,13 @@ function b_xoonips_tree_show()
 
     if (!class_exists('Xoonips_UserPreload')) {
         // view page hook
-    // http://foo.bar/register.php
-    //   -> http://foo.bar/modules/xoonips/registeruser.php
-    // http://foo.bar/userinfo.php
-    //   -> http://foo.bar/modules/xoonips/userinfo.php
-    // http://foo.bar/user.php
-    //   -> http://foo.bar/modules/xoonips/user.php
-    $site_url = XOOPS_URL.'/';
+        // http://foo.bar/register.php
+        //   -> http://foo.bar/modules/xoonips/registeruser.php
+        // http://foo.bar/userinfo.php
+        //   -> http://foo.bar/modules/xoonips/userinfo.php
+        // http://foo.bar/user.php
+        //   -> http://foo.bar/modules/xoonips/user.php
+        $site_url = XOOPS_URL.'/';
         $site_url_base = '/';
         if (preg_match('/^(\\S+):\\/\\/([^\\/]+)((\\/[^\\/]+)*\\/)$/', $site_url, $matches)) {
             $site_url_base = $matches[3];
@@ -79,30 +79,30 @@ function b_xoonips_tree_show()
         }
     }
 
-  // hide block if user is invalid xoonips user
-  $xsession_handler = &xoonips_getormhandler('xoonips', 'session');
+    // hide block if user is invalid xoonips user
+    $xsession_handler = &xoonips_getormhandler('xoonips', 'session');
     if (!$xsession_handler->validateUser($uid, false)) {
         return false;
     }
 
-  // record view top page event
-  $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
+    // record view top page event
+    $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
     $eventlog_handler->recordViewTopPageEvent();
 
-  // load handlers
-  $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+    // load handlers
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $xuser_handler = &xoonips_getormhandler('xoonips', 'users');
     $title_handler = &xoonips_getormhandler('xoonips', 'title');
     $xmember_handler = &xoonips_gethandler('xoonips', 'member');
     $xgroup_handler = &xoonips_gethandler('xoonips', 'group');
 
-  // get configs
-  $tree_frame_width = $xconfig_handler->getValue('tree_frame_width');
+    // get configs
+    $tree_frame_width = $xconfig_handler->getValue('tree_frame_width');
     $tree_frame_height = $xconfig_handler->getValue('tree_frame_height');
     $public_item_target_user = $xconfig_handler->getValue('public_item_target_user');
 
-  // set query for tree.php of inline frame
-  $query = array();
+    // set query for tree.php of inline frame
+    $query = array();
     if (!empty($xoonipsTreeCheckBox)) {
         $query[] = 'checkbox=1';
     }
@@ -134,8 +134,8 @@ function b_xoonips_tree_show()
         }
     }
 
-  // get user informations
-  $pxid = 0;
+    // get user informations
+    $pxid = 0;
     if ($puid != UID_GUEST) {
         $xuser_obj = &$xuser_handler->get($puid);
         if (is_object($xuser_obj)) {
@@ -144,36 +144,36 @@ function b_xoonips_tree_show()
     }
     $is_moderator = $xmember_handler->isModerator($uid);
 
-  // get indexes
-  $xids = array();
+    // get indexes
+    $xids = array();
     if ($uid == UID_GUEST) {
         if ($public_item_target_user == 'all') {
             // guest user can view public index
-      $xids[] = IID_PUBLIC;
+            $xids[] = IID_PUBLIC;
         } else {
             // disable to show public index
         }
     } else {
         // login users
-    if (!empty($xoonipsEditIndex)) {
-        // edit index - show editable indexes
-      if ($is_moderator || !empty($xoonipsEditPublic) && !empty($_SESSION['xoonips_old_uid'])) {
-          $xids[] = IID_PUBLIC;
-      }
-        $xids = array_merge($xids, $xgroup_handler->getGroupRootIndexIds($puid, false));
-        $xids[] = $pxid;
-    } elseif (isset($xoonipsTree['private_only']) && $xoonipsTree['private_only']) {
-        // only private index only mode
-      if ($pxid != 0) {
-          $xids[] = $pxid;
-      }
-    } else {
-        $xids[] = IID_PUBLIC;
-        $xids = array_merge($xids, $xgroup_handler->getGroupRootIndexIds($puid, false));
-        if ($pxid != 0) {
+        if (!empty($xoonipsEditIndex)) {
+            // edit index - show editable indexes
+            if ($is_moderator || !empty($xoonipsEditPublic) && !empty($_SESSION['xoonips_old_uid'])) {
+                $xids[] = IID_PUBLIC;
+            }
+            $xids = array_merge($xids, $xgroup_handler->getGroupRootIndexIds($puid, false));
             $xids[] = $pxid;
+        } elseif (isset($xoonipsTree['private_only']) && $xoonipsTree['private_only']) {
+            // only private index only mode
+            if ($pxid != 0) {
+                $xids[] = $pxid;
+            }
+        } else {
+            $xids[] = IID_PUBLIC;
+            $xids = array_merge($xids, $xgroup_handler->getGroupRootIndexIds($puid, false));
+            if ($pxid != 0) {
+                $xids[] = $pxid;
+            }
         }
-    }
     }
     $indexes = array();
     foreach ($xids as $xid) {
@@ -186,13 +186,13 @@ function b_xoonips_tree_show()
             $title = $textutil->html_special_chars($title_objs[0]->get('title'));
         }
         $indexes[] = array(
-      'item_id' => $xid,
-      'title' => $title,
-    );
+            'item_id' => $xid,
+            'title' => $title,
+        );
     }
 
-  // assign block template variables
-  $block = array();
+    // assign block template variables
+    $block = array();
     $block['tree_frame_width'] = $tree_frame_width;
     $block['tree_frame_height'] = $tree_frame_height;
     $block['query'] = implode('&amp;', $query);

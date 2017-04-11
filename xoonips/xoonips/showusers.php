@@ -61,7 +61,7 @@ $is_activated = ($u_obj->get('level') > 0);
 $is_certified = ($xu_obj->get('activate') == 1);
 if (!$is_activated || !$is_certified) {
     // profile of 'not activated / certified user' is not displayed.
-  redirect_header(XOOPS_URL.'/', 3, _US_SELECTNG);
+    redirect_header(XOOPS_URL.'/', 3, _US_SELECTNG);
     exit();
 }
 $is_admin = $xmember_handler->isAdmin($myuid);
@@ -75,14 +75,14 @@ $textutil = &xoonips_getutility('text');
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-   'name' => _MD_XOONIPS_USERLIST_TITLE,
-   'url' => XOONIPS_URL.'/userlist.php',
-  ),
-  array(
-   'name' => $u_obj->getVar('uname', 's'),
-   'url' => XOONIPS_URL.'/showusers.php?uid='.$uid,
-  ),
+    array(
+       'name' => _MD_XOONIPS_USERLIST_TITLE,
+       'url' => XOONIPS_URL.'/userlist.php',
+    ),
+    array(
+       'name' => $u_obj->getVar('uname', 's'),
+       'url' => XOONIPS_URL.'/showusers.php?uid='.$uid,
+    ),
 );
 
 // publication list
@@ -91,10 +91,10 @@ $item_type_id = $formdata->getValue('post', 'item_type_id', 'i', false);
 $page = $formdata->getValue('post', 'page', 'i', false, 1);
 if (count($item_counts) != 0) {
     // validate item type id
-  $item_type_order = array_keys($item_counts);
+    $item_type_order = array_keys($item_counts);
     if (!in_array($item_type_id, $item_type_order)) {
         // override existing item type id
-    $item_type_id = $item_type_order[0];
+        $item_type_id = $item_type_order[0];
     }
     $limit = 20;
     $sort = 'publication_date';
@@ -104,22 +104,22 @@ if (count($item_counts) != 0) {
     $navi->setOrder($order);
     $item_ids = _xoonips_showusers_get_item_ids($item_type_id, $uid, $navi);
     $page = $navi->getPage();
-  // set page navi
-  $pagenavi = $navi->getTemplateVars(10);
+    // set page navi
+    $pagenavi = $navi->getTemplateVars(10);
     $pagenavi['onclick'] = 'xoonips_showusers_select_page';
-  // set page tabs
-  $pagetabs = array();
+    // set page tabs
+    $pagetabs = array();
     foreach ($item_counts as $itid => $item_type) {
         $pagetabs[] = array(
-      'id' => $itid,
-      'label' => sprintf('%s(%u)', $item_type['label'], $item_type['count']),
-      'selected' => ($itid == $item_type_id),
-      'onclick' => 'xoonips_showusers_select_itemtype',
-    );
+            'id' => $itid,
+            'label' => sprintf('%s(%u)', $item_type['label'], $item_type['count']),
+            'selected' => ($itid == $item_type_id),
+            'onclick' => 'xoonips_showusers_select_itemtype',
+        );
     }
 } else {
     // publication item not found
-  $item_ids = array();
+    $item_ids = array();
     $pagenavi = false;
     $pagetabs = false;
 }
@@ -188,9 +188,9 @@ function _xoonips_showusers_get_count_items($uid)
         $item_type_id = $item_type_obj->get('item_type_id');
         if (isset($nums[$item_type_id])) {
             $ret[$item_type_id] = array(
-        'label' => $item_type_obj->getVar('display_name', 's'),
-        'count' => $nums[$item_type_id],
-      );
+                'label' => $item_type_obj->getVar('display_name', 's'),
+                'count' => $nums[$item_type_id],
+            );
         }
     }
 
@@ -223,17 +223,17 @@ function _xoonips_showusers_get_item_ids($item_type_id, $uid, &$navi)
     $sort = $navi->getSort();
     $order = $navi->getOrder();
     $def_sort = array(
-    'title' => 'it.title',
-    'item_id' => 'its.item_id',
-    'ext_id' => 'doi',
-    'last_update' => 'last_updated_date',
-    'creation_date' => 'creation_date',
-    'publication_date' => 'publication_year',
-  );
+        'title' => 'it.title',
+        'item_id' => 'its.item_id',
+        'ext_id' => 'doi',
+        'last_update' => 'last_updated_date',
+        'creation_date' => 'creation_date',
+        'publication_date' => 'publication_year',
+    );
     $def_order = array(
-    'ASC' => 'ASC',
-    'DESC' => 'DESC',
-  );
+        'ASC' => 'ASC',
+        'DESC' => 'DESC',
+    );
     $sort = isset($def_sort[$sort]) ? $def_sort[$sort] : 'it.title';
     $order = isset($def_order[$order]) ? $def_order[$order] : 'ASC';
     $criteria->setStart($start);
@@ -366,16 +366,16 @@ $w_link = '';
 for ($i = 0; $i < $times; ++$i) {
     $pag = intval($pages[$i]) + 1;
     switch ($pag) {
-        case $w_page:
-            if ($w_last != 1) {
-                $link = '&nbsp;'.$pages[$i].'&nbsp;';
-            } else {
-                $link = '';
-            }
-                break;
-        default:
-            $link = '&nbsp;<a href="showusers.php?uid='.$uid.'&page='.$pag.'">'.$pag.'</a>&nbsp;';
+    case $w_page:
+        if ($w_last != 1) {
+            $link = '&nbsp;'.$pages[$i].'&nbsp;';
+        } else {
+            $link = '';
         }
+        break;
+    default:
+        $link = '&nbsp;<a href="showusers.php?uid='.$uid.'&page='.$pag.'">'.$pag.'</a>&nbsp;';
+    }
     $w_link[] = array('link' => $link);
 }
 $xoopsTpl->assign('w_link', $w_link);

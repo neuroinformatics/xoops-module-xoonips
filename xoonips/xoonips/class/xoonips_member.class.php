@@ -121,58 +121,58 @@ class XooNIpsMemberHandler
     public function pickupXoopsUser($uid, $is_certified)
     {
         $xu_handler = &xoonips_getormhandler('xoonips', 'users');
-      // create user root index
-      $index_handler = &xoonips_getormhandler('xoonips', 'index');
+        // create user root index
+        $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $index_id = $index_handler->createUserRootIndex($uid);
         if ($index_id === false) {
             return false;
         }
 
-      // set xoonips user information
-      $activate = ($is_certified) ? 1 : 0;
+        // set xoonips user information
+        $activate = ($is_certified) ? 1 : 0;
         $xu_obj = &$xu_handler->create();
         $xu_obj->setVar('uid', $uid, true); // not gpc
-      $xu_obj->setVar('activate', $activate, true); // not gpc
-      $xu_obj->setVar('private_index_id', $index_id, true); // not gpc
-      // set dummy variable to required field
-      $dummy_field = 'required';
+        $xu_obj->setVar('activate', $activate, true); // not gpc
+        $xu_obj->setVar('private_index_id', $index_id, true); // not gpc
+        // set dummy variable to required field
+        $dummy_field = 'required';
         $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
         $keys = array(
-        // config key name => field name of 'xoonips_users' table
-        'account_address_optional' => 'address',
-        'account_division_optional' => 'division',
-        'account_tel_optional' => 'tel',
-        'account_company_name_optional' => 'company_name',
-        'account_country_optional' => 'country',
-        'account_zipcode_optional' => 'zipcode',
-        'account_fax_optional' => 'fax',
-      );
+            // config key name => field name of 'xoonips_users' table
+            'account_address_optional' => 'address',
+            'account_division_optional' => 'division',
+            'account_tel_optional' => 'tel',
+            'account_company_name_optional' => 'company_name',
+            'account_country_optional' => 'country',
+            'account_zipcode_optional' => 'zipcode',
+            'account_fax_optional' => 'fax',
+        );
         foreach ($keys as $key => $field) {
             $val = $xconfig_handler->getValue($key);
             if ($val == 'off') {
                 // 'optional off' means 'required'
-          $xu_obj->setVar($field, $dummy_field, true); // not gpc
+               $xu_obj->setVar($field, $dummy_field, true); // not gpc
             }
             unset($xc_obj);
         }
-      // register user information
-      if (!$xu_handler->insert($xu_obj)) {
-          // TODO: delete created private index
-        return false;
-      }
+        // register user information
+        if (!$xu_handler->insert($xu_obj)) {
+            // TODO: delete created private index
+           return false;
+        }
 
-      // record event logs
-      $event_handler = &xoonips_getormhandler('xoonips', 'event_log');
+        // record event logs
+        $event_handler = &xoonips_getormhandler('xoonips', 'event_log');
         $event_handler->recordRequestInsertAccountEvent($uid);
         if ($activate) {
             $event_handler->recordCertifyAccountEvent($uid);
         }
 
-      // join default group
-      $admin_xgroup_handler = &xoonips_gethandler('xoonips', 'admin_group');
+        // join default group
+        $admin_xgroup_handler = &xoonips_gethandler('xoonips', 'admin_group');
         if (!$admin_xgroup_handler->addUserToDefaultXooNIpsGroup($uid)) {
             // TODO: delete created private index
-        $xu_handler->delete($xu_obj);
+            $xu_handler->delete($xu_obj);
 
             return false;
         }

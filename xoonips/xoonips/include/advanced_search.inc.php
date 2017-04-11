@@ -57,9 +57,7 @@ if (!isset($itemselect_url)) {
     $itemselect_url = 'itemselect.php';
 }
 if (!isset($pankuzu)) {
-    $pankuzu = _MI_XOONIPS_ACCOUNT_PANKUZU_PLATFORM_USER.
-        _MI_XOONIPS_ACCOUNT_PANKUZU_SEPARATOR.
-        _MD_XOONIPS_ITEM_PANKUZU_ADVANCED_SEARCH;
+    $pankuzu = _MI_XOONIPS_ACCOUNT_PANKUZU_PLATFORM_USER._MI_XOONIPS_ACCOUNT_PANKUZU_SEPARATOR._MD_XOONIPS_ITEM_PANKUZU_ADVANCED_SEARCH;
 }
 
 $textutil = &xoonips_getutility('text');

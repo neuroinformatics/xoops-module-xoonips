@@ -35,26 +35,26 @@ $description = _AM_XOONIPS_SYSTEM_XOOPS_ITEM_RESCUE_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_SYSTEM_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_SYSTEM_XOOPS_TITLE,
-    'url' => $xoonips_admin['mypage_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_SYSTEM_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_SYSTEM_XOOPS_TITLE,
+        'url' => $xoonips_admin['mypage_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // logic
@@ -106,12 +106,12 @@ foreach ($item_ids as $item_id) {
     $item_url = sprintf('%s/transfer_item.php?action=detail_item&item_id=%u', XOONIPS_URL, $item_id);
     $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
     $items[] = array(
-    'EVENODD' => $evenodd,
-    'ITEM_ID' => $item_id,
-    'ITEM_TYPE' => $item_type,
-    'ITEM_TITLE' => $item_title,
-    'ITEM_URL' => $item_url,
-  );
+        'EVENODD' => $evenodd,
+        'ITEM_ID' => $item_id,
+        'ITEM_TYPE' => $item_type,
+        'ITEM_TITLE' => $item_title,
+        'ITEM_URL' => $item_url,
+    );
 }
 
 // get to user list
@@ -125,7 +125,7 @@ foreach ($to_users as $key => $to_user) {
 }
 if ($to_uid == 0 || count($to_users) == 0) {
     // to user not exists
-  die('illegal request');
+    die('illegal request');
 }
 
 // get to index list
@@ -185,8 +185,8 @@ function get_uname_by_index_title($uid, $fmt)
 {
     $index_handler = &xoonips_getormhandler('xoonips', 'index');
     $title_handler = &xoonips_getormhandler('xoonips', 'title');
-  // get root index
-  $criteria = new CriteriaCompo(new Criteria('uid', $uid));
+    // get root index
+    $criteria = new CriteriaCompo(new Criteria('uid', $uid));
     $criteria->add(new Criteria('parent_index_id', IID_ROOT));
     $criteria->add(new Criteria('open_level', OL_PRIVATE));
     $index_objs = &$index_handler->getObjects($criteria);
@@ -195,8 +195,8 @@ function get_uname_by_index_title($uid, $fmt)
     }
     $index_obj = &$index_objs[0];
     $index_id = $index_obj->get('index_id');
-  // get title
-  $criteria = new CriteriaCompo(new Criteria('item_id', $index_id));
+    // get title
+    $criteria = new CriteriaCompo(new Criteria('item_id', $index_id));
     $criteria->add(new Criteria('title_id', DEFAULT_INDEX_TITLE_OFFSET));
     $title_objs = &$title_handler->getObjects($criteria);
     if (count($title_objs) != 1) {
@@ -226,9 +226,9 @@ function get_user_list($fmt)
     $users = array();
     foreach ($users_objs as $users_obj) {
         $users[] = array(
-      'uid' => $users_obj->get('uid'),
-      'uname' => $users_obj->getVar('uname', $fmt),
-    );
+            'uid' => $users_obj->get('uid'),
+            'uname' => $users_obj->getVar('uname', $fmt),
+        );
     }
 
     return $users;
@@ -273,11 +273,11 @@ function get_index_list($xid, $depth)
     $item_count = $index_item_link_handler->getCount($criteria);
     $ret = array();
     $ret[] = array(
-    'index_id' => $xid,
-    'index_title' => $title,
-    'item_count' => $item_count,
-    'indent_html' => str_repeat('&nbsp;&nbsp;', $depth),
-  );
+        'index_id' => $xid,
+        'index_title' => $title,
+        'item_count' => $item_count,
+        'indent_html' => str_repeat('&nbsp;&nbsp;', $depth),
+    );
     $cindex_objs = &$index_obj->getAllChildren();
     foreach ($cindex_objs as $cindex_obj) {
         $cxid = $cindex_obj->get('index_id');

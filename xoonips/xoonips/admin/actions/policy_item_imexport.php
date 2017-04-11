@@ -35,26 +35,26 @@ $description = _AM_XOONIPS_POLICY_ITEM_IMEXPORT_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_POLICY_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_POLICY_ITEM_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=item',
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_POLICY_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_POLICY_ITEM_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=item',
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket
@@ -64,9 +64,9 @@ $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // get configs
 $config_keys = array(
-  'export_enabled' => 's',
-  'export_attachment' => 's',
-  'private_import_enabled' => 's',
+    'export_enabled' => 's',
+    'export_attachment' => 's',
+    'private_import_enabled' => 's',
 );
 $config_values = xoonips_admin_get_configs($config_keys, 'e');
 

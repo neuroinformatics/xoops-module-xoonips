@@ -50,9 +50,5 @@ exit();
 
 function is_valid_action($action)
 {
-    return in_array($action, array('default',
-                                     'upload',
-                                     'import',
-                                     'import_index_tree',
-                                     'resolve_conflict', ));
+    return in_array($action, array('default', 'upload', 'import', 'import_index_tree', 'resolve_conflict'));
 }

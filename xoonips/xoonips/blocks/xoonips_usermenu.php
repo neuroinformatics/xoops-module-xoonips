@@ -34,66 +34,66 @@ function b_xoonips_user_show()
 {
     global $xoopsUser;
 
-  // hide block if user is guest
-  if (!is_object($xoopsUser)) {
-      return false;
-  }
+    // hide block if user is guest
+    if (!is_object($xoopsUser)) {
+        return false;
+    }
 
     $uid = $xoopsUser->getVar('uid', 'n');
 
-  // hide block if user is invalid xoonips user
-  $xsession_handler = &xoonips_getormhandler('xoonips', 'session');
+    // hide block if user is invalid xoonips user
+    $xsession_handler = &xoonips_getormhandler('xoonips', 'session');
     if (!$xsession_handler->validateUser($uid, false)) {
         return false;
     }
 
     $block = array();
 
-  // get xoonips module id
-  $module_handler = &xoops_gethandler('module');
+    // get xoonips module id
+    $module_handler = &xoops_gethandler('module');
     $module = &$module_handler->getByDirname('xoonips');
     if (!is_object($module)) {
         exit('Access Denied');
     }
     $mid = $module->getVar('mid', 's');
 
-  // get xoonips user information
-  $xuser_handler = &xoonips_getormhandler('xoonips', 'users');
+    // get xoonips user information
+    $xuser_handler = &xoonips_getormhandler('xoonips', 'users');
     $xuser_obj = &$xuser_handler->get($uid);
     if (!is_object($xuser_obj)) {
         // not xoonips user
-    return false;
+        return false;
     }
     $is_certified = $xuser_obj->getVar('activate', 'n');
     if ($is_certified != 1) {
         // user is not certified
-    return false;
+        return false;
     }
     $uname = $xoopsUser->getVar('uname', 's');
     $private_index_id = $xuser_obj->getVar('private_index_id', 's');
     $is_admin = $xoopsUser->isAdmin($mid);
 
-  // get count of private messages
-  $pm_handler = &xoops_gethandler('privmessage');
+    // get count of private messages
+    $pm_handler = &xoops_gethandler('privmessage');
     $criteria = new CriteriaCompo(new Criteria('read_msg', 0));
     $criteria->add(new Criteria('to_userid', $uid));
     $new_messages = $pm_handler->getCount($criteria);
 
-  // get configuration value of 'private_import_enabled'
-  $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+    // get configuration value of 'private_import_enabled'
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $private_import_enabled = $xconfig_handler->getValue('private_import_enabled');
 
-  // count transfer requested items
-  if (xoonips_get_version() >= 340) {
-      $tr_handler = &xoonips_getormhandler('xoonips', 'transfer_request');
-      $criteria = new Criteria('to_uid', $uid);
-      $tr_count = $tr_handler->getCount($criteria);
-  } else {
-      $tr_count = 0;
-  }
+    // count transfer requested items
+    if (xoonips_get_version() >= 340) {
+        $tr_handler = &xoonips_getormhandler('xoonips', 'transfer_request');
+        $criteria = new Criteria('to_uid', $uid);
+        $tr_count = $tr_handler->getCount($criteria);
+    } else {
+        $tr_count = 0;
+    }
 
-  // assign block template variables
-  $block['private_index_id'] = $private_index_id;
+    // assign block template variables
+    $block['private_index_id'] = $private_index_id;
     $block['is_su'] = isset($_SESSION['xoonips_old_uid']);
     $block['uid'] = $uid;
     $block['new_messages'] = $new_messages;
@@ -120,9 +120,9 @@ function b_xoonips_user_show()
 
     if ($is_admin || $private_import_enabled == 'on') {
         // set to $block['lang_import'] if user is permitted to import.
-    // - config of private_import_enabled is true
-    // - or user is administrator
-    $block['lang_import'] = _MB_XOONIPS_USER_IMPORT;
+        // - config of private_import_enabled is true
+        // - or user is administrator
+        $block['lang_import'] = _MB_XOONIPS_USER_IMPORT;
     }
 
     return $block;

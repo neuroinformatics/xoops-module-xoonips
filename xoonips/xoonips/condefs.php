@@ -42,7 +42,7 @@ define('IID_PUBLIC', 3);
 // reserved item'_'type'_'id value
 define('ITID_INDEX', 1);
 
-    //IDs of item operation
+//IDs of item operation
 define('OP_READ', 1);
 define('OP_MODIFY', 2);
 define('OP_DELETE', 3);

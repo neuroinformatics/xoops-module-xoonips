@@ -34,50 +34,23 @@ include 'actions/common.inc.php';
 $pages = array();
 $pages['main'] = array();
 $pages['account'] = array(
-  'post' => array(
-    'rupdate',
-    'iupdate',
-    'vupdate',
-  ),
+    'post' => array('rupdate', 'iupdate', 'vupdate'),
 );
 $pages['group'] = array(
-  'post' => array(
-    'vupdate',
-  ),
+    'post' => array('vupdate'),
 );
 $pages['item'] = array(
-  'get' => array(
-    'public',
-    'type',
-    'imexport',
-    'comment',
-  ),
-  'post' => array(
-    'pmupdate',
-    'poupdate',
-    'tupdate',
-    'imexeupdate',
-    'imexiupdate',
-    'compmupdate',
-  ),
+    'get' => array('public', 'type', 'imexport', 'comment'),
+    'post' => array('pmupdate', 'poupdate', 'tupdate', 'imexeupdate', 'imexiupdate', 'compmupdate'),
 );
 $pages['moderator'] = array(
-  'post' => array(
-    'update',
-  ),
+    'post' => array('update'),
 );
 $pages['position'] = array(
-  'post' => array(
-    'delete',
-    'update',
-    'add',
-  ),
+    'post' => array('delete', 'update', 'add'),
 );
 $pages['ranking'] = array(
-  'post' => array(
-    'update',
-    'sort',
-  ),
+    'post' => array('update', 'sort'),
 );
 
 // initialize

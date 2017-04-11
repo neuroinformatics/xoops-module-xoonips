@@ -38,13 +38,13 @@ if (!defined('XOOPS_ROOT_PATH')) {
 function xoonips_group_error($url, $reason)
 {
     $messages = array(
-    'select' => _MD_XOONIPS_ERROR_GROUP_SELECT,
-    'insert' => _MD_XOONIPS_ERROR_GROUP_INSERT,
-    'update' => _MD_XOONIPS_ERROR_GROUP_UPDATE,
-    'delete' => _MD_XOONIPS_ERROR_GROUP_DELETE,
-    'lock_edit' => sprintf(_MD_XOONIPS_ERROR_CANNOT_EDIT_LOCKED_GROUP, _MD_XOONIPS_LOCK_TYPE_STRING_CERTIFY_REQUEST),
-    'lock_delete' => sprintf(_MD_XOONIPS_ERROR_CANNOT_DELETE_LOCKED_GROUP, _MD_XOONIPS_LOCK_TYPE_STRING_CERTIFY_REQUEST),
-  );
+        'select' => _MD_XOONIPS_ERROR_GROUP_SELECT,
+        'insert' => _MD_XOONIPS_ERROR_GROUP_INSERT,
+        'update' => _MD_XOONIPS_ERROR_GROUP_UPDATE,
+        'delete' => _MD_XOONIPS_ERROR_GROUP_DELETE,
+        'lock_edit' => sprintf(_MD_XOONIPS_ERROR_CANNOT_EDIT_LOCKED_GROUP, _MD_XOONIPS_LOCK_TYPE_STRING_CERTIFY_REQUEST),
+        'lock_delete' => sprintf(_MD_XOONIPS_ERROR_CANNOT_DELETE_LOCKED_GROUP, _MD_XOONIPS_LOCK_TYPE_STRING_CERTIFY_REQUEST),
+    );
     $msg = isset($messages[$reason]) ? $messages[$reason] : 'fatal error';
     redirect_header($url, 3, $msg);
     exit();
@@ -74,18 +74,18 @@ function xoonips_group_get_groups($uid, $gids = null)
                 continue;
             }
             $gadmins[] = array(
-        'uid' => $gadmin_uid,
-        'uname' => $u_obj->getVar('uname', 's'),
-      );
+                'uid' => $gadmin_uid,
+                'uname' => $u_obj->getVar('uname', 's'),
+            );
         }
         $groups[] = array(
-      'gid' => $gid,
-      'gname' => $xg_obj->get('gname', 's'),
-      'gdesc' => $xg_obj->get('gdesc', 's'),
-      'locked' => (!xoonips_group_check_perm($gid)),
-      'gadmins' => $gadmins,
-      'is_admin' => ($is_admin || $is_gadmin),
-    );
+            'gid' => $gid,
+            'gname' => $xg_obj->get('gname', 's'),
+            'gdesc' => $xg_obj->get('gdesc', 's'),
+            'locked' => (!xoonips_group_check_perm($gid)),
+            'gadmins' => $gadmins,
+            'is_admin' => ($is_admin || $is_gadmin),
+        );
     }
 
     return $groups;
@@ -111,10 +111,10 @@ function xoonips_group_get_users($gadmin_uids)
     foreach ($u_objs as $u_obj) {
         $uid = $u_obj->get('uid');
         $gadmins[] = array(
-      'uid' => $uid,
-      'uname' => $u_obj->getVar('uname', 's'),
-      'isadmin' => in_array($uid, $gadmin_uids),
-    );
+            'uid' => $uid,
+            'uname' => $u_obj->getVar('uname', 's'),
+            'isadmin' => in_array($uid, $gadmin_uids),
+        );
     }
 
     return $gadmins;

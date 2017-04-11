@@ -31,35 +31,35 @@
 class XooNIpsFileSearchPluginPPT extends XooNIpsFileSearchPlugin
 {
     /**
-   * constractor.
-   */
-  public function XooNIpsFileSearchPluginPPT()
-  {
-      parent::XooNIpsFileSearchPlugin();
-      $this->is_xml = true;
-      $this->is_utf8 = true;
-  }
+     * constractor.
+     */
+    public function XooNIpsFileSearchPluginPPT()
+    {
+        parent::XooNIpsFileSearchPlugin();
+        $this->is_xml = true;
+        $this->is_utf8 = true;
+    }
 
-  /**
-   * open file resource.
-   *
-   * @acccess protected
-   *
-   * @param string $filename file name
-   */
-  public function _open_file($filename)
-  {
-      $cmd = sprintf('ppthtml %s', escapeshellarg($filename));
-      $this->handle = @popen($cmd, 'rb');
-  }
+    /**
+     * open file resource.
+     *
+     * @acccess protected
+     *
+     * @param string $filename file name
+     */
+    public function _open_file($filename)
+    {
+        $cmd = sprintf('ppthtml %s', escapeshellarg($filename));
+        $this->handle = @popen($cmd, 'rb');
+    }
 
-  /**
-   * close file resource.
-   *
-   * @acccess protected
-   */
-  public function _close_file()
-  {
-      @pclose($this->handle);
-  }
+    /**
+     * close file resource.
+     *
+     * @acccess protected
+     */
+    public function _close_file()
+    {
+        @pclose($this->handle);
+    }
 }

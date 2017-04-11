@@ -32,22 +32,22 @@ if (!defined('XOOPS_ROOT_PATH')) {
 function xoonips_admin_system_check_phpext(&$category)
 {
     // mbstring
-  $name = 'mbstring';
+    $name = 'mbstring';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $ext = $name;
     if (extension_loaded($ext)) {
         $res->setResult(_XASC_STATUS_OK, '', _AM_XOONIPS_SYSTEM_CHECK_LABEL_ENABLE);
         $category->registerResult($res);
         unset($res);
-    // -- mbstring_language
-    $name = 'mbstring.language';
+        // -- mbstring_language
+        $name = 'mbstring.language';
         $ans[$name] = mb_language();
         $res = new XooNIpsAdminSystemCheckResult(' &raquo; '.$name);
         $res->setResult(_XASC_STATUS_OK, $ans[$name], _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
         $category->registerResult($res);
         unset($res);
-    // -- mbstring.internal_encoding
-    $name = 'mbstring.internal_encoding';
+        // -- mbstring.internal_encoding
+        $name = 'mbstring.internal_encoding';
         $ans[$name] = mb_internal_encoding();
         $res = new XooNIpsAdminSystemCheckResult(' &raquo; '.$name);
         if ($ans[$name] == _CHARSET) {
@@ -59,14 +59,11 @@ function xoonips_admin_system_check_phpext(&$category)
         }
         $category->registerResult($res);
         unset($res);
-    // -- mbstring.detect_order
-    $name = 'mbstring.detect_order';
+        // -- mbstring.detect_order
+        $name = 'mbstring.detect_order';
         $ans[$name] = mb_detect_order();
         $res = new XooNIpsAdminSystemCheckResult(' &raquo; '.$name);
-        $mb_require_order = array(
-      'ASCII',
-      _CHARSET,
-    );
+        $mb_require_order = array('ASCII', _CHARSET);
         if (_CHARSET != 'UTF-8') {
             array_push($mb_require_order, 'UTF-8');
         }
@@ -86,8 +83,8 @@ function xoonips_admin_system_check_phpext(&$category)
         }
         $category->registerResult($res);
         unset($res);
-    // -- mbstring.func_overload
-    $name = 'mbstring.func_overload';
+        // -- mbstring.func_overload
+        $name = 'mbstring.func_overload';
         $ans[$name] = ini_get($name);
         $res = new XooNIpsAdminSystemCheckResult(' &raquo; '.$name);
         if ($ans[$name] == 0) {
@@ -99,8 +96,8 @@ function xoonips_admin_system_check_phpext(&$category)
         }
         $category->registerResult($res);
         unset($res);
-    // -- mbstring.http_input
-    $name = 'mbstring.http_input';
+        // -- mbstring.http_input
+        $name = 'mbstring.http_input';
         $ans[$name] = ini_get($name);
         $res = new XooNIpsAdminSystemCheckResult(' &raquo; '.$name);
         if ($ans[$name] == 'pass') {
@@ -112,8 +109,8 @@ function xoonips_admin_system_check_phpext(&$category)
         }
         $category->registerResult($res);
         unset($res);
-    // -- mbstring.http_output
-    $name = 'mbstring.http_output';
+        // -- mbstring.http_output
+        $name = 'mbstring.http_output';
         $ans[$name] = ini_get($name);
         $res = new XooNIpsAdminSystemCheckResult(' &raquo; '.$name);
         if ($ans[$name] == 'pass') {
@@ -125,15 +122,15 @@ function xoonips_admin_system_check_phpext(&$category)
         }
         $category->registerResult($res);
         unset($res);
-    // -- mbstring.encoding_translation
-    $name = 'mbstring.encoding_translation';
+        // -- mbstring.encoding_translation
+        $name = 'mbstring.encoding_translation';
         $ans[$name] = ini_get($name);
         $res = new XooNIpsAdminSystemCheckResult(' &raquo; '.$name);
         $res->setResult(_XASC_STATUS_OK, $ans[$name], _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
         $category->registerResult($res);
         unset($res);
-    // -- mbstring.substitute_character
-    $name = 'mbstring.substitute_character';
+        // -- mbstring.substitute_character
+        $name = 'mbstring.substitute_character';
         $ans[$name] = ini_get($name);
         $res = new XooNIpsAdminSystemCheckResult(' &raquo; '.$name);
         if ($ans[$name] == '') {
@@ -155,21 +152,21 @@ function xoonips_admin_system_check_phpext(&$category)
         unset($res);
     }
 
-  // gd
-  $name = 'gd';
+    // gd
+    $name = 'gd';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $ext = $name;
     if (extension_loaded($ext)) {
         $gd_support_info = gd_info();
         $gd_support = array(
-      'FreeType Support' => false,
-      'GIF Read Support' => false,
-      'GIF Create Support' => false,
-      'JPG Support' => false,
-      'PNG Support' => false,
-      'WBMP Support' => false,
-      'XBM Support' => false,
-    );
+            'FreeType Support' => false,
+            'GIF Read Support' => false,
+            'GIF Create Support' => false,
+            'JPG Support' => false,
+            'PNG Support' => false,
+            'WBMP Support' => false,
+            'XBM Support' => false,
+        );
         $gd_results = true;
         if (isset($gd_support_info['JPEG Support'])) {
             $gd_support_info['JPG Support'] = $gd_support_info['JPEG Support'];
@@ -202,8 +199,8 @@ function xoonips_admin_system_check_phpext(&$category)
         unset($res);
     }
 
-  // zlib
-  $name = 'zlib';
+    // zlib
+    $name = 'zlib';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $ext = $name;
     if (extension_loaded($ext)) {
@@ -218,8 +215,8 @@ function xoonips_admin_system_check_phpext(&$category)
         unset($res);
     }
 
-  // xml
-  $name = 'xml';
+    // xml
+    $name = 'xml';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $ext = $name;
     if (extension_loaded($ext)) {
@@ -234,8 +231,8 @@ function xoonips_admin_system_check_phpext(&$category)
         unset($res);
     }
 
-  // fileinfo
-  $name = 'fileinfo';
+    // fileinfo
+    $name = 'fileinfo';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $ext = $name;
     if (extension_loaded($ext)) {

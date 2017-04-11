@@ -72,12 +72,12 @@ $formdata = &xoonips_getutility('formdata');
 $textutil = &xoonips_getutility('text');
 
 $request_vars = array(
-  'op' => array('s', ''),
-  'index_id' => array('i', ''),
-  'export_type' => array('s', ''),
-  'recursive_item' => array('i', 0),
-  'recursive_index' => array('i', 0),
-  'attachment' => array('i', 0),
+    'op' => array('s', ''),
+    'index_id' => array('i', ''),
+    'export_type' => array('s', ''),
+    'recursive_item' => array('i', 0),
+    'recursive_index' => array('i', 0),
+    'attachment' => array('i', 0),
 );
 foreach ($request_vars as $key => $meta) {
     list($type, $default) = $meta;
@@ -314,7 +314,7 @@ EOT;
                                         'use_cc' => $use_cc,
                                         'detail_html' => $html,
                                         //'export_flag' => function_exists( $func_export )
-                                        );
+                );
             }
         }
         if ($index_id != '') {
@@ -481,9 +481,7 @@ function export_item_enable($item_id)
     global $xoopsUser;
     $handler = &xoonips_getormcompohandler('xoonips', 'item');
 
-    return $handler->getPerm($item_id,
-                               $xoopsUser ? $xoopsUser->getVar('uid') : UID_GUEST,
-                               'export');
+    return $handler->getPerm($item_id, $xoopsUser ? $xoopsUser->getVar('uid') : UID_GUEST, 'export');
 }
 
 /**

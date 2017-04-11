@@ -39,24 +39,12 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 
 // get requests
 $post_keys = array(
-  'sort_ranking' => array(
-    's',
-    false,
-    true,
-  ),
-  // block, 'general' or 'recent'
-  'sort_id' => array(
-    'i',
-    false,
-    true,
-  ),
-  // target id
-  'sort_updown' => array(
-    's',
-    false,
-    true,
-  ),
-  // sort order, 'up' or 'down',
+    'sort_ranking' => array('s', false, true),
+    // block, 'general' or 'recent'
+    'sort_id' => array('i', false, true),
+    // target id
+    'sort_updown' => array('s', false, true),
+    // sort order, 'up' or 'down',
 );
 $post_vals = xoonips_admin_get_requests('post', $post_keys);
 $sort_ranking = $post_vals['sort_ranking'];
@@ -70,22 +58,18 @@ if (!in_array($sort_ranking, array('general', 'recent')) || !in_array($sort_updo
 
 switch ($sort_ranking) {
 case 'general':
-  $max_num = 5;
-  $step_key = 'general_step';
-  $order_key = 'ranking_order';
-  break;
+    $max_num = 5;
+    $step_key = 'general_step';
+    $order_key = 'ranking_order';
+    break;
 case 'recent':
-  $max_num = 2;
-  $step_key = 'recent_step';
-  $order_key = 'ranking_new_order';
-  break;
+    $max_num = 2;
+    $step_key = 'recent_step';
+    $order_key = 'ranking_new_order';
+    break;
 }
 $step_requests = array(
-  $step_key => array(
-    'i',
-    true,
-    true,
-  ),
+    $step_key => array('i', true, true),
 );
 $step_vals = xoonips_admin_get_requests('post', $step_requests);
 if ($sort_id >= $max_num || $sort_id < 0 || !isset($step_vals[$step_key][$sort_id])) {

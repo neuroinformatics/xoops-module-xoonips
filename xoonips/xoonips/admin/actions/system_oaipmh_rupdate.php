@@ -39,31 +39,11 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 
 // get requests
 $post_keys = array(
-  'repository_name' => array(
-    's',
-    false,
-    true,
-  ),
-  'repository_nijc_code' => array(
-    's',
-    false,
-    true,
-  ),
-  'repository_deletion_track' => array(
-    'i',
-    false,
-    true,
-  ),
-  'repository_institution' => array(
-    's',
-    false,
-    true,
-  ),
-  'repository_publisher' => array(
-    's',
-    false,
-    true,
-  ),
+    'repository_name' => array('s', false, true),
+    'repository_nijc_code' => array('s', false, true),
+    'repository_deletion_track' => array('i', false, true),
+    'repository_institution' => array('s', false, true),
+    'repository_publisher' => array('s', false, true),
 );
 $post_vals = xoonips_admin_get_requests('post', $post_keys);
 

@@ -35,119 +35,119 @@ if (!defined('XOOPS_ROOT_PATH')) {
 class XooNIpsFileHandler
 {
     /**
-   * orm handler of xoonips_file table.
-   *
-   * @var object
-   */
-  public $xf_handler;
+     * orm handler of xoonips_file table.
+     *
+     * @var object
+     */
+    public $xf_handler;
 
-  /**
-   * orm handler of xoonips_search_text table.
-   *
-   * @var object
-   */
-  public $xst_handler;
+    /**
+     * orm handler of xoonips_search_text table.
+     *
+     * @var object
+     */
+    public $xst_handler;
 
-  /**
-   * file uploaded path.
-   *
-   * @var string
-   */
-  public $upload_dir;
+    /**
+     * file uploaded path.
+     *
+     * @var string
+     */
+    public $upload_dir;
 
-  /**
-   * constractor.
-   */
-  public function XooNIpsFileHandler()
-  {
-      $this->xf_handler = &xoonips_getormhandler('xoonips', 'file');
-      $this->xst_handler = &xoonips_getormhandler('xoonips', 'search_text');
-      $xc_handler = &xoonips_getormhandler('xoonips', 'config');
-      $this->upload_dir = $xc_handler->getValue('upload_dir');
-      if (strlen($this->upload_dir) > 1 && substr($this->upload_dir, -1) == '/') {
-          $this->upload_dir = substr($this->upload_dir, 0, strlen($this->upload_dir) - 1);
-      }
-  }
+    /**
+     * constractor.
+     */
+    public function XooNIpsFileHandler()
+    {
+        $this->xf_handler = &xoonips_getormhandler('xoonips', 'file');
+        $this->xst_handler = &xoonips_getormhandler('xoonips', 'search_text');
+        $xc_handler = &xoonips_getormhandler('xoonips', 'config');
+        $this->upload_dir = $xc_handler->getValue('upload_dir');
+        if (strlen($this->upload_dir) > 1 && substr($this->upload_dir, -1) == '/') {
+            $this->upload_dir = substr($this->upload_dir, 0, strlen($this->upload_dir) - 1);
+        }
+    }
 
-  /**
-   * get file path.
-   *
-   * @param int $file_id file id
-   *
-   * @return string uploaded file path
-   */
-  public function getFilePath($file_id)
-  {
-      $file_path = $this->upload_dir.'/'.$file_id;
+    /**
+     * get file path.
+     *
+     * @param int $file_id file id
+     *
+     * @return string uploaded file path
+     */
+    public function getFilePath($file_id)
+    {
+        $file_path = $this->upload_dir.'/'.$file_id;
 
-      return $file_path;
-  }
+        return $file_path;
+    }
 
-  /**
-   * get files info by item_id and file_type_name.
-   *
-   * @param int    $item_id        item id
-   * @param string $file_type_name file type name
-   *
-   * @return array files info
-   */
-  public function getFilesInfo($item_id, $file_type_name = false)
-  {
-      $join = new XooNIpsJoinCriteria('xoonips_file_type', 'file_type_id', 'file_type_id', 'INNER', 'ft');
-      $criteria = new CriteriaCompo(new Criteria('item_id', $item_id));
-      $criteria->add(new Criteria('is_deleted', 0));
-      if ($file_type_name !== false) {
-          $criteria->add(new Criteria('name', $file_type_name, '=', 'ft'));
-      }
-      $files_info = array();
-      $res = &$this->xf_handler->open($criteria, '', false, $join);
-      while ($xf_obj = &$this->xf_handler->getNext($res)) {
-          $info = $xf_obj->getArray();
-          $info['file_path'] = $this->getFilePath($info['file_id']);
-          $info['file_url'] = XOONIPS_URL.'/download.php?file_id='.$info['file_id'];
-          $info['image_url'] = XOONIPS_URL.'/image.php?file_id='.$info['file_id'];
-          $files_info[] = $info;
-      }
-      $this->xf_handler->close($res);
+    /**
+     * get files info by item_id and file_type_name.
+     *
+     * @param int    $item_id        item id
+     * @param string $file_type_name file type name
+     *
+     * @return array files info
+     */
+    public function getFilesInfo($item_id, $file_type_name = false)
+    {
+        $join = new XooNIpsJoinCriteria('xoonips_file_type', 'file_type_id', 'file_type_id', 'INNER', 'ft');
+        $criteria = new CriteriaCompo(new Criteria('item_id', $item_id));
+        $criteria->add(new Criteria('is_deleted', 0));
+        if ($file_type_name !== false) {
+            $criteria->add(new Criteria('name', $file_type_name, '=', 'ft'));
+        }
+        $files_info = array();
+        $res = &$this->xf_handler->open($criteria, '', false, $join);
+        while ($xf_obj = &$this->xf_handler->getNext($res)) {
+            $info = $xf_obj->getArray();
+            $info['file_path'] = $this->getFilePath($info['file_id']);
+            $info['file_url'] = XOONIPS_URL.'/download.php?file_id='.$info['file_id'];
+            $info['image_url'] = XOONIPS_URL.'/image.php?file_id='.$info['file_id'];
+            $files_info[] = $info;
+        }
+        $this->xf_handler->close($res);
 
-      return $files_info;
-  }
+        return $files_info;
+    }
 
-  /**
-   * get file id by doi - NTTDK and Keio University 20080825.
-   *
-   * @param string $doi doi parameter
-   *
-   * @return int file id
-   */
-  public function getFileIdByDOI($doi)
-  {
-      if (empty($doi)) {
-          return false;
-      }
-      $join = new XooNIpsJoinCriteria('xoonips_item_basic', 'item_id', 'item_id', 'INNER', 'ib');
-      $criteria = new CriteriaCompo(new Criteria('is_deleted', 0));
-      $criteria->setSort('file_id');
-      $separate_param = XNP_CONFIG_DOWNLOAD_DOI_FIELD_SEPARATE_PARAM;
-      if (preg_match('/'.preg_quote($separate_param, '/').'/', $doi)) {
-          $tmp = explode($separate_param, $doi, 2);
-          $doi = $tmp[0];
-          if (preg_match('/[1-9]/', intval($tmp[1]))) {
-              $start = intval($tmp[1]) - 1;
-              $criteria->setStart($start);
-              $criteria->setLimit($start + 1);
-          }
-      }
-      $mimetypes = explode(',', XNP_CONFIG_DOWNLOAD_FILE_TYPE_LIMIT);
-      $mimetypes = array_map(array(&$GLOBALS['xoopsDB'], 'quoteString'), $mimetypes);
-      $criteria->add(new Criteria('mime_type', '('.implode(',', $mimetypes).')', 'IN'));
-      $criteria->add(new Criteria('doi', $doi, '=', 'ib'));
-      $xf_objs = &$this->xf_handler->getObjects($criteria, false, 'file_id', false, $join);
-      if (count($xf_objs) == 0) {
-          return false;
-      }
-      $file_id = $xf_objs[0]->get('file_id');
+    /**
+     * get file id by doi - NTTDK and Keio University 20080825.
+     *
+     * @param string $doi doi parameter
+     *
+     * @return int file id
+     */
+    public function getFileIdByDOI($doi)
+    {
+        if (empty($doi)) {
+            return false;
+        }
+        $join = new XooNIpsJoinCriteria('xoonips_item_basic', 'item_id', 'item_id', 'INNER', 'ib');
+        $criteria = new CriteriaCompo(new Criteria('is_deleted', 0));
+        $criteria->setSort('file_id');
+        $separate_param = XNP_CONFIG_DOWNLOAD_DOI_FIELD_SEPARATE_PARAM;
+        if (preg_match('/'.preg_quote($separate_param, '/').'/', $doi)) {
+            $tmp = explode($separate_param, $doi, 2);
+            $doi = $tmp[0];
+            if (preg_match('/[1-9]/', intval($tmp[1]))) {
+                $start = intval($tmp[1]) - 1;
+                $criteria->setStart($start);
+                $criteria->setLimit($start + 1);
+            }
+        }
+        $mimetypes = explode(',', XNP_CONFIG_DOWNLOAD_FILE_TYPE_LIMIT);
+        $mimetypes = array_map(array(&$GLOBALS['xoopsDB'], 'quoteString'), $mimetypes);
+        $criteria->add(new Criteria('mime_type', '('.implode(',', $mimetypes).')', 'IN'));
+        $criteria->add(new Criteria('doi', $doi, '=', 'ib'));
+        $xf_objs = &$this->xf_handler->getObjects($criteria, false, 'file_id', false, $join);
+        if (count($xf_objs) == 0) {
+            return false;
+        }
+        $file_id = $xf_objs[0]->get('file_id');
 
-      return $file_id;
-  }
+        return $file_id;
+    }
 }

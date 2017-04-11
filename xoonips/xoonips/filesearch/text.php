@@ -31,12 +31,12 @@
 class XooNIpsFileSearchPluginTEXT extends XooNIpsFileSearchPlugin
 {
     /**
-   * constractor.
-   */
-  public function XooNIpsFileSearchPluginTEXT()
-  {
-      parent::XooNIpsFileSearchPlugin();
-      $this->is_xml = false;
-      $this->is_utf8 = false;
-  }
+     * constractor.
+     */
+    public function XooNIpsFileSearchPluginTEXT()
+    {
+        parent::XooNIpsFileSearchPlugin();
+        $this->is_xml = false;
+        $this->is_utf8 = false;
+    }
 }

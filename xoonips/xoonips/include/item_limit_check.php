@@ -64,10 +64,7 @@ function filesize_by_item_id($iids)
 
         $table = $xoopsDB->prefix("${modname}_item_detail");
         $id_name = preg_replace('/^xnp/', '', $modname).'_id';
-        $query =
-            "SELECT ${id_name} FROM $table where ${id_name} IN (".implode(', ',
-                                                                           $iids).
-            ')';
+        $query = "SELECT ${id_name} FROM $table where ${id_name} IN (".implode(', ', $iids).')';
         $result = $xoopsDB->query($query);
         if ($result) {
             $mod_iids = array();

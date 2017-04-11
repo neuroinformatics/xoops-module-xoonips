@@ -56,7 +56,7 @@ $file = $formdata->getFile('file', false);
 $errorMessage = false;
 if (!is_null($file)) {
     // file was uploaded
-  $originalFileName = $file['name'];
+    $originalFileName = $file['name'];
     $mimeType = $file['type'];
     $fileName = $file['tmp_name'];
     $error = (int) $file['error'];
@@ -69,16 +69,16 @@ if (!is_null($file)) {
         $getTextFromOpener = true;
     } else {
         // check mime type
-    if (strstr($mimeType, 'text/plain') === false) {
-        $errorMessage = 'unsupported file type : '.$mimeType;
-        $getTextFromOpener = true;
-    } else {
-        $text = file_get_contents($fileName);
-      // convert encoding to _CHARSET
-      $unicode = &xoonips_getutility('unicode');
-        $text = $unicode->convert_encoding($text, _CHARSET, 'h');
-        $getTextFromOpener = false;
-    }
+        if (strstr($mimeType, 'text/plain') === false) {
+            $errorMessage = 'unsupported file type : '.$mimeType;
+            $getTextFromOpener = true;
+        } else {
+            $text = file_get_contents($fileName);
+            // convert encoding to _CHARSET
+            $unicode = &xoonips_getutility('unicode');
+            $text = $unicode->convert_encoding($text, _CHARSET, 'h');
+            $getTextFromOpener = false;
+        }
     }
 } else {
     $getTextFromOpener = true;
@@ -185,9 +185,6 @@ function clickCancel(){
 	return false;
 }
 
-
-
-
 <?php if ($getTextFromOpener) {
     ?>
 
@@ -246,5 +243,3 @@ function getTextFromOpener(){
 
 //include XOOPS_ROOT_PATH.'/footer.php';
 xoops_footer();
-
-?>

@@ -38,56 +38,56 @@ $description = _AM_XOONIPS_SYSTEM_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // menu
 $menu = array(
-  array(
-    'label' => _AM_XOONIPS_SYSTEM_BASIC_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=basic',
-  ),
-  array(
-    'label' => _AM_XOONIPS_SYSTEM_TREE_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=tree',
-  ),
-  array(
-    'label' => _AM_XOONIPS_SYSTEM_PRINT_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=print',
-  ),
-  array(
-    'label' => _AM_XOONIPS_SYSTEM_RSS_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=rss',
-  ),
-  array(
-    'label' => _AM_XOONIPS_SYSTEM_OAIPMH_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=oaipmh',
-  ),
-  array(
-    'label' => _AM_XOONIPS_SYSTEM_PROXY_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=proxy',
-  ),
-  array(
-    'label' => _AM_XOONIPS_SYSTEM_MODULE_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=module',
-  ),
-  array(
-    'label' => _AM_XOONIPS_SYSTEM_XOOPS_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=xoops',
-  ),
-  array(
-    'label' => _AM_XOONIPS_SYSTEM_CHECK_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=check',
-  ),
+    array(
+        'label' => _AM_XOONIPS_SYSTEM_BASIC_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=basic',
+    ),
+    array(
+        'label' => _AM_XOONIPS_SYSTEM_TREE_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=tree',
+    ),
+    array(
+        'label' => _AM_XOONIPS_SYSTEM_PRINT_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=print',
+    ),
+    array(
+        'label' => _AM_XOONIPS_SYSTEM_RSS_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=rss',
+    ),
+    array(
+        'label' => _AM_XOONIPS_SYSTEM_OAIPMH_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=oaipmh',
+    ),
+    array(
+        'label' => _AM_XOONIPS_SYSTEM_PROXY_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=proxy',
+    ),
+    array(
+        'label' => _AM_XOONIPS_SYSTEM_MODULE_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=module',
+    ),
+    array(
+        'label' => _AM_XOONIPS_SYSTEM_XOOPS_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=xoops',
+    ),
+    array(
+        'label' => _AM_XOONIPS_SYSTEM_CHECK_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=check',
+    ),
 );
 
 // templates

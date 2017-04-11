@@ -33,7 +33,7 @@ $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
 if ($myuid == UID_GUEST) {
     // deny to access from guest user
-  redirect_header('user.php', 3, _NOPERM);
+    redirect_header('user.php', 3, _NOPERM);
     exit();
 }
 
@@ -48,19 +48,19 @@ $member_handler = &xoops_gethandler('member');
 $thisUser = &$member_handler->getUser($uid);
 if (!is_object($thisUser)) {
     // selected user not found
-  redirect_header(XOOPS_URL.'/', 3, _US_SELECTNG);
+    redirect_header(XOOPS_URL.'/', 3, _US_SELECTNG);
     exit();
 } elseif (!$thisUser->isActive()) {
     // not activated user
-  if ($is_admin) {
-      // try activate using admin privilege
-    header('Location: admin/maintenance.php?page=account&action=modify&uid='.$uid);
-      exit();
-  } else {
-      // deny access to selected user information
-    redirect_header(XOOPS_URL.'/', 3, _US_NOACTTPADM);
-      exit();
-  }
+    if ($is_admin) {
+        // try activate using admin privilege
+        header('Location: admin/maintenance.php?page=account&action=modify&uid='.$uid);
+        exit();
+    } else {
+        // deny access to selected user information
+        redirect_header(XOOPS_URL.'/', 3, _US_NOACTTPADM);
+        exit();
+    }
 }
 
 $xoopsOption['template_main'] = 'xoonips_userinfo.html';
@@ -211,31 +211,31 @@ $criteria->add(new Criteria('isactive', 1));
 $mids = &array_keys($module_handler->getList($criteria));
 foreach ($mids as $mid) {
     // Hack by marcan : only return results of modules for which user has access permission
-  if ($gperm_handler->checkRight('module_read', $mid, $groups)) {
-      $module = &$module_handler->get($mid);
-      $results = &$module->search('', '', 5, 0, $uid);
-      $count = count($results);
-      if (is_array($results) && $count > 0) {
-          $dirname = $module->getVar('dirname', 's');
-          $modname = $module->getVar('name', 's');
-          for ($i = 0; $i < $count; ++$i) {
-              if (isset($results[$i]['image']) && $results[$i]['image'] != '') {
-                  $results[$i]['image'] = '../'.$dirname.'/'.$results[$i]['image'];
-              } else {
-                  $results[$i]['image'] = '../../images/icons/posticon2.gif';
-              }
-              $results[$i]['link'] = '../'.$dirname.'/'.$results[$i]['link'];
-              $results[$i]['title'] = $myts->makeTboxData4Show($results[$i]['title']);
-              $results[$i]['time'] = $results[$i]['time'] ? formatTimestamp($results[$i]['time']) : '';
-          }
-          if ($count == 5) {
-              $showall_link = '<a href="../../search.php?action=showallbyuser&amp;mid='.$mid.'&amp;uid='.$thisUser->getVar('uid').'">'._US_SHOWALL.'</a>';
-          } else {
-              $showall_link = '';
-          }
-          $xoopsTpl->append('modules', array('name' => $modname, 'results' => $results, 'showall_link' => $showall_link));
-      }
-      unset($module);
-  }
+    if ($gperm_handler->checkRight('module_read', $mid, $groups)) {
+        $module = &$module_handler->get($mid);
+        $results = &$module->search('', '', 5, 0, $uid);
+        $count = count($results);
+        if (is_array($results) && $count > 0) {
+            $dirname = $module->getVar('dirname', 's');
+            $modname = $module->getVar('name', 's');
+            for ($i = 0; $i < $count; ++$i) {
+                if (isset($results[$i]['image']) && $results[$i]['image'] != '') {
+                    $results[$i]['image'] = '../'.$dirname.'/'.$results[$i]['image'];
+                } else {
+                    $results[$i]['image'] = '../../images/icons/posticon2.gif';
+                }
+                $results[$i]['link'] = '../'.$dirname.'/'.$results[$i]['link'];
+                $results[$i]['title'] = $myts->makeTboxData4Show($results[$i]['title']);
+                $results[$i]['time'] = $results[$i]['time'] ? formatTimestamp($results[$i]['time']) : '';
+            }
+            if ($count == 5) {
+                $showall_link = '<a href="../../search.php?action=showallbyuser&amp;mid='.$mid.'&amp;uid='.$thisUser->getVar('uid').'">'._US_SHOWALL.'</a>';
+            } else {
+                $showall_link = '';
+            }
+            $xoopsTpl->append('modules', array('name' => $modname, 'results' => $results, 'showall_link' => $showall_link));
+        }
+        unset($module);
+    }
 }
 include XOOPS_ROOT_PATH.'/footer.php';

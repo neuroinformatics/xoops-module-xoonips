@@ -230,10 +230,10 @@ if ($op == 'open' || $op == '') {
 
     $cvitaeLen = xnpGetSwapCvitaePos($uid);
 
-        // get position
-        $pos = -1;
-        // $psql = "SELECT cvitae_id FROM ".$xoopsDB->prefix('xoonips_cvitaes')." WHERE uid=".$uid." ORDER BY cvitae_order ASC, from_year ASC, from_month ASC";
-        $psql = 'SELECT cvitae_id, cvitae_order FROM '.$xoopsDB->prefix('xoonips_cvitaes').' WHERE uid='.$uid.' ORDER BY cvitae_order ASC, from_year ASC, from_month ASC';
+    // get position
+    $pos = -1;
+    // $psql = "SELECT cvitae_id FROM ".$xoopsDB->prefix('xoonips_cvitaes')." WHERE uid=".$uid." ORDER BY cvitae_order ASC, from_year ASC, from_month ASC";
+    $psql = 'SELECT cvitae_id, cvitae_order FROM '.$xoopsDB->prefix('xoonips_cvitaes').' WHERE uid='.$uid.' ORDER BY cvitae_order ASC, from_year ASC, from_month ASC';
     $pres = $xoopsDB->query($psql);
     $i = 0;
     while ($prow = $xoopsDB->fetchArray($pres)) {
@@ -249,69 +249,69 @@ if ($op == 'open' || $op == '') {
 
     if ($pos != -1) {
         // change order ch1:cvitae_order=0 (cvitae_id=move_id)
-            //              ch2:cvitae_order=move_id's order (cvitae_id=updown_cvitae2)
-            //              ch3:cvitae_order=updown_cvitae2's order (cvitae_id=move_id)
-            for ($i = 0; $i < $step; ++$i) {
-                $pos += $dir;
+        //              ch2:cvitae_order=move_id's order (cvitae_id=updown_cvitae2)
+        //              ch3:cvitae_order=updown_cvitae2's order (cvitae_id=move_id)
+        for ($i = 0; $i < $step; ++$i) {
+            $pos += $dir;
 
-                if ($pos < 0 || $cvitaeLen <= $pos) {
-                    break;
-                }
-
-                $nextArray = xnpGetSwapCvitaeId($pos, $uid);
-                foreach ($nextArray as $key => $value) {
-                    $updown_cvitae2 = strval($key);
-                    $change_orders2 = $value;
-                }
-
-                $ch1sql = 'UPDATE '.$xoopsDB->prefix('xoonips_cvitaes').' SET cvitae_order = 0 WHERE cvitae_id='.$move_id.' ';
-                $ch1res = $xoopsDB->query($ch1sql);
-                if (!$ch1res) {
-                    $err = "Can't update data into database1.";
-                }
-                if ($ch1res == false) {
-                    echo "ERROR: SQL=$ch1sql<br />\n error=".$xoopsDB->error()."<br />1\n";
-                }
-                $ch2sql = 'UPDATE '.$xoopsDB->prefix('xoonips_cvitaes').' SET cvitae_order = '.$move_order.' WHERE cvitae_id='.$updown_cvitae2.'';
-                $ch2res = $xoopsDB->query($ch2sql);
-                if (!$ch2res) {
-                    $err = "Can't update data into database2.";
-                }
-                if ($ch2res == false) {
-                    echo "ERROR: SQL=$ch2sql<br />\n error=".$xoopsDB->error()."<br />2\n";
-                }
-                $ch3sql = 'UPDATE '.$xoopsDB->prefix('xoonips_cvitaes').' SET cvitae_order = '.$change_orders2.' WHERE cvitae_id='.$move_id.'';
-                $ch3res = $xoopsDB->query($ch3sql);
-                if (!$ch3res) {
-                    $err = "Can't update data into database3.";
-                }
-                if ($ch3res == false) {
-                    echo "ERROR: SQL=$ch3sql<br />\n error=".$xoopsDB->error()."<br />3\n";
-                }
-                $move_order = $change_orders2;
+            if ($pos < 0 || $cvitaeLen <= $pos) {
+                break;
             }
+
+            $nextArray = xnpGetSwapCvitaeId($pos, $uid);
+            foreach ($nextArray as $key => $value) {
+                $updown_cvitae2 = strval($key);
+                $change_orders2 = $value;
+            }
+
+            $ch1sql = 'UPDATE '.$xoopsDB->prefix('xoonips_cvitaes').' SET cvitae_order = 0 WHERE cvitae_id='.$move_id.' ';
+            $ch1res = $xoopsDB->query($ch1sql);
+            if (!$ch1res) {
+                $err = "Can't update data into database1.";
+            }
+            if ($ch1res == false) {
+                echo "ERROR: SQL=$ch1sql<br />\n error=".$xoopsDB->error()."<br />1\n";
+            }
+            $ch2sql = 'UPDATE '.$xoopsDB->prefix('xoonips_cvitaes').' SET cvitae_order = '.$move_order.' WHERE cvitae_id='.$updown_cvitae2.'';
+            $ch2res = $xoopsDB->query($ch2sql);
+            if (!$ch2res) {
+                $err = "Can't update data into database2.";
+            }
+            if ($ch2res == false) {
+                echo "ERROR: SQL=$ch2sql<br />\n error=".$xoopsDB->error()."<br />2\n";
+            }
+            $ch3sql = 'UPDATE '.$xoopsDB->prefix('xoonips_cvitaes').' SET cvitae_order = '.$change_orders2.' WHERE cvitae_id='.$move_id.'';
+            $ch3res = $xoopsDB->query($ch3sql);
+            if (!$ch3res) {
+                $err = "Can't update data into database3.";
+            }
+            if ($ch3res == false) {
+                echo "ERROR: SQL=$ch3sql<br />\n error=".$xoopsDB->error()."<br />3\n";
+            }
+            $move_order = $change_orders2;
+        }
     }
 }
 
 // display confirm form
-    $sql = 'SELECT * FROM '.$xoopsDB->prefix('xoonips_cvitaes').' ';
-    $sql .= 'WHERE uid='.$uid.' ORDER BY cvitae_order ASC, from_year ASC, from_month ASC';
-    $result = $xoopsDB->query($sql);
-        if (!$result) {
-            $err = "Can't select data into database.";
-        }
-        if ($result == false) {
-            echo "ERROR: SQL=$sql<br />\n error=".$xoopsDB->error()."<br />\n";
-        }
-        $rcount = $xoopsDB->getRowsNum($result);
-            $xoopsTpl->assign('rcount', $rcount);
-        while ($row = $xoopsDB->fetchArray($result)) {
-            $cvdata['cvitae_id'] = $myts->makeTboxData4Show($row['cvitae_id']);
-            $cvdata['cvitae_from_date'] = $textutil->html_special_chars(xnpMktime($row['from_year'], $row['from_month'], 0));
-            $cvdata['cvitae_to_date'] = $textutil->html_special_chars(xnpMktime($row['to_year'], $row['to_month'], 0));
-            $cvdata['cvitae_title'] = $textutil->html_special_chars($row['cvitae_title']);
-            $xoopsTpl->append('cv_array', $cvdata);
-        }
+$sql = 'SELECT * FROM '.$xoopsDB->prefix('xoonips_cvitaes').' ';
+$sql .= 'WHERE uid='.$uid.' ORDER BY cvitae_order ASC, from_year ASC, from_month ASC';
+$result = $xoopsDB->query($sql);
+if (!$result) {
+    $err = "Can't select data into database.";
+}
+if ($result == false) {
+    echo "ERROR: SQL=$sql<br />\n error=".$xoopsDB->error()."<br />\n";
+}
+$rcount = $xoopsDB->getRowsNum($result);
+$xoopsTpl->assign('rcount', $rcount);
+while ($row = $xoopsDB->fetchArray($result)) {
+    $cvdata['cvitae_id'] = $myts->makeTboxData4Show($row['cvitae_id']);
+    $cvdata['cvitae_from_date'] = $textutil->html_special_chars(xnpMktime($row['from_year'], $row['from_month'], 0));
+    $cvdata['cvitae_to_date'] = $textutil->html_special_chars(xnpMktime($row['to_year'], $row['to_month'], 0));
+    $cvdata['cvitae_title'] = $textutil->html_special_chars($row['cvitae_title']);
+    $xoopsTpl->append('cv_array', $cvdata);
+}
 
 $xoopsTpl->assign('updown_options', array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10));
 

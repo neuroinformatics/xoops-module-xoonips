@@ -73,19 +73,19 @@ if ($doi_column_name != '') {
 if ($doi != '') {
     $new_item_ids = array();
     $result = xnpGetItemIdByDoi($doi, $new_item_ids);
-  // error check. $new_item_ids must be one.
-  if (count($new_item_ids) == 0) {
-      redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_ITEM_DOI_NOT_FOUND);
-      exit();
-  } elseif (count($new_item_ids) > 1) {
-      redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_ITEM_DOI_DUPLICATE_ID);
-      exit();
-  }
+    // error check. $new_item_ids must be one.
+    if (count($new_item_ids) == 0) {
+        redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_ITEM_DOI_NOT_FOUND);
+        exit();
+    } elseif (count($new_item_ids) > 1) {
+        redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_ITEM_DOI_DUPLICATE_ID);
+        exit();
+    }
     $item_id = $new_item_ids[0];
-  // for comment function
-  $comformdata = &xoonips_getutility('formdata');
+    // for comment function
+    $comformdata = &xoonips_getutility('formdata');
     $comformdata->set('get', 'item_id', $item_id);
-  // end of comment function
+    // end of comment function
 }
 
 // set download file id if op == 'download'
@@ -94,7 +94,7 @@ if ($op == 'download') {
     $download_file_id = $formdata->getValue('both', 'download_file_id', 'i', false, false);
 }
 
-//retrieve item detail and set item type id to $item_type_id;
+// retrieve item detail and set item type id to $item_type_id;
 $item_compo_handler = &xoonips_getormcompohandler('xoonips', 'item');
 if (!$item_compo_handler->getPerm($item_id, $uid, 'read')) {
     redirect_header('user.php', 3, _MD_XOONIPS_ITEM_FORBIDDEN);
@@ -127,10 +127,7 @@ if ($op == 'reject_certify' || $op == 'accept_certify' || $op == 'withdraw') {
     $succeeded_index_ids = array();
     foreach ($formdata->getValueArray('post', 'index_ids', 'i', true) as $index_id) {
         if ($op == 'withdraw' && $item_lock_handler->isLocked($item_id)) {
-            redirect_header(XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$item_id,
-                5, sprintf(_MD_XOONIPS_ERROR_CANNOT_WITHDRAW_LOCKED_ITEM,
-                    xoonips_get_lock_type_string(
-                        $item_lock_handler->getLockType($item_id))));
+            redirect_header(XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$item_id, 5, sprintf(_MD_XOONIPS_ERROR_CANNOT_WITHDRAW_LOCKED_ITEM, xoonips_get_lock_type_string($item_lock_handler->getLockType($item_id))));
             exit();
         }
         if ($op == 'reject_certify') {
@@ -166,16 +163,12 @@ if ($op == 'delete') {
     //show error if locked
     $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
     if ($item_lock_handler->isLocked($item_id)) {
-        redirect_header(XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$item_id,
-            5, sprintf(_MD_XOONIPS_ERROR_CANNOT_DELETE_LOCKED_ITEM,
-                xoonips_get_lock_type_string(
-                    $item_lock_handler->getLockType($item_id))));
+        redirect_header(XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$item_id, 5, sprintf(_MD_XOONIPS_ERROR_CANNOT_DELETE_LOCKED_ITEM, xoonips_get_lock_type_string($item_lock_handler->getLockType($item_id))));
         exit();
     }
     //show error if no permission
     if (!$item_compo_handler->getPerm($item_id, $uid, 'delete')) {
-        redirect_header(XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$item_id,
-            3, _MD_XOONIPS_ITEM_FORBIDDEN);
+        redirect_header(XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$item_id, 3, _MD_XOONIPS_ITEM_FORBIDDEN);
     }
 
     xoonips_delete_item($item_id);
@@ -207,10 +200,7 @@ include XOOPS_ROOT_PATH.'/header.php';
 
 $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
 if ($item_lock_handler->isLocked($item_id)) {
-    $xoopsTpl->assign('locked_message',
-        sprintf(_MD_XOONIPS_WARNING_CANNOT_EDIT_LOCKED_ITEM,
-            xoonips_get_lock_type_string(
-                $item_lock_handler->getLockType($item_id))));
+    $xoopsTpl->assign('locked_message', sprintf(_MD_XOONIPS_WARNING_CANNOT_EDIT_LOCKED_ITEM, xoonips_get_lock_type_string($item_lock_handler->getLockType($item_id))));
 } else {
     $xoopsTpl->assign('locked_message', false);
 }
@@ -243,12 +233,7 @@ if ($doi != '') {
 
 if (xoonips_is_user_export_enabled()) {
     $handler = &xoonips_getormcompohandler('xoonips', 'item');
-    $xoopsTpl->assign(
-        'export_enabled',
-        $handler->getPerm(
-            $item_id,
-            $xoopsUser ? $xoopsUser->getVar('uid') : UID_GUEST,
-            'export'));
+    $xoopsTpl->assign('export_enabled', $handler->getPerm($item_id, $xoopsUser ? $xoopsUser->getVar('uid') : UID_GUEST, 'export'));
 }
 
 function genSelectLabels(&$index)

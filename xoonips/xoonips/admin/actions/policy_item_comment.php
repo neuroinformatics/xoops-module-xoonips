@@ -35,26 +35,26 @@ $description = _AM_XOONIPS_POLICY_ITEM_COMMENT_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_POLICY_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_POLICY_ITEM_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=item',
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_POLICY_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_POLICY_ITEM_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=item',
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket
@@ -64,8 +64,8 @@ $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // get configs
 $config_keys = array(
-  'item_comment_dirname' => 's',
-  'item_comment_forum_id' => 'i',
+    'item_comment_dirname' => 's',
+    'item_comment_forum_id' => 'i',
 );
 $config_values = xoonips_admin_get_configs($config_keys, 'e');
 
@@ -81,9 +81,9 @@ if ($selected) {
     $d3forum_not_found = false;
 }
 $d3forums[] = array(
-  'dirname' => '',
-  'label' => '----------',
-  'selected' => $selected,
+    'dirname' => '',
+    'label' => '----------',
+    'selected' => $selected,
 );
 foreach ($mod_dirnames as $mod_dirname) {
     $trustdir_php = XOOPS_ROOT_PATH.'/modules/'.$mod_dirname.'/mytrustdirname.php';
@@ -93,35 +93,35 @@ foreach ($mod_dirnames as $mod_dirname) {
             $module = &$module_handler->getByDirname($mod_dirname);
             if (is_object($module) && $module->getVar('isactive', 'n') == 1) {
                 // set found d3forum module name
-        $selected = ($config_values['item_comment_dirname'] == $mod_dirname);
+                $selected = ($config_values['item_comment_dirname'] == $mod_dirname);
                 if ($selected) {
                     $d3forum_not_found = false;
                 }
                 $d3forums[] = array(
-          'dirname' => $mod_dirname,
-          'label' => $mod_dirname,
-          'selected' => $selected,
-        );
+                    'dirname' => $mod_dirname,
+                    'label' => $mod_dirname,
+                    'selected' => $selected,
+                );
             }
         }
     }
 }
 if ($d3forum_not_found) {
     // selected d3forum dirname not found
-  $d3forum_dirname_notfound = _AM_XOONIPS_POLICY_ITEM_COMMENT_DIRNAME_NOTFOUND.' : '.$config_values['item_comment_dirname'];
+    $d3forum_dirname_notfound = _AM_XOONIPS_POLICY_ITEM_COMMENT_DIRNAME_NOTFOUND.' : '.$config_values['item_comment_dirname'];
     $d3forums[0]['selected'] = true;
     $d3forum_forumid = $config_values['item_comment_forum_id'];
     $d3forum_forumid_notfound = _AM_XOONIPS_POLICY_ITEM_COMMENT_FORUMID_NOTFOUND.' : '.$config_values['item_comment_forum_id'];
 } else {
     // selected d3forum dirname found or empty dirname
-  $d3forum_forumid = $config_values['item_comment_forum_id'];
+    $d3forum_forumid = $config_values['item_comment_forum_id'];
     $d3forum_dirname_notfound = '';
     if ($config_values['item_comment_dirname'] == '') {
         // empty dirname
-    $d3forum_forumid_notfound = '';
+        $d3forum_forumid_notfound = '';
     } else {
         // selected d3forum dirname found
-    $sql = sprintf('SELECT forum_id FROM %s WHERE forum_id=%u', $xoopsDB->prefix($config_values['item_comment_dirname'].'_forums'), $config_values['item_comment_forum_id']);
+        $sql = sprintf('SELECT forum_id FROM %s WHERE forum_id=%u', $xoopsDB->prefix($config_values['item_comment_dirname'].'_forums'), $config_values['item_comment_forum_id']);
         $res = $xoopsDB->query($sql);
         if ($res === false) {
             die('unexpected error');

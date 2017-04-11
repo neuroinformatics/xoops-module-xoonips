@@ -39,39 +39,15 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 
 // get requests
 $post_keys = array(
-  'ranking_num_rows' => array(
-    'i',
-    false,
-    true,
-  ),
-  'ranking_new_num_rows' => array(
-    'i',
-    false,
-    true,
-  ),
-  'ranking_days' => array(
-    'i',
-    false,
-    true,
-  ),
-  'ranking_days_enabled' => array(
-    's',
-    false,
-    false,
-  ),
-  // checkbox
-  'ranking_visible' => array(
-    'i',
-    true,
-    false,
-  ),
-  // checkbox
-  'ranking_new_visible' => array(
-    'i',
-    true,
-    false,
-  ),
-  // checkbox,
+    'ranking_num_rows' => array('i', false, true),
+    'ranking_new_num_rows' => array('i', false, true),
+    'ranking_days' => array('i', false, true),
+    'ranking_days_enabled' => array('s', false, false),
+    // checkbox
+    'ranking_visible' => array('i', true, false),
+    // checkbox
+    'ranking_new_visible' => array('i', true, false),
+    // checkbox,
 );
 $post_vals = xoonips_admin_get_requests('post', $post_keys);
 
@@ -88,8 +64,8 @@ if (is_null($post_vals['ranking_days_enabled'])) {
 }
 // >> visible
 $post_array_keys = array(
-  'ranking_visible' => 5,
-  'ranking_new_visible' => 2,
+    'ranking_visible' => 5,
+    'ranking_new_visible' => 2,
 );
 foreach ($post_array_keys as $key => $max_num) {
     $val = $post_vals[$key];

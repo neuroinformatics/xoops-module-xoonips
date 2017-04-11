@@ -64,10 +64,7 @@ $textutil = &xoonips_getutility('text');
 //error if item is locked
 $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
 if ($item_lock_handler->isLocked($item_id)) {
-    redirect_header(XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$item_id,
-        5, sprintf(_MD_XOONIPS_ERROR_CANNOT_EDIT_LOCKED_ITEM,
-            xoonips_get_lock_type_string(
-                $item_lock_handler->getLockType($item_id))));
+    redirect_header(XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$item_id, 5, sprintf(_MD_XOONIPS_ERROR_CANNOT_EDIT_LOCKED_ITEM, xoonips_get_lock_type_string($item_lock_handler->getLockType($item_id))));
     exit();
 }
 
@@ -102,15 +99,13 @@ $title = $formdata->getValue('post', 'title', 's', false);
 if (!isset($title)) {
     //title is not filled
     $op = '';
-    $system_message = '<span style="color: red;">'
-        ._MD_XOONIPS_ITEM_TITLE_REQUIRED.'</span>';
+    $system_message = '<span style="color: red;">'._MD_XOONIPS_ITEM_TITLE_REQUIRED.'</span>';
 }
 
 // check private_item_storage_limit
 if (!check_private_item_storage_limit()) {
     $op = '';
-    $system_message .= '<span style="color: red;">'
-        ._MD_XOONIPS_ITEM_WARNING_ITEM_STORAGE_LIMIT.'</span><br />';
+    $system_message .= '<span style="color: red;">'._MD_XOONIPS_ITEM_WARNING_ITEM_STORAGE_LIMIT.'</span><br />';
 }
 
 // check group_item_number_limit
@@ -142,26 +137,18 @@ foreach (array_unique($gids) as $gid) {
         // warinig, if not enough space to store items
         $op = '';
         if (is_object($xgroup_obj)) {
-            $system_message .= '<span style="color: red;">'
-                ._MD_XOONIPS_ITEM_WARNING_ITEM_NUMBER_LIMIT
-                .'(group='.$gname.')</span><br />';
+            $system_message .= '<span style="color: red;">'._MD_XOONIPS_ITEM_WARNING_ITEM_NUMBER_LIMIT.'(group='.$gname.')</span><br />';
         } else {
-            $system_message .= '<span style="color: red;">'
-                ._MD_XOONIPS_ITEM_WARNING_ITEM_NUMBER_LIMIT
-                .'(gid='.$gid.')</span><br />';
+            $system_message .= '<span style="color: red;">'._MD_XOONIPS_ITEM_WARNING_ITEM_NUMBER_LIMIT.'(gid='.$gid.')</span><br />';
         }
     }
     if (!check_group_item_storage_limit($gid)) {
         $op = '';
         $group = array();
         if (is_object($xgroup_obj)) {
-            $system_message .= '<span style="color: red;">'
-                ._MD_XOONIPS_ITEM_WARNING_ITEM_STORAGE_LIMIT
-                .'(group='.$gname.')</span><br />';
+            $system_message .= '<span style="color: red;">'._MD_XOONIPS_ITEM_WARNING_ITEM_STORAGE_LIMIT.'(group='.$gname.')</span><br />';
         } else {
-            $system_message .= '<span style="color: red;">'
-                ._MD_XOONIPS_ITEM_WARNING_ITEM_STORAGE_LIMIT
-                .'(gid='.$gid.')</span><br />';
+            $system_message .= '<span style="color: red;">'._MD_XOONIPS_ITEM_WARNING_ITEM_STORAGE_LIMIT.'(gid='.$gid.')</span><br />';
         }
     }
 }
@@ -188,8 +175,7 @@ foreach ($checked_xids as $xid) {
 }
 
 $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
-if ($item_type_id != ITID_INDEX && !$private_index_flag
-    && $index_item_link_handler->privateIndexReadable($item_id, $xoopsUser->getVar('uid'))) {
+if ($item_type_id != ITID_INDEX && !$private_index_flag && $index_item_link_handler->privateIndexReadable($item_id, $xoopsUser->getVar('uid'))) {
     $op = '';
 }
 
@@ -203,17 +189,14 @@ if (XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') {
         if (strlen($doi) > XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN
             || $res == 0 || $matches[0] != $doi) {
             $op = '';
-            $system_message .= "\n".'<br /><span style="color: red;">'
-                .sprintf(_MD_XOONIPS_ITEM_DOI_INVALID_ID,
-                          XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN).'</span><br />';
+            $system_message .= "\n".'<br /><span style="color: red;">'.sprintf(_MD_XOONIPS_ITEM_DOI_INVALID_ID, XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN).'</span><br />';
         }
         //check doi duplication when doi is changed.
         $org_doi = '';
         if (xnpGetDoiByItemId($item_id, $org_doi) == RES_OK) {
             if ($org_doi != $doi && xnpIsDoiExists($doi)) {
                 $op = '';
-                $system_message .= "\n".'<br /><span style="color: red;">'
-                    ._MD_XOONIPS_ITEM_DOI_DUPLICATE_ID.'</span><br />';
+                $system_message .= "\n".'<br /><span style="color: red;">'._MD_XOONIPS_ITEM_DOI_DUPLICATE_ID.'</span><br />';
             }
         }
     }

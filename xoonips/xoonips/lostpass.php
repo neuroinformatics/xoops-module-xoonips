@@ -33,7 +33,7 @@ $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
 if ($uid != UID_GUEST) {
     // deny to access from registered user
-  redirect_header(XOOPS_URL.'/', 3, _NOPERM);
+    redirect_header(XOOPS_URL.'/', 3, _NOPERM);
     exit();
 }
 
@@ -69,8 +69,8 @@ if (!is_null($code) && $areyou == $code) {
     if (!$xoopsMailer->send()) {
         echo $xoopsMailer->getErrors();
     }
-  // Next step: add the new password to the database
-  $sql = sprintf('UPDATE `%s` SET `pass`=%s WHERE `uid`=%u', $xoopsDB->prefix('users'), $xoopsDB->quoteString(md5($newpass)), $getuser[0]->getVar('uid', 's'));
+    // Next step: add the new password to the database
+    $sql = sprintf('UPDATE `%s` SET `pass`=%s WHERE `uid`=%u', $xoopsDB->prefix('users'), $xoopsDB->quoteString(md5($newpass)), $getuser[0]->getVar('uid', 's'));
     if (!$xoopsDB->queryF($sql)) {
         include XOOPS_ROOT_PATH.'/header.php';
         echo _US_MAILPWDNG;
@@ -81,11 +81,11 @@ if (!is_null($code) && $areyou == $code) {
     exit();
 } else {
     // If no validation code, send it
-  if (!is_null($code)) {
-      // if invalid code send, die process
-    // die( 'invalid code request' );
-    die('Your new password has been send to your email address. Please check your email again.');
-  }
+    if (!is_null($code)) {
+        // if invalid code send, die process
+        // die( 'invalid code request' );
+        die('Your new password has been send to your email address. Please check your email again.');
+    }
     $xoopsMailer = &getMailer();
     $xoopsMailer->useMail();
     $xoopsMailer->setTemplate('lostpass1.tpl');

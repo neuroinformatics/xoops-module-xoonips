@@ -35,21 +35,21 @@ $description = _AM_XOONIPS_SYSTEM_TREE_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_SYSTEM_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_SYSTEM_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket
@@ -59,8 +59,8 @@ $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // get configs
 $config_keys = array(
-  'tree_frame_width' => 's',
-  'tree_frame_height' => 's',
+    'tree_frame_width' => 's',
+    'tree_frame_height' => 's',
 );
 $config_values = xoonips_admin_get_configs($config_keys, 'e');
 // >> tree_frame_width

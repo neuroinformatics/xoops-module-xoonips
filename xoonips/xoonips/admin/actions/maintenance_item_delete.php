@@ -31,16 +31,8 @@ if (!defined('XOOPS_ROOT_PATH')) {
 
 // get requests
 $get_keys = array(
-  'uid' => array(
-    'i',
-    false,
-    false,
-  ),
-  'upage' => array(
-    'i',
-    false,
-    false,
-  ),
+    'uid' => array('i', false, false),
+    'upage' => array('i', false, false),
 );
 $get_vals = xoonips_admin_get_requests('get', $get_keys);
 $uid = $get_vals['uid'];
@@ -48,7 +40,7 @@ $upage = $get_vals['upage'];
 
 if (is_null($uid)) {
     // user select
-  $title = _AM_XOONIPS_MAINTENANCE_ITEM_DELETE_TITLE;
+    $title = _AM_XOONIPS_MAINTENANCE_ITEM_DELETE_TITLE;
     $nextaction = 'delete';
     include 'actions/maintenance_item_uselect.php';
     exit();

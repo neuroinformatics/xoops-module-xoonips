@@ -32,10 +32,10 @@ if (!defined('XOOPS_ROOT_PATH')) {
 function xoonips_admin_system_check_mysql(&$category)
 {
     // mysql class
-  $mysqlinfo = &xoonips_getutility('mysqlinfo');
+    $mysqlinfo = &xoonips_getutility('mysqlinfo');
 
-  // version
-  $name = 'MySQL version';
+    // version
+    $name = 'MySQL version';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $version = $mysqlinfo->getVersion('full');
     $res->setResult(_XASC_STATUS_OK, $version, _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
@@ -44,11 +44,11 @@ function xoonips_admin_system_check_mysql(&$category)
 
     if ($mysqlinfo->isVersion41orHigher()) {
         $keys = array(
-      'character_set_database' => true,
-      'character_set_client' => false,
-      'character_set_connection' => false,
-      'character_set_results' => false,
-    );
+            'character_set_database' => true,
+            'character_set_client' => false,
+            'character_set_connection' => false,
+            'character_set_results' => false,
+        );
         foreach ($keys as $key => $is_database) {
             $res = new XooNIpsAdminSystemCheckResult($key);
             $charset = $mysqlinfo->getVariable($key);

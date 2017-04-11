@@ -39,11 +39,7 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 
 // get requests
 $post_keys = array(
-  'rss_item_max' => array(
-    'i',
-    false,
-    true,
-  ),
+    'rss_item_max' => array('i', false, true),
 );
 $post_vals = xoonips_admin_get_requests('post', $post_keys);
 

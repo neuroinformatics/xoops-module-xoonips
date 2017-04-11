@@ -48,27 +48,27 @@ foreach ($posi_objs as $posi_obj) {
     $posi_title = $posi_obj->get('posi_title');
     $criteria = new CriteriaCompo();
     $criteria->add(new Criteria('posi', $posi_id)); // position id
-  $criteria->add(new Criteria('level', 0, '>', 'u')); // activated user
-  $criteria->add(new Criteria('activate', 1)); // certified user
-  $criteria->add(new Criteria('user_order', 0, '>=')); // user order
-  $join_criteria = new XooNIpsJoinCriteria('users', 'uid', 'uid', 'INNER', 'u');
+    $criteria->add(new Criteria('level', 0, '>', 'u')); // activated user
+    $criteria->add(new Criteria('activate', 1)); // certified user
+    $criteria->add(new Criteria('user_order', 0, '>=')); // user order
+    $join_criteria = new XooNIpsJoinCriteria('users', 'uid', 'uid', 'INNER', 'u');
     $criteria->setSort('user_order');
     $criteria->setOrder('ASC');
     $xu_objs = &$xu_handler->getObjects($criteria, false, 'u.uid, u.name, u.uname, company_name', false, $join_criteria);
     $users = array();
     foreach ($xu_objs as $xu_obj) {
         $users[] = array(
-      'uid' => $xu_obj->get('uid'),
-      'name' => $textutil->html_special_chars($xu_obj->getExtraVar('name')),
-      'uname' => $textutil->html_special_chars($xu_obj->getExtraVar('uname')),
-      'company_name' => $textutil->html_special_chars($xu_obj->getVar('company_name')),
-    );
+            'uid' => $xu_obj->get('uid'),
+            'name' => $textutil->html_special_chars($xu_obj->getExtraVar('name')),
+            'uname' => $textutil->html_special_chars($xu_obj->getExtraVar('uname')),
+            'company_name' => $textutil->html_special_chars($xu_obj->getVar('company_name')),
+        );
     }
     if (count($xu_objs) > 0) {
         $userslist[] = array(
-      'title' => $textutil->html_special_chars($posi_title),
-      'users' => $users,
-    );
+            'title' => $textutil->html_special_chars($posi_title),
+            'users' => $users,
+        );
     }
 }
 

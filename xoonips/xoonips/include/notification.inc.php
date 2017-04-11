@@ -229,7 +229,7 @@ function xoonips_notification_account_rejected($user_id, $comments)
         _MD_XOONIPS_ACCOUNT_REJECTED_NOTIFYSBJ,
         $nhandler->getTemplateDirByMid(),
         'administrator_account_rejected_notify',
-    $tags,
+        $tags,
         xoonips_notification_get_moderator_uids());
 }
 
@@ -261,8 +261,7 @@ function xoonips_notification_get_index_path_string($index_id)
  * @param[in] $subject  subject of notification
  * @param[in] $template_name  template file name of notification
  */
-function xoonips_notification_item_certify(
-    $item_id, $index_id, $subject, $template_name)
+function xoonips_notification_item_certify($item_id, $index_id, $subject, $template_name)
 {
     $index_handler = &xoonips_getormhandler('xoonips', 'index');
     $index = $index_handler->get($index_id);
@@ -282,8 +281,8 @@ function xoonips_notification_item_certify(
 
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
     $nhandler->triggerEvent2('administrator', 0, 'item_certify',
-        $subject, $nhandler->getTemplateDirByMid(),
-        $template_name, $tags, $uids);
+    $subject, $nhandler->getTemplateDirByMid(),
+    $template_name, $tags, $uids);
 }
 
 /**
@@ -340,16 +339,14 @@ function xoonips_notification_user_item_transfer_request($to_uid)
         $tags, array($to_uid));
 }
 
-function xoonips_notification_user_item_transfer_accepted(
-    $from_uid, $to_uid, $item_ids)
+function xoonips_notification_user_item_transfer_accepted($from_uid, $to_uid, $item_ids)
 {
     $xoops_user_handler = &xoops_gethandler('user');
     $to_user = $xoops_user_handler->get($to_uid);
 
     $tags = array(
         'TO_UNAME' => $to_user->getVar('uname'),
-        'ITEM_LIST' => _xoonips_notification_get_item_list($from_uid,
-                                                           $item_ids),
+        'ITEM_LIST' => _xoonips_notification_get_item_list($from_uid, $item_ids),
     );
 
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
@@ -360,8 +357,7 @@ function xoonips_notification_user_item_transfer_accepted(
         $tags, array($from_uid));
 }
 
-function xoonips_notification_user_item_transfer_rejected(
-    $from_uid, $to_uid, $item_ids)
+function xoonips_notification_user_item_transfer_rejected($from_uid, $to_uid, $item_ids)
 {
     $xoops_user_handler = &xoops_gethandler('user');
     $to_user = $xoops_user_handler->get($to_uid);
@@ -388,9 +384,7 @@ function _xoonips_notification_get_descendant_index_ids($index_id)
     $indexes = &$index_handler->getObjects(new Criteria('parent_index_id', $index_id));
     if (!empty($indexes)) {
         foreach ($indexes as $index) {
-            $result = array_merge($result,
-                _xoonips_notification_get_descendant_index_ids(
-                    $index->get('index_id')));
+            $result = array_merge($result, _xoonips_notification_get_descendant_index_ids($index->get('index_id')));
         }
     }
 
@@ -400,14 +394,12 @@ function _xoonips_notification_get_descendant_index_ids($index_id)
 function _xoonips_notification_get_affected_items($start_index_id)
 {
     // get all descendant index id
-    $index_ids = _xoonips_notification_get_descendant_index_ids(
-        $start_index_id);
+    $index_ids = _xoonips_notification_get_descendant_index_ids($start_index_id);
 
     // get all affected item_id
     $result = array();
     $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
-    $index_item_link_handler = &xoonips_getormhandler(
-        'xoonips', 'index_item_link');
+    $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
     foreach ($index_ids as $index_id) {
         $links = &$index_item_link_handler->getObjects(new Criteria('index_id', $index_id));
         foreach ($links as $link) {
@@ -440,8 +432,7 @@ function _xoonips_notification_get_title_of_items($item_ids)
     return $item_titles;
 }
 
-function xoonips_notification_send_user_index_notification(
-    $context, $subject, $template_name)
+function xoonips_notification_send_user_index_notification($context, $subject, $template_name)
 {
     $new_index_path = xoonips_notification_get_index_path_string(
         $context['index_id']);

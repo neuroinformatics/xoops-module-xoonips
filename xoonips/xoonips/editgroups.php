@@ -50,133 +50,133 @@ $gname_forbidden = false;
 $gname_exists = false;
 $gadmins_empty = false;
 $gname_system = array(
-  'public',
-  'private',
-  'root',
+    'public',
+    'private',
+    'root',
 );
 
 $breadcrumbs = array(
-  array(
-    'name' => _MD_XOONIPS_BREADCRUMBS_MODERATOR,
-  ),
-  array(
-    'name' => _MD_XOONIPS_TITLE_GROUP_EDIT,
-    'url' => 'editgroups.php',
-  ),
+    array(
+        'name' => _MD_XOONIPS_BREADCRUMBS_MODERATOR,
+    ),
+    array(
+        'name' => _MD_XOONIPS_TITLE_GROUP_EDIT,
+        'url' => 'editgroups.php',
+    ),
 );
 
 switch ($op) {
 case 'edit':
-  $gid = $formdata->getValue('get', 'gid', 'i', true);
-  $xg_obj = &$admin_xgroup_handler->getGroupObject($gid);
-  if (!is_object($xg_obj)) {
-      xoonips_group_error('editgroups.php', 'select');
-  }
-  if (!xoonips_group_check_perm($gid)) {
-      xoonips_group_error('editgroups.php', 'lock_edit');
-  }
-  $gname = $xg_obj->getVar('gname', 'e');
-  $gdesc = $xg_obj->getVar('gdesc', 'e');
-  $gilimit = $xg_obj->get('group_item_number_limit');
-  $gxlimit = $xg_obj->get('group_index_number_limit');
-  $gslimit = $xg_obj->get('group_item_storage_limit') / 1000 / 1000;
-  $gadmin_uids = $admin_xgroup_handler->getUserIds($gid, true);
-  $breadcrumbs[] = array(
-    'name' => $xg_obj->getVar('gname', 's'),
-    'url' => 'editgroups.php?op=edit&amp;gid='.$gid,
-  );
-  $groups_show = false;
-  break;
+    $gid = $formdata->getValue('get', 'gid', 'i', true);
+    $xg_obj = &$admin_xgroup_handler->getGroupObject($gid);
+    if (!is_object($xg_obj)) {
+        xoonips_group_error('editgroups.php', 'select');
+    }
+    if (!xoonips_group_check_perm($gid)) {
+        xoonips_group_error('editgroups.php', 'lock_edit');
+    }
+    $gname = $xg_obj->getVar('gname', 'e');
+    $gdesc = $xg_obj->getVar('gdesc', 'e');
+    $gilimit = $xg_obj->get('group_item_number_limit');
+    $gxlimit = $xg_obj->get('group_index_number_limit');
+    $gslimit = $xg_obj->get('group_item_storage_limit') / 1000 / 1000;
+    $gadmin_uids = $admin_xgroup_handler->getUserIds($gid, true);
+    $breadcrumbs[] = array(
+      'name' => $xg_obj->getVar('gname', 's'),
+      'url' => 'editgroups.php?op=edit&amp;gid='.$gid,
+    );
+    $groups_show = false;
+    break;
 case 'update':
-  if (!$xoopsGTicket->check(true, $ticket_area, false)) {
-      redirect_header('editgroups.php', 3, $xoopsGTicket->getErrors());
-      exit();
-  }
-  $gid = $formdata->getValue('post', 'gid', 'i', true);
-  $gname = $formdata->getValue('post', 'gname', 's', true);
-  $gdesc = $formdata->getValue('post', 'gdesc', 's', true);
-  $gilimit = $formdata->getValue('post', 'item_number_limit', 'i', true);
-  $gxlimit = $formdata->getValue('post', 'index_number_limit', 'i', true);
-  $gslimit = $formdata->getValue('post', 'item_storage_limit', 'i', true);
-  $gadmin_uids = $formdata->getValueArray('post', 'gadmins', 'i', false);
-  $xg_obj = &$admin_xgroup_handler->getGroupObject($gid);
-  if (!is_object($xg_obj)) {
-      xoonips_group_error('editgroups.php', 'select');
-  }
-  $is_error = false;
-  if (in_array(strtolower($gname), $gname_system)) {
-      $gname_forbidden = true;
-      $is_error = true;
-  }
-  if ($admin_xgroup_handler->existsGroup($gname, $gid)) {
-      $gname_exists = true;
-      $is_error = true;
-  }
-  if (empty($gadmin_uids)) {
-      $gadmins_empty = true;
-      $is_error = true;
-  }
-  if ($is_error) {
-      $groups_show = false;
-      break;
-  }
-  if (!$admin_xgroup_handler->updateGroup($gid, $gname, $gdesc, $gadmin_uids, $gilimit, $gxlimit, $gslimit * 1000 * 1000)) {
-      xoonips_group_error('editgroups.php', 'update');
-  }
-  $op = '';
-  break;
+    if (!$xoopsGTicket->check(true, $ticket_area, false)) {
+        redirect_header('editgroups.php', 3, $xoopsGTicket->getErrors());
+        exit();
+    }
+    $gid = $formdata->getValue('post', 'gid', 'i', true);
+    $gname = $formdata->getValue('post', 'gname', 's', true);
+    $gdesc = $formdata->getValue('post', 'gdesc', 's', true);
+    $gilimit = $formdata->getValue('post', 'item_number_limit', 'i', true);
+    $gxlimit = $formdata->getValue('post', 'index_number_limit', 'i', true);
+    $gslimit = $formdata->getValue('post', 'item_storage_limit', 'i', true);
+    $gadmin_uids = $formdata->getValueArray('post', 'gadmins', 'i', false);
+    $xg_obj = &$admin_xgroup_handler->getGroupObject($gid);
+    if (!is_object($xg_obj)) {
+        xoonips_group_error('editgroups.php', 'select');
+    }
+    $is_error = false;
+    if (in_array(strtolower($gname), $gname_system)) {
+        $gname_forbidden = true;
+        $is_error = true;
+    }
+    if ($admin_xgroup_handler->existsGroup($gname, $gid)) {
+        $gname_exists = true;
+        $is_error = true;
+    }
+    if (empty($gadmin_uids)) {
+        $gadmins_empty = true;
+        $is_error = true;
+    }
+    if ($is_error) {
+        $groups_show = false;
+        break;
+    }
+    if (!$admin_xgroup_handler->updateGroup($gid, $gname, $gdesc, $gadmin_uids, $gilimit, $gxlimit, $gslimit * 1000 * 1000)) {
+        xoonips_group_error('editgroups.php', 'update');
+    }
+    $op = '';
+    break;
 case 'register':
-  $gid = 0;
-  if (!$xoopsGTicket->check(true, $ticket_area, false)) {
-      redirect_header('editgroups.php', 3, $xoopsGTicket->getErrors());
-      exit();
-  }
-  $gname = $formdata->getValue('post', 'gname', 's', true);
-  $gdesc = $formdata->getValue('post', 'gdesc', 's', true);
-  $gilimit = $formdata->getValue('post', 'item_number_limit', 'i', true);
-  $gxlimit = $formdata->getValue('post', 'index_number_limit', 'i', true);
-  $gslimit = $formdata->getValue('post', 'item_storage_limit', 'i', true);
-  $gadmin_uids = $formdata->getValueArray('post', 'gadmins', 'i', false);
-  $is_error = false;
-  if (in_array(strtolower($gname), $gname_system)) {
-      $gname_forbidden = true;
-      $is_error = true;
-  }
-  if ($admin_xgroup_handler->existsGroup($gname)) {
-      $gname_exists = true;
-      $is_error = true;
-  }
-  if (empty($gadmin_uids)) {
-      $gadmins_empty = true;
-      $is_error = true;
-  }
-  if ($is_error) {
-      $groups_show = false;
-      break;
-  }
-  if (!$admin_xgroup_handler->createGroup($gname, $gdesc, $gadmin_uids, $gilimit, $gxlimit, $gslimit * 1000 * 1000)) {
-      xoonips_group_error('editgroups.php', 'insert');
-  }
-  $op = '';
-  break;
+    $gid = 0;
+    if (!$xoopsGTicket->check(true, $ticket_area, false)) {
+        redirect_header('editgroups.php', 3, $xoopsGTicket->getErrors());
+        exit();
+    }
+    $gname = $formdata->getValue('post', 'gname', 's', true);
+    $gdesc = $formdata->getValue('post', 'gdesc', 's', true);
+    $gilimit = $formdata->getValue('post', 'item_number_limit', 'i', true);
+    $gxlimit = $formdata->getValue('post', 'index_number_limit', 'i', true);
+    $gslimit = $formdata->getValue('post', 'item_storage_limit', 'i', true);
+    $gadmin_uids = $formdata->getValueArray('post', 'gadmins', 'i', false);
+    $is_error = false;
+    if (in_array(strtolower($gname), $gname_system)) {
+        $gname_forbidden = true;
+        $is_error = true;
+    }
+    if ($admin_xgroup_handler->existsGroup($gname)) {
+        $gname_exists = true;
+        $is_error = true;
+    }
+    if (empty($gadmin_uids)) {
+        $gadmins_empty = true;
+        $is_error = true;
+    }
+    if ($is_error) {
+        $groups_show = false;
+        break;
+    }
+    if (!$admin_xgroup_handler->createGroup($gname, $gdesc, $gadmin_uids, $gilimit, $gxlimit, $gslimit * 1000 * 1000)) {
+        xoonips_group_error('editgroups.php', 'insert');
+    }
+    $op = '';
+    break;
 case 'delete':
-  if (!$xoopsGTicket->check(true, $ticket_area, false)) {
-      redirect_header('editgroups.php', 3, $xoopsGTicket->getErrors());
-      exit();
-  }
-  $gid = $formdata->getValue('post', 'gid', 'i', true);
-  $xg_obj = &$admin_xgroup_handler->getGroupObject($gid);
-  if (!is_object($xg_obj)) {
-      xoonips_group_error('editgroups.php', 'select');
-  }
-  if (!xoonips_group_check_perm($gid, 'delete')) {
-      xoonips_group_error('editgroups.php', 'lock_delete');
-  }
-  if (!$admin_xgroup_handler->deleteGroup($gid)) {
-      xoonips_group_error('editgroups.php', 'delete');
-  }
-  $op = '';
-  break;
+    if (!$xoopsGTicket->check(true, $ticket_area, false)) {
+        redirect_header('editgroups.php', 3, $xoopsGTicket->getErrors());
+        exit();
+    }
+    $gid = $formdata->getValue('post', 'gid', 'i', true);
+    $xg_obj = &$admin_xgroup_handler->getGroupObject($gid);
+    if (!is_object($xg_obj)) {
+        xoonips_group_error('editgroups.php', 'select');
+    }
+    if (!xoonips_group_check_perm($gid, 'delete')) {
+        xoonips_group_error('editgroups.php', 'lock_delete');
+    }
+    if (!$admin_xgroup_handler->deleteGroup($gid)) {
+        xoonips_group_error('editgroups.php', 'delete');
+    }
+    $op = '';
+    break;
 }
 
 if ($op == '') {

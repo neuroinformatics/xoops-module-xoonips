@@ -35,21 +35,21 @@ $description = _AM_XOONIPS_POLICY_POSITION_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_POLICY_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_POLICY_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket
@@ -64,14 +64,14 @@ $positions = array();
 $evenodd = 'odd';
 foreach ($posi_array as $posi_id => $posi) {
     $positions[] = array(
-    'id' => $posi_id,
-    'order' => $posi['posi_order'],
-    'title_e' => $posi['posi_title'],
-    'title_s' => $posi['posi_title'],
-    'title_js' => str_replace('&#039;', '\\\'', $posi['posi_title']),
-    'evenodd' => $evenodd,
-    'delete' => _AM_XOONIPS_LABEL_DELETE,
-  );
+        'id' => $posi_id,
+        'order' => $posi['posi_order'],
+        'title_e' => $posi['posi_title'],
+        'title_s' => $posi['posi_title'],
+        'title_js' => str_replace('&#039;', '\\\'', $posi['posi_title']),
+        'evenodd' => $evenodd,
+        'delete' => _AM_XOONIPS_LABEL_DELETE,
+    );
     $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
 }
 

@@ -57,77 +57,77 @@ if ($count > 0) {
         $new_value = &$_POST[$config->getVar('conf_name')];
         if (is_array($new_value) || $new_value != $config->getVar('conf_value')) {
             // if language has been changed
-      if (!$lang_updated && $config->getVar('conf_catid') == XOOPS_CONF && $config->getVar('conf_name') == 'language') {
-          // regenerate admin menu file
-        $xoopsConfig['language'] = $_POST[$config->getVar('conf_name')];
-          xoops_module_write_admin_menu(xoops_module_get_admin_menu());
-          $lang_updated = true;
-      }
-
-      // if default theme has been changed
-      if (!$theme_updated && $config->getVar('conf_catid') == XOOPS_CONF && $config->getVar('conf_name') == 'theme_set') {
-          $member_handler = &xoops_gethandler('member');
-          $member_handler->updateUsersByField('theme', $_POST[$config->getVar('conf_name')]);
-          $theme_updated = true;
-      }
-
-      // if default template set has been changed
-      if (!$tpl_updated && $config->getVar('conf_catid') == XOOPS_CONF && $config->getVar('conf_name') == 'template_set') {
-          // clear cached/compiled files and regenerate them if default theme has been changed
-        if ($xoopsConfig['template_set'] != $_POST[$config->getVar('conf_name')]) {
-            $newtplset = $_POST[$config->getVar('conf_name')];
-
-          // clear all compiled and cachedfiles
-          $xoopsTpl->clear_compiled_tpl();
-
-          // generate compiled files for the new theme
-          // block files only for now..
-          $tplfile_handler = &xoops_gethandler('tplfile');
-            $dtemplates = &$tplfile_handler->find('default', 'block');
-            $dcount = count($dtemplates);
-
-          // need to do this to pass to xoops_template_touch function
-          $GLOBALS['xoopsConfig']['template_set'] = $newtplset;
-
-            for ($i = 0; $i < $dcount; ++$i) {
-                $found = &$tplfile_handler->find($newtplset, 'block', $dtemplates[$i]->getVar('tpl_refid'), null);
-                if (count($found) > 0) {
-                    // template for the new theme found, compile it
-              xoops_template_touch($found[0]->getVar('tpl_id'));
-                } else {
-                    // not found, so compile 'default' template file
-              xoops_template_touch($dtemplates[$i]->getVar('tpl_id'));
-                }
+            if (!$lang_updated && $config->getVar('conf_catid') == XOOPS_CONF && $config->getVar('conf_name') == 'language') {
+                // regenerate admin menu file
+                $xoopsConfig['language'] = $_POST[$config->getVar('conf_name')];
+                xoops_module_write_admin_menu(xoops_module_get_admin_menu());
+                $lang_updated = true;
             }
 
-          // generate image cache files from image binary data, save them under cache/
-          $image_handler = &xoops_gethandler('imagesetimg');
-            $imagefiles = &$image_handler->getObjects(new Criteria('tplset_name', $newtplset), true);
-            foreach (array_keys($imagefiles) as $i) {
-                if (!$fp = fopen(XOOPS_CACHE_PATH.'/'.$newtplset.'_'.$imagefiles[$i]->getVar('imgsetimg_file'), 'wb')) {
-                } else {
-                    fwrite($fp, $imagefiles[$i]->getVar('imgsetimg_body'));
-                    fclose($fp);
-                }
+            // if default theme has been changed
+            if (!$theme_updated && $config->getVar('conf_catid') == XOOPS_CONF && $config->getVar('conf_name') == 'theme_set') {
+                $member_handler = &xoops_gethandler('member');
+                $member_handler->updateUsersByField('theme', $_POST[$config->getVar('conf_name')]);
+                $theme_updated = true;
             }
-        }
-          $tpl_updated = true;
-      }
 
-      // add read permission for the start module to all groups
-      if (!$startmod_updated && $new_value != '--' && $config->getVar('conf_catid') == XOOPS_CONF && $config->getVar('conf_name') == 'startpage') {
-          $member_handler = &xoops_gethandler('member');
-          $groups = &$member_handler->getGroupList();
-          $moduleperm_handler = &xoops_gethandler('groupperm');
-          $module_handler = &xoops_gethandler('module');
-          $module = &$module_handler->getByDirname($new_value);
-          foreach ($groups as $groupid => $groupname) {
-              if (!$moduleperm_handler->checkRight('module_read', $module->getVar('mid'), $groupid)) {
-                  $moduleperm_handler->addRight('module_read', $module->getVar('mid'), $groupid);
-              }
-          }
-          $startmod_updated = true;
-      }
+            // if default template set has been changed
+            if (!$tpl_updated && $config->getVar('conf_catid') == XOOPS_CONF && $config->getVar('conf_name') == 'template_set') {
+                // clear cached/compiled files and regenerate them if default theme has been changed
+                if ($xoopsConfig['template_set'] != $_POST[$config->getVar('conf_name')]) {
+                    $newtplset = $_POST[$config->getVar('conf_name')];
+
+                    // clear all compiled and cachedfiles
+                    $xoopsTpl->clear_compiled_tpl();
+
+                    // generate compiled files for the new theme
+                    // block files only for now..
+                    $tplfile_handler = &xoops_gethandler('tplfile');
+                    $dtemplates = &$tplfile_handler->find('default', 'block');
+                    $dcount = count($dtemplates);
+
+                    // need to do this to pass to xoops_template_touch function
+                    $GLOBALS['xoopsConfig']['template_set'] = $newtplset;
+
+                    for ($i = 0; $i < $dcount; ++$i) {
+                        $found = &$tplfile_handler->find($newtplset, 'block', $dtemplates[$i]->getVar('tpl_refid'), null);
+                        if (count($found) > 0) {
+                            // template for the new theme found, compile it
+                            xoops_template_touch($found[0]->getVar('tpl_id'));
+                        } else {
+                            // not found, so compile 'default' template file
+                            xoops_template_touch($dtemplates[$i]->getVar('tpl_id'));
+                        }
+                    }
+
+                    // generate image cache files from image binary data, save them under cache/
+                    $image_handler = &xoops_gethandler('imagesetimg');
+                    $imagefiles = &$image_handler->getObjects(new Criteria('tplset_name', $newtplset), true);
+                    foreach (array_keys($imagefiles) as $i) {
+                        if (!$fp = fopen(XOOPS_CACHE_PATH.'/'.$newtplset.'_'.$imagefiles[$i]->getVar('imgsetimg_file'), 'wb')) {
+                        } else {
+                            fwrite($fp, $imagefiles[$i]->getVar('imgsetimg_body'));
+                            fclose($fp);
+                        }
+                    }
+                }
+                $tpl_updated = true;
+            }
+
+            // add read permission for the start module to all groups
+            if (!$startmod_updated && $new_value != '--' && $config->getVar('conf_catid') == XOOPS_CONF && $config->getVar('conf_name') == 'startpage') {
+                $member_handler = &xoops_gethandler('member');
+                $groups = &$member_handler->getGroupList();
+                $moduleperm_handler = &xoops_gethandler('groupperm');
+                $module_handler = &xoops_gethandler('module');
+                $module = &$module_handler->getByDirname($new_value);
+                foreach ($groups as $groupid => $groupname) {
+                    if (!$moduleperm_handler->checkRight('module_read', $module->getVar('mid'), $groupid)) {
+                        $moduleperm_handler->addRight('module_read', $module->getVar('mid'), $groupid);
+                    }
+                }
+                $startmod_updated = true;
+            }
             $config->setConfValueForInput($new_value);
             $config_handler->insertConfig($config);
         }

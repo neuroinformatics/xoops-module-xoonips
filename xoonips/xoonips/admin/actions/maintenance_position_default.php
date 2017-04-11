@@ -35,21 +35,21 @@ $description = _AM_XOONIPS_MAINTENANCE_POSITION_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket
@@ -92,12 +92,12 @@ foreach ($xusers_objs as $xusers_obj) {
     $name = $textutil->html_special_chars($xusers_obj->getExtraVar('name'));
     $uname = $textutil->html_special_chars($xusers_obj->getExtraVar('uname'));
     $positions[] = array(
-    'uid' => $uid,
-    'position' => $posi,
-    'name' => ($name == '') ? $uname : $name,
-    'order' => $order,
-    'evenodd' => $evenodd,
-  );
+        'uid' => $uid,
+        'position' => $posi,
+        'name' => ($name == '') ? $uname : $name,
+        'order' => $order,
+        'evenodd' => $evenodd,
+    );
     $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
 }
 $is_user_empty = (count($positions) == 0);

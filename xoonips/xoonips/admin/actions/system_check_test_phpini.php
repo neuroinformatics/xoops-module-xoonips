@@ -42,14 +42,14 @@ function inival2num($ini)
     if (!is_numeric($str)) {
         $ratio = 1;
         switch (strtoupper($str)) {
-    case 'G':
-      $ratio *= 1024.0;
-    case 'M':
-      $ratio *= 1024.0;
-    case 'K':
-      $ratio *= 1024.0;
-      break;
-    }
+        case 'G':
+            $ratio *= 1024.0;
+        case 'M':
+            $ratio *= 1024.0;
+        case 'K':
+            $ratio *= 1024.0;
+            break;
+        }
         $num = floatval($num) * $ratio;
     } else {
         $num = floatval($ini);
@@ -76,8 +76,8 @@ function inival2bool($ini)
 function xoonips_admin_system_check_phpini(&$category)
 {
     // general settings
-  // -- default_mimetype
-  $name = 'default_mimetype';
+    // -- default_mimetype
+    $name = 'default_mimetype';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);
@@ -91,8 +91,8 @@ function xoonips_admin_system_check_phpini(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // -- default_charset
-  $name = 'default_charset';
+    // -- default_charset
+    $name = 'default_charset';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);
@@ -108,8 +108,8 @@ function xoonips_admin_system_check_phpini(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // -- register_globals
-  $name = 'register_globals';
+    // -- register_globals
+    $name = 'register_globals';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);
@@ -124,8 +124,8 @@ function xoonips_admin_system_check_phpini(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // -- magic_quotes_gpc
-  $name = 'magic_quotes_gpc';
+    // -- magic_quotes_gpc
+    $name = 'magic_quotes_gpc';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);
@@ -140,8 +140,8 @@ function xoonips_admin_system_check_phpini(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // -- allow_url_fopen
-  $name = 'allow_url_fopen';
+    // -- allow_url_fopen
+    $name = 'allow_url_fopen';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);
@@ -156,8 +156,8 @@ function xoonips_admin_system_check_phpini(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // -- memory limit
-  $name = 'memory_limit';
+    // -- memory limit
+    $name = 'memory_limit';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);
@@ -165,11 +165,11 @@ function xoonips_admin_system_check_phpini(&$category)
     $unlimit['memory_limit'] = false;
     if ($ini == '') {
         // disable to limit memory
-    $res->setResult(_XASC_STATUS_OK, '(disable memory limit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
+        $res->setResult(_XASC_STATUS_OK, '(disable memory limit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
         $unlimit['memory_limit'] = true;
     } elseif ($memory_limit <= -1) {
         // disable to limit memory
-    $res->setResult(_XASC_STATUS_OK, '(unlimit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
+        $res->setResult(_XASC_STATUS_OK, '(unlimit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
         $unlimit['memory_limit'] = true;
     } else {
         if ($memory_limit >= inival2num('128M')) {
@@ -183,8 +183,8 @@ function xoonips_admin_system_check_phpini(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // -- post_max_size
-  $name = 'post_max_size';
+    // -- post_max_size
+    $name = 'post_max_size';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);
@@ -193,11 +193,11 @@ function xoonips_admin_system_check_phpini(&$category)
     if ($unlimit['memory_limit'] || $memory_limit >= $post_max_size) {
         if ($ini == '') {
             // disable to limit memory
-      $res->setResult(_XASC_STATUS_OK, '(disable memory limit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
+            $res->setResult(_XASC_STATUS_OK, '(disable memory limit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
             $unlimit['post_max_size'] = true;
         } elseif ($post_max_size <= -1) {
             // unlimit memory
-      $res->setResult(_XASC_STATUS_OK, '(unlimit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
+            $res->setResult(_XASC_STATUS_OK, '(unlimit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
             $unlimit['post_max_size'] = true;
         } elseif ($post_max_size >= inival2num('128M')) {
             $res->setResult(_XASC_STATUS_OK, $ini, _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
@@ -214,9 +214,9 @@ function xoonips_admin_system_check_phpini(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // file uploads
-  // -- file uploads
-  $name = 'file_uploads';
+    // file uploads
+    // -- file uploads
+    $name = 'file_uploads';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);
@@ -231,8 +231,8 @@ function xoonips_admin_system_check_phpini(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // -- upload_max_filesize
-  $name = 'upload_max_filesize';
+    // -- upload_max_filesize
+    $name = 'upload_max_filesize';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);
@@ -241,7 +241,7 @@ function xoonips_admin_system_check_phpini(&$category)
     if ($unlimit['post_max_size'] || $post_max_size >= $upload_max_filesize) {
         if ($ini == '' || $upload_max_filesize <= -1) {
             // unlimit memory size
-      $res->setResult(_XASC_STATUS_OK, '(unlimit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
+            $res->setResult(_XASC_STATUS_OK, '(unlimit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
         } elseif ($upload_max_filesize >= inival2num('128M')) {
             $res->setResult(_XASC_STATUS_OK, $ini, _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
         } else {
@@ -257,9 +257,9 @@ function xoonips_admin_system_check_phpini(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // session extension
-  // -- session.use_trans_sid
-  $name = 'session.use_trans_sid';
+    // session extension
+    // -- session.use_trans_sid
+    $name = 'session.use_trans_sid';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);
@@ -274,8 +274,8 @@ function xoonips_admin_system_check_phpini(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // -- session.use_cookies
-  $name = 'session.use_cookies';
+    // -- session.use_cookies
+    $name = 'session.use_cookies';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);
@@ -290,8 +290,8 @@ function xoonips_admin_system_check_phpini(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // -- session.use_only_cookies
-  $name = 'session.use_only_cookies';
+    // -- session.use_only_cookies
+    $name = 'session.use_only_cookies';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);

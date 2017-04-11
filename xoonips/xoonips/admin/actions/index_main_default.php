@@ -37,9 +37,9 @@ include './menu.php';
 $menu = array();
 foreach ($adminmenu as $item) {
     $menu[] = array(
-    'label' => $item['title'],
-    'url' => $xoonips_admin['mod_url'].'/'.$item['link'],
-  );
+        'label' => $item['title'],
+        'url' => $xoonips_admin['mod_url'].'/'.$item['link'],
+    );
 }
 
 // templates

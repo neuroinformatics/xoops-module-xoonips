@@ -35,21 +35,21 @@ $description = _AM_XOONIPS_SYSTEM_XOOPS_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_SYSTEM_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_SYSTEM_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket
@@ -70,8 +70,8 @@ function &get_xoonips_unregistered_users()
     $users_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
     $xusers_handler = &xoonips_getormhandler('xoonips', 'users');
     $criteria = new CriteriaElement();
-  //  $criteria = new Criteria( 'level', '0', '>' );
-  $criteria->setSort('uname');
+    // $criteria = new Criteria( 'level', '0', '>' );
+    $criteria->setSort('uname');
     $users_objs = &$users_handler->getObjects($criteria);
     $users = array();
     $evenodd = 'odd';
@@ -128,13 +128,13 @@ function render_zombie_list()
     global $tmpl;
     global $xoopsGTicket;
 
-  // set token
-  $ticket_area = 'xoonips_admin_system_xoops_zombielist';
+    // set token
+    $ticket_area = 'xoonips_admin_system_xoops_zombielist';
     $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
     $tmpl->addVar('main', 'ZOMBIELIST_TOKEN_TICKET', $token_ticket);
 
-  // assign labels
-  $tmpl->addVar('main', 'ZOMBIELIST_TITLE', _AM_XOONIPS_SYSTEM_XOOPS_ZOMBIELIST_TITLE);
+    // assign labels
+    $tmpl->addVar('main', 'ZOMBIELIST_TITLE', _AM_XOONIPS_SYSTEM_XOOPS_ZOMBIELIST_TITLE);
     $tmpl->addVar('main', 'ZOMBIELIST_DESC', _AM_XOONIPS_SYSTEM_XOOPS_ZOMBIELIST_DESC);
     $tmpl->addVar('main', 'LABEL_UID', _AM_XOONIPS_LABEL_UID);
     $tmpl->addVar('main', 'ZOMBIELIST_LABEL_ITEMCOUNT', _AM_XOONIPS_SYSTEM_XOOPS_ZOMBIELIST_LABEL_ITEMCOUNT);
@@ -226,8 +226,8 @@ function get_uname_by_index_title($uid, $fmt)
 {
     $index_handler = &xoonips_getormhandler('xoonips', 'index');
     $title_handler = &xoonips_getormhandler('xoonips', 'title');
-  // get root index
-  $criteria = new CriteriaCompo(new Criteria('uid', $uid));
+    // get root index
+    $criteria = new CriteriaCompo(new Criteria('uid', $uid));
     $criteria->add(new Criteria('parent_index_id', IID_ROOT));
     $criteria->add(new Criteria('open_level', OL_PRIVATE));
     $index_objs = &$index_handler->getObjects($criteria);
@@ -236,8 +236,8 @@ function get_uname_by_index_title($uid, $fmt)
     }
     $index_obj = &$index_objs[0];
     $index_id = $index_obj->get('index_id');
-  // get title
-  $criteria = new CriteriaCompo(new Criteria('item_id', $index_id));
+    // get title
+    $criteria = new CriteriaCompo(new Criteria('item_id', $index_id));
     $criteria->add(new Criteria('title_id', DEFAULT_INDEX_TITLE_OFFSET));
     $title_objs = &$title_handler->getObjects($criteria);
     if (count($title_objs) != 1) {

@@ -35,21 +35,21 @@ $description = _AM_XOONIPS_POLICY_GROUP_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_POLICY_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_POLICY_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket
@@ -60,21 +60,21 @@ $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 // get configs
 $config_keys = array();
 $initvals_config_keys = array(
-  'group_item_number_limit' => array(
-    'title' => _AM_XOONIPS_LABEL_ITEM_NUMBER_LIMIT,
-    'desc' => _AM_XOONIPS_POLICY_GROUP_INITIAL_MAX_ITEM_DESC,
-    'type' => 'i',
-  ),
-  'group_index_number_limit' => array(
-    'title' => _AM_XOONIPS_LABEL_INDEX_NUMBER_LIMIT,
-    'desc' => _AM_XOONIPS_POLICY_GROUP_INITIAL_MAX_INDEX_DESC,
-    'type' => 'i',
-  ),
-  'group_item_storage_limit' => array(
-    'title' => _AM_XOONIPS_LABEL_ITEM_STORAGE_LIMIT,
-    'desc' => _AM_XOONIPS_POLICY_GROUP_INITIAL_MAX_DISK_DESC,
-    'type' => 'f',
-  ),
+    'group_item_number_limit' => array(
+        'title' => _AM_XOONIPS_LABEL_ITEM_NUMBER_LIMIT,
+        'desc' => _AM_XOONIPS_POLICY_GROUP_INITIAL_MAX_ITEM_DESC,
+        'type' => 'i',
+    ),
+    'group_index_number_limit' => array(
+        'title' => _AM_XOONIPS_LABEL_INDEX_NUMBER_LIMIT,
+        'desc' => _AM_XOONIPS_POLICY_GROUP_INITIAL_MAX_INDEX_DESC,
+        'type' => 'i',
+    ),
+    'group_item_storage_limit' => array(
+        'title' => _AM_XOONIPS_LABEL_ITEM_STORAGE_LIMIT,
+        'desc' => _AM_XOONIPS_POLICY_GROUP_INITIAL_MAX_DISK_DESC,
+        'type' => 'f',
+    ),
 );
 foreach ($initvals_config_keys as $key => $value) {
     $config_keys[$key] = $value['type'];

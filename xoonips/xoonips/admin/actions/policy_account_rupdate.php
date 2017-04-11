@@ -39,16 +39,8 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 
 // get variables
 $post_keys = array(
-  'activate_user' => array(
-    'i',
-    false,
-    true,
-  ),
-  'certify_user' => array(
-    's',
-    false,
-    true,
-  ),
+    'activate_user' => array('i', false, true),
+    'certify_user' => array('s', false, true),
 );
 $post_vals = xoonips_admin_get_requests('post', $post_keys);
 
@@ -56,13 +48,13 @@ $post_vals = xoonips_admin_get_requests('post', $post_keys);
 $config_handler = &xoops_gethandler('config');
 if (defined('XOOPS_CUBE_LEGACY')) {
     // for Cube 2.1
-  $module_handler = &xoops_gethandler('module');
+    $module_handler = &xoops_gethandler('module');
     $user_module = &$module_handler->getByDirname('user');
     $user_mid = $user_module->get('mid');
     $criteria = new CriteriaCompo(new Criteria('conf_modid', $user_mid));
 } else {
     // for Cube 2.0
-  $criteria = new CriteriaCompo(new Criteria('conf_catid', XOOPS_CONF_USER));
+    $criteria = new CriteriaCompo(new Criteria('conf_catid', XOOPS_CONF_USER));
 }
 $criteria->add(new Criteria('conf_name', 'activation_type'));
 $xoopsUserConfigs = &$config_handler->getConfigs($criteria);

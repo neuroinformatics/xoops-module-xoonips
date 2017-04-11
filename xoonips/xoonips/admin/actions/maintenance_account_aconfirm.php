@@ -35,26 +35,26 @@ $title = _AM_XOONIPS_MAINTENANCE_ACCOUNT_ACONFIRM_TITLE;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_ACCOUNT_TITLE,
-    'url' => $xoonips_admin['mypage_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_ACCOUNT_TITLE,
+        'url' => $xoonips_admin['mypage_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket

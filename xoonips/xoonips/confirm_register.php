@@ -84,23 +84,20 @@ $title = $formdata->getValue('post', 'title', 's', false);
 if ($title == '') {
     //title is not filled
     $op = '';
-    $system_message = '<span style="color: red;">'
-        ._MD_XOONIPS_ITEM_TITLE_REQUIRED.'</span>';
+    $system_message = '<span style="color: red;">'._MD_XOONIPS_ITEM_TITLE_REQUIRED.'</span>';
 }
 
 //check private_item_number_limit
 if (available_space_of_private_item() == 0) {
     // warning, if not enough to store items
     $op = '';
-    $system_message .= '<span style="color: red;">'
-        ._MD_XOONIPS_ITEM_WARNING_ITEM_NUMBER_LIMIT.'</span><br />';
+    $system_message .= '<span style="color: red;">'._MD_XOONIPS_ITEM_WARNING_ITEM_NUMBER_LIMIT.'</span><br />';
 }
 
 //check private_item_storage_limit
 if (!check_private_item_storage_limit()) {
     $op = '';
-    $system_message .= '<span style="color: red;">'
-        ._MD_XOONIPS_ITEM_WARNING_ITEM_STORAGE_LIMIT.'</span><br />';
+    $system_message .= '<span style="color: red;">'._MD_XOONIPS_ITEM_WARNING_ITEM_STORAGE_LIMIT.'</span><br />';
 }
 
 //check group_item_number_limit
@@ -116,7 +113,7 @@ foreach ($checked_xids as $xid) {
 foreach (array_unique($gids) as $gid) {
     if (available_space_of_group_item($gid) == 0) {
         // warning, if not enough to store items
-    $op = '';
+        $op = '';
         $xg_obj = &$xgroup_handler->getGroupObject($gid);
         if (is_object($xg_obj)) {
             $system_message .= '<span style="color: red;">'._MD_XOONIPS_ITEM_WARNING_ITEM_NUMBER_LIMIT.'(group='.$xg_obj->getVar('gname', 's').')</span><br />';
@@ -182,8 +179,7 @@ if (XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') {
 }
 //check required field(detail information)
 $msg = '';
-eval('$param_check_result = '
-      .$modname.'CheckRegisterParameters( $msg );');
+eval('$param_check_result = '.$modname.'CheckRegisterParameters( $msg );');
 if (!$param_check_result) {
     $op = '';
 }
@@ -227,16 +223,14 @@ if (isset($op) && $op == 'register') {
             if ($index_item_link->get('certify_state') == CERTIFY_REQUIRED) {
                 $index_id = $index_item_link->get('index_id');
                 $index = $index_handler->get($index_id);
-                if ($index->get('open_level') == OL_PUBLIC
-                     || $index->get('open_level') == OL_GROUP_ONLY) {
+                if ($index->get('open_level') == OL_PUBLIC || $index->get('open_level') == OL_GROUP_ONLY) {
                     $item_basic_handler->lockItemAndIndexes($item_id, $index_id);
                     $certify_required = true;
                 }
             }
         }
         if ($certify_required) {
-            redirect_header('register.php', 5, "Succeed\n<br />".
-                            _MD_XOONIPS_ITEM_NEED_TO_BE_CERTIFIED);
+            redirect_header('register.php', 5, "Succeed\n<br />"._MD_XOONIPS_ITEM_NEED_TO_BE_CERTIFIED);
         } else {
             redirect_header('register.php', 3, 'Succeed');
         }
@@ -249,8 +243,7 @@ if (isset($op) && $op == 'register') {
         }
 
         $msg = '';
-        eval('$param_check_result = '
-              .$modname.'CheckRegisterParameters( $msg );');
+        eval('$param_check_result = '.$modname.'CheckRegisterParameters( $msg );');
         $system_message = $system_message.$msg;
     }
 

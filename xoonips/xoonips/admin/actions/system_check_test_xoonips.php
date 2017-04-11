@@ -36,18 +36,16 @@ function xoonips_admin_system_check_xoonips(&$category)
 
     $is_windows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
 
-  // version
-  $name = 'XooNIps version';
+    // version
+    $name = 'XooNIps version';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $version = sprintf('%3.2f', $module->getVar('version', 's') / 100.0);
     $res->setResult(_XASC_STATUS_OK, $version, _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
     $category->registerResult($res);
     unset($res);
 
-  // file upload dir
-  $keys = array(
-    'upload_dir' => 's',
-  );
+    // file upload dir
+    $keys = array('upload_dir' => 's');
     $vals = xoonips_admin_get_configs($keys, 'n');
     $upload_dir = $vals['upload_dir'];
     $name = 'File upload directory';
@@ -65,58 +63,58 @@ function xoonips_admin_system_check_xoonips(&$category)
         $ans['message'] = 'You have to set the file upload directory';
         $ans['error'] = _XASC_STATUS_FAIL;
     }
-  // -- check absolute directory
-  if ($ans['error'] == _XASC_STATUS_OK) {
-      if ($is_windows) {
-          // trim drive letter
-      $upload_dir = preg_replace('/^[a-zA-Z]:/', '', $upload_dir);
-      // use '/' file separator
-      $upload_dir = str_replace('\\', '/', $upload_dir);
-      }
-      if ($upload_dir[0] != '/') {
-          $ans['status'] = _XASC_STATUS_FAIL;
-          $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
-          $ans['message'] = 'File upload directory must be absolute path';
-          $ans['error'] = _XASC_STATUS_FAIL;
-      }
-  }
-  // -- check temporary directory
-  if ($ans['error'] == _XASC_STATUS_OK) {
-      if (preg_match('/^(\\/var\\/tmp|\\/tmp)(\\/.*)?$/', $upload_dir)) {
-          $ans['status'] = _XASC_STATUS_FAIL;
-          $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
-          $ans['message'] = 'File upload directory should not locate under temporary directory';
-          $ans['error'] = _XASC_STATUS_FAIL;
-      }
-  }
-  // -- check XOOPS_ROOT_PATH
-  if ($ans['error'] == _XASC_STATUS_OK) {
-      $pos = strpos($upload_dir, XOOPS_ROOT_PATH);
-      if ($pos === 0) {
-          $ans['status'] = _XASC_STATUS_FAIL;
-          $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
-          $ans['message'] = 'File upload directory should not locate under XOOPS_ROOT_PATH';
-          $ans['error'] = _XASC_STATUS_FAIL;
-      }
-  }
-  // -- check directory
-  if ($ans['error'] == _XASC_STATUS_OK) {
-      if (!is_dir($upload_dir)) {
-          $ans['status'] = _XASC_STATUS_FAIL;
-          $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
-          $ans['message'] = 'File upload directory not found';
-          $ans['error'] = _XASC_STATUS_FAIL;
-      }
-  }
-  // -- check permission
-  if ($ans['error'] == _XASC_STATUS_OK) {
-      if (!is_writable($upload_dir) || !is_readable($upload_dir) || (!$is_windows && !is_executable($upload_dir))) {
-          $ans['status'] = _XASC_STATUS_FAIL;
-          $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
-          $ans['message'] = 'File upload directory has invalid permission';
-          $ans['error'] = _XASC_STATUS_FAIL;
-      }
-  }
+    // -- check absolute directory
+    if ($ans['error'] == _XASC_STATUS_OK) {
+        if ($is_windows) {
+            // trim drive letter
+            $upload_dir = preg_replace('/^[a-zA-Z]:/', '', $upload_dir);
+            // use '/' file separator
+            $upload_dir = str_replace('\\', '/', $upload_dir);
+        }
+        if ($upload_dir[0] != '/') {
+            $ans['status'] = _XASC_STATUS_FAIL;
+            $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
+            $ans['message'] = 'File upload directory must be absolute path';
+            $ans['error'] = _XASC_STATUS_FAIL;
+        }
+    }
+    // -- check temporary directory
+    if ($ans['error'] == _XASC_STATUS_OK) {
+        if (preg_match('/^(\\/var\\/tmp|\\/tmp)(\\/.*)?$/', $upload_dir)) {
+            $ans['status'] = _XASC_STATUS_FAIL;
+            $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
+            $ans['message'] = 'File upload directory should not locate under temporary directory';
+            $ans['error'] = _XASC_STATUS_FAIL;
+        }
+    }
+    // -- check XOOPS_ROOT_PATH
+    if ($ans['error'] == _XASC_STATUS_OK) {
+        $pos = strpos($upload_dir, XOOPS_ROOT_PATH);
+        if ($pos === 0) {
+            $ans['status'] = _XASC_STATUS_FAIL;
+            $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
+            $ans['message'] = 'File upload directory should not locate under XOOPS_ROOT_PATH';
+            $ans['error'] = _XASC_STATUS_FAIL;
+        }
+    }
+    // -- check directory
+    if ($ans['error'] == _XASC_STATUS_OK) {
+        if (!is_dir($upload_dir)) {
+            $ans['status'] = _XASC_STATUS_FAIL;
+            $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
+            $ans['message'] = 'File upload directory not found';
+            $ans['error'] = _XASC_STATUS_FAIL;
+        }
+    }
+    // -- check permission
+    if ($ans['error'] == _XASC_STATUS_OK) {
+        if (!is_writable($upload_dir) || !is_readable($upload_dir) || (!$is_windows && !is_executable($upload_dir))) {
+            $ans['status'] = _XASC_STATUS_FAIL;
+            $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
+            $ans['message'] = 'File upload directory has invalid permission';
+            $ans['error'] = _XASC_STATUS_FAIL;
+        }
+    }
     $res->setResult($ans['status'], $ans['label'], $ans['result']);
     if (!empty($ans['message'])) {
         $res->setMessage($ans['message']);
@@ -127,10 +125,8 @@ function xoonips_admin_system_check_xoonips(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // magic file path
-  $keys = array(
-    'magic_file_path' => 's',
-  );
+    // magic file path
+    $keys = array('magic_file_path' => 's');
     $vals = xoonips_admin_get_configs($keys, 'n');
     $magic_file_path = $vals['magic_file_path'];
     $name = 'Magic file path';
@@ -180,5 +176,5 @@ function xoonips_admin_system_check_xoonips(&$category)
     $category->registerResult($res);
     unset($res);
 
-  // TODO: proxy
+    // TODO: proxy
 }

@@ -93,29 +93,29 @@ foreach ($item_ids as $item_id) {
         $index_obj = &$index_handler->get($xid);
         $open_level = $index_obj->get('open_level');
         switch ($open_level) {
-    case OL_PRIVATE:
-      // delete index item link
-      $index_item_link_handler->delete($index_item_link_obj);
-      break;
-    case OL_GROUP_ONLY:
-      // join old user joined group
-      $gid = $index_obj->get('gid');
-      if (!$admin_xgroup_handler->isGroupMember($to_uid, $gid)) {
-          $admin_xgroup_handler->addUserToXooNIpsGroup($gid, $to_uid, false);
-      }
-      break;
-    case OL_PUBLIC:
-      // nothing to do
-      break;
+        case OL_PRIVATE:
+            // delete index item link
+            $index_item_link_handler->delete($index_item_link_obj);
+            break;
+        case OL_GROUP_ONLY:
+            // join old user joined group
+            $gid = $index_obj->get('gid');
+            if (!$admin_xgroup_handler->isGroupMember($to_uid, $gid)) {
+                $admin_xgroup_handler->addUserToXooNIpsGroup($gid, $to_uid, false);
+            }
+            break;
+        case OL_PUBLIC:
+            // nothing to do
+            break;
+        }
     }
-    }
-  // added new index item link to $to_xid
-  $index_item_link_handler->add($to_xid, $item_id, NOT_CERTIFIED);
-  // change item owner to $to_uid
-  $item_basic_obj->set('uid', $to_uid);
+    // added new index item link to $to_xid
+    $index_item_link_handler->add($to_xid, $item_id, NOT_CERTIFIED);
+    // change item owner to $to_uid
+    $item_basic_obj->set('uid', $to_uid);
     $item_basic_handler->insert($item_basic_obj);
-  // TODO: append change logs
-  $event_handler->recordRequestTransferItemEvent($item_id, $to_uid);
+    // TODO: append change logs
+    $event_handler->recordRequestTransferItemEvent($item_id, $to_uid);
     $event_handler->recordTransferItemEvent($item_id, $to_xid, $to_uid);
 }
 

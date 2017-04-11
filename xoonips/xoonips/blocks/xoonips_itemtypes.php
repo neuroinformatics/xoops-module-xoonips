@@ -34,28 +34,28 @@ function b_xoonips_itemtypes_show()
 {
     global $xoopsUser;
 
-  // hide block if user is guest and public index viewing policy is 'platform'
-  if (!is_object($xoopsUser)) {
-      $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
-      $target_user = $xconfig_handler->getValue('public_item_target_user');
-      if ($target_user != 'all') {
-          // 'platform'
-      return false;
-      }
-  }
+    // hide block if user is guest and public index viewing policy is 'platform'
+    if (!is_object($xoopsUser)) {
+        $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+        $target_user = $xconfig_handler->getValue('public_item_target_user');
+        if ($target_user != 'all') {
+            // 'platform'
+        return false;
+        }
+    }
 
     $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // hide block if user is invalid xoonips user
-  $xsession_handler = &xoonips_getormhandler('xoonips', 'session');
+    // hide block if user is invalid xoonips user
+    $xsession_handler = &xoonips_getormhandler('xoonips', 'session');
     if (!$xsession_handler->validateUser($uid, false)) {
         return false;
     }
 
     require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
 
-  // get installed itemtypes
-  $block = array();
+    // get installed itemtypes
+    $block = array();
     $block['explain'] = array();
     $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
     $item_type_objs = &$item_type_handler->getObjectsSortByWeight();
@@ -68,7 +68,7 @@ function b_xoonips_itemtypes_show()
         $fname = $name.'GetTopBlock';
         if (function_exists($fname)) {
             // call xxxGetTopBlock function in view.php
-      $itemtype = $item_type_obj->getVarArray('s');
+            $itemtype = $item_type_obj->getVarArray('s');
             $html = $fname($itemtype);
             if (!empty($html)) {
                 $block['explain'][] = $html;
@@ -77,7 +77,7 @@ function b_xoonips_itemtypes_show()
     }
     if (empty($block['explain'])) {
         // visible itemtype not found
-    return false;
+        return false;
     }
 
     return $block;

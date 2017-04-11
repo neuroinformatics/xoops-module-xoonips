@@ -31,11 +31,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
 
 // get variables
 $get_keys = array(
-  'uid' => array(
-    'i',
-    false,
-    true,
-  ),
+  'uid' => array('i', false, true),
 );
 $get_vals = xoonips_admin_get_requests('get', $get_keys);
 $uid = $get_vals['uid'];

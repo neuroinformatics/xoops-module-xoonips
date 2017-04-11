@@ -43,11 +43,7 @@ $text = 'Button';
 $text_shadow = false;
 $font_size = 8;
 $font_angle = 0;
-$font_color = array(
-  0,
-  0,
-  0,
-);
+$font_color = array(0, 0, 0);
 $font_file = 'default.ttf';
 $padding_x = 10;
 $padding_y = 6;
@@ -59,25 +55,25 @@ $formdata = &xoonips_getutility('formdata');
 $mode = $formdata->getValue('get', 'mode', 'n', false, $background_image_file);
 switch ($mode) {
 case 'normal':
-  $background_image_file = 'icon_button_normal.png';
-  break;
+    $background_image_file = 'icon_button_normal.png';
+    break;
 case 'down':
-  $background_image_file = 'icon_button_down.png';
-  break;
+    $background_image_file = 'icon_button_down.png';
+    break;
 case 'over':
-  $background_image_file = 'icon_button_over.png';
-  break;
+    $background_image_file = 'icon_button_over.png';
+    break;
 case 'focus':
-  $background_image_file = 'icon_button_focus.png';
-  break;
+    $background_image_file = 'icon_button_focus.png';
+    break;
 }
 $label = $formdata->getValue('get', 'label', 'n', false);
 if (!is_null($label)) {
     switch ($label) {
-  case 'download':
-    $text = _MD_XOONIPS_ITEM_DOWNLOAD_LABEL;
-    break;
-  }
+    case 'download':
+        $text = _MD_XOONIPS_ITEM_DOWNLOAD_LABEL;
+        break;
+    }
 }
 
 $background_image_path = __DIR__.'/'.$background_image_file;
@@ -103,8 +99,8 @@ if (!extension_loaded('gd')) {
 }
 $gdinfo = gd_info();
 $gd_required = array(
-  'FreeType Support',
-  'PNG Support',
+    'FreeType Support',
+    'PNG Support',
 );
 foreach ($gd_required as $req_type) {
     if (!$gdinfo[$req_type]) {

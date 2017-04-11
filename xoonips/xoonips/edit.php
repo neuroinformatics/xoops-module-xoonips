@@ -73,10 +73,7 @@ if (!$xoopsUser->isAdmin($xoopsModule->getVar('mid'))
 //error if item is locked
 $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
 if ($item_lock_handler->isLocked($item_id)) {
-    redirect_header(XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$item_id,
-        5, sprintf(_MD_XOONIPS_ERROR_CANNOT_EDIT_LOCKED_ITEM,
-            xoonips_get_lock_type_string(
-                $item_lock_handler->getLockType($item_id))));
+    redirect_header(XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$item_id, 5, sprintf(_MD_XOONIPS_ERROR_CANNOT_EDIT_LOCKED_ITEM, xoonips_get_lock_type_string($item_lock_handler->getLockType($item_id))));
     exit();
 }
 

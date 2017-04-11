@@ -35,21 +35,21 @@ $description = _AM_XOONIPS_MAINTENANCE_RANKING_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket
@@ -76,8 +76,8 @@ $download_fname = 'ranking'.date('YmdHis').'.zip';
 // upload
 // clear
 $config_keys = array(
-  'ranking_sum_start' => 'i',
-  'ranking_sum_last_update' => 'i',
+    'ranking_sum_start' => 'i',
+    'ranking_sum_last_update' => 'i',
 );
 $config_values = xoonips_admin_get_configs($config_keys, 'n');
 $sum_start = $config_values['ranking_sum_start'];

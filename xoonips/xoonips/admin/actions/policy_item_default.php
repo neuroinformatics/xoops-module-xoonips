@@ -38,41 +38,29 @@ $description = _AM_XOONIPS_POLICY_ITEM_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_POLICY_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array('type' => 'top', 'label' => _AM_XOONIPS_TITLE, 'url' => $xoonips_admin['admin_url'].'/'),
+    array('type' => 'link', 'label' => _AM_XOONIPS_POLICY_TITLE, 'url' => $xoonips_admin['myfile_url']),
+    array('type' => 'label', 'label' => $title, 'url' => ''),
 );
 
 // menu
 $menu = array(
-  array(
-    'label' => _AM_XOONIPS_POLICY_ITEM_PUBLIC_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=item&amp;action=public',
-  ),
-  array(
-    'label' => _AM_XOONIPS_POLICY_ITEM_TYPE_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=item&amp;action=type',
-  ),
-  array(
-    'label' => _AM_XOONIPS_POLICY_ITEM_IMEXPORT_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=item&amp;action=imexport',
-  ),
-  array(
-    'label' => _AM_XOONIPS_POLICY_ITEM_COMMENT_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=item&amp;action=comment',
-  ),
+    array(
+      'label' => _AM_XOONIPS_POLICY_ITEM_PUBLIC_TITLE,
+      'url' => $xoonips_admin['myfile_url'].'?page=item&amp;action=public',
+    ),
+    array(
+      'label' => _AM_XOONIPS_POLICY_ITEM_TYPE_TITLE,
+      'url' => $xoonips_admin['myfile_url'].'?page=item&amp;action=type',
+    ),
+    array(
+      'label' => _AM_XOONIPS_POLICY_ITEM_IMEXPORT_TITLE,
+      'url' => $xoonips_admin['myfile_url'].'?page=item&amp;action=imexport',
+    ),
+    array(
+      'label' => _AM_XOONIPS_POLICY_ITEM_COMMENT_TITLE,
+      'url' => $xoonips_admin['myfile_url'].'?page=item&amp;action=comment',
+    ),
 );
 
 // templates

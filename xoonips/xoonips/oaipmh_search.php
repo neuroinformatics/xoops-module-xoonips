@@ -48,4 +48,3 @@ if (!$action) {
     header('Location: '.XOOPS_URL.'/');
 }
 $action->action();
-exit();

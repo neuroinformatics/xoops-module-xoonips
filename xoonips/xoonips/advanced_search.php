@@ -58,7 +58,5 @@ if ($xnpsid != 0) {
 $xoopsOption['template_main'] = 'xoonips_advanced_search.html';
 
 include XOOPS_ROOT_PATH.'/header.php';
-
 include 'include/advanced_search.inc.php';
-
 include XOOPS_ROOT_PATH.'/footer.php';

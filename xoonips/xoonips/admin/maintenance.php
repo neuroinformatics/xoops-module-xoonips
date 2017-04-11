@@ -34,50 +34,22 @@ include 'actions/common.inc.php';
 $pages = array();
 $pages['main'] = array();
 $pages['account'] = array(
-  'get' => array(
-    'modify',
-    'add',
-    'dconfirm',
-  ),
-  'post' => array(
-    'update',
-    'activate',
-    'delete',
-  ),
+    'get' => array('modify', 'add', 'dconfirm'),
+    'post' => array('update', 'activate', 'delete'),
 );
 $pages['item'] = array(
-  'get' => array(
-    'withdraw',
-    'delete',
-    'transfer',
-  ),
-  'post' => array(
-    'wupdate',
-    'dupdate',
-    'transfer',
-    'tconfirm',
-    'tupdate',
-  ),
+    'get' => array('withdraw', 'delete', 'transfer'),
+    'post' => array('wupdate', 'dupdate', 'transfer', 'tconfirm', 'tupdate'),
 );
 $pages['ranking'] = array(
-  'get' => array(
-    'download',
-  ),
-  'post' => array(
-    'download',
-    'upload',
-    'clear',
-  ),
+    'get' => array('download'),
+    'post' => array('download', 'upload', 'clear'),
 );
 $pages['position'] = array(
-  'post' => array(
-    'update',
-  ),
+    'post' => array('update'),
 );
 $pages['filesearch'] = array(
-  'post' => array(
-    'rescan',
-  ),
+    'post' => array('rescan'),
 );
 $pages['oaipmh'] = array();
 

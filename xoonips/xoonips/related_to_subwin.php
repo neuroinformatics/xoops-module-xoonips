@@ -99,12 +99,9 @@ $bl['advanced_search_enable'] = false;
 $bl['search_itemtypes'] = array('all' => _MD_XOONIPS_SEARCH_ALL,
                                  'basic' => _MD_XOONIPS_SEARCH_TITLE_AND_KEYWORD, );
 $itemtype_handler = &xoonips_getormhandler('xoonips', 'item_type');
-foreach ($itemtype_handler->getObjects(new Criteria('item_type_id',
-                                                     ITID_INDEX, '!='))
-          as $itemtype) {
+foreach ($itemtype_handler->getObjects(new Criteria('item_type_id', ITID_INDEX, '!=')) as $itemtype) {
     if ($itemtype->getVar('item_type_id', 'n') != ITID_INDEX) {
-        $bl['search_itemtypes'][$itemtype->getVar('name', 's')]
-            = $itemtype->getVar('display_name', 's');
+        $bl['search_itemtypes'][$itemtype->getVar('name', 's')] = $itemtype->getVar('display_name', 's');
     }
 }
 $tpl->assign('block', $bl);
@@ -135,4 +132,3 @@ $xoopsTpl->display('db:xoonips_related_to_itemselect.html');
 
 <?php
 xoops_footer();
-?>

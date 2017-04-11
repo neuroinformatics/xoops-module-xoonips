@@ -38,44 +38,44 @@ $description = _AM_XOONIPS_POLICY_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // menu
 $menu = array(
-  array(
-    'label' => _AM_XOONIPS_POLICY_ACCOUNT_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=account',
-  ),
-  array(
-    'label' => _AM_XOONIPS_POLICY_GROUP_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=group',
-  ),
-  array(
-    'label' => _AM_XOONIPS_POLICY_ITEM_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=item',
-  ),
-  array(
-    'label' => _AM_XOONIPS_POLICY_MODERATOR_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=moderator',
-  ),
-  array(
-    'label' => _AM_XOONIPS_POLICY_POSITION_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=position',
-  ),
-  array(
-    'label' => _AM_XOONIPS_POLICY_RANKING_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=ranking',
-  ),
+    array(
+        'label' => _AM_XOONIPS_POLICY_ACCOUNT_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=account',
+    ),
+    array(
+        'label' => _AM_XOONIPS_POLICY_GROUP_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=group',
+    ),
+    array(
+        'label' => _AM_XOONIPS_POLICY_ITEM_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=item',
+    ),
+    array(
+        'label' => _AM_XOONIPS_POLICY_MODERATOR_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=moderator',
+    ),
+    array(
+        'label' => _AM_XOONIPS_POLICY_POSITION_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=position',
+    ),
+    array(
+        'label' => _AM_XOONIPS_POLICY_RANKING_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=ranking',
+    ),
 );
 
 // templates

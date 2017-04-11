@@ -41,21 +41,21 @@ $description = _AM_XOONIPS_POLICY_RANKING_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_POLICY_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_POLICY_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket
@@ -65,14 +65,14 @@ $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // get configs
 $config_keys = array(
-  'ranking_num_rows' => 'i',
-  'ranking_order' => 's',
-  'ranking_visible' => 's',
-  'ranking_new_num_rows' => 'i',
-  'ranking_new_order' => 's',
-  'ranking_new_visible' => 's',
-  'ranking_days' => 'i',
-  'ranking_days_enabled' => 's',
+    'ranking_num_rows' => 'i',
+    'ranking_order' => 's',
+    'ranking_visible' => 's',
+    'ranking_new_num_rows' => 'i',
+    'ranking_new_order' => 's',
+    'ranking_new_visible' => 's',
+    'ranking_days' => 'i',
+    'ranking_days_enabled' => 's',
 );
 $config_values = xoonips_admin_get_configs($config_keys, 'e');
 
@@ -98,7 +98,7 @@ function get_block_title($mid, $fname, $sfunc)
         $show_func = $block_obj->getVar('show_func', 'n');
         if ($func_file == $fname && $show_func == $sfunc) {
             // found
-      $block_title = $block_obj->getVar('title', 's');
+            $block_title = $block_obj->getVar('title', 's');
             break;
         }
     }
@@ -114,10 +114,10 @@ function ranking_create_array($names, $order_conf, $visible_conf)
     $ranking = array();
     for ($i = 0; $i < $cnt; ++$i) {
         $ranking[$orders[$i]] = array(
-      'id' => $i,
-      'name' => $names[$i], 'order' => $orders[$i], 'checked' => ($visibles[$i] == 1) ? 'checked="checked"' : '',
-      'up' => _AM_XOONIPS_LABEL_UP, 'down' => _AM_XOONIPS_LABEL_DOWN,
-    );
+            'id' => $i,
+            'name' => $names[$i], 'order' => $orders[$i], 'checked' => ($visibles[$i] == 1) ? 'checked="checked"' : '',
+            'up' => _AM_XOONIPS_LABEL_UP, 'down' => _AM_XOONIPS_LABEL_DOWN,
+        );
     }
     ksort($ranking);
     $evenodd = 'odd';
@@ -139,11 +139,11 @@ if ($xoonips_mid === false) {
 // >> general ranking block
 $general_ranking_title = _AM_XOONIPS_POLICY_RANKING_BLOCK_TITLE.'&nbsp;:&nbsp;'.get_block_title($xoonips_mid, 'xoonips_blocks.php', 'b_xoonips_ranking_show');
 $general_ranking_names = array(
-  _MB_XOONIPS_RANKING_VIEWED_ITEM,
-  _MB_XOONIPS_RANKING_DOWNLOADED_ITEM,
-  _MB_XOONIPS_RANKING_CONTRIBUTING_USER,
-  _MB_XOONIPS_RANKING_SEARCHED_KEYWORD,
-  _MB_XOONIPS_RANKING_CONTRIBUTED_GROUP,
+    _MB_XOONIPS_RANKING_VIEWED_ITEM,
+    _MB_XOONIPS_RANKING_DOWNLOADED_ITEM,
+    _MB_XOONIPS_RANKING_CONTRIBUTING_USER,
+    _MB_XOONIPS_RANKING_SEARCHED_KEYWORD,
+    _MB_XOONIPS_RANKING_CONTRIBUTED_GROUP,
 );
 $general_ranking = ranking_create_array($general_ranking_names, $config_values['ranking_order'], $config_values['ranking_visible']);
 $general_ranking_numrows = $config_values['ranking_num_rows'];
@@ -151,8 +151,8 @@ $general_ranking_numrows = $config_values['ranking_num_rows'];
 // >> recent ranking block
 $recent_ranking_title = _AM_XOONIPS_POLICY_RANKING_BLOCK_TITLE.'&nbsp;&nbsp;:&nbsp;&nbsp;'.get_block_title($xoonips_mid, 'xoonips_blocks.php', 'b_xoonips_ranking_new_show');
 $recent_ranking_names = array(
-  _MB_XOONIPS_RANKING_NEW_ITEM,
-  _MB_XOONIPS_RANKING_NEW_GROUP,
+    _MB_XOONIPS_RANKING_NEW_ITEM,
+    _MB_XOONIPS_RANKING_NEW_GROUP,
 );
 $recent_ranking = ranking_create_array($recent_ranking_names, $config_values['ranking_new_order'], $config_values['ranking_new_visible']);
 $recent_ranking_numrows = $config_values['ranking_new_num_rows'];

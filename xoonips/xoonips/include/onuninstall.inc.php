@@ -47,14 +47,14 @@ function xoops_module_uninstall_xoonips($xoopsMod)
     $uid = $GLOBALS['xoopsUser']->getVar('uid', 'n');
     $mid = $xoopsMod->getVar('mid', 'n');
 
-  // get xoops administration handler
-  $admin_xoops_handler = &xoonips_gethandler('xoonips', 'admin_xoops');
+    // get xoops administration handler
+    $admin_xoops_handler = &xoonips_gethandler('xoonips', 'admin_xoops');
 
-  // show original 'user' and 'login' blocks
-  $sys_blocks = array('user' => array(), 'login' => array());
+    // show original 'user' and 'login' blocks
+    $sys_blocks = array('user' => array(), 'login' => array());
     if (defined('XOOPS_CUBE_LEGACY')) {
         // for XOOPS Cube Legacy 2.1
-    $sys_blocks['user'][] = array('legacy', 'b_legacy_usermenu_show');
+        $sys_blocks['user'][] = array('legacy', 'b_legacy_usermenu_show');
         $sys_blocks['login'][] = array('user', 'b_user_login_show');
     }
     $sys_blocks['user'][] = array('system', 'b_system_user_show');

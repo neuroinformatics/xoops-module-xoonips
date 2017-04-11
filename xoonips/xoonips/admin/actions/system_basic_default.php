@@ -35,21 +35,21 @@ $description = _AM_XOONIPS_SYSTEM_BASIC_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_SYSTEM_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_SYSTEM_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket
@@ -59,9 +59,9 @@ $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // get configs
 $config_keys = array(
-  'moderator_gid' => 'i',
-  'upload_dir' => 's',
-  'magic_file_path' => 's',
+    'moderator_gid' => 'i',
+    'upload_dir' => 's',
+    'magic_file_path' => 's',
 );
 $config_values = xoonips_admin_get_configs($config_keys, 'e');
 // >> moderator_gid
@@ -73,10 +73,10 @@ $moderator_gid = array();
 foreach ($grouplist as $gid => $name) {
     $selected = ($gid == $config_values['moderator_gid']) ? 'yes' : 'no';
     $moderator_gid[] = array(
-    'label' => $name,
-    'value' => $gid,
-    'selected' => $selected,
-  );
+        'label' => $name,
+        'value' => $gid,
+        'selected' => $selected,
+    );
 }
 // >> upload_dir
 $upload_dir_title = _AM_XOONIPS_SYSTEM_BASIC_UPLOAD_DIR_TITLE;

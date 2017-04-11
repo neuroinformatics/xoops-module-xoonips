@@ -47,8 +47,8 @@ function xoonips_extra_param_restore()
     if (!empty($extra_params)) {
         return $extra_params;
     }
-  // try to get serialized extra_param request
-  $extra_param = $formdata->getValue('post', 'extra_param', 's', false);
+    // try to get serialized extra_param request
+    $extra_param = $formdata->getValue('post', 'extra_param', 's', false);
     $extra_params = @unserialize($extra_param);
     if (is_array($extra_params)) {
         return $extra_params;

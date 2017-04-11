@@ -39,16 +39,8 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 
 // get variables
 $post_keys = array(
-  'certify_item' => array(
-    's',
-    false,
-    true,
-  ),
-  'public_item_target_user' => array(
-    's',
-    false,
-    true,
-  ),
+    'certify_item' => array('s', false, true),
+    'public_item_target_user' => array('s', false, true),
 );
 $post_vals = xoonips_admin_get_requests('post', $post_keys);
 

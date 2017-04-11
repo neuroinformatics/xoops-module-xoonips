@@ -39,26 +39,10 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 
 // get requests
 $post_keys = array(
-  'proxy_host' => array(
-    's',
-    false,
-    true,
-  ),
-  'proxy_port' => array(
-    'i',
-    false,
-    true,
-  ),
-  'proxy_user' => array(
-    's',
-    false,
-    true,
-  ),
-  'proxy_pass' => array(
-    's',
-    false,
-    true,
-  ),
+    'proxy_host' => array('s', false, true),
+    'proxy_port' => array('i', false, true),
+    'proxy_user' => array('s', false, true),
+    'proxy_pass' => array('s', false, true),
 );
 $post_vals = xoonips_admin_get_requests('post', $post_keys);
 

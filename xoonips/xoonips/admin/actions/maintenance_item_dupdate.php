@@ -50,13 +50,7 @@ $langman = &xoonips_getutility('languagemanager');
 $langman->read('main.php');
 
 // get requests
-$get_keys = array(
-  'tree' => array(
-    'i',
-    true,
-    false,
-  ),
-);
+$get_keys = array('tree' => array('i', true, false));
 $get_vals = xoonips_admin_get_requests('post', $get_keys);
 $tree_ids = $get_vals['tree'];
 
@@ -65,11 +59,7 @@ function xoonips_admin_maintenance_item_delete_item($iid)
 {
     $factory = new XooNIpsLogicFactory();
     $remove_item_logic = &$factory->create('removeItem');
-    $vars = array(
-    $_SESSION['XNPSID'],
-    $iid,
-    'item_id',
-  );
+    $vars = array($_SESSION['XNPSID'], $iid, 'item_id');
     $response = new XooNIpsResponse();
     $remove_item_logic->execute($vars, $response);
 
@@ -84,7 +74,7 @@ function xoonips_admin_maintenance_item_delete_item($iid)
 function xoonips_admin_maintenance_item_unlock_item($item_id)
 {
     // unlock item
-  $index_handler = &xoonips_getormhandler('xoonips', 'index');
+    $index_handler = &xoonips_getormhandler('xoonips', 'index');
     $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
     $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
     $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
@@ -126,35 +116,35 @@ if (count($tree_ids) > 0) {
     $empty_tree_ids = false;
     $evenodd = 'odd';
 
-  // execute item delete
-  foreach ($tree_ids as $xid) {
-      $succeed = 0;
-      $failed = 0;
-      $iids = xnpitmgrListIndexItems(array($xid));
-      if ($iids === false) {
-          // no item in tree
-      continue;
-      }
-      foreach ($iids as $iid) {
-          xoonips_admin_maintenance_item_unlock_item($iid);
+    // execute item delete
+    foreach ($tree_ids as $xid) {
+        $succeed = 0;
+        $failed = 0;
+        $iids = xnpitmgrListIndexItems(array($xid));
+        if ($iids === false) {
+            // no item in tree
+            continue;
+        }
+        foreach ($iids as $iid) {
+            xoonips_admin_maintenance_item_unlock_item($iid);
 
-          if (xoonips_admin_maintenance_item_delete_item($iid)) {
-              // succeed
-        ++$succeed;
-          } else {
-              // error occured
-        ++$failed;
-          }
-      }
-      $results[] = array(
-      'id' => $xid,
-      'evenodd' => $evenodd,
-      'index' => $textutil->html_special_chars($treemap[$xid]),
-      'succeed' => $succeed,
-      'failed' => $failed,
-    );
-      $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
-  }
+            if (xoonips_admin_maintenance_item_delete_item($iid)) {
+                // succeed
+               ++$succeed;
+            } else {
+                // error occured
+                ++$failed;
+            }
+        }
+        $results[] = array(
+            'id' => $xid,
+            'evenodd' => $evenodd,
+            'index' => $textutil->html_special_chars($treemap[$xid]),
+            'succeed' => $succeed,
+            'failed' => $failed,
+            );
+        $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+    }
 }
 
 // title
@@ -162,31 +152,31 @@ $title = _AM_XOONIPS_MAINTENANCE_ITEM_DUPDATE_TITLE;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_ITEM_TITLE,
-    'url' => $xoonips_admin['mypage_url'],
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_ITEM_DELETE_TITLE,
-    'url' => $xoonips_admin['mypage_url'].'&amp;action=delete',
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_ITEM_TITLE,
+        'url' => $xoonips_admin['mypage_url'],
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_ITEM_DELETE_TITLE,
+        'url' => $xoonips_admin['mypage_url'].'&amp;action=delete',
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // templates

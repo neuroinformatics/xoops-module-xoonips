@@ -80,27 +80,27 @@ function _xnpal_insertIndexInternal($sid, $index, &$xid)
 {
     global $xoopsDB;
 
-  // 1. insert basic information (index used item_basic table)
-  // 2. insert index information (index_id must be same with item_id)
-  $iid = 0;
+    // 1. insert basic information (index used item_basic table)
+    // 2. insert index information (index_id must be same with item_id)
+    $iid = 0;
     $result = RES_ERROR;
 
-  //1.
-  $index['item_type_id'] = ITID_INDEX;
+    //1.
+    $index['item_type_id'] = ITID_INDEX;
     $index['uid'] = $index['contributor_uid'];
     $result = xnp_insert_item($sid, $index, $iid);
     if ($result == RES_OK) {
         //2.
-    $sql = 'INSERT INTO '.$xoopsDB->prefix('xoonips_index').' ( index_id, parent_index_id, uid, gid, open_level, sort_number ) values ( '
-      .$iid.','
-      .$index['parent_index_id'].','
-      .($index['open_level'] == OL_PRIVATE ? $index['owner_uid'] : 'NULL').','
-      .($index['open_level'] == OL_GROUP_ONLY ? $index['owner_gid'] : 'NULL').','
-      .$index['open_level'].','
-      .$index['sort_number'].')';
+        $sql = 'INSERT INTO '.$xoopsDB->prefix('xoonips_index').' ( index_id, parent_index_id, uid, gid, open_level, sort_number ) values ( '
+            .$iid.','
+            .$index['parent_index_id'].','
+            .($index['open_level'] == OL_PRIVATE ? $index['owner_uid'] : 'NULL').','
+            .($index['open_level'] == OL_GROUP_ONLY ? $index['owner_gid'] : 'NULL').','
+            .$index['open_level'].','
+            .$index['sort_number'].')';
         if ($result = $xoopsDB->queryF($sql)) {
             // set index id
-      $xid = $iid;
+            $xid = $iid;
             _xnpal_setLastErrorString('');
             $result = RES_OK;
         } else {
@@ -137,22 +137,21 @@ function _xnpal_updateTitles($caller, $item_id, $titles)
         $titles = array($titles);
     }
 
-  //1. remove titles
-  $sql = 'DELETE FROM '.$xoopsDB->prefix('xoonips_item_title')." WHERE item_id=${item_id} and title_id >= ".count($titles);
+    //1. remove titles
+    $sql = 'DELETE FROM '.$xoopsDB->prefix('xoonips_item_title')." WHERE item_id=${item_id} and title_id >= ".count($titles);
     $result = $xoopsDB->queryF($sql);
     if (!$result) {
         _xnpal_setLastErrorString("can't remove surplus titles in _xnpal_updateTitles(called by ${caller}) ".$xoopsDB->error()." sql=$sql at ".__LINE__.' in '.__FILE__."\n");
 
         return false;
     }
-  //3. update title and insert new title
-  $i = 0;
+    //3. update title and insert new title
+    $i = 0;
     foreach ($titles as $title) {
         $sql = 'INSERT INTO '.$xoopsDB->prefix('xoonips_item_title')." (item_id, title_id, title) values ( ${item_id}, ${i}, '".addslashes($title)."' )";
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $sql = 'UPDATE '.$xoopsDB->prefix('xoonips_item_title')." SET title='".addslashes($title)."'"
-        ." WHERE item_id=${item_id} AND title_id=${i}";
+            $sql = 'UPDATE '.$xoopsDB->prefix('xoonips_item_title')." SET title='".addslashes($title)."'"." WHERE item_id=${item_id} AND title_id=${i}";
             $result = $xoopsDB->queryF($sql);
             if (!$result) {
                 _xnpal_setLastErrorString("can't update title in _xnpal_updateTitles(called by ${caller}) ".$xoopsDB->error()." sql=$sql at ".__LINE__.' in '.__FILE__."\n");
@@ -187,22 +186,21 @@ function _xnpal_updateKeywords($caller, $item_id, $keywords)
         $keywords = array($keywords);
     }
 
-  //1. remove keywords
-  $sql = 'DELETE FROM '.$xoopsDB->prefix('xoonips_item_keyword')." WHERE item_id=${item_id} and keyword_id >= ".count($keywords);
+    //1. remove keywords
+    $sql = 'DELETE FROM '.$xoopsDB->prefix('xoonips_item_keyword')." WHERE item_id=${item_id} and keyword_id >= ".count($keywords);
     $result = $xoopsDB->queryF($sql);
     if (!$result) {
         _xnpal_setLastErrorString("can't remove surplus keywords in _xnpal_updateKeywords(called by ${caller}) ".$xoopsDB->error()." sql=$sql at ".__LINE__.' in '.__FILE__."\n");
 
         return false;
     }
-  // update keyword and insert new keyword
-  $i = 0;
+    // update keyword and insert new keyword
+    $i = 0;
     foreach ($keywords as $keyword) {
         $sql = 'INSERT INTO '.$xoopsDB->prefix('xoonips_item_keyword')." (item_id, keyword_id, keyword) values ( ${item_id}, ${i}, '".addslashes($keyword)."' )";
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $sql = 'UPDATE '.$xoopsDB->prefix('xoonips_item_keyword')." SET keyword='".addslashes($keyword)."'"
-        ." WHERE item_id=${item_id} AND keyword_id=${i}";
+            $sql = 'UPDATE '.$xoopsDB->prefix('xoonips_item_keyword')." SET keyword='".addslashes($keyword)."'"." WHERE item_id=${item_id} AND keyword_id=${i}";
             $result = $xoopsDB->queryF($sql);
             if (!$result) {
                 _xnpal_setLastErrorString("can't update keyword in _xnpal_updateKeywords(called by ${caller}) ".$xoopsDB->error()." sql=$sql at ".__LINE__.' in '.__FILE__."\n");
@@ -245,37 +243,36 @@ function _xnpal_insertItemInternal($sid, $item, &$itemid, $direct)
     $ret = RES_ERROR;
 
     $sql = 'INSERT INTO '.$xoopsDB->prefix('xoonips_item_basic')
-    .' (item_type_id, description, doi, uid, creation_date, last_update_date, publication_year, publication_month, publication_mday, lang) VALUES ('
-    .implode(', ',
-              array(isset($item['item_type_id']) ? (int) $item['item_type_id'] : 0,
-                     "'".addslashes(isset($item['description']) ? $item['description'] : '')."'",
-                     "'".addslashes(isset($item['doi']) ? $item['doi'] : '')."'",
-                     $item['uid'],
-                     ($direct ? $item['creation_date'] : 'UNIX_TIMESTAMP(NOW())'),
-                     ($direct ? $item['last_update_date'] : 'UNIX_TIMESTAMP(NOW())'),
-                     isset($item['publication_year']) ? (int) $item['publication_year'] : 0,
-                     isset($item['publication_month']) ? (int) $item['publication_month'] : 0,
-                     isset($item['publication_mday']) ? (int) $item['publication_mday'] : 0,
-                     "'".addslashes(isset($item['lang']) ? $item['lang'] : '')."'", ))
-    .')';
+        .' (item_type_id, description, doi, uid, creation_date, last_update_date, publication_year, publication_month, publication_mday, lang) VALUES ('
+        .implode(', ',
+            array(isset($item['item_type_id']) ? (int) $item['item_type_id'] : 0,
+                "'".addslashes(isset($item['description']) ? $item['description'] : '')."'",
+                "'".addslashes(isset($item['doi']) ? $item['doi'] : '')."'",
+                $item['uid'],
+                ($direct ? $item['creation_date'] : 'UNIX_TIMESTAMP(NOW())'),
+                ($direct ? $item['last_update_date'] : 'UNIX_TIMESTAMP(NOW())'),
+                isset($item['publication_year']) ? (int) $item['publication_year'] : 0,
+                isset($item['publication_month']) ? (int) $item['publication_month'] : 0,
+                isset($item['publication_mday']) ? (int) $item['publication_mday'] : 0,
+                "'".addslashes(isset($item['lang']) ? $item['lang'] : '')."'", )).')';
     $result = $xoopsDB->queryF($sql);
     if ($result) {
         // get inserted item id
-    $itemid = $xoopsDB->getInsertID();
-    //insert titles and keywords
-    if (isset($item['titles'])) {
-        if (!is_array($item['titles'])) {
-            $item['titles'] = array($item['titles']);
-        }
-        if (count($item['titles']) > 0) {
-            if (!_xnpal_updateTitles(__FUNCTION__, $itemid, $item['titles'])) {
-                _xnpal_setLastErrorString("can't insert title in ".__FUNCTION__.' at '.__LINE__.' in '.__FILE__."\n".xnp_get_last_error_string());
-                xnp_delete_item($sid, $itemid);
+        $itemid = $xoopsDB->getInsertID();
+        //insert titles and keywords
+        if (isset($item['titles'])) {
+            if (!is_array($item['titles'])) {
+                $item['titles'] = array($item['titles']);
+            }
+            if (count($item['titles']) > 0) {
+                if (!_xnpal_updateTitles(__FUNCTION__, $itemid, $item['titles'])) {
+                    _xnpal_setLastErrorString("can't insert title in ".__FUNCTION__.' at '.__LINE__.' in '.__FILE__."\n".xnp_get_last_error_string());
+                    xnp_delete_item($sid, $itemid);
 
-                return RES_DB_QUERY_ERROR;
+                    return RES_DB_QUERY_ERROR;
+                }
             }
         }
-    }
         if (isset($item['keywords'])) {
             if (!is_array($item['keywords'])) {
                 $item['keywords'] = array($item['keywords']);
@@ -291,12 +288,11 @@ function _xnpal_insertItemInternal($sid, $item, &$itemid, $direct)
         }
         if ($item['item_type_id'] == ITID_INDEX) {
             //nothing to do if index.
-      _xnpal_setLastErrorString('');
+            _xnpal_setLastErrorString('');
             $ret = RES_OK;
         } else {
             //insert into private index
-      $sql = 'SELECT private_index_id FROM '.$xoopsDB->prefix('xoonips_users')
-        .' WHERE uid='.$item['uid'];
+            $sql = 'SELECT private_index_id FROM '.$xoopsDB->prefix('xoonips_users').' WHERE uid='.$item['uid'];
             if ($result = $xoopsDB->query($sql)) {
                 list($private_xid) = $xoopsDB->fetchRow($result);
                 $ret = xnp_register_item($sid, $private_xid, $itemid);
@@ -320,45 +316,45 @@ function _xnpal_updateIndexInternal($sess_id, $uid, $newIndex, $oldIndex, $newPa
     global $xoopsDB;
     $move = ($newIndex['parent_index_id'] != $oldIndex['parent_index_id']);
     $result = RES_ERROR;
-  // if parent_index_id will be changed then do error check
-  if ($move) {
-      if ($oldIndex['item_id'] == IID_ROOT || $oldIndex['parent_index_id'] == IID_ROOT) {
-          _xnpal_setLastErrorString('in updateIndex: cannot change parent_index_id of system-created-index');
+    // if parent_index_id will be changed then do error check
+    if ($move) {
+        if ($oldIndex['item_id'] == IID_ROOT || $oldIndex['parent_index_id'] == IID_ROOT) {
+            _xnpal_setLastErrorString('in updateIndex: cannot change parent_index_id of system-created-index');
 
-          return RES_ERROR; // this is root index or parent index
-      } elseif ($newIndex['parent_index_id'] == IID_ROOT) {
-          _xnpal_setLastErrorString('in updateIndex: cannot change parent_index_id to ROOT');
+            return RES_ERROR; // this is root index or parent index
+        } elseif ($newIndex['parent_index_id'] == IID_ROOT) {
+            _xnpal_setLastErrorString('in updateIndex: cannot change parent_index_id to ROOT');
 
-          return RES_ERROR; // reject if new parent index will be root index
-      }
-  }
-  // check writable permission
-  if (!_xnpal_isWritableInternal($sess_id, $uid, $newParentIndex)) {
-      _xnpal_setLastErrorString('in updateIndex: no access right. cannot move.');
+            return RES_ERROR; // reject if new parent index will be root index
+        }
+    }
+    // check writable permission
+    if (!_xnpal_isWritableInternal($sess_id, $uid, $newParentIndex)) {
+        _xnpal_setLastErrorString('in updateIndex: no access right. cannot move.');
 
-      return RES_ERROR; // no access right
-  }
-  // check duplication of sort_number except moving
-  if (!$move && $newIndex['sort_number'] != $oldIndex['sort_number']) {
-      $conflictIndexes = array();
-      $cond = 'tx.sort_number='.$newIndex['sort_number'];
-      $result = _xnpal_getIndexesInternal($sess_id, $cond, $uid, $conflictIndexes, '');
-      if ($result == RES_OK) {
-          if (count($conflictIndexes)) {
-              _xnpal_setLastErrorString('in updateIndex: sort_number conflicts');
+        return RES_ERROR; // no access right
+    }
+    // check duplication of sort_number except moving
+    if (!$move && $newIndex['sort_number'] != $oldIndex['sort_number']) {
+        $conflictIndexes = array();
+        $cond = 'tx.sort_number='.$newIndex['sort_number'];
+        $result = _xnpal_getIndexesInternal($sess_id, $cond, $uid, $conflictIndexes, '');
+        if ($result == RES_OK) {
+            if (count($conflictIndexes)) {
+                _xnpal_setLastErrorString('in updateIndex: sort_number conflicts');
 
-              return RES_ERROR; // duplicated sortNumber
-          }
-      } else {
-          return $result; // cannot _xnpal_getIndexesInternal()
-      }
-  }
-  // reject if titles are empty
-  if ($newIndex['titles'][DEFAULT_INDEX_TITLE_OFFSET] == '') {
-      _xnpal_setLastErrorString('in _xnpal_updateIndexInternal: empty title.');
+                return RES_ERROR; // duplicated sortNumber
+            }
+        } else {
+            return $result; // cannot _xnpal_getIndexesInternal()
+        }
+    }
+    // reject if titles are empty
+    if ($newIndex['titles'][DEFAULT_INDEX_TITLE_OFFSET] == '') {
+        _xnpal_setLastErrorString('in _xnpal_updateIndexInternal: empty title.');
 
-      return RES_ERROR;
-  }
+        return RES_ERROR;
+    }
 
     if ($move) {
         $descXID = array();
@@ -373,7 +369,7 @@ function _xnpal_updateIndexInternal($sess_id, $uid, $newIndex, $oldIndex, $newPa
         for ($i = 0; $i < $descXIDLen; ++$i) {
             if ($descXID[$i] == $newIndex['parent_index_id']) {
                 // reject if descendant index id will be parent index id
-        _xnpal_setLastErrorString('in _xnpal_updateIndexInternal: circular parent');
+                _xnpal_setLastErrorString('in _xnpal_updateIndexInternal: circular parent');
 
                 return RES_ERROR;
             }
@@ -391,20 +387,20 @@ function _xnpal_updateIndexInternal($sess_id, $uid, $newIndex, $oldIndex, $newPa
     $ownerUIDString = ($newParentIndex['open_level'] == OL_PRIVATE ? $newParentIndex['owner_uid'] : 'NULL');
     $ownerGIDString = ($newParentIndex['open_level'] == OL_GROUP_ONLY ? $newParentIndex['owner_gid'] : 'NULL');
     $sql = 'UPDATE '.$xoopsDB->prefix('xoonips_index set').
-    ' parent_index_id = '.($newIndex['parent_index_id']).
-    ', uid = '.$ownerUIDString.
-    ', gid = '.$ownerGIDString.
-    ', open_level = '.$ownerOpenLevelString.
-    ', sort_number = '.$newIndex['sort_number'].
-    ' where index_id = '.$newIndex['item_id'];
+        ' parent_index_id = '.($newIndex['parent_index_id']).
+        ', uid = '.$ownerUIDString.
+        ', gid = '.$ownerGIDString.
+        ', open_level = '.$ownerOpenLevelString.
+        ', sort_number = '.$newIndex['sort_number'].
+        ' where index_id = '.$newIndex['item_id'];
     if ($xoopsDB->queryF($sql)) {
         $sql = 'UPDATE '.$xoopsDB->prefix('xoonips_item_basic').' set'.
-      ' item_type_id = '.$newIndex['item_type_id'].
-      ', uid = '.$uid.
-      ', last_update_date = '.$newIndex['last_update_date'].
-      ', creation_date = '.$newIndex['creation_date'].
-      ", description = '".addslashes($newIndex['description'])."'".
-      ' where item_id = '.$newIndex['item_id'];
+            ' item_type_id = '.$newIndex['item_type_id'].
+            ', uid = '.$uid.
+            ', last_update_date = '.$newIndex['last_update_date'].
+            ', creation_date = '.$newIndex['creation_date'].
+            ", description = '".addslashes($newIndex['description'])."'".
+            ' where item_id = '.$newIndex['item_id'];
         if ($xoopsDB->queryF($sql)) {
             if (!_xnpal_updateTitles(__FUNCTION__, $newIndex['item_id'], $newIndex['titles'])) {
                 _xnpal_setLastErrorString("can't update titles. update index incompletely in ".__FUNCTION__.' at '.__LINE__.' in '.__FILE__);
@@ -430,8 +426,8 @@ function _xnpal_updateIndexInternal($sess_id, $uid, $newIndex, $oldIndex, $newPa
          || $newParentIndex['owner_gid'] != $oldParentIndex['owner_gid']
          || $newParentIndex['open_level'] != $oldParentIndex['open_level']) {
             // if parent index location will changed, then this index and descendant
-      // indexes will be changed respectively.
-      $descXID = array();
+            // indexes will be changed respectively.
+            $descXID = array();
             $result = _xnpal_getDescendantIndexID($oldIndex['item_id'], $descXID);
             if ($result != RES_OK) {
                 _xnpal_setLastErrorString('in _xnpal_updateIndexInternal: _xnpal_getDescendantIndexID failed');
@@ -441,10 +437,10 @@ function _xnpal_updateIndexInternal($sess_id, $uid, $newIndex, $oldIndex, $newPa
             $descXIDLen = count($descXID);
             for ($i = 0; $i < $descXIDLen; ++$i) {
                 $sql = 'UPDATE '.$xoopsDB->prefix('xoonips_index').' set '.
-          ' uid='.$ownerUIDString.
-          ', gid='.$ownerGIDString.
-          ', open_level='.$ownerOpenLevelString.
-          ' WHERE index_id='.($descXID[$i]);
+                    ' uid='.$ownerUIDString.
+                    ', gid='.$ownerGIDString.
+                    ', open_level='.$ownerOpenLevelString.
+                    ' WHERE index_id='.($descXID[$i]);
                 _xnpal_querySimple('updateIndex', $sql);
             }
         }
@@ -452,7 +448,7 @@ function _xnpal_updateIndexInternal($sess_id, $uid, $newIndex, $oldIndex, $newPa
 
     if ($newIndex['open_level'] == OL_PUBLIC) {
         // call insertMetadataEventAuto() for certified items under newIndex
-    $descXID = array();
+        $descXID = array();
         $result = _xnpal_getDescendantIndexID($newIndex['item_id'], $descXID);
         if ($result != RES_OK) {
             _xnpal_setLastErrorString('in updateIndex: _xnpal_getDescendantIndexID failed');
@@ -466,8 +462,8 @@ function _xnpal_updateIndexInternal($sess_id, $uid, $newIndex, $oldIndex, $newPa
         }
 
         $sql = 'select distinct item_id from '.$xoopsDB->prefix('xoonips_index_item_link ').
-      ' where certify_state = '.CERTIFIED.
-      "  and index_id in ( $xid_str )";
+            ' where certify_state = '.CERTIFIED.
+            "  and index_id in ( $xid_str )";
         $result2 = $xoopsDB->query($sql);
         if ($result2) {
             $result = RES_OK;
@@ -500,25 +496,25 @@ function _xnpal_updateItemStatus()
     $ret = RES_ERROR;
     if (public_item_target_user_all()) {
         // update if item is public and item_status was deleted or not found
-    //  select distinct txil.item_id, tis.is_deleted from x_xoonips_index as tx,x_xoonips_index_item_link as txil left join x_xoonips_item_status as tis on txil.item_id = tis.item_id  where  tx.index_id=txil.index_id and  txil.certify_state = 2 and  tx.open_level = 1;
-    $sql = 'select distinct txil.item_id, tis.is_deleted '
-      .' from '.$xoopsDB->prefix('xoonips_index').' as tx, '
-      .$xoopsDB->prefix('xoonips_index_item_link').' as txil '
-      .' left join '.$xoopsDB->prefix('xoonips_item_status').' as tis on txil.item_id = tis.item_id '
-      .' where  tx.index_id=txil.index_id '
-      .' and  txil.certify_state = '.CERTIFIED
-      .' and  tx.open_level = '.OL_PUBLIC;
+        //  select distinct txil.item_id, tis.is_deleted from x_xoonips_index as tx,x_xoonips_index_item_link as txil left join x_xoonips_item_status as tis on txil.item_id = tis.item_id  where  tx.index_id=txil.index_id and  txil.certify_state = 2 and  tx.open_level = 1;
+        $sql = 'select distinct txil.item_id, tis.is_deleted '
+            .' from '.$xoopsDB->prefix('xoonips_index').' as tx, '
+            .$xoopsDB->prefix('xoonips_index_item_link').' as txil '
+            .' left join '.$xoopsDB->prefix('xoonips_item_status').' as tis on txil.item_id = tis.item_id '
+            .' where  tx.index_id=txil.index_id '
+            .' and  txil.certify_state = '.CERTIFIED
+            .' and  tx.open_level = '.OL_PUBLIC;
         if ($result = $xoopsDB->query($sql)) {
             $ret = RES_OK;
             while (list($iid, $isDeleted) = $xoopsDB->fetchRow($result)) {
                 if ($isDeleted == null) {
                     $sql = 'insert into '.$xoopsDB->prefix('xoonips_item_status')
-            .'( item_id, created_timestamp, is_deleted ) values '
-            ."( ${iid}, unix_timestamp(now()), 0 )";
+                        .'( item_id, created_timestamp, is_deleted ) values '
+                        ."( ${iid}, unix_timestamp(now()), 0 )";
                 } else {
                     $sql = 'update '.$xoopsDB->prefix('xoonips_item_status')
-            .' set created_timestamp=unix_timestamp(now()), is_deleted=0 '
-            ." where item_id=${iid}";
+                        .' set created_timestamp=unix_timestamp(now()), is_deleted=0 '
+                        ." where item_id=${iid}";
                 }
                 if ($result2 = $xoopsDB->queryF($sql)) {
                     _xnpal_setLastErrorString('');
@@ -530,19 +526,19 @@ function _xnpal_updateItemStatus()
         } else {
             return RES_DB_QUERY_ERROR;
         }
-    // update item is not public and item_status.is_deleted=0
-    // select tis.item_id, count(tx.index_id) as public_count from x_xoonips_item_status as tis  left join x_xoonips_index_item_link as tl on tl.item_id = tis.item_id and certify_state = 2 left join x_xoonips_index           as tx on tx.index_id =tl.index_id and tx.open_level = 1 where is_deleted=0 group by tis.item_id having pubilc_count=0 ;
-    $sql = 'select tis.item_id, count(tx.index_id) as public_count '
-      .' from '.$xoopsDB->prefix('xoonips_item_status').' as tis  '
-      .' left join '.$xoopsDB->prefix('xoonips_index_item_link').' as tl on tl.item_id = tis.item_id and certify_state = '.CERTIFIED
-      .' left join '.$xoopsDB->prefix('xoonips_index').'           as tx on tx.index_id =tl.index_id and tx.open_level = '.OL_PUBLIC
-      .' where is_deleted=0 group by tis.item_id having public_count=0 ';
+        // update item is not public and item_status.is_deleted=0
+        // select tis.item_id, count(tx.index_id) as public_count from x_xoonips_item_status as tis  left join x_xoonips_index_item_link as tl on tl.item_id = tis.item_id and certify_state = 2 left join x_xoonips_index           as tx on tx.index_id =tl.index_id and tx.open_level = 1 where is_deleted=0 group by tis.item_id having pubilc_count=0 ;
+        $sql = 'select tis.item_id, count(tx.index_id) as public_count '
+            .' from '.$xoopsDB->prefix('xoonips_item_status').' as tis  '
+            .' left join '.$xoopsDB->prefix('xoonips_index_item_link').' as tl on tl.item_id = tis.item_id and certify_state = '.CERTIFIED
+            .' left join '.$xoopsDB->prefix('xoonips_index').'           as tx on tx.index_id =tl.index_id and tx.open_level = '.OL_PUBLIC
+            .' where is_deleted=0 group by tis.item_id having public_count=0 ';
         if ($result = $xoopsDB->query($sql)) {
             $ret = RES_OK;
             while (list($iid) = $xoopsDB->fetchRow($result)) {
                 $sql = 'update '.$xoopsDB->prefix('xoonips_item_status').' '
-          .' set is_deleted=1, deleted_timestamp=unix_timestamp(now()) '
-          ." where item_id=${iid}";
+                    .' set is_deleted=1, deleted_timestamp=unix_timestamp(now()) '
+                    ." where item_id=${iid}";
                 if ($result2 = $xoopsDB->queryF($sql)) {
                     _xnpal_setLastErrorString('');
                     $ret = RES_OK;
@@ -623,15 +619,15 @@ function _xnpal_queryGetUnsignedInt($functionName, $sql, &$uint)
 function _xnpal_getDescendantIndexID($xid, &$descXID)
 {
     global $xoopsDB;
-  // descXID[0] - descXID[i-1] : searched nodes
-  // descXID[i] 〜 descXID[iFill-1] : not searched nodes
-  $descXID = array($xid);
+    // descXID[0] - descXID[i-1] : searched nodes
+    // descXID[i] 〜 descXID[iFill-1] : not searched nodes
+    $descXID = array($xid);
     $i = 0;
     $iFill = 1;
     while ($i < $iFill) {
         $xid = $descXID[$i++]; // get a not searched node
-    // add child list to not searched not
-    $sql = 'SELECT index_id FROM '.$xoopsDB->prefix('xoonips_index')." WHERE parent_index_id=$xid";
+        // add child list to not searched not
+        $sql = 'SELECT index_id FROM '.$xoopsDB->prefix('xoonips_index')." WHERE parent_index_id=$xid";
         $result = $xoopsDB->query($sql);
         if (!$result) {
             _xnpal_setLastErrorString('error in _xnpal_getDescendantIndexID, '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n".xnp_get_last_error_string());
@@ -814,14 +810,14 @@ function _xnpal_sessionID2UID($sess_id, &$sess_uid)
             }
         }
     }
-  // invalid session_id() or $_SESSION['xoopsUserId'] not found.
-  // maybe this is guest.
-  if (public_item_target_user_all()) {
-      $sess_uid = UID_GUEST;
-      _xnpal_setLastErrorString('');
+    // invalid session_id() or $_SESSION['xoopsUserId'] not found.
+    // maybe this is guest.
+    if (public_item_target_user_all()) {
+        $sess_uid = UID_GUEST;
+        _xnpal_setLastErrorString('');
 
-      return RES_OK;
-  }
+        return RES_OK;
+    }
 
     return RES_NO_SUCH_SESSION;
 }
@@ -852,8 +848,8 @@ function _xnpal_deleteIndexInternal($sess_id, $xid, &$index, &$descXID, &$affect
         return RES_NO_WRITE_ACCESS_RIGHT;
     }
 
-  // list up deleting index ids
-  $result = _xnpal_getDescendantIndexID($xid, $descXID);
+    // list up deleting index ids
+    $result = _xnpal_getDescendantIndexID($xid, $descXID);
     if ($result != RES_OK) {
         _xnpal_setLastErrorString('in deleteIndex: _xnpal_getDescendantIndexID failed'.' at '.__LINE__.' in '.__FILE__."\n".xnp_get_last_error_string());
 
@@ -863,7 +859,7 @@ function _xnpal_deleteIndexInternal($sess_id, $xid, &$index, &$descXID, &$affect
     $affectedIIDs = array();
     if ($index['open_level'] == OL_PUBLIC) {
         // save certified items under newIndex for run insertMetadataEventAuto()
-    $sql = 'select count(*) from '.$xoopsDB->prefix('xoonips_item_basic');
+        $sql = 'select count(*) from '.$xoopsDB->prefix('xoonips_item_basic');
         $iidsLen = 0;
         $result = _xnpal_queryGetUnsignedInt($functionName, $sql, $iidsLen);
         if ($result != RES_OK) {
@@ -872,8 +868,8 @@ function _xnpal_deleteIndexInternal($sess_id, $xid, &$index, &$descXID, &$affect
         if (count($descXID)) {
             $xid_str = _xnpal_getCsvStr($descXID);
             $sql = 'select item_id from '.$xoopsDB->prefix('xoonips_index_item_link').
-        ' where certify_state='.CERTIFIED.
-        " and index_id in ( $xid_str ) ";
+                ' where certify_state='.CERTIFIED.
+                " and index_id in ( $xid_str ) ";
             $result = $xoopsDB->query($sql);
             if (!$result) {
                 return RES_DB_QUERY_ERROR;
@@ -888,32 +884,32 @@ function _xnpal_deleteIndexInternal($sess_id, $xid, &$index, &$descXID, &$affect
         $xid = $descXID[$i];
         $linkTable = $xoopsDB->prefix('xoonips_index_item_link');
         $indexTable = $xoopsDB->prefix('xoonips_index');
-    // if descXID[i] is located under Private index and this linked item is
-    // only one. then move item to parent index
-    if ($index['open_level'] == OL_PRIVATE) {
-        $sql = 'SELECT t1.index_item_link_id, t1.item_id, count(*) '.
-        " FROM $linkTable  AS t1 ".
-        " LEFT JOIN $linkTable AS t2 ON t1.item_id = t2.item_id ".
-        " LEFT JOIN $indexTable AS tx2 on t2.index_id = tx2.index_id ".
-        " WHERE t1.index_id=$xid ".
-        ' and tx2.open_level = '.OL_PRIVATE.
-        ' group by t1.item_id ';
-        $result = $xoopsDB->query($sql);
-        if (!$result) {
-            _xnpal_setLastErrorString('in deleteIndex at '.__LINE__.' in '.__FILE__."\n".xnp_get_last_error_string());
+        // if descXID[i] is located under Private index and this linked item is
+        // only one. then move item to parent index
+        if ($index['open_level'] == OL_PRIVATE) {
+            $sql = 'SELECT t1.index_item_link_id, t1.item_id, count(*) '.
+            " FROM $linkTable  AS t1 ".
+            " LEFT JOIN $linkTable AS t2 ON t1.item_id = t2.item_id ".
+            " LEFT JOIN $indexTable AS tx2 on t2.index_id = tx2.index_id ".
+            " WHERE t1.index_id=$xid ".
+            ' and tx2.open_level = '.OL_PRIVATE.
+            ' group by t1.item_id ';
+            $result = $xoopsDB->query($sql);
+            if (!$result) {
+                _xnpal_setLastErrorString('in deleteIndex at '.__LINE__.' in '.__FILE__."\n".xnp_get_last_error_string());
 
-            return RES_ERROR;
-        }
-        while (list($link_id, $item_id, $count) = $xoopsDB->fetchRow($result)) {
-            if ($count == 1) {
-                $sql2 = "UPDATE $linkTable set index_id= $parentXid where index_item_link_id = $link_id";
-                $result2 = _xnpal_querySimple('deleteIndex', $sql2);
-                if ($result2 != RES_OK) {
-                    break;
+                return RES_ERROR;
+            }
+            while (list($link_id, $item_id, $count) = $xoopsDB->fetchRow($result)) {
+                if ($count == 1) {
+                    $sql2 = "UPDATE $linkTable set index_id= $parentXid where index_item_link_id = $link_id";
+                    $result2 = _xnpal_querySimple('deleteIndex', $sql2);
+                    if ($result2 != RES_OK) {
+                        break;
+                    }
                 }
             }
         }
-    }
     // remove items in descXID[i] and descXID[i]
     $sql = "DELETE from $linkTable where index_id=$xid";
         $result = _xnpal_querySimple($functionName, $sql);
@@ -924,17 +920,17 @@ function _xnpal_deleteIndexInternal($sess_id, $xid, &$index, &$descXID, &$affect
                 $sql = 'DELETE from '.$xoopsDB->prefix('xoonips_index')." where index_id = $xid";
                 $result = _xnpal_querySimple($functionName, $sql);
             }
-      // delete title
-      $sql = 'DELETE from '.$xoopsDB->prefix('xoonips_item_title')." where item_id = $xid";
+            // delete title
+            $sql = 'DELETE from '.$xoopsDB->prefix('xoonips_item_title')." where item_id = $xid";
             $result = _xnpal_querySimple($functionName, $sql);
-      // delete keyword
-      $sql = 'DELETE from '.$xoopsDB->prefix('xoonips_item_keyword')." where item_id = $xid";
+            // delete keyword
+            $sql = 'DELETE from '.$xoopsDB->prefix('xoonips_item_keyword')." where item_id = $xid";
             $result = _xnpal_querySimple($functionName, $sql);
         }
     }
 
-  // run insertMetadataEventAuto() for affected items
-  $len = count($affectedIIDs);
+    // run insertMetadataEventAuto() for affected items
+    $len = count($affectedIIDs);
     for ($i = 0; $i < $len; ++$i) {
         insertMetadataEventAuto($affectedIIDs[$i]);
     }
@@ -970,21 +966,21 @@ function _xnpal_getIndexesInternal($sess_id, $cond, $uid, &$indexes, $criteriaSt
     $accessRightCond = '1';
     if (!xnp_is_moderator($sess_id, $uid)) {
         $accessRightCond =
-      ' (  tx.open_level=1 '.
-      ' OR tx.open_level=2 AND tlink.uid is not NULL AND tx.gid != '.GID_DEFAULT.
-      " OR tx.open_level=3 AND tx.uid = $uid )";
+            ' (  tx.open_level=1 '.
+            ' OR tx.open_level=2 AND tlink.uid is not NULL AND tx.gid != '.GID_DEFAULT.
+            " OR tx.open_level=3 AND tx.uid = $uid )";
     } // アクセス権を表すSQL
 
-  $sql = 'SELECT tx.index_id as item_id, tx.parent_index_id, tx.uid, tx.gid, tx.open_level, tx.sort_number '.
-    ' , ti.item_type_id, ti.creation_date, ti.uid, ti.description, ti.last_update_date, tt.title as title '.
-    " FROM      $titleTable as tt, ".
-    " $indexTable  AS tx ".
-    " LEFT JOIN $itemTable   AS ti on tx.index_id = ti.item_id ".
-    " LEFT JOIN $groupUserLinkTable  AS tlink on tlink.gid = tx.gid and tlink.uid = $uid ".
-    " LEFT JOIN $groupTable  AS tg on tx.gid = tg.gid ".
-    " WHERE $accessRightCond AND ( tx.open_level != 2 OR tx.open_level = 2 AND tg.gid IS NOT NULL ) ".
-    ' AND tt.title_id='.DEFAULT_ORDER_TITLE_OFFSET.' AND tt.item_id=ti.item_id'.
-    " AND $cond $criteriaString";
+    $sql = 'SELECT tx.index_id as item_id, tx.parent_index_id, tx.uid, tx.gid, tx.open_level, tx.sort_number '.
+        ' , ti.item_type_id, ti.creation_date, ti.uid, ti.description, ti.last_update_date, tt.title as title '.
+        " FROM      $titleTable as tt, ".
+        " $indexTable  AS tx ".
+        " LEFT JOIN $itemTable   AS ti on tx.index_id = ti.item_id ".
+        " LEFT JOIN $groupUserLinkTable  AS tlink on tlink.gid = tx.gid and tlink.uid = $uid ".
+        " LEFT JOIN $groupTable  AS tg on tx.gid = tg.gid ".
+        " WHERE $accessRightCond AND ( tx.open_level != 2 OR tx.open_level = 2 AND tg.gid IS NOT NULL ) ".
+        ' AND tt.title_id='.DEFAULT_ORDER_TITLE_OFFSET.' AND tt.item_id=ti.item_id'.
+        " AND $cond $criteriaString";
 
     $result = $xoopsDB->query($sql);
     if (!$result) {
@@ -995,31 +991,31 @@ function _xnpal_getIndexesInternal($sess_id, $cond, $uid, &$indexes, $criteriaSt
 
     $index_buf = array();
     $orderd_ids = array(); //array of sorted item_id(s) to sort $index_buf in the end of this function
-  while (list($index_id, $parent_index_id, $owner_uid, $gid, $open_level, $sort_number,
-                $item_type_id, $creation_date, $contributor_uid, $description, $last_update_date) = $xoopsDB->fetchRow($result)) {
-      $index = array(
-      'item_id' => $index_id,
-      'parent_index_id' => $parent_index_id,
-      'owner_uid' => ($owner_uid == null) ? 0 : $owner_uid,
-      'owner_gid' => ($gid == null) ? 0 : $gid,
-      'open_level' => $open_level,
-      'sort_number' => $sort_number,
-      'item_type_id' => $item_type_id,
-      'creation_date' => $creation_date,
-      'contributor_uid' => $contributor_uid,
-      'titles' => array(),
-      'keywords' => array(),
-      'description' => $description,
-      'last_update_date' => $last_update_date,
-    );
-      $index_buf[$index_id] = $index;
-      $orderd_ids[] = $index_id;
-  }
+    while (list($index_id, $parent_index_id, $owner_uid, $gid, $open_level, $sort_number,
+            $item_type_id, $creation_date, $contributor_uid, $description, $last_update_date) = $xoopsDB->fetchRow($result)) {
+        $index = array(
+            'item_id' => $index_id,
+            'parent_index_id' => $parent_index_id,
+            'owner_uid' => ($owner_uid == null) ? 0 : $owner_uid,
+            'owner_gid' => ($gid == null) ? 0 : $gid,
+            'open_level' => $open_level,
+            'sort_number' => $sort_number,
+            'item_type_id' => $item_type_id,
+            'creation_date' => $creation_date,
+            'contributor_uid' => $contributor_uid,
+            'titles' => array(),
+            'keywords' => array(),
+            'description' => $description,
+            'last_update_date' => $last_update_date,
+        );
+        $index_buf[$index_id] = $index;
+        $orderd_ids[] = $index_id;
+    }
 
     if (count($index_buf) > 0) {
         //get titles of selected item
-    $sql = 'SELECT item_id, title FROM '.$xoopsDB->prefix('xoonips_item_title')
-      .' WHERE item_id IN ( '.implode(',', array_keys($index_buf)).' ) ORDER BY item_id ASC, title_id ASC';
+        $sql = 'SELECT item_id, title FROM '.$xoopsDB->prefix('xoonips_item_title')
+            .' WHERE item_id IN ( '.implode(',', array_keys($index_buf)).' ) ORDER BY item_id ASC, title_id ASC';
         $result = $xoopsDB->query($sql);
         if (!$result) {
             _xnpal_setLastErrorString('error in _xnpal_getIndexesInternal '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n".xnp_get_last_error_string());
@@ -1031,15 +1027,15 @@ function _xnpal_getIndexesInternal($sess_id, $cond, $uid, &$indexes, $criteriaSt
         }
         $textutil = &xoonips_getutility('text');
         foreach ($index_buf as $k => $index) {// rename to "Private" if owwner_uid of index == $uid
-      if ($index['parent_index_id'] == IID_ROOT && $index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $uid) {
-          $index_buf[$k]['titles'][DEFAULT_INDEX_TITLE_OFFSET] = XNP_PRIVATE_INDEX_TITLE;
-      }
+            if ($index['parent_index_id'] == IID_ROOT && $index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $uid) {
+                $index_buf[$k]['titles'][DEFAULT_INDEX_TITLE_OFFSET] = XNP_PRIVATE_INDEX_TITLE;
+            }
             $index_buf[$k]['html_title'] = $textutil->html_special_chars($index_buf[$k]['titles'][DEFAULT_INDEX_TITLE_OFFSET]);
         }
 
-    //get keywords of selected item
-    $sql = 'SELECT item_id, keyword FROM '.$xoopsDB->prefix('xoonips_item_keyword')
-      .' WHERE item_id IN ( '.implode(',', array_keys($index_buf)).' ) ORDER BY item_id ASC, keyword_id ASC';
+        //get keywords of selected item
+        $sql = 'SELECT item_id, keyword FROM '.$xoopsDB->prefix('xoonips_item_keyword')
+            .' WHERE item_id IN ( '.implode(',', array_keys($index_buf)).' ) ORDER BY item_id ASC, keyword_id ASC';
         $result = $xoopsDB->query($sql);
         if (!$result) {
             _xnpal_setLastErrorString('error in _xnpal_getIndexesInternal '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n".xnp_get_last_error_string());
@@ -1051,10 +1047,10 @@ function _xnpal_getIndexesInternal($sess_id, $cond, $uid, &$indexes, $criteriaSt
         }
     }
 
-  // convert the associative array(index_buf) to the array(indexes) (keep order specified by criteriaString)
-  foreach ($orderd_ids as $id) {
-      $indexes[] = $index_buf[$id];
-  }
+    // convert the associative array(index_buf) to the array(indexes) (keep order specified by criteriaString)
+    foreach ($orderd_ids as $id) {
+        $indexes[] = $index_buf[$id];
+    }
 
     _xnpal_setLastErrorString('');
 
@@ -1954,14 +1950,16 @@ function xnp_update_account($sid, $account)
 
     $ret = RES_ERROR;
 
-    $keys = array('uname',                  'name',                  'email',                  'url',
-                   'user_avatar',            'user_regdate',          'user_icq',               'user_from',
-                   'user_sig',               'user_viewemail',        'actkey',                 'user_aim',
-                   'user_yim',               'user_msnm',             'pass',                   'posts',
-                   'attachsig',              'rank',                  'level',                  'theme',
-                   'timezone_offset',        'last_login',            'umode',                  'uorder',
-                   'notify_method',          'notify_mode',           'user_occ',               'bio',
-                   'user_intrest',           'user_mailok', );
+    $keys = array(
+        'uname',           'name',           'email',    'url',
+        'user_avatar',     'user_regdate',   'user_icq', 'user_from',
+        'user_sig',        'user_viewemail', 'actkey',   'user_aim',
+        'user_yim',        'user_msnm',      'pass',     'posts',
+        'attachsig',       'rank',           'level',    'theme',
+        'timezone_offset', 'last_login',     'umode',    'uorder',
+        'notify_method',   'notify_mode',    'user_occ', 'bio',
+        'user_intrest',    'user_mailok',
+    );
 
     $sets = array();
     foreach ($keys as $k) {
@@ -1983,10 +1981,21 @@ function xnp_update_account($sid, $account)
     }
 
     //xoonipsのユーザテーブルに残りの情報を上書きする
-    $keys = array('activate' => 'activate', 'address' => 'address', 'division' => 'division', 'tel' => 'tel',
-                   'company_name' => 'company_name', 'country' => 'country', 'zipcode' => 'zipcode', 'fax' => 'fax',
-                   'notice_mail' => 'notice_mail', 'notice_mail_since' => 'notice_mail_since',
-                   'private_item_number_limit' => 'item_number_limit', 'private_index_number_limit' => 'index_number_limit', 'private_item_storage_limit' => 'item_storage_limit', );
+    $keys = array(
+        'activate' => 'activate',
+        'address' => 'address',
+        'division' => 'division',
+        'tel' => 'tel',
+        'company_name' => 'company_name',
+        'country' => 'country',
+        'zipcode' => 'zipcode',
+        'fax' => 'fax',
+        'notice_mail' => 'notice_mail',
+        'notice_mail_since' => 'notice_mail_since',
+        'private_item_number_limit' => 'item_number_limit',
+        'private_index_number_limit' => 'index_number_limit',
+        'private_item_storage_limit' => 'item_storage_limit',
+    );
     $sets = array();
     foreach ($keys as $col => $k) {
         if (array_key_exists($k, $account)) {

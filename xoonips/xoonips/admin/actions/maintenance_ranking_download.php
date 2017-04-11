@@ -33,11 +33,7 @@ require_once '../class/base/gtickets.php';
 
 // get requests
 $request_keys = array(
-  'ranking_download_file' => array(
-    's',
-    false,
-    true,
-  ),
+    'ranking_download_file' => array('s', false, true),
 );
 $request_vals = xoonips_admin_get_requests('both', $request_keys);
 $filename = $request_vals['ranking_download_file'];
@@ -58,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 $download = &xoonips_getutility('download');
 if (!$download->check_pathinfo($filename)) {
     // reload for KHTML based browser
-  $url = $xoonips_admin['mypage_url'];
+    $url = $xoonips_admin['mypage_url'];
     $url .= '&action=download';
     $url .= '&ranking_download_file='.$filename;
     $url .= '&'.$xoopsGTicket->getTicketParamString(__LINE__, true, 10, $ticket_area);

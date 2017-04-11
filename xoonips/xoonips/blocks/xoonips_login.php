@@ -34,19 +34,19 @@ function b_xoonips_login_show()
 {
     global $xoopsUser;
 
-  // hide block during site login
-  if (is_object($xoopsUser)) {
-      return false;
-  }
+    // hide block during site login
+    if (is_object($xoopsUser)) {
+        return false;
+    }
 
-  // get xoops configurations
-  $myxoopsConfig = &xoonips_get_xoops_configs(XOOPS_CONF);
+    // get xoops configurations
+    $myxoopsConfig = &xoonips_get_xoops_configs(XOOPS_CONF);
     $usercookie = $myxoopsConfig['usercookie'];
     $use_ssl = $myxoopsConfig['use_ssl'];
     $sslloginlink = $myxoopsConfig['sslloginlink'];
 
-  // set variables
-  $block = array();
+    // set variables
+    $block = array();
     $block['lang_username'] = _MB_XOONIPS_LOGIN_USERNAME;
     if ($usercookie != '' && isset($_COOKIE[$usercookie])) {
         $block['unamevalue'] = $_COOKIE[$usercookie];
@@ -61,6 +61,6 @@ function b_xoonips_login_show()
         $block['use_ssl'] = $use_ssl;
         $block['sslloginlink'] = $sslloginlink;
     }
-  // $block['lang_rememberme'] = _MB_XOONIPS_LOGIN_REMEMBERME;
-  return $block;
+    // $block['lang_rememberme'] = _MB_XOONIPS_LOGIN_REMEMBERME;
+    return $block;
 }

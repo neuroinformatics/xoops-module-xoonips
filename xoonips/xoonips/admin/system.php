@@ -34,55 +34,32 @@ include 'actions/common.inc.php';
 $pages = array();
 $pages['main'] = array();
 $pages['basic'] = array(
-  'post' => array(
-    'update',
-  ),
+    'post' => array('update'),
 );
 $pages['tree'] = array(
-  'post' => array(
-    'update',
-  ),
+    'post' => array('update'),
 );
 $pages['print'] = array(
-  'post' => array(
-    'update',
-  ),
+    'post' => array('update'),
 );
 $pages['rss'] = array(
-  'post' => array(
-    'update',
-  ),
+    'post' => array('update'),
 );
 $pages['oaipmh'] = array(
-  'post' => array(
-    'rupdate',
-    'hupdate',
-  ),
+    'post' => array('rupdate', 'hupdate'),
 );
 $pages['proxy'] = array(
-  'post' => array(
-    'update',
-  ),
+    'post' => array('update'),
 );
 $pages['module'] = array(
-  'post' => array(
-    'update',
-  ),
+    'post' => array('update'),
 );
 $pages['xoops'] = array(
-  'post' => array(
-    'pickup',
-    'zudelete',
-    'zirescue',
-  ),
-  'get' => array(
-    'zilist',
-  ),
+    'post' => array('pickup', 'zudelete', 'zirescue'),
+    'get' => array('zilist'),
 );
 $pages['check'] = array(
-  'post' => array(
-    'test',
-  ),
+    'post' => array('test'),
 );
 
 // initialize

@@ -33,7 +33,5 @@ function xoonips_item_list_header()
     $order_dir = $formdata->getValue('post', 'order_dir', 'i', false);
     $item_per_page = $formdata->getValue('post', 'item_per_page', 'i', false);
 
-    return array('order_by' => $order_by,
-                'order_dir' => $order_dir,
-                'item_per_page' => $item_per_page, );
+    return array('order_by' => $order_by, 'order_dir' => $order_dir, 'item_per_page' => $item_per_page);
 }

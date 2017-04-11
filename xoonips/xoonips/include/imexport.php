@@ -95,8 +95,8 @@ function xnpExportItem($export_path, $item_id, $attachment = false, $is_absolute
         return false;
     }
 
-  // item type module doesn't support export
-  $func = "${itemtype['name']}ExportItem";
+    // item type module doesn't support export
+    $func = "${itemtype['name']}ExportItem";
     if (!function_exists($func)) {
         return false;
     }
@@ -116,8 +116,8 @@ function xnpExportItem($export_path, $item_id, $attachment = false, $is_absolute
 
     fclose($fhdl);
 
-  // convert encoding for client environment
-  $fp_r = fopen($tmpfile, 'r');
+    // convert encoding for client environment
+    $fp_r = fopen($tmpfile, 'r');
     $fp_w = fopen($filename, 'w');
     if (!$fp_r || !$fp_w) {
         if (!$fp_r) {
@@ -184,12 +184,7 @@ function xnpExportIndex($fhdl, $index_id, $recurse)
 
     $xml = array();
     if ($recurse) {
-        $res = xnp_get_indexes($xnpsid, $index_id, array('orders' => array(
-      array(
-        'sort_number',
-        0,
-      ),
-    )), $child);
+        $res = xnp_get_indexes($xnpsid, $index_id, array('orders' => array(array('sort_number', 0))), $child);
         if ($res == RES_OK) {
             foreach ($child as $i) {
                 if (!xnpExportIndex($fhdl, $i['item_id'], $recurse)) {
@@ -222,8 +217,8 @@ function xnpExportFile($export_path, $fhdl, $item_id)
         return false;
     }
 
-  // create files directory under $export_path.
-  $dir = $export_path.'/files';
+    // create files directory under $export_path.
+    $dir = $export_path.'/files';
     if (!file_exists($dir)) {
         if (!mkdir($dir)) {
             xoonips_error("can't make directory '${dir}'");
@@ -232,8 +227,8 @@ function xnpExportFile($export_path, $fhdl, $item_id)
         }
     }
 
-  // for absolete path of attachment file
-  $files = array();
+    // for absolete path of attachment file
+    $files = array();
     foreach ($file as $f) {
         $file = array();
         list($file['file_id'], $file['file_type_name'], $file['original_file_name'], $file['file_size'], $file['mime_type'], $file['thumbnail_file'], $file['caption']) = $f;
@@ -336,9 +331,9 @@ function xnpExportRelatedTo($parent_id)
     $xnpsid = $_SESSION['XNPSID'];
     $xml = array();
     $item_id = array();
-  // Export item: only accesible item
-  // ->export link information getted xnp_get_related_to.
-  $res = xnp_get_related_to($xnpsid, $parent_id, $item_id);
+    // Export item: only accesible item
+    // ->export link information getted xnp_get_related_to.
+    $res = xnp_get_related_to($xnpsid, $parent_id, $item_id);
     if ($res != RES_OK) {
         return null;
     }
@@ -379,20 +374,20 @@ function xnpImportIndex($str, $parent_index_id, &$id_table, &$errmsg)
         return false;
     }
     $parser_hash[$parser] = array(
-    'tagstack' => array(),
-    'id_table' => $id_table,
-    'errmsg' => $errmsg,
-    'handler' => array(),
-    'handlerstack' => array(),
-    'indexes' => array(),
-    'parent_index_id' => $parent_index_id,
-  );
+        'tagstack' => array(),
+        'id_table' => $id_table,
+        'errmsg' => $errmsg,
+        'handler' => array(),
+        'handlerstack' => array(),
+        'indexes' => array(),
+        'parent_index_id' => $parent_index_id,
+    );
 
     $parser_hash[$parser]['handler']['/INDEXES'] = array(
-    '_xoonips_import_indexStartElement',
-    '_xoonips_import_indexEndElement',
-    '_xoonips_import_indexCharacterData',
-  );
+        '_xoonips_import_indexStartElement',
+        '_xoonips_import_indexEndElement',
+        '_xoonips_import_indexCharacterData',
+    );
 
     xml_set_element_handler($parser, '_xoonips_import_startElement', '_xoonips_import_endElement');
     xml_set_character_data_handler($parser, '_xoonips_import_CharacterData');
@@ -424,17 +419,17 @@ function xnpImportIndexCheck($str, &$indexes)
         return null;
     }
     $parser_hash[$parser] = array(
-    'tagstack' => array(),
-    'indexes' => array(),
-    'handler' => array(),
-    'handlerstack' => array(),
-  );
-  // XooNIps processes following tags.
-  $parser_hash[$parser]['handler']['/INDEXES'] = array(
-    '_xoonips_import_indexcheckStartElement',
-    '_xoonips_import_indexcheckEndElement',
-    '_xoonips_import_indexcheckCharacterData',
-  );
+        'tagstack' => array(),
+        'indexes' => array(),
+        'handler' => array(),
+        'handlerstack' => array(),
+    );
+    // XooNIps processes following tags.
+    $parser_hash[$parser]['handler']['/INDEXES'] = array(
+        '_xoonips_import_indexcheckStartElement',
+        '_xoonips_import_indexcheckEndElement',
+        '_xoonips_import_indexcheckCharacterData',
+    );
 
     xml_set_element_handler($parser, '_xoonips_import_startElement', '_xoonips_import_endElement');
     xml_set_character_data_handler($parser, '_xoonips_import_CharacterData');
@@ -464,10 +459,10 @@ function _xoonips_import_startElement($parser, $name, $attribs)
     global $parser_hash;
     $currentTag = $name;
 
-  // return if item_id is not in accept_id
-  if (array_key_exists('basic', $parser_hash[$parser]) && array_key_exists('ID', $parser_hash[$parser]['basic']) && !in_array($parser_hash[$parser]['basic']['ID'], $parser_hash[$parser]['accept_id'])) {
-      return;
-  }
+    // return if item_id is not in accept_id
+    if (array_key_exists('basic', $parser_hash[$parser]) && array_key_exists('ID', $parser_hash[$parser]['basic']) && !in_array($parser_hash[$parser]['basic']['ID'], $parser_hash[$parser]['accept_id'])) {
+        return;
+    }
 
     $currentAttribs = $attribs;
 
@@ -493,20 +488,20 @@ function _xoonips_import_endElement($parser, $name)
     global $currentTag;
     global $parser_hash;
 
-  // return if item_id is not in accept_id
-  if (array_key_exists('basic', $parser_hash[$parser]) && array_key_exists('ID', $parser_hash[$parser]['basic']) && !in_array($parser_hash[$parser]['basic']['ID'], $parser_hash[$parser]['accept_id'])) {
-      return;
-  }
+    // return if item_id is not in accept_id
+    if (array_key_exists('basic', $parser_hash[$parser]) && array_key_exists('ID', $parser_hash[$parser]['basic']) && !in_array($parser_hash[$parser]['basic']['ID'], $parser_hash[$parser]['accept_id'])) {
+        return;
+    }
 
     if (count($parser_hash[$parser]['handlerstack']) > 0) {
         $handler = end($parser_hash[$parser]['handlerstack']);
         if (function_exists($handler[1])) {
             $handler[1]($parser, $name, $parser_hash[$parser]);
         }
-    // TODO: compare with first value in 'handler' key.
-    if (array_key_exists('/'.implode('/', $parser_hash[$parser]['tagstack']), $parser_hash[$parser]['handler'])) {
-        array_pop($parser_hash[$parser]['handlerstack']);
-    }
+        // TODO: compare with first value in 'handler' key.
+        if (array_key_exists('/'.implode('/', $parser_hash[$parser]['tagstack']), $parser_hash[$parser]['handler'])) {
+            array_pop($parser_hash[$parser]['handlerstack']);
+        }
         array_pop($parser_hash[$parser]['tagstack']);
 
         return;
@@ -523,10 +518,10 @@ function _xoonips_import_CharacterData($parser, $data)
     global $currentTag, $currentAttribs;
     global $parser_hash;
 
-  // return if item_id is not in accept_id
-  if (array_key_exists('basic', $parser_hash[$parser]) && array_key_exists('ID', $parser_hash[$parser]['basic']) && !in_array($parser_hash[$parser]['basic']['ID'], $parser_hash[$parser]['accept_id'])) {
-      return;
-  }
+    // return if item_id is not in accept_id
+    if (array_key_exists('basic', $parser_hash[$parser]) && array_key_exists('ID', $parser_hash[$parser]['basic']) && !in_array($parser_hash[$parser]['basic']['ID'], $parser_hash[$parser]['accept_id'])) {
+        return;
+    }
 
     $tags = '/'.implode('/', $parser_hash[$parser]['tagstack']);
 
@@ -548,21 +543,21 @@ function _xoonips_import_indexStartElement($parser, $name, $attribs, &$parser_ha
     $tags = '/'.implode('/', $parser_hash['tagstack']);
 
     switch ($tags) {
-  case '/INDEXES/INDEX/TITLE':
-    // prepare a new buffer of index title to read
-    $parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles'][] = '';
-    break;
-  case '/INDEXES/INDEX':
-    $ar = array(
-      'parent_id' => $attribs['PARENT_ID'],
-      'index_id' => $attribs['ID'],
-      'titles' => array(),
-    );
-    array_push($parser_hash['indexes'], $ar);
-    break;
-  case '/INDEXES':
-    break;
-  }
+    case '/INDEXES/INDEX/TITLE':
+        // prepare a new buffer of index title to read
+        $parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles'][] = '';
+        break;
+    case '/INDEXES/INDEX':
+        $ar = array(
+            'parent_id' => $attribs['PARENT_ID'],
+            'index_id' => $attribs['ID'],
+            'titles' => array(),
+        );
+        array_push($parser_hash['indexes'], $ar);
+       break;
+    case '/INDEXES':
+       break;
+    }
 }
 
 function _xoonips_import_indexEndElement($parser, $name, &$parser_hash)
@@ -570,62 +565,62 @@ function _xoonips_import_indexEndElement($parser, $name, &$parser_hash)
     $xnpsid = $_SESSION['XNPSID'];
 
     switch ($name) {
-  case 'INDEXES':
-    $indexes = $parser_hash['indexes'];
+    case 'INDEXES':
+        $indexes = $parser_hash['indexes'];
 
-    // To construct tree structure from given indexes by $indexes
-    // associative array (child ID -> parent ID)
-    $c2p = array();
-    // associative array (parent ID -> array of child ID)
-    $p2c = array();
-    // $index_by_id[ index_id ] => index array;
-    $index_by_id = array();
-    foreach ($indexes as $i) {
-        $c2p[$i['index_id']] = $i['parent_id'];
-        if (!isset($p2c[$i['parent_id']])) {
-            $p2c[$i['parent_id']] = array();
-        }
-        $p2c[$i['parent_id']][] = $i['index_id'];
-        $index_by_id[$i['index_id']] = $i;
-    }
-
-    // Index id of root of each index trees
-    $root_ids = array();
-    while (list($child, $parent) = each($c2p)) {
-        while (array_key_exists($parent, $c2p)) {
-            // track back to root
-        unset($c2p[$child]);
-            $child = $parent;
-            $parent = $c2p[$parent];
+        // To construct tree structure from given indexes by $indexes
+        // associative array (child ID -> parent ID)
+        $c2p = array();
+        // associative array (parent ID -> array of child ID)
+        $p2c = array();
+        // $index_by_id[ index_id ] => index array;
+        $index_by_id = array();
+        foreach ($indexes as $i) {
+            $c2p[$i['index_id']] = $i['parent_id'];
+            if (!isset($p2c[$i['parent_id']])) {
+                $p2c[$i['parent_id']] = array();
+            }
+            $p2c[$i['parent_id']][] = $i['index_id'];
+            $index_by_id[$i['index_id']] = $i;
         }
 
-        $parent = $child;
+        // Index id of root of each index trees
+        $root_ids = array();
+        while (list($child, $parent) = each($c2p)) {
+            while (array_key_exists($parent, $c2p)) {
+                // track back to root
+                unset($c2p[$child]);
+                $child = $parent;
+                $parent = $c2p[$parent];
+            }
 
-        $root_ids[] = $parent;
-        unset($c2p[$parent]);
+            $parent = $child;
 
-      // remove all childs of the root($parent)
-      if (isset($p2c[$parent])) {
-          $stack = $p2c[$parent];
-          while (count($stack) > 0) {
-              $id = array_pop($stack);
-              unset($c2p[$id]);
-              if (isset($p2c[$id])) {
-                  $stack = array_merge($stack, $p2c[$id]);
-              }
-          }
-      }
-        reset($c2p);
+            $root_ids[] = $parent;
+            unset($c2p[$parent]);
+
+            // remove all childs of the root($parent)
+            if (isset($p2c[$parent])) {
+                $stack = $p2c[$parent];
+                while (count($stack) > 0) {
+                    $id = array_pop($stack);
+                    unset($c2p[$id]);
+                    if (isset($p2c[$id])) {
+                        $stack = array_merge($stack, $p2c[$id]);
+                    }
+                }
+            }
+            reset($c2p);
+        }
+        // structured index tree
+        $tree = array();
+        foreach ($root_ids as $root_id) {
+            $tree[] = _xoonips_import_constructIndexTree($p2c, $index_by_id, $root_id);
+        }
+
+        _xoonips_import_index($parser_hash['parent_index_id'], $tree, $parser_hash['id_table']);
+        break;
     }
-    // structured index tree
-    $tree = array();
-    foreach ($root_ids as $root_id) {
-        $tree[] = _xoonips_import_constructIndexTree($p2c, $index_by_id, $root_id);
-    }
-
-    _xoonips_import_index($parser_hash['parent_index_id'], $tree, $parser_hash['id_table']);
-    break;
-  }
 }
 
 function _xoonips_import_indexCharacterData($parser, $data, &$parser_hash)
@@ -633,12 +628,12 @@ function _xoonips_import_indexCharacterData($parser, $data, &$parser_hash)
     $tags = '/'.implode('/', $parser_hash['tagstack']);
 
     switch ($tags) {
-  case '/INDEXES/INDEX/TITLE':
-    $index = array_pop($parser_hash['indexes']);
-    $index['titles'][count($index['titles']) - 1] .= $data;
-    array_push($parser_hash['indexes'], $index);
-    break;
-  }
+    case '/INDEXES/INDEX/TITLE':
+        $index = array_pop($parser_hash['indexes']);
+        $index['titles'][count($index['titles']) - 1] .= $data;
+        array_push($parser_hash['indexes'], $index);
+        break;
+    }
 }
 
 // parser handlers for index check
@@ -647,21 +642,21 @@ function _xoonips_import_indexcheckStartElement($parser, $name, $attribs, &$pars
     $tags = '/'.implode('/', $parser_hash['tagstack']);
 
     switch ($tags) {
-  case '/INDEXES':
-    $parser_hash['indexlinks'] = array();
-    break;
-  case '/INDEXES/INDEX':
-    $ar = array(
-      'parent_id' => $attribs['PARENT_ID'],
-      'index_id' => $attribs['ID'],
-      'titles' => array(),
-    );
-    array_push($parser_hash['indexes'], $ar);
-    break;
-  case '/INDEXES/INDEX/TITLE':
-    $parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles'][] = '';
-    break;
-  }
+    case '/INDEXES':
+        $parser_hash['indexlinks'] = array();
+        break;
+    case '/INDEXES/INDEX':
+        $ar = array(
+            'parent_id' => $attribs['PARENT_ID'],
+            'index_id' => $attribs['ID'],
+            'titles' => array(),
+        );
+        array_push($parser_hash['indexes'], $ar);
+        break;
+    case '/INDEXES/INDEX/TITLE':
+        $parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles'][] = '';
+        break;
+    }
 }
 
 function _xoonips_import_indexcheckEndElement($parser, $name, &$parser_hash)
@@ -669,12 +664,12 @@ function _xoonips_import_indexcheckEndElement($parser, $name, &$parser_hash)
     $tags = '/'.implode('/', $parser_hash['tagstack']);
 
     switch ($tags) {
-  case '/INDEXES/INDEX/TITLE':
-    $title = &$parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles'][count($parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles']) - 1];
-    $unicode = &xoonips_getutility('unicode');
-    $title = $unicode->decode_utf8($title, xoonips_get_server_charset(), 'h');
-    break;
-  }
+    case '/INDEXES/INDEX/TITLE':
+        $title = &$parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles'][count($parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles']) - 1];
+        $unicode = &xoonips_getutility('unicode');
+        $title = $unicode->decode_utf8($title, xoonips_get_server_charset(), 'h');
+        break;
+    }
 }
 
 function _xoonips_import_indexcheckCharacterData($parser, $data, &$parser_hash)
@@ -682,10 +677,10 @@ function _xoonips_import_indexcheckCharacterData($parser, $data, &$parser_hash)
     $tags = '/'.implode('/', $parser_hash['tagstack']);
 
     switch ($tags) {
-  case '/INDEXES/INDEX/TITLE':
-    $parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles'][count($parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles']) - 1] .= $data;
-    break;
-  }
+        case '/INDEXES/INDEX/TITLE':
+        $parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles'][count($parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles']) - 1] .= $data;
+        break;
+    }
 }
 
 /**
@@ -721,15 +716,15 @@ function _xoonips_import_index($parent_index_id, &$indexes, &$id_table)
             list($index['titles'][$k], $dummy) = xnpTrimString($unicode->decode_utf8($title, xoonips_get_server_charset(), 'h'), $lengths['title'], 'UTF-8');
         }
         $child = array();
-    // numbers of same index name
-    $cnt = 0;
+        // numbers of same index name
+        $cnt = 0;
         $index_id = 0;
         if (xnp_get_indexes($xnpsid, $parent_index_id, array(), $child) == RES_OK) {
             foreach ($child as $i) {
                 $diff = array_diff($i['titles'], $index['titles']);
                 if (empty($diff)) {
                     // true if $index have only same names of $i ( $i['titles'] == $index['titles'] )
-          ++$cnt;
+                    ++$cnt;
                     $index_id = $i['item_id'];
                 }
             }
@@ -746,8 +741,8 @@ function _xoonips_import_index($parent_index_id, &$indexes, &$id_table)
             }
             $id_table[$index['index_id']] = $index_id;
 
-      // record event log
-      $mydirname = basename(dirname(__DIR__));
+            // record event log
+            $mydirname = basename(dirname(__DIR__));
             $event_handler = &xoonips_getormhandler('xoonips', 'event_log');
             $event_handler->recordInsertIndexEvent($index_id);
         }
@@ -776,10 +771,10 @@ function _xoonips_import_constructIndexTree($p2c, $index_by_id, $root_id)
 
     if (isset($p2c[$root_id])) {
         // call _xoonips_import_constructIndexTree if index(id=$root_id) has
-    // child indexes
-    foreach ($p2c[$root_id] as $child_id) {
-        $ret['child'][] = _xoonips_import_constructIndexTree($p2c, $index_by_id, $child_id);
-    }
+        // child indexes
+        foreach ($p2c[$root_id] as $child_id) {
+            $ret['child'][] = _xoonips_import_constructIndexTree($p2c, $index_by_id, $child_id);
+        }
     }
 
     return $ret;

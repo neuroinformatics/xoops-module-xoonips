@@ -41,10 +41,10 @@
 function download_error($num, $msg = '')
 {
     $header_message = array(
-    '403' => 'Forbidden',
-    '404' => 'Not Found',
-    '500' => 'Internal Server Error',
-  );
+        '403' => 'Forbidden',
+        '404' => 'Not Found',
+        '500' => 'Internal Server Error',
+    );
     $error = sprintf('%d %s', $num, $header_message[$num]);
     header('HTTP/1.0 '.$error);
     if (empty($msg)) {
@@ -65,8 +65,8 @@ function download_create_zipfile($file_id, $item_id, $file_name, $metadata, $fil
         // file not found
     return false;
     }
-  // open metafile
-  $dirutil = &xoonips_getutility('directory');
+    // open metafile
+    $dirutil = &xoonips_getutility('directory');
     $metafile_path = $dirutil->get_template('XooNIpsDownloadMetaFile');
     $metafile_fp = $dirutil->mkstemp($metafile_path);
     if ($metafile_fp === false) {
@@ -74,8 +74,8 @@ function download_create_zipfile($file_id, $item_id, $file_name, $metadata, $fil
     return false;
     }
     register_shutdown_function('download_unlink', $metafile_path);
-  // write metafile
-  $unicode = &xoonips_getutility('unicode');
+    // write metafile
+    $unicode = &xoonips_getutility('unicode');
     $metafile_body = '';
     foreach ($metadata as $key => $val) {
         $metafile_body .= $key;
@@ -93,11 +93,11 @@ function download_create_zipfile($file_id, $item_id, $file_name, $metadata, $fil
     $metafile_body .= _MD_XOONIPS_ITEM_DETAIL_URL.': '.xnpGetItemDetailURL($item_id)."\r\n";
     $metafile_body = $unicode->encode_utf8($metafile_body);
     fwrite($metafile_fp, $metafile_body);
-  // close metafile
-  fclose($metafile_fp);
+    // close metafile
+    fclose($metafile_fp);
 
-  // open zipfile
-  $zipfile_path = $dirutil->get_template('XooNIpsDownloadZipFile');
+    // open zipfile
+    $zipfile_path = $dirutil->get_template('XooNIpsDownloadZipFile');
     $zipfile_fp = $dirutil->mkstemp($zipfile_path);
     if ($zipfile_fp === false) {
         // failed to create temporary file for zip
@@ -110,11 +110,11 @@ function download_create_zipfile($file_id, $item_id, $file_name, $metadata, $fil
         // failed to open zip file
     return false;
     }
-  // write zipfile
-  $ziputil->add($file_path, $file_name);
+    // write zipfile
+    $ziputil->add($file_path, $file_name);
     $ziputil->add($metafile_path, 'metainfo.txt');
-  // close zipfile
-  $ziputil->close();
+    // close zipfile
+    $ziputil->close();
 
     return $zipfile_path;
 }
@@ -142,7 +142,7 @@ $is_post = $formdata->getRequestMethod() == 'POST' ? true : false;
 $file_id = $formdata->getValue('both', 'file_id', 'i', false);
 if (is_null($file_id)) {
     // try to get file_id from doi parameter - NTTDK and Keio University 20080825
-  $doi = $formdata->getValue('both', XNP_CONFIG_DOI_FIELD_PARAM_NAME, 's', false);
+    $doi = $formdata->getValue('both', XNP_CONFIG_DOI_FIELD_PARAM_NAME, 's', false);
     $file_id = $file_handler->getFileIdByDOI($doi);
     if ($file_id === false) {
         download_error(404);
@@ -201,14 +201,14 @@ include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype_viewphp;
 $dllimit_func = $itemtype_name.'GetAttachmentDownloadLimitOption';
 if (function_exists($dllimit_func) && $dllimit_func($item_id)) {
     // only registered user can download file
-  if ($uid == UID_GUEST) {
-      // if user is guest than redirect to login page
-    $parsed = parse_url(XOOPS_URL);
-      $xoops_path = isset($parsed['path']) ? $parsed['path'] : '';
-      $xoops_redirect = str_replace(XOOPS_URL, $xoops_path, $detail_url);
-      header('Location:'.XOOPS_URL.'/modules/xoonips/user.php?xoops_redirect='.urlencode($xoops_redirect));
-      exit();
-  }
+    if ($uid == UID_GUEST) {
+        // if user is guest than redirect to login page
+        $parsed = parse_url(XOOPS_URL);
+        $xoops_path = isset($parsed['path']) ? $parsed['path'] : '';
+        $xoops_redirect = str_replace(XOOPS_URL, $xoops_path, $detail_url);
+        header('Location:'.XOOPS_URL.'/modules/xoonips/user.php?xoops_redirect='.urlencode($xoops_redirect));
+        exit();
+    }
 }
 
 // check the download confirmation
@@ -216,14 +216,14 @@ $dlconfirm = false;
 $dlconfirm_func = $itemtype_name.'GetDownloadConfirmationRequired';
 if (function_exists($dlconfirm_func) && $dlconfirm_func($item_id)) {
     // let users confirm and download
-  $ticket_area = 'xoonips_download_token'.$file_id;
+    $ticket_area = 'xoonips_download_token'.$file_id;
     if (!$xoopsGTicket->check($is_post, $ticket_area, false)) {
         if (isset($_REQUEST['XOOPS_G_TIKET'])) {
             // bad token ticket, maybe this ticket already used
-      redirect_header($detail_url, 5, _MD_XOONIPS_ITEM_ATTACHMENT_BAD_TOKEN_LABEL);
+            redirect_header($detail_url, 5, _MD_XOONIPS_ITEM_ATTACHMENT_BAD_TOKEN_LABEL);
         } else {
             // no token ticket pair found
-      header('Location:'.$detail_url);
+            header('Location:'.$detail_url);
         }
         exit();
     }
@@ -251,18 +251,18 @@ $zip_filename = $itemtype_displayname.'_'.$file_id.'.zip';
 $pathinfo_filename = $do_compress ? $zip_filename : $filename;
 if (!$download->check_pathinfo($pathinfo_filename)) {
     // don't redirect if download notification required
-  if (!$dlnotify) {
-      // redirect page if safari
-    $ticket_area = 'xoonips_download_token'.$file_id;
-      $url = $download_url;
-      if ($dlconfirm) {
-          // add token ticket if confirmation required
-      $url .= '&'.$xoopsGTicket->getTicketParamString(__LINE__, true, 1800, $ticket_area);
-      }
-      $url = $download->append_pathinfo($url, $pathinfo_filename);
-      header('Location: '.$url);
-      exit();
-  }
+    if (!$dlnotify) {
+        // redirect page if safari
+        $ticket_area = 'xoonips_download_token'.$file_id;
+        $url = $download_url;
+        if ($dlconfirm) {
+            // add token ticket if confirmation required
+            $url .= '&'.$xoopsGTicket->getTicketParamString(__LINE__, true, 1800, $ticket_area);
+        }
+        $url = $download->append_pathinfo($url, $pathinfo_filename);
+        header('Location: '.$url);
+        exit();
+    }
 }
 
 $dl_filepath = false;
@@ -273,10 +273,10 @@ if (class_exists('XCube_DelegateUtils')) {
 
 if ($do_compress) {
     // get metadata of attachment file
-  $meta_func = $itemtype_name.'GetMetaInformation';
+    $meta_func = $itemtype_name.'GetMetaInformation';
     $metadata = $meta_func($item_id);
-  // create zip file
-  $filename = $download->convert_to_client($filename, 'u');
+    // create zip file
+    $filename = $download->convert_to_client($filename, 'u');
     $dl_filepath = download_create_zipfile($file_id, $item_id, $filename, $metadata, $dl_filepath);
 
     if ($dl_filepath === false) {

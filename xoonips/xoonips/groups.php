@@ -36,13 +36,13 @@ if ($uid == UID_GUEST) {
 }
 
 $breadcrumbs = array(
-  array(
-    'name' => _MD_XOONIPS_BREADCRUMBS_USER,
-  ),
-  array(
-    'name' => _MD_XOONIPS_TITLE_GROUP_LIST,
-    'url' => 'groups.php',
-  ),
+    array(
+        'name' => _MD_XOONIPS_BREADCRUMBS_USER,
+    ),
+    array(
+        'name' => _MD_XOONIPS_TITLE_GROUP_LIST,
+        'url' => 'groups.php',
+    ),
 );
 
 $xgroup_handler = &xoonips_gethandler('xoonips', 'group');

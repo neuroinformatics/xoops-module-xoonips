@@ -45,8 +45,8 @@ function item_get_userlist($upage)
 {
     global $xoopsDB;
     global $xoopsUser;
-  // myuid
-  $myuid = $xoopsUser->getVar('uid', 'n');
+    // myuid
+    $myuid = $xoopsUser->getVar('uid', 'n');
     $xusers_handler = &xoonips_getormhandler('xoonips', 'users');
     $tables['users'] = $xoopsDB->prefix('users');
     $tables['xusers'] = $xoopsDB->prefix('xoonips_users');
@@ -61,18 +61,18 @@ function item_get_userlist($upage)
     $textutil = &xoonips_getutility('text');
     $users = array();
     $users[] = array(
-    'uid' => 0,
-    'uname' => $textutil->html_special_chars(_AM_XOONIPS_MAINTENANCE_ITEM_LABEL_ALLUSERS),
-    'selected' => 'selected="selected"',
-  );
+        'uid' => 0,
+        'uname' => $textutil->html_special_chars(_AM_XOONIPS_MAINTENANCE_ITEM_LABEL_ALLUSERS),
+        'selected' => 'selected="selected"',
+    );
     foreach ($xusers_objs as $xusers_obj) {
         $uid = $xusers_obj->getVar('uid', 'e');
         $uname = $textutil->html_special_chars($xusers_obj->getExtraVar('uname'));
         $users[] = array(
-      'uid' => $uid,
-      'uname' => $uname,
-      'selected' => '',
-    );
+          'uid' => $uid,
+          'uname' => $uname,
+          'selected' => '',
+        );
     }
 
     return $users;
@@ -82,26 +82,26 @@ $userlist = item_get_userlist($upage);
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_ITEM_TITLE,
-    'url' => $xoonips_admin['mypage_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_ITEM_TITLE,
+        'url' => $xoonips_admin['mypage_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // templates

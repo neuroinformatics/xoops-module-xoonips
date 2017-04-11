@@ -34,42 +34,42 @@ function b_xoonips_group_show()
 {
     global $xoopsUser;
 
-  // hide block if user is guest
-  if (!is_object($xoopsUser)) {
-      return false;
-  }
+    // hide block if user is guest
+    if (!is_object($xoopsUser)) {
+        return false;
+    }
 
     $uid = $xoopsUser->getVar('uid', 'n');
 
-  // hide block if user is invalid xoonips user
-  $xsession_handler = &xoonips_getormhandler('xoonips', 'session');
+    // hide block if user is invalid xoonips user
+    $xsession_handler = &xoonips_getormhandler('xoonips', 'session');
     if (!$xsession_handler->validateUser($uid, false)) {
         return false;
     }
 
-  // get administrable group ids
-  $xgroup_handler = &xoonips_gethandler('xoonips', 'group');
+    // get administrable group ids
+    $xgroup_handler = &xoonips_gethandler('xoonips', 'group');
     $admin_gids = $xgroup_handler->getGroupIds($uid, true);
     if (empty($admin_gids)) {
         // user is not group admin
-    return false;
+        return false;
     }
 
-  // get index id of primary group
-  $gid = $admin_gids[0];
-  // primary gid
-  $group_index_id = $xgroup_handler->getGroupRootIndexId($gid);
+    // get index id of primary group
+    $gid = $admin_gids[0];
+    // primary gid
+    $group_index_id = $xgroup_handler->getGroupRootIndexId($gid);
 
-  // count certification requested items
-  $xil_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
+    // count certification requested items
+    $xil_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
     $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id', 'INNER', 'x');
     $criteria = new CriteriaCompo(new Criteria('certify_state', CERTIFY_REQUIRED));
     $criteria->add(new Criteria('open_level', OL_GROUP_ONLY, '=', 'x'));
     $criteria->add(new Criteria('gid', '('.implode(',', $admin_gids).')', 'IN', 'x'));
     $ci_count = $xil_handler->getCount($criteria, $join);
 
-  // assign block template variables
-  $block = array();
+    // assign block template variables
+    $block = array();
     $block['lang_edit_group'] = _MB_XOONIPS_GROUP_EDIT_GROUP_MEMBERS;
     $block['lang_certify_group_items'] = _MB_XOONIPS_GROUP_CERTIFY_GROUP_ITEMS;
     $block['lang_certify_group_items_count'] = $ci_count;

@@ -35,26 +35,26 @@ $description = _AM_XOONIPS_POLICY_ITEM_TYPE_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_POLICY_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_POLICY_ITEM_TITLE,
-    'url' => $xoonips_admin['myfile_url'].'?page=item',
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_POLICY_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_POLICY_ITEM_TITLE,
+        'url' => $xoonips_admin['myfile_url'].'?page=item',
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket
@@ -70,18 +70,18 @@ $itemtype_order = array();
 $editicon = '<img src="../images/icon_modify.png" alt="'._AM_XOONIPS_LABEL_PREFERENCES.'" title="'._AM_XOONIPS_LABEL_PREFERENCES.'"/>';
 foreach ($it_objs as $it_obj) {
     // get module id
-  $mid = $it_obj->get('mid');
-  // get display name
-  $display_name_s = $it_obj->getVar('display_name', 's');
+    $mid = $it_obj->get('mid');
+    // get display name
+    $display_name_s = $it_obj->getVar('display_name', 's');
     $display_name_e = $it_obj->getVar('display_name', 'e');
     $item_type_id = $it_obj->getVar('item_type_id', 'e');
-  // get module information
-  $xoonips_module = &$module_handler->getByDirname('xoonips');
+    // get module information
+    $xoonips_module = &$module_handler->getByDirname('xoonips');
     $xoonips_mid = $xoonips_module->getVar('mid');
     $module = &$module_handler->get($mid);
     $modname = $module->getVar('name', 's');
-  // get admin page link
-  $hasadmin = $module->getVar('hasadmin', 'n');
+    // get admin page link
+    $hasadmin = $module->getVar('hasadmin', 'n');
     if ($hasadmin) {
         $adminindex = $module->getInfo('adminindex');
         $dirname = $module->getVar('dirname', 'e');
@@ -89,17 +89,17 @@ foreach ($it_objs as $it_obj) {
     } else {
         $adminlink = '&nbsp;';
     }
-  // get module order
-  $weight = $module->getVar('weight', 'n');
+    // get module order
+    $weight = $module->getVar('weight', 'n');
     $itemtype_order[] = array(
-    'mid' => $mid,
-    'item_type_id' => $item_type_id,
-    'display_name_s' => $display_name_s,
-    'display_name_e' => $display_name_e,
-    'modname' => $modname,
-    'weight' => $weight,
-    'admin_link' => $adminlink,
-  );
+        'mid' => $mid,
+        'item_type_id' => $item_type_id,
+        'display_name_s' => $display_name_s,
+        'display_name_e' => $display_name_e,
+        'modname' => $modname,
+        'weight' => $weight,
+        'admin_link' => $adminlink,
+    );
     unset($module);
 }
 $num = 0;

@@ -41,21 +41,9 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 
 // get requests
 $post_keys = array(
-  'moderator_gid' => array(
-    'i',
-    false,
-    true,
-  ),
-  'upload_dir' => array(
-    's',
-    false,
-    true,
-  ),
-  'magic_file_path' => array(
-    's',
-    false,
-    true,
-  ),
+    'moderator_gid' => array('i', false, true),
+    'upload_dir' => array('s', false, true),
+    'magic_file_path' => array('s', false, true),
 );
 $post_vals = xoonips_admin_get_requests('post', $post_keys);
 
@@ -71,31 +59,31 @@ $config_vals = xoonips_admin_get_configs($config_keys, 'e');
 function update_block_permissions($old_gid, $new_gid)
 {
     // get handlers
-  $gperm_handler = &xoops_gethandler('groupperm');
+    $gperm_handler = &xoops_gethandler('groupperm');
     $module_handler = &xoops_gethandler('module');
     $module = &$module_handler->getByDirname('xoonips');
     $mid = $module->getVar('mid');
     $block_objs = &XoopsBlock::getByModule($mid);
     foreach ($block_objs as $block_obj) {
         // find moderator menu block
-    if ($block_obj->getVar('show_func') == 'b_xoonips_moderator_show') {
-        $bid = $block_obj->getVar('bid');
-      // if old_gid don't have module admin right,
-      // delete the right to access from old_gid.
-      if (!$gperm_handler->checkRight('module_admin', $mid, $old_gid)) {
-          $criteria = new CriteriaCompo();
-          $criteria->add(new Criteria('gperm_groupid', $old_gid));
-          $criteria->add(new Criteria('gperm_itemid', $bid));
-          $criteria->add(new Criteria('gperm_name', 'block_read'));
-          $gperm_handler->deleteAll($criteria);
-      }
-      // if there is no right to access moderator block in new_gid,
-      // the right gives new_gid.
-      if (!$gperm_handler->checkRight('block_read', $bid, $new_gid)) {
-          $gperm_handler->addRight('block_read', $bid, $new_gid);
-      }
-        break;
-    }
+        if ($block_obj->getVar('show_func') == 'b_xoonips_moderator_show') {
+            $bid = $block_obj->getVar('bid');
+            // if old_gid don't have module admin right,
+            // delete the right to access from old_gid.
+            if (!$gperm_handler->checkRight('module_admin', $mid, $old_gid)) {
+                $criteria = new CriteriaCompo();
+                $criteria->add(new Criteria('gperm_groupid', $old_gid));
+                $criteria->add(new Criteria('gperm_itemid', $bid));
+                $criteria->add(new Criteria('gperm_name', 'block_read'));
+                $gperm_handler->deleteAll($criteria);
+            }
+            // if there is no right to access moderator block in new_gid,
+            // the right gives new_gid.
+            if (!$gperm_handler->checkRight('block_read', $bid, $new_gid)) {
+                $gperm_handler->addRight('block_read', $bid, $new_gid);
+            }
+            break;
+        }
     }
 }
 

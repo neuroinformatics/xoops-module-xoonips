@@ -47,11 +47,7 @@ include_once '../include/notification.inc.php';
 
 // get requests
 $get_keys = array(
-  'tree' => array(
-    'i',
-    true,
-    false,
-  ),
+  'tree' => array('i', true, false),
 );
 $get_vals = xoonips_admin_get_requests('post', $get_keys);
 $tree_ids = $get_vals['tree'];
@@ -79,76 +75,76 @@ if (count($tree_ids) > 0) {
 
     $modified_item_ids = array();
 
-  // execute item withdraw
-  foreach ($tree_ids as $xid) {
-      $succeed = 0;
-      $failed = 0;
-      $uncertified = 0;
+    // execute item withdraw
+    foreach ($tree_ids as $xid) {
+        $succeed = 0;
+        $failed = 0;
+        $uncertified = 0;
 
-      $index_item_links = &$index_item_link_handler->getObjects(new Criteria('index_id', $xid));
-      if ($index_item_links === false) {
-          // no item in tree
-      continue;
-      }
-      foreach ($index_item_links as $index_item_link) {
-          $item_id = $index_item_link->get('item_id');
-          if ($item_lock_handler->isLocked($item_id)) {
-              // item is not certified
-        ++$uncertified;
-          } else {
-              if ($index_item_link_handler->delete($index_item_link)) {
-                  // succeed
-          ++$succeed;
-                  $event_log_handler->recordRejectItemEvent($item_id, $xid);
-                  $modified_item_ids[$item_id] = $item_id;
-                  xoonips_notification_item_rejected($item_id, $xid);
-              } else {
-                  // error occured
-          ++$failed;
-              }
-          }
-      }
+        $index_item_links = &$index_item_link_handler->getObjects(new Criteria('index_id', $xid));
+        if ($index_item_links === false) {
+            // no item in tree
+            continue;
+        }
+        foreach ($index_item_links as $index_item_link) {
+            $item_id = $index_item_link->get('item_id');
+            if ($item_lock_handler->isLocked($item_id)) {
+                // item is not certified
+                ++$uncertified;
+            } else {
+                if ($index_item_link_handler->delete($index_item_link)) {
+                    // succeed
+                    ++$succeed;
+                    $event_log_handler->recordRejectItemEvent($item_id, $xid);
+                    $modified_item_ids[$item_id] = $item_id;
+                    xoonips_notification_item_rejected($item_id, $xid);
+                } else {
+                    // error occured
+                    ++$failed;
+                }
+            }
+        }
 
-      $results[] = array(
-      'id' => $xid,
-      'evenodd' => $evenodd,
-      'index' => $textutil->html_special_chars($treemap[$xid]),
-      'succeed' => $succeed,
-      'uncertified' => $uncertified,
-      'failed' => $failed,
-    );
-      $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
-  }
+        $results[] = array(
+            'id' => $xid,
+            'evenodd' => $evenodd,
+            'index' => $textutil->html_special_chars($treemap[$xid]),
+            'succeed' => $succeed,
+            'uncertified' => $uncertified,
+            'failed' => $failed,
+        );
+        $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+    }
 
-  // update item_status and item_basic. delete item_show
-  foreach ($modified_item_ids as $item_id) {
-      // update last_update
-    $item_basic = $item_basic_handler->get($item_id);
-      $item_basic->set('last_update_date', time());
-      $item_basic_handler->insert($item_basic);
+    // update item_status and item_basic. delete item_show
+    foreach ($modified_item_ids as $item_id) {
+        // update last_update
+        $item_basic = $item_basic_handler->get($item_id);
+        $item_basic->set('last_update_date', time());
+        $item_basic_handler->insert($item_basic);
 
-    // if item becomes not public...
-    $criteria = new CriteriaCompo();
-      $criteria->add(new Criteria('item_id', $item_id));
-      $criteria->add(new Criteria('open_level', OL_PUBLIC));
-      $criteria->add(new Criteria('certify_state', CERTIFIED));
-      $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id');
-      $index_item_links = &$index_item_link_handler->getObjects($criteria, false, '', false, $join);
-      if (count($index_item_links) === 0) {
-          // update item_status
-      $item_status = $item_status_handler->get($item_id);
-          if ($item_status !== false) {
-              $item_status->set('is_deleted', 1);
-              $item_status->set('deleted_timestamp', time());
-              $item_status_handler->insert($item_status);
-          }
-      // delete item_show
-      $item_shows = &$item_show_handler->getObjects(new Criteria('item_id', $item_id));
-          foreach ($item_shows as $item_show) {
-              $item_show_handler->delete($item_show);
-          }
-      }
-  }
+        // if item becomes not public...
+        $criteria = new CriteriaCompo();
+        $criteria->add(new Criteria('item_id', $item_id));
+        $criteria->add(new Criteria('open_level', OL_PUBLIC));
+        $criteria->add(new Criteria('certify_state', CERTIFIED));
+        $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id');
+        $index_item_links = &$index_item_link_handler->getObjects($criteria, false, '', false, $join);
+        if (count($index_item_links) === 0) {
+            // update item_status
+            $item_status = $item_status_handler->get($item_id);
+            if ($item_status !== false) {
+                $item_status->set('is_deleted', 1);
+                $item_status->set('deleted_timestamp', time());
+                $item_status_handler->insert($item_status);
+            }
+            // delete item_show
+            $item_shows = &$item_show_handler->getObjects(new Criteria('item_id', $item_id));
+            foreach ($item_shows as $item_show) {
+                $item_show_handler->delete($item_show);
+            }
+        }
+    }
 }
 
 // title
@@ -157,31 +153,31 @@ $description = _AM_XOONIPS_MAINTENANCE_ITEM_WUPDATE_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_ITEM_TITLE,
-    'url' => $xoonips_admin['mypage_url'],
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_ITEM_WITHDRAW_TITLE,
-    'url' => $xoonips_admin['mypage_url'].'&amp;action=withdraw',
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_ITEM_TITLE,
+        'url' => $xoonips_admin['mypage_url'],
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_ITEM_WITHDRAW_TITLE,
+        'url' => $xoonips_admin['mypage_url'].'&amp;action=withdraw',
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // templates

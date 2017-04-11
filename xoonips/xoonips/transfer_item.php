@@ -33,8 +33,7 @@ include_once 'class/base/actionfactory.class.php';
 $formdata = &xoonips_getutility('formdata');
 $op = $formdata->getValue('get', 'action', 'n', false);
 if (empty($op)) {
-    header('Location: '.XOOPS_URL
-            .'/modules/xoonips/transfer_item.php?action=request_initialize');
+    header('Location: '.XOOPS_URL.'/modules/xoonips/transfer_item.php?action=request_initialize');
     exit(0);
 }
 
@@ -54,13 +53,5 @@ exit(0);
 
 function is_valid_action($action)
 {
-    return in_array($action, array('accept',
-                                     'detail_item',
-                                     'list_item',
-                                     'reject',
-                                     'request',
-                                     'request_check',
-                                     'request_initialize',
-                                     'request_select_item',
-                                     'request_unselect_item', ));
+    return in_array($action, array('accept', 'detail_item', 'list_item', 'reject', 'request', 'request_check', 'request_initialize', 'request_select_item', 'request_unselect_item'));
 }

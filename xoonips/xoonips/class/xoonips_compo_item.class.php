@@ -538,47 +538,47 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
                                             'log' => $changelog->getVar('log', 's'), );
         }
 
-// get indexes only not item listing for loading performance improvement
-if ($type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST) {
-    $xoonips_user_handler = &xoonips_getormhandler('xoonips', 'users');
-    $xoonips_user = &$xoonips_user_handler->get($basic->get('uid'));
-    $private_index_id = $xoonips_user->get('private_index_id');
-    foreach ($item->getVar('indexes') as $link) {
-        $result['indexes'][] = array(
-            'path' => $this->get_index_path_by_index_id($link->get('index_id'), $private_index_id, 's'),
-          );
-    }
-}
-
-// get related to part only not item listing for disable to recursive calling
-if ($type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST) {
-    $basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
-    foreach ($item->getVar('related_tos') as $related_to) {
-        $related_basic = &$basic_handler->get($related_to->get('item_id'));
-        if (empty($related_basic)) {
-            continue;
-        } // ignore invalid item id
-            $related_item_type = &$item_type_handler->get($related_basic->get('item_type_id'));
-        $related_item_type_id = $related_item_type->get('item_type_id');
-        if ($related_item_type_id == ITID_INDEX) {
-            continue;
-        } // ignore index id
-            $item_compo_handler = &xoonips_getormcompohandler($related_item_type->getVar('name', 's'), 'item');
-        if ($item_compo_handler->getPerm($item_id, $uid, 'read')) {
-            $result['related_tos'][]
-                    = array('filename' => 'db:'.$item_compo_handler->getTemplateFileName(XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST),
-                             'var' => $item_compo_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST,
-                                                                             $related_basic->get('item_id'), $uid), );
+        // get indexes only not item listing for loading performance improvement
+        if ($type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST) {
+            $xoonips_user_handler = &xoonips_getormhandler('xoonips', 'users');
+            $xoonips_user = &$xoonips_user_handler->get($basic->get('uid'));
+            $private_index_id = $xoonips_user->get('private_index_id');
+            foreach ($item->getVar('indexes') as $link) {
+                $result['indexes'][] = array(
+                    'path' => $this->get_index_path_by_index_id($link->get('index_id'), $private_index_id, 's'),
+                  );
+            }
         }
-    }
-}
+
+        // get related to part only not item listing for disable to recursive calling
+        if ($type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST) {
+            $basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
+            foreach ($item->getVar('related_tos') as $related_to) {
+                $related_basic = &$basic_handler->get($related_to->get('item_id'));
+                if (empty($related_basic)) {
+                    continue;
+                } // ignore invalid item id
+                $related_item_type = &$item_type_handler->get($related_basic->get('item_type_id'));
+                $related_item_type_id = $related_item_type->get('item_type_id');
+                if ($related_item_type_id == ITID_INDEX) {
+                    continue;
+                } // ignore index id
+                $item_compo_handler = &xoonips_getormcompohandler($related_item_type->getVar('name', 's'), 'item');
+                if ($item_compo_handler->getPerm($item_id, $uid, 'read')) {
+                    $result['related_tos'][] = array(
+                        'filename' => 'db:'.$item_compo_handler->getTemplateFileName(XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST),
+                        'var' => $item_compo_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST,
+                        $related_basic->get('item_id'), $uid), );
+                }
+            }
+        }
 
         //additional type specific template vars
         switch ($type) {
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
-          $result['url'] = $textutil->html_special_chars(xoonips_get_transfer_request_item_detail_url($basic->get('item_id')));
+            $result['url'] = $textutil->html_special_chars(xoonips_get_transfer_request_item_detail_url($basic->get('item_id')));
         case XOONIPS_TEMPLATE_TYPE_ITEM_LIST:
-          $result['pending'] = xnpIsPending($item_id);
+            $result['pending'] = xnpIsPending($item_id);
         }
 
         return $result;
@@ -614,8 +614,9 @@ if ($type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_T
 
     public function get_lang_label($lang)
     {
-        $languages = $this->array_combine(explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_IDS),
-                                             explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_NAMES));
+        $languages = $this->array_combine(
+            explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_IDS),
+            explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_NAMES));
 
         if (in_array($lang, array_keys($languages))) {
             return $languages[$lang];
@@ -628,11 +629,7 @@ if ($type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_T
     {
         $index_handler = &xoonips_getormcompohandler('xoonips', 'index');
 
-        return '/'
-            .implode('/',
-                       $index_handler
-                       ->getIndexPathNames($index_id,
-                                            $private_index_id, $fmt));
+        return '/'.implode('/', $index_handler->getIndexPathNames($index_id, $private_index_id, $fmt));
     }
 
     /**
@@ -707,14 +704,15 @@ if ($type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_T
 
         $file_type = &$file_type_handler->get($file->get('file_type_id'));
 
-        return array('file_id' => $file->getVar('file_id', 's'),
-                      'file_name' => $file->getVar('original_file_name', 's'),
-                      'mime_type' => $file->getVar('mime_type', 's'),
-                      'file_size' => $fileSizeStr,
-                      'last_update_date' => $file->get('timestamp'),
-                      'download_count' => $file->get('download_count'),
-                      'item_creation_date' => $basic->get('creation_date'),
-                      'total_download_count' => $file_handler->getTotalDownloadCount($file->get('item_id'), $file_type->get('name')), );
+        return array(
+            'file_id' => $file->getVar('file_id', 's'),
+            'file_name' => $file->getVar('original_file_name', 's'),
+            'mime_type' => $file->getVar('mime_type', 's'),
+            'file_size' => $fileSizeStr,
+            'last_update_date' => $file->get('timestamp'),
+            'download_count' => $file->get('download_count'),
+            'item_creation_date' => $basic->get('creation_date'),
+            'total_download_count' => $file_handler->getTotalDownloadCount($file->get('item_id'), $file_type->get('name')), );
     }
 
     /**
@@ -726,14 +724,11 @@ if ($type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_T
      */
     public function getPreviewTemplateVar($preview)
     {
-        return array('thumbnail_url' => XOOPS_URL
-                          .'/modules/xoonips/image.php?file_id='
-                          .$preview->get('file_id')
-                          .'&amp;thumbnail=1',
-                      'image_url' => XOOPS_URL
-                          .'/modules/xoonips/image.php?file_id='
-                          .$preview->get('file_id'),
-                      'caption' => $preview->getVar('caption', 's'), );
+        return array(
+            'thumbnail_url' => XOOPS_URL.'/modules/xoonips/image.php?file_id='.$preview->get('file_id').'&amp;thumbnail=1',
+            'image_url' => XOOPS_URL.'/modules/xoonips/image.php?file_id='.$preview->get('file_id'),
+            'caption' => $preview->getVar('caption', 's'),
+        );
     }
 
     /**
@@ -790,8 +785,7 @@ if ($type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_T
             return $base_url.'?item_id='.intval($item_id);
         }
 
-        return $base_url.'?'.XNP_CONFIG_DOI_FIELD_PARAM_NAME
-            .'='.urlencode($basic->get('doi'));
+        return $base_url.'?'.XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($basic->get('doi'));
     }
 
     public function hasDownloadPermission($uid, $file_id)

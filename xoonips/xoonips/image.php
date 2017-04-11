@@ -43,16 +43,16 @@ $xnpsid = $_SESSION['XNPSID'];
 function image_error($err)
 {
     switch ($err) {
-  case 403:
-    header('HTTP/1.0 403 Forbidden');
-    break;
-  case 404:
-    header('HTTP/1.0 404 Not Found');
-    break;
-  case 500:
-    header('HTTP/1.0 500 Internal Server Error');
-    break;
-  }
+    case 403:
+        header('HTTP/1.0 403 Forbidden');
+        break;
+    case 404:
+        header('HTTP/1.0 404 Not Found');
+        break;
+    case 500:
+        header('HTTP/1.0 500 Internal Server Error');
+        break;
+    }
     exit();
 }
 
@@ -107,7 +107,7 @@ if ($xnpsid == $sess_id) {
         // Visible item
     } else {
         // user don't have rights of access.
-    image_error(403);
+        image_error(403);
     }
 }
 
@@ -158,19 +158,9 @@ if (!empty($thumbnail)) {
             } elseif ($matches[1] == 'text') {
                 $img_type = 'text';
             } elseif ($matches[1] == 'application') {
-                $text_types = array(
-          'pdf',
-          'xml',
-          'msword',
-          'vnd.ms-excel',
-        );
-                $image_types = array(
-          'vnd.ms-powerpoint',
-          'postscript',
-        );
-                $audio_types = array(
-          'vnd.rn-realmedia',
-        );
+                $text_types = array('pdf', 'xml', 'msword', 'vnd.ms-excel');
+                $image_types = array('vnd.ms-powerpoint', 'postscript');
+                $audio_types = array('vnd.rn-realmedia');
                 if (in_array($matches[2], $text_types)) {
                     $img_type = 'text';
                 } elseif (in_array($matches[2], $audio_types)) {
@@ -187,22 +177,22 @@ if (!empty($thumbnail)) {
             $img_type = 'unknown';
         }
         $img_file = XOOPS_ROOT_PATH.'/modules/xoonips/images/thumbnail_'.$img_type.'.png';
-    // create image resource
-    $w = 100;
+        // create image resource
+        $w = 100;
         $h = 100;
         $im = imagecreatetruecolor($w, $h);
-    // label setting
-    $f = 2;
-    // font number
-    $lp = 5;
-    // label padding
-    $fw = imagefontwidth($f);
-    // font width
-    $fh = imagefontheight($f);
-    // font height
-    $fmaxlen = ($w - $lp * 2) / $fw;
-    // max label length
-    $labels = explode(',', $label);
+        // label setting
+        $f = 2;
+        // font number
+        $lp = 5;
+        // label padding
+        $fw = imagefontwidth($f);
+        // font width
+        $fh = imagefontheight($f);
+        // font height
+        $fmaxlen = ($w - $lp * 2) / $fw;
+        // max label length
+        $labels = explode(',', $label);
         $label = $labels[0];
         $llen = strlen($label);
         if ($llen > $fmaxlen) {
@@ -212,16 +202,16 @@ if (!empty($thumbnail)) {
         }
         $lx = ($w - $llen * $fw) / 2;
         $ly = $h - $fh - $lp;
-    // change alpha attributes and create transparent color
-    imageantialias($im, true);
+        // change alpha attributes and create transparent color
+        imageantialias($im, true);
         imagealphablending($im, false);
         imagesavealpha($im, true);
         $transparent = imagecolorallocatealpha($im, 255, 255, 255, 0);
         $col_white = imagecolorallocate($im, 255, 255, 255);
         $col_gray = imagecolorallocate($im, 127, 127, 127);
         $col_black = imagecolorallocate($im, 0, 0, 0);
-    // fill all area with transparent color
-    imagefill($im, 0, 0, $col_white);
+        // fill all area with transparent color
+        imagefill($im, 0, 0, $col_white);
         imagealphablending($im, true);
         $imicon = imagecreatefrompng($img_file);
         imagecopy($im, $imicon, $w / 2 - 48 / 2, $h / 2 - 48 / 2, 0, 0, 48, 48);
@@ -238,7 +228,7 @@ if (!empty($thumbnail)) {
 } else {
     if ($file_type_name != 'preview') {
         /* check the download limitation */
-    $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
+        $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $criteria = new Criteria('item_id', $item_id);
         $items = &$item_basic_handler->getObjects($criteria, false, 'item_type_id');
         if (empty($items)) {
@@ -259,26 +249,26 @@ if (!empty($thumbnail)) {
         $fname_dllimit = "${name}GetAttachmentDownloadLimitOption";
         if (function_exists($fname_dllimit) && $fname_dllimit($item_id) == 1) {
             /* require to confirm file download */
-      image_error(403);
+            image_error(403);
         }
     }
     $strip_mime_types = explode(';', $mime_type);
     $strip_mime_type = trim($strip_mime_types[0]);
     $show_mime_types = array(
-    'image/jpeg',
-    'image/png',
-    'image/gif',
-    'text/plain',
-  );
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'text/plain',
+    );
     if (in_array($strip_mime_type, $show_mime_types)) {
         // acceptable to show directly in the browser
-    header("Content-Type: $mime_type");
+        header("Content-Type: $mime_type");
         header("Content-Length: $file_size");
         readfile($file_path);
         exit();
     } else {
         // download file
-    $download = &xoonips_getutility('download');
+        $download = &xoonips_getutility('download');
         if (!$download->check_pathinfo($file_name)) {
             $url = XOOPS_URL.'/modules/xoonips/image.php?file_id='.$fileID;
             $url = $download->append_pathinfo($url, $file_name);

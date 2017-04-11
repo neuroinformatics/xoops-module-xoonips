@@ -28,85 +28,85 @@
 class XooNIpsFileSearchPluginWORD extends XooNIpsFileSearchPlugin
 {
     /**
-   * temporary file path for wv output data.
-   *
-   * @var string temporary file path
-   */
-  public $tmpfile = '';
+     * temporary file path for wv output data.
+     *
+     * @var string temporary file path
+     */
+    public $tmpfile = '';
 
-  /**
-   * flag to use antiword for file reader.
-   *
-   * @var bool true if use antiword
-   */
-  public $use_antiword = false;
+    /**
+     * flag to use antiword for file reader.
+     *
+     * @var bool true if use antiword
+     */
+    public $use_antiword = false;
 
-  /**
-   * environemnt variable for antword 'ANTIWORDHOME'.
-   *
-   * @var string
-   */
-  public $antiwordhome = '/usr/local/antiword';
+    /**
+     * environemnt variable for antword 'ANTIWORDHOME'.
+     *
+     * @var string
+     */
+    public $antiwordhome = '/usr/local/antiword';
 
-  /**
-   * constractor.
-   */
-  public function XooNIpsFileSearchPluginWORD()
-  {
-      parent::XooNIpsFileSearchPlugin();
-      $this->is_xml = false;
-      $this->is_utf8 = true;
-    // for antiword
-    // $this->use_antiword = true;
-    // $this->antiwordhome = '/foo/bar';
-  }
+    /**
+     * constractor.
+     */
+    public function XooNIpsFileSearchPluginWORD()
+    {
+        parent::XooNIpsFileSearchPlugin();
+        $this->is_xml = false;
+        $this->is_utf8 = true;
+        // for antiword
+        // $this->use_antiword = true;
+        // $this->antiwordhome = '/foo/bar';
+    }
 
-  /**
-   * open file resource.
-   *
-   * @acccess protected
-   *
-   * @param string $filename file name
-   */
-  public function _open_file($filename)
-  {
-      if ($this->use_antiword) {
-          // for antiword
-      putenv('ANTIWORDHOME='.$this->antiwordhome);
-          $cmd = sprintf('antiword -t -m UTF-8.txt %s', $filename);
-          $this->handle = @popen($cmd, 'rb');
-      } else {
-          // for wv
-      $dirutil = &xoonips_getutility('directory');
-          $this->tmpfile = $dirutil->tempnam($dirutil->get_tempdir(), 'XooNIpsFileSearchPluginWord');
-          $cmd = sprintf('wvText %s %s', escapeshellarg($filename), escapeshellarg($this->tmpfile));
-      // set LANG to UTF-8 for wvText(elinks)
-      $lang = getenv('LANG');
-          putenv('LANG=en_US.UTF-8');
-      // execute wvText command
-      @system($cmd);
-      // restore original lang
-      putenv('LANG='.(($lang === false) ? '' : $lang));
-          $this->handle = @fopen($this->tmpfile, 'rb');
-      }
-  }
+    /**
+     * open file resource.
+     *
+     * @acccess protected
+     *
+     * @param string $filename file name
+     */
+    public function _open_file($filename)
+    {
+        if ($this->use_antiword) {
+            // for antiword
+            putenv('ANTIWORDHOME='.$this->antiwordhome);
+            $cmd = sprintf('antiword -t -m UTF-8.txt %s', $filename);
+            $this->handle = @popen($cmd, 'rb');
+        } else {
+            // for wv
+            $dirutil = &xoonips_getutility('directory');
+            $this->tmpfile = $dirutil->tempnam($dirutil->get_tempdir(), 'XooNIpsFileSearchPluginWord');
+            $cmd = sprintf('wvText %s %s', escapeshellarg($filename), escapeshellarg($this->tmpfile));
+            // set LANG to UTF-8 for wvText(elinks)
+            $lang = getenv('LANG');
+            putenv('LANG=en_US.UTF-8');
+            // execute wvText command
+            @system($cmd);
+            // restore original lang
+            putenv('LANG='.(($lang === false) ? '' : $lang));
+            $this->handle = @fopen($this->tmpfile, 'rb');
+        }
+    }
 
-  /**
-   * close file resource.
-   *
-   * @acccess protected
-   */
-  public function _close_file()
-  {
-      if ($this->use_antiword) {
-          // for antiword
-      @pclose($this->handle);
-          putenv('ANTWORDHOME=');
-      } else {
-          // for wv
-      parent::_close_file();
-          @unlink($this->tmpfile);
-          $this->tmpfile = '';
-      }
-  }
+    /**
+     * close file resource.
+     *
+     * @acccess protected
+     */
+    public function _close_file()
+    {
+        if ($this->use_antiword) {
+            // for antiword
+            @pclose($this->handle);
+            putenv('ANTWORDHOME=');
+        } else {
+            // for wv
+            parent::_close_file();
+            @unlink($this->tmpfile);
+            $this->tmpfile = '';
+        }
+    }
 }

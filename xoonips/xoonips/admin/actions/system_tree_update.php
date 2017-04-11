@@ -39,16 +39,8 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 
 // get requests
 $post_keys = array(
-  'tree_frame_width' => array(
-    's',
-    false,
-    true,
-  ),
-  'tree_frame_height' => array(
-    's',
-    false,
-    true,
-  ),
+    'tree_frame_width' => array('s', false, true),
+    'tree_frame_height' => array('s', false, true),
 );
 $post_vals = xoonips_admin_get_requests('post', $post_keys);
 

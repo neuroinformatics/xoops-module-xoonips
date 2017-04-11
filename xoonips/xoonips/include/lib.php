@@ -76,11 +76,11 @@ function xnpGetBasicInformationConfirmBlock($item_id)
     $itemlib_handler = &XooNIpsItemLibraryHandler::getInstance();
     if ($item_id) {
         // modify item
-    $itemlib_obj = &$itemlib_handler->get($item_id);
+        $itemlib_obj = &$itemlib_handler->get($item_id);
         $is_register = false;
     } else {
         // create new item
-    $itemlib_obj = &$itemlib_handler->create();
+        $itemlib_obj = &$itemlib_handler->create();
         $is_register = true;
     }
     $itemlib_handler->fetchRequest($itemlib_obj, false);
@@ -126,7 +126,7 @@ function xnpDeleteBasicInformation($item_id)
 function xnpGetItemTypeDisplayNameByDirname($dirname, $fmt)
 {
     // TODO: move this function to felicitous class method
-  $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
+    $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
     $criteria = new Criteria('name', $dirname);
     $item_type_objs = &$item_type_handler->getObjects($criteria);
     if (count($item_type_objs) != 1) {
@@ -220,8 +220,8 @@ function xnpCleanup()
     $cacheMetadataTable = $xoopsDB->prefix('xoonips_search_cache_metadata');
     $cacheFileTable = $xoopsDB->prefix('xoonips_search_cache_file');
 
-  // remove file if no-related sessions and files
-  $sql = "select file_id from $fileTable as tf left join $sessionTable as ts on tf.sess_id=ts.sess_id where tf.item_id is NULL and ts.sess_id is NULL";
+    // remove file if no-related sessions and files
+    $sql = "select file_id from $fileTable as tf left join $sessionTable as ts on tf.sess_id=ts.sess_id where tf.item_id is NULL and ts.sess_id is NULL";
     $result = $xoopsDB->query($sql);
     while (list($file_id) = $xoopsDB->fetchRow($result)) {
         $path = xnpGetUploadFilePath($file_id);
@@ -233,8 +233,8 @@ function xnpCleanup()
         $xoopsDB->queryF("delete from $fileTable where file_id=$file_id");
     }
 
-  // get search_cache_id from timeouted session_id
-  $scids = array();
+    // get search_cache_id from timeouted session_id
+    $scids = array();
     $sql = "select search_cache_id from $cacheTable as tc left join $sessionTable as ts on ts.sess_id=tc.sess_id where ts.sess_id is NULL";
     $result = $xoopsDB->query($sql);
     while (list($scid) = $xoopsDB->fetchRow($result)) {
@@ -393,10 +393,10 @@ function xnpCreateHidden($key, $val, $do_escape = true)
 }
 
 /* array of HTML named '$in' is table of '$col' rows.
-  ex)
-  $in = array( array(a0,a1,a2,a3,a4...), array(b0,b1,b2,...), array(c0,c1,c2,...) );
-  $col = 2;
-  array($in) becomes a table like the figure below.
+    ex)
+    $in = array( array(a0,a1,a2,a3,a4...), array(b0,b1,b2,...), array(c0,c1,c2,...) );
+    $col = 2;
+    array($in) becomes a table like the figure below.
     a0 a1
     b0 b1
     c0 c1
@@ -420,8 +420,8 @@ function xnpMakeTable($in, $col)
         return '';
     }
 
-  // make table
-  $out = array("<table>\n");
+    // make table
+    $out = array("<table>\n");
     for ($i = 0; $i < $maxLen; $i += $col) {
         for ($j = 0; $j < $inLen; ++$j) {
             $out[] = "<tr>\n";
@@ -445,10 +445,10 @@ function xnpMakeTable($in, $col)
 function xnpGetPreviewDetailBlock($item_id)
 {
     $textutil = &xoonips_getutility('text');
-  // get file's information specified by item_id
-  $files = xnpGetFileInfo('t_file.file_id, t_file.caption', "t_file_type.name='preview' and is_deleted=0 and sess_id is NULL ", $item_id);
-  // generate HTML
-  reset($files);
+    // get file's information specified by item_id
+    $files = xnpGetFileInfo('t_file.file_id, t_file.caption', "t_file_type.name='preview' and is_deleted=0 and sess_id is NULL ", $item_id);
+    // generate HTML
+    reset($files);
     $imageHtml1 = array();
     $imageHtml2 = array();
     $fileIDs = array();
@@ -461,11 +461,14 @@ function xnpGetPreviewDetailBlock($item_id)
         $fileIDs[] = $fileID;
     }
 
-  // make a table of three rows in side.
-  $html = xnpMakeTable(array($imageHtml1, $imageHtml2), 3);
+    // make a table of three rows in side.
+    $html = xnpMakeTable(array($imageHtml1, $imageHtml2), 3);
 
-    return array('name' => _MD_XOONIPS_ITEM_PREVIEW_LABEL, 'value' => $html,
-    'hidden' => xnpCreateHidden('previewFileID', implode(',', $fileIDs)), );
+    return array(
+        'name' => _MD_XOONIPS_ITEM_PREVIEW_LABEL,
+        'value' => $html,
+        'hidden' => xnpCreateHidden('previewFileID', implode(',', $fileIDs)),
+    );
 }
 
 /** get AttachmentBlock for detail page.
@@ -477,17 +480,16 @@ function xnpGetPreviewDetailBlock($item_id)
 function xnpGetAttachmentDetailBlock($item_id, $name)
 {
     $textutil = &xoonips_getutility('text');
-  // get attachment file
-  // generate html
-  $uid = UID_GUEST;
+    // get attachment file
+    // generate html
+    $uid = UID_GUEST;
     if (isset($_SESSION['xoopsUserId'])) {
         $uid = $_SESSION['xoopsUserId'];
     }
 
     $item = array();
     $res = xnp_get_item($_SESSION['XNPSID'], $item_id, $item);
-    $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name, t_file.file_size, t_file.mime_type, unix_timestamp(t_file.timestamp), download_count',
-    "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
+    $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name, t_file.file_size, t_file.mime_type, unix_timestamp(t_file.timestamp), download_count', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
     if ($files == false || count($files) == 0 || $res != RES_OK) {
         $html = '';
         $hidden = '';
@@ -509,8 +511,8 @@ function xnpGetAttachmentDetailBlock($item_id, $name)
 
         $hidden = xnpCreateHidden($name.'FileID', $fileID);
 
-    // item_id -> modname
-    $itemtypes = array();
+        // item_id -> modname
+        $itemtypes = array();
         $module_name = 'xoonips';
         if (($res = xnp_get_item_types($itemtypes)) == RES_OK) {
             foreach ($itemtypes as $itemtype) {
@@ -542,32 +544,31 @@ function xnpGetAttachmentDetailBlock($item_id, $name)
         }
 
         $html = (empty($warning)) ? '' : $warning;
-        $html .=
-      "$htmlFileName<br />
+        $html .= "$htmlFileName<br />
         <table>
-         <tr>
-          <td>"._MD_XOONIPS_ITEM_TYPE_LABEL.'</td>
-          <td>: '.$textutil->html_special_chars($mimeType)."</td>
-          <td rowspan=\"4\" style=\"vertical-align: middle;\">
+          <tr>
+            <td>"._MD_XOONIPS_ITEM_TYPE_LABEL.'</td>
+            <td>: '.$textutil->html_special_chars($mimeType)."</td>
+            <td rowspan=\"4\" style=\"vertical-align: middle;\">
             $download_button
-          </td>
-         </tr>
-         <tr>
-          <td>"._MD_XOONIPS_ITEM_SIZE_LABEL."</td>
-          <td>: $fileSizeStr</td>
-         </tr>
-         <tr>
-          <td>"._MD_XOONIPS_ITEM_LAST_UPDATED_LABEL.'</td>
-          <td>: '.date(DATE_FORMAT, $timestamp).'</td>
-         </tr>
-         <tr>
-          <td>'._MD_XOONIPS_ITEM_DOWNLOAD_COUNT_LABEL."</td>
-          <td>: $download_count</td>
-         </tr>
+            </td>
+          </tr>
+          <tr>
+            <td>"._MD_XOONIPS_ITEM_SIZE_LABEL."</td>
+            <td>: $fileSizeStr</td>
+          </tr>
+          <tr>
+            <td>"._MD_XOONIPS_ITEM_LAST_UPDATED_LABEL.'</td>
+            <td>: '.date(DATE_FORMAT, $timestamp).'</td>
+          </tr>
+          <tr>
+            <td>'._MD_XOONIPS_ITEM_DOWNLOAD_COUNT_LABEL."</td>
+            <td>: $download_count</td>
+          </tr>
         </table>
         <br />
         "._MD_XOONIPS_ITEM_TOTAL_DOWNLOAD_COUNT_SINCE_LABEL.date(DATE_FORMAT, $item['creation_date'])." : $totalDownloads<br />
-      ";
+        ";
 
         $fname_dllimit = "${module_name}GetAttachmentDownloadLimitOption";
         if (function_exists($fname_dllimit) && $fname_dllimit($item_id) == 1) {
@@ -620,13 +621,13 @@ function xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $attachmen
         $ticket_area = 'xoonips_download_token'.$fileID;
         $token_ticket = $GLOBALS['xoopsGTicket']->getTicketHtml(__LINE__, 1800, $ticket_area);
         $ar[] = array(
-      'fileID' => $fileID,
-      'fileName' => $textutil->html_special_chars($fileName),
-      'fileSizeStr' => $fileSizeStr,
-      'mimeType' => $mimeType,
-      'lastUpdated' => date(DATE_FORMAT, $timestamp),
-      'token' => $token_ticket,
-    );
+            'fileID' => $fileID,
+            'fileName' => $textutil->html_special_chars($fileName),
+            'fileSizeStr' => $fileSizeStr,
+            'mimeType' => $mimeType,
+            'lastUpdated' => date(DATE_FORMAT, $timestamp),
+            'token' => $token_ticket,
+        );
         unset($token);
     }
 
@@ -670,22 +671,17 @@ function xoonips_get_download_filename($file_id)
     }
 
     $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
-    $download_file_compression = $xconfig_handler->getValue(
-        'download_file_compression');
+    $download_file_compression = $xconfig_handler->getValue('download_file_compression');
     if (is_null($download_file_compression)) {
         return null;
     }
 
     if ($download_file_compression == 'on') {
-        return $item_type->get('display_name').'_'.
-            $file->get('file_id').'.zip';
+        return $item_type->get('display_name').'_'.$file->get('file_id').'.zip';
     } else {
         $unicode = &xoonips_getutility('unicode');
 
-        return mb_decode_numericentity(
-            $unicode->encode_utf8($file->get('original_file_name'),
-                xoonips_get_server_charset()),
-            xoonips_get_conversion_map(), 'UTF-8');
+        return mb_decode_numericentity($unicode->encode_utf8($file->get('original_file_name'), xoonips_get_server_charset()), xoonips_get_conversion_map(), 'UTF-8');
     }
 }
 
@@ -696,9 +692,9 @@ function xoonips_get_download_filename($file_id)
 function xnpGetAttachmentFilenameBlock($item_id, $name)
 {
     $textutil = &xoonips_getutility('text');
-  // get attachment file
-  // generate html
-  $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
+    // get attachment file
+    // generate html
+    $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
     if (count($files) == 0) {
         $html = '';
     } else {
@@ -719,9 +715,9 @@ function xnpGetAttachmentFilenameBlock($item_id, $name)
 function xnpGetAttachmentMimetypeBlock($item_id, $name)
 {
     $textutil = &xoonips_getutility('text');
-  // get attachment file
-  // generate html
-  $files = xnpGetFileInfo('t_file.file_id, t_file.mime_type', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
+    // get attachment file
+    // generate html
+    $files = xnpGetFileInfo('t_file.file_id, t_file.mime_type', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
     if (count($files) == 0) {
         $html = '';
     } else {
@@ -738,9 +734,9 @@ function xnpGetAttachmentMimetypeBlock($item_id, $name)
 function xnpGetAttachmentFiletypeBlock($item_id, $name)
 {
     $textutil = &xoonips_getutility('text');
-  // get attachment file
-  // generate html
-  $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
+    // get attachment file
+    // generate html
+    $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
     if (count($files) == 0) {
         $html = '';
     } else {
@@ -765,8 +761,7 @@ function xnpGetTextFileDetailBlock($item_id, $name, $text)
 {
     $textutil = &xoonips_getutility('text');
 
-    return array('name' => _MD_XOONIPS_ITEM_TEXTFILE_LABEL, 'value' => '<textarea readonly="readonly" rows="5" cols="40" style="width:320px;">'.$textutil->html_special_chars($text).'</textarea>',
-    'hidden' => xnpCreateHidden($name.'EncText', $text), );
+    return array('name' => _MD_XOONIPS_ITEM_TEXTFILE_LABEL, 'value' => '<textarea readonly="readonly" rows="5" cols="40" style="width:320px;">'.$textutil->html_special_chars($text).'</textarea>', 'hidden' => xnpCreateHidden($name.'EncText', $text));
 }
 
 /**
@@ -863,8 +858,8 @@ function xnpGetIndexDetailBlock($item_id, $button_flag = true)
 
         return $block;
     }
-  // todo
-  return false;
+    // todo
+    return false;
 }
 
 /** upload file inserts into database. and file is moved at hand.
@@ -883,8 +878,8 @@ function xnpUploadFile($name, $keyval)
 
     $esc_sess_id = addslashes($_SESSION['XNPSID']);
 
-  // get file_type_id
-  $sql = 'select file_type_id from '.$xoopsDB->prefix('xoonips_file_type')." where name='$name' ";
+    // get file_type_id
+    $sql = 'select file_type_id from '.$xoopsDB->prefix('xoonips_file_type')." where name='$name' ";
     $result = $xoopsDB->query($sql);
     if ($result == false) {
         return array(false, "xnpUploadFile: bad sql $sql ".mysql_error());
@@ -894,17 +889,17 @@ function xnpUploadFile($name, $keyval)
         return array(false, "xnpUploadFile: no filetype '$name' ");
     }
 
-  // register file table
-  $formdata = &xoonips_getutility('formdata');
+    // register file table
+    $formdata = &xoonips_getutility('formdata');
     $file = $formdata->getFile($name, false);
     $ar = array(
-    'original_file_name' => $file['name'],
-    'mime_type' => $file['type'],
-  );
+        'original_file_name' => $file['name'],
+        'mime_type' => $file['type'],
+    );
     xnpTrimColumn($ar, 'xoonips_file', array_keys($ar), _CHARSET);
 
-  // record in file table
-  $escOriginalFileName = addslashes($ar['original_file_name']);
+    // record in file table
+    $escOriginalFileName = addslashes($ar['original_file_name']);
     $escMimeType = addslashes($ar['mime_type']);
     $fileSize = (int) $file['size'];
     $escKeys = '';
@@ -927,15 +922,15 @@ function xnpUploadFile($name, $keyval)
         return array(false, $errorMessage);
     }
     $sql = 'insert into '.$xoopsDB->prefix('xoonips_file').
-    " ( original_file_name, mime_type, file_size, sess_id, item_id, file_type_id  $escKeys ) ".
-    " values ( '$escOriginalFileName', '$escMimeType', $fileSize, '$esc_sess_id', NULL, $fileTypeID  $escVals) ";
+        " ( original_file_name, mime_type, file_size, sess_id, item_id, file_type_id  $escKeys ) ".
+        " values ( '$escOriginalFileName', '$escMimeType', $fileSize, '$esc_sess_id', NULL, $fileTypeID  $escVals) ";
     $result = $xoopsDB->queryF($sql);
     if ($result == false) {
         return array(false, "xnpUploadFile: bad sql $sql ".mysql_error());
     }
 
-  // file is moved at hand.
-  $fileID = $xoopsDB->getInsertId();
+    // file is moved at hand.
+    $fileID = $xoopsDB->getInsertId();
     $filePath = xnpGetUploadFilePath($fileID);
     $escFilePath = addslashes($filePath);
     $uploadTmpDirPath = ini_get('upload_tmp_dir');
@@ -953,8 +948,8 @@ function xnpUploadFile($name, $keyval)
         }
     }
 
-  // create search text
-  $admin_file_handler = &xoonips_gethandler('xoonips', 'admin_file');
+    // create search text
+    $admin_file_handler = &xoonips_gethandler('xoonips', 'admin_file');
     $admin_file_handler->updateFileSearchText($fileID, true);
 
     return array($fileID, false);
@@ -973,23 +968,23 @@ function xnpGetPreviewEditBlock($item_id)
     $formdata = &xoonips_getutility('formdata');
     $previewFileID = $formdata->getValue('post', 'previewFileID', 's', false);
     if (isset($previewFileID)) { // User comes from some edit pages.
-    if ($previewFileID == '') {
-        $previewFileIDs = array();
-    } else {
-        // illegal inputs are removed.
-      if (!xnpIsCommaSeparatedNumber($previewFileID)) {
-          echo 'Error: bad previewFileID';
+        if ($previewFileID == '') {
+            $previewFileIDs = array();
+        } else {
+            // illegal inputs are removed.
+            if (!xnpIsCommaSeparatedNumber($previewFileID)) {
+                echo 'Error: bad previewFileID';
 
-          return false;
-      }
-        $previewFileIDs = explode(',', $previewFileID);
-    }
-    // process of upload/delete
-    $mode = $formdata->getValue('post', 'mode', 's', false);
+                return false;
+            }
+            $previewFileIDs = explode(',', $previewFileID);
+        }
+        // process of upload/delete
+        $mode = $formdata->getValue('post', 'mode', 's', false);
         if (empty($mode)) {
         } elseif ($mode == 'Upload') {
             // upload something
-      $preview = $formdata->getFile('preview', false);
+            $preview = $formdata->getFile('preview', false);
             if (!empty($preview['name'])) {
                 $keyval = array();
                 $keyval['caption'] = $formdata->getValue('post', 'previewCaption', 's', false);
@@ -1002,7 +997,7 @@ function xnpGetPreviewEditBlock($item_id)
                     $keyval['thumbnail_file'] = $fileutil->get_thumbnail($preview['tmp_name'], $preview['type']);
                     if (empty($keyval['thumbnail_file'])) {
                         // unknown image formats
-            $errorMessage = _MD_XOONIPS_ITEM_THUMBNAIL_BAD_FILETYPE;
+                        $errorMessage = _MD_XOONIPS_ITEM_THUMBNAIL_BAD_FILETYPE;
                     } else {
                         list($fileID, $errorMessage2) = xnpUploadFile('preview', $keyval);
                         if ($fileID) {
@@ -1014,15 +1009,14 @@ function xnpGetPreviewEditBlock($item_id)
                     }
                 }
                 $_SESSION['xoonips_preview_message'] = $errorMessage;
+            } elseif (isset($_SESSION['xoonips_preview_message'])) {
+                // error message is set to $_SESSION, and it is acquired in GET
+                // ( POST is converted into GET at edit.php, and register.php ).
+                $errorMessage = $_SESSION['xoonips_preview_message'];
             }
-      // error message is set to $_SESSION, and it is acquired in GET
-      // ( POST is converted into GET at edit.php, and register.php ).
-      elseif (isset($_SESSION['xoonips_preview_message'])) {
-          $errorMessage = $_SESSION['xoonips_preview_message'];
-      }
         } elseif ($mode == 'Delete') {
             // $_POST['file_id'] delete from $previewFileID.
-      $ar = array();
+            $ar = array();
             $fileID = $formdata->getValue('post', 'fileID', 'i', false);
             foreach ($previewFileIDs as $value) {
                 if ($value != $fileID) {
@@ -1032,25 +1026,23 @@ function xnpGetPreviewEditBlock($item_id)
             $previewFileIDs = $ar;
         }
 
-    // previewFileID -> files
-    if (count($previewFileIDs)) {
-        $sql = 't_file.file_id in ('.implode(',', $previewFileIDs).')';
-        $files = xnpGetFileInfo('t_file.file_id, t_file.caption',
-        "t_file_type.name='preview' and $sql ", $item_id);
+        // previewFileID -> files
+        if (count($previewFileIDs)) {
+            $sql = 't_file.file_id in ('.implode(',', $previewFileIDs).')';
+            $files = xnpGetFileInfo('t_file.file_id, t_file.caption', "t_file_type.name='preview' and $sql ", $item_id);
+        }
+        // Value of previewFileID are returned to $_POST ( Value of $_POST is saved and restored on register.php ).
+        $formdata->set('post', 'previewFileID', implode(',', $previewFileIDs));
+    } else {
+        // user comes from non-editing pages.
+        // get default value from database.
+        if (!empty($item_id)) {
+            $files = xnpGetFileInfo('t_file.file_id, t_file.caption', "t_file_type.name='preview' and is_deleted=0 and item_id=$item_id ", $item_id);
+        }
     }
-    // Value of previewFileID are returned to $_POST ( Value of $_POST is saved and restored on register.php ).
-    $formdata->set('post', 'previewFileID', implode(',', $previewFileIDs));
-    }
-  // user comes from non-editing pages.
-  else {
-      // get default value from database.
-    if (!empty($item_id)) {
-        $files = xnpGetFileInfo('t_file.file_id, t_file.caption', "t_file_type.name='preview' and is_deleted=0 and item_id=$item_id ", $item_id);
-    }
-  }
 
-  // display files in HTML format.
-  $ar = array();
+    // display files in HTML format.
+    $ar = array();
     reset($files);
     while (list($key, list($fileID, $caption)) = each($files)) {
         $ar[] = $fileID;
@@ -1094,8 +1086,8 @@ function xnpGetAttachmentEditBlock($item_id, $name)
     $textutil = &xoonips_getutility('text');
     $formdata = &xoonips_getutility('formdata');
     $sql = 't_file.file_id, t_file.original_file_name, t_file.file_size';
-  // get file information.
-  $fileID = $formdata->getValue('post', $name.'FileID', 'i', false);
+    // get file information.
+    $fileID = $formdata->getValue('post', $name.'FileID', 'i', false);
     if (isset($fileID)) {
         // user comes from Confirm/Edit/Register page.
     if ($fileID) {
@@ -1110,15 +1102,15 @@ function xnpGetAttachmentEditBlock($item_id, $name)
     $fileInfo = xnpGetFileInfo($sql, "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
     }
 
-  // generate html
-  if (empty($fileInfo)) {
-      $fileID = false;
-      $fileInfoLine = '';
-  } else {
-      list(list($fileID, $fileName, $fileSize)) = $fileInfo;
-      $fileName = $textutil->html_special_chars(encodeMacSafari2Server($fileName));
-      $fileInfoLine = "$fileName  ($fileSize Bytes) <input class='formButton' type='button' name='file_delete_button_".$fileID."' value='"._MD_XOONIPS_ITEM_DELETE_BUTTON_LABEL."' onclick=\"xnpSubmitFileDelete( this.form, '$name', $fileID )\" />";
-  }
+    // generate html
+    if (empty($fileInfo)) {
+        $fileID = false;
+        $fileInfoLine = '';
+    } else {
+        list(list($fileID, $fileName, $fileSize)) = $fileInfo;
+        $fileName = $textutil->html_special_chars(encodeMacSafari2Server($fileName));
+        $fileInfoLine = "$fileName  ($fileSize Bytes) <input class='formButton' type='button' name='file_delete_button_".$fileID."' value='"._MD_XOONIPS_ITEM_DELETE_BUTTON_LABEL."' onclick=\"xnpSubmitFileDelete( this.form, '$name', $fileID )\" />";
+    }
     $html = "
     <input type='hidden' name='${name}FileID' value='$fileID' />
     <input type='file' name='$name' size='50' /><br />
@@ -1239,7 +1231,7 @@ function xnpGetDownloadNotificationOptionRegisterBlock($dirname, $option = 0)
             $html .= ' checked="checked"';
         }
         $html .= ' />'._MD_XOONIPS_ITEM_ATTACHMENT_DL_NOTIFY_DONT_LABEL
-          .'<br /> '._MD_XOONIPS_ITEM_ATTACHMENT_DL_NOTIFY_EXPLANATION;
+            .'<br /> '._MD_XOONIPS_ITEM_ATTACHMENT_DL_NOTIFY_EXPLANATION;
     } else {
         $html = _MD_XOONIPS_ITEM_ATTACHMENT_DL_NOTIFY_DONT_LABEL
             ."<input type='hidden' name='attachment_dl_notify' value='0'/>";
@@ -1287,8 +1279,8 @@ function xnpHeadText($text)
 function xnpGetTextFileEditBlock($item_id, $name, $defaultText)
 {
     $textutil = &xoonips_getutility('text');
-  // select, text, fileInfo
-  $item_id = (int) $item_id;
+    // select, text, fileInfo
+    $item_id = (int) $item_id;
     $formdata = &xoonips_getutility('formdata');
     $text = $formdata->getValue('post', $name.'EncText', 's', false);
     if (!isset($text)) {
@@ -1305,7 +1297,7 @@ function xnpGetTextFileEditBlock($item_id, $name, $defaultText)
     $html = "
     <table width='100%'><tr>
     <td>
-      <div id='${name}ShowText'>$htmlShowText</div>
+        <div id='${name}ShowText'>$htmlShowText</div>
     </td>\n
     <td style='vertical-align: text-bottom; text-align:right'><a href='#' onclick=\"return xnpOpenTextFileInputWindow('$name',$item_id)\">"._MD_XOONIPS_ITEM_TEXT_FILE_EDIT_LABEL."</a></td>\n
     </tr></table>\n
@@ -1330,8 +1322,8 @@ function xnpGetIndexEditBlock($item_id)
             $formdata->set('post', 'xoonipsCheckedXID', implode(',', $xids));
         }
     }
-  //generate html to display index from $_POST
-  return xnpGetIndexRegisterBlock($item_id);
+    //generate html to display index from $_POST
+    return xnpGetIndexRegisterBlock($item_id);
 }
 
 function xnpGetPreviewPrinterFriendlyBlock($item_id)
@@ -1421,7 +1413,7 @@ function xnpGetAttachmentConfirmBlock($item_id, $name)
     } else {
         $attachmentFileID = $formdata->getValue('post', $name.'FileID', 'i', false, 0);
         if ($attachmentFileID == 0) { // no attachment file.
-      $sql = ' 0 ';
+        $sql = ' 0 ';
         } else {
             $sql = "t_file.file_id = $attachmentFileID";
         }
@@ -1434,26 +1426,26 @@ function xnpGetAttachmentConfirmBlock($item_id, $name)
     } else {
         list(list($fileID, $fileName, $fileSize, $mimeType, $timestamp)) = $files;
         $html =
-      "<input type='hidden' name='${name}FileID' value='$fileID' /> ".$textutil->html_special_chars($fileName).'<br />
+        "<input type='hidden' name='${name}FileID' value='$fileID' /> ".$textutil->html_special_chars($fileName).'<br />
         <table>
          <tr>
-          <td>'._MD_XOONIPS_ITEM_TYPE_LABEL.'</td>
-          <td>: '.$textutil->html_special_chars($mimeType).'</td>
+            <td>'._MD_XOONIPS_ITEM_TYPE_LABEL.'</td>
+            <td>: '.$textutil->html_special_chars($mimeType).'</td>
          </tr>
          <tr>
-          <td>'._MD_XOONIPS_ITEM_SIZE_LABEL."</td>
-          <td>: $fileSize bytes</td>
+            <td>'._MD_XOONIPS_ITEM_SIZE_LABEL."</td>
+            <td>: $fileSize bytes</td>
          </tr>
          <tr>
-          <td>"._MD_XOONIPS_ITEM_LAST_UPDATED_LABEL.'</td>
-          <td>: '.date(DATE_FORMAT, $timestamp).'</td>
+            <td>"._MD_XOONIPS_ITEM_LAST_UPDATED_LABEL.'</td>
+            <td>: '.date(DATE_FORMAT, $timestamp).'</td>
          </tr>
         </table>';
     }
 
-  // get attachment file
-  // generate html
-  return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html);
+    // get attachment file
+    // generate html
+    return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html);
 }
 
 function xnpGetTextFileConfirmBlock($item_id, $name, $maxlen = 65535)
@@ -1599,13 +1591,13 @@ function xoonips_insert_event_and_send_notification_of_certification($item_id)
                 continue;
             }
 
-      // record events(request certify item)
-                        $eventlog_handler->recordRequestCertifyItemEvent($item_id, $i);
+            // record events(request certify item)
+            $eventlog_handler->recordRequestCertifyItemEvent($item_id, $i);
             if ($certify_item == 'auto') {
                 xoonips_notification_item_certified_auto($item_id, $i);
 
-        // record events(certify item)
-                                $eventlog_handler->recordCertifyItemEvent($item_id, $i);
+                // record events(certify item)
+                $eventlog_handler->recordCertifyItemEvent($item_id, $i);
             } elseif ($certify_item == 'on') {
                 xoonips_notification_item_certify_request($item_id, $i);
             }
@@ -1617,8 +1609,8 @@ function xnpUpdatePreview($item_id)
 {
     global $xoopsDB;
     $formdata = &xoonips_getutility('formdata');
-  // File under registration relates to this item.
-  $previewFileID = $formdata->getValue('post', 'previewFileID', 's', false, '');
+    // File under registration relates to this item.
+    $previewFileID = $formdata->getValue('post', 'previewFileID', 's', false, '');
     $table = $xoopsDB->prefix('xoonips_file');
     $xnpsid = $_SESSION['XNPSID'];
     $esc_sess_id = addslashes($xnpsid);
@@ -1653,14 +1645,14 @@ function xnpUpdateAttachment($item_id, $name)
 {
     global $xoopsDB;
     $formdata = &xoonips_getutility('formdata');
-  // File under registration relates to this item.
-  $fileID = $formdata->getValue('post', $name.'FileID', 'i', false, 0);
+    // File under registration relates to this item.
+    $fileID = $formdata->getValue('post', $name.'FileID', 'i', false, 0);
     $table = $xoopsDB->prefix('xoonips_file');
     $xnpsid = $_SESSION['XNPSID'];
     $esc_sess_id = addslashes($xnpsid);
 
-  // name -> file_type_id
-  $sql = 'select file_type_id from '.$xoopsDB->prefix('xoonips_file_type')." where name='$name'";
+    // name -> file_type_id
+    $sql = 'select file_type_id from '.$xoopsDB->prefix('xoonips_file_type')." where name='$name'";
     $result = $xoopsDB->query($sql);
     if ($result == false) {
         echo "xnpUpdateAttachment: bad file_type_name $name ";
@@ -1669,8 +1661,8 @@ function xnpUpdateAttachment($item_id, $name)
     }
     list($file_type_id) = $xoopsDB->fetchRow($result);
 
-  // delete old file
-  $sql = "select file_id, is_deleted from $table where item_id=$item_id and file_type_id=$file_type_id and is_deleted=0 and file_id <> $fileID";
+    // delete old file
+    $sql = "select file_id, is_deleted from $table where item_id=$item_id and file_type_id=$file_type_id and is_deleted=0 and file_id <> $fileID";
     $result = $xoopsDB->queryF($sql);
     if ($result == false) {
         echo "Error: cannot update xoonips_file $sql ".mysql_error();
@@ -1742,7 +1734,7 @@ function xnpGetBasicInformationAdvancedSearchBlock($moduleName, &$search_var)
     'publication_year' => array('name' => _MD_XOONIPS_ITEM_PUBLICATION_YEAR_LABEL,  'value' => $tpl->fetch('db:xoonips_search_year.html')),
     'publication_month' => array('name' => _MD_XOONIPS_ITEM_PUBLICATION_MONTH_LABEL, 'value' => $tpl->fetch('db:xoonips_search_month.html')),
     'publication_mday' => array('name' => _MD_XOONIPS_ITEM_PUBLICATION_MDAY_LABEL,  'value' => $tpl->fetch('db:xoonips_search_mday.html')),
-  );
+    );
 }
 
 /** Input keyword is divided into the unit of the retrieval.
@@ -1757,17 +1749,17 @@ function xnpSplitKeywords($keywords)
     $match = array();
     preg_match_all('/(([^ "]+)|"([^"]+)")/', $keywords, $match, PREG_PATTERN_ORDER);
 
-  /*
+    /*
     input a% b% "hoge huga", the content of $match:
     array(
-      array( "a%", "b%", '"hoge huga"' ),
-      array( "a%", "b%", '"hoge huga"' ),
-      array( "a%", "b%", "" ),
-      array( "",    "",  "hoge huga" )
+        array( "a%", "b%", '"hoge huga"' ),
+        array( "a%", "b%", '"hoge huga"' ),
+        array( "a%", "b%", "" ),
+        array( "",    "",  "hoge huga" )
     )
-  */
+    */
 
-  $ar = array();
+    $ar = array();
     for ($j = 2; $j <= 3; ++$j) {
         $len = count($match[$j]);
         for ($i = 0; $i < $len; ++$i) {
@@ -1785,19 +1777,19 @@ function xnpSplitKeywords($keywords)
 /* memo:
 
     検索時:
-      英語では
+        英語では
         m&#252;ller -> "m&#252;ller"
         m &#252;ller -> m "&#252;ller"
         単語境界は空白だけとする．&#を含む単語はフレーズ検索する．
 
-      日本語なら
+        日本語なら
         ほげ&#252;ふが -> ウィンドウをかけて "ほげ げ &#252; ふ ふが"
         ほげ&#252;huga -> ウィンドウをかけて "ほげ げ &#252;huga"
             &#252;huga -> ウィンドウをかけて         "&#252;huga"
         &#はsbとみなす．&#を含むsb文字列はフレーズ検索する
 
-      numericでascii単語が切られてしまうのは仕方が無い．
-      252が&#252;にヒットするのは仕方が無い．
+        numericでascii単語が切られてしまうのは仕方が無い．
+        252が&#252;にヒットするのは仕方が無い．
 */
 
 /** the unit of the retrieval and syntax are pulled out from input keyword.
@@ -1830,45 +1822,45 @@ function xnpSplitKeywords2($keyword)
     $elements = array();
 
     $nest = 0; // Depth of parentheses
-  $expectTerm = true; // string or '(' is expected to get next time.
+    $expectTerm = true; // string or '(' is expected to get next time.
 
-  foreach ($match as $match1) {
-      $str = $match1[0];
-      $lowerstr = strtolower($str);
-      if ($str == '(') {
-          ++$nest;
-          if (!$expectTerm) {
-              $elements[] = 'and';
-          }
-          $expectTerm = true;
-          $elements[] = $lowerstr;
-      } elseif ($str == ')') {
-          --$nest;
-          if ($expectTerm || $nest < 0) {
-              return array(array(), array(), _MD_XOONIPS_ITEM_SEARCH_SYNTAX_ERROR);
-          }
-          $expectTerm = false;
-          $elements[] = $lowerstr;
-      } elseif ($lowerstr == 'and' || $lowerstr == 'or') {
-          if ($expectTerm) {
-              return array(array(), array(), _MD_XOONIPS_ITEM_SEARCH_SYNTAX_ERROR);
-          }
-          $expectTerm = true;
-          $elements[] = $lowerstr;
-      } else {
-          if (substr($str, 0, 1) == '"') {
-              $str = substr($str, 1, -1);
-          }  // remove double-quote at both ends
-      if (!$expectTerm) {
-          $elements[] = 'and';
-      }
-          $expectTerm = false;
-          $elements[] = 'string';
+    foreach ($match as $match1) {
+        $str = $match1[0];
+        $lowerstr = strtolower($str);
+        if ($str == '(') {
+            ++$nest;
+            if (!$expectTerm) {
+                $elements[] = 'and';
+            }
+            $expectTerm = true;
+            $elements[] = $lowerstr;
+        } elseif ($str == ')') {
+            --$nest;
+            if ($expectTerm || $nest < 0) {
+                return array(array(), array(), _MD_XOONIPS_ITEM_SEARCH_SYNTAX_ERROR);
+            }
+            $expectTerm = false;
+            $elements[] = $lowerstr;
+        } elseif ($lowerstr == 'and' || $lowerstr == 'or') {
+            if ($expectTerm) {
+                return array(array(), array(), _MD_XOONIPS_ITEM_SEARCH_SYNTAX_ERROR);
+            }
+            $expectTerm = true;
+            $elements[] = $lowerstr;
+        } else {
+            if (substr($str, 0, 1) == '"') {
+                $str = substr($str, 1, -1);
+            }  // remove double-quote at both ends
+            if (!$expectTerm) {
+                $elements[] = 'and';
+            }
+            $expectTerm = false;
+            $elements[] = 'string';
 
-          $separated = xnpWordSeparation($str, false, false);
-          $keywords[] = $str;
-      }
-  }
+            $separated = xnpWordSeparation($str, false, false);
+            $keywords[] = $str;
+        }
+    }
     if ($nest != 0 || $expectTerm) {
         return array(array(), array(), _MD_XOONIPS_ITEM_SEARCH_SYNTAX_ERROR);
     }
@@ -1951,7 +1943,7 @@ function xnpGetKeywordsQueries($dbVarNames, $keywords)
 }
 
 /*
-  avoid a number to hit numeric character reference(e.g. keyword '123' hits '&#11234;' ).
+    avoid a number to hit numeric character reference(e.g. keyword '123' hits '&#11234;' ).
 */
 function xnpGetKeywordQueryEntity($dbVarName, $escKeyword)
 {
@@ -2087,8 +2079,8 @@ function xnpGetTotalFileSize($iids)
     $file_table = $xoopsDB->prefix('xoonips_file');
     $iids_str = implode(',', $iids);
 
-  // calculate amount of use file_table and file
-  $sql = "select sum(file_size) from $file_table where item_id in ($iids_str) and is_deleted=0";
+    // calculate amount of use file_table and file
+    $sql = "select sum(file_size) from $file_table where item_id in ($iids_str) and is_deleted=0";
     $result = $xoopsDB->query($sql);
     list($file_size) = $xoopsDB->fetchRow($result);
 
@@ -2248,10 +2240,10 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
         }
     }
     $join1 =
-      " left join $xlink_table on $xlink_table.item_id  = $basic_table.item_id ".
-      " left join $index_table on $index_table.index_id = $xlink_table.index_id ".
-      " left join $glink_table on $glink_table.gid      = $index_table.gid ".
-      " left join $user_table  on $user_table.uid       = $basic_table.uid ";
+        " left join $xlink_table on $xlink_table.item_id  = $basic_table.item_id ".
+        " left join $index_table on $index_table.index_id = $xlink_table.index_id ".
+        " left join $glink_table on $glink_table.gid      = $index_table.gid ".
+        " left join $user_table  on $user_table.uid       = $basic_table.uid ";
     $iids = array();
 
     if ($private_flag) { // operation to add item into index. search for only the user's item.
@@ -2271,7 +2263,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
     if ($op == 'advancedsearch' || $op == 'itemsubtypesearch') {
         // advanced では、結果をタブ表示しない。$search_tab を無視する。
         // advanced では、fileがヒットした場合でも search_cache_fileではなくsearch_cache_itemのほうに書く
-      $formdata = &xoonips_getutility('formdata');
+        $formdata = &xoonips_getutility('formdata');
         foreach ($itemtypes as $itemtype_id => $itemtype) {
             $wheres = array(' 0 ');
             $module_name = $itemtype['name'];
@@ -2319,7 +2311,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
             $join1.
             " where $privilege and $basic_table.item_type_id=$itemtype_id \n".
             " group by $basic_table.item_id  ";
-            // inserting results to cache
+        // inserting results to cache
         $result = $xoopsDB->queryF("insert ignore into $cache_item_table ( item_id, search_cache_id ) ".$sql);
         $sql = "select item_id from $cache_item_table where search_cache_id = $search_cache_id";
 
@@ -2379,7 +2371,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
             $sql = "select identifier, $search_cache_id
              from ${meta_table} as data, ${repo_table} as repo
              where repo.enabled=1 AND repo.deleted!=1 AND repo.repository_id=data.repository_id
-              AND ".$fulltext_criteria->render().' order by identifier, data.repository_id';
+                AND ".$fulltext_criteria->render().' order by identifier, data.repository_id';
 
             // inserting results to cache
             $result = $xoopsDB->queryF("insert into $cache_meta_table ( identifier, search_cache_id ) ".$sql);
@@ -2576,8 +2568,8 @@ function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = fa
         return false;
     }
 
-  //generate <title>xxx</title> for each title
-  $titles = '';
+    //generate <title>xxx</title> for each title
+    $titles = '';
     foreach ($item['titles'] as $title) {
         $titles .= '<title>'.$myts->htmlSpecialChars($title).'</title>'."\n";
     }
@@ -2645,15 +2637,15 @@ function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = fa
 function xnpGetTopBlock($moduleName, $displayName, $iconPath, $explanation, $subtypeVarName, $subtypes)
 {
     // variables are set to template
-  global $xoopsTpl;
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
     $tpl->assign($xoopsTpl->get_template_vars()); // Variables set to $xoopsTpl is copied to $tpl.
 
-  $tpl->assign('icon', XOOPS_URL."/modules/$moduleName/".$iconPath);
+    $tpl->assign('icon', XOOPS_URL."/modules/$moduleName/".$iconPath);
     $tpl->assign('explanation', $explanation); //**
 
-  $tpl->assign('moduleName', $moduleName);
+    $tpl->assign('moduleName', $moduleName);
     $tpl->assign('displayName', $displayName);
     $tpl->assign('formName', $moduleName.'_form');
     $tpl->assign('subtypeVarName', $subtypeVarName);
@@ -2662,14 +2654,14 @@ function xnpGetTopBlock($moduleName, $displayName, $iconPath, $explanation, $sub
         $searchURLs = array();
         foreach ($subtypes as $subtypeName => $subtypeDisplayName) {
             $searchURLs[] = array(
-        'subtypeDisplayName' => $subtypeDisplayName,
-        'subtypeName' => $subtypeName,
-      );
+                'subtypeDisplayName' => $subtypeDisplayName,
+                'subtypeName' => $subtypeName,
+            );
         }
         $tpl->assign('searchURLs', $searchURLs);
     }
-  // Output in HTML.
-  return $tpl->fetch('db:xoonips_top_itemtype_block.html');
+    // Output in HTML.
+    return $tpl->fetch('db:xoonips_top_itemtype_block.html');
 }
 
 function xnpGetModifiedFields($item_id)
@@ -2699,7 +2691,7 @@ function xnpGetModifiedFields($item_id)
         }
     }
 
-  //has been title modified ?
+    //has been title modified ?
     $titles = array();
     foreach (preg_split("/[\r\n]+/", $formdata->getValue('post', 'title', 's', false, '')) as $title) {
         if (trim($title) != '') {
@@ -2711,7 +2703,7 @@ function xnpGetModifiedFields($item_id)
         array_push($ret, _MD_XOONIPS_ITEM_TITLE_LABEL);
     }
 
-  //has been keyword modified ?
+    //has been keyword modified ?
     $keywords = $formdata->getValue('post', 'keywords', 's', false);
     $keywords = !empty($keywords) ? explode(',', $keywords) : array();
     $diff = array_diff($keywords, $item['keywords']);
@@ -2733,7 +2725,7 @@ function xnpGetModifiedFields($item_id)
         }
     }
 
-  //is related to modified ?
+    //is related to modified ?
     $related_to_check = $formdata->getValueArray('post', 'related_to_check', 'i', false, null);
     $new_related_to =
     (!isset($related_to_check) || $related_to_check === '') ? array() :
@@ -2753,12 +2745,12 @@ function xnpGetModifiedFields($item_id)
 
     if ($res == RES_OK) {
         if (count(array_diff($old_related_to, $new_related_to)) > 0
-      || count(array_diff($new_related_to, $old_related_to)) > 0) {
+        || count(array_diff($new_related_to, $old_related_to)) > 0) {
             array_push($ret, _MD_XOONIPS_ITEM_RELATED_TO_LABEL);
         }
     }
 
-  // get file_id of preview file before change
+    // get file_id of preview file before change
     $tmp = xnpGetFileInfo('t_file.file_id', "t_file_type.name='preview' and is_deleted=0 and sess_id is NULL ", $item_id);
     $old_files = array();
     foreach ($tmp as $i) {
@@ -2781,13 +2773,13 @@ function xnpGetModifiedFields($item_id)
 function xnpIsAttachmentModified($file_type, $item_id)
 {
     //return true if uploaded successfully
-  $formdata = &xoonips_getutility('formdata');
+    $formdata = &xoonips_getutility('formdata');
     $file = $formdata->getFile($file_type, false);
     if (isset($file) && $file['error'] == 0) {
         return true;
     }
 
-  // get file_id of preview file before change
+    // get file_id of preview file before change
     $tmp = xnpGetFileInfo('t_file.file_id', "t_file_type.name='${file_type}' and sess_id is NULL and is_deleted=0", $item_id);
     $old_files = array();
     $new_files = array();
@@ -2887,7 +2879,7 @@ function xnpGetBasicInformationMetadata($metadataPrefix, $item_id)
         return implode("\n", $lines);
     } elseif ($metadataPrefix == 'oai_dc') {
         /* title, identifier, type, language, subject, description */
-    $lines = array();
+        $lines = array();
 
         $publisher = $xconfig_handler->getValue('repository_publisher');
         $meta_author = $myxoopsConfigMetaFooter['meta_author'];
@@ -2953,13 +2945,13 @@ function xnpGetRightsDetailBlock($item_id, $use_cc = 1, $text = '', $cc_commerci
 
     if ($use_cc) {
         return
-      array(
+        array(
         'name' => _MD_XOONIPS_ITEM_TEXTFILE_LABEL,
         'value' => "$text",
         'hidden' => $hidden, );
     } else {
         return
-      array(
+        array(
         'name' => _MD_XOONIPS_ITEM_TEXTFILE_LABEL,
         'value' => '<textarea readonly="readonly" rows="5" cols="40" style="width:320px">'.$textutil->html_special_chars($text).'</textarea>',
         'hidden' => $hidden, );
@@ -2970,8 +2962,8 @@ function xnpGetRightsDetailBlock($item_id, $use_cc = 1, $text = '', $cc_commerci
 function xnpGetRightsEditBlock($item_id, $use_cc = 1, $text = '', $cc_commercial_use = 1, $cc_modification = 2)
 {
     $textutil = &xoonips_getutility('text');
-  // select, text, fileInfo
-  $item_id = (int) $item_id;
+    // select, text, fileInfo
+    $item_id = (int) $item_id;
     $formdata = &xoonips_getutility('formdata');
     $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
     if (isset($rightsUseCC)) { // There is initial value specification by POST.
@@ -3002,43 +2994,43 @@ function xnpGetRightsEditBlock($item_id, $use_cc = 1, $text = '', $cc_commercial
     $html = "
     <table>
      <tr>
-      <td><input type='radio' name='rightsUseCC' value='1' {$check_cc[1]} /></td>
-      <td>"._MD_XOONIPS_RIGHTS_SOME_RIGHTS_RESERVED.'</td>
+        <td><input type='radio' name='rightsUseCC' value='1' {$check_cc[1]} /></td>
+        <td>"._MD_XOONIPS_RIGHTS_SOME_RIGHTS_RESERVED.'</td>
      </tr>
      <tr>
-      <td></td>
-      <td>
-      <ul>
-      <li>'._MD_XOONIPS_RIGHTS_ALLOW_COMMERCIAL_USE."<br />
+        <td></td>
+        <td>
+        <ul>
+        <li>'._MD_XOONIPS_RIGHTS_ALLOW_COMMERCIAL_USE."<br />
         <div style='padding-left: 20px;'>
         <input type='radio' name='rightsCCCommercialUse' value='1' {$check_com[1]} />"._YES."<br />
         <input type='radio' name='rightsCCCommercialUse' value='0' {$check_com[0]} />"._NO.'<br />
         </div></li>
-      <li>'._MD_XOONIPS_RIGHTS_ALLOW_MODIFICATIONS."<br />
+        <li>'._MD_XOONIPS_RIGHTS_ALLOW_MODIFICATIONS."<br />
         <div style='padding-left: 20px;'>
         <input type='radio' name='rightsCCModification' value='2' {$check_mod[2]} />"._YES."<br />
         <input type='radio' name='rightsCCModification' value='1' {$check_mod[1]} />"._MD_XOONIPS_RIGHTS_YES_SA."<br />
         <input type='radio' name='rightsCCModification' value='0' {$check_mod[0]} />"._NO."<br />
         </div></li>
-      </ul>
-      </td>
+        </ul>
+        </td>
      </tr>
      <tr>
-      <td><input type='radio' name='rightsUseCC' value='0' {$check_cc[0]} /></td>
-      <td>"._MD_XOONIPS_RIGHTS_ALL_RIGHTS_RESERVED."</td>
+        <td><input type='radio' name='rightsUseCC' value='0' {$check_cc[0]} /></td>
+        <td>"._MD_XOONIPS_RIGHTS_ALL_RIGHTS_RESERVED."</td>
      </tr>
      <tr>
-      <td></td>
-      <td>
+        <td></td>
+        <td>
         <div id='rightsShowText' style='width: 100%;'>$htmlShowText</div>
         <div style='vertical-align: text-bottom; text-align:right'>
          <a href='#' onclick=\"return xnpOpenTextFileInputWindow('rights',$item_id)\">"._MD_XOONIPS_ITEM_TEXT_FILE_EDIT_LABEL."</a>
         </div>
         <input type='hidden' name='rightsEncText' value='$encText'  id='rightsEncText' />
-      </td>
+        </td>
      </tr>
     </table>
-  ";
+    ";
 
     return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html);
 }
@@ -3047,12 +3039,12 @@ function xnpGetRightsPrinterFriendlyBlock($item_id, $use_cc, $text)
     $textutil = &xoonips_getutility('text');
     if ($use_cc) {
         return
-      array(
+        array(
         'name' => _MD_XOONIPS_ITEM_TEXTFILE_LABEL,
         'value' => "$text", );
     } else {
         return
-      array(
+        array(
         'name' => _MD_XOONIPS_ITEM_TEXTFILE_LABEL,
         'value' => nl2br($textutil->html_special_chars($text)), );
     }
@@ -3078,11 +3070,11 @@ function xnpGetRightsConfirmBlock($item_id, $maxlen = 65535)
     }
 
     $html = $htmlText."
-      <input type='hidden' name='rightsEncText' value='".$textutil->html_special_chars($within.$without)."' />
-      <input type='hidden' name='rightsUseCC'           value='".((int) $rightsUseCC)."' />
-      <input type='hidden' name='rightsCCCommercialUse' value='".((int) $rightsCCCommercialUse)."' />
-      <input type='hidden' name='rightsCCModification' value='".((int) $rightsCCModification)."' />
-      ";
+        <input type='hidden' name='rightsEncText' value='".$textutil->html_special_chars($within.$without)."' />
+        <input type='hidden' name='rightsUseCC'           value='".((int) $rightsUseCC)."' />
+        <input type='hidden' name='rightsCCCommercialUse' value='".((int) $rightsCCCommercialUse)."' />
+        <input type='hidden' name='rightsCCModification' value='".((int) $rightsCCModification)."' />
+        ";
 
     return array('name' => _MD_XOONIPS_ITEM_TEXTFILE_LABEL, 'value' => $html, 'within' => $within, 'without' => $without);
 }
@@ -3104,7 +3096,7 @@ function xnpGetRights()
     $formdata->getValue('post', 'rightsUseCC', 'i', false, 0),
     $formdata->getValue('post', 'rightsCCCommercialUse', 'i', false, 0),
     $formdata->getValue('post', 'rightsCCModification', 'i', false, 0),
-  );
+    );
 }
 
 /**
@@ -3238,49 +3230,49 @@ function xnpGetMacSafariAcceptCharset()
 function xnpWindowString($str, $output_leading, $output_trailing)
 {
     $w0 = 0; // windowの左端
-  $w1 = 0; // windowの右端
-  $words = array();
+    $w1 = 0; // windowの右端
+    $words = array();
     $encoding = mb_detect_encoding($str);
     $end = mb_strlen($str, $encoding);
 
-  // leading
-  for ($j = 0; $j < XOONIPS_WINDOW_SIZE; ++$j) {
-      if ($output_leading && $w1) {
-          $words[] = bin2hex(mb_substr($str, $w0, $w1 - $w0, $encoding));
-      }
-      ++$w1;
-      if ($w1 >= $end) {
-          break;
-      }
-  }
+    // leading
+    for ($j = 0; $j < XOONIPS_WINDOW_SIZE; ++$j) {
+        if ($output_leading && $w1) {
+            $words[] = bin2hex(mb_substr($str, $w0, $w1 - $w0, $encoding));
+        }
+        ++$w1;
+        if ($w1 >= $end) {
+            break;
+        }
+    }
 
-  // middle
-  while (true) {
-      $words[] = bin2hex(mb_substr($str, $w0, $w1 - $w0, $encoding));
+    // middle
+    while (true) {
+        $words[] = bin2hex(mb_substr($str, $w0, $w1 - $w0, $encoding));
 
-      if ($w1 >= $end) {
-          break;
-      }
+        if ($w1 >= $end) {
+            break;
+        }
 
-      ++$w0;
-      if ($w1 < $end) {
-          ++$w1;
-          if ($w1 >= $end) {
-              $w1 = $end;
-          }
-      }
-  }
+        ++$w0;
+        if ($w1 < $end) {
+            ++$w1;
+            if ($w1 >= $end) {
+                $w1 = $end;
+            }
+        }
+    }
 
-  // trailing
-  if ($output_trailing) {
-      while (true) {
-          ++$w0;
-          if ($w0 >= $end) {
-              break;
-          }
-          $words[] = bin2hex(mb_substr($str, $w0, $w1 - $w0, $encoding));
-      }
-  }
+    // trailing
+    if ($output_trailing) {
+        while (true) {
+            ++$w0;
+            if ($w0 >= $end) {
+                break;
+            }
+            $words[] = bin2hex(mb_substr($str, $w0, $w1 - $w0, $encoding));
+        }
+    }
 
     return $words;
 }
@@ -3300,9 +3292,9 @@ function xnpWordSeparation($str, $output_leading = true, $output_trailing = true
 {
     $words = array();
     $w0 = 0; // wordの左端
-  $w1 = 0; // wordの右端
+    $w1 = 0; // wordの右端
 
-  $regex_encoding = mb_regex_encoding();
+    $regex_encoding = mb_regex_encoding();
     $encoding = mb_detect_encoding($str);
     mb_regex_encoding($encoding);
     $end = mb_strlen($str, $encoding);
@@ -3355,11 +3347,11 @@ function xnpTrimString($src, $len, $enc = null)
     //1.1 日本語対応サーバ(mbstring有効)ならば，mb_strcutを使って部分文字列を得る
     //1.2 日本語非対応サーバならば，substrで部分文字列を得る
     //2 部分文字列が数値文字参照の途中で終了していたら，その数値文字参照を削除する
-  //multi byte charset or numeric character reference
-  $dst = mb_substr($src, 0, $len, is_null($enc) ? mb_detect_encoding($src) : $enc);
+    //multi byte charset or numeric character reference
+    $dst = mb_substr($src, 0, $len, is_null($enc) ? mb_detect_encoding($src) : $enc);
 
-  // if the last numeric character reference is incompleted, remove it
-  $within = preg_replace('/^(.*)&[^;]*$/s', '$1', $dst);
+    // if the last numeric character reference is incompleted, remove it
+    $within = preg_replace('/^(.*)&[^;]*$/s', '$1', $dst);
     $without = substr($src, strlen($within));
     if ($within == $dst) {    // $dstの末尾が、数値文字参照の途中ではない。
     return array($within, $without);
@@ -3447,8 +3439,8 @@ function xnpTrimColumn(&$assoc, $table_wo_prefix, $names = null, $enc = null)
         //echo "xnpTrimColumn: name=$name len=$len type=$type <br />\n";
     if (isset($assoc[$name]) && (is_null($names) || in_array($name, $names))) {
         list($within, $without) = xnpTrimString($assoc[$name], $len, $enc);
-      //echo $assoc[$name] . " within=$within, without=$without <br />\n";
-      $assoc[$name] = $within;
+        //echo $assoc[$name] . " within=$within, without=$without <br />\n";
+        $assoc[$name] = $within;
     }
     }
 }
@@ -3678,15 +3670,15 @@ function xnpListIndexTree($mode = XOONIPS_LISTINDEX_MODE_ALL, $assoc_array_mode 
     $where_level = '';
     switch ($mode) {
     case XOONIPS_LISTINDEX_MODE_ALL:
-      $where_level = '1';
-      break;
+        $where_level = '1';
+        break;
     case XOONIPS_LISTINDEX_PUBLICONLY:
-      $where_level .= 'tx.open_level='.OL_PUBLIC;
-      break;
+        $where_level .= 'tx.open_level='.OL_PUBLIC;
+        break;
     case XOONIPS_LISTINDEX_PUBLICONLY:
-      $where_level .= 'tx.open_level='.OL_PRIVATE.' OR ti.item_id='.IID_ROOT.' ';
-      break;
-  }
+        $where_level .= 'tx.open_level='.OL_PRIVATE.' OR ti.item_id='.IID_ROOT.' ';
+        break;
+    }
 
     $sql = 'SELECT tx.index_id, tx.parent_index_id, tx.uid, tx.gid, tx.open_level, tx.sort_number '.
     ' , ti.item_type_id, tt.title '.
@@ -3717,51 +3709,51 @@ function xnpListIndexTree($mode = XOONIPS_LISTINDEX_MODE_ALL, $assoc_array_mode 
             $parent_id_full_path[$pid] = '';
         }
     }
-  // extract to full path
-  foreach ($parent_full_path as $k => $v) {
-      if ($k == 0) {
-          continue;
-      }
-      $idx = $k;
-      $fullpath = '';
-      $id_fullpath = '';
-      while ($idx != 0) {
-          if (!isset($tree_items[$idx])) {
-              break;
-          }
-          $fullpath = $tree_items[$idx]['title'].'/'.$fullpath;
-          $id_fullpath = $tree_items[$idx]['index_id'].','.$id_fullpath;
-          $idx = $tree_items[$idx]['parent_index_id'];
-      }
-      $parent_full_path[$k] = $fullpath;
-      $parent_id_full_path[$k] = $id_fullpath;
-  }
+    // extract to full path
+    foreach ($parent_full_path as $k => $v) {
+        if ($k == 0) {
+            continue;
+        }
+        $idx = $k;
+        $fullpath = '';
+        $id_fullpath = '';
+        while ($idx != 0) {
+            if (!isset($tree_items[$idx])) {
+                break;
+            }
+            $fullpath = $tree_items[$idx]['title'].'/'.$fullpath;
+            $id_fullpath = $tree_items[$idx]['index_id'].','.$id_fullpath;
+            $idx = $tree_items[$idx]['parent_index_id'];
+        }
+        $parent_full_path[$k] = $fullpath;
+        $parent_id_full_path[$k] = $id_fullpath;
+    }
     $result = array();
-  // set result from tree_items and parent_full_path.
-  foreach ($tree_items as $k => $v) {
-      $parent_path = $parent_full_path[$v['parent_index_id']];
-      $parent_id_path = $parent_id_full_path[$v['parent_index_id']];
+    // set result from tree_items and parent_full_path.
+    foreach ($tree_items as $k => $v) {
+        $parent_path = $parent_full_path[$v['parent_index_id']];
+        $parent_id_path = $parent_id_full_path[$v['parent_index_id']];
     // exclude check.
     if ($v['index_id'] == IID_ROOT) {
         continue;
     }
     // delete "ROOT" string.
     $idx = strpos($parent_path, '/');
-      $parent_path = substr($parent_path, $idx, strlen($parent_path));
+        $parent_path = substr($parent_path, $idx, strlen($parent_path));
     // delete "ROOT" id.
     $idx = strpos($parent_id_path, ',');
-      $parent_id_path = substr($parent_id_path, $idx + 1, strlen($parent_id_path));
+        $parent_id_path = substr($parent_id_path, $idx + 1, strlen($parent_id_path));
     // set value to result array
     $a = array();
-      $a['id'] = $k;
-      $a['fullpath'] = $parent_path.$v['title'];
-      $a['id_fullpath'] = $parent_id_path.$v['index_id'];
-      if ($assoc_array_mode) {
-          $result[intval($k)] = $a;
-      } else {
-          $result[] = $a;
-      }
-  }
+        $a['id'] = $k;
+        $a['fullpath'] = $parent_path.$v['title'];
+        $a['id_fullpath'] = $parent_id_path.$v['index_id'];
+        if ($assoc_array_mode) {
+            $result[intval($k)] = $a;
+        } else {
+            $result[] = $a;
+        }
+    }
 
     return $result;
 }
@@ -3781,368 +3773,368 @@ class XooNIpsItemLibraryObject
     public $_related_to_ids = array();
     public $_changelog_objs = array();
     public $_related_to_check_ids = array(); // for edit
-  public $_related_to_check_all_ids = array(); // for edit
-  public $_changelog = ''; // for edit
+    public $_related_to_check_all_ids = array(); // for edit
+    public $_changelog = ''; // for edit
 
-  public function XooNIpsItemLibraryObject(&$meta)
-  {
-      $this->_item_basic_obj = &$meta['item_basic'];
-      $this->_xoops_users_obj = &$meta['xoops_user'];
-      $this->_xoonips_users_obj = &$meta['xoonips_user'];
-      $this->_item_type_obj = &$meta['item_type'];
-      $this->_item_title_objs = &$meta['item_title_arr'];
-      $this->_item_keyword_objs = &$meta['item_keyword_arr'];
-      $this->_related_to_ids = $meta['related_to_arr'];
-      $this->_changelog_objs = $meta['changelog_arr'];
-  }
-
-  /**
-   * get item list block.
-   *
-   * @return string html
-   */
-  public function getItemListBlock()
-  {
-      $modname = $this->_item_type_obj->get('name');
-      $viewphp = $this->_item_type_obj->get('viewphp');
-      include_once XOOPS_ROOT_PATH.'/modules/'.$viewphp;
-      $ret = '';
-      $func = $modname.'GetListBlock';
-      if (function_exists($func)) {
-          $item_basic = $this->getBasicInformationArray('e');
-          $ret = $func($item_basic);
-      }
-
-      return $ret;
-  }
-
-  /**
-   * get item id.
-   *
-   * @return int item id
-   */
-  public function getItemId()
-  {
-      return $this->_item_basic_obj->get('item_id');
-  }
-
-  /**
-   * get item basic information array.
-   *
-   * @param string $fmt format
-   *
-   * @return array formated strings
-   */
-  public function getBasicInformationArray($fmt)
-  {
-      $textutil = &xoonips_getutility('text');
-    // item type
-    if (is_object($this->_item_type_obj)) {
-        $item_type_id = $this->_item_type_obj->get('item_type_id');
-        $item_type = $this->_item_type_obj->getVar('display_name', $fmt);
-    } else {
-        $item_type_id = 0;
-        $item_type = '';
+    public function XooNIpsItemLibraryObject(&$meta)
+    {
+        $this->_item_basic_obj = &$meta['item_basic'];
+        $this->_xoops_users_obj = &$meta['xoops_user'];
+        $this->_xoonips_users_obj = &$meta['xoonips_user'];
+        $this->_item_type_obj = &$meta['item_type'];
+        $this->_item_title_objs = &$meta['item_title_arr'];
+        $this->_item_keyword_objs = &$meta['item_keyword_arr'];
+        $this->_related_to_ids = $meta['related_to_arr'];
+        $this->_changelog_objs = $meta['changelog_arr'];
     }
-    // contributor
-    if (is_object($this->_xoops_users_obj)) {
-        $user_name = $this->_xoops_users_obj->getVar('name', $fmt);
-        $user_uname = $this->_xoops_users_obj->getVar('uname', $fmt);
-        if ($user_name == '') {
-            $contributor = $user_uname;
-        } else {
-            $contributor = $user_name.' ('.$user_uname.')';
+
+    /**
+     * get item list block.
+     *
+     * @return string html
+     */
+    public function getItemListBlock()
+    {
+        $modname = $this->_item_type_obj->get('name');
+        $viewphp = $this->_item_type_obj->get('viewphp');
+        include_once XOOPS_ROOT_PATH.'/modules/'.$viewphp;
+        $ret = '';
+        $func = $modname.'GetListBlock';
+        if (function_exists($func)) {
+            $item_basic = $this->getBasicInformationArray('e');
+            $ret = $func($item_basic);
         }
-    } else {
-        $contributor = '(Zombie User)';
+
+        return $ret;
     }
-    // titles
-    $titles = array();
-      foreach ($this->_item_title_objs as $item_title_obj) {
-          $titles[] = $item_title_obj->getVar('title', $fmt);
-      }
-    // keywords
-    $keywords = array();
-      foreach ($this->_item_keyword_objs as $item_keyword_obj) {
-          $keywords[] = $item_keyword_obj->getVar('keyword', $fmt);
-      }
-    // last update date
-    $last_update_date = xoops_getUserTimestamp($this->_item_basic_obj->get('last_update_date'));
-    // creation date
-    $creation_date = xoops_getUserTimestamp($this->_item_basic_obj->get('creation_date'));
-    // publication date (year, month, mday)
-    $publication_year = $this->_item_basic_obj->get('publication_year');
-      $publication_month = $this->_item_basic_obj->get('publication_month');
-      $publication_mday = $this->_item_basic_obj->get('publication_mday');
-      $publication_date = xnpDate($publication_year, $publication_month, $publication_mday);
-    // language
-    $lang_map = array();
-      $lang_ids = explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_IDS);
-      $lang_names = explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_NAMES);
-      foreach ($lang_ids as $num => $lang_id) {
-          $lang_map[$lang_id] = $lang_names[$num];
-      }
-      $lang = $this->_item_basic_obj->get('lang');
-      $language = isset($lang_map[$lang]) ? $lang_map[$lang] : '';
-    // change log
-    if ($fmt == 'e' || $fmt == 's') {
-        $change_log = $textutil->html_special_chars($this->_changelog);
-    } else {
-        $change_log = $this->_changelog;
+
+    /**
+     * get item id.
+     *
+     * @return int item id
+     */
+    public function getItemId()
+    {
+        return $this->_item_basic_obj->get('item_id');
     }
-    // return array
-    return array(
-      'item_id' => $this->_item_basic_obj->get('item_id'),
-      'item_url' => $this->getItemDetailUrl(),
-      'uid' => $this->_item_basic_obj->get('uid'),
-      'item_type_id' => $item_type_id,
-      'item_type' => $item_type,
-      'titles' => $titles,
-      'contributor' => $contributor,
-      'keywords' => $keywords,
-      'description' => $this->_item_basic_obj->getVar('description', $fmt),
-      'doi' => $this->_item_basic_obj->getVar('doi', $fmt),
-      'last_update_date' => date(DATETIME_FORMAT, $last_update_date),
-      'creation_date' => date(DATETIME_FORMAT, $creation_date),
-      'publication_year' => $publication_year,
-      'publication_month' => $publication_month,
-      'publication_mday' => $publication_mday,
-      'publication_date' => $publication_date,
-      'lang' => $lang,
-      'language' => $language,
-      'related_to' => $this->_related_to_ids,
-      'related_to_check' => $this->_related_to_check_ids,
-      'related_to_check_all' => $this->_related_to_check_all_ids,
-      'change_log' => $change_log,
-    );
-  }
 
-  /**
-   * get basic information detail block.
-   *
-   * @return array detail block of basic information
-   */
-  public function getBasicInformationDetailBlock()
-  {
-      // show values
-    $basic = $this->getBasicInformationArray('s');
-    // related to
-    $tpl = new XoopsTpl();
-      $tpl->assign('item_htmls', $this->_getRelatedToHtmlArray('s'));
-      $related_to = $tpl->fetch('db:xoonips_detail_related_to.html');
-
-      return array(
-      'uid' => array(
-        'name' => _MD_XOONIPS_ITEM_UID_LABEL,
-        'value' => $basic['uid'],
-      ),
-      'contributor' => array(
-        'name' => _MD_XOONIPS_ITEM_CONTRIBUTOR_LABEL,
-        'value' => $basic['contributor'],
-      ),
-      'title' => array(
-        'name' => _MD_XOONIPS_ITEM_TITLE_LABEL,
-        'value' => implode("\n", $basic['titles']),
-      ),
-      'keywords' => array(
-        'name' => _MD_XOONIPS_ITEM_KEYWORDS_LABEL,
-        'value' => implode(', ', $basic['keywords']),
-      ),
-      'description' => array(
-        'name' => _MD_XOONIPS_ITEM_DESCRIPTION_LABEL,
-        'value' => $basic['description'],
-      ),
-      'doi' => array(
-        'name' => _MD_XOONIPS_ITEM_DOI_LABEL,
-        'value' => $basic['doi'],
-      ),
-      'last_update_date' => array(
-        'name' => _MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL,
-        'value' => $basic['last_update_date'],
-      ),
-      'creation_date' => array(
-        'name' => _MD_XOONIPS_ITEM_CREATION_DATE_LABEL,
-        'value' => $basic['creation_date'],
-      ),
-      'item_type' => array(
-        'name' => _MD_XOONIPS_ITEM_ITEM_TYPE_LABEL,
-        'value' => $basic['item_type'],
-      ),
-      'change_logs' => array(
-        'name' => _MD_XOONIPS_ITEM_CHANGELOGS_LABEL,
-        'value' => $this->_getChangeLogHtml(),
-      ),
-      'publication_date' => array(
-        'name' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
-        'value' => $basic['publication_date'],
-      ),
-      'publication_year' => array(
-        'name' => _MD_XOONIPS_ITEM_PUBLICATION_YEAR_LABEL,
-        'value' => $basic['publication_year'],
-      ),
-      'publication_month' => array(
-        'name' => _MD_XOONIPS_ITEM_PUBLICATION_MONTH_LABEL,
-        'value' => $basic['publication_month'],
-      ),
-      'publication_mday' => array(
-        'name' => _MD_XOONIPS_ITEM_PUBLICATION_MDAY_LABEL,
-        'value' => $basic['publication_mday'],
-      ),
-      'lang' => array(
-        'name' => _MD_XOONIPS_ITEM_LANG_LABEL,
-        'value' => $basic['language'],
-      ),
-      'related_to' => array(
-        'name' => _MD_XOONIPS_ITEM_RELATED_TO_LABEL,
-        'value' => $related_to,
-      ),
-      'hidden' => $this->getHiddenHtml(),
-    );
-  }
-
-  /**
-   * get basic information edit block.
-   *
-   * @param bool $is_register
-   *
-   * @return array edit block of basic information
-   */
-  public function getBasicInformationEditBlock($is_register)
-  {
-      $textutil = &xoonips_getutility('text');
-
-    // edit values
-    $basic = $this->getBasicInformationArray('e');
-
-    // change log
-    if ($is_register) {
-        $change_log = '';
-    } else {
-        $change_log = sprintf('<input type="text" name="change_log" value="%s" size="50"/>', $textutil->html_special_chars($this->_changelog));
-    }
-    // publication date (year, month, mday)
-    $tpl = new XoopsTpl();
-      $pubyear = isset($basic['publication_year']) ? intval($basic['publication_year']) : 0;
-      $pubmonth = isset($basic['publication_month']) ? intval($basic['publication_month']) : 0;
-      $pubmday = isset($basic['publication_mday']) ? intval($basic['publication_mday']) : 0;
-      $gmtime = $pubyear == 0 ? '' : sprintf('%04d-%02d-%02d', $pubyear, $pubmonth, $pubmday);
-      $tpl->assign('gmtime', $gmtime);
-      $publcation_date = $tpl->fetch('db:xoonips_publication_date.html');
-      $publication_year = $tpl->fetch('db:xoonips_publication_year.html');
-      $publication_month = $tpl->fetch('db:xoonips_publication_month.html');
-      $publication_mday = $tpl->fetch('db:xoonips_publication_mday.html');
-    // lang
-    $tpl = new XoopsTpl();
-      $tpl->assign('lang_option_ids', explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_IDS));
-      $tpl->assign('lang_option_names', explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_NAMES));
-      $tpl->assign('lang_option_default_id', $basic['lang']);
-
-      $lang = $tpl->fetch('db:xoonips_lang.html');
-    // related to
-    $tpl = new XoopsTpl();
-      $tpl->assign('related_to', implode("\n", $basic['related_to']));
-      if ($is_register) {
-          $related_to = $tpl->fetch('db:xoonips_register_related_to.html');
-      } else {
-          $item_htmls = array();
-          foreach ($this->_getRelatedToHtmlArray('e') as $id => $html) {
-              $item_htmls[$id] = array(
-          'html' => $html,
-          'check' => empty($basic['related_to_check_all']) || in_array($id, $basic['related_to_check']),
+    /**
+     * get item basic information array.
+     *
+     * @param string $fmt format
+     *
+     * @return array formated strings
+     */
+    public function getBasicInformationArray($fmt)
+    {
+        $textutil = &xoonips_getutility('text');
+        // item type
+        if (is_object($this->_item_type_obj)) {
+            $item_type_id = $this->_item_type_obj->get('item_type_id');
+            $item_type = $this->_item_type_obj->getVar('display_name', $fmt);
+        } else {
+            $item_type_id = 0;
+            $item_type = '';
+        }
+        // contributor
+        if (is_object($this->_xoops_users_obj)) {
+            $user_name = $this->_xoops_users_obj->getVar('name', $fmt);
+            $user_uname = $this->_xoops_users_obj->getVar('uname', $fmt);
+            if ($user_name == '') {
+                $contributor = $user_uname;
+            } else {
+                $contributor = $user_name.' ('.$user_uname.')';
+            }
+        } else {
+            $contributor = '(Zombie User)';
+        }
+        // titles
+        $titles = array();
+        foreach ($this->_item_title_objs as $item_title_obj) {
+            $titles[] = $item_title_obj->getVar('title', $fmt);
+        }
+        // keywords
+        $keywords = array();
+        foreach ($this->_item_keyword_objs as $item_keyword_obj) {
+            $keywords[] = $item_keyword_obj->getVar('keyword', $fmt);
+        }
+        // last update date
+        $last_update_date = xoops_getUserTimestamp($this->_item_basic_obj->get('last_update_date'));
+        // creation date
+        $creation_date = xoops_getUserTimestamp($this->_item_basic_obj->get('creation_date'));
+        // publication date (year, month, mday)
+        $publication_year = $this->_item_basic_obj->get('publication_year');
+        $publication_month = $this->_item_basic_obj->get('publication_month');
+        $publication_mday = $this->_item_basic_obj->get('publication_mday');
+        $publication_date = xnpDate($publication_year, $publication_month, $publication_mday);
+        // language
+        $lang_map = array();
+        $lang_ids = explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_IDS);
+        $lang_names = explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_NAMES);
+        foreach ($lang_ids as $num => $lang_id) {
+            $lang_map[$lang_id] = $lang_names[$num];
+        }
+        $lang = $this->_item_basic_obj->get('lang');
+        $language = isset($lang_map[$lang]) ? $lang_map[$lang] : '';
+        // change log
+        if ($fmt == 'e' || $fmt == 's') {
+            $change_log = $textutil->html_special_chars($this->_changelog);
+        } else {
+            $change_log = $this->_changelog;
+        }
+        // return array
+        return array(
+            'item_id' => $this->_item_basic_obj->get('item_id'),
+            'item_url' => $this->getItemDetailUrl(),
+            'uid' => $this->_item_basic_obj->get('uid'),
+            'item_type_id' => $item_type_id,
+            'item_type' => $item_type,
+            'titles' => $titles,
+            'contributor' => $contributor,
+            'keywords' => $keywords,
+            'description' => $this->_item_basic_obj->getVar('description', $fmt),
+            'doi' => $this->_item_basic_obj->getVar('doi', $fmt),
+            'last_update_date' => date(DATETIME_FORMAT, $last_update_date),
+            'creation_date' => date(DATETIME_FORMAT, $creation_date),
+            'publication_year' => $publication_year,
+            'publication_month' => $publication_month,
+            'publication_mday' => $publication_mday,
+            'publication_date' => $publication_date,
+            'lang' => $lang,
+            'language' => $language,
+            'related_to' => $this->_related_to_ids,
+            'related_to_check' => $this->_related_to_check_ids,
+            'related_to_check_all' => $this->_related_to_check_all_ids,
+            'change_log' => $change_log,
         );
-          }
-          $tpl->assign('item_htmls', $item_htmls);
-          $related_to = $tpl->fetch('db:xoonips_edit_related_to.html');
-      }
+    }
 
-      return array(
-      'contributor' => array(
-        'name' => _MD_XOONIPS_ITEM_CONTRIBUTOR_LABEL,
-        'value' => ($is_register) ? '' : $basic['contributor'],
-      ),
-      'title' => array(
-        'name' => _MD_XOONIPS_ITEM_TITLE_LABEL._MD_XOONIPS_ITEM_REQUIRED_MARK,
-        'value' => sprintf('<textarea name="title" rows="3" cols="50" wrap="off" style="width:400px;">%s</textarea>', implode("\n", $basic['titles'])),
-      ),
-      'keywords' => array(
-        'name' => _MD_XOONIPS_ITEM_KEYWORDS_LABEL,
-        'value' => sprintf('<input size="50" type="text" name="keywords" value="%s"/><br /> Separate the words or phrases with commas.', implode(',', $basic['keywords'])),
-      ),
-      'description' => array(
-        'name' => _MD_XOONIPS_ITEM_DESCRIPTION_LABEL,
-        'value' => sprintf('<textarea rows="5" cols="50" name="description" style="width:400px;">%s</textarea>', $basic['description']),
-      ),
-      'doi' => array(
-        'name' => _MD_XOONIPS_ITEM_DOI_LABEL,
-        'value' => sprintf('<input type="text" name="doi" value="%s" size="50"/>', $basic['doi']),
-      ),
-      'last_update_date' => array(
-        'name' => _MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL,
-        'value' => ($is_register) ? '' : $basic['last_update_date'],
-      ),
-      'creation_date' => array(
-        'name' => _MD_XOONIPS_ITEM_CREATION_DATE_LABEL,
-        'value' => ($is_register) ? '' : $basic['creation_date'],
-      ),
-      'change_log' => array(
-        'name' => _MD_XOONIPS_ITEM_CHANGELOG_LABEL,
-        'value' => $change_log,
-      ),
-      'change_logs' => array(
-        'name' => _MD_XOONIPS_ITEM_CHANGELOGS_LABEL,
-        'value' => ($is_register) ? '' : $this->_getChangeLogHtml(),
-      ),
-      'publication_date' => array(
-        'name' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
-        'value' => $publcation_date,
-      ),
-      'publication_year' => array(
-        'name' => _MD_XOONIPS_ITEM_PUBLICATION_YEAR_LABEL,
-        'value' => $publication_year,
-      ),
-      'publication_month' => array(
-        'name' => _MD_XOONIPS_ITEM_PUBLICATION_MONTH_LABEL,
-        'value' => $publication_month,
-      ),
-      'publication_mday' => array(
-        'name' => _MD_XOONIPS_ITEM_PUBLICATION_MDAY_LABEL,
-        'value' => $publication_mday,
-      ),
-      'lang' => array(
-        'name' => _MD_XOONIPS_ITEM_LANG_LABEL,
-        'value' => $lang,
-      ),
-      'related_to' => array(
-        'name' => _MD_XOONIPS_ITEM_RELATED_TO_LABEL,
-        'value' => $related_to,
-      ),
-    );
-  }
+    /**
+     * get basic information detail block.
+     *
+     * @return array detail block of basic information
+     */
+    public function getBasicInformationDetailBlock()
+    {
+        // show values
+        $basic = $this->getBasicInformationArray('s');
+        // related to
+        $tpl = new XoopsTpl();
+        $tpl->assign('item_htmls', $this->_getRelatedToHtmlArray('s'));
+        $related_to = $tpl->fetch('db:xoonips_detail_related_to.html');
+
+        return array(
+            'uid' => array(
+                'name' => _MD_XOONIPS_ITEM_UID_LABEL,
+                'value' => $basic['uid'],
+            ),
+            'contributor' => array(
+                'name' => _MD_XOONIPS_ITEM_CONTRIBUTOR_LABEL,
+                'value' => $basic['contributor'],
+            ),
+            'title' => array(
+                'name' => _MD_XOONIPS_ITEM_TITLE_LABEL,
+                'value' => implode("\n", $basic['titles']),
+            ),
+            'keywords' => array(
+                'name' => _MD_XOONIPS_ITEM_KEYWORDS_LABEL,
+                'value' => implode(', ', $basic['keywords']),
+            ),
+            'description' => array(
+                'name' => _MD_XOONIPS_ITEM_DESCRIPTION_LABEL,
+                'value' => $basic['description'],
+            ),
+            'doi' => array(
+                'name' => _MD_XOONIPS_ITEM_DOI_LABEL,
+                'value' => $basic['doi'],
+            ),
+            'last_update_date' => array(
+                'name' => _MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL,
+                'value' => $basic['last_update_date'],
+            ),
+            'creation_date' => array(
+                'name' => _MD_XOONIPS_ITEM_CREATION_DATE_LABEL,
+                'value' => $basic['creation_date'],
+            ),
+            'item_type' => array(
+                'name' => _MD_XOONIPS_ITEM_ITEM_TYPE_LABEL,
+                'value' => $basic['item_type'],
+            ),
+            'change_logs' => array(
+                'name' => _MD_XOONIPS_ITEM_CHANGELOGS_LABEL,
+                'value' => $this->_getChangeLogHtml(),
+            ),
+            'publication_date' => array(
+                'name' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
+                'value' => $basic['publication_date'],
+            ),
+            'publication_year' => array(
+                'name' => _MD_XOONIPS_ITEM_PUBLICATION_YEAR_LABEL,
+                'value' => $basic['publication_year'],
+            ),
+            'publication_month' => array(
+                'name' => _MD_XOONIPS_ITEM_PUBLICATION_MONTH_LABEL,
+                'value' => $basic['publication_month'],
+            ),
+            'publication_mday' => array(
+                'name' => _MD_XOONIPS_ITEM_PUBLICATION_MDAY_LABEL,
+                'value' => $basic['publication_mday'],
+            ),
+            'lang' => array(
+                'name' => _MD_XOONIPS_ITEM_LANG_LABEL,
+                'value' => $basic['language'],
+            ),
+            'related_to' => array(
+                'name' => _MD_XOONIPS_ITEM_RELATED_TO_LABEL,
+                'value' => $related_to,
+            ),
+            'hidden' => $this->getHiddenHtml(),
+        );
+    }
+
+    /**
+     * get basic information edit block.
+     *
+     * @param bool $is_register
+     *
+     * @return array edit block of basic information
+     */
+    public function getBasicInformationEditBlock($is_register)
+    {
+        $textutil = &xoonips_getutility('text');
+
+        // edit values
+        $basic = $this->getBasicInformationArray('e');
+
+        // change log
+        if ($is_register) {
+            $change_log = '';
+        } else {
+            $change_log = sprintf('<input type="text" name="change_log" value="%s" size="50"/>', $textutil->html_special_chars($this->_changelog));
+        }
+        // publication date (year, month, mday)
+        $tpl = new XoopsTpl();
+        $pubyear = isset($basic['publication_year']) ? intval($basic['publication_year']) : 0;
+        $pubmonth = isset($basic['publication_month']) ? intval($basic['publication_month']) : 0;
+        $pubmday = isset($basic['publication_mday']) ? intval($basic['publication_mday']) : 0;
+        $gmtime = $pubyear == 0 ? '' : sprintf('%04d-%02d-%02d', $pubyear, $pubmonth, $pubmday);
+        $tpl->assign('gmtime', $gmtime);
+        $publcation_date = $tpl->fetch('db:xoonips_publication_date.html');
+        $publication_year = $tpl->fetch('db:xoonips_publication_year.html');
+        $publication_month = $tpl->fetch('db:xoonips_publication_month.html');
+        $publication_mday = $tpl->fetch('db:xoonips_publication_mday.html');
+        // lang
+        $tpl = new XoopsTpl();
+        $tpl->assign('lang_option_ids', explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_IDS));
+        $tpl->assign('lang_option_names', explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_NAMES));
+        $tpl->assign('lang_option_default_id', $basic['lang']);
+
+        $lang = $tpl->fetch('db:xoonips_lang.html');
+        // related to
+        $tpl = new XoopsTpl();
+        $tpl->assign('related_to', implode("\n", $basic['related_to']));
+        if ($is_register) {
+            $related_to = $tpl->fetch('db:xoonips_register_related_to.html');
+        } else {
+            $item_htmls = array();
+            foreach ($this->_getRelatedToHtmlArray('e') as $id => $html) {
+                $item_htmls[$id] = array(
+            'html' => $html,
+            'check' => empty($basic['related_to_check_all']) || in_array($id, $basic['related_to_check']),
+            );
+            }
+            $tpl->assign('item_htmls', $item_htmls);
+            $related_to = $tpl->fetch('db:xoonips_edit_related_to.html');
+        }
+
+        return array(
+            'contributor' => array(
+                'name' => _MD_XOONIPS_ITEM_CONTRIBUTOR_LABEL,
+                'value' => ($is_register) ? '' : $basic['contributor'],
+            ),
+            'title' => array(
+                'name' => _MD_XOONIPS_ITEM_TITLE_LABEL._MD_XOONIPS_ITEM_REQUIRED_MARK,
+                'value' => sprintf('<textarea name="title" rows="3" cols="50" wrap="off" style="width:400px;">%s</textarea>', implode("\n", $basic['titles'])),
+            ),
+            'keywords' => array(
+                'name' => _MD_XOONIPS_ITEM_KEYWORDS_LABEL,
+                'value' => sprintf('<input size="50" type="text" name="keywords" value="%s"/><br /> Separate the words or phrases with commas.', implode(',', $basic['keywords'])),
+            ),
+            'description' => array(
+                'name' => _MD_XOONIPS_ITEM_DESCRIPTION_LABEL,
+                'value' => sprintf('<textarea rows="5" cols="50" name="description" style="width:400px;">%s</textarea>', $basic['description']),
+            ),
+            'doi' => array(
+                'name' => _MD_XOONIPS_ITEM_DOI_LABEL,
+                'value' => sprintf('<input type="text" name="doi" value="%s" size="50"/>', $basic['doi']),
+            ),
+            'last_update_date' => array(
+                'name' => _MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL,
+                'value' => ($is_register) ? '' : $basic['last_update_date'],
+            ),
+            'creation_date' => array(
+                'name' => _MD_XOONIPS_ITEM_CREATION_DATE_LABEL,
+                'value' => ($is_register) ? '' : $basic['creation_date'],
+            ),
+            'change_log' => array(
+                'name' => _MD_XOONIPS_ITEM_CHANGELOG_LABEL,
+                'value' => $change_log,
+            ),
+            'change_logs' => array(
+                'name' => _MD_XOONIPS_ITEM_CHANGELOGS_LABEL,
+                'value' => ($is_register) ? '' : $this->_getChangeLogHtml(),
+            ),
+            'publication_date' => array(
+                'name' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
+                'value' => $publcation_date,
+            ),
+            'publication_year' => array(
+                'name' => _MD_XOONIPS_ITEM_PUBLICATION_YEAR_LABEL,
+                'value' => $publication_year,
+            ),
+            'publication_month' => array(
+                'name' => _MD_XOONIPS_ITEM_PUBLICATION_MONTH_LABEL,
+                'value' => $publication_month,
+            ),
+            'publication_mday' => array(
+                'name' => _MD_XOONIPS_ITEM_PUBLICATION_MDAY_LABEL,
+                'value' => $publication_mday,
+            ),
+            'lang' => array(
+                'name' => _MD_XOONIPS_ITEM_LANG_LABEL,
+                'value' => $lang,
+            ),
+            'related_to' => array(
+                'name' => _MD_XOONIPS_ITEM_RELATED_TO_LABEL,
+                'value' => $related_to,
+            ),
+        );
+    }
 
     public function getBasicInformationConfirmBlock($is_register)
     {
         $textutil = &xoonips_getutility('text');
 
-    // show values
-    $basic = $this->getBasicInformationArray('s');
+        // show values
+        $basic = $this->getBasicInformationArray('s');
 
-    // change log
-    $changelog = $textutil->html_special_chars($this->_changelog);
+        // change log
+        $changelog = $textutil->html_special_chars($this->_changelog);
 
-    // related to
-    $tpl = new XoopsTpl();
+        // related to
+        $tpl = new XoopsTpl();
         $tpl->assign('related_to', implode("\n", $basic['related_to']));
         $tpl->assign('item_htmls', $this->_getRelatedToHtmlArray('c'));
         $related_to = $tpl->fetch('db:xoonips_confirm_related_to.html');
 
-    // description
-    $description = $this->_getConfirmTemplateVars(_MD_XOONIPS_ITEM_DESCRIPTION_LABEL, $this->_item_basic_obj->get('description'), $this->_item_basic_obj->getMaxLength('description'));
+        // description
+        $description = $this->_getConfirmTemplateVars(_MD_XOONIPS_ITEM_DESCRIPTION_LABEL, $this->_item_basic_obj->get('description'), $this->_item_basic_obj->getMaxLength('description'));
 
-    // doi
-    $doi = $this->_getConfirmTemplateVars(_MD_XOONIPS_ITEM_DOI_LABEL, $this->_item_basic_obj->get('doi'), $this->_item_basic_obj->getMaxLength('doi'));
+        // doi
+        $doi = $this->_getConfirmTemplateVars(_MD_XOONIPS_ITEM_DOI_LABEL, $this->_item_basic_obj->get('doi'), $this->_item_basic_obj->getMaxLength('doi'));
 
-    // title
-    $title['name'] = _MD_XOONIPS_ITEM_TITLE_LABEL;
+        // title
+        $title['name'] = _MD_XOONIPS_ITEM_TITLE_LABEL;
         foreach ($this->_item_title_objs as $obj) {
             $t = $this->_getConfirmTemplateVars('', $obj->get('title'), $obj->getMaxLength('title'));
             foreach ($t as $k => $v) {
@@ -4157,8 +4149,8 @@ class XooNIpsItemLibraryObject
             }
         }
 
-    // keywords
-    $keywords['name'] = _MD_XOONIPS_ITEM_KEYWORDS_LABEL;
+        // keywords
+        $keywords['name'] = _MD_XOONIPS_ITEM_KEYWORDS_LABEL;
         foreach ($this->_item_keyword_objs as $obj) {
             $t = $this->_getConfirmTemplateVars('', $obj->get('keyword'), $obj->getMaxLength('keyword'));
             foreach ($t as $k => $v) {
@@ -4174,542 +4166,542 @@ class XooNIpsItemLibraryObject
         }
 
         return array(
-      'item_type' => array(
-        'name' => _MD_XOONIPS_ITEM_ITEM_TYPE_LABEL,
-        'value' => $basic['item_type'],
-      ),
-      'contributor' => array(
-        'name' => _MD_XOONIPS_ITEM_CONTRIBUTOR_LABEL,
-        'value' => ($is_register ? '' : $basic['contributor']),
-      ),
-      'last_update_date' => array(
-        'name' => _MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL,
-        'value' => ($is_register ? '' : $basic['last_update_date']),
-      ),
-      'creation_date' => array(
-        'name' => _MD_XOONIPS_ITEM_CREATION_DATE_LABEL,
-        'value' => ($is_register ? '' : $basic['creation_date']),
-      ),
-      'change_log' => array(
-        'name' => _MD_XOONIPS_ITEM_CHANGELOG_LABEL,
-        'value' => $changelog,
-      ),
-      'change_logs' => array(
-        'name' => _MD_XOONIPS_ITEM_CHANGELOGS_LABEL,
-        'value' => $this->_getChangeLogHtml(),
-      ),
-      'publication_date' => array(
-        'name' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
-        'value' => $basic['publication_date'],
-      ),
-      'publication_year' => array(
-        'name' => _MD_XOONIPS_ITEM_PUBLICATION_YEAR_LABEL,
-        'value' => $basic['publication_year'],
-      ),
-      'publication_month' => array(
-        'name' => _MD_XOONIPS_ITEM_PUBLICATION_MONTH_LABEL,
-        'value' => $basic['publication_month'],
-      ),
-      'publication_mday' => array(
-        'name' => _MD_XOONIPS_ITEM_PUBLICATION_MDAY_LABEL,
-        'value' => $basic['publication_mday'],
-      ),
-      'lang' => array(
-        'name' => _MD_XOONIPS_ITEM_LANG_LABEL,
-        'value' => $basic['language'],
-      ),
-      'related_to' => array(
-        'name' => _MD_XOONIPS_ITEM_RELATED_TO_LABEL,
-        'value' => $related_to,
-      ),
-      'description' => $description,
-      'doi' => $doi,
-      'title' => $title,
-      'keywords' => $keywords,
-    );
+            'item_type' => array(
+                'name' => _MD_XOONIPS_ITEM_ITEM_TYPE_LABEL,
+                'value' => $basic['item_type'],
+            ),
+            'contributor' => array(
+                'name' => _MD_XOONIPS_ITEM_CONTRIBUTOR_LABEL,
+                'value' => ($is_register ? '' : $basic['contributor']),
+            ),
+            'last_update_date' => array(
+                'name' => _MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL,
+                'value' => ($is_register ? '' : $basic['last_update_date']),
+            ),
+            'creation_date' => array(
+                'name' => _MD_XOONIPS_ITEM_CREATION_DATE_LABEL,
+                'value' => ($is_register ? '' : $basic['creation_date']),
+            ),
+            'change_log' => array(
+                'name' => _MD_XOONIPS_ITEM_CHANGELOG_LABEL,
+                'value' => $changelog,
+            ),
+            'change_logs' => array(
+                'name' => _MD_XOONIPS_ITEM_CHANGELOGS_LABEL,
+                'value' => $this->_getChangeLogHtml(),
+            ),
+            'publication_date' => array(
+                'name' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
+                'value' => $basic['publication_date'],
+            ),
+            'publication_year' => array(
+                'name' => _MD_XOONIPS_ITEM_PUBLICATION_YEAR_LABEL,
+                'value' => $basic['publication_year'],
+            ),
+            'publication_month' => array(
+                'name' => _MD_XOONIPS_ITEM_PUBLICATION_MONTH_LABEL,
+                'value' => $basic['publication_month'],
+            ),
+            'publication_mday' => array(
+                'name' => _MD_XOONIPS_ITEM_PUBLICATION_MDAY_LABEL,
+                'value' => $basic['publication_mday'],
+            ),
+            'lang' => array(
+                'name' => _MD_XOONIPS_ITEM_LANG_LABEL,
+                'value' => $basic['language'],
+            ),
+            'related_to' => array(
+                'name' => _MD_XOONIPS_ITEM_RELATED_TO_LABEL,
+                'value' => $related_to,
+            ),
+            'description' => $description,
+            'doi' => $doi,
+            'title' => $title,
+            'keywords' => $keywords,
+        );
     }
 
-  /**
-   * truncate object for insert object to database.
-   *
-   * @return bool false if failure
-   */
-  public function truncateObject()
-  {
-      // item basic
-    $this->_truncateSimpleObject($this->_item_basic_obj);
-    // titles
-    foreach ($this->_item_title_objs as $item_title_obj) {
-        $this->_truncateSimpleObject($item_title_obj);
-    }
-    // keywords
-    foreach ($this->_item_keyword_objs as $item_keyword_obj) {
-        $this->_truncateSimpleObject($item_keyword_obj);
-    }
-
-      return true;
-  }
-
-  /**
-   * get item detail url.
-   *
-   * @return string url
-   */
-  public function getItemDetailUrl()
-  {
-      $doi = $this->_item_basic_obj->get('doi');
-      $mydirname = basename(dirname(__DIR__));
-      if ($doi != '' && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') {
-          $opt = XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($doi);
-      } else {
-          $opt = 'item_id='.$this->_item_basic_obj->get('item_id');
-      }
-
-      return XOOPS_URL.'/modules/'.$mydirname.'/detail.php?'.$opt;
-  }
-
-  /**
-   * get item basic object.
-   *
-   * @return object
-   */
-  public function &getItemBasicObject()
-  {
-      return $this->_item_basic_obj;
-  }
-
-  /**
-   * get title objects.
-   *
-   * @return array
-   */
-  public function &getTitleObjects()
-  {
-      return $this->_item_title_objs;
-  }
-
-  /**
-   * set title objects.
-   *
-   * @param array objects
-   */
-  public function setTitleObjects(&$objs)
-  {
-      $this->_item_title_objs = &$objs;
-  }
-
-  /**
-   * get keyword objects.
-   *
-   * @return array
-   */
-  public function &getKeywordObjects()
-  {
-      return $this->_item_keyword_objs;
-  }
-
-  /**
-   * set keyword objects.
-   *
-   * @param array objects
-   */
-  public function setKeywordObjects(&$objs)
-  {
-      $this->_item_keyword_objs = &$objs;
-  }
-
-  /**
-   * set description.
-   *
-   * @param string $description
-   */
-  public function setDescription($description)
-  {
-      $this->_item_basic_obj->set('description', $description);
-  }
-
-  /**
-   * set item type id.
-   *
-   * @param int $item_type_id
-   */
-  public function setItemTypeId($item_type_id)
-  {
-      $this->_item_basic_obj->set('item_type_id', $item_type_id);
-  }
-
-  /**
-   * set doi.
-   *
-   * @param string $doi
-   */
-  public function setDOI($doi)
-  {
-      if (strlen($doi) <= XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN && preg_match('/'.XNP_CONFIG_DOI_FIELD_PARAM_PATTERN.'/', $doi)) {
-          $this->_item_basic_obj->set('doi', $doi);
-      }
-  }
-
-  /**
-   * set change log.
-   *
-   * @param int $mday
-   */
-  public function setChangeLog($change_log)
-  {
-      $this->_changelog = $change_log;
-  }
-
-  /**
-   * set publication year.
-   *
-   * @param int $year
-   */
-  public function setPublicationYear($year)
-  {
-      $this->_item_basic_obj->set('publication_year', $year);
-  }
-
-  /**
-   * set publication month.
-   *
-   * @param int $month
-   */
-  public function setPublicationMonth($month)
-  {
-      if ($month >= 0 && $month <= 12) {
-          $this->_item_basic_obj->set('publication_month', $month);
-      }
-  }
-
-  /**
-   * set publication day.
-   *
-   * @param int $mday
-   */
-  public function setPublicationDay($mday)
-  {
-      if ($mday >= 0 && $mday <= 31) {
-          $this->_item_basic_obj->set('publication_mday', $mday);
-      }
-  }
-
-  /**
-   * set language.
-   *
-   * @param string $lang
-   */
-  public function setLanguage($lang)
-  {
-      $lang_ids = explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_IDS);
-      if (in_array($lang, $lang_ids)) {
-          $this->_item_basic_obj->set('lang', $lang);
-      }
-  }
-
-  /**
-   * get related to item ids.
-   *
-   * @param array
-   */
-  public function getRelatedTo()
-  {
-      return $this->_related_to_ids;
-  }
-
-  /**
-   * set related to.
-   *
-   * @param string $lang
-   */
-  public function setRelatedTo($related_to)
-  {
-      $related_to = trim($related_to);
-      $ids = preg_split("/[\r\n]+/", $related_to);
-      $related_to_ids = array();
-      foreach ($ids as $id) {
-          $id = intval($id);
-          if ($id != 0) {
-              $related_to_ids[] = $id;
-          }
-      }
-      $this->_related_to_ids = $related_to_ids;
-  }
-
-  /**
-   * get related to check item ids.
-   *
-   * @param array
-   */
-  public function getRelatedToCheck()
-  {
-      return $this->_related_to_check_ids;
-  }
-
-  /**
-   * set related to check (for edit).
-   *
-   * @param array $item_ids
-   * @param array $item_all_ids
-   */
-  public function setRelatedToCheck($item_ids, $item_all_ids)
-  {
-      $this->_related_to_check_ids = $item_ids;
-      $this->_related_to_check_all_ids = $item_all_ids;
-  }
-
-  /**
-   * get hidden html.
-   */
-  public function getHiddenHtml()
-  {
-      $basic = $this->getBasicInformationArray('e');
-      $hidden = array();
-    // single value
-    $keys = array(
-      'item_type_id' => $basic['item_type_id'],
-      'title' => implode("\n", $basic['titles']),
-      'keywords' => implode(',', $basic['keywords']),
-      'description' => $basic['description'],
-      'doi' => $basic['doi'],
-      'publicationDateYear' => $basic['publication_year'],
-      'publicationDateMonth' => $basic['publication_month'],
-      'publicationDateDay' => $basic['publication_mday'],
-      'lang' => $basic['lang'],
-      'related_to' => implode("\n", $basic['related_to']),
-      'change_log' => $basic['change_log'],
-    );
-      foreach ($keys as $key => $value) {
-          $hidden[] = $this->_renderHiddenHtml($key, $value);
-      }
-    // multiple values
-    $keys = array(
-      'related_to_check' => $basic['related_to_check'],
-      'related_to_check_all' => $basic['related_to_check_all'],
-    );
-      foreach ($keys as $key => $values) {
-          foreach ($values as $value) {
-              $hidden[] = $this->_renderHiddenHtml($key.'[]', $value);
-          }
-      }
-
-      return implode("\n", $hidden);
-  }
-
-  /**
-   * check need to cerity.
-   *
-   * @return bool true if required
-   */
-  public function isCertifyRequired()
-  {
-      $item_id = $this->_item_basic_obj->get('item_id');
-    // check modified fields
-    $modname = $this->_item_type_obj->get('name');
-      $viewphp = $this->_item_type_obj->get('viewphp');
-      include_once XOOPS_ROOT_PATH.'/modules/'.$viewphp;
-      $func = $modname.'GetModifiedFields';
-      $modified = xnpGetModifiedFields($item_id) + (function_exists($func) ? $func($item_id) : array());
-      if (count($modified) == 0) {
-          // modified field not found, no need to certify
-      return false;
-      }
-    // fetch new index ids
-    $formdata = &xoonips_getutility('formdata');
-      $xids_new = array_map('intval', explode(',', $formdata->getValue('post', 'xoonipsCheckedXID', 's', false, '')));
-      if (count($modified) == 1 && $modified[0] == _MD_XOONIPS_ITEM_INDEX_LABEL) {
-          // only indexes are modified
-      // get old index ids
-      $xids_old = array();
-          $item_id = $this->_item_basic_obj->get('item_id');
-          $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
-          $criteria = new Criteria('item_id', $item_id);
-          $index_item_link_objs = &$index_item_link_handler->getObjects();
-          foreach ($index_item_link_objs as $index_item_link_obj) {
-              $xids_old[] = $index_item_link_obj->get('index_id');
-          }
-      // get newly arrived index ids
-      $xids = array_diff($xids_new, $xids_old);
-      } else {
-          // set all new index ids
-      $xids = $xids_new;
-      }
-      if (count($xids) == 0) {
-          // indexes are not changed
-      return false;
-      }
-    // check open_level of modified indexes
-    $index_handler = &xoonips_getormhandler('xoonips', 'index');
-      $criteria = new CriteriaCompo(new Criteria('open_level', OL_PRIVATE, '!='));
-      $criteria->add(new Criteria('index_id', '('.implode(',', $xids).')', 'IN'));
-
-      return  $index_handler->getCount($criteria) > 0;
-  }
-
-  /**
-   * get related to htmls.
-   *
-   * @param string $type block type
-   *                     's' : show
-   *                     'e' : edit
-   *                     'c' : confirm
-   *
-   * @return array renderd list block htmls
-   */
-  public function _getRelatedToHtmlArray($type)
-  {
-      $itemlib_handler = &XooNIpsItemLibraryHandler::getInstance();
-      $htmls = array();
-      switch ($type) {
-    case 's':
-      // show block
-      $item_ids = $this->_related_to_ids;
-      break;
-    case 'e':
-      // edit block
-      $item_ids = array_merge($this->_related_to_ids, $this->_related_to_check_all_ids);
-      break;
-    case 'c':
-      // confirm block
-      $item_ids = array_merge($this->_related_to_ids, $this->_related_to_check_ids);
-      break;
-    }
-      $self_item_id = $this->_item_basic_obj->get('item_id');
-      foreach ($item_ids as $item_id) {
-          if ($self_item_id == $item_id) {
-              continue;
-          }
-          $itemlib_obj = &$itemlib_handler->get($item_id);
-          if (!is_object($itemlib_obj)) {
-              // broken related to item id found
-        if (XOONIPS_DEBUG_MODE) {
-            error_log('BROKEN RELATED TO ITEM ID FOUND : PARENT('.$this->_item_basic_obj->get('item_id').') - CHILD('.$item_id.')');
+    /**
+     * truncate object for insert object to database.
+     *
+     * @return bool false if failure
+     */
+    public function truncateObject()
+    {
+        // item basic
+        $this->_truncateSimpleObject($this->_item_basic_obj);
+        // titles
+        foreach ($this->_item_title_objs as $item_title_obj) {
+            $this->_truncateSimpleObject($item_title_obj);
         }
-              continue;
-          }
-          $htmls[$item_id] = $itemlib_obj->getItemListBlock();
-      }
+        // keywords
+        foreach ($this->_item_keyword_objs as $item_keyword_obj) {
+            $this->_truncateSimpleObject($item_keyword_obj);
+        }
 
-      return $htmls;
-  }
-
-  /**
-   * get change log html.
-   *
-   * @return string rendered html
-   */
-  public function _getChangeLogHtml()
-  {
-      $ret = '';
-      if (count($this->_changelog_objs) > 0) {
-          $ret = '<table>'."\n";
-          foreach ($this->_changelog_objs as $changelog_obj) {
-              $ret .= '<tr><td nowrap="nowrap">';
-              $ret .= date(DATE_FORMAT, $changelog_obj->get('log_date'));
-              $ret .= '&nbsp;</td><td>';
-              $ret .= nl2br($changelog_obj->getVar('log', 's'));
-              $ret .= '</td></tr>'."\n";
-          }
-          $ret .= '</table>'."\n";
-      }
-
-      return $ret;
-  }
-
-  /**
-   * render hidden html.
-   *
-   * @param string $key
-   * @param mixed  $val
-   *
-   * @return string rendered html
-   */
-  public function _renderHiddenHtml($key, $val)
-  {
-      return sprintf('<input type="hidden" name="%s" value="%s"/>', $key, $val);
-  }
-
-  /**
-   * get confirmation template variables array.
-   *
-   * @param string $name
-   * @param string $text
-   * @param int    $len  string maximum length
-   *
-   * @return array template variables
-   *               - 'name' : label
-   *               - 'html_string' : escaped form string
-   *               - 'value' : escaped display data
-   *               - 'within' : trimed string (escaped)
-   *               - 'without' : overflowed string (escaped)
-   */
-  public function _getConfirmTemplateVars($name, $text, $len)
-  {
-      $textutil = &xoonips_getutility('text');
-    // truncate
-    $within_raw = $this->_truncateSimpleText($text, $len);
-    // remove broken html entity if truncated
-    if (strlen($text) != strlen($within_raw)) {
-        // get overflowd string
-      $without_raw = substr($text, strlen($within_raw));
-    } else {
-        $without_raw = '';
-    }
-    // escaped
-    $within = $textutil->html_special_chars($within_raw);
-      $without = $textutil->html_special_chars($without_raw);
-      $html_string = $textutil->html_special_chars($text);
-    // create value
-    $value = $within.($without != '' ? sprintf('<span style="color: red;">%s</span>', $without) : '');
-
-      return array(
-      'name' => $name,
-      'html_string' => $html_string,
-      'within' => $within,
-      'without' => $without,
-      'value' => $value,
-    );
-  }
-
-  /**
-   * truncate simple text.
-   *
-   * @param string $text source text
-   * @param string $len  text length
-   * @retrun string truncated string
-   */
-  public function _truncateSimpleText($text, $len)
-  {
-      $textutil = &xoonips_getutility('text');
-    // truncate
-    $trunc = mb_substr($text, 0, $len, mb_detect_encoding($text));
-    // remove broken html entity if truncated
-    if (strlen($text) != strlen($trunc)) {
-        $trunc = preg_replace('/&#[^;]*$/s', '', $trunc);
+        return true;
     }
 
-      return $trunc;
-  }
+    /**
+     * get item detail url.
+     *
+     * @return string url
+     */
+    public function getItemDetailUrl()
+    {
+        $doi = $this->_item_basic_obj->get('doi');
+        $mydirname = basename(dirname(__DIR__));
+        if ($doi != '' && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') {
+            $opt = XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($doi);
+        } else {
+            $opt = 'item_id='.$this->_item_basic_obj->get('item_id');
+        }
 
-  /**
-   * truncate simple object.
-   *
-   * @param object $obj
-   * @retrun bool false if failure
-   */
-  public function _truncateSimpleObject(&$obj)
-  {
-      $keys = $obj->getKeysArray();
-      foreach ($keys as $key) {
-          $len = $obj->getMaxLength($key);
-          if ($len !== false) {
-              $value = $this->_truncateSimpleText($obj->get($key), $len);
-              $obj->set($key, $value);
-          }
-      }
+        return XOOPS_URL.'/modules/'.$mydirname.'/detail.php?'.$opt;
+    }
 
-      return true;
-  }
+    /**
+     * get item basic object.
+     *
+     * @return object
+     */
+    public function &getItemBasicObject()
+    {
+        return $this->_item_basic_obj;
+    }
+
+    /**
+     * get title objects.
+     *
+     * @return array
+     */
+    public function &getTitleObjects()
+    {
+        return $this->_item_title_objs;
+    }
+
+    /**
+     * set title objects.
+     *
+     * @param array objects
+     */
+    public function setTitleObjects(&$objs)
+    {
+        $this->_item_title_objs = &$objs;
+    }
+
+    /**
+     * get keyword objects.
+     *
+     * @return array
+     */
+    public function &getKeywordObjects()
+    {
+        return $this->_item_keyword_objs;
+    }
+
+    /**
+     * set keyword objects.
+     *
+     * @param array objects
+     */
+    public function setKeywordObjects(&$objs)
+    {
+        $this->_item_keyword_objs = &$objs;
+    }
+
+    /**
+     * set description.
+     *
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->_item_basic_obj->set('description', $description);
+    }
+
+    /**
+     * set item type id.
+     *
+     * @param int $item_type_id
+     */
+    public function setItemTypeId($item_type_id)
+    {
+        $this->_item_basic_obj->set('item_type_id', $item_type_id);
+    }
+
+    /**
+     * set doi.
+     *
+     * @param string $doi
+     */
+    public function setDOI($doi)
+    {
+        if (strlen($doi) <= XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN && preg_match('/'.XNP_CONFIG_DOI_FIELD_PARAM_PATTERN.'/', $doi)) {
+            $this->_item_basic_obj->set('doi', $doi);
+        }
+    }
+
+    /**
+     * set change log.
+     *
+     * @param int $mday
+     */
+    public function setChangeLog($change_log)
+    {
+        $this->_changelog = $change_log;
+    }
+
+    /**
+     * set publication year.
+     *
+     * @param int $year
+     */
+    public function setPublicationYear($year)
+    {
+        $this->_item_basic_obj->set('publication_year', $year);
+    }
+
+    /**
+     * set publication month.
+     *
+     * @param int $month
+     */
+    public function setPublicationMonth($month)
+    {
+        if ($month >= 0 && $month <= 12) {
+            $this->_item_basic_obj->set('publication_month', $month);
+        }
+    }
+
+    /**
+     * set publication day.
+     *
+     * @param int $mday
+     */
+    public function setPublicationDay($mday)
+    {
+        if ($mday >= 0 && $mday <= 31) {
+            $this->_item_basic_obj->set('publication_mday', $mday);
+        }
+    }
+
+    /**
+     * set language.
+     *
+     * @param string $lang
+     */
+    public function setLanguage($lang)
+    {
+        $lang_ids = explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_IDS);
+        if (in_array($lang, $lang_ids)) {
+            $this->_item_basic_obj->set('lang', $lang);
+        }
+    }
+
+    /**
+     * get related to item ids.
+     *
+     * @param array
+     */
+    public function getRelatedTo()
+    {
+        return $this->_related_to_ids;
+    }
+
+    /**
+     * set related to.
+     *
+     * @param string $lang
+     */
+    public function setRelatedTo($related_to)
+    {
+        $related_to = trim($related_to);
+        $ids = preg_split("/[\r\n]+/", $related_to);
+        $related_to_ids = array();
+        foreach ($ids as $id) {
+            $id = intval($id);
+            if ($id != 0) {
+                $related_to_ids[] = $id;
+            }
+        }
+        $this->_related_to_ids = $related_to_ids;
+    }
+
+    /**
+     * get related to check item ids.
+     *
+     * @param array
+     */
+    public function getRelatedToCheck()
+    {
+        return $this->_related_to_check_ids;
+    }
+
+    /**
+     * set related to check (for edit).
+     *
+     * @param array $item_ids
+     * @param array $item_all_ids
+     */
+    public function setRelatedToCheck($item_ids, $item_all_ids)
+    {
+        $this->_related_to_check_ids = $item_ids;
+        $this->_related_to_check_all_ids = $item_all_ids;
+    }
+
+    /**
+     * get hidden html.
+     */
+    public function getHiddenHtml()
+    {
+        $basic = $this->getBasicInformationArray('e');
+        $hidden = array();
+        // single value
+        $keys = array(
+            'item_type_id' => $basic['item_type_id'],
+            'title' => implode("\n", $basic['titles']),
+            'keywords' => implode(',', $basic['keywords']),
+            'description' => $basic['description'],
+            'doi' => $basic['doi'],
+            'publicationDateYear' => $basic['publication_year'],
+            'publicationDateMonth' => $basic['publication_month'],
+            'publicationDateDay' => $basic['publication_mday'],
+            'lang' => $basic['lang'],
+            'related_to' => implode("\n", $basic['related_to']),
+            'change_log' => $basic['change_log'],
+        );
+        foreach ($keys as $key => $value) {
+            $hidden[] = $this->_renderHiddenHtml($key, $value);
+        }
+        // multiple values
+        $keys = array(
+            'related_to_check' => $basic['related_to_check'],
+            'related_to_check_all' => $basic['related_to_check_all'],
+        );
+        foreach ($keys as $key => $values) {
+            foreach ($values as $value) {
+                $hidden[] = $this->_renderHiddenHtml($key.'[]', $value);
+            }
+        }
+
+        return implode("\n", $hidden);
+    }
+
+    /**
+     * check need to cerity.
+     *
+     * @return bool true if required
+     */
+    public function isCertifyRequired()
+    {
+        $item_id = $this->_item_basic_obj->get('item_id');
+        // check modified fields
+        $modname = $this->_item_type_obj->get('name');
+        $viewphp = $this->_item_type_obj->get('viewphp');
+        include_once XOOPS_ROOT_PATH.'/modules/'.$viewphp;
+        $func = $modname.'GetModifiedFields';
+        $modified = xnpGetModifiedFields($item_id) + (function_exists($func) ? $func($item_id) : array());
+        if (count($modified) == 0) {
+            // modified field not found, no need to certify
+            return false;
+        }
+        // fetch new index ids
+        $formdata = &xoonips_getutility('formdata');
+        $xids_new = array_map('intval', explode(',', $formdata->getValue('post', 'xoonipsCheckedXID', 's', false, '')));
+        if (count($modified) == 1 && $modified[0] == _MD_XOONIPS_ITEM_INDEX_LABEL) {
+            // only indexes are modified
+            // get old index ids
+            $xids_old = array();
+            $item_id = $this->_item_basic_obj->get('item_id');
+            $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
+            $criteria = new Criteria('item_id', $item_id);
+            $index_item_link_objs = &$index_item_link_handler->getObjects();
+            foreach ($index_item_link_objs as $index_item_link_obj) {
+                $xids_old[] = $index_item_link_obj->get('index_id');
+            }
+            // get newly arrived index ids
+            $xids = array_diff($xids_new, $xids_old);
+        } else {
+            // set all new index ids
+            $xids = $xids_new;
+        }
+        if (count($xids) == 0) {
+            // indexes are not changed
+            return false;
+        }
+        // check open_level of modified indexes
+        $index_handler = &xoonips_getormhandler('xoonips', 'index');
+        $criteria = new CriteriaCompo(new Criteria('open_level', OL_PRIVATE, '!='));
+        $criteria->add(new Criteria('index_id', '('.implode(',', $xids).')', 'IN'));
+
+        return  $index_handler->getCount($criteria) > 0;
+    }
+
+    /**
+     * get related to htmls.
+     *
+     * @param string $type block type
+     *                     's' : show
+     *                     'e' : edit
+     *                     'c' : confirm
+     *
+     * @return array renderd list block htmls
+     */
+    public function _getRelatedToHtmlArray($type)
+    {
+        $itemlib_handler = &XooNIpsItemLibraryHandler::getInstance();
+        $htmls = array();
+        switch ($type) {
+        case 's':
+            // show block
+            $item_ids = $this->_related_to_ids;
+            break;
+        case 'e':
+            // edit block
+            $item_ids = array_merge($this->_related_to_ids, $this->_related_to_check_all_ids);
+            break;
+        case 'c':
+            // confirm block
+            $item_ids = array_merge($this->_related_to_ids, $this->_related_to_check_ids);
+            break;
+        }
+        $self_item_id = $this->_item_basic_obj->get('item_id');
+        foreach ($item_ids as $item_id) {
+            if ($self_item_id == $item_id) {
+                continue;
+            }
+            $itemlib_obj = &$itemlib_handler->get($item_id);
+            if (!is_object($itemlib_obj)) {
+                // broken related to item id found
+            if (XOONIPS_DEBUG_MODE) {
+                error_log('BROKEN RELATED TO ITEM ID FOUND : PARENT('.$this->_item_basic_obj->get('item_id').') - CHILD('.$item_id.')');
+            }
+                continue;
+            }
+            $htmls[$item_id] = $itemlib_obj->getItemListBlock();
+        }
+
+        return $htmls;
+    }
+
+    /**
+     * get change log html.
+     *
+     * @return string rendered html
+     */
+    public function _getChangeLogHtml()
+    {
+        $ret = '';
+        if (count($this->_changelog_objs) > 0) {
+            $ret = '<table>'."\n";
+            foreach ($this->_changelog_objs as $changelog_obj) {
+                $ret .= '<tr><td nowrap="nowrap">';
+                $ret .= date(DATE_FORMAT, $changelog_obj->get('log_date'));
+                $ret .= '&nbsp;</td><td>';
+                $ret .= nl2br($changelog_obj->getVar('log', 's'));
+                $ret .= '</td></tr>'."\n";
+            }
+            $ret .= '</table>'."\n";
+        }
+
+        return $ret;
+    }
+
+    /**
+     * render hidden html.
+     *
+     * @param string $key
+     * @param mixed  $val
+     *
+     * @return string rendered html
+     */
+    public function _renderHiddenHtml($key, $val)
+    {
+        return sprintf('<input type="hidden" name="%s" value="%s"/>', $key, $val);
+    }
+
+    /**
+     * get confirmation template variables array.
+     *
+     * @param string $name
+     * @param string $text
+     * @param int    $len  string maximum length
+     *
+     * @return array template variables
+     *               - 'name' : label
+     *               - 'html_string' : escaped form string
+     *               - 'value' : escaped display data
+     *               - 'within' : trimed string (escaped)
+     *               - 'without' : overflowed string (escaped)
+     */
+    public function _getConfirmTemplateVars($name, $text, $len)
+    {
+        $textutil = &xoonips_getutility('text');
+        // truncate
+        $within_raw = $this->_truncateSimpleText($text, $len);
+        // remove broken html entity if truncated
+        if (strlen($text) != strlen($within_raw)) {
+            // get overflowd string
+            $without_raw = substr($text, strlen($within_raw));
+        } else {
+            $without_raw = '';
+        }
+        // escaped
+        $within = $textutil->html_special_chars($within_raw);
+        $without = $textutil->html_special_chars($without_raw);
+        $html_string = $textutil->html_special_chars($text);
+        // create value
+        $value = $within.($without != '' ? sprintf('<span style="color: red;">%s</span>', $without) : '');
+
+        return array(
+            'name' => $name,
+            'html_string' => $html_string,
+            'within' => $within,
+            'without' => $without,
+            'value' => $value,
+        );
+    }
+
+    /**
+     * truncate simple text.
+     *
+     * @param string $text source text
+     * @param string $len  text length
+     * @retrun string truncated string
+     */
+    public function _truncateSimpleText($text, $len)
+    {
+        $textutil = &xoonips_getutility('text');
+        // truncate
+        $trunc = mb_substr($text, 0, $len, mb_detect_encoding($text));
+        // remove broken html entity if truncated
+        if (strlen($text) != strlen($trunc)) {
+            $trunc = preg_replace('/&#[^;]*$/s', '', $trunc);
+        }
+
+        return $trunc;
+    }
+
+    /**
+     * truncate simple object.
+     *
+     * @param object $obj
+     * @retrun bool false if failure
+     */
+    public function _truncateSimpleObject(&$obj)
+    {
+        $keys = $obj->getKeysArray();
+        foreach ($keys as $key) {
+            $len = $obj->getMaxLength($key);
+            if ($len !== false) {
+                $value = $this->_truncateSimpleText($obj->get($key), $len);
+                $obj->set($key, $value);
+            }
+        }
+
+        return true;
+    }
 }
 
 class XooNIpsItemLibraryHandler
@@ -4722,287 +4714,287 @@ class XooNIpsItemLibraryHandler
     public $_item_title_handler;
     public $_related_to_handler;
 
-  /**
-   * constructor.
-   */
-  public function XooNIpsItemLibraryHandler()
-  {
-      $this->_item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
-      $this->_xoops_users_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
-      $this->_xoonips_users_handler = &xoonips_getormhandler('xoonips', 'users');
-      $this->_item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
-      $this->_item_title_handler = &xoonips_getormhandler('xoonips', 'title');
-      $this->_item_keyword_handler = &xoonips_getormhandler('xoonips', 'keyword');
-      $this->_related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
-      $this->_changelog_handler = &xoonips_getormhandler('xoonips', 'changelog');
-  }
-
-  /**
-   * get handler instance.
-   *
-   * @return object instance of class XooNIpsItemLibraryHandler
-   */
-  public function &getInstance()
-  {
-      static $instance = null;
-      if (is_null($instance)) {
-          $instance = new self();
-      }
-
-      return $instance;
-  }
-
-  /**
-   * create object instance.
-   *
-   * @return object instance of class XooNIpsItemLibraryObject
-   */
-  public function &create()
-  {
-      $meta = array();
-      $uid = $GLOBALS['xoopsUser']->getVar('uid');
-      $meta['item_basic'] = &$this->_item_basic_handler->create();
-      $meta['item_basic']->set('uid', $uid);
-      $meta['xoops_user'] = &$this->_xoops_users_handler->get($uid);
-      $meta['xoonips_user'] = &$this->_xoonips_users_handler->get($uid);
-      $meta['item_type'] = null;
-      $meta['item_title_arr'] = array();
-      $meta['item_keyword_arr'] = array();
-      $meta['related_to_arr'] = array();
-      $meta['changelog_arr'] = array();
-      $ret = new XooNIpsItemLibraryObject($meta);
-
-      return $ret;
-  }
-
-  /**
-   * get xoonips item basic objects.
-   *
-   * @param int $item_id
-   *
-   * @return object instance of class XooNIpsItemLibraryObject
-   */
-  public function &get($item_id)
-  {
-      $ret = false;
-      $meta = array();
-      $meta['item_basic'] = &$this->_item_basic_handler->get($item_id);
-      if (!is_object($meta['item_basic'])) {
-          return $ret;
-      }
-      $uid = $meta['item_basic']->get('uid');
-      $meta['xoops_user'] = &$this->_xoops_users_handler->get($uid);
-      $meta['xoonips_user'] = &$this->_xoonips_users_handler->get($uid);
-      $item_type_id = $meta['item_basic']->get('item_type_id');
-      if ($item_type_id == ITID_INDEX) {
-          return $ret;
-      } // ignore if item_id is index_id
-    $meta['item_type'] = &$this->_item_type_handler->get($item_type_id);
-      $meta['item_title_arr'] = &$this->_item_title_handler->getTitles($item_id);
-      $meta['item_keyword_arr'] = &$this->_item_keyword_handler->getKeywords($item_id);
-      $meta['related_to_arr'] = $this->_related_to_handler->getChildItemIds($item_id);
-      $meta['changelog_arr'] = $this->_changelog_handler->getChangeLogs($item_id);
-      $ret = new XooNIpsItemLibraryObject($meta);
-
-      return $ret;
-  }
-
-  /**
-   * fetch previous page's form request data.
-   *
-   * @param object $itemlib_obj
-   * @param bool   $do_check_post_id if check post_id sended
-   */
-  public function fetchRequest(&$itemlib_obj, $do_check_post_id)
-  {
-      $formdata = &xoonips_getutility('formdata');
-      if ($do_check_post_id) {
-          $post_id = $formdata->getValue('get', 'post_id', 's', false);
-          if (is_null($post_id)) {
-              // first item registeration
-        return;
-          }
-      }
-    // title
-    $value = $formdata->getValue('post', 'title', 's', false);
-      if (!is_null($value)) {
-          $objs_old = &$itemlib_obj->getTitleObjects();
-          $values = preg_split("/[\r\n]+/", $value);
-          $objs_new = array();
-          foreach ($values as $num => $val) {
-              $val = trim($val);
-              if ($val == '') {
-                  continue;
-              }
-              if (isset($objs_old[$num])) {
-                  $obj = &$objs_old[$num];
-              } else {
-                  $obj = &$this->_item_title_handler->create();
-              }
-              $obj->set('title', $val);
-              $obj->set('title_id', $num);
-              $objs_new[] = &$obj;
-              unset($obj);
-          }
-          $itemlib_obj->setTitleObjects($objs_new);
-          unset($objs_old);
-          unset($objs_new);
-      }
-    // keywords
-    $value = $formdata->getValue('post', 'keywords', 's', false);
-      if (!is_null($value)) {
-          $objs_old = &$itemlib_obj->getKeywordObjects();
-          $values = explode(',', $value);
-          $objs_new = array();
-          foreach ($values as $num => $val) {
-              $val = trim($val);
-              if ($val == '') {
-                  continue;
-              }
-              if (isset($objs_old[$num])) {
-                  $obj = &$objs_old[$num];
-              } else {
-                  $obj = &$this->_item_keyword_handler->create();
-              }
-              $obj->set('keyword', $val);
-              $obj->set('keyword_id', $num);
-              $objs_new[] = &$obj;
-              unset($obj);
-          }
-          $itemlib_obj->setKeywordObjects($objs_new);
-          unset($objs_old);
-          unset($objs_new);
-      }
-    // item type id
-    $value = $formdata->getValue('post', 'item_type_id', 'i', false);
-      if (!is_null($value)) {
-          $itemlib_obj->setItemTypeId($value);
-      }
-    // description
-    $value = $formdata->getValue('post', 'description', 's', false);
-      if (!is_null($value)) {
-          $itemlib_obj->setDescription($value);
-      }
-    // doi
-    $value = $formdata->getValue('post', 'doi', 's', false);
-      if (!is_null($value)) {
-          $itemlib_obj->setDOI($value);
-      }
-    // change log
-    $value = $formdata->getValue('post', 'change_log', 's', false);
-      if (!is_null($value)) {
-          $itemlib_obj->setChangeLog($value);
-      }
-    // publication date (yaar, month, mday)
-    $value = $formdata->getValue('post', 'publicationDateYear', 'i', false);
-      if (!is_null($value)) {
-          $itemlib_obj->setPublicationYear($value);
-      }
-      $value = $formdata->getValue('post', 'publicationDateMonth', 'i', false);
-      if (!is_null($value)) {
-          $itemlib_obj->setPublicationMonth($value);
-      }
-      $value = $formdata->getValue('post', 'publicationDateDay', 'i', false);
-      if (!is_null($value)) {
-          $itemlib_obj->setPublicationDay($value);
-      }
-    // lang
-    $value = $formdata->getValue('post', 'lang', 's', false);
-      if (!is_null($value)) {
-          $itemlib_obj->setLanguage($value);
-      }
-    // related to
-    $value = $formdata->getValue('post', 'related_to', 's', false);
-      if (!is_null($value)) {
-          $itemlib_obj->setRelatedTo($value);
-      }
-    // related to check (for edit)
-    $value = $formdata->getValueArray('post', 'related_to_check', 'i', false);
-      $value2 = $formdata->getValueArray('post', 'related_to_check_all', 'i', false);
-      $itemlib_obj->setRelatedToCheck($value, $value2);
-
-      return;
-  }
-
-  /**
-   * insert/update basic information.
-   *
-   * @param object $itemlib_obj
-   *
-   * @return bool false if failure
-   */
-  public function insertBasicInformation($itemlib_obj)
-  {
-      $item_basic_obj = &$itemlib_obj->getItemBasicObject();
-      $is_new = ($item_basic_obj->get('item_id') == 0);
-      $certify_required_onupdate = $is_new ? false : $itemlib_obj->isCertifyRequired();
-      $itemlib_obj->truncateObject();
-    // transaction
-    $transaction = &XooNIpsTransaction::getInstance();
-      $transaction->start();
-    // basic information
-    if (!$this->_item_basic_handler->insert($item_basic_obj)) {
-        $transaction->rollback();
-
-        return false;
+    /**
+     * constructor.
+     */
+    public function XooNIpsItemLibraryHandler()
+    {
+        $this->_item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
+        $this->_xoops_users_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
+        $this->_xoonips_users_handler = &xoonips_getormhandler('xoonips', 'users');
+        $this->_item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
+        $this->_item_title_handler = &xoonips_getormhandler('xoonips', 'title');
+        $this->_item_keyword_handler = &xoonips_getormhandler('xoonips', 'keyword');
+        $this->_related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
+        $this->_changelog_handler = &xoonips_getormhandler('xoonips', 'changelog');
     }
-    // get inserted item_id
-    $item_id = $item_basic_obj->get('item_id');
-    // title
-    $item_title_objs = &$itemlib_obj->getTitleObjects();
-      if (!$this->_item_title_handler->updateAllObjectsByForeignKey('item_id', $item_id, $item_title_objs)) {
-          $transaction->rollback();
 
-          return false;
-      }
-    // keyword
-    $item_keyword_objs = &$itemlib_obj->getKeywordObjects();
-      if (!$this->_item_keyword_handler->updateAllObjectsByForeignKey('item_id', $item_id, $item_keyword_objs)) {
-          $transaction->rollback();
-
-          return false;
-      }
-    // related to
-    $related_to_ids = array_unique(array_merge($itemlib_obj->getRelatedTo(), $itemlib_obj->getRelatedToCheck()));
-      if (!$this->_related_to_handler->insertChildItemIds($item_id, $related_to_ids)) {
-          $transaction->rollback();
-
-          return false;
-      }
-
-    // update certify state on update
-    if ($certify_required_onupdate) {
-        $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
-        $certify_item = $xconfig_handler->getValue('certify_item');
-        $certify_state = $certify_item == 'auto' ? CERTIFIED : CERTIFY_REQUIRED;
-        $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
-        $index_item_link_objs = &$index_item_link_handler->getByItemId($item_id, array(OL_PUBLIC, OL_GROUP_ONLY));
-        foreach ($index_item_link_objs as $index_item_link_obj) {
-            $index_item_link_obj->set('certify_state', $certify_state);
-            $index_item_link_handler->insert($index_item_link_obj);
+    /**
+     * get handler instance.
+     *
+     * @return object instance of class XooNIpsItemLibraryHandler
+     */
+    public function &getInstance()
+    {
+        static $instance = null;
+        if (is_null($instance)) {
+            $instance = new self();
         }
+
+        return $instance;
     }
 
-    // update item status
-    $item_status_handler = &xoonips_getormhandler('xoonips', 'item_status');
-      $item_status_handler->updateItemStatus($item_id);
+    /**
+     * create object instance.
+     *
+     * @return object instance of class XooNIpsItemLibraryObject
+     */
+    public function &create()
+    {
+        $meta = array();
+        $uid = $GLOBALS['xoopsUser']->getVar('uid');
+        $meta['item_basic'] = &$this->_item_basic_handler->create();
+        $meta['item_basic']->set('uid', $uid);
+        $meta['xoops_user'] = &$this->_xoops_users_handler->get($uid);
+        $meta['xoonips_user'] = &$this->_xoonips_users_handler->get($uid);
+        $meta['item_type'] = null;
+        $meta['item_title_arr'] = array();
+        $meta['item_keyword_arr'] = array();
+        $meta['related_to_arr'] = array();
+        $meta['changelog_arr'] = array();
+        $ret = new XooNIpsItemLibraryObject($meta);
 
-    // success
-    $transaction->commit();
+        return $ret;
+    }
 
-      $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
-      if ($is_new) {
-          // record event log (insert item)
-      $eventlog_handler->recordInsertItemEvent($item_id);
-      // notification
-      xoonips_insert_event_and_send_notification_of_certification($item_id);
-      } else {
-          // record event log (update item)
-      $eventlog_handler->recordUpdateItemEvent($item_id);
-      // notification
-      xoonips_insert_event_and_send_notification_of_certification($item_id);
-      }
+    /**
+     * get xoonips item basic objects.
+     *
+     * @param int $item_id
+     *
+     * @return object instance of class XooNIpsItemLibraryObject
+     */
+    public function &get($item_id)
+    {
+        $ret = false;
+        $meta = array();
+        $meta['item_basic'] = &$this->_item_basic_handler->get($item_id);
+        if (!is_object($meta['item_basic'])) {
+            return $ret;
+        }
+        $uid = $meta['item_basic']->get('uid');
+        $meta['xoops_user'] = &$this->_xoops_users_handler->get($uid);
+        $meta['xoonips_user'] = &$this->_xoonips_users_handler->get($uid);
+        $item_type_id = $meta['item_basic']->get('item_type_id');
+        if ($item_type_id == ITID_INDEX) {
+            return $ret;
+        } // ignore if item_id is index_id
+        $meta['item_type'] = &$this->_item_type_handler->get($item_type_id);
+        $meta['item_title_arr'] = &$this->_item_title_handler->getTitles($item_id);
+        $meta['item_keyword_arr'] = &$this->_item_keyword_handler->getKeywords($item_id);
+        $meta['related_to_arr'] = $this->_related_to_handler->getChildItemIds($item_id);
+        $meta['changelog_arr'] = $this->_changelog_handler->getChangeLogs($item_id);
+        $ret = new XooNIpsItemLibraryObject($meta);
 
-      return true;
-  }
+        return $ret;
+    }
+
+    /**
+     * fetch previous page's form request data.
+     *
+     * @param object $itemlib_obj
+     * @param bool   $do_check_post_id if check post_id sended
+     */
+    public function fetchRequest(&$itemlib_obj, $do_check_post_id)
+    {
+        $formdata = &xoonips_getutility('formdata');
+        if ($do_check_post_id) {
+            $post_id = $formdata->getValue('get', 'post_id', 's', false);
+            if (is_null($post_id)) {
+                // first item registeration
+        return;
+            }
+        }
+        // title
+        $value = $formdata->getValue('post', 'title', 's', false);
+        if (!is_null($value)) {
+            $objs_old = &$itemlib_obj->getTitleObjects();
+            $values = preg_split("/[\r\n]+/", $value);
+            $objs_new = array();
+            foreach ($values as $num => $val) {
+                $val = trim($val);
+                if ($val == '') {
+                    continue;
+                }
+                if (isset($objs_old[$num])) {
+                    $obj = &$objs_old[$num];
+                } else {
+                    $obj = &$this->_item_title_handler->create();
+                }
+                $obj->set('title', $val);
+                $obj->set('title_id', $num);
+                $objs_new[] = &$obj;
+                unset($obj);
+            }
+            $itemlib_obj->setTitleObjects($objs_new);
+            unset($objs_old);
+            unset($objs_new);
+        }
+        // keywords
+        $value = $formdata->getValue('post', 'keywords', 's', false);
+        if (!is_null($value)) {
+            $objs_old = &$itemlib_obj->getKeywordObjects();
+            $values = explode(',', $value);
+            $objs_new = array();
+            foreach ($values as $num => $val) {
+                $val = trim($val);
+                if ($val == '') {
+                    continue;
+                }
+                if (isset($objs_old[$num])) {
+                    $obj = &$objs_old[$num];
+                } else {
+                    $obj = &$this->_item_keyword_handler->create();
+                }
+                $obj->set('keyword', $val);
+                $obj->set('keyword_id', $num);
+                $objs_new[] = &$obj;
+                unset($obj);
+            }
+            $itemlib_obj->setKeywordObjects($objs_new);
+            unset($objs_old);
+            unset($objs_new);
+        }
+        // item type id
+        $value = $formdata->getValue('post', 'item_type_id', 'i', false);
+        if (!is_null($value)) {
+            $itemlib_obj->setItemTypeId($value);
+        }
+        // description
+        $value = $formdata->getValue('post', 'description', 's', false);
+        if (!is_null($value)) {
+            $itemlib_obj->setDescription($value);
+        }
+        // doi
+        $value = $formdata->getValue('post', 'doi', 's', false);
+        if (!is_null($value)) {
+            $itemlib_obj->setDOI($value);
+        }
+        // change log
+        $value = $formdata->getValue('post', 'change_log', 's', false);
+        if (!is_null($value)) {
+            $itemlib_obj->setChangeLog($value);
+        }
+        // publication date (yaar, month, mday)
+        $value = $formdata->getValue('post', 'publicationDateYear', 'i', false);
+        if (!is_null($value)) {
+            $itemlib_obj->setPublicationYear($value);
+        }
+        $value = $formdata->getValue('post', 'publicationDateMonth', 'i', false);
+        if (!is_null($value)) {
+            $itemlib_obj->setPublicationMonth($value);
+        }
+        $value = $formdata->getValue('post', 'publicationDateDay', 'i', false);
+        if (!is_null($value)) {
+            $itemlib_obj->setPublicationDay($value);
+        }
+        // lang
+        $value = $formdata->getValue('post', 'lang', 's', false);
+        if (!is_null($value)) {
+            $itemlib_obj->setLanguage($value);
+        }
+        // related to
+        $value = $formdata->getValue('post', 'related_to', 's', false);
+        if (!is_null($value)) {
+            $itemlib_obj->setRelatedTo($value);
+        }
+        // related to check (for edit)
+        $value = $formdata->getValueArray('post', 'related_to_check', 'i', false);
+        $value2 = $formdata->getValueArray('post', 'related_to_check_all', 'i', false);
+        $itemlib_obj->setRelatedToCheck($value, $value2);
+
+        return;
+    }
+
+    /**
+     * insert/update basic information.
+     *
+     * @param object $itemlib_obj
+     *
+     * @return bool false if failure
+     */
+    public function insertBasicInformation($itemlib_obj)
+    {
+        $item_basic_obj = &$itemlib_obj->getItemBasicObject();
+        $is_new = ($item_basic_obj->get('item_id') == 0);
+        $certify_required_onupdate = $is_new ? false : $itemlib_obj->isCertifyRequired();
+        $itemlib_obj->truncateObject();
+        // transaction
+        $transaction = &XooNIpsTransaction::getInstance();
+        $transaction->start();
+        // basic information
+        if (!$this->_item_basic_handler->insert($item_basic_obj)) {
+            $transaction->rollback();
+
+            return false;
+        }
+        // get inserted item_id
+        $item_id = $item_basic_obj->get('item_id');
+        // title
+        $item_title_objs = &$itemlib_obj->getTitleObjects();
+        if (!$this->_item_title_handler->updateAllObjectsByForeignKey('item_id', $item_id, $item_title_objs)) {
+            $transaction->rollback();
+
+            return false;
+        }
+        // keyword
+        $item_keyword_objs = &$itemlib_obj->getKeywordObjects();
+        if (!$this->_item_keyword_handler->updateAllObjectsByForeignKey('item_id', $item_id, $item_keyword_objs)) {
+            $transaction->rollback();
+
+            return false;
+        }
+        // related to
+        $related_to_ids = array_unique(array_merge($itemlib_obj->getRelatedTo(), $itemlib_obj->getRelatedToCheck()));
+        if (!$this->_related_to_handler->insertChildItemIds($item_id, $related_to_ids)) {
+            $transaction->rollback();
+
+            return false;
+        }
+
+        // update certify state on update
+        if ($certify_required_onupdate) {
+            $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+            $certify_item = $xconfig_handler->getValue('certify_item');
+            $certify_state = $certify_item == 'auto' ? CERTIFIED : CERTIFY_REQUIRED;
+            $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
+            $index_item_link_objs = &$index_item_link_handler->getByItemId($item_id, array(OL_PUBLIC, OL_GROUP_ONLY));
+            foreach ($index_item_link_objs as $index_item_link_obj) {
+                $index_item_link_obj->set('certify_state', $certify_state);
+                $index_item_link_handler->insert($index_item_link_obj);
+            }
+        }
+
+        // update item status
+        $item_status_handler = &xoonips_getormhandler('xoonips', 'item_status');
+        $item_status_handler->updateItemStatus($item_id);
+
+        // success
+        $transaction->commit();
+
+        $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
+        if ($is_new) {
+            // record event log (insert item)
+            $eventlog_handler->recordInsertItemEvent($item_id);
+            // notification
+            xoonips_insert_event_and_send_notification_of_certification($item_id);
+        } else {
+            // record event log (update item)
+            $eventlog_handler->recordUpdateItemEvent($item_id);
+            // notification
+            xoonips_insert_event_and_send_notification_of_certification($item_id);
+        }
+
+        return true;
+    }
 }

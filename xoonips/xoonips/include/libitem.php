@@ -57,19 +57,19 @@ function xnpitmgrListIndexTree($mode = XNPITMGR_LISTMODE_ALL, $uid = 0)
     $item_title = $xoopsDB->prefix('xoonips_item_title');
     $where_level = '';
     switch ($mode) {
-        case XNPITMGR_LISTMODE_ALL:
-            $where_level = '1';
-            break;
-        case XNPITMGR_LISTMODE_PUBLICONLY:
-            $where_level .= 'tx.open_level='.OL_PUBLIC;
-            break;
-        case XNPITMGR_LISTMODE_PRIVATEONLY:
-            if ($uid == 0) {
-                $where_level .= 'tx.open_level='.OL_PRIVATE.' OR ti.item_id='.IID_ROOT.' ';
-            } else {
-                $where_level .= '( tx.open_level='.OL_PRIVATE.' AND tx.uid='.$uid.' ) OR ti.item_id='.IID_ROOT.' ';
-            }
-            break;
+    case XNPITMGR_LISTMODE_ALL:
+        $where_level = '1';
+        break;
+    case XNPITMGR_LISTMODE_PUBLICONLY:
+        $where_level .= 'tx.open_level='.OL_PUBLIC;
+        break;
+    case XNPITMGR_LISTMODE_PRIVATEONLY:
+        if ($uid == 0) {
+            $where_level .= 'tx.open_level='.OL_PRIVATE.' OR ti.item_id='.IID_ROOT.' ';
+        } else {
+            $where_level .= '( tx.open_level='.OL_PRIVATE.' AND tx.uid='.$uid.' ) OR ti.item_id='.IID_ROOT.' ';
+        }
+        break;
     }
 
     $sql = 'SELECT tx.index_id, tx.parent_index_id, tx.uid, tx.gid, tx.open_level, tx.sort_number '.

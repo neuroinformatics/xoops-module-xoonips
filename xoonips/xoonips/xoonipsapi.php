@@ -47,23 +47,25 @@ ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 ini_set('error_log', 'syslog');
 
-$allow_methods = array('XooNIps.getChildIndexes',
-                      'XooNIps.getFile',
-                      'XooNIps.getFileMetadata',
-                      'XooNIps.getIndex',
-                      'XooNIps.getItem',
-                      'XooNIps.getItemPermission',
-                      'XooNIps.getItemtype',
-                      'XooNIps.getItemtypes',
-                      'XooNIps.getPreference',
-                      'XooNIps.getRootIndex',
-                      'XooNIps.getSimpleItems',
-                      'XooNIps.login',
-                      'XooNIps.logout',
-                      'XooNIps.putItem',
-                      'XooNIps.removeItem',
-                      'XooNIps.searchItem',
-                      'XooNIps.updateItem2', );
+$allow_methods = array(
+    'XooNIps.getChildIndexes',
+    'XooNIps.getFile',
+    'XooNIps.getFileMetadata',
+    'XooNIps.getIndex',
+    'XooNIps.getItem',
+    'XooNIps.getItemPermission',
+    'XooNIps.getItemtype',
+    'XooNIps.getItemtypes',
+    'XooNIps.getPreference',
+    'XooNIps.getRootIndex',
+    'XooNIps.getSimpleItems',
+    'XooNIps.login',
+    'XooNIps.logout',
+    'XooNIps.putItem',
+    'XooNIps.removeItem',
+    'XooNIps.searchItem',
+    'XooNIps.updateItem2',
+);
 
 $rpc_response = new XoopsXmlRpcResponse();
 $parser = new XooNIpsXmlRpcParser(file_get_contents('php://input'));

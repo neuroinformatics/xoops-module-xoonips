@@ -39,19 +39,15 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 
 // get requests
 $keys = array(
-  'uid' => array(
-    'i',
-    false,
-    true,
-  ),
+    'uid' => array('i', false, true),
 );
 $vals = xoonips_admin_get_requests('post', $keys);
 
 function user_reactivate($uid)
 {
     global $xoonips_admin;
-  // get user information
-  $u_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
+    // get user information
+    $u_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
     $xu_handler = &xoonips_getormhandler('xoonips', 'users');
     $u_obj = &$u_handler->get($uid);
     $xu_obj = &$xu_handler->get($uid);
@@ -60,8 +56,8 @@ function user_reactivate($uid)
         exit();
     }
 
-  // update db values
-  $u_obj->set('level', 1);
+    // update db values
+    $u_obj->set('level', 1);
     if (!$u_handler->insert($u_obj)) {
         redirect_header($xoonips_admin['mypage_url'], 1, _AM_XOONIPS_MSG_UNEXPECTED_ERROR);
         exit();

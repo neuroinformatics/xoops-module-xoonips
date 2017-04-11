@@ -73,15 +73,15 @@ $xnpsid = $_SESSION['XNPSID'];
 // get variables
 $formdata = &xoonips_getutility('formdata');
 $get_keys = array(
-  'checkbox' => array('type' => 'b', 'default' => false),
-  'url' => array('type' => 's', 'default' => 'listitem.php'),
-  'edit' => array('type' => 'b', 'default' => false),
-  'on_check_private_handler_id' => array('type' => 's', 'default' => ''),
-  'selected_tab' => array('type' => 'i', 'default' => ''),
-  'edit_public' => array('type' => 'b', 'default' => false),
-  'puid' => array('type' => 'i', 'default' => 0),
-  'onclick_title' => array('type' => 's', 'default' => ''),
-  'private_only' => array('type' => 'i', 'default' => 0),
+    'checkbox' => array('type' => 'b', 'default' => false),
+    'url' => array('type' => 's', 'default' => 'listitem.php'),
+    'edit' => array('type' => 'b', 'default' => false),
+    'on_check_private_handler_id' => array('type' => 's', 'default' => ''),
+    'selected_tab' => array('type' => 'i', 'default' => ''),
+    'edit_public' => array('type' => 'b', 'default' => false),
+    'puid' => array('type' => 'i', 'default' => 0),
+    'onclick_title' => array('type' => 's', 'default' => ''),
+    'private_only' => array('type' => 'i', 'default' => 0),
 );
 $get_vals = array();
 foreach ($get_keys as $key => $meta) {
@@ -117,9 +117,9 @@ $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
 if ($uid == UID_GUEST && !public_item_target_user_all()) {
     //
-  // for guest access, show message that access to index tree is forbidden.
-  //
-  xoops_header(false);
+    // for guest access, show message that access to index tree is forbidden.
+    //
+    xoops_header(false);
     echo '</head><body><div style="font-size: 10pt;">';
     echo _MD_XOONIPS_INDEX_FORBIDDEN;
     echo '</div>';
@@ -153,7 +153,7 @@ $itemCounts = array();
 $result = xnp_get_item_count_group_by_index($xnpsid, $itemCounts);
 $ct = count($indexes);
 for ($i = 0; $i < $ct; ++$i) { // can't change value in foreach
-  $index = &$indexes[$i];
+    $index = &$indexes[$i];
     $index_id = $index['item_id'];
 }
 unset($index);
@@ -164,8 +164,8 @@ $xoonips_tree_roots_array = array();
 $length = count($indexes);
 foreach ($indexes as $i => $index) {
     $xid = $index['item_id'];
-  // tree nodes
-  $node = array();
+    // tree nodes
+    $node = array();
     $node['xid'] = $xid;
     $node['is_last'] = $index['is_last'] ? 1 : 0;
     $node['open_level'] = $index['open_level'];
@@ -181,23 +181,23 @@ foreach ($indexes as $i => $index) {
     }
     $xoonips_tree_nodes_array[] = $node;
 
-  // tree roots
-  if ($index['depth'] == 1) {
-      $xoonips_tree_roots_array[] = $xid;
-  }
+    // tree roots
+    if ($index['depth'] == 1) {
+        $xoonips_tree_roots_array[] = $xid;
+    }
 }
 unset($index);
 unset($i);
 
 // global attributes
 $attributes = array(
-  'url' => XOOPS_URL.'/modules/xoonips',
-  'target_url' => $xoonips_target_url,
-  'link_is_checkbox' => intval($get_vals['checkbox']),
-  'selected_tab' => $get_vals['selected_tab'],
-  'onclick_title' => $get_vals['onclick_title'],
-  'image_url' => $tree_image_url,
-  'image_compat33' => $tree_image_compat33 ? 1 : 0,
+    'url' => XOOPS_URL.'/modules/xoonips',
+    'target_url' => $xoonips_target_url,
+    'link_is_checkbox' => intval($get_vals['checkbox']),
+    'selected_tab' => $get_vals['selected_tab'],
+    'onclick_title' => $get_vals['onclick_title'],
+    'image_url' => $tree_image_url,
+    'image_compat33' => $tree_image_compat33 ? 1 : 0,
 );
 $xoonips_tree_attributes_array = array();
 foreach ($attributes as $key => $val) {

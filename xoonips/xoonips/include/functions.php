@@ -190,8 +190,8 @@ function &xoonips_getutility($name)
     if (isset($instances[$name])) {
         return $instances[$name];
     }
-  // load class file
-  $cname = 'XooNIpsUtility'.ucfirst($name);
+    // load class file
+    $cname = 'XooNIpsUtility'.ucfirst($name);
     if (!class_exists($cname)) {
         $cpath = dirname(__DIR__).'/class';
         if (!class_exists('XooNIpsUtility')) {
@@ -221,54 +221,54 @@ function &xoonips_get_xoops_configs($category)
     }
     $config_handler = &xoops_gethandler('config');
     $configs = $config_handler->getConfigsByCat($category); // copy
-  if (defined('XOOPS_CUBE_LEGACY')) {
-      // for XOOPS Cube Legacy 2.1
-    switch ($category) {
-    case XOOPS_CONF:
-      // -----------------------------------------------------------------
-      // missing configs:
-      //   banners, root_path, usercookie, xoops_url
-      // duplicated configs in 'user' module:
-      //   avatar_minposts, maxuname, sslloginlink, sslpost_name, use_ssl
-      // -----------------------------------------------------------------
-      // 'xoops_url' and 'root_path' are DEPRECATED since 2.0.
-      $configs['xoops_url'] = XOOPS_URL;
-      $configs['root_path'] = XOOPS_ROOT_PATH.'/';
-      // 'banners' found in 'legacyRender' module
-      $tmp = &$config_handler->getConfigsByDirname('legacyRender');
-      $configs['banners'] = $tmp['banners'];
-      // 'usercookie' found in 'user' module
-      $tmp = &$config_handler->getConfigsByDirname('user');
-      $configs['usercookie'] = $tmp['usercookie'];
-      // override duplicated configs in 'user' module
-      $keys = array('avatar_minposts', 'maxuname', 'sslloginlink', 'sslpost_name', 'use_ssl');
-      foreach ($keys as $key) {
-          $configs[$key] = $tmp[$key];
-      }
-      break;
-    case XOOPS_CONF_USER:
-      // all 2.0 compatible configs available in 'user' module
-      // added configs from 2.1 'user' module are:
-      //   self_delete_confirm, sslloginlink, sslpost_name, use_ssl, usercookie
-      $configs = $config_handler->getConfigsByDirname('user'); // copy
-      break;
-    case XOOPS_CONF_METAFOOTER:
-      // all 2.0 compatible configs available in 'legacyRender' module
-      // added configs from 2.1 'legacyRender' module are:
-      //   banners
-      $configs = $config_handler->getConfigsByDirname('legacyRender'); // copy
-      break;
-    case XOOPS_CONF_CENSOR:
-      // same config keys
-      break;
-    case XOOPS_CONF_SEARCH:
-      // same config keys
-      break;
-    case XOOPS_CONF_MAILER:
-      // same config keys
-      break;
+    if (defined('XOOPS_CUBE_LEGACY')) {
+        // for XOOPS Cube Legacy 2.1
+        switch ($category) {
+        case XOOPS_CONF:
+            // -----------------------------------------------------------------
+            // missing configs:
+            //   banners, root_path, usercookie, xoops_url
+            // duplicated configs in 'user' module:
+            //   avatar_minposts, maxuname, sslloginlink, sslpost_name, use_ssl
+            // -----------------------------------------------------------------
+            // 'xoops_url' and 'root_path' are DEPRECATED since 2.0.
+            $configs['xoops_url'] = XOOPS_URL;
+            $configs['root_path'] = XOOPS_ROOT_PATH.'/';
+            // 'banners' found in 'legacyRender' module
+            $tmp = &$config_handler->getConfigsByDirname('legacyRender');
+            $configs['banners'] = $tmp['banners'];
+            // 'usercookie' found in 'user' module
+            $tmp = &$config_handler->getConfigsByDirname('user');
+            $configs['usercookie'] = $tmp['usercookie'];
+            // override duplicated configs in 'user' module
+            $keys = array('avatar_minposts', 'maxuname', 'sslloginlink', 'sslpost_name', 'use_ssl');
+            foreach ($keys as $key) {
+                $configs[$key] = $tmp[$key];
+            }
+            break;
+        case XOOPS_CONF_USER:
+            // all 2.0 compatible configs available in 'user' module
+            // added configs from 2.1 'user' module are:
+            //   self_delete_confirm, sslloginlink, sslpost_name, use_ssl, usercookie
+            $configs = $config_handler->getConfigsByDirname('user'); // copy
+            break;
+        case XOOPS_CONF_METAFOOTER:
+            // all 2.0 compatible configs available in 'legacyRender' module
+            // added configs from 2.1 'legacyRender' module are:
+            //   banners
+            $configs = $config_handler->getConfigsByDirname('legacyRender'); // copy
+            break;
+        case XOOPS_CONF_CENSOR:
+            // same config keys
+            break;
+        case XOOPS_CONF_SEARCH:
+            // same config keys
+            break;
+        case XOOPS_CONF_MAILER:
+            // same config keys
+            break;
+        }
     }
-  }
     $cache_configs[$category] = &$configs;
 
     return $cache_configs[$category];
@@ -635,13 +635,13 @@ function xoonips_get_multiple_field_template_vars($ormObjects, $module, $name)
     $lengths = xnpGetColumnLengths($field_handler->getTableName());
 
     $vars = array(
-      'table_name' => $field_handler->getTableName(),
-      'name' => array(
-        'primary_key' => $field_handler->getKeyName(),
-        'text' => $name,
-        'order' => $name.'_order',
-      ),
-      'objects' => array(),
+        'table_name' => $field_handler->getTableName(),
+        'name' => array(
+            'primary_key' => $field_handler->getKeyName(),
+            'text' => $name,
+            'order' => $name.'_order',
+        ),
+        'objects' => array(),
     );
     foreach ($ormObjects as $orm) {
         list($within, $without) = xnpTrimString($orm->getVar($name, 's'), $lengths[$name], _CHARSET);
@@ -656,7 +656,9 @@ function xoonips_get_multiple_field_template_vars($ormObjects, $module, $name)
                 'value' => $orm->getVar($name, 's'), ),
             'order' => array(
                 'name' => "{$name}_order",
-                'value' => $orm->get("{$name}_order"), ), );
+                'value' => $orm->get("{$name}_order"),
+            ),
+        );
     }
     $vars['num'] = count($vars['objects']);
 
@@ -722,34 +724,32 @@ function xoonips_is_same_objects(&$objs1, &$objs2)
 function xoonips_get_cc_license($cc_commercial_use, $cc_modification, $version, $region)
 {
     static $cc_condition_map = array(
-    '00' => 'BY-NC-ND',
-    '01' => 'BY-NC-SA',
-    '02' => 'BY-NC',
-    '10' => 'BY-ND',
-    '11' => 'BY-SA',
-    '12' => 'BY',
-  );
+        '00' => 'BY-NC-ND',
+        '01' => 'BY-NC-SA',
+        '02' => 'BY-NC',
+        '10' => 'BY-ND',
+        '11' => 'BY-SA',
+        '12' => 'BY',
+    );
     static $cc_region_map = array(
-    // php-indent: disable
-    'INTERNATIONAL' => array('40'),
-    // php-indent: enable
-  );
+        'INTERNATIONAL' => array('40'),
+    );
     static $cc_cache = array();
     $condtion = sprintf('%u%u', $cc_commercial_use, $cc_modification);
     $region = strtoupper($region);
     $version = sprintf('%u', $version * 10);
     if (!isset($cc_condition_map[$condtion])) {
         // unknown condtion
-    return false;
+        return false;
     }
     $condtion = $cc_condition_map[$condtion];
     if (!isset($cc_region_map[$region])) {
         // unknown region
-    return false;
+        return false;
     }
     if (!in_array($version, $cc_region_map[$region])) {
         // unkown version
-    return false;
+        return false;
     }
     if (isset($cc_cache[$region][$version][$condtion])) {
         return $cc_cache[$region][$version][$condtion];
@@ -758,12 +758,12 @@ function xoonips_get_cc_license($cc_commercial_use, $cc_modification, $version, 
     $fpath = __DIR__.'/creativecommons/'.$fname;
     if (!file_exists($fpath)) {
         // file not found
-    return false;
+        return false;
     }
     $cc_html = @file_get_contents($fpath);
     if ($cc_html === false) {
         // failed to read file
-    return false;
+        return false;
     }
     $cc_cache[$region][$version][$condtion] = $cc_html;
 

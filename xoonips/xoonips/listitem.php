@@ -39,7 +39,7 @@ $xnpsid = $_SESSION['XNPSID'];
 $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 if (!xnp_is_valid_session_id($xnpsid)) {
     // User is guest group, and guest isn't admitted to access the page.
-  redirect_header('user.php', 3, _MD_XOONIPS_ITEM_FORBIDDEN);
+    redirect_header('user.php', 3, _MD_XOONIPS_ITEM_FORBIDDEN);
     exit();
 }
 
@@ -51,17 +51,17 @@ $textutil = &xoonips_getutility('text');
 $sess_orderby = isset($_SESSION['xoonips_order_by']) ? $_SESSION['xoonips_order_by'] : 'title';
 $sess_orderdir = isset($_SESSION['xoonips_order_dir']) ? $_SESSION['xoonips_order_dir'] : ASC;
 $request_vars = array(
-  'op' => array('s', ''),
-  'page' => array('i', 1),
-  'orderby' => array('s', $sess_orderby),
-  'order_dir' => array('i', $sess_orderdir),
-  'itemcount' => array('i', 20),
-  'selected' => array('i', array()),
-  'initially_selected' => array('i', array()),
-  'print' => array('b', false),
-  'add_to_index' => array('b', false),
-  'num_of_items' => array('i', null),
-  'index_id' => array('i', null),
+    'op' => array('s', ''),
+    'page' => array('i', 1),
+    'orderby' => array('s', $sess_orderby),
+    'order_dir' => array('i', $sess_orderdir),
+    'itemcount' => array('i', 20),
+    'selected' => array('i', array()),
+    'initially_selected' => array('i', array()),
+    'print' => array('b', false),
+    'add_to_index' => array('b', false),
+    'num_of_items' => array('i', null),
+    'index_id' => array('i', null),
 );
 
 $formdata = &xoonips_getutility('formdata');
@@ -97,20 +97,20 @@ if ($print) {
 $index_handler = &xoonips_getormhandler('xoonips', 'index');
 if (isset($index_id)) {
     // check permission
-  $idx_obj = &$index_handler->get($index_id);
+    $idx_obj = &$index_handler->get($index_id);
     if ($idx_obj === false) {
         // index not found
-    redirect_header(XOOPS_URL.'/', 3, _NOPERM);
+        redirect_header(XOOPS_URL.'/', 3, _NOPERM);
         exit();
     }
     if (!$index_handler->getPerm($index_id, $uid, 'read')) {
         if ($uid == UID_GUEST) {
             // try login
-      redirect_header(XOONIPS_URL.'/user.php', 3, _NOPERM);
+            redirect_header(XOONIPS_URL.'/user.php', 3, _NOPERM);
             exit();
         }
-    // no permission
-    redirect_header(XOOPS_URL.'/', 3, _NOPERM);
+        // no permission
+        redirect_header(XOOPS_URL.'/', 3, _NOPERM);
         exit();
     }
 }
@@ -120,31 +120,36 @@ $xoopsTpl->assign('title_page', _MD_XOONIPS_ITEM_LISTING_ITEM);
 $xoopsTpl->assign('order_by_label', _MD_XOONIPS_ITEM_ORDER_BY);
 $xoopsTpl->assign('item_count_label', _MD_XOONIPS_ITEM_NUM_OF_ITEM_PER_PAGE);
 //order_by_select: array( "variable name" => "name for view", ... )
-$xoopsTpl->assign('order_by_select',
-                  array('title' => _MD_XOONIPS_ITEM_TITLE_LABEL,
-                         'doi' => _MD_XOONIPS_ITEM_DOI_LABEL,
-                         'last_update_date' => _MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL,
-                         'creation_date' => _MD_XOONIPS_ITEM_CREATION_DATE_LABEL,
-                         'publication_date' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL, ));
+$xoopsTpl->assign('order_by_select', array(
+    'title' => _MD_XOONIPS_ITEM_TITLE_LABEL,
+    'doi' => _MD_XOONIPS_ITEM_DOI_LABEL,
+    'last_update_date' => _MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL,
+    'creation_date' => _MD_XOONIPS_ITEM_CREATION_DATE_LABEL,
+    'publication_date' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
+));
 $xoopsTpl->assign('order_by', $textutil->html_special_chars($orderby));
 
-$xoopsTpl->assign('item_count_select',
-                  array('20', '50', '100'));
+$xoopsTpl->assign('item_count_select', array('20', '50', '100'));
 
 $iids = array();
 $items = array();
 $cri = array();
 if ($orderby == 'publication_date') {
-    $cri = array('start' => ($page - 1) * $itemcount,
-                  'rows' => $itemcount,
-                  'orders' => array(
-                      array('name' => 'publication_year', 'order' => $order_dir),
-                      array('name' => 'publication_month', 'order' => $order_dir),
-                      array('name' => 'publication_mday', 'order' => $order_dir), ), );
+    $cri = array(
+        'start' => ($page - 1) * $itemcount,
+        'rows' => $itemcount,
+        'orders' => array(
+            array('name' => 'publication_year', 'order' => $order_dir),
+            array('name' => 'publication_month', 'order' => $order_dir),
+            array('name' => 'publication_mday', 'order' => $order_dir),
+        ),
+    );
 } else {
-    $cri = array('start' => ($page - 1) * $itemcount,
-                  'rows' => $itemcount,
-                  'orders' => array(array('name' => $orderby, 'order' => $order_dir)), );
+    $cri = array(
+        'start' => ($page - 1) * $itemcount,
+        'rows' => $itemcount,
+        'orders' => array(array('name' => $orderby, 'order' => $order_dir)),
+    );
 }
 if (isset($index_id)) {
     $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
@@ -176,7 +181,7 @@ function my_xoonips_get_child_index(&$db, $index_id)
 
 if (isset($index_id)) {
     // add index list
-  $my_indexes = array();
+    $my_indexes = array();
     $cids = my_xoonips_get_child_index($xoopsDB, $index_id);
     if (count($cids) > 0) {
         $item_counts = array();
@@ -187,11 +192,11 @@ if (isset($index_id)) {
             if (xnp_get_index($xnpsid, $cid, $info) == RES_OK) {
                 $cnt = isset($item_counts[$cid]) ? $item_counts[$cid] : 0;
                 $my_index = array(
-           'index_id' => $cid,
-           'title' => $info['html_title'],
-           'child_index_num' => $cicnt,
-           'child_item_num' => $cnt,
-        );
+                     'index_id' => $cid,
+                     'title' => $info['html_title'],
+                     'child_index_num' => $cicnt,
+                     'child_item_num' => $cnt,
+                );
                 $index_tpl = new XoopsTpl();
                 $index_tpl->assign('index', $my_index);
                 $my_indexes[] = $index_tpl->fetch('db:xoonips_index_list_block.html');

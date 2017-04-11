@@ -29,10 +29,8 @@
 $modversion['name'] = _MI_XOONIPS_NAME;
 $modversion['version'] = 3.49;
 $modversion['description'] = _MI_XOONIPS_DESC;
-$modversion['credits'] =
-  'RIKEN, Japan (http://www.riken.jp/)';
-$modversion['author'] =
-  'The XooNIps Project (http://sourceforge.jp/projects/xoonips/)';
+$modversion['credits'] = 'RIKEN, Japan (http://www.riken.jp/)';
+$modversion['author'] = 'The XooNIps Project (http://sourceforge.jp/projects/xoonips/)';
 $modversion['help'] = 'help.html';
 $modversion['license'] = 'GPL see LICENSE';
 $modversion['official'] = 0;

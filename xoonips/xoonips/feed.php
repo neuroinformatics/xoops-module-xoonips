@@ -101,8 +101,8 @@ function _set_feed_items(&$feed, $output, $limit, $start)
     global $event_handler;
     global $item_handler;
     global $xgroup_handler;
-  // get events
-  $criteria = new CriteriaCompo();
+    // get events
+    $criteria = new CriteriaCompo();
     $fields = 'event_id,event_type_id,item_id,gid,MAX(timestamp)';
     $groupby = '';
     if ($output['certify_item']) {
@@ -124,52 +124,52 @@ function _set_feed_items(&$feed, $output, $limit, $start)
     $criteria->setGroupBy($groupby);
     $criteria->setStart($start);
 
-  // query
-  $event_objs = &$event_handler->getObjects($criteria, false, $fields);
+    // query
+    $event_objs = &$event_handler->getObjects($criteria, false, $fields);
 
-  // get records
-  $num = 0;
+    // get records
+    $num = 0;
     foreach ($event_objs as $event_obj) {
         $event_type_id = $event_obj->getVar('event_type_id', 'n');
         $timestamp = $event_obj->getExtraVar('MAX(timestamp)');
         $is_error = false;
         switch ($event_type_id) {
-    case ETID_CERTIFY_ITEM:
-      $item_id = $event_obj->getVar('item_id', 'n');
-      $item_obj = &$item_handler->get($item_id);
-      if (is_object($item_obj)) {
-          $item = $item_obj->getVarArray('n');
-          $category = 'Incoming Public Item';
-          $title = _create_item_title($item['item_id']);
-          $description = _create_item_description($item['item_id']);
-          $link = _create_item_link($item['item_id'], $item['doi']);
-          if ($description === false) {
-              $is_error = true;
-          }
-      } else {
-          $is_error = true;
-        // item was already deleted
-      }
-      break;
-    case ETID_INSERT_GROUP:
-      $gid = $event_obj->getVar('gid', 'n');
-      $xgroup_obj = &$xgroup_handler->getGroupObject($gid);
-      if (is_object($xgroup_obj)) {
-          $group = $xgroup_obj->getVarArray('n');
-          $category = 'Incoming Group';
-          $title = _MD_XOONIPS_EVENT_NEW_GROUP.' : '.$group['gname'];
-          $description = ($group['gdesc'] === '') ? '(empty)' : $group['gdesc'];
-          $link = XOOPS_URL.'/modules/xoonips/groups.php';
-        // TODO: detail page
-      } else {
-          $is_error = true;
-        // group was already deleted
-      }
-      break;
-    default:
-      $is_error = true;
-      break;
-    }
+        case ETID_CERTIFY_ITEM:
+            $item_id = $event_obj->getVar('item_id', 'n');
+            $item_obj = &$item_handler->get($item_id);
+            if (is_object($item_obj)) {
+                $item = $item_obj->getVarArray('n');
+                $category = 'Incoming Public Item';
+                $title = _create_item_title($item['item_id']);
+                $description = _create_item_description($item['item_id']);
+                $link = _create_item_link($item['item_id'], $item['doi']);
+                if ($description === false) {
+                    $is_error = true;
+                }
+            } else {
+                $is_error = true;
+                // item was already deleted
+            }
+            break;
+        case ETID_INSERT_GROUP:
+            $gid = $event_obj->getVar('gid', 'n');
+            $xgroup_obj = &$xgroup_handler->getGroupObject($gid);
+            if (is_object($xgroup_obj)) {
+                $group = $xgroup_obj->getVarArray('n');
+                $category = 'Incoming Group';
+                $title = _MD_XOONIPS_EVENT_NEW_GROUP.' : '.$group['gname'];
+                $description = ($group['gdesc'] === '') ? '(empty)' : $group['gdesc'];
+                $link = XOOPS_URL.'/modules/xoonips/groups.php';
+                // TODO: detail page
+            } else {
+                $is_error = true;
+                // group was already deleted
+            }
+            break;
+        default:
+            $is_error = true;
+            break;
+        }
         if ($is_error == false) {
             $feed->addItem($category, $title, $description, $link, $timestamp);
             ++$num;

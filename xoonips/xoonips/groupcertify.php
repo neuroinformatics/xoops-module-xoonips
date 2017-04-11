@@ -1,4 +1,5 @@
 <?php
+
 // $Revision: 1.1.2.5 $
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
@@ -119,7 +120,7 @@ include XOOPS_ROOT_PATH.'/footer.php';
 function certify($to_index_ids, $group_index_id)
 {
     // transaction
-  require_once __DIR__.'/class/base/transaction.class.php';
+    require_once __DIR__.'/class/base/transaction.class.php';
     $transaction = &XooNIpsTransaction::getInstance();
     $transaction->start();
 
@@ -142,7 +143,7 @@ function certify($to_index_ids, $group_index_id)
 function uncertify($to_index_ids, $group_index_id)
 {
     // transaction
-  require_once __DIR__.'/class/base/transaction.class.php';
+    require_once __DIR__.'/class/base/transaction.class.php';
     $transaction = &XooNIpsTransaction::getInstance();
     $transaction->start();
 
@@ -162,7 +163,3 @@ function uncertify($to_index_ids, $group_index_id)
     $transaction->commit();
     redirect_header(XOOPS_URL.'/modules/xoonips/groupcertify.php', 3, 'Succeed');
 }
-
-?>
-
-

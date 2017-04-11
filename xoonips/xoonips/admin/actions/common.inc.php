@@ -56,8 +56,8 @@ function xoonips_admin_initialize($myfile, $preference, $pages)
     $xoonips_admin['admin_url'] = $xoonips_admin['mod_url'].'/admin';
     $xoonips_admin['admin_path'] = $xoonips_admin['mod_path'].'/admin';
     $xoonips_admin['myfile_url'] = $xoonips_admin['admin_url'].'/'.basename($myfile);
-  // select page and action
-  $formdata = &xoonips_getutility('formdata');
+    // select page and action
+    $formdata = &xoonips_getutility('formdata');
     $page = $formdata->getValue('get', 'page', 's', false, 'main');
     if (!preg_match('/^[a-z]+$/', $page)) {
         die('illegal request');
@@ -113,31 +113,31 @@ function xoonips_admin_get_configs($keys, $fmt)
             $ret[$key] = $val;
         } else {
             switch ($key_fmt) {
-      case 's':
-        // string
-        switch ($fmt) {
-        case 's':
-        case 'show':
-        case 'e':
-        case 'edit':
-          $ret[$key] = $textutil->html_special_chars($val);
-          break;
-        case 'n':
-        case 'none':
-          $ret[$key] = $val;
-        }
-        break;
-      case 'i':
-        // int
-        $ret[$key] = intval($val);
-        break;
-      case 'f':
-        // float
-        $ret[$key] = floatval($val);
-        break;
-      default:
-        die('unknown key type');
-      }
+            case 's':
+                // string
+                switch ($fmt) {
+                case 's':
+                case 'show':
+                case 'e':
+                case 'edit':
+                    $ret[$key] = $textutil->html_special_chars($val);
+                    break;
+                case 'n':
+                case 'none':
+                    $ret[$key] = $val;
+                }
+                break;
+            case 'i':
+                // int
+                $ret[$key] = intval($val);
+                break;
+            case 'f':
+                // float
+                $ret[$key] = floatval($val);
+                break;
+            default:
+                die('unknown key type');
+            }
         }
     }
 
@@ -150,19 +150,19 @@ function xoonips_admin_set_config($key, &$val, $type)
     $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $cleanv = null;
     switch ($type) {
-  case 's':
-    // string
-    $cleanv = $myts->censorString($val);
-    break;
-  case 'i':
-    // int
-    $cleanv = intval($val);
-    break;
-  case 'f':
-    // float
-    $cleanv = floatval($val);
-    break;
-  }
+    case 's':
+        // string
+        $cleanv = $myts->censorString($val);
+        break;
+    case 'i':
+        // int
+        $cleanv = intval($val);
+        break;
+    case 'f':
+        // float
+        $cleanv = floatval($val);
+        break;
+    }
     if (is_null($cleanv)) {
         return false;
     }

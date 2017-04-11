@@ -56,11 +56,11 @@ include_once '../include/libitem.php';
 $treelist = array();
 switch ($index_mode) {
 case 'private':
-  $treelist = xnpitmgrListIndexTree(XNPITMGR_LISTMODE_PRIVATEONLY, $uid);
-  break;
+    $treelist = xnpitmgrListIndexTree(XNPITMGR_LISTMODE_PRIVATEONLY, $uid);
+    break;
 case 'public':
-  $treelist = xnpitmgrListIndexTree(XNPITMGR_LISTMODE_PUBLICONLY);
-  break;
+    $treelist = xnpitmgrListIndexTree(XNPITMGR_LISTMODE_PUBLICONLY);
+    break;
 }
 if (empty($treelist)) {
     die('unexpected error');
@@ -72,26 +72,26 @@ $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_ITEM_TITLE,
-    'url' => $xoonips_admin['mypage_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_ITEM_TITLE,
+        'url' => $xoonips_admin['mypage_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // templates

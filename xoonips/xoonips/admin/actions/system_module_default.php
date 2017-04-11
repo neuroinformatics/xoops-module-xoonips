@@ -35,21 +35,21 @@ $description = _AM_XOONIPS_SYSTEM_MODULE_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_SYSTEM_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_SYSTEM_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // token ticket
@@ -67,8 +67,8 @@ $textutil = &xoonips_getutility('text');
 $criteria = new CriteriaCompo(new Criteria('conf_modid', $module_id));
 // select notification configulations only
 $append_confnames = array(
-  'notification_enabled',
-  'notification_events',
+    'notification_enabled',
+    'notification_events',
 );
 if (count($append_confnames) > 0) {
     $criteria_append = new CriteriaCompo();
@@ -102,63 +102,63 @@ for ($i = 0; $i < $count; ++$i) {
     $title4tray = (!defined($config[$i]->getVar('conf_desc')) || constant($config[$i]->getVar('conf_desc')) == '') ? constant($config[$i]->getVar('conf_title')) : constant($config[$i]->getVar('conf_title')).'<br /><br /><span style="font-weight:normal;">'.constant($config[$i]->getVar('conf_desc')).'</span>';
     $eletitle = '';
     switch ($config[$i]->getVar('conf_formtype')) {
-  case 'textarea':
-    if ($config[$i]->getVar('conf_valuetype') == 'array') {
-        // this is exceptional.. only when value type is arrayneed a
-      // smarter way for this
-      $ele = ($config[$i]->getVar('conf_value') != '') ? new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), $textutil->html_special_chars(implode('|', $config[$i]->getConfValueForOutput())), 5, 50) : new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), '', 5, 50);
-    } else {
-        $ele = new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), $textutil->html_special_chars($config[$i]->getConfValueForOutput()), 5, 50);
+    case 'textarea':
+        if ($config[$i]->getVar('conf_valuetype') == 'array') {
+            // this is exceptional.. only when value type is arrayneed a
+          // smarter way for this
+          $ele = ($config[$i]->getVar('conf_value') != '') ? new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), $textutil->html_special_chars(implode('|', $config[$i]->getConfValueForOutput())), 5, 50) : new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), '', 5, 50);
+        } else {
+            $ele = new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), $textutil->html_special_chars($config[$i]->getConfValueForOutput()), 5, 50);
+        }
+        break;
+    case 'select':
+        $ele = new XoopsFormSelect($eletitle, $config[$i]->getVar('conf_name'), $config[$i]->getConfValueForOutput());
+        $options = &$config_handler->getConfigOptions(new Criteria('conf_id', $config[$i]->getVar('conf_id')));
+        $opcount = count($options);
+        for ($j = 0; $j < $opcount; ++$j) {
+            $optval = defined($options[$j]->getVar('confop_value')) ? constant($options[$j]->getVar('confop_value')) : $options[$j]->getVar('confop_value');
+            $optkey = defined($options[$j]->getVar('confop_name')) ? constant($options[$j]->getVar('confop_name')) : $options[$j]->getVar('confop_name');
+            $ele->addOption($optval, $optkey);
+        }
+        break;
+    case 'select_multi':
+        $ele = new XoopsFormSelect($eletitle, $config[$i]->getVar('conf_name'), $config[$i]->getConfValueForOutput(), 5, true);
+        $options = &$config_handler->getConfigOptions(new Criteria('conf_id', $config[$i]->getVar('conf_id')));
+        $opcount = count($options);
+        for ($j = 0; $j < $opcount; ++$j) {
+            $optval = defined($options[$j]->getVar('confop_value')) ? constant($options[$j]->getVar('confop_value')) : $options[$j]->getVar('confop_value');
+            $optkey = defined($options[$j]->getVar('confop_name')) ? constant($options[$j]->getVar('confop_name')) : $options[$j]->getVar('confop_name');
+            $ele->addOption($optval, $optkey);
+        }
+        break;
+    case 'yesno':
+        $ele = new XoopsFormRadioYN($eletitle, $config[$i]->getVar('conf_name'), $config[$i]->getConfValueForOutput(), _YES, _NO);
+        break;
+    case 'group':
+        include_once XOOPS_ROOT_PATH.'/class/xoopslists.php';
+        $ele = new XoopsFormSelectGroup($eletitle, $config[$i]->getVar('conf_name'), false, $config[$i]->getConfValueForOutput(), 1, false);
+        break;
+    case 'group_multi':
+        include_once XOOPS_ROOT_PATH.'/class/xoopslists.php';
+        $ele = new XoopsFormSelectGroup($eletitle, $config[$i]->getVar('conf_name'), false, $config[$i]->getConfValueForOutput(), 5, true);
+        break;
+        // RMV-NOTIFY: added 'user' and 'user_multi'
+    case 'user':
+        include_once XOOPS_ROOT_PATH.'/class/xoopslists.php';
+        $ele = new XoopsFormSelectUser($eletitle, $config[$i]->getVar('conf_name'), false, $config[$i]->getConfValueForOutput(), 1, false);
+        break;
+    case 'user_multi':
+        include_once XOOPS_ROOT_PATH.'/class/xoopslists.php';
+        $ele = new XoopsFormSelectUser($eletitle, $config[$i]->getVar('conf_name'), false, $config[$i]->getConfValueForOutput(), 5, true);
+        break;
+    case 'password':
+        $ele = new XoopsFormPassword($eletitle, $config[$i]->getVar('conf_name'), 50, 255, $textutil->html_special_chars($config[$i]->getConfValueForOutput()));
+        break;
+    case 'textbox':
+    default:
+        $ele = new XoopsFormText($eletitle, $config[$i]->getVar('conf_name'), 50, 255, $textutil->html_special_chars($config[$i]->getConfValueForOutput()));
+        break;
     }
-    break;
-  case 'select':
-    $ele = new XoopsFormSelect($eletitle, $config[$i]->getVar('conf_name'), $config[$i]->getConfValueForOutput());
-    $options = &$config_handler->getConfigOptions(new Criteria('conf_id', $config[$i]->getVar('conf_id')));
-    $opcount = count($options);
-    for ($j = 0; $j < $opcount; ++$j) {
-        $optval = defined($options[$j]->getVar('confop_value')) ? constant($options[$j]->getVar('confop_value')) : $options[$j]->getVar('confop_value');
-        $optkey = defined($options[$j]->getVar('confop_name')) ? constant($options[$j]->getVar('confop_name')) : $options[$j]->getVar('confop_name');
-        $ele->addOption($optval, $optkey);
-    }
-    break;
-  case 'select_multi':
-    $ele = new XoopsFormSelect($eletitle, $config[$i]->getVar('conf_name'), $config[$i]->getConfValueForOutput(), 5, true);
-    $options = &$config_handler->getConfigOptions(new Criteria('conf_id', $config[$i]->getVar('conf_id')));
-    $opcount = count($options);
-    for ($j = 0; $j < $opcount; ++$j) {
-        $optval = defined($options[$j]->getVar('confop_value')) ? constant($options[$j]->getVar('confop_value')) : $options[$j]->getVar('confop_value');
-        $optkey = defined($options[$j]->getVar('confop_name')) ? constant($options[$j]->getVar('confop_name')) : $options[$j]->getVar('confop_name');
-        $ele->addOption($optval, $optkey);
-    }
-    break;
-  case 'yesno':
-    $ele = new XoopsFormRadioYN($eletitle, $config[$i]->getVar('conf_name'), $config[$i]->getConfValueForOutput(), _YES, _NO);
-    break;
-  case 'group':
-    include_once XOOPS_ROOT_PATH.'/class/xoopslists.php';
-    $ele = new XoopsFormSelectGroup($eletitle, $config[$i]->getVar('conf_name'), false, $config[$i]->getConfValueForOutput(), 1, false);
-    break;
-  case 'group_multi':
-    include_once XOOPS_ROOT_PATH.'/class/xoopslists.php';
-    $ele = new XoopsFormSelectGroup($eletitle, $config[$i]->getVar('conf_name'), false, $config[$i]->getConfValueForOutput(), 5, true);
-    break;
-    // RMV-NOTIFY: added 'user' and 'user_multi'
-  case 'user':
-    include_once XOOPS_ROOT_PATH.'/class/xoopslists.php';
-    $ele = new XoopsFormSelectUser($eletitle, $config[$i]->getVar('conf_name'), false, $config[$i]->getConfValueForOutput(), 1, false);
-    break;
-  case 'user_multi':
-    include_once XOOPS_ROOT_PATH.'/class/xoopslists.php';
-    $ele = new XoopsFormSelectUser($eletitle, $config[$i]->getVar('conf_name'), false, $config[$i]->getConfValueForOutput(), 5, true);
-    break;
-  case 'password':
-    $ele = new XoopsFormPassword($eletitle, $config[$i]->getVar('conf_name'), 50, 255, $textutil->html_special_chars($config[$i]->getConfValueForOutput()));
-    break;
-  case 'textbox':
-  default:
-    $ele = new XoopsFormText($eletitle, $config[$i]->getVar('conf_name'), 50, 255, $textutil->html_special_chars($config[$i]->getConfValueForOutput()));
-    break;
-  }
     $hidden = new XoopsFormHidden('conf_ids[]', $config[$i]->getVar('conf_id'));
     $ele_tray = new XoopsFormElementTray($title4tray, '');
     $ele_tray->addElement($ele);

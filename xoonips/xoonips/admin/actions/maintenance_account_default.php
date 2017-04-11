@@ -31,11 +31,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
 
 // get requsts
 $get_keys = array(
-  'navi' => array(
-    'i',
-    false,
-    false,
-  ),
+    'navi' => array('i', false, false),
 );
 $get_vals = xoonips_admin_get_requests('get', $get_keys);
 
@@ -48,21 +44,21 @@ $description = _AM_XOONIPS_MAINTENANCE_ACCOUNT_DESC;
 
 // breadcrumbs
 $breadcrumbs = array(
-  array(
-    'type' => 'top',
-    'label' => _AM_XOONIPS_TITLE,
-    'url' => $xoonips_admin['admin_url'].'/',
-  ),
-  array(
-    'type' => 'link',
-    'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
-    'url' => $xoonips_admin['myfile_url'],
-  ),
-  array(
-    'type' => 'label',
-    'label' => $title,
-    'url' => '',
-  ),
+    array(
+        'type' => 'top',
+        'label' => _AM_XOONIPS_TITLE,
+        'url' => $xoonips_admin['admin_url'].'/',
+    ),
+    array(
+        'type' => 'link',
+        'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
+        'url' => $xoonips_admin['myfile_url'],
+    ),
+    array(
+        'type' => 'label',
+        'label' => $title,
+        'url' => '',
+    ),
 );
 
 // TODO: set sort, start and limit
@@ -111,10 +107,10 @@ $navi_title = sprintf(_AM_XOONIPS_MAINTENANCE_ACCOUNT_PAGENAVI_FORMAT, $navi['st
 $navi_body = array();
 foreach ($navi['navi'] as $body) {
     $navi_body[] = array(
-    'has_link' => ($navi['page'] == $body) ? 'no' : 'yes',
-    'link' => $xoonips_admin['mypage_url'],
-    'page' => $body,
-  );
+        'has_link' => ($navi['page'] == $body) ? 'no' : 'yes',
+        'link' => $xoonips_admin['mypage_url'],
+        'page' => $body,
+    );
 }
 
 $users_objs = &account_get_userlist($limit, $pagenavi->getStart(), $pagenavi->getSort());
@@ -126,14 +122,14 @@ foreach ($users_objs as $users_obj) {
     $uname = $users_obj->getVar('uname', 's');
     $email = $users_obj->getVar('email', 's');
     $users[] = array(
-    'uid' => $uid,
-    'name' => $name,
-    'uname' => $uname,
-    'email' => $email,
-    'evenodd' => $evenodd,
-    'modify' => _AM_XOONIPS_LABEL_MODIFY,
-    'delete' => _AM_XOONIPS_LABEL_DELETE,
-  );
+        'uid' => $uid,
+        'name' => $name,
+        'uname' => $uname,
+        'email' => $email,
+        'evenodd' => $evenodd,
+        'modify' => _AM_XOONIPS_LABEL_MODIFY,
+        'delete' => _AM_XOONIPS_LABEL_DELETE,
+    );
     $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
 }
 

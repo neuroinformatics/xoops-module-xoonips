@@ -39,11 +39,7 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 
 // get variables
 $post_keys = array(
-  'moderator_modify_any_items' => array(
-    's',
-    false,
-    true,
-  ),
+    'moderator_modify_any_items' => array('s', false, true),
 );
 $post_vals = xoonips_admin_get_requests('post', $post_keys);
 
