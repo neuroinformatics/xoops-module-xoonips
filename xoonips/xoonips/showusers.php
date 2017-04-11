@@ -70,7 +70,7 @@ $is_editable = ($is_admin || $is_owner);
 $is_deletable = ($is_editable && $myxoopsConfigUser['self_delete'] == 1);
 $avatar = '../../uploads/'.$u_obj->getVar('user_avatar', 'e');
 
-$myts = &MyTextSanitizer::getInstance();
+(method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
 $textutil = &xoonips_getutility('text');
 
 // breadcrumbs

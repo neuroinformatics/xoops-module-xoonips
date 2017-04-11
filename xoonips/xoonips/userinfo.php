@@ -83,7 +83,7 @@ if ($uid == $myuid || $is_admin) {
     $xoopsTpl->assign('user_candelete', false);
 }
 
-$myts = &MyTextSanitizer::getInstance();
+(method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
 $textutil = &xoonips_getutility('text');
 
 // assign basic user information

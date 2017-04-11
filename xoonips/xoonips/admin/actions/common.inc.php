@@ -146,7 +146,7 @@ function xoonips_admin_get_configs($keys, $fmt)
 
 function xoonips_admin_set_config($key, &$val, $type)
 {
-    $myts = &MyTextSanitizer::getInstance();
+    (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
     $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $cleanv = null;
     switch ($type) {

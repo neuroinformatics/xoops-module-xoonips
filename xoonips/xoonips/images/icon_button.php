@@ -54,7 +54,7 @@ $padding_y = 6;
 $background_image_file = 'icon_button_normal.png';
 
 // get params
-$myts = &MyTextSanitizer::getInstance();
+(method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
 $formdata = &xoonips_getutility('formdata');
 $mode = $formdata->getValue('get', 'mode', 'n', false, $background_image_file);
 switch ($mode) {

@@ -203,7 +203,7 @@ class XooNIpsTableObject extends XoopsObject
   public function &getVar($key, $format = null)
   {
       $ret = $this->vars[$key]['value'];
-      $ts = &MyTextSanitizer::getInstance();
+      (method_exists(MyTextSanitizer, sGetInstance) and $ts = &MyTextSanitizer::sGetInstance()) || $ts = &MyTextSanitizer::getInstance();
       $textutil = &xoonips_getutility('text');
 
       if (XOONIPS_DEBUG_MODE) {
@@ -465,7 +465,7 @@ class XooNIpsTableObject extends XoopsObject
    */
   public function cleanVars()
   {
-      $ts = &MyTextSanitizer::getInstance();
+      (method_exists(MyTextSanitizer, sGetInstance) and $ts = &MyTextSanitizer::sGetInstance()) || $ts = &MyTextSanitizer::getInstance();
       foreach ($this->vars as $k => $v) {
           $cleanv = $v['value'];
           if ($v['changed']) {

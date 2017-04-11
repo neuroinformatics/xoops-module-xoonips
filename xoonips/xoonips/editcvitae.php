@@ -37,7 +37,7 @@ xoonips_deny_guest_access();
 
 $op = 'open';
 
-$myts = &MyTextSanitizer::getInstance();
+(method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
 $textutil = &xoonips_getutility('text');
 $formdata = &xoonips_getutility('formdata');
 

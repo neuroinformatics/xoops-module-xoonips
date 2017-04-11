@@ -162,7 +162,7 @@ function xnpExportIndex($fhdl, $index_id, $recurse)
     if (!$fhdl) {
         return false;
     }
-    $myts = &MyTextSanitizer::getInstance();
+    (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
 
     $xnpsid = $_SESSION['XNPSID'];
     $index = array();
@@ -299,7 +299,7 @@ function xnpExportChangeLog($fhdl, $item_id)
     if (!$fhdl) {
         return false;
     }
-    $myts = &MyTextSanitizer::getInstance();
+    (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
 
     $xnpsid = $_SESSION['XNPSID'];
     $xml = array();

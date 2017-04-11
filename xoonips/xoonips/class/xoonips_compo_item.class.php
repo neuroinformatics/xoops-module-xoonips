@@ -775,7 +775,7 @@ if ($type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_T
      */
     public function getItemDetailUrl($item_id)
     {
-        $myts = &MyTextSanitizer::getInstance();
+        (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
         $basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $basic = &$basic_handler->get($item_id);
         if (!$basic) {

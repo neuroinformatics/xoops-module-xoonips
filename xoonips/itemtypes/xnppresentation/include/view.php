@@ -211,7 +211,7 @@ function xnppresentationGetPrinterFriendlyDetailBlock($item_id)
 function xnppresentationGetRegisterBlock()
 {
     global $xoopsDB;
-    $myts = &MyTextSanitizer::getInstance();
+    (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
 
   // retrieve detail information
   $formdata = &xoonips_getutility('formdata');
@@ -283,7 +283,7 @@ function xnppresentationGetEditBlock($item_id)
 
   // retrieve detail information
   if (!is_null($formdata->getValue('get', 'post_id', 's', false))) {
-      $myts = &MyTextSanitizer::getInstance();
+      (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
       $detail = array(
       'presentation_type' => $formdata->getValue('post', 'presentation_type', 's', true),
       'readme' => '',
@@ -484,7 +484,7 @@ function xnppresentationInsertItem(&$item_id)
 
   // register detail information
   list($rights, $use_cc, $cc_commercial_use, $cc_modification) = xnpGetRights();
-    $myts = &MyTextSanitizer::getInstance();
+    (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
 
   // it makes string with constant length
   $ar = array(
@@ -494,7 +494,7 @@ function xnppresentationInsertItem(&$item_id)
   );
     xnpTrimColumn($ar, 'xnppresentation_item_detail', array_keys($ar), _CHARSET);
 
-    $myts = &MyTextSanitizer::getInstance();
+    (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
     $keys = implode(',', array('attachment_dl_limit', 'attachment_dl_notify', 'presentation_type', 'readme', 'rights', 'use_cc', 'cc_commercial_use', 'cc_modification'));
     $attachment_dl_limit = $formdata->getValue('post', 'attachment_dl_limit', 'i', true);
     $attachment_dl_notify = $formdata->getValue('post', 'attachment_dl_notify', 'i', true);
@@ -523,7 +523,7 @@ function xnppresentationUpdateItem($item_id)
     global $xoopsDB;
     $xnpsid = $_SESSION['XNPSID'];
     $formdata = &xoonips_getutility('formdata');
-    $myts = &MyTextSanitizer::getInstance();
+    (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
 
   // modify BasicInformation, Index, Preview and Attachment.
   $result = xnpUpdateBasicInformation($item_id);
@@ -617,7 +617,7 @@ function xnppresentationGetAdvancedSearchQuery(&$where, &$join)
         $wheres[] = $w;
     }
     if (!empty($xnppresentation_presentation_type)) {
-        $myts = &MyTextSanitizer::getInstance();
+        (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
         $wheres[] = $presentation_table.'.presentation_type = \''.addslashes($xnppresentation_presentation_type).'\'';
     }
     $w = xnpGetKeywordQuery($presentation_creator_table.'.creator', 'xnppresentation_creator');
