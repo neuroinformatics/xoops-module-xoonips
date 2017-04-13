@@ -29,11 +29,11 @@
 //  page for confirm to edit items
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
-include_once 'include/item_limit_check.php';
-include_once 'include/lib.php';
-include_once 'include/AL.php';
+require_once 'include/item_limit_check.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 $system_message = '';
@@ -93,7 +93,7 @@ if (xnp_get_item_types($itemtypes) != RES_OK) {
 }
 
 // include view.php
-include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
 
 $title = $formdata->getValue('post', 'title', 's', false);
 if (!isset($title)) {
@@ -184,10 +184,10 @@ if (XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') {
     $doi = $formdata->getValue('post', 'doi', 's', false);
     if ($doi != '') {
         $matches = array();
-        $res = preg_match('/'.XNP_CONFIG_DOI_FIELD_PARAM_PATTERN
-                           .'/', $doi, $matches);
+        $res = preg_match('/'.XNP_CONFIG_DOI_FIELD_PARAM_PATTERN.'/', $doi, $matches);
         if (strlen($doi) > XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN
-            || $res == 0 || $matches[0] != $doi) {
+            || $res == 0 || $matches[0] != $doi
+        ) {
             $op = '';
             $system_message .= "\n".'<br /><span style="color: red;">'.sprintf(_MD_XOONIPS_ITEM_DOI_INVALID_ID, XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN).'</span><br />';
         }
@@ -235,8 +235,9 @@ if ($op == 'update') {
             if ($index_item_link->get('certify_state') == CERTIFY_REQUIRED) {
                 $index_id = $index_item_link->get('index_id');
                 $index = $index_handler->get($index_id);
-                if ($index->get('open_level') == OL_PUBLIC ||
-                     $index->get('open_level') == OL_GROUP_ONLY) {
+                if ($index->get('open_level') == OL_PUBLIC
+                    || $index->get('open_level') == OL_GROUP_ONLY
+                ) {
                     $item_basic_handler->lockItemAndIndexes($item_id, $index_id);
                     $certify_required = true;
                 }
@@ -245,8 +246,7 @@ if ($op == 'update') {
 
         $detail_url = xnpGetItemDetailURL($item_id, $doi);
         if ($certify_required) {
-            redirect_header($detail_url, 5, "Succeed\n<br />".
-              _MD_XOONIPS_ITEM_NEED_TO_BE_CERTIFIED);
+            redirect_header($detail_url, 5, "Succeed\n<br />"._MD_XOONIPS_ITEM_NEED_TO_BE_CERTIFIED);
         } else {
             redirect_header($detail_url, 3, 'Succeed');
         }
@@ -258,8 +258,7 @@ if ($op == 'update') {
             eval($modname.'CorrectEditParameters();');
         }
         $msg = '';
-        eval('$param_check_result = '
-              .$modname.'CheckEditParameters( $msg );');
+        eval('$param_check_result = '.$modname.'CheckEditParameters( $msg );');
         $system_message = $system_message.$msg;
     }
 
@@ -267,9 +266,12 @@ if ($op == 'update') {
     xnpEncodeMacSafariPost();
     xnpEncodeMacSafariGet();
 
-    $check_xids = array_unique(array_merge(
-        array($formdata->getValue('post', 'add_to_index_id', 'i', false)),
-        explode(',', $formdata->getValue('post', 'xoonipsCheckedXID', 's', false))));
+    $check_xids = array_unique(
+        array_merge(
+            array($formdata->getValue('post', 'add_to_index_id', 'i', false)),
+            explode(',', $formdata->getValue('post', 'xoonipsCheckedXID', 's', false))
+        )
+    );
 
     // $_POST['related_to_check'] is an array(from edit.php)
     // or string(from detail.php,confirm_edit.php).

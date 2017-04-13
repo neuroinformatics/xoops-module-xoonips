@@ -62,19 +62,19 @@ class XooNIpsOrmChangelogHandler extends XooNIpsTableObjectHandler
         $this->__initHandler('XooNIpsOrmChangelog', 'xoonips_changelog', 'log_id');
     }
 
-  /**
-   * get change logs.
-   *
-   * @param int $item_id
-   *
-   * @return array objects
-   */
-  public function getChangeLogs($item_id)
-  {
-      $criteria = new Criteria('item_id', $item_id);
-      $criteria->setSort('log_date');
-      $criteria->setOrder('DESC');
+    /**
+     * get change logs.
+     *
+     * @param int $item_id
+     *
+     * @return array objects
+     */
+    public function getChangeLogs($item_id)
+    {
+        $criteria = new Criteria('item_id', $item_id);
+        $criteria->setSort('log_date');
+        $criteria->setOrder('DESC');
 
-      return $this->getObjects($criteria);
-  }
+        return $this->getObjects($criteria);
+    }
 }

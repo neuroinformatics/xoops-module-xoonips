@@ -30,9 +30,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnptool/include/view.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnptool/iteminfo.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnptool/include/view.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnptool/iteminfo.php';
 
 /**
  * @brief Handler object that create,insert,update,get,delete XNPToolCompo object.
@@ -113,16 +113,12 @@ class XNPToolCompoHandler extends XooNIpsItemInfoCompoHandler
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
-            $result['xnptool_developer']
-                = xoonips_get_multiple_field_template_vars($detail->getDevelopers(),
-                                                          'xnptool',
-                                                          'developer');
+            $result['xnptool_developer'] = xoonips_get_multiple_field_template_vars($detail->getDevelopers(), 'xnptool', 'developer');
 
             if (is_array($tool->getVar('preview'))) {
                 $result['detail']['previews'] = array();
                 foreach ($tool->getVar('preview') as $preview) {
-                    $result['detail']['previews'][]
-                        = $this->getPreviewTemplateVar($preview);
+                    $result['detail']['previews'][] = $this->getPreviewTemplateVar($preview);
                 }
             }
 

@@ -105,28 +105,28 @@ function &get_amazon_data($asin)
         return $ret;
     }
     $item = &$amazon->_data[$asin];
-  // asin
-  $ret['asin'] = $item['ASIN'];
-  // isbn
-  $ret['isbn'] = $item['ISBN'];
-  // ean
-  $ret['ean'] = $item['EAN'];
-  // url
-  $ret['url'] = get_simplified_url($item['DetailPageURL']);
-  // author
-  $ret['author'] = $item['Author'];
-  // year
-  $ret['year'] = '';
-  // - PublicationDate is yyyy-mm-dd or yyyy-mm form
-  $pdate = explode('-', $item['PublicationDate']);
+    // asin
+    $ret['asin'] = $item['ASIN'];
+    // isbn
+    $ret['isbn'] = $item['ISBN'];
+    // ean
+    $ret['ean'] = $item['EAN'];
+    // url
+    $ret['url'] = get_simplified_url($item['DetailPageURL']);
+    // author
+    $ret['author'] = $item['Author'];
+    // year
+    $ret['year'] = '';
+    // - PublicationDate is yyyy-mm-dd or yyyy-mm form
+    $pdate = explode('-', $item['PublicationDate']);
     $pdate_count = count($pdate);
     if ($pdate_count == 2 || $pdate_count == 3) {
         $ret['year'] = sscanf($pdate[0], '%d');
     }
-  // publisher
-  $ret['publisher'] = $item['Publisher'];
-  // title
-  $ret['title'] = $item['Title'];
+    // publisher
+    $ret['publisher'] = $item['Publisher'];
+    // title
+    $ret['title'] = $item['Title'];
 
     return $ret;
 }

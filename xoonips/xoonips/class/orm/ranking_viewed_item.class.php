@@ -59,44 +59,44 @@ class XooNIpsOrmRankingViewedItemHandler extends XooNIpsOrmAbstractRankingHandle
         $this->_set_columns(array('item_id', 'count'));
     }
 
-  /**
-   * insert/upldate/replace object.
-   *
-   * @param object &$obj
-   * @param bool   $force force operation
-   *
-   * @return bool false if failed
-   */
-  public function insert(&$obj, $force = false)
-  {
-      $item_id = $obj->get('item_id');
-      if ($item_id == 0) {
-          // ignore if item id is zero
-      return true;
-      }
+    /**
+     * insert/upldate/replace object.
+     *
+     * @param object &$obj
+     * @param bool   $force force operation
+     *
+     * @return bool false if failed
+     */
+    public function insert(&$obj, $force = false)
+    {
+        $item_id = $obj->get('item_id');
+        if ($item_id == 0) {
+            // ignore if item id is zero
+            return true;
+        }
 
-      return parent::insert($obj, $force);
-  }
+        return parent::insert($obj, $force);
+    }
 
-  /**
-   * increment item viewed counter for updating/rebuilding rankings.
-   *
-   * @param int $item_id item id
-   * @param int $delta   counter delta
-   *
-   * @return bool FALSE if failed
-   */
-  public function increment($item_id, $delta)
-  {
-      $obj = &$this->get($item_id);
-      if (is_object($obj)) {
-          $delta += $obj->get('count');
-      } else {
-          $obj = &$this->create();
-          $obj->set('item_id', $item_id);
-      }
-      $obj->set('count', $delta);
-    // force insertion
-    return $this->insert($obj, true);
-  }
+    /**
+     * increment item viewed counter for updating/rebuilding rankings.
+     *
+     * @param int $item_id item id
+     * @param int $delta   counter delta
+     *
+     * @return bool FALSE if failed
+     */
+    public function increment($item_id, $delta)
+    {
+        $obj = &$this->get($item_id);
+        if (is_object($obj)) {
+            $delta += $obj->get('count');
+        } else {
+            $obj = &$this->create();
+            $obj->set('item_id', $item_id);
+        }
+        $obj->set('count', $delta);
+        // force insertion
+        return $this->insert($obj, true);
+    }
 }

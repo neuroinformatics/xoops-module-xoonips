@@ -32,11 +32,11 @@ if (!defined('XOOPS_ROOT_PATH')) {
 function xoops_module_update_xnpbinder($xoopsMod, $oldversion)
 {
     global $xoopsDB;
-  // remember that version is multiplied with 100 to get an integer
-  switch ($oldversion) {
-  case 340:
-  default:
-  }
+    // remember that version is multiplied with 100 to get an integer
+    switch ($oldversion) {
+    case 340:
+    default:
+    }
 
     return true;
 }

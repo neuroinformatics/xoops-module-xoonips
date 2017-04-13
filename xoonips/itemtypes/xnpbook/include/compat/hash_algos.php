@@ -3,17 +3,17 @@
 /**
  * Replace hash_algos().
  *
- * @category    PHP
+ * @category PHP
  *
- * @license     LGPL - http://www.gnu.org/licenses/lgpl.html
- * @copyright   2004-2007 Aidan Lister <aidan@php.net>, Arpad Ray <arpad@php.net>
+ * @license   LGPL - http://www.gnu.org/licenses/lgpl.html
+ * @copyright 2004-2007 Aidan Lister <aidan@php.net>, Arpad Ray <arpad@php.net>
  *
- * @see        http://php.net/function.hash_algos
+ * @see http://php.net/function.hash_algos
  *
- * @author      revulo <revulon@gmail.com>
+ * @author revulo <revulon@gmail.com>
  *
- * @since       PHP 5.1.2
- * @require     PHP 4.0.0
+ * @since   PHP 5.1.2
+ * @require PHP 4.0.0
  */
 function php_compat_hash_algos()
 {

@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/logic.class.php';
+require_once dirname(__DIR__).'/base/logic.class.php';
 
 class XooNIpsLogicImportReadFile extends XooNIpsLogic
 {
@@ -63,9 +63,7 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
 
         $unzip = &xoonips_getutility('unzip');
         if (!$unzip->open($this->_import_file_path)) {
-            $response->addError(E_XOONIPS_OPEN_FILE,
-                                   "can't open file("
-                                   .$this->_import_file_path.')');
+            $response->addError(E_XOONIPS_OPEN_FILE, "can't open file(".$this->_import_file_path.')');
             $response->setResult(false);
             $unzip->close();
 
@@ -75,9 +73,7 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
         $unzip->close();
 
         if (!$this->_extract_zip()) {
-            $response->addError(E_XOONIPS_OPEN_FILE,
-                                   "can't open file("
-                                   .$this->_import_file_path.')');
+            $response->addError(E_XOONIPS_OPEN_FILE, "can't open file(".$this->_import_file_path.')');
             $response->setResult(false);
 
             return false;
@@ -90,11 +86,8 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
                 $handler = &xoonips_gethandler('xoonips', 'import_item');
                 $item = &$handler->parseXml(file_get_contents($this->_extract_dir.'/'.$fname));
                 $basic = &$item->getVar('basic');
-                $handler_item
-                    = &$this->_get_import_item_handler_by_item_type_id(
-                        $basic->get('item_type_id'));
-                $handler_item->setAttachmentDirectoryPath(
-                    $this->_extract_dir);
+                $handler_item = &$this->_get_import_item_handler_by_item_type_id($basic->get('item_type_id'));
+                $handler_item->setAttachmentDirectoryPath($this->_extract_dir);
                 foreach ($import_index_ids as $index_id) {
                     $handler_item->addImportIndexId($index_id);
                 }
@@ -107,13 +100,9 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
         $itemtype_handler = &xoonips_getormhandler('xoonips', 'item_type');
         foreach (array_keys($this->_items) as $key) {
             $basic = &$this->_items[$key]->getVar('basic');
-            $itemtype
-                = &$itemtype_handler->get($basic->get('item_type_id'));
-            $handler
-                = &xoonips_gethandler($itemtype->get('name'),
-                                       'import_item');
-            $handler->onReadFileFinished(
-                $this->_items[$key], $this->_items);
+            $itemtype = &$itemtype_handler->get($basic->get('item_type_id'));
+            $handler = &xoonips_gethandler($itemtype->get('name'), 'import_item');
+            $handler->onReadFileFinished($this->_items[$key], $this->_items);
         }
 
         $this->_check_import_items_and_set_errors();
@@ -138,14 +127,8 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
             $pseudo_id = $item->getPseudoId();
             if (isset($pseudo_id2i[$pseudo_id])) {
                 foreach ($pseudo_id2i[$pseudo_id] as $j) {
-                    $this->_items[$i]->setErrors(
-                        E_XOONIPS_PSEUDO_ID_CONFLICT,
-                        " pseudo_id($pseudo_id) conflicts with "
-                        .$this->_items[$j]->getFilename());
-                    $this->_items[$j]->setErrors(
-                        E_XOONIPS_PSEUDO_ID_CONFLICT,
-                        " pseudo_id($pseudo_id) conflicts with "
-                        .$this->_items[$i]->getFilename());
+                    $this->_items[$i]->setErrors(E_XOONIPS_PSEUDO_ID_CONFLICT, " pseudo_id($pseudo_id) conflicts with ".$this->_items[$j]->getFilename());
+                    $this->_items[$j]->setErrors(E_XOONIPS_PSEUDO_ID_CONFLICT, " pseudo_id($pseudo_id) conflicts with ".$this->_items[$i]->getFilename());
                 }
                 $pseudo_id2i[$pseudo_id][] = $i;
             } else {
@@ -164,10 +147,7 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
             }
             foreach ($item->getVar('related_tos') as $related_to) {
                 if (!isset($valid_pseudo_ids[$related_to->get('item_id')])) {
-                    $this->_items[$key]->setErrors(
-                        E_XOONIPS_RELATED_ITEM_IS_NOT_FOUND,
-                        'unresolvable related_to(id='
-                        .$related_to->get('item_id').')');
+                    $this->_items[$key]->setErrors(E_XOONIPS_RELATED_ITEM_IS_NOT_FOUND, 'unresolvable related_to(id='.$related_to->get('item_id').')');
                 }
             }
         }
@@ -182,14 +162,8 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
             }
             if (isset($doi2i[$doi])) {
                 foreach ($doi2i[$doi] as $j) {
-                    $this->_items[$i]->setErrors(
-                        E_XOONIPS_DOI_CONFLICT,
-                        " doi($doi) conflicts with "
-                        .$this->_items[$j]->getFilename());
-                    $this->_items[$j]->setErrors(
-                        E_XOONIPS_DOI_CONFLICT,
-                        " doi($doi) conflicts with "
-                        .$this->_items[$i]->getFilename());
+                    $this->_items[$i]->setErrors(E_XOONIPS_DOI_CONFLICT, " doi($doi) conflicts with ".$this->_items[$j]->getFilename());
+                    $this->_items[$j]->setErrors(E_XOONIPS_DOI_CONFLICT, " doi($doi) conflicts with ".$this->_items[$i]->getFilename());
                 }
                 $doi2i[$doi][] = $i;
             } else {
@@ -255,16 +229,14 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
                 }
             } else {
                 if (!unlink($file)) {
-                    $this->_response->addError(
-                        E_XOONIPS_FILE_SYSTEM, "can't remove file(${file})");
+                    $this->_response->addError(E_XOONIPS_FILE_SYSTEM, "can't remove file(${file})");
 
                     return false;
                 }
             }
         }
         if (!rmdir($path)) {
-            $this->_response->addError(
-                E_XOONIPS_FILE_SYSTEM, "can't remove directory(${path})");
+            $this->_response->addError(E_XOONIPS_FILE_SYSTEM, "can't remove directory(${path})");
 
             return false;
         }

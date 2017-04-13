@@ -37,18 +37,18 @@ if (!defined('XOOPS_ROOT_PATH')) {
 class XooNIpsUtilityFile extends XooNIpsUtility
 {
     /**
-   * magic file path.
-   *
-   * @var string
-   */
-  public $magic_file_path;
+     * magic file path.
+     *
+     * @var string
+     */
+    public $magic_file_path;
 
-  /**
-   * map of mime type.
-   *
-   * @var array
-   */
-  public $mimetype_map = array(
+    /**
+     * map of mime type.
+     *
+     * @var array
+     */
+    public $mimetype_map = array(
     '' => array(
       'dtd' => 'application/xml-dtd',
       'jnlp' => 'application/x-java-jnlp-file',
@@ -148,121 +148,121 @@ class XooNIpsUtilityFile extends XooNIpsUtility
       'xml' => 'application/xml',
       'xsl' => 'application/xml',
     ),
-  );
+    );
 
-  /**
-   * constructor.
-   */
-  public function XooNIpsUtilityFile()
-  {
-      $this->setSingleton();
-      $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
-      $this->magic_file_path = $xconfig_handler->getValue('magic_file_path');
-    // append additional mimetype mapping
-    $this->mimetype_map['application/zip'] = $this->mimetype_map['application/x-zip'];
-  }
+    /**
+     * constructor.
+     */
+    public function XooNIpsUtilityFile()
+    {
+        $this->setSingleton();
+        $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+        $this->magic_file_path = $xconfig_handler->getValue('magic_file_path');
+        // append additional mimetype mapping
+        $this->mimetype_map['application/zip'] = $this->mimetype_map['application/x-zip'];
+    }
 
-  /**
-   * get file mime type.
-   *
-   * @param string $file_path local file path
-   * @param string $file_name original file name
-   *
-   * @return string mime type
-   */
-  public function get_mimetype($file_path, $file_name)
-  {
-      // get file inforamation
-    if (extension_loaded('fileinfo')) {
-        if ($this->magic_file_path == '') {
-            $finfo = @finfo_open(FILEINFO_MIME);
+    /**
+     * get file mime type.
+     *
+     * @param string $file_path local file path
+     * @param string $file_name original file name
+     *
+     * @return string mime type
+     */
+    public function get_mimetype($file_path, $file_name)
+    {
+        // get file inforamation
+        if (extension_loaded('fileinfo')) {
+            if ($this->magic_file_path == '') {
+                $finfo = @finfo_open(FILEINFO_MIME);
+            } else {
+                $finfo = @finfo_open(FILEINFO_MIME, $this->magic_file_path);
+            }
+            if (!$finfo) {
+                return false;
+            }
+            $mimetype = finfo_file($finfo, $file_path);
+            finfo_close($finfo);
         } else {
-            $finfo = @finfo_open(FILEINFO_MIME, $this->magic_file_path);
+            // try to use mime_content_type()
+            $mimetype = mime_content_type($file_path);
         }
-        if (!$finfo) {
-            return false;
+        // trim additional information
+        $mimetype = preg_replace('/[,; ].*$/', '', $mimetype);
+        // get original extension
+        $pathi = pathinfo($file_name);
+        $ext = isset($pathi['extension']) ? $pathi['extension'] : '';
+        // override mimetype
+        if ($ext != '' && isset($this->mimetype_map[$mimetype][$ext])) {
+            $mimetype = $this->mimetype_map[$mimetype][$ext];
         }
-        $mimetype = finfo_file($finfo, $file_path);
-        finfo_close($finfo);
-    } else {
-        // try to use mime_content_type()
-      $mimetype = mime_content_type($file_path);
-    }
-    // trim additional information
-    $mimetype = preg_replace('/[,; ].*$/', '', $mimetype);
-    // get original extension
-    $pathi = pathinfo($file_name);
-      $ext = isset($pathi['extension']) ? $pathi['extension'] : '';
-    // override mimetype
-    if ($ext != '' && isset($this->mimetype_map[$mimetype][$ext])) {
-        $mimetype = $this->mimetype_map[$mimetype][$ext];
-    }
-      if ($mimetype == '') {
-          // fail safe
-      $mimetype = 'application/octet-stream';
-      }
+        if ($mimetype == '') {
+            // fail safe
+            $mimetype = 'application/octet-stream';
+        }
 
-      return $mimetype;
-  }
-
-  /**
-   * get thumbnail data.
-   *
-   * @param string $file_path file path
-   * @param string $mimetype  mime type of file
-   *
-   * @return string created thumbnail
-   */
-  public function get_thumbnail($file_path, $mimetype)
-  {
-      $image_id = '';
-      switch ($mimetype) {
-    case 'image/png':
-      $image_id = @imagecreatefrompng($file_path);
-      break;
-    case 'image/gif':
-      $image_id = @imagecreatefromgif($file_path);
-      break;
-    case 'image/jpeg':
-      $image_id = @imagecreatefromjpeg($file_path);
-      break;
+        return $mimetype;
     }
-      if ($image_id === '') {
-          return null;
-      }
-      $width = imagesx($image_id);
-      $height = imagesy($image_id);
-    // maximum file size in thumbnail
-    $max_width = 100;
-      $max_height = 100;
-      if ($max_width < $width || $max_height < $height) {
-          // If size of image file is too large, need to reduce it.
-      $scale_x = $max_width / $width;
-          $scale_y = $max_height / $height;
-          $scale = min($scale_x, $scale_y);
-          $new_width = round($width * $scale);
-          $new_height = round($height * $scale);
-      // resize
-      $new_image_id = imagecreatetruecolor($new_width, $new_height);
-          $result = imagecopyresampled($new_image_id, $image_id, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-          imagedestroy($image_id);
-          $image_id = $new_image_id;
-          $width = $new_width;
-          $height = $new_height;
-      }
-      $tmpfile = tempnam('/tmp', 'XooNIpsThumbnail');
-      if ($tmpfile === false) {
-          return null;
-      }
-      @unlink($tmpfile);
-      $result = imagepng($image_id, $tmpfile);
-      imagedestroy($image_id);
-      if ($result == false) {
-          return null;
-      }
-      $thumbnail = file_get_contents($tmpfile);
-      @unlink($tmpfile);
 
-      return $thumbnail;
-  }
+    /**
+     * get thumbnail data.
+     *
+     * @param string $file_path file path
+     * @param string $mimetype  mime type of file
+     *
+     * @return string created thumbnail
+     */
+    public function get_thumbnail($file_path, $mimetype)
+    {
+        $image_id = '';
+        switch ($mimetype) {
+        case 'image/png':
+            $image_id = @imagecreatefrompng($file_path);
+            break;
+        case 'image/gif':
+            $image_id = @imagecreatefromgif($file_path);
+            break;
+        case 'image/jpeg':
+            $image_id = @imagecreatefromjpeg($file_path);
+            break;
+        }
+        if ($image_id === '') {
+            return null;
+        }
+        $width = imagesx($image_id);
+        $height = imagesy($image_id);
+        // maximum file size in thumbnail
+        $max_width = 100;
+        $max_height = 100;
+        if ($max_width < $width || $max_height < $height) {
+            // If size of image file is too large, need to reduce it.
+            $scale_x = $max_width / $width;
+            $scale_y = $max_height / $height;
+            $scale = min($scale_x, $scale_y);
+            $new_width = round($width * $scale);
+            $new_height = round($height * $scale);
+            // resize
+            $new_image_id = imagecreatetruecolor($new_width, $new_height);
+            $result = imagecopyresampled($new_image_id, $image_id, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+            imagedestroy($image_id);
+            $image_id = $new_image_id;
+            $width = $new_width;
+            $height = $new_height;
+        }
+        $tmpfile = tempnam('/tmp', 'XooNIpsThumbnail');
+        if ($tmpfile === false) {
+            return null;
+        }
+        @unlink($tmpfile);
+        $result = imagepng($image_id, $tmpfile);
+        imagedestroy($image_id);
+        if ($result == false) {
+            return null;
+        }
+        $thumbnail = file_get_contents($tmpfile);
+        @unlink($tmpfile);
+
+        return $thumbnail;
+    }
 }

@@ -26,8 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(dirname(__DIR__)).'/xoonips/class/base/itemeventlistener.class.php';
-include_once dirname(dirname(__DIR__)).'/xoonips/include/notification.inc.php';
+require_once dirname(dirname(__DIR__)).'/xoonips/class/base/itemeventlistener.class.php';
+require_once dirname(dirname(__DIR__)).'/xoonips/include/notification.inc.php';
 
 class XNPBinderItemEventListener extends XooNIpsItemEventListener
 {
@@ -69,11 +69,13 @@ class XNPBinderItemEventListener extends XooNIpsItemEventListener
                 $module = $mhandler->getByDirName('xnpbinder');
 
                 $nhandler = &xoonips_gethandler('xoonips', 'notification');
-                $nhandler->triggerEvent2('user', 0, 'item_updated',
+                $nhandler->triggerEvent2(
+                    'user', 0, 'item_updated',
                     _MD_XNPBINDER_USER_CONTENT_EMPTY_NOTIFYSBJ,
                     $nhandler->getTemplateDirByMid($module->mid()),
                     'user_content_empty_notify',
-                    $tags, array($basic->get('uid')));
+                    $tags, array($basic->get('uid'))
+                );
             }
             if (!$bilink_handler->delete($bilink)) {
                 die('cannnot remove a deleted item from a binder.');
@@ -84,7 +86,7 @@ class XNPBinderItemEventListener extends XooNIpsItemEventListener
     public function _notify()
     {
         /*
-  from XooNIpsLogicRemoveItem
+        from XooNIpsLogicRemoveItem
         // if public binder becomes empty, notify to moderator.
         $empty_binder_ids = array();
         $bilink_handler =& xoonips_getormhandler('xoonips', 'binder_item_link');
@@ -106,9 +108,9 @@ class XNPBinderItemEventListener extends XooNIpsItemEventListener
                 }
             }
         }
-*/
-/*
-  from XooNIpsLogicRemoveItem
+        */
+        /*
+        from XooNIpsLogicRemoveItem
         $notification_handler = &xoops_gethandler('notification');
         foreach($empty_binder_ids as $binder_id) {
             $binder = $item_handler->get($binder_id);
@@ -120,6 +122,6 @@ class XNPBinderItemEventListener extends XooNIpsItemEventListener
             $tags['TITLE'] = $titles[0]->get('title');
             $notification_handler->triggerEvent('administrator', 0, 'binder_content_empty', $tags);
         }
-*/
+        */
     }
 }

@@ -63,7 +63,7 @@ function download_create_zipfile($file_id, $item_id, $file_name, $metadata, $fil
     }
     if (!file_exists($file_path)) {
         // file not found
-    return false;
+        return false;
     }
     // open metafile
     $dirutil = &xoonips_getutility('directory');
@@ -71,7 +71,7 @@ function download_create_zipfile($file_id, $item_id, $file_name, $metadata, $fil
     $metafile_fp = $dirutil->mkstemp($metafile_path);
     if ($metafile_fp === false) {
         // failed to create temporary file for metadata
-    return false;
+        return false;
     }
     register_shutdown_function('download_unlink', $metafile_path);
     // write metafile
@@ -79,8 +79,8 @@ function download_create_zipfile($file_id, $item_id, $file_name, $metadata, $fil
     $metafile_body = '';
     foreach ($metadata as $key => $val) {
         $metafile_body .= $key;
-    // convert dos and mac new line code to unix
-    $val = str_replace("\r", "\n", str_replace("\r\n", "\n", $val));
+        // convert dos and mac new line code to unix
+        $val = str_replace("\r", "\n", str_replace("\r\n", "\n", $val));
         $ar = explode("\n", $val);
         $metafile_body .= ': ';
         if (count($ar) <= 1) {
@@ -101,14 +101,14 @@ function download_create_zipfile($file_id, $item_id, $file_name, $metadata, $fil
     $zipfile_fp = $dirutil->mkstemp($zipfile_path);
     if ($zipfile_fp === false) {
         // failed to create temporary file for zip
-    return false;
+        return false;
     }
     register_shutdown_function('download_unlink', $zipfile_path);
     fclose($zipfile_fp);
     $ziputil = &xoonips_getutility('zip');
     if ($ziputil->open($zipfile_path) == false) {
         // failed to open zip file
-    return false;
+        return false;
     }
     // write zipfile
     $ziputil->add($file_path, $file_name);
@@ -128,8 +128,8 @@ function download_unlink($file_path)
 // avoid IE bug1 -> http://jp2.php.net/header  Harry 10-Dec-2004 03:26
 session_cache_limiter('none');
 
-include 'include/common.inc.php';
-include 'class/base/gtickets.php';
+require 'include/common.inc.php';
+require 'class/base/gtickets.php';
 
 $formdata = &xoonips_getutility('formdata');
 $download = &xoonips_getutility('download');
@@ -193,9 +193,9 @@ $itemtype_displayname = $itemtype_objs[0]->get('display_name');
 // load item type's view.php
 if (is_null($itemtype_viewphp)) {
     // maybe this is index
-  download_error(500, _MD_XOONIPS_ITEM_BAD_FILE_TYPE);
+    download_error(500, _MD_XOONIPS_ITEM_BAD_FILE_TYPE);
 }
-include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype_viewphp;
+require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype_viewphp;
 
 // check the download limitation
 $dllimit_func = $itemtype_name.'GetAttachmentDownloadLimitOption';

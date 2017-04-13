@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/view.class.php';
+require_once dirname(__DIR__).'/base/view.class.php';
 
 class XooNIpsViewImportLog extends XooNIpsView
 {
@@ -45,8 +45,7 @@ class XooNIpsViewImportLog extends XooNIpsView
             include XOOPS_ROOT_PATH.'/header.php';
             $xoopsTpl->assign('result', $this->_params['result']);
             $xoopsTpl->assign('filename', $textutil->html_special_chars($this->_params['filename']));
-            $xoopsTpl->assign('number_of_items',
-                                 $this->_number_of_items());
+            $xoopsTpl->assign('number_of_items', $this->_number_of_items());
             $xoopsTpl->assign('uname', $textutil->html_special_chars($this->_params['uname']));
             $xoopsTpl->assign('errors', $this->_params['errors']);
             $xoopsTpl->assign('log', $textutil->html_special_chars($this->_get_item_log()));
@@ -55,8 +54,7 @@ class XooNIpsViewImportLog extends XooNIpsView
             include XOOPS_ROOT_PATH.'/header.php';
             $xoopsTpl->assign('result', false);
             $xoopsTpl->assign('filename', $this->_params['filename']);
-            $xoopsTpl->assign('number_of_items',
-                                 $this->_number_of_items());
+            $xoopsTpl->assign('number_of_items', $this->_number_of_items());
             $xoopsTpl->assign('uname', $this->_params['uname']);
             $xoopsTpl->assign('errors', $this->_params['errors']);
             $xoopsTpl->assign('log', $this->_get_item_log());
@@ -70,20 +68,14 @@ class XooNIpsViewImportLog extends XooNIpsView
         $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
         foreach ($this->_params['import_items'] as $item) {
             $basic = &$item->getVar('basic');
-            $itemtype
-                = &$item_type_handler->get($basic->get('item_type_id'));
-            $handler
-                = &xoonips_gethandler($itemtype->get('name'),
-                                       'import_item');
+            $itemtype = &$item_type_handler->get($basic->get('item_type_id'));
+            $handler = &xoonips_gethandler($itemtype->get('name'), 'import_item');
             $log .= "\n\n[item]\n".$handler->getImportLog($item);
             foreach ($item->getErrors() as $e) {
                 $log .= "\nerror $e";
             }
 
-            foreach (array_merge($item->getDuplicateUnupdatableItemId(),
-                                  $item->getDuplicateUpdatableItemId(),
-                                  $item->getDuplicateLockedItemId())
-                     as $item_id) {
+            foreach (array_merge($item->getDuplicateUnupdatableItemId(), $item->getDuplicateUpdatableItemId(), $item->getDuplicateLockedItemId()) as $item_id) {
                 $log .= "\nwarning conflict with "
                     .xnpGetItemDetailURL($item_id);
             }

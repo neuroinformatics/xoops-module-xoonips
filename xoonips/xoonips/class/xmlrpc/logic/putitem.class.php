@@ -26,11 +26,11 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipserror.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipsresponse.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipserror.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipsresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
 
 /**
  * @brief Class that executes logic specified by XML-RPC putItem request

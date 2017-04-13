@@ -26,8 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/action.class.php';
-include_once dirname(__DIR__).'/base/logicfactory.class.php';
+require_once dirname(__DIR__).'/base/action.class.php';
+require_once dirname(__DIR__).'/base/logicfactory.class.php';
 require_once dirname(__DIR__).'/base/gtickets.php';
 
 class XooNIpsActionImportResolveConflict extends XooNIpsAction
@@ -69,28 +69,22 @@ class XooNIpsActionImportResolveConflict extends XooNIpsAction
             if ('xoonips_index' == $itemtype->get('name')) {
                 continue;
             }
-            $handler = &xoonips_gethandler($itemtype->get('name'),
-                                            'import_item');
+            $handler = &xoonips_gethandler($itemtype->get('name'), 'import_item');
             $handler->create();
         }
 
         $sess_hander = &xoonips_getormhandler('xoonips', 'session');
         $sess = &$sess_hander->get(session_id());
         $session = unserialize($sess->get('sess_data'));
-        $this->_collection = unserialize(
-            gzuncompress(base64_decode($session['xoonips_import_items'])));
+        $this->_collection = unserialize(gzuncompress(base64_decode($session['xoonips_import_items'])));
         xoonips_validate_request($this->_collection);
 
-        $this->_collection->setImportAsNewOption(
-            !is_null($this->_formdata->getValue('post', 'import_as_new', 'i', false)));
+        $this->_collection->setImportAsNewOption(!is_null($this->_formdata->getValue('post', 'import_as_new', 'i', false)));
         $items = &$this->_collection->getItems();
         foreach (array_keys($items) as $key) {
-            if (in_array($items[$key]->getPseudoId(),
-                          $this->getUpdatablePseudoId())) {
+            if (in_array($items[$key]->getPseudoId(), $this->getUpdatablePseudoId())) {
                 // set update flag of displayed item
-                $items[$key]->setUpdateFlag(
-                    in_array($items[$key]->getPseudoId(),
-                              $this->getUpdatePseudoId()));
+                $items[$key]->setUpdateFlag(in_array($items[$key]->getPseudoId(), $this->getUpdatePseudoId()));
             }
         }
 
@@ -114,27 +108,22 @@ class XooNIpsActionImportResolveConflict extends XooNIpsAction
         $sess_handler = &xoonips_getormhandler('xoonips', 'session');
         $sess = &$sess_handler->get(session_id());
         $session = unserialize($sess->get('sess_data'));
-        $session['xoonips_import_items']
-            = base64_encode(gzcompress(serialize($this->_collection)));
+        $session['xoonips_import_items'] = base64_encode(gzcompress(serialize($this->_collection)));
         $sess->set('sess_data', serialize($session));
         $sess_handler->insert($sess);
 
         if ($this->_formdata->getValue('post', 'resolve_conflict_flag', 'i', false)
             && !$success['private_item_number_limit_over']
-            && !$success['private_item_storage_limit_over']) {
-            $this->_view_params['ticket_html']
-                = $GLOBALS['xoopsGTicket']->getTicketHtml(__LINE__, 600, 'import');
+            && !$success['private_item_storage_limit_over']
+        ) {
+            $this->_view_params['ticket_html'] = $GLOBALS['xoopsGTicket']->getTicketHtml(__LINE__, 600, 'import');
             $this->_view_name = 'import_confirm';
         } else {//for page navigation or number and storage limits over
-            $this->_view_params['import_as_new_flag']
-                = $this->_collection->getImportAsNewOption();
+            $this->_view_params['import_as_new_flag'] = $this->_collection->getImportAsNewOption();
             $this->_view_params['page'] = $page;
-            $this->_view_params['import_items']
-                = $this->_collection->getItems();
-            $this->_view_params['private_item_number_limit_over']
-                = $success['private_item_number_limit_over'];
-            $this->_view_params['private_item_storage_limit_over']
-                = $success['private_item_storage_limit_over'];
+            $this->_view_params['import_items'] = $this->_collection->getItems();
+            $this->_view_params['private_item_number_limit_over'] = $success['private_item_number_limit_over'];
+            $this->_view_params['private_item_storage_limit_over'] = $success['private_item_storage_limit_over'];
             $this->_view_name = 'import_conflict';
         }
     }
@@ -147,8 +136,7 @@ class XooNIpsActionImportResolveConflict extends XooNIpsAction
     public function getUpdatablePseudoId()
     {
         $updatable_pseudo_id = $this->_formdata->getValueArray('post', 'updatable_pseudo_id', 'i', false);
-        if (is_null($updatable_pseudo_id)
-            || !is_array($updatable_pseudo_id)) {
+        if (is_null($updatable_pseudo_id) || !is_array($updatable_pseudo_id)) {
             return array();
         }
 
@@ -163,8 +151,7 @@ class XooNIpsActionImportResolveConflict extends XooNIpsAction
     public function getUpdatePseudoId()
     {
         $update_pseudo_id = $this->_formdata->getValueArray('post', 'update_pseudo_id', 'i', false);
-        if (is_null($update_pseudo_id)
-            || !is_array($update_pseudo_id)) {
+        if (is_null($update_pseudo_id) || !is_array($update_pseudo_id)) {
             return array();
         }
 

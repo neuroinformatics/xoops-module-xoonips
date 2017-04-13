@@ -34,7 +34,7 @@ function _xoonips_helper_quick_search_cmp($a, $b)
 {
     if ($a['weight'] == $b['weight']) {
         return($a['mid'] < $b['mid']) ? -1 : 1;
-    // mid must be uniq
+        // mid must be uniq
     }
 
     return($a['weight'] < $b['weight']) ? -1 : 1;
@@ -54,7 +54,7 @@ function b_xoonips_quick_search_show()
         $target_user = $xconfig_handler->getValue('public_item_target_user');
         if ($target_user != 'all') {
             // 'platform'
-        return false;
+            return false;
         }
     }
 

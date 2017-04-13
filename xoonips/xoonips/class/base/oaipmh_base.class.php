@@ -45,16 +45,24 @@ $langman->read('metadata.php');
 
 class OAIPMH
 {
-    /** hash to manage OAIPMHHandler ( key=name of metadataPrefix, value=instance of OAIPMHHandler) */
+    /**
+     * hash to manage OAIPMHHandler ( key=name of metadataPrefix, value=instance of OAIPMHHandler).
+     */
     public $handlers;
 
-    /** base URL of repository */
+    /**
+     * base URL of repository.
+     */
     public $baseURL;
 
-    /** name of repository */
+    /**
+     * name of repository.
+     */
     public $repositoryName;
 
-    /** array of administrator's e-mail address */
+    /**
+     * array of administrator's e-mail address.
+     */
     public $adminEmails;
 
     /**
@@ -404,7 +412,7 @@ class OAIPMH
         if (isset($args['resumptionToken'])) {
             $resumptionToken = $args['resumptionToken'];
             $result = getResumptionToken($resumptionToken);
-// echo "result="; var_dump($result); echo "\n";
+            // echo "result="; var_dump($result); echo "\n";
             if (count($result) > 1) {
                 if (isset($result['last_item_id'])) {
                     $start_index = $result['last_item_id'];
@@ -579,7 +587,8 @@ class OAIPMHHandler
             $item_info = '';
             $res = xnpGetItemIdByDoi($parsed['doi'], $iids);
             if ($res == RES_OK && isset($iids[0])
-                && xnp_get_item($_SESSION['XNPSID'], $iids[0], $item_info) == RES_OK) {
+                && xnp_get_item($_SESSION['XNPSID'], $iids[0], $item_info) == RES_OK
+            ) {
                 $id_str = $parsed['nijc_code'].'/'.$item_info['item_type_id'].'.'.$iids[0];
             } else {
                 return '';

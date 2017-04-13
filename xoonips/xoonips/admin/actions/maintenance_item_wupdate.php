@@ -42,8 +42,8 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 }
 
 // load libraries
-include_once '../include/libitem.php';
-include_once '../include/notification.inc.php';
+require_once '../include/libitem.php';
+require_once '../include/notification.inc.php';
 
 // get requests
 $get_keys = array(

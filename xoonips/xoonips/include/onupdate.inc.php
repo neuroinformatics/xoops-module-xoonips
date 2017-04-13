@@ -399,10 +399,10 @@ SQL;
             return false;
         }
     case 332:
-    // Notice:
-    //   version 333-339 are reserved number for future releases of
-    //   RELENG_3_3 branch. don't change database structure after
-    //   3.40 released.
+        // Notice:
+        //   version 333-339 are reserved number for future releases of
+        //   RELENG_3_3 branch. don't change database structure after
+        //   3.40 released.
     case 333:
     case 334:
     case 335:

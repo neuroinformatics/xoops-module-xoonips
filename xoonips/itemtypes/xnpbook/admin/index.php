@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include '../../../include/cp_header.php';
+require '../../../include/cp_header.php';
 
 // load xoonips
 if (!file_exists('../../xoonips/condefs.php')) {
@@ -37,8 +37,8 @@ if (!file_exists('../../xoonips/condefs.php')) {
     xoops_cp_footer();
     exit();
 }
-include '../../xoonips/condefs.php';
-include '../../xoonips/include/functions.php';
+require '../../xoonips/condefs.php';
+require '../../xoonips/include/functions.php';
 
 $textutil = &xoonips_getutility('text');
 
@@ -47,10 +47,10 @@ $title = _AM_XNPBOOK_TITLE;
 $mid = $xoopsModule->getVar('mid');
 if (defined('XOOPS_CUBE_LEGACY')) {
     // for XOOPS Cube 2.1 Legacy
-  $pref_url = XOOPS_URL.'/modules/legacy/admin/index.php?action=PreferenceEdit&confmod_id='.$mid;
+    $pref_url = XOOPS_URL.'/modules/legacy/admin/index.php?action=PreferenceEdit&confmod_id='.$mid;
 } else {
     // for XOOPS 2.0
-  $pref_url = XOOPS_URL.'/modules/system/admin.php?fct=preferences&op=showmod&mod='.$mid;
+    $pref_url = XOOPS_URL.'/modules/system/admin.php?fct=preferences&op=showmod&mod='.$mid;
 }
 $pref_title = _PREFERENCES;
 $pref_url = $textutil->html_special_chars($pref_url);

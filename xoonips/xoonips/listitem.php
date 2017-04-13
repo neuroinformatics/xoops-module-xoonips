@@ -27,11 +27,11 @@
 // ------------------------------------------------------------------------- //
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
-include_once 'include/lib.php';
-include_once 'include/AL.php';
-include_once '../../class/xoopstree.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
+require_once '../../class/xoopstree.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 
@@ -86,7 +86,7 @@ if (xnp_get_item_types($tmp) != RES_OK) {
 
 $xoopsOption['template_main'] = 'xoonips_itemlist.html';
 if ($print) {
-    require_once XOOPS_ROOT_PATH.'/class/template.php';
+    include_once XOOPS_ROOT_PATH.'/class/template.php';
     $xoopsTpl = new XoopsTpl();
     xoops_header(false);
     echo "</head><body onload='window.print();'>\n";
@@ -120,13 +120,15 @@ $xoopsTpl->assign('title_page', _MD_XOONIPS_ITEM_LISTING_ITEM);
 $xoopsTpl->assign('order_by_label', _MD_XOONIPS_ITEM_ORDER_BY);
 $xoopsTpl->assign('item_count_label', _MD_XOONIPS_ITEM_NUM_OF_ITEM_PER_PAGE);
 //order_by_select: array( "variable name" => "name for view", ... )
-$xoopsTpl->assign('order_by_select', array(
+$xoopsTpl->assign(
+    'order_by_select', array(
     'title' => _MD_XOONIPS_ITEM_TITLE_LABEL,
     'doi' => _MD_XOONIPS_ITEM_DOI_LABEL,
     'last_update_date' => _MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL,
     'creation_date' => _MD_XOONIPS_ITEM_CREATION_DATE_LABEL,
     'publication_date' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
-));
+    )
+);
 $xoopsTpl->assign('order_by', $textutil->html_special_chars($orderby));
 
 $xoopsTpl->assign('item_count_select', array('20', '50', '100'));
@@ -228,9 +230,7 @@ if (isset($index_id)) {
 
     // check that index is editable
     $handler = &xoonips_getormhandler('xoonips', 'index');
-    $xoopsTpl->assign('edit_index', $handler->getPerm($index_id,
-                                                         $xoopsUser ? $xoopsUser->getVar('uid') : UID_GUEST,
-                                                         'write'));
+    $xoopsTpl->assign('edit_index', $handler->getPerm($index_id, $xoopsUser ? $xoopsUser->getVar('uid') : UID_GUEST, 'write'));
 }
 
 //centering current page number(5th of $pages)

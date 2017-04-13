@@ -26,9 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_item_event_dispatcher.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_item_event_dispatcher.class.php';
 
 /**
  * subclass of XooNIpsLogic(removeItem).
@@ -149,10 +149,7 @@ class XooNIpsLogicRemoveItem extends XooNIpsLogic
             $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
             $response->setResult(false);
             if ($item_lock_handler->isLocked($item_id)) {
-                $error->add(XNPERR_ACCESS_FORBIDDEN,
-                    'cannot remove item because item is '.
-                    $this->getLockTypeString(
-                        $item_lock_handler->getLockType($item_id)));
+                $error->add(XNPERR_ACCESS_FORBIDDEN, 'cannot remove item because item is '.$this->getLockTypeString($item_lock_handler->getLockType($item_id)));
             } else {
                 $error->add(XNPERR_ACCESS_FORBIDDEN);
             }

@@ -63,25 +63,20 @@ class XooNIpsActionFactory
         if (false !== strstr($name, '..')) {
             return $falseVar;
         }
-        $include_file = XOOPS_ROOT_PATH
-            .'/modules/xoonips/class/action/'
-            .strtolower($name).'.class.php';
+        $include_file = XOOPS_ROOT_PATH.'/modules/xoonips/class/action/'.strtolower($name).'.class.php';
         if (file_exists($include_file)) {
             include_once $include_file;
         } else {
             return $falseVar;
         }
 
-        $class = 'XooNIpsAction'
-            .str_replace(' ', '',
-                           ucwords(str_replace('_', ' ', $name)));
+        $class = 'XooNIpsAction'.str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
         if (class_exists($class)) {
             $action = new $class();
         }
 
         if (!isset($action)) {
-            trigger_error('Handler does not exist. Name: '
-                          .$name, E_USER_ERROR);
+            trigger_error('Handler does not exist. Name: '.$name, E_USER_ERROR);
         }
         // return result
         if (isset($action)) {

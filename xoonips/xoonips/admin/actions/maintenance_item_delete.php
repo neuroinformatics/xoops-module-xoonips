@@ -56,5 +56,5 @@ $confirm_desc = _AM_XOONIPS_MAINTENANCE_ITEM_DELETE_CONFIRM;
 $confirm = _AM_XOONIPS_MSG_DELETE_CONFIRM;
 $nextaction = 'dupdate';
 $submit = _AM_XOONIPS_LABEL_DELETE;
-include 'actions/maintenance_item_idxselect.php';
+require 'actions/maintenance_item_idxselect.php';
 exit();

@@ -26,10 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/base/transaction.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/notification.inc.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/notification.inc.php';
 
 /**
  * subclass of XooNIpsLogic(getFileMetadata).
@@ -122,14 +121,12 @@ class XooNIpsLogicGetFileMetadata extends XooNIpsLogic
         $item_type = $item_type_handler->get($basic->get('item_type_id'));
         if (!$item_type) {
             $response->setResult(false);
-            $error->add(XNPERR_SERVER_ERROR,
-                        'cannot get itemtype of that item');
+            $error->add(XNPERR_SERVER_ERROR, 'cannot get itemtype of that item');
 
             return false;
         }
         // item_type, item_id -> detail
-        $detail_item_handler = &xoonips_getormcompohandler(
-            $item_type->get('name'), 'item');
+        $detail_item_handler = &xoonips_getormcompohandler($item_type->get('name'), 'item');
         $detail_item = $detail_item_handler->get($item_id);
         if (!$detail_item) {
             $response->setResult(false);
@@ -155,8 +152,7 @@ class XooNIpsLogicGetFileMetadata extends XooNIpsLogic
         $iteminfo = $detail_item_handler->getItemInfo();
         if ($iteminfo['files']['main'] == $file_type->get('name')) {
             $download_count = $file->get('download_count');
-            $download_count_sum = $file_handler->getTotalDownloadCount(
-                $item_id, $file_type->get('name'));
+            $download_count_sum = $file_handler->getTotalDownloadCount($item_id, $file_type->get('name'));
         } else {
             $download_count = 0;
             $download_count_sum = 0;

@@ -78,71 +78,71 @@ function &get_pubmed_data($pmid)
         return $ret;
     }
     $article = &$pubmed->_data[$pmid];
-  // pubmed id
-  $ret['pmid'] = $article['PMID'];
-  // title
-  $ret['title'] = $article['ArticleTitle'];
+    // pubmed id
+    $ret['pmid'] = $article['PMID'];
+    // title
+    $ret['title'] = $article['ArticleTitle'];
     if (preg_match('/^\\[(.*)\\]$/', $ret['title'], $matches)) {
         $ret['title'] = $matches[1];
     }
-  // volume
-  $ret['volume'] = ($article['Journal_Volume'] != '') ? $article['Journal_Volume'] : '';
-  // issue
-  $ret['issue'] = ($article['Journal_Issue'] != '') ? $article['Journal_Issue'] : '';
-  // publication_year
-  if ($article['Journal_PubDate_Year'] != '') {
-      $ret['year'] = $article['Journal_PubDate_Year'];
-  } else {
-      if (preg_match('/(\\d\\d\\d\\d)\\s.*/', $article['Journal_MedlineDate'], $matches)) {
-          $ret['year'] = $matches[1];
-      } else {
-          $ret['year'] = '';
-      }
-  }
-  // journal
-  if ($article['Journal_Title'] != '') {
-      $ret['journal'] = $article['Journal_Title'];
-  } elseif ($article['MedlineTA'] != '') {
-      $journal_esearch = new XooNIps_PubMed_JournalEsearch();
-      if ($journal_esearch->set_journal_ta($article['MedlineTA'])) {
-          if ($journal_esearch->fetch()) {
-              if ($journal_esearch->parse()) {
-                  if (isset($journal_esearch->_data['id'])) {
-                      $jids = &$journal_esearch->_data['id'];
-                      $journal_esummary = new XooNIps_PubMed_JournalEsummary();
-                      foreach ($jids as $jid) {
-                          $journal_esummary->set_journal_id($jid);
-                      }
-                      if ($journal_esummary->fetch()) {
-                          if ($journal_esummary->parse()) {
-                              foreach ($jids as $jid) {
-                                  if (isset($journal_esummary->_data[$jid])) {
-                                      $docsum = &$journal_esummary->_data[$jid];
-                                      if ($docsum['MedAbbr'] == $article['MedlineTA']) {
-                                          $ret['journal'] = $docsum['Title'];
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      }
-  } else {
-      $ret['journal'] = '';
-  }
-  // page
-  $ret['page'] = ($article['MedlinePgn'] != '') ? $article['MedlinePgn'] : '';
-  // abstract
-  $ret['abst'] = ($article['AbstractText'] != '') ? $article['AbstractText'] : '';
+    // volume
+    $ret['volume'] = ($article['Journal_Volume'] != '') ? $article['Journal_Volume'] : '';
+    // issue
+    $ret['issue'] = ($article['Journal_Issue'] != '') ? $article['Journal_Issue'] : '';
+    // publication_year
+    if ($article['Journal_PubDate_Year'] != '') {
+        $ret['year'] = $article['Journal_PubDate_Year'];
+    } else {
+        if (preg_match('/(\\d\\d\\d\\d)\\s.*/', $article['Journal_MedlineDate'], $matches)) {
+            $ret['year'] = $matches[1];
+        } else {
+            $ret['year'] = '';
+        }
+    }
+    // journal
+    if ($article['Journal_Title'] != '') {
+        $ret['journal'] = $article['Journal_Title'];
+    } elseif ($article['MedlineTA'] != '') {
+        $journal_esearch = new XooNIps_PubMed_JournalEsearch();
+        if ($journal_esearch->set_journal_ta($article['MedlineTA'])) {
+            if ($journal_esearch->fetch()) {
+                if ($journal_esearch->parse()) {
+                    if (isset($journal_esearch->_data['id'])) {
+                        $jids = &$journal_esearch->_data['id'];
+                        $journal_esummary = new XooNIps_PubMed_JournalEsummary();
+                        foreach ($jids as $jid) {
+                            $journal_esummary->set_journal_id($jid);
+                        }
+                        if ($journal_esummary->fetch()) {
+                            if ($journal_esummary->parse()) {
+                                foreach ($jids as $jid) {
+                                    if (isset($journal_esummary->_data[$jid])) {
+                                        $docsum = &$journal_esummary->_data[$jid];
+                                        if ($docsum['MedAbbr'] == $article['MedlineTA']) {
+                                            $ret['journal'] = $docsum['Title'];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        $ret['journal'] = '';
+    }
+    // page
+    $ret['page'] = ($article['MedlinePgn'] != '') ? $article['MedlinePgn'] : '';
+    // abstract
+    $ret['abst'] = ($article['AbstractText'] != '') ? $article['AbstractText'] : '';
     if (empty($ret['abst'])) {
         if ($article['OtherAbstractText'] != '') {
             $ret['abst'] = $article['OtherAbstractText'];
         }
     }
-  // author
-  $ret['author'] = array();
+    // author
+    $ret['author'] = array();
     if (!empty($article['AuthorList'])) {
         foreach ($article['AuthorList'] as $author) {
             $str = $author['LastName'].' ';
@@ -159,8 +159,8 @@ function &get_pubmed_data($pmid)
             $ret['author'][] = $str;
         }
     }
-  // keywords
-  $ret['keywords'] = array();
+    // keywords
+    $ret['keywords'] = array();
     if (!empty($article['MeshHeadingList'])) {
         foreach ($article['MeshHeadingList'] as $meshheading) {
             $str = $meshheading['DescriptorName'];

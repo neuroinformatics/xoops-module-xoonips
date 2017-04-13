@@ -26,8 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
 
 /**
  * subclass of XooNIpsLogic(removeFile).
@@ -122,10 +122,7 @@ class XooNIpsLogicRemoveFile extends XooNIpsLogic
             $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
             $response->setResult(false);
             if ($item_lock_handler->isLocked($item_id)) {
-                $error->add(XNPERR_ACCESS_FORBIDDEN,
-                    'cannot remove file because item is '.
-                    $this->getLockTypeString(
-                        $item_lock_handler->getLockType($item_id)));
+                $error->add(XNPERR_ACCESS_FORBIDDEN, 'cannot remove file because item is '.$this->getLockTypeString($item_lock_handler->getLockType($item_id)));
             } else {
                 $error->add(XNPERR_ACCESS_FORBIDDEN);
             }

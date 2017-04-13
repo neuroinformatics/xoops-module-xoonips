@@ -26,8 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(dirname(__DIR__))
-    .'/class/base/action.class.php';
+require_once dirname(dirname(__DIR__)).'/class/base/action.class.php';
 
 class XooNIpsActionOaipmhSearchDefault extends XooNIpsAction
 {
@@ -64,10 +63,8 @@ class XooNIpsActionOaipmhSearchDefault extends XooNIpsAction
         $this->_view_params['repository_id'] = $repository_id;
         $this->_view_params['keyword'] = $textutil->html_special_chars($this->_formdata->getValue('post', 'keyword', 's', false));
         $this->_view_params['repositories'] = $this->getRepositoryArrays();
-        $this->_view_params['total_repository_count']
-            = $this->getTotalRepositoryCount();
-        $this->_view_params['total_metadata_count']
-            = $this->getTotalMetadataCount();
+        $this->_view_params['total_repository_count'] = $this->getTotalRepositoryCount();
+        $this->_view_params['total_metadata_count'] = $this->getTotalMetadataCount();
     }
 
     /**
@@ -90,13 +87,10 @@ class XooNIpsActionOaipmhSearchDefault extends XooNIpsAction
         }
         $result = array();
         foreach ($rows as $row) {
-            $result[] = array('repository_id' => $row->getVar('repository_id', 's'),
-                              'repository_name' => $textutil->truncate(
-                                                                       (trim($row->getVar('repository_name', 's')) != ''
-                                                                         ? $row->getVar('repository_name', 's')
-                                                                         : $row->getVar('URL', 's')),
-                                                                       70, '...'),
-                              'metadata_count' => $row->getVar('metadata_count', 's'), );
+            $result[] = array(
+                'repository_id' => $row->getVar('repository_id', 's'),
+                'repository_name' => $textutil->truncate((trim($row->getVar('repository_name', 's')) != '' ? $row->getVar('repository_name', 's') : $row->getVar('URL', 's')), 70, '...'),
+                'metadata_count' => $row->getVar('metadata_count', 's'), );
         }
 
         return $result;

@@ -68,4 +68,4 @@ user_reactivate($vals['uid']);
 
 // load modify panel.
 $_GET['uid'] = $_POST['uid'];
-include 'actions/maintenance_account_modify.php';
+require 'actions/maintenance_account_modify.php';

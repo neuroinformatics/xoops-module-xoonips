@@ -74,14 +74,14 @@ class XooNIpsOrmPositionsHandler extends XooNIpsTableObjectHandler
     public function deleteById($id)
     {
         // check existing id
-    $posi_criteria = new Criteria('posi_id', $id);
+        $posi_criteria = new Criteria('posi_id', $id);
         if ($this->getCount($posi_criteria) == 0) {
             return false;
         }
 
-    // if deleting position has used in existing users,
-    // change position to neutral.
-    $xusers_handler = &xoonips_getormhandler('xoonips', 'users');
+        // if deleting position has used in existing users,
+        // change position to neutral.
+        $xusers_handler = &xoonips_getormhandler('xoonips', 'users');
         $xusers_criteria = new Criteria('posi', $id);
         $xusers_objs = &$xusers_handler->getObjects($xusers_criteria);
         foreach ($xusers_objs as $xusers_obj) {
@@ -89,7 +89,7 @@ class XooNIpsOrmPositionsHandler extends XooNIpsTableObjectHandler
             $xusers_handler->insert($xusers_obj);
         }
 
-    // delete
-    return $this->deleteAll($posi_criteria);
+        // delete
+        return $this->deleteAll($posi_criteria);
     }
 }

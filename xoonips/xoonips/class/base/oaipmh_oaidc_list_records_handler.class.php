@@ -64,32 +64,22 @@ class OaidcListRecordsHandler extends ListRecordsHandler
             'RELATION',
             'COVERAGE',
             'RIGHTS',
-            );
-        if (isset($this->tagstack[3])
-            && $this->getElementName($this->tagstack[3]) == 'HEADER'
-            || !in_array($this->getElementName(end($this->tagstack)),
-                          $support_tags)) {
+        );
+        if (isset($this->tagstack[3]) && $this->getElementName($this->tagstack[3]) == 'HEADER' || !in_array($this->getElementName(end($this->tagstack)), $support_tags)
+        ) {
             parent::endElementHandler($parser, $name);
         } elseif ($this->getElementName(end($this->tagstack)) == 'DATE') {
             $this->_creation_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
-            $this->addMetadataField(
-                    end($this->tagstack), $this->_cdata_buf,
-                    XOONIPS_METADATA_CATEGORY_CREATION_DATE);
+            $this->addMetadataField(end($this->tagstack), $this->_cdata_buf, XOONIPS_METADATA_CATEGORY_CREATION_DATE);
             array_pop($this->tagstack);
         } elseif ($this->getElementName(end($this->tagstack)) == 'IDENTIFIER') {
-            $result = preg_match(
-                '/^(s?https?:\\/\\/'
-                ."[-_.!~*'\\(\\)a-zA-Z0-9;\\/?:\\@&=+\$,%#]+)/",
-                $this->_cdata_buf);
+            $result = preg_match('/^(s?https?:\\/\\/'."[-_.!~*'\\(\\)a-zA-Z0-9;\\/?:\\@&=+\$,%#]+)/", $this->_cdata_buf);
             if (1 == $result) {
                 $this->_resource_url[] = $this->_cdata_buf;
-                $this->addMetadataField(
-                    end($this->tagstack), $this->_cdata_buf,
-                    XOONIPS_METADATA_CATEGORY_RESOURCE_LINK);
+                $this->addMetadataField(end($this->tagstack), $this->_cdata_buf, XOONIPS_METADATA_CATEGORY_RESOURCE_LINK);
             } else {
-                $this->addMetadataField(
-                    end($this->tagstack), $this->_cdata_buf);
+                $this->addMetadataField(end($this->tagstack), $this->_cdata_buf);
             }
             array_pop($this->tagstack);
         } else {

@@ -121,21 +121,21 @@ function xnpfilesGetMetaInformation($item_id)
 function xnpfilesGetListBlock($item_basic)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
 
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $xnpfiles_handler = &xoonips_getormcompohandler('xnpfiles', 'item');
     $tpl->assign('xoonips_item', $xnpfiles_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_LIST, $item_basic['item_id'], $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpfiles_list_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpfiles_list_block.html');
 }
 
 function xnpfilesGetPrinterFriendlyListBlock($item_basic)
@@ -146,15 +146,15 @@ function xnpfilesGetPrinterFriendlyListBlock($item_basic)
 function xnpfilesGetDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->assign($xoopsTpl->get_template_vars());
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationDetailBlock($item_id));
     $tpl->assign('index', xnpGetIndexDetailBlock($item_id));
     $tpl->assign('files_file', xnpGetAttachmentDetailBlock($item_id, 'files_file'));
@@ -162,22 +162,22 @@ function xnpfilesGetDetailBlock($item_id)
     $xnpfiles_handler = &xoonips_getormcompohandler('xnpfiles', 'item');
     $tpl->assign('xoonips_item', $xnpfiles_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpfiles_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpfiles_detail_block.html');
 }
 
 function xnpfilesGetPrinterFriendlyDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->assign($xoopsTpl->get_template_vars());
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationPrinterFriendlyBlock($item_id));
     $tpl->assign('index', xnpGetIndexPrinterFriendlyBlock($item_id));
     $tpl->assign('files_file', xnpGetAttachmentPrinterFriendlyBlock($item_id, 'files_file'));
@@ -185,16 +185,16 @@ function xnpfilesGetPrinterFriendlyDetailBlock($item_id)
     $xnpfiles_handler = &xoonips_getormcompohandler('xnpfiles', 'item');
     $tpl->assign('xoonips_item', $xnpfiles_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpfiles_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpfiles_detail_block.html');
 }
 
 function xnpfilesGetRegisterBlock()
 {
     $formdata = &xoonips_getutility('formdata');
 
-  // get BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationRegisterBlock();
+    // get BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationRegisterBlock();
     if ($basic['title'] == '') {
         $basic['title'] = ' ';
     }
@@ -220,34 +220,34 @@ function xnpfilesGetRegisterBlock()
 
     if (isset($data_file_name)) {
         $data_file_name = array(
-      'name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL,
-      'value' => $data_file_name,
-    );
+        'name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL,
+        'value' => $data_file_name,
+        );
     } else {
         $data_file_name = '';
     }
     if (isset($data_file_mimetype)) {
         $data_file_mimetype = array(
-      'name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL,
-      'value' => $data_file_mimetype,
-    );
+        'name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL,
+        'value' => $data_file_mimetype,
+        );
     } else {
         $data_file_mimetype = '';
     }
     if (isset($data_file_filetype)) {
         $data_file_filetype = array(
-      'name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL,
-      'value' => $data_file_filetype,
-    );
+        'name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL,
+        'value' => $data_file_filetype,
+        );
     } else {
         $data_file_filetype = '';
     }
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
@@ -257,16 +257,16 @@ function xnpfilesGetRegisterBlock()
     $tpl->assign('data_file_filetype', $data_file_filetype);
     $tpl->assign('title_empty_magic', XNPFILES_ITEM_TITLE_EMPTY_MAGIC);
 
-  // return as HTML
-  return $tpl->fetch('db:xnpfiles_register_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpfiles_register_block.html');
 }
 
 function xnpfilesGetEditBlock($item_id)
 {
     $formdata = &xoonips_getutility('formdata');
 
-  // get BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationEditBlock($item_id);
+    // get BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationEditBlock($item_id);
     $index = xnpGetIndexEditBlock($item_id);
     $data_file = xnpGetAttachmentEditBlock($item_id, 'files_file');
 
@@ -286,40 +286,40 @@ function xnpfilesGetEditBlock($item_id)
     $data_file_filetype = $file_pathinfo['extension'];
     if (isset($data_file_name)) {
         $data_file_name = array(
-      'name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL,
-      'value' => $data_file_name,
-    );
+        'name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL,
+        'value' => $data_file_name,
+        );
     } else {
         $data_file_name = '';
     }
     if (isset($data_file_mimetype)) {
         $data_file_mimetype = array(
-      'name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL,
-      'value' => $data_file_mimetype,
-    );
+        'name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL,
+        'value' => $data_file_mimetype,
+        );
     } else {
         $data_file_mimetype = '';
     }
     if (isset($data_file_filetype)) {
         $data_file_filetype = array(
-      'name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL,
-      'value' => $data_file_filetype,
-    );
+        'name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL,
+        'value' => $data_file_filetype,
+        );
     } else {
         $data_file_filetype = '';
     }
-  // get DetailInformation
-  if (!empty($item_id)) {
-      $detail = xnpfilesGetDetailInformation($item_id);
-  } else {
-      $detail = array();
-  }
+    // get DetailInformation
+    if (!empty($item_id)) {
+        $detail = xnpfilesGetDetailInformation($item_id);
+    } else {
+        $detail = array();
+    }
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
@@ -329,48 +329,48 @@ function xnpfilesGetEditBlock($item_id)
     $tpl->assign('data_file_filetype', $data_file_filetype);
     $tpl->assign('title_empty_magic', XNPFILES_ITEM_TITLE_EMPTY_MAGIC);
 
-  // return as HTML
-  return $tpl->fetch('db:xnpfiles_register_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpfiles_register_block.html');
 }
 
 function xnpfilesGetConfirmBlock($item_id)
 {
     $formdata = &xoonips_getutility('formdata');
     $textutil = &xoonips_getutility('text');
-  // get BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationConfirmBlock($item_id);
+    // get BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationConfirmBlock($item_id);
     $index = xnpGetIndexConfirmBlock($item_id);
     $file_file = $formdata->getFile('files_file', false);
     $data_file = xnpGetAttachmentConfirmBlock($item_id, 'files_file');
     $file_id = $formdata->getValue('post', 'files_fileFileID', 'i', false);
-  // get detail information
-  if (is_null($file_file) && $file_id == 0) {
-      $data_file_name = '';
-      $data_file_mimetype = '';
-      $data_file_filetype = '';
-  } else {
-      if (is_null($file_file)) {
-          $file_handler = &xoonips_getormhandler('xoonips', 'file');
-          $file_obj = &$file_handler->get($file_id);
-          $data_file_name = $file_obj->get('original_file_name', 's');
-          $data_file_mimetype = $file_obj->get('mime_type', 's');
-      } else {
-          $data_file_name = $file_file['name'];
-          $data_file_mimetype = $file_file['type'];
-      }
-      $file_pathinfo = pathinfo($data_file_name);
-      $data_file_filetype = $file_pathinfo['extension'];
-  }
+    // get detail information
+    if (is_null($file_file) && $file_id == 0) {
+        $data_file_name = '';
+        $data_file_mimetype = '';
+        $data_file_filetype = '';
+    } else {
+        if (is_null($file_file)) {
+            $file_handler = &xoonips_getormhandler('xoonips', 'file');
+            $file_obj = &$file_handler->get($file_id);
+            $data_file_name = $file_obj->get('original_file_name', 's');
+            $data_file_mimetype = $file_obj->get('mime_type', 's');
+        } else {
+            $data_file_name = $file_file['name'];
+            $data_file_mimetype = $file_file['type'];
+        }
+        $file_pathinfo = pathinfo($data_file_name);
+        $data_file_filetype = $file_pathinfo['extension'];
+    }
     if (xnpHasWithout($basic) || xnpHasWithout($data_file)) {
         global $system_message;
         $system_message = $system_message."\n<br /><font color='#ff0000'>"._MD_XOONIPS_ITEM_WARNING_FIELD_TRIM.'</font><br />';
     }
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
@@ -379,11 +379,12 @@ function xnpfilesGetConfirmBlock($item_id)
     $tpl->assign('data_file_mimetype', $textutil->html_special_chars($data_file_mimetype));
     $tpl->assign('data_file_filetype', $textutil->html_special_chars($data_file_filetype));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpfiles_confirm_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpfiles_confirm_block.html');
 }
 
-/** check DetailInformation input
+/**
+ * check DetailInformation input
  * called from confirm/registered page.
  */
 function xnpfilesCheckRegisterParameters(&$message)
@@ -418,8 +419,8 @@ function xnpfilesCheckRegisterParameters(&$message)
         }
     }
 
-  // require Readme, License and Rights if register to public indexes
-  $xids = explode(',', $xoonipsCheckedXID);
+    // require Readme, License and Rights if register to public indexes
+    $xids = explode(',', $xoonipsCheckedXID);
     $indexes = array();
     if ($xids[0] != $xoonipsCheckedXID) {
         foreach ($xids as $i) {
@@ -456,8 +457,8 @@ function xnpfilesInsertItem(&$item_id)
 
     $xnpsid = $_SESSION['XNPSID'];
 
-  // register BasicInformation, Index, Attachment
-  $item_id = 0;
+    // register BasicInformation, Index, Attachment
+    $item_id = 0;
     $result = xnpInsertBasicInformation($item_id);
     if ($result) {
         $result = xnpUpdateIndex($item_id);
@@ -477,8 +478,8 @@ function xnpfilesInsertItem(&$item_id)
         return false;
     }
 
-  // register Detail Information
-  $file_id = $formdata->getValue('post', 'files_fileFileID', 'i', false);
+    // register Detail Information
+    $file_id = $formdata->getValue('post', 'files_fileFileID', 'i', false);
     $file_handler = &xoonips_getormhandler('xoonips', 'file');
     $file_obj = &$file_handler->get($file_id);
     $file_name = $file_obj->get('original_file_name');
@@ -506,8 +507,8 @@ function xnpfilesUpdateItem($item_id)
     $formdata = &xoonips_getutility('formdata');
     $xnpsid = $_SESSION['XNPSID'];
 
-  // edit BasicInformation, Index, Preview, Attachment
-  $result = xnpUpdateBasicInformation($item_id);
+    // edit BasicInformation, Index, Preview, Attachment
+    $result = xnpUpdateBasicInformation($item_id);
     if ($result) {
         $result = xnpUpdateIndex($item_id);
         if ($result) {
@@ -536,8 +537,8 @@ function xnpfilesUpdateItem($item_id)
         return false;
     }
 
-  // update item detail information
-  $file_id = $formdata->getValue('post', 'files_fileFileID', 'i', false);
+    // update item detail information
+    $file_id = $formdata->getValue('post', 'files_fileFileID', 'i', false);
     $file_handler = &xoonips_getormhandler('xoonips', 'file');
     $file_obj = &$file_handler->get($file_id);
     $file_name = $file_obj->get('original_file_name');
@@ -616,7 +617,7 @@ function xnpfilesGetAdvancedSearchQuery(&$where, &$join)
 function xnpfilesGetAdvancedSearchBlock(&$search_var)
 {
     // get BasicInformation / Preview / IndexKeywords block
-  $basic = xnpGetBasicInformationAdvancedSearchBlock('xnpfiles', $search_var);
+    $basic = xnpGetBasicInformationAdvancedSearchBlock('xnpfiles', $search_var);
     $data_file_name = xnpfilesGetAttachmentFilenameAdvancedSearchBlock('data_file_name');
     $data_file_mimetype = xnpfilesGetAttachmentMimetypeAdvancedSearchBlock('data_file_mimetype');
     $data_file_filetype = xnpfilesGetAttachmentFiletypeAdvancedSearchBlock('data_file_filetype');
@@ -624,11 +625,11 @@ function xnpfilesGetAdvancedSearchBlock(&$search_var)
     $search_var[] = 'data_file_filetype';
     $search_var[] = 'xnpfiles_data_file';
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('module_name', 'xnpfiles');
@@ -637,14 +638,14 @@ function xnpfilesGetAdvancedSearchBlock(&$search_var)
     $tpl->assign('data_file_filetype', $data_file_filetype);
     $tpl->assign('module_display_name', xnpGetItemTypeDisplayNameByDirname(basename(dirname(__DIR__)), 's'));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpfiles_search_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpfiles_search_block.html');
 }
 
 function xnpfilesGetAttachmentFilenameAdvancedSearchBlock($name)
 {
     // create html
-  $html = "<input type='text' name='${name}' value='' />";
+    $html = "<input type='text' name='${name}' value='' />";
 
     return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html);
 }
@@ -652,8 +653,8 @@ function xnpfilesGetAttachmentFilenameAdvancedSearchBlock($name)
 function xnpfilesGetAttachmentMimetypeAdvancedSearchBlock($name)
 {
     // get attachment file
-  // create html
-  $files = xnpfilesGetDetailDistinctInfo('data_file_mimetype');
+    // create html
+    $files = xnpfilesGetDetailDistinctInfo('data_file_mimetype');
     if (count($files) == 0) {
         $html = '<select name="data_file_mimetype"><option value="">Any</option>
 				</select>';
@@ -675,8 +676,8 @@ function xnpfilesGetAttachmentMimetypeAdvancedSearchBlock($name)
 function xnpfilesGetAttachmentFiletypeAdvancedSearchBlock($name)
 {
     // get attachment file
-  // create html
-  $files = xnpfilesGetDetailDistinctInfo('data_file_filetype');
+    // create html
+    $files = xnpfilesGetDetailDistinctInfo('data_file_filetype');
     if (count($files) == 0) {
         $html = '<select name="data_file_filetype_Any">
 				<option value="any">Any</option>
@@ -732,8 +733,8 @@ function xnpfilesExportItem($export_path, $fhdl, $item_id, $attachment)
         return false;
     }
 
-  // get DetailInformation
-  $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpfiles_item_detail')." where files_id=$item_id");
+    // get DetailInformation
+    $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpfiles_item_detail')." where files_id=$item_id");
     if (!$result) {
         return null;
     }
@@ -762,9 +763,9 @@ function xnpfilesGetModifiedFields($item_id)
 
     if ($detail) {
         // was data file modified?
-    if (xnpIsAttachmentModified('files_file', $item_id)) {
-        array_push($ret, _MD_XNPFILES_DATA_FILE_LABEL);
-    }
+        if (xnpIsAttachmentModified('files_file', $item_id)) {
+            array_push($ret, _MD_XNPFILES_DATA_FILE_LABEL);
+        }
     }
 
     return $ret;
@@ -792,18 +793,18 @@ function xnpfilesGetMetadata($prefix, $item_id)
         return false;
     }
 
-  // detail information
-  $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
+    // detail information
+    $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
     $detail_obj = &$detail_handler->get($item_id);
     if (empty($detail_obj)) {
         return false;
     }
     $detail = $detail_obj->getArray();
-  // basic information
-  $basic = xnpGetBasicInformationArray($item_id);
+    // basic information
+    $basic = xnpGetBasicInformationArray($item_id);
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
-  // indexes
-  $indexes = array();
+    // indexes
+    $indexes = array();
     if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
         foreach ($xids as $xid) {
             if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
@@ -811,8 +812,8 @@ function xnpfilesGetMetadata($prefix, $item_id)
             }
         }
     }
-  // files
-  $files = array();
+    // files
+    $files = array();
     $mimetypes = array();
     $file_handler = &xoonips_gethandler('xoonips', 'file');
     $files = $file_handler->getFilesInfo($item_id, 'files_file');
@@ -821,18 +822,18 @@ function xnpfilesGetMetadata($prefix, $item_id)
             $mimetypes[] = $file['mime_type'];
         }
     }
-  // related to
-  $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
+    // related to
+    $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
     $related_to_ids = $related_to_handler->getChildItemIds($item_id);
     $related_tos = array();
     foreach ($related_to_ids as $related_to_id) {
         $related_tos[] = array(
-      'item_id' => $related_to_id,
-      'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
-    );
+        'item_id' => $related_to_id,
+        'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
+        );
     }
-  // repository configs
-  $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+    // repository configs
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $myxoopsConfigMetaFooter = &xoonips_get_xoops_configs(XOOPS_CONF_METAFOOTER);
     $repository = array(
     'download_file_compression' => $xconfig_handler->getValue('download_file_compression'),
@@ -840,9 +841,9 @@ function xnpfilesGetMetadata($prefix, $item_id)
     'publisher' => $xconfig_handler->getValue('repository_publisher'),
     'institution' => $xconfig_handler->getValue('repository_institution'),
     'meta_author' => $myxoopsConfigMetaFooter['meta_author'],
-  );
-  // assign template
-  global $xoopsTpl;
+    );
+    // assign template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->plugins_dir[] = XOONIPS_PATH.'/class/smarty/plugins';
     $tpl->assign($xoopsTpl->get_template_vars());

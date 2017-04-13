@@ -71,32 +71,21 @@ class OAIPMHHarvester
         if ($handler->insert($repository[0], true)) {
             if ($this->Identify()) {
                 $unicode = &xoonips_getutility('unicode');
-                $repository[0]
-                    ->set('repository_name',
-                            $unicode->decode_utf8(
-                                $this->_repositoryName,
-                                xoonips_get_server_charset(), 'h'));
+                $repository[0]->set('repository_name', $unicode->decode_utf8($this->_repositoryName, xoonips_get_server_charset(), 'h'));
                 $handler->insert($repository[0], true);
                 if ($this->ListMetadataFormats()) {
                     $args = array('metadataPrefix' => $this->_metadataPrefix);
                     if ('' == $repository[0]->get('last_success_date')) {
-                        $args['from'] = gmdate($this->_dateFormat,
-                                                $this->_earliestDatestamp);
+                        $args['from'] = gmdate($this->_dateFormat, $this->_earliestDatestamp);
                     } else {
-                        $args['from']
-                            = gmdate($this->_dateFormat,
-                                      $repository[0]->get('last_success_date'));
+                        $args['from'] = gmdate($this->_dateFormat, $repository[0]->get('last_success_date'));
                     }
 
                     if ($this->ListRecords($args)) {
                         //update repositories table
-                        $repository[0]->set('last_access_result',
-                                               $this->_lastStatus);
+                        $repository[0]->set('last_access_result', $this->_lastStatus);
                         $repository[0]->set('last_success_date', time());
-                        $repository[0]->set('metadata_count',
-                                              $this->getMetadataCount(
-                                                  $repository[0]->get(
-                                                      'repository_id')));
+                        $repository[0]->set('metadata_count', $this->getMetadataCount($repository[0]->get('repository_id')));
 
                         return $handler->insert($repository[0], true);
                     }
@@ -217,17 +206,13 @@ class OAIPMHHarvester
         do {
             $url = $this->_baseUrl.'?verb=ListRecords';
             if ($resumptionToken == null) {
-                foreach (array('metadataPrefix',
-                                'from',
-                                'until',
-                                'set', ) as $k) {
+                foreach (array('metadataPrefix', 'from', 'until', 'set') as $k) {
                     if (isset($args[$k])) {
                         $url .= '&'.urlencode($k).'='.urlencode($args[$k]);
                     }
                 }
             } else {
-                $url .= '&resumptionToken='
-                    .htmlspecialchars($resumptionToken, ENT_QUOTES);
+                $url .= '&resumptionToken='.htmlspecialchars($resumptionToken, ENT_QUOTES);
             }
             $snoopy = &xoonips_getutility('snoopy');
             if (!is_object($snoopy)) {
@@ -252,10 +237,7 @@ class OAIPMHHarvester
                 return false;
             }
 
-            $listRecordsHandler
-                = &$this->createListRecordsHandler($this->parser,
-                                                      $this->_baseUrl,
-                                                      $args['metadataPrefix']);
+            $listRecordsHandler = &$this->createListRecordsHandler($this->parser, $this->_baseUrl, $args['metadataPrefix']);
             $result = $this->parse($snoopy->results);
             if (!$result) {
                 //some erorr has occured
@@ -299,13 +281,10 @@ class OAIPMHHarvester
      */
     public function getMetadataCount($repository_id)
     {
-        $metadata_handler = &xoonips_getormhandler('xoonips',
-                                                    'oaipmh_metadata');
+        $metadata_handler = &xoonips_getormhandler('xoonips', 'oaipmh_metadata');
 
-        $metadata_criteria = new Criteria('repository_id',
-                                           intval($repository_id));
-        $rows = &$metadata_handler->getObjects($metadata_criteria,
-                                               false, 'count(*)');
+        $metadata_criteria = new Criteria('repository_id', intval($repository_id));
+        $rows = &$metadata_handler->getObjects($metadata_criteria, false, 'count(*)');
         if (!$rows) {
             return 0;
         } else {
@@ -325,18 +304,15 @@ class OAIPMHHarvester
         $result = false;
         switch ($metadataPrefix) {
         case 'oai_dc':
-            include_once __DIR__
-                .'/oaipmh_oaidc_list_records_handler.class.php';
+            include_once __DIR__.'/oaipmh_oaidc_list_records_handler.class.php';
             $result = new OaidcListRecordsHandler($parser, $baseUrl);
             break;
         case 'junii':
-            include_once __DIR__
-                .'/oaipmh_junii_list_records_handler.class.php';
+            include_once __DIR__.'/oaipmh_junii_list_records_handler.class.php';
             $result = new JuniiListRecordsHandler($parser, $baseUrl);
             break;
         case 'junii2':
-            include_once __DIR__
-                .'/oaipmh_junii2_list_records_handler.class.php';
+            include_once __DIR__.'/oaipmh_junii2_list_records_handler.class.php';
             $result = new Junii2ListRecordsHandler($parser, $baseUrl);
             break;
         }

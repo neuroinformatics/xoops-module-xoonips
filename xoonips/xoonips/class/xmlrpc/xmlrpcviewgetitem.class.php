@@ -26,5 +26,5 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/class/xml/rpc/xmlrpcapi.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipsview.php';
+require_once XOOPS_ROOT_PATH.'/class/xml/rpc/xmlrpcapi.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipsview.php';

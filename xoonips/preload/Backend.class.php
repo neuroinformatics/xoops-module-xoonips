@@ -14,7 +14,7 @@ class Xoonips_Backend extends XCube_ActionFilter
     public function getRSSItems(&$items)
     {
         // check module_read permission
-    $module_handler = &xoops_gethandler('module');
+        $module_handler = &xoops_gethandler('module');
         $module = &$module_handler->getByDirname('xoonips');
         $gperm_handler = &xoops_gethandler('groupperm');
         $can_read = $gperm_handler->checkRight('module_read', $module->getVar('mid'), XOOPS_GROUP_ANONYMOUS);
@@ -22,8 +22,8 @@ class Xoonips_Backend extends XCube_ActionFilter
             return;
         }
 
-    // get all published items
-    $limit = 10;
+        // get all published items
+        $limit = 10;
         $category = $module->getVar('name');
         $ib_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $criteria = new CriteriaCompo();
@@ -46,13 +46,13 @@ class Xoonips_Backend extends XCube_ActionFilter
             $url = $this->_getItemUrl($item_id, $doi, 's');
             $description = $obj->get('description');
             $items[] = array(
-        'pubdate' => $obj->getExtraVar('pubdate'),
-        'title' => $title,
-        'link' => $url,
-        'guid' => $url,
-        'description' => $description,
-        'category' => $category,
-      );
+            'pubdate' => $obj->getExtraVar('pubdate'),
+            'title' => $title,
+            'link' => $url,
+            'guid' => $url,
+            'description' => $description,
+            'category' => $category,
+            );
         }
         $ib_handler->close($res);
     }

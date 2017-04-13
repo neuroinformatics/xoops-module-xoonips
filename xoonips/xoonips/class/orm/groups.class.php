@@ -45,26 +45,26 @@ class XooNIpsOrmGroups extends XooNIpsTableObject
     public function XooNIpsOrmGroups()
     {
         parent::XooNIpsTableObject();
-    // from XooNIps_users table
-    $this->initVar('gid', XOBJ_DTYPE_INT, 0, false);
+        // from XooNIps_users table
+        $this->initVar('gid', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('gname', XOBJ_DTYPE_TXTBOX, '', true, 255);
         $this->initVar('gdesc', XOBJ_DTYPE_TXTBOX, '', false, 255);
         $this->initVar('group_index_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('group_item_number_limit', XOBJ_DTYPE_INT, null, true);
         $this->initVar('group_index_number_limit', XOBJ_DTYPE_INT, null, true);
-    // data type = double
-    $this->initVar('group_item_storage_limit', XOBJ_DTYPE_OTHER, null, true);
+        // data type = double
+        $this->initVar('group_item_storage_limit', XOBJ_DTYPE_OTHER, null, true);
     }
 
     public function cleanVars()
     {
         $retval = true;
-    // is group_item_storage_limit double?
-    if (!is_numeric($this->getVar('group_item_storage_limit', 'n'))) {
-        // todo: define constant string
-      $this->setErrors('group_item_storage_limit must be numeric.');
-        $retval = false;
-    }
+        // is group_item_storage_limit double?
+        if (!is_numeric($this->getVar('group_item_storage_limit', 'n'))) {
+            // todo: define constant string
+              $this->setErrors('group_item_storage_limit must be numeric.');
+            $retval = false;
+        }
 
         return $retval && parent::cleanVars();
     }
@@ -81,23 +81,23 @@ class XooNIpsOrmGroupsHandler extends XooNIpsTableObjectHandler
         $this->__initHandler('XooNIpsOrmGroups', 'xoonips_groups', 'gid');
     }
 
-  /**
-   * create object.
-   *
-   * @param bool $isNew true if create new object
-   *
-   * @return object
-   */
-  public function &create($isNew = true)
-  {
-      $obj = &parent::create($isNew);
-      if ($isNew) {
-          $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
-          $obj->set('group_item_number_limit', $xconfig_handler->getValue('group_item_number_limit'));
-          $obj->set('group_index_number_limit', $xconfig_handler->getValue('group_index_number_limit'));
-          $obj->set('group_item_storage_limit', $xconfig_handler->getValue('group_item_storage_limit'));
-      }
+    /**
+     * create object.
+     *
+     * @param bool $isNew true if create new object
+     *
+     * @return object
+     */
+    public function &create($isNew = true)
+    {
+        $obj = &parent::create($isNew);
+        if ($isNew) {
+            $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+            $obj->set('group_item_number_limit', $xconfig_handler->getValue('group_item_number_limit'));
+            $obj->set('group_index_number_limit', $xconfig_handler->getValue('group_index_number_limit'));
+            $obj->set('group_item_storage_limit', $xconfig_handler->getValue('group_item_storage_limit'));
+        }
 
-      return $obj;
-  }
+        return $obj;
+    }
 }

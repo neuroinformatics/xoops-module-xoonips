@@ -36,7 +36,7 @@ $get_keys = array(
 $get_vals = xoonips_admin_get_requests('get', $get_keys);
 
 // class files
-include '../class/base/pagenavi.class.php';
+require '../class/base/pagenavi.class.php';
 
 // title
 $title = _AM_XOONIPS_MAINTENANCE_ACCOUNT_TITLE;

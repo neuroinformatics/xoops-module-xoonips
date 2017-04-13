@@ -26,11 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once 'transfer.class.php';
-include_once dirname(dirname(__DIR__))
-    .'/include/transfer.inc.php';
-include_once dirname(dirname(__DIR__))
-    .'/include/extra_param.inc.php';
+require_once 'transfer.class.php';
+require_once dirname(dirname(__DIR__)).'/include/transfer.inc.php';
+require_once dirname(dirname(__DIR__)).'/include/extra_param.inc.php';
 
 class XooNIpsActionTransferUserRequestUnselectItem extends XooNIpsActionTransfer
 {
@@ -56,39 +54,23 @@ class XooNIpsActionTransferUserRequestUnselectItem extends XooNIpsActionTransfer
         xoonips_allow_post_method();
 
         $extra_params = xoonips_extra_param_restore();
-        xoonips_validate_request(
-            $this->is_valid_transferee_user(@$extra_params['to_uid']));
+        xoonips_validate_request($this->is_valid_transferee_user(@$extra_params['to_uid']));
 
-        xoonips_validate_request(
-            $this->is_readable_all_items(
-                $this->_formdata->getValueArray('post', 'selected_original', 'i', false),
-                $xoopsUser->getVar('uid')));
+        xoonips_validate_request($this->is_readable_all_items($this->_formdata->getValueArray('post', 'selected_original', 'i', false), $xoopsUser->getVar('uid')));
     }
 
     public function doAction()
     {
         global $xoopsUser;
 
-        $this->_view_params['to_uid']
-            = $this->_formdata->getValue('post', 'to_uid', 'i', false);
+        $this->_view_params['to_uid'] = $this->_formdata->getValue('post', 'to_uid', 'i', false);
 
-        $item_ids_to_transfer = $this->remove_item_id(
-            $this->_formdata->getValue('post', 'item_id_to_unselect', 'i', false),
-            $this->_formdata->getValueArray('post', 'item_ids_to_transfer', 'i', false));
+        $item_ids_to_transfer = $this->remove_item_id($this->_formdata->getValue('post', 'item_id_to_unselect', 'i', false), $this->_formdata->getValueArray('post', 'item_ids_to_transfer', 'i', false));
 
-        $this->_view_params['items_to_transfer']
-            = xoonips_transfer_get_transferrable_item_information(
-                $xoopsUser->getVar('uid'),
-                $item_ids_to_transfer);
+        $this->_view_params['items_to_transfer'] = xoonips_transfer_get_transferrable_item_information($xoopsUser->getVar('uid'), $item_ids_to_transfer);
 
-        $this->_view_params['to_user_options']
-            = xoonips_transfer_get_users_for_dropdown(
-                $xoopsUser->getVar('uid'));
-
-        $this->_view_params['transfer_enable']
-            = $this->is_all_transferrable_items(
-                $xoopsUser->getVar('uid'),
-                $item_ids_to_transfer);
+        $this->_view_params['to_user_options'] = xoonips_transfer_get_users_for_dropdown($xoopsUser->getVar('uid'));
+        $this->_view_params['transfer_enable'] = $this->is_all_transferrable_items($xoopsUser->getVar('uid'), $item_ids_to_transfer);
     }
 
     /**

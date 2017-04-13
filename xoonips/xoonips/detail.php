@@ -29,13 +29,13 @@
 //  page to display item's detail
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
-include_once 'include/lib.php';
-include_once 'include/AL.php';
-include_once 'include/notification.inc.php';
-include_once 'class/xoonipsresponse.class.php';
-include_once 'class/xoonipserror.class.php';
-include_once 'class/base/logicfactory.class.php';
+require 'include/common.inc.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
+require_once 'include/notification.inc.php';
+require_once 'class/xoonipsresponse.class.php';
+require_once 'class/xoonipserror.class.php';
+require_once 'class/base/logicfactory.class.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 $textutil = &xoonips_getutility('text');
@@ -50,7 +50,8 @@ if (!$xoopsUser) {
     }
     $uid = UID_GUEST;
 } elseif ($xoopsUser && !$xoopsUser->isAdmin($xoopsModule->getVar('mid'))
-    && !xnp_is_activated($xnpsid, $xoopsUser->getVar('uid'))) {
+    && !xnp_is_activated($xnpsid, $xoopsUser->getVar('uid'))
+) {
     // disable to access by not certified user without xoonips admin
     redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_MODERATOR_NOT_ACTIVATED);
     exit();
@@ -174,7 +175,7 @@ if ($op == 'delete') {
     xoonips_delete_item($item_id);
 }
 if ($op == 'print') {
-    require_once XOOPS_ROOT_PATH.'/class/template.php';
+    include_once XOOPS_ROOT_PATH.'/class/template.php';
     $xoopsTpl = new XoopsTpl();
     xoops_header(false);
 
@@ -196,7 +197,7 @@ if ($op == 'print') {
 }
 
 $xoopsOption['template_main'] = 'xoonips_detail.html';
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
 $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
 if ($item_lock_handler->isLocked($item_id)) {
@@ -260,7 +261,7 @@ if ($op == '' || $op == 'download') {
     $xoopsTpl->assign('index_tree', $indexTree);
 }
 
-include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
 eval('$body = '.$modname.'GetDetailBlock( $item_id );');
 $xoopsTpl->assign('body', $body);
 
@@ -299,7 +300,7 @@ $xoopsTpl->assign('dir_name', $com_dir_name);
 $xoopsTpl->assign('forum_id', $com_forum_id);
 //end of item comment function
 
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';
 
 function xoonips_delete_item($item_id)
 {

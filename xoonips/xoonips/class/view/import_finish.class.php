@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/view.class.php';
+require_once dirname(__DIR__).'/base/view.class.php';
 
 class XooNIpsViewImportFinish extends XooNIpsView
 {
@@ -64,10 +64,8 @@ class XooNIpsViewImportFinish extends XooNIpsView
             }
 
             $basic = &$item->getVar('basic');
-            $itemtype
-                = &$item_type_handler->get($basic->get('item_type_id'));
-            $handler = &xoonips_gethandler($itemtype->get('name'),
-                                            'import_item');
+            $itemtype = &$item_type_handler->get($basic->get('item_type_id'));
+            $handler = &xoonips_gethandler($itemtype->get('name'), 'import_item');
             $log .= "\n\n[item]\n".$handler->getImportLog($item);
             foreach ($item->getErrors() as $e) {
                 $log .= "\nerror $e";
@@ -76,10 +74,7 @@ class XooNIpsViewImportFinish extends XooNIpsView
                 $log .= "\nerror doi conflict with following items"
                     .' in exitsing item.';
             }
-            foreach (array_merge($item->getDuplicateUnupdatableItemId(),
-                                  $item->getDuplicateUpdatableItemId(),
-                                  $item->getDuplicateLockedItemId())
-                     as $item_id) {
+            foreach (array_merge($item->getDuplicateUnupdatableItemId(), $item->getDuplicateUpdatableItemId(), $item->getDuplicateLockedItemId()) as $item_id) {
                 $log .= "\nwarning conflict with "
                     .xnpGetItemDetailURL($item_id);
             }
@@ -106,9 +101,10 @@ class XooNIpsViewImportFinish extends XooNIpsView
             } else {
                 $basic = &$item->getVar('basic');
             }
-            $result[] = array('pseudo_id' => $item->getPseudoId(),
-                               'url' => xnpGetItemDetailURL(
-                                   $basic->get('item_id')), );
+            $result[] = array(
+                'pseudo_id' => $item->getPseudoId(),
+                'url' => xnpGetItemDetailURL($basic->get('item_id')),
+            );
         }
 
         return $result;

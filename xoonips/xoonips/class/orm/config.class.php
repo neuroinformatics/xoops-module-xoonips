@@ -57,59 +57,59 @@ class XooNIpsOrmConfigHandler extends XooNIpsTableObjectHandler
         $this->__initHandler('XooNIpsOrmConfig', 'xoonips_config', 'id', false);
     }
 
-  /**
-   * get a configuration value.
-   *
-   * @param string $key configuration key
-   *
-   * @return string configuration value
-   */
-  public function getValue($key)
-  {
-      $config_obj = &$this->getConfig($key);
-      if (!is_object($config_obj)) {
-          return null;
-      }
+    /**
+     * get a configuration value.
+     *
+     * @param string $key configuration key
+     *
+     * @return string configuration value
+     */
+    public function getValue($key)
+    {
+        $config_obj = &$this->getConfig($key);
+        if (!is_object($config_obj)) {
+            return null;
+        }
 
-      return $config_obj->get('value');
-  }
+        return $config_obj->get('value');
+    }
 
-  /**
-   * set a configuration value.
-   *
-   * @param string $key   configuration key
-   * @param string $val   configuration value
-   * @param bool   $force force update
-   *
-   * @return bool FALSE if failed
-   */
-  public function setValue($key, $val, $force = false)
-  {
-      $config_obj = &$this->getConfig($key);
-      if (!is_object($config_obj)) {
-          return false;
-      }
-      $config_obj->set('value', $val);
+    /**
+     * set a configuration value.
+     *
+     * @param string $key   configuration key
+     * @param string $val   configuration value
+     * @param bool   $force force update
+     *
+     * @return bool FALSE if failed
+     */
+    public function setValue($key, $val, $force = false)
+    {
+        $config_obj = &$this->getConfig($key);
+        if (!is_object($config_obj)) {
+            return false;
+        }
+        $config_obj->set('value', $val);
 
-      return $this->insert($config_obj, $force);
-  }
+        return $this->insert($config_obj, $force);
+    }
 
-  /**
-   * get a configuration value object.
-   *
-   * @param string key configuration key
-   *
-   * @return object XooNIpsOrmConfig. return false if key was not found.
-   */
-  public function &getConfig($key)
-  {
-      $config_objs = &$this->getObjects(new Criteria('name', addslashes($key)));
-      if (!$config_objs || count($config_objs) != 1) {
-          $result = false;
+    /**
+     * get a configuration value object.
+     *
+     * @param string key configuration key
+     *
+     * @return object XooNIpsOrmConfig. return false if key was not found.
+     */
+    public function &getConfig($key)
+    {
+        $config_objs = &$this->getObjects(new Criteria('name', addslashes($key)));
+        if (!$config_objs || count($config_objs) != 1) {
+            $result = false;
 
-          return $result;
-      }
+            return $result;
+        }
 
-      return $config_objs[0];
-  }
+        return $config_objs[0];
+    }
 }

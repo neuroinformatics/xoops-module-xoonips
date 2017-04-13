@@ -33,7 +33,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
 $title = _AM_XOONIPS_TITLE;
 
 // load menu
-include './menu.php';
+require './menu.php';
 $menu = array();
 foreach ($adminmenu as $item) {
     $menu[] = array(

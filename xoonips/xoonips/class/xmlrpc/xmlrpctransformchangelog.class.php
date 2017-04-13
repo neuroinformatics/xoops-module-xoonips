@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/orm/changelog.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/orm/changelog.class.php';
 class XooNIpsXmlRpcTransformChangelog extends XooNIpsXmlRpcTransformElement
 {
     public function getObject($array)

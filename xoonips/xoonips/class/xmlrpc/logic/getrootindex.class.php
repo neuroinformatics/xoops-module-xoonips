@@ -26,16 +26,11 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xoonipserror.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xoonipsresponse.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipserror.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipsresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
 
 /**
  * @brief Class that executes logic specified by XML-RPC getRootIndex request
@@ -45,7 +40,7 @@ class XooNIpsXmlRpcLogicGetRootIndex extends XooNIpsXmlRpcLogic
     /**
      * load and execute xoonips logic.
      *
-     * @param[in] XooNIpsXmlRpcRequest $request
+     * @param[in]  XooNIpsXmlRpcRequest $request
      * @param[out] XooNIpsXmlRpcResponse $response
      *  result of logic(success/fault, response, error)
      */
@@ -82,17 +77,14 @@ class XooNIpsXmlRpcLogicGetRootIndex extends XooNIpsXmlRpcLogic
         $vars = array();
         $vars[0] = $params[0];
         $unicode = &xoonips_getutility('unicode');
-        $vars[1] = $unicode->decode_utf8($params[1],
-                                         xoonips_get_server_charset(), 'h');
+        $vars[1] = $unicode->decode_utf8($params[1], xoonips_get_server_charset(), 'h');
 
         $logic->execute($vars, $xoonips_response);
 
         $response->setResult($xoonips_response->getResult());
         $response->setError($xoonips_response->getError());
         if ($xoonips_response->getResult()) {
-            $response->setSuccess(
-                $this->convertIndexObjectToIndexStructure(
-                    $xoonips_response->getSuccess(), $response));
+            $response->setSuccess($this->convertIndexObjectToIndexStructure($xoonips_response->getSuccess(), $response));
         }
     }
 }

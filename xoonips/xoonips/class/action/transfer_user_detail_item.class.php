@@ -26,9 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once 'transfer.class.php';
-include_once dirname(dirname(__DIR__))
-    .'/include/transfer.inc.php';
+require_once 'transfer.class.php';
+require_once dirname(dirname(__DIR__)).'/include/transfer.inc.php';
 
 class XooNIpsActionTransferUserDetailItem extends XooNIpsActionTransfer
 {
@@ -62,9 +61,7 @@ class XooNIpsActionTransferUserDetailItem extends XooNIpsActionTransfer
 
         // permission check
         $item_compo_handler = &xoonips_getormcompohandler('xoonips', 'item');
-        if (!$item_compo_handler->getPerm($item_id,
-                                            $xoopsUser->getVar('uid'),
-                                            'read')) {
+        if (!$item_compo_handler->getPerm($item_id, $xoopsUser->getVar('uid'), 'read')) {
             $this->show_no_permission_error_page();
         }
 
@@ -73,11 +70,9 @@ class XooNIpsActionTransferUserDetailItem extends XooNIpsActionTransfer
         $item_basic = $item_basic_handler->get($item_id);
 
         $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
-        $item_type = $item_type_handler->get(
-            $item_basic->get('item_type_id'));
+        $item_type = $item_type_handler->get($item_basic->get('item_type_id'));
 
-        $info_compo_handler = &xoonips_getormcompohandler(
-            $item_type->get('name'), 'item');
+        $info_compo_handler = &xoonips_getormcompohandler($item_type->get('name'), 'item');
         $info_compo = $info_compo_handler->get($item_id);
 
         // read language file of item
@@ -85,15 +80,9 @@ class XooNIpsActionTransferUserDetailItem extends XooNIpsActionTransfer
         $langman->read('main.php', $item_type->get('name'));
 
         // set params
-        $this->_view_params['template_file_name']
-            = $info_compo_handler->getTemplateFileName(
-                XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL);
+        $this->_view_params['template_file_name'] = $info_compo_handler->getTemplateFileName(XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL);
 
-        $this->_view_params['template_vars']
-            = $info_compo_handler->getTemplateVar(
-                XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL,
-                $item_id,
-                $xoopsUser->getVar('uid'));
+        $this->_view_params['template_vars'] = $info_compo_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL, $item_id, $xoopsUser->getVar('uid'));
     }
 
     /**

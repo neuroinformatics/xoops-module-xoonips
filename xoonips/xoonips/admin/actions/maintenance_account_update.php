@@ -139,8 +139,8 @@ function check_variables(&$vals)
         }
     }
 
-  // check missing fields
-  $missing_fields = array();
+    // check missing fields
+    $missing_fields = array();
     foreach ($requirements as $type => $reqs) {
         foreach ($reqs as $name) {
             $value = trim(strval($vals[$type][$name]));

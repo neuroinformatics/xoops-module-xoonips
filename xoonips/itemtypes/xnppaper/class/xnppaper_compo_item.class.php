@@ -30,9 +30,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnppaper/iteminfo.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnppaper/include/view.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnppaper/iteminfo.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnppaper/include/view.php';
 
 /**
  * @brief Handler object that create,insert,update,get,delete XNPPaperCompo object.
@@ -108,10 +108,7 @@ class XNPPaperCompoHandler extends XooNIpsItemInfoCompoHandler
             return $result;
         case XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
-            $result['xnppaper_author']
-                = xoonips_get_multiple_field_template_vars($detail->getAuthors(),
-                                                          'xnppaper',
-                                                          'author');
+            $result['xnppaper_author'] = xoonips_get_multiple_field_template_vars($detail->getAuthors(), 'xnppaper', 'author');
             $paper_pdf_reprint = $paper->getVar('paper_pdf_reprint');
             if ($paper_pdf_reprint->get('item_id') == $item_id) {
                 $result['detail']['paper_pdf_reprint'] = $this->getAttachmentTemplateVar($paper->getVar('paper_pdf_reprint'));

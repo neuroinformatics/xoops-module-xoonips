@@ -33,7 +33,9 @@
         int child_count; // not null
  */
 
-/** A child is added recursively. (Caution) not add parentXID.
+/**
+ * A child is added recursively. (Caution) not add parentXID.
+ *
  * @param $parentXID parentXID
  * @param $in  XID->index Conversion table
  * @param $childFinder  XID->array(childXID) Conversion table
@@ -117,7 +119,9 @@ function genIndexTree1(&$indexes)
     return $out;
 }
 
-/** get Index tree
+/**
+ * get Index tree.
+ *
  * @param $xnpsid XNPSID
  *
  * @return tree empty array in error
@@ -129,7 +133,9 @@ function genIndexTree($xnpsid)
     return genIndexTree1($indexes);
 }
 
-/** get Public index tree.
+/**
+ * get Public index tree.
+ *
  * @param $xnpsid XNPSID
  *
  * @return tree empty array in error
@@ -155,7 +161,8 @@ function filterPublicIndex(&$indexes)
     }
 }
 
-/** get Index tree for moderator
+/**
+ * get Index tree for moderator
  *  not contain other's private index, and not contain group-index of group which he does not belong.
  *
  * @param $xnpsid XNPSID
@@ -183,12 +190,12 @@ function filterMyIndex(&$indexes, $xnpsid, $uid)
         if ($index['open_level'] == OL_GROUP_ONLY) {
             if (!in_array($index['owner_gid'], $gids)) {
                 // group which he does not belong.
-        $indexes[$i] = false;
+                $indexes[$i] = false;
             }
         } elseif ($index['open_level'] == OL_PRIVATE) {
             if ($index['owner_uid'] != $uid) {
                 // index is not this user's one.
-        $indexes[$i] = false;
+                $indexes[$i] = false;
             }
         }
     }
@@ -208,7 +215,8 @@ function filterPrivateIndex(&$indexes, $uid)
     }
 }
 
-/** get Index tree.
+/**
+ * get Index tree.
  *  get same index as $refIndex ($refIndex have same open_level and same owner_gid, and  same owner_uid).
  *
  * @param $xnpsid XNPSID
@@ -231,14 +239,17 @@ function filterSameAreaIndex(&$indexes, &$refIndex)
             continue;
         }
         if (!($index['open_level'] == OL_PUBLIC && $refIndex['open_level'] == OL_PUBLIC
-              || $index['open_level'] == OL_GROUP_ONLY && $refIndex['open_level'] == OL_GROUP_ONLY && $index['owner_gid'] == $refIndex['owner_gid']
-              || $index['open_level'] == OL_PRIVATE && $refIndex['open_level'] == OL_PRIVATE && $index['owner_uid'] == $refIndex['owner_uid'])) {
+            || $index['open_level'] == OL_GROUP_ONLY && $refIndex['open_level'] == OL_GROUP_ONLY && $index['owner_gid'] == $refIndex['owner_gid']
+            || $index['open_level'] == OL_PRIVATE && $refIndex['open_level'] == OL_PRIVATE && $index['owner_uid'] == $refIndex['owner_uid'])
+        ) {
             $indexes[$i] = false;
         }
     }
 }
 
-/** get Index tree contains Public and Private Index.
+/**
+ * get Index tree contains Public and Private Index.
+ *
  * @param $xnpsid XNPSID
  *
  * @return tree empty array in error
@@ -280,7 +291,8 @@ function filterWritableIndex(&$indexes, $xnpsid, $uid)
             continue;
         }
         if (!($index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $uid
-             || $index['open_level'] == OL_GROUP_ONLY && in_array($index['owner_gid'], $admin_gids))) {
+            || $index['open_level'] == OL_GROUP_ONLY && in_array($index['owner_gid'], $admin_gids))
+        ) {
             $indexes[$i] = false;
         }
     }
@@ -300,8 +312,9 @@ function filterEditableIndex(&$indexes, $xnpsid, $uid, $puid, $isPublicEditable)
             continue;
         }
         if (!($index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $puid
-             || $index['open_level'] == OL_GROUP_ONLY && in_array($index['owner_gid'], $admin_gids)
-             || $index['open_level'] == OL_PUBLIC && $isPublicEditable)) {
+            || $index['open_level'] == OL_GROUP_ONLY && in_array($index['owner_gid'], $admin_gids)
+            || $index['open_level'] == OL_PUBLIC && $isPublicEditable)
+        ) {
             $indexes[$i] = false;
         }
     }

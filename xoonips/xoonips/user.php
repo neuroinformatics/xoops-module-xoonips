@@ -27,7 +27,7 @@
 // ------------------------------------------------------------------------- //
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 require_once 'include/notification.inc.php';
 require_once 'class/base/gtickets.php';
 require_once 'include/AL.php';
@@ -112,8 +112,8 @@ if ($op == 'logout') {
 if ($op == 'lostpass') {
     // page for password lost
     $xoopsOption['template_main'] = 'xoonips_userform.html';
-    require XOOPS_ROOT_PATH.'/header.php';
-    require XOOPS_ROOT_PATH.'/footer.php';
+    include XOOPS_ROOT_PATH.'/header.php';
+    include XOOPS_ROOT_PATH.'/footer.php';
     exit();
 }
 
@@ -123,7 +123,7 @@ if ($op == 'actv') {
         $id = $formdata->getValue('get', 'id', 'i', true);
         $actkey = $formdata->getValue('get', 'actkey', 's', true);
         $xoopsOption['template_main'] = 'xoonips_activate_user.html';
-        require XOOPS_ROOT_PATH.'/header.php';
+        include XOOPS_ROOT_PATH.'/header.php';
 
         // token ticket
         $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, 'xoonips_activate_user');
@@ -132,7 +132,7 @@ if ($op == 'actv') {
         $xoopsTpl->assign('op', $op);
         $xoopsTpl->assign('id', $id);
         $xoopsTpl->assign('actkey', $actkey);
-        require XOOPS_ROOT_PATH.'/footer.php';
+        include XOOPS_ROOT_PATH.'/footer.php';
         exit();
     }
     if (!$xoopsGTicket->check(true, 'xoonips_activate_user', false)) {
@@ -251,8 +251,7 @@ if ($op == 'delete') {
 
     $config_handler = &xoonips_getormhandler('xoonips', 'config');
     $member_handler = &xoops_gethandler('member');
-    $moderators = $member_handler->getUsersByGroup(
-        $config_handler->getValue('moderator_gid'), true);
+    $moderators = $member_handler->getUsersByGroup($config_handler->getValue('moderator_gid'), true);
 
     //
     // notify a delete account to moderator by e-mail

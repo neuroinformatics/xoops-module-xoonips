@@ -26,5 +26,5 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include 'include/common.inc.php';
-include XOOPS_ROOT_PATH.'/include/notification_update.php';
+require 'include/common.inc.php';
+require XOOPS_ROOT_PATH.'/include/notification_update.php';

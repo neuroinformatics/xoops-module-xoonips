@@ -27,7 +27,7 @@
 // ------------------------------------------------------------------------- //
 
 error_reporting(0);
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
 $session = session_id();
 $sess_handler = &xoops_gethandler('session');
@@ -35,9 +35,9 @@ if ($sess_handler->write($session, session_encode())) {
     $_SESSION['XNPSID'] = $session;
 }
 
-include_once 'include/lib.php';
-include_once 'include/AL.php';
-include_once 'class/base/oaipmh.class.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
+require_once 'class/base/oaipmh.class.php';
 
 // retrieve admin's e-mail
 $emails = array();

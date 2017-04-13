@@ -55,7 +55,7 @@ function xnptool_get_type_array()
     'mathematica',
     'program',
     'other',
-  );
+    );
     $value = explode("\t", _MD_XNPTOOL_TOOL_TYPE_SELECT);
     $ret = array();
     if (count($key) != count($value)) {
@@ -68,7 +68,8 @@ function xnptool_get_type_array()
     return $ret;
 }
 
-/** retrieve Detail Information that specified by item_id
+/**
+ * retrieve Detail Information that specified by item_id
  * return array(only keys, no values) if item_id is wrong.
  *
  * @return array as result
@@ -89,21 +90,21 @@ function xnptoolGetDetailInformation($item_id)
     'value' => $item['tool_type'],
     'select' => xnptool_get_type_array(),
     'display_value' => $tool_types[$item['tool_type']],
-  ), 'readme' => array(
+    ), 'readme' => array(
     'value' => $item['readme'],
-  ), 'rights' => array(
+    ), 'rights' => array(
     'value' => $item['rights'],
-  ), 'use_cc' => array(
+    ), 'use_cc' => array(
     'value' => $item['use_cc'],
-  ), 'cc_commercial_use' => array(
+    ), 'cc_commercial_use' => array(
     'value' => $item['cc_commercial_use'],
-  ), 'cc_modification' => array(
+    ), 'cc_modification' => array(
     'value' => $item['cc_modification'],
-  ), 'attachment_dl_limit' => array(
+    ), 'attachment_dl_limit' => array(
     'value' => $item['attachment_dl_limit'],
-  ), 'attachment_dl_notify' => array(
+    ), 'attachment_dl_notify' => array(
     'value' => $item['attachment_dl_notify'],
-  ));
+    ));
 
     return false;
 }
@@ -111,21 +112,21 @@ function xnptoolGetDetailInformation($item_id)
 function xnptoolGetListBlock($item_basic)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $xnptool_handler = &xoonips_getormcompohandler('xnptool', 'item');
     $tpl->assign('xoonips_item', $xnptool_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_LIST, $item_basic['item_id'], $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnptool_list_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnptool_list_block.html');
 }
 
 function xnptoolGetPrinterFriendlyListBlock($item_basic)
@@ -136,22 +137,22 @@ function xnptoolGetPrinterFriendlyListBlock($item_basic)
 function xnptoolGetDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
     global $xoopsTpl;
 
-  // get DetailInformation
-  $detail_handler = &xoonips_getormhandler('xnptool', 'item_detail');
+    // get DetailInformation
+    $detail_handler = &xoonips_getormhandler('xnptool', 'item_detail');
     $detail_orm = &$detail_handler->get($item_id);
     if (!$detail_orm) {
         return '';
     }
 
-  // set to template
-  $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // set to template
+    $tpl = new XoopsTpl();
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationDetailBlock($item_id));
@@ -164,8 +165,8 @@ function xnptoolGetDetailBlock($item_id)
     $xnptool_handler = &xoonips_getormcompohandler('xnptool', 'item');
     $tpl->assign('xoonips_item', $xnptool_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnptool_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnptool_detail_block.html');
 }
 
 /**
@@ -192,22 +193,22 @@ function xnptoolGetDownloadConfirmationRequired($item_id)
 function xnptoolGetPrinterFriendlyDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
     global $xoopsTpl;
 
-  // get DetailInformation
-  $detail_handler = &xoonips_getormhandler('xnptool', 'item_detail');
+    // get DetailInformation
+    $detail_handler = &xoonips_getormhandler('xnptool', 'item_detail');
     $detail_orm = &$detail_handler->get($item_id);
     if (!$detail_orm) {
         return '';
     }
 
-  // set to template
-  $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // set to template
+    $tpl = new XoopsTpl();
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationPrinterFriendlyBlock($item_id));
@@ -220,15 +221,15 @@ function xnptoolGetPrinterFriendlyDetailBlock($item_id)
     $xnptool_handler = &xoonips_getormcompohandler('xnptool', 'item');
     $tpl->assign('xoonips_item', $xnptool_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnptool_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnptool_detail_block.html');
 }
 
 function xnptoolGetRegisterBlock()
 {
     $formdata = &xoonips_getutility('formdata');
-  // retrieve detail information
-  $detail = array();
+    // retrieve detail information
+    $detail = array();
     $tool_types = xnptool_get_type_array();
     $post_id = $formdata->getValue('get', 'post_id', 's', false);
     if (is_null($post_id)) {
@@ -243,22 +244,22 @@ function xnptoolGetRegisterBlock()
     'value' => $tool_type,
     'display_value' => $tool_types[$tool_type],
     'select' => $tool_types,
-  );
+    );
 
-  // retrieve blocks of BasicInformation / Preview / Readme / License / index
-  $basic = xnpGetBasicInformationRegisterBlock();
+    // retrieve blocks of BasicInformation / Preview / Readme / License / index
+    $basic = xnpGetBasicInformationRegisterBlock();
     $preview = xnpGetPreviewRegisterBlock();
     $index = xnpGetIndexRegisterBlock();
     $attachment = xnpGetAttachmentRegisterBlock('tool_data');
     $readme = xnpGetTextFileRegisterBlock('readme');
     $rights = xnpGetRightsRegisterBlock();
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('preview', $preview);
@@ -276,16 +277,16 @@ function xnptoolGetRegisterBlock()
     }
     $tpl->assign('xnptool_developer', xoonips_get_multiple_field_template_vars(xoonips_get_orm_from_post('xnptool', 'developer'), 'xnptool', 'developer'));
 
-  // return HTML content
-  return $tpl->fetch('db:xnptool_register_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnptool_register_block.html');
 }
 
 function xnptoolGetEditBlock($item_id)
 {
     $formdata = &xoonips_getutility('formdata');
 
-  // retrieve detail information
-  $detail = xnptoolGetDetailInformation($item_id);
+    // retrieve detail information
+    $detail = xnptoolGetDetailInformation($item_id);
     $tool_types = xnptool_get_type_array();
     $post_id = $formdata->getValue('get', 'post_id', 's', false);
     if (!is_null($post_id)) {
@@ -294,14 +295,14 @@ function xnptoolGetEditBlock($item_id)
             list($tool_type) = each($tool_types);
         }
         $detail['tool_type'] = array(
-      'value' => $tool_type,
-      'display_value' => $tool_types[$tool_type],
-      'select' => $tool_types,
-    );
+        'value' => $tool_type,
+        'display_value' => $tool_types[$tool_type],
+        'select' => $tool_types,
+        );
     }
 
-  // retrieve blocks of BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationEditBlock($item_id);
+    // retrieve blocks of BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationEditBlock($item_id);
 
     $preview = xnpGetPreviewEditBlock($item_id);
     $index = xnpGetIndexEditBlock($item_id);
@@ -312,12 +313,12 @@ function xnptoolGetEditBlock($item_id)
 
     $attachment['name'] = _MD_XNPTOOL_TOOL_FILE;
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('preview', $preview);
@@ -337,8 +338,8 @@ function xnptoolGetEditBlock($item_id)
         $tpl->assign('xnptool_developer', xoonips_get_multiple_field_template_vars(xoonips_get_orm_from_post('xnptool', 'developer'), 'xnptool', 'developer'));
     }
 
-  // return HTML content
-  return $tpl->fetch('db:xnptool_register_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnptool_register_block.html');
 }
 
 function xnptoolGetConfirmBlock($item_id)
@@ -348,28 +349,28 @@ function xnptoolGetConfirmBlock($item_id)
     $developer_handler = &xoonips_getormhandler('xnptool', 'developer');
     $developer_objs = &$formdata->getObjectArray('post', $developer_handler->getTableName(), $developer_handler, false);
 
-  // retrive detail information
-  $detail = array();
+    // retrive detail information
+    $detail = array();
     $tool_type = $formdata->getValue('post', 'tool_type', 's', false);
     if ($tool_type !== false) {
         $tool_types = xnptool_get_type_array();
         $detail['tool_type'] = array(
-      'value' => $textutil->html_special_chars($tool_type),
-      'display_value' => $textutil->html_special_chars($tool_types[$tool_type]),
-    );
+        'value' => $textutil->html_special_chars($tool_type),
+        'display_value' => $textutil->html_special_chars($tool_types[$tool_type]),
+        );
     }
     if (isset($tool_date)) {
         $detail['tool_date'] = array(
-      'value' => mktime(0, 0, 0, $tool_date['Date_Month'], $tool_date['Date_Day'], $tool_date['Date_Year']),
-    );
+        'value' => mktime(0, 0, 0, $tool_date['Date_Month'], $tool_date['Date_Day'], $tool_date['Date_Year']),
+        );
     } else {
         $detail['tool_date'] = array(
-      'value' => time(),
-    );
+        'value' => time(),
+        );
     }
 
-  // retrieve blocks of BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationConfirmBlock($item_id);
+    // retrieve blocks of BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationConfirmBlock($item_id);
     xnpConfirmHtml($detail, 'xnptool_item_detail', array_keys($detail), _CHARSET);
     $preview = xnpGetPreviewConfirmBlock($item_id);
     $attachment = xnpGetAttachmentConfirmBlock($item_id, 'tool_data');
@@ -383,12 +384,12 @@ function xnptoolGetConfirmBlock($item_id)
         $system_message = $system_message."\n<br /><font color='#ff0000'>"._MD_XOONIPS_ITEM_WARNING_FIELD_TRIM.'</font><br />';
     }
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('preview', $preview);
@@ -407,8 +408,8 @@ function xnptoolGetConfirmBlock($item_id)
     }
     $tpl->assign('xnptool_developer', xoonips_get_multiple_field_template_vars($developer_objs, 'xnptool', 'developer'));
 
-  // return HTML content
-  return $tpl->fetch('db:xnptool_confirm_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnptool_confirm_block.html');
 }
 
 function xnptoolInsertItem(&$item_id)
@@ -418,8 +419,8 @@ function xnptoolInsertItem(&$item_id)
 
     $xnpsid = $_SESSION['XNPSID'];
 
-  // retister BasicInformation, Index and Attachment
-  $item_id = 0;
+    // retister BasicInformation, Index and Attachment
+    $item_id = 0;
     $result = xnpInsertBasicInformation($item_id);
     if ($result) {
         $result = xnpUpdateIndex($item_id);
@@ -439,14 +440,14 @@ function xnptoolInsertItem(&$item_id)
         return false;
     }
 
-  // register detail information
-  list($rights, $use_cc, $cc_commercial_use, $cc_modification) = xnpGetRights();
-  // trim strings
-  $ar = array(
+    // register detail information
+    list($rights, $use_cc, $cc_commercial_use, $cc_modification) = xnpGetRights();
+    // trim strings
+    $ar = array(
     'tool_type' => $formdata->getValue('post', 'tool_type', 's', false),
     'readme' => xnpGetTextFile('readme'),
     'rights' => $rights,
-  );
+    );
     xnpTrimColumn($ar, 'xnptool_item_detail', array_keys($ar), _CHARSET);
 
     $keys = implode(',', array('tool_type', 'readme', 'rights', 'use_cc', 'cc_commercial_use', 'cc_modification', 'attachment_dl_limit', 'attachment_dl_notify'));
@@ -454,8 +455,8 @@ function xnptoolInsertItem(&$item_id)
     $attachment_dl_notify = $formdata->getValue('post', 'attachment_dl_notify', 'i', false);
     $vals = implode('\',\'', array(addslashes($ar['tool_type']), addslashes($ar['readme']), addslashes($ar['rights']), $use_cc, $cc_commercial_use, $cc_modification, $attachment_dl_limit, $attachment_dl_limit ? $attachment_dl_notify : 0));
 
-  // insert DetailInformation
-  $sql = 'insert into '.$xoopsDB->prefix('xnptool_item_detail')." ( tool_id, $keys ) values ( $item_id, '$vals' ) ";
+    // insert DetailInformation
+    $sql = 'insert into '.$xoopsDB->prefix('xnptool_item_detail')." ( tool_id, $keys ) values ( $item_id, '$vals' ) ";
     $result = $xoopsDB->queryF($sql);
     if ($result == false) {
         echo 'cannot insert item_detail: '.$xoopsDB->error();
@@ -463,8 +464,8 @@ function xnptoolInsertItem(&$item_id)
         return false;
     }
 
-  // insert developer
-  $developer_handler = &xoonips_getormhandler('xnptool', 'developer');
+    // insert developer
+    $developer_handler = &xoonips_getormhandler('xnptool', 'developer');
     $developer_objs = &$formdata->getObjectArray('post', $developer_handler->getTableName(), $developer_handler, false);
     if (!$developer_handler->updateAllObjectsByForeignKey('tool_id', $item_id, $developer_objs)) {
         return false;
@@ -480,8 +481,8 @@ function xnptoolUpdateItem($tool_id)
 
     $xnpsid = $_SESSION['XNPSID'];
 
-  // modify BasicInformation, Index, Preview and Attachment.
-  $result = xnpUpdateBasicInformation($tool_id);
+    // modify BasicInformation, Index, Preview and Attachment.
+    $result = xnpUpdateBasicInformation($tool_id);
     if ($result) {
         $result = xnpUpdateIndex($tool_id);
         if ($result) {
@@ -511,12 +512,12 @@ function xnptoolUpdateItem($tool_id)
     }
 
     list($rights, $use_cc, $cc_commercial_use, $cc_modification) = xnpGetRights();
-  // trim string
-  $ar = array(
+    // trim string
+    $ar = array(
     'tool_type' => $formdata->getValue('post', 'tool_type', 's', false),
     'readme' => xnpGetTextFile('readme'),
     'rights' => $rights,
-  );
+    );
     xnpTrimColumn($ar, 'xnptool_item_detail', array_keys($ar), _CHARSET);
 
     $attachment_dl_limit = $formdata->getValue('post', 'attachment_dl_limit', 'i', false);
@@ -530,10 +531,10 @@ function xnptoolUpdateItem($tool_id)
     'cc_modification'.'=\''.$cc_modification.'\'',
     'attachment_dl_limit'.'=\''.$attachment_dl_limit.'\'',
     'attachment_dl_notify'.'=\''.($attachment_dl_limit ? $attachment_dl_notify : 0).'\'',
-  );
+    );
 
-  // modify detail information
-  $sql = 'update '.$xoopsDB->prefix('xnptool_item_detail').' set '.implode(', ', $keyval)." where tool_id=$tool_id";
+    // modify detail information
+    $sql = 'update '.$xoopsDB->prefix('xnptool_item_detail').' set '.implode(', ', $keyval)." where tool_id=$tool_id";
     $result = $xoopsDB->queryF($sql);
     if ($result == false) {
         echo 'cannot update item_detail';
@@ -542,8 +543,8 @@ function xnptoolUpdateItem($tool_id)
         return false;
     }
 
-  // insert/update developer
-  $developer_handler = &xoonips_getormhandler('xnptool', 'developer');
+    // insert/update developer
+    $developer_handler = &xoonips_getormhandler('xnptool', 'developer');
     $developer_objs = &$formdata->getObjectArray('post', $developer_handler->getTableName(), $developer_handler, false);
     if (!$developer_handler->updateAllObjectsByForeignKey('tool_id', $tool_id, $developer_objs)) {
         return false;
@@ -569,16 +570,16 @@ function xnptoolCheckRegisterParameters(&$msg)
 
     if (empty($developer)) {
         // developer is not filled
-    $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPTOOL_DEVELOPER_REQUIRED.'</font>';
+        $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPTOOL_DEVELOPER_REQUIRED.'</font>';
         $result = false;
     }
     if ((empty($tool_data) || $tool_data['name'] == '') && $tool_dataFileID == '') {
         // tool_data is not filled
-    $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPTOOL_TOOL_FILE_REQUIRED.'</font>';
+        $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPTOOL_TOOL_FILE_REQUIRED.'</font>';
         $result = false;
     }
-  // notify that license statement is required when register into public indexes.
-  $xids = explode(',', $xoonipsCheckedXID);
+    // notify that license statement is required when register into public indexes.
+    $xids = explode(',', $xoonipsCheckedXID);
     $indexes = array();
     if ($xids[0] != $xoonipsCheckedXID) {
         foreach ($xids as $i) {
@@ -600,12 +601,12 @@ function xnptoolCheckRegisterParameters(&$msg)
                 $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
                 if ($readmeEncText == '') {
                     // readme is not filled
-          $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPTOOL_README_REQUIRED.'</font>';
+                    $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPTOOL_README_REQUIRED.'</font>';
                     $result = false;
                 }
                 if ($rightsEncText == '' && $rightsUseCC == '0') {
                     // license is not filled
-          $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPTOOL_RIGHTS_REQUIRED.'</font>';
+                    $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPTOOL_RIGHTS_REQUIRED.'</font>';
                     $result = false;
                 }
                 break;
@@ -664,20 +665,20 @@ function xnptoolGetAdvancedSearchBlock(&$search_var)
     $search_var[] = 'xnptool_caption';
     $search_var[] = 'xnptool_tool_file';
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
     $tpl->assign('basic', $basic);
     $tpl->assign('module_name', 'xnptool');
     $tool_type = xnptool_get_type_array();
     $tpl->assign('tool_type_option', $tool_type);
     $tpl->assign('module_display_name', xnpGetItemTypeDisplayNameByDirname(basename(dirname(__DIR__)), 's'));
 
-  // return HTML content
-  return $tpl->fetch('db:xnptool_search_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnptool_search_block.html');
 }
 
 function xnptoolGetAdvancedSearchQuery(&$where, &$join)
@@ -733,7 +734,7 @@ function xnptoolGetDetailInformationQuickSearchQuery(&$wheres, &$join, $keywords
     $colnames = array(
     "$tool_developer_table.developer",
     "$file_table.caption",
-  );
+    );
     $wheres = xnpGetKeywordsQueries($colnames, $keywords);
     $join = " INNER JOIN $tool_developer_table ON ".$tool_developer_table.'.tool_id  = '.$xoopsDB->prefix('xoonips_item_basic').'.item_id ';
 
@@ -749,8 +750,8 @@ function xnptoolGetLicenseRequired($item_id)
 {
     global $xoopsDB;
 
-  // retrieve detail information
-  $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnptool_item_detail')." where tool_id=$item_id");
+    // retrieve detail information
+    $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnptool_item_detail')." where tool_id=$item_id");
     if (!$result) {
         return null;
     }
@@ -763,8 +764,8 @@ function xnptoolGetLicenseStatement($item_id)
 {
     global $xoopsDB;
 
-  // retrieve detail information
-  $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnptool_item_detail')." where tool_id=$item_id");
+    // retrieve detail information
+    $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnptool_item_detail')." where tool_id=$item_id");
     if (!$result) {
         return null;
     }
@@ -789,9 +790,9 @@ function xnptoolGetLicenseStatement($item_id)
 function xnptoolExportItem($export_path, $fhdl, $item_id, $attachment)
 {
     // get detail information
-  if (!$fhdl) {
-      return false;
-  }
+    if (!$fhdl) {
+        return false;
+    }
 
     $handler = &xoonips_getormhandler('xnptool', 'item_detail');
     $detail = &$handler->get($item_id);
@@ -853,19 +854,19 @@ function xnptoolGetModifiedFields($item_id)
                 array_push($ret, $v);
             }
         }
-    // is readme modified ?
-    foreach (array('readme' => _MD_XOONIPS_ITEM_README_LABEL) as $k => $v) {
-        $tmp = $formdata->getValue('post', "${k}EncText", 's', false);
-        if (!array_key_exists($k, $detail) || $tmp === null) {
-            continue;
+        // is readme modified ?
+        foreach (array('readme' => _MD_XOONIPS_ITEM_README_LABEL) as $k => $v) {
+            $tmp = $formdata->getValue('post', "${k}EncText", 's', false);
+            if (!array_key_exists($k, $detail) || $tmp === null) {
+                continue;
+            }
+            if ($detail[$k]['value'] != $tmp) {
+                array_push($ret, $v);
+            }
         }
-        if ($detail[$k]['value'] != $tmp) {
-            array_push($ret, $v);
-        }
-    }
 
-    // is rights modified ?
-    $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
+        // is rights modified ?
+        $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
         $rightsEncText = $formdata->getValue('post', 'rightsEncText', 's', false);
         if ($rightsUseCC !== null) {
             if ($rightsUseCC != $detail['use_cc']['value']) {
@@ -888,10 +889,10 @@ function xnptoolGetModifiedFields($item_id)
             }
         }
 
-    // is modified data files ?
-    if (xnpIsAttachmentModified('tool_data', $item_id)) {
-        array_push($ret, _MD_XNPTOOL_TOOL_FILE);
-    }
+        // is modified data files ?
+        if (xnpIsAttachmentModified('tool_data', $item_id)) {
+            array_push($ret, _MD_XNPTOOL_TOOL_FILE);
+        }
 
         $developer_handler = &xoonips_getormhandler('xnptool', 'developer');
         $developer_objs = &$formdata->getObjectArray('post', $developer_handler->getTableName(), $developer_handler, false);
@@ -959,8 +960,8 @@ function xnptoolGetMetadata($prefix, $item_id)
     if (!in_array($prefix, array('oai_dc', 'junii2'))) {
         return false;
     }
-  // detail information
-  $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
+    // detail information
+    $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
     $developer_handler = &xoonips_getormhandler($mydirname, 'developer');
     $detail_obj = &$detail_handler->get($item_id);
     if (empty($detail_obj)) {
@@ -976,11 +977,11 @@ function xnptoolGetMetadata($prefix, $item_id)
     }
     $types = xnptool_get_type_array();
     $detail['tool_type_display'] = $types[$detail['tool_type']];
-  // basic information
-  $basic = xnpGetBasicInformationArray($item_id);
+    // basic information
+    $basic = xnpGetBasicInformationArray($item_id);
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
-  // indexes
-  $indexes = array();
+    // indexes
+    $indexes = array();
     if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
         foreach ($xids as $xid) {
             if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
@@ -988,8 +989,8 @@ function xnptoolGetMetadata($prefix, $item_id)
             }
         }
     }
-  // files
-  $files = array();
+    // files
+    $files = array();
     $mimetypes = array();
     $file_handler = &xoonips_gethandler('xoonips', 'file');
     if ($detail['attachment_dl_limit'] == 0) {
@@ -1001,8 +1002,8 @@ function xnptoolGetMetadata($prefix, $item_id)
         }
     }
     $previews = $file_handler->getFilesInfo($item_id, 'preview');
-  // rights
-  $detail['rights_cc_url'] = '';
+    // rights
+    $detail['rights_cc_url'] = '';
     if ($detail['use_cc'] == 1) {
         $cond = 'by';
         if ($detail['cc_commercial_use'] == 0) {
@@ -1015,18 +1016,18 @@ function xnptoolGetMetadata($prefix, $item_id)
         }
         $detail['rights_cc_url'] = sprintf('http://creativecommons.org/licenses/%s/2.5/', $cond);
     }
-  // related to
-  $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
+    // related to
+    $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
     $related_to_ids = $related_to_handler->getChildItemIds($item_id);
     $related_tos = array();
     foreach ($related_to_ids as $related_to_id) {
         $related_tos[] = array(
-      'item_id' => $related_to_id,
-      'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
-    );
+        'item_id' => $related_to_id,
+        'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
+        );
     }
-  // repository configs
-  $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+    // repository configs
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $myxoopsConfigMetaFooter = &xoonips_get_xoops_configs(XOOPS_CONF_METAFOOTER);
     $repository = array(
     'download_file_compression' => $xconfig_handler->getValue('download_file_compression'),
@@ -1034,9 +1035,9 @@ function xnptoolGetMetadata($prefix, $item_id)
     'publisher' => $xconfig_handler->getValue('repository_publisher'),
     'institution' => $xconfig_handler->getValue('repository_institution'),
     'meta_author' => $myxoopsConfigMetaFooter['meta_author'],
-  );
-  // assign template
-  global $xoopsTpl;
+    );
+    // assign template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->plugins_dir[] = XOONIPS_PATH.'/class/smarty/plugins';
     $tpl->assign($xoopsTpl->get_template_vars());

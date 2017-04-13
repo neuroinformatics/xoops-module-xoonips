@@ -30,9 +30,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnpmodel/include/view.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnpmodel/iteminfo.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnpmodel/include/view.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnpmodel/iteminfo.php';
 
 /**
  * @brief Handler object that create,insert,update,get,delete XNPModelCompo object.
@@ -106,10 +106,7 @@ class XNPModelCompoHandler extends XooNIpsItemInfoCompoHandler
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
-            $result['xnpmodel_creator']
-                = xoonips_get_multiple_field_template_vars($detail->getCreators(),
-                                                          'xnpmodel',
-                                                          'creator');
+            $result['xnpmodel_creator'] = xoonips_get_multiple_field_template_vars($detail->getCreators(), 'xnpmodel', 'creator');
             $result['detail'] = $detail->getVarArray('s');
             $result['detail']['model_type'] = $textutil->html_special_chars($this->get_model_type_label($detail->getVar('model_type', 's')));
             $result['detail']['model_type_value'] = $detail->getVar('model_type', 's');
@@ -121,8 +118,7 @@ class XNPModelCompoHandler extends XooNIpsItemInfoCompoHandler
             if (is_array($model->getVar('preview'))) {
                 $result['detail']['previews'] = array();
                 foreach ($model->getVar('preview') as $preview) {
-                    $result['detail']['previews'][]
-                        = $this->getPreviewTemplateVar($preview);
+                    $result['detail']['previews'][] = $this->getPreviewTemplateVar($preview);
                 }
             }
 

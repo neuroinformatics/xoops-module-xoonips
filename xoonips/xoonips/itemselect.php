@@ -31,12 +31,12 @@
 // This page can't be cached. Results of search(cached before login) don't display after login.
 session_cache_limiter('none');
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 
-include_once 'include/lib.php';
-include_once 'include/AL.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
 
 // If not a user, redirect
 if (!is_object($xoopsUser)) {
@@ -51,7 +51,7 @@ if (!is_object($xoopsUser)) {
 xnpEncodeMacSafariPost();
 xnpEncodeMacSafariGet();
 
-include_once __DIR__.'/include/extra_param.inc.php';
+require_once __DIR__.'/include/extra_param.inc.php';
 
 $requested_vars = array(
     'op' => array('s', ''),
@@ -87,7 +87,7 @@ if (in_array($op, $onclickidx_ops)) {
 }
 
 if ($print) {
-    require_once XOOPS_ROOT_PATH.'/class/template.php';
+    include_once XOOPS_ROOT_PATH.'/class/template.php';
     $xoopsTpl = new XoopsTpl();
     xoops_header(false);
     echo "</head><body onload='window.print();'>\n";
@@ -95,7 +95,7 @@ if ($print) {
     include XOOPS_ROOT_PATH.'/header.php';
 }
 
-include 'include/itemselect.inc.php';
+require 'include/itemselect.inc.php';
 
 if (isset($search_itemtype)) {
     $xoopsTpl->assign('search_itemtype', $search_itemtype);
@@ -130,13 +130,15 @@ if ($print) {
     $textutil = &xoonips_getutility('text');
     $xoopsTpl->assign('title', _MD_XOONIPS_ITEM_SEARCH_RESULT);
     $xoopsTpl->assign('date', $textutil->html_special_chars(date(DATETIME_FORMAT, xoops_getUserTimestamp(time()))));
-    $xoopsTpl->assign('order_by_select', array(
+    $xoopsTpl->assign(
+        'order_by_select', array(
         'title' => _MD_XOONIPS_ITEM_TITLE_LABEL,
         'doi' => _MD_XOONIPS_ITEM_DOI_LABEL,
         'last_update_date' => _MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL,
         'creation_date' => _MD_XOONIPS_ITEM_CREATION_DATE_LABEL,
         'publication_date' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
-    ));
+        )
+    );
     $xoopsTpl->assign('order_by', $textutil->html_special_chars($order_by));
 
     $xoopsTpl->display('db:xoonips_itemselect_print.html');

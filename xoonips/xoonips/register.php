@@ -39,10 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && (isset($_GET['item_type_id']) || isse
 }
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
-include_once 'include/lib.php';
-include_once 'include/AL.php';
-include_once 'include/item_limit_check.php';
+require 'include/common.inc.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
+require_once 'include/item_limit_check.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 
@@ -68,7 +68,8 @@ $uid = $_SESSION['xoopsUserId'];
 
 //Uncertified user can't access(except XOOPS administrator).
 if (!$xoopsUser->isAdmin($xoopsModule->getVar('mid'))
-    && !xnp_is_activated($xnpsid, $uid)) {
+    && !xnp_is_activated($xnpsid, $uid)
+) {
     redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_MODERATOR_NOT_ACTIVATED);
     exit();
 }
@@ -106,7 +107,7 @@ $xoonipsURL = '';
 $xoonipsCheckPrivateHandlerId = 'PrivateIndexCheckedHandler'; //see also xoonips_register.html
 
 $xoopsOption['template_main'] = 'xoonips_register.html';
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
 //check private_item_number_limit
 if (available_space_of_private_item() == 0) {
@@ -124,8 +125,7 @@ if (available_space_of_private_item() == 0) {
 $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
 $item_type = &$item_type_handler->get($item_type_id);
 if (!$item_type) {
-    $item_type = &$item_type_handler->get(
-        $item_types[0]->get('item_type_id'));
+    $item_type = &$item_type_handler->get($item_types[0]->get('item_type_id'));
 }
 
 //select_item_type: array( 'item type name' => 'item_type_id', ... );
@@ -137,7 +137,7 @@ $xoopsTpl->assign('prev_url', 'register.php');
 $xoopsTpl->assign('this_url', XOOPS_URL.'/modules/xoonips/register.php');
 $xoopsTpl->assign('accept_charset', xnpGetMacSafariAcceptCharset());
 
-include_once XOOPS_ROOT_PATH.'/modules/'.$item_type->get('viewphp');
+require_once XOOPS_ROOT_PATH.'/modules/'.$item_type->get('viewphp');
 $func = $item_type->get('name').'GetRegisterBlock';
 $body = $func();
 
@@ -184,4 +184,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 header('Content-Type:text/html; charset='._CHARSET);
 //echo "\r\n"; flush();
 
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';

@@ -27,7 +27,7 @@
 // ------------------------------------------------------------------------- //
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
 // TODO: token ticket
 
@@ -42,9 +42,9 @@ if ($xoopsUser) {
     exit();
 }
 
-include_once 'include/lib.php';
-include_once 'include/AL.php';
-include_once 'include/imexport.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
+require_once 'include/imexport.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 $uid = $_SESSION['xoopsUserId'];

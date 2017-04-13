@@ -25,7 +25,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
 // If not a user, redirect
 $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
@@ -88,14 +88,18 @@ xoops_header(false);
 
 ?>
 </head>
-<body <?php if ($getTextFromOpener) {
+<body <?php
+if ($getTextFromOpener) {
     echo 'onload="getTextFromOpener()"';
-} ?> >
+}
+?> >
 <form  method="post" action='' enctype="multipart/form-data">
 <table class="outer">
 <tr>
 <td class="head">
-  <?php echo $displayName; ?>
+<?php
+echo $displayName;
+?>
 </td>
 <td class="even">
 <input type="hidden" name="name" value="<?php echo $textutil->html_special_chars($name); ?>" id="xoonipsName"/>
@@ -112,7 +116,9 @@ if ($errorMessage) {
 <br />
 
 <textarea name="text" id="xoonipsText" cols="37" rows="8" style="width:296px;">
-<?php echo $textutil->html_special_chars($text); ?>
+<?php
+echo $textutil->html_special_chars($text);
+?>
 </textarea>
 
 <br />
@@ -128,111 +134,109 @@ if ($errorMessage) {
 <!--
 
 function headText(str){
-	str = str.replace(/\r\n/, "\n");
-	str = str.replace(/\r/, "\n");
-	return str;
+    str = str.replace(/\r\n/, "\n");
+    str = str.replace(/\r/, "\n");
+    return str;
 }
 
 function nl2br(str){
-	return str.replace(/\n/, " <br /> ");
+    return str.replace(/\n/, " <br /> ");
 }
 
 function clickOK(){
-	var opener = window.opener;
-	var name = document.getElementById('xoonipsName').value;
-	
-	// textarea -> opener_text
-	var textarea = document.getElementById('xoonipsText');
-	var text = textarea.value; // IE:OK mozilla:OK safari:OK
-	text = text.split("\u00a5").join("\u005c"); // yen sign -> backslash
-	
-	// set text to opener
-	var openerEncText = opener.document.getElementById(name+'EncText');
-	var openerShowText = opener.document.getElementById(name+'ShowText');
-	openerEncText.value = text;
-	
-	//openerShowText.firstChild.nodeValue = nl2br(headText(text)); // IE:OK mozilla:OK safari:OK
-	var str = text;
-	str = str.replace(/\r\n/g, "\n");
-	str = str.replace(/\r/g, "\n");
-	var ar = str.split( "\n" );
-	
-	// clear showText
-	while ( openerShowText.hasChildNodes() )
-		openerShowText.removeChild( openerShowText.lastChild );
-	
-	// appendto showText
-	var i;
-	var visibleLines = 3;
-	for ( i = 0; i < ar.length && i < visibleLines; i++ ){
-		if ( i == visibleLines-1 ){
-			if ( ar.length > visibleLines+1 || ar.length == visibleLines+1 && ar[visibleLines] != '' ){
-				//window.alert(ar);
-				//window.alert(visibleLines);
-				ar[i] = ar[i] + ' ...';
-			}
-		}
-		openerShowText.appendChild( opener.document.createTextNode(ar[i]) );
-		openerShowText.appendChild( opener.document.createElement('BR'));
-	}
-	
-	window.close();
-	return false;
+    var opener = window.opener;
+    var name = document.getElementById('xoonipsName').value;
+    
+    // textarea -> opener_text
+    var textarea = document.getElementById('xoonipsText');
+    var text = textarea.value; // IE:OK mozilla:OK safari:OK
+    text = text.split("\u00a5").join("\u005c"); // yen sign -> backslash
+    
+    // set text to opener
+    var openerEncText = opener.document.getElementById(name+'EncText');
+    var openerShowText = opener.document.getElementById(name+'ShowText');
+    openerEncText.value = text;
+    
+    //openerShowText.firstChild.nodeValue = nl2br(headText(text)); // IE:OK mozilla:OK safari:OK
+    var str = text;
+    str = str.replace(/\r\n/g, "\n");
+    str = str.replace(/\r/g, "\n");
+    var ar = str.split( "\n" );
+    
+    // clear showText
+    while ( openerShowText.hasChildNodes() )
+        openerShowText.removeChild( openerShowText.lastChild );
+    
+    // appendto showText
+    var i;
+    var visibleLines = 3;
+    for ( i = 0; i < ar.length && i < visibleLines; i++ ){
+        if ( i == visibleLines-1 ){
+            if ( ar.length > visibleLines+1 || ar.length == visibleLines+1 && ar[visibleLines] != '' ){
+                //window.alert(ar);
+                //window.alert(visibleLines);
+                ar[i] = ar[i] + ' ...';
+            }
+        }
+        openerShowText.appendChild( opener.document.createTextNode(ar[i]) );
+        openerShowText.appendChild( opener.document.createElement('BR'));
+    }
+    
+    window.close();
+    return false;
 }
 
 function clickCancel(){
-	window.close();
-	return false;
+    window.close();
+    return false;
 }
 
-<?php if ($getTextFromOpener) {
-    ?>
-
-function resizer(){
-<?php 
+<?php
+if ($getTextFromOpener) {
     /* resize window to prefered height
         see : http://www.quirksmode.org/viewport/compatibility.html
     */
 ?>
-	
-	window.resizeTo( 500, 400 );
-	
-	var windowInnerHeight;
-	if (self.innerHeight) // all except Explorer
-		windowInnerHeight = self.innerHeight;
-	else if (document.documentElement && document.documentElement.clientHeight) // Explorer 6 Strict Mode
-		windowInnerHeight = document.documentElement.clientHeight;
-	else if (document.body) // other Explorers
-		windowInnerHeight = document.body.clientHeight;
-	
-	var documentHeight;
-	var test1 = document.body.scrollHeight;
-	var test2 = document.body.offsetHeight
-	if (test1 > test2) // all but Explorer Mac
-		documentHeight = document.body.scrollHeight;
-	else // Explorer Mac;
-	     //would also work in Explorer 6 Strict, Mozilla and Safari
-		documentHeight = document.body.offsetHeight;
-	
-	if ( windowInnerHeight && documentHeight ){
-		window.resizeBy( 0, documentHeight - windowInnerHeight );
-	}
+function resizer(){
+    window.resizeTo( 500, 400 );
+    
+    var windowInnerHeight;
+    if (self.innerHeight) // all except Explorer
+        windowInnerHeight = self.innerHeight;
+    else if (document.documentElement && document.documentElement.clientHeight) // Explorer 6 Strict Mode
+        windowInnerHeight = document.documentElement.clientHeight;
+    else if (document.body) // other Explorers
+        windowInnerHeight = document.body.clientHeight;
+    
+    var documentHeight;
+    var test1 = document.body.scrollHeight;
+    var test2 = document.body.offsetHeight
+    if (test1 > test2) // all but Explorer Mac
+        documentHeight = document.body.scrollHeight;
+    else // Explorer Mac;
+         //would also work in Explorer 6 Strict, Mozilla and Safari
+        documentHeight = document.body.offsetHeight;
+    
+    if ( windowInnerHeight && documentHeight ){
+        window.resizeBy( 0, documentHeight - windowInnerHeight );
+    }
 }
 
 function getTextFromOpener(){
-	var opener = window.opener;
-	var name = document.getElementById('xoonipsName').value;
-	
-	// opener_text -> textarea
-	var encText = opener.document.getElementById(name+'EncText').value; // IE:OK mozilla:OK safari:OK
-	var tarea = document.getElementById('xoonipsText');
-	if ( encText == '' && name == 'rights' )
-		encText = "All rights reserved.\nLicense:\n";
-	tarea.value = encText;
-	resizer();
+    var opener = window.opener;
+    var name = document.getElementById('xoonipsName').value;
+    
+    // opener_text -> textarea
+    var encText = opener.document.getElementById(name+'EncText').value; // IE:OK mozilla:OK safari:OK
+    var tarea = document.getElementById('xoonipsText');
+    if ( encText == '' && name == 'rights' )
+        encText = "All rights reserved.\nLicense:\n";
+    tarea.value = encText;
+    resizer();
 }
 <?php 
-} ?>
+}
+?>
 
 
 //-->

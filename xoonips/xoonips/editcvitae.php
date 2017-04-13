@@ -27,9 +27,9 @@
 // ------------------------------------------------------------------------- //
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
-include_once 'include/lib.php';
-include_once 'include/AL.php';
+require 'include/common.inc.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 
@@ -54,13 +54,13 @@ if ($uid <= 0) {
 }
 
 //error if argument 'uid' is not equal to own UID
-if (xnp_is_moderator($xnpsid, $_SESSION['xoopsUserId']) || $xoopsUser->isAdmin($xoopsModule->getVar('mid')));
-elseif ($uid != $_SESSION['xoopsUserId']) {
+if (xnp_is_moderator($xnpsid, $_SESSION['xoopsUserId']) || $xoopsUser->isAdmin($xoopsModule->getVar('mid'))) {
+} elseif ($uid != $_SESSION['xoopsUserId']) {
     redirect_header(XOOPS_URL.'/', 3, _NOPERM);
 }
 
 $xoopsOption['template_main'] = 'xoonips_editcvitae.html';
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
 $op = $formdata->getValue('both', 'op', 's', false);
 

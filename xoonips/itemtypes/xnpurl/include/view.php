@@ -70,21 +70,21 @@ function xnpurlGetMetaInformation($item_id)
 function xnpurlGetListBlock($item_basic)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $xnpurl_handler = &xoonips_getormcompohandler('xnpurl', 'item');
     $tpl->assign('xoonips_item', $xnpurl_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_LIST, $item_basic['item_id'], $myuid));
 
-  // return HTML content
-  return $tpl->fetch('db:xnpurl_list_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnpurl_list_block.html');
 }
 
 function xnpurlGetPrinterFriendlyListBlock($item_basic)
@@ -95,18 +95,18 @@ function xnpurlGetPrinterFriendlyListBlock($item_basic)
 function xnpurlGetUrlBannerFileDetailBlock($item_id, $url)
 {
     // retrieve file information that specified by item_id
-  $files = xnpGetFileInfo('t_file.file_id, t_file.caption', 't_file_type.name=\'url_banner_file\' and sess_id is NULL ', $item_id);
-  // generate html
-  if (count($files) != 0) {
-      reset($files);
-      list($dummy, list($fileID, $caption)) = each($files);
-      $imageFileName = XOOPS_URL."/modules/xoonips/image.php?file_id=$fileID";
-      $html = '<a href="'.$url.'"><img src="'.$imageFileName.'" alt="'.$url.'"/></a>';
-      $hidden = xnpCreateHidden('url_banner_fileFileID', $fileID);
-  } else {
-      $html = '';
-      $hidden = '';
-  }
+    $files = xnpGetFileInfo('t_file.file_id, t_file.caption', 't_file_type.name=\'url_banner_file\' and sess_id is NULL ', $item_id);
+    // generate html
+    if (count($files) != 0) {
+        reset($files);
+        list($dummy, list($fileID, $caption)) = each($files);
+        $imageFileName = XOOPS_URL."/modules/xoonips/image.php?file_id=$fileID";
+        $html = '<a href="'.$url.'"><img src="'.$imageFileName.'" alt="'.$url.'"/></a>';
+        $hidden = xnpCreateHidden('url_banner_fileFileID', $fileID);
+    } else {
+        $html = '';
+        $hidden = '';
+    }
 
     return array('name' => 'Banner', 'value' => $html, 'hidden' => $hidden);
 }
@@ -114,15 +114,15 @@ function xnpurlGetUrlBannerFileDetailBlock($item_id, $url)
 function xnpurlGetDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
     global $xoopsTpl;
 
-  // set to template
-  $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // set to template
+    $tpl = new XoopsTpl();
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationDetailBlock($item_id));
@@ -132,22 +132,22 @@ function xnpurlGetDetailBlock($item_id)
     $xnpurl_handler = &xoonips_getormcompohandler('xnpurl', 'item');
     $tpl->assign('xoonips_item', $xnpurl_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpurl_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpurl_detail_block.html');
 }
 
 function xnpurlGetPrinterFriendlyDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
     global $xoopsTpl;
 
-  // set to template
-  $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // set to template
+    $tpl = new XoopsTpl();
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationPrinterFriendlyBlock($item_id));
@@ -157,44 +157,44 @@ function xnpurlGetPrinterFriendlyDetailBlock($item_id)
     $xnpurl_handler = &xoonips_getormcompohandler('xnpurl', 'item');
     $tpl->assign('xoonips_item', $xnpurl_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpurl_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpurl_detail_block.html');
 }
 
 function xnpurlGetRegisterBlock()
 {
     $textutil = &xoonips_getutility('text');
     $formdata = &xoonips_getutility('formdata');
-  // get DetailInformation
-  if ($formdata->getValue('get', 'post_id', 's', false)) {
-      $detail = array(
-      'url' => $textutil->html_special_chars($formdata->getValue('post', 'url', 's', true)),
-    );
-  } else {
-      $detail = array(
-      'url' => '',
-    );
-  }
+    // get DetailInformation
+    if ($formdata->getValue('get', 'post_id', 's', false)) {
+        $detail = array(
+        'url' => $textutil->html_special_chars($formdata->getValue('post', 'url', 's', true)),
+        );
+    } else {
+        $detail = array(
+        'url' => '',
+        );
+    }
 
-  // retrieve blocks of BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationRegisterBlock();
+    // retrieve blocks of BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationRegisterBlock();
     $preview = xnpGetPreviewRegisterBlock();
     $index = xnpGetIndexRegisterBlock();
     $url_banner_file = xnpGetAttachmentRegisterBlock('url_banner_file');
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('preview', $preview);
     $tpl->assign('index', $index);
     $tpl->assign('url_banner_file', $url_banner_file);
     $tpl->assign('detail', $detail);
-  // return HTML content
-  return $tpl->fetch('db:xnpurl_register_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnpurl_register_block.html');
 }
 
 function xnpurlGetEditBlock($item_id)
@@ -202,37 +202,37 @@ function xnpurlGetEditBlock($item_id)
     global $xoopsDB;
     $formdata = &xoonips_getutility('formdata');
 
-  // retrieve blocks of BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationEditBlock($item_id);
+    // retrieve blocks of BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationEditBlock($item_id);
     $preview = xnpGetPreviewEditBlock($item_id);
     $index = xnpGetIndexEditBlock($item_id);
     $url_banner_file = xnpGetAttachmentEditBlock($item_id, 'url_banner_file');
 
-  // retrieve detail information
-  $url = $formdata->getValue('post', 'url', 's', false);
+    // retrieve detail information
+    $url = $formdata->getValue('post', 'url', 's', false);
     if (isset($url)) {
         $detail = array(
-      'url' => $url,
-    );
+        'url' => $url,
+        );
     } elseif (!empty($item_id)) {
         $detail = xnpurlGetDetailInformation($item_id);
     } else {
         $detail = array();
     }
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
     $tpl->assign('basic', $basic);
     $tpl->assign('preview', $preview);
     $tpl->assign('index', $index);
     $tpl->assign('url_banner_file', $url_banner_file);
     $tpl->assign('detail', $detail);
 
-  // return HTML content
-  return $tpl->fetch('db:xnpurl_register_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnpurl_register_block.html');
 }
 
 // see also xnpGetAttachmentConfirmBlock
@@ -243,7 +243,7 @@ function xnpurlGetUrlBannerFileConfirmBlock($item_id)
     $url_banner_file = $formdata->getFile($name, false);
     if (!empty($url_banner_file['name'])) {
         // file has been Uploaded
-    list($fileID, $errorMessage) = xnpUploadFile($name, false);
+        list($fileID, $errorMessage) = xnpUploadFile($name, false);
         if ($fileID == false) {
             $errorHTML = '<font color=\'#ff0000\'>'.htmlspecialchars($errorMessage).'</font><br />';
 
@@ -255,7 +255,7 @@ function xnpurlGetUrlBannerFileConfirmBlock($item_id)
         $attachmentFileID = $formdata->getValue('post', $name.'FileID', 'i', false);
         if ($attachmentFileID == 0) {
             // no files should be attached
-      $sql = ' 0 ';
+            $sql = ' 0 ';
         } else {
             $sql = "t_file.file_id = $attachmentFileID";
         }
@@ -267,58 +267,59 @@ function xnpurlGetUrlBannerFileConfirmBlock($item_id)
         $html = "<input type='hidden' name='${name}FileID' value=''>";
     } else {
         // todo: to be downloadable
-    list(list($fileID, $fileName, $fileSize)) = $files;
+        list(list($fileID, $fileName, $fileSize)) = $files;
         $imageFileName = XOOPS_URL."/modules/xoonips/image.php?file_id=$fileID";
         $html = "<input type='hidden' name='${name}FileID' value='$fileID'><img src='$imageFileName'>";
     }
 
-  // generate html
-  return array('name' => 'Attachment', 'value' => $html);
+    // generate html
+    return array('name' => 'Attachment', 'value' => $html);
 }
 
 function xnpurlGetConfirmBlock($item_id)
 {
     $formdata = &xoonips_getutility('formdata');
-  // retrieve blocks of BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationConfirmBlock($item_id);
+    // retrieve blocks of BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationConfirmBlock($item_id);
     $preview = xnpGetPreviewConfirmBlock($item_id);
     $index = xnpGetIndexConfirmBlock($item_id);
     $url_banner_file = xnpurlGetUrlBannerFileConfirmBlock($item_id, 'url_banner_file');
-  // retrieve detail information
-  $url = $formdata->getValue('post', 'url', 's', false);
+    // retrieve detail information
+    $url = $formdata->getValue('post', 'url', 's', false);
     if (isset($url)) {
         $detail = array(
-      'url' => array(
+        'url' => array(
         'value' => $url,
-      ),
-    );
+        ),
+        );
         xnpConfirmHtml($detail, 'xnpurl_item_detail', array_keys($detail), _CHARSET);
     } else {
         $detail = array();
     }
 
-  // trim strings
-  if (xnpHasWithout($basic) || xnpHasWithout($preview) || xnpHasWithout($detail)) {
-      global $system_message;
-      $system_message = $system_message."\n<br /><font color='#ff0000'>"._MD_XOONIPS_ITEM_WARNING_FIELD_TRIM.'</font><br />';
-  }
+    // trim strings
+    if (xnpHasWithout($basic) || xnpHasWithout($preview) || xnpHasWithout($detail)) {
+        global $system_message;
+        $system_message = $system_message."\n<br /><font color='#ff0000'>"._MD_XOONIPS_ITEM_WARNING_FIELD_TRIM.'</font><br />';
+    }
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('preview', $preview);
     $tpl->assign('index', $index);
     $tpl->assign('url_banner_file', $url_banner_file);
     $tpl->assign('detail', $detail);
-  // return HTML content
-  return $tpl->fetch('db:xnpurl_confirm_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnpurl_confirm_block.html');
 }
 
-/** make sure that enterd detail information is correctly or not.
+/**
+ * make sure that enterd detail information is correctly or not.
  * called from register confirmation and edit confirmation.
  */
 function xnpurlCheckRegisterParameters(&$message)
@@ -351,8 +352,8 @@ function xnpurlInsertItem(&$item_id)
     global $xoopsDB;
     $xnpsid = $_SESSION['XNPSID'];
 
-  // retister BasicInformation, Index and Attachment
-  $item_id = 0;
+    // retister BasicInformation, Index and Attachment
+    $item_id = 0;
     $result = xnpInsertBasicInformation($item_id);
     if ($result) {
         $result = xnpUpdateIndex($item_id);
@@ -369,14 +370,14 @@ function xnpurlInsertItem(&$item_id)
         return false;
     }
 
-  // limit num of chracters
-  $ar = array(
+    // limit num of chracters
+    $ar = array(
     'url' => preg_replace('/javascript:/i', '', preg_replace('/[\\x00-\\x20\\x22\\x27]/', '', $formdata->getValue('post', 'url', 's', false))),
-  );
+    );
     xnpTrimColumn($ar, 'xnpurl_item_detail', array_keys($ar), _CHARSET);
 
-  // register detail information
-  $sql = 'insert into '.$xoopsDB->prefix('xnpurl_item_detail')." ( url_id, url ) values ( $item_id, '".addslashes($ar['url']).'\' ) ';
+    // register detail information
+    $sql = 'insert into '.$xoopsDB->prefix('xnpurl_item_detail')." ( url_id, url ) values ( $item_id, '".addslashes($ar['url']).'\' ) ';
     $result = $xoopsDB->queryF($sql);
     if ($result == false) {
         echo 'cannot insert item_detail';
@@ -393,8 +394,8 @@ function xnpurlUpdateItem($item_id)
     global $xoopsDB;
     $xnpsid = $_SESSION['XNPSID'];
 
-  // modify BasicInformation, Index, Preview and Attachment.
-  $result = xnpUpdateBasicInformation($item_id);
+    // modify BasicInformation, Index, Preview and Attachment.
+    $result = xnpUpdateBasicInformation($item_id);
     if ($result) {
         $result = xnpUpdateIndex($item_id);
         if ($result) {
@@ -418,14 +419,14 @@ function xnpurlUpdateItem($item_id)
         return false;
     }
 
-  // trim strings
-  $ar = array(
+    // trim strings
+    $ar = array(
     'url' => preg_replace('/javascript:/i', '', preg_replace('/[\\x00-\\x20\\x22\\x27]/', '', $formdata->getValue('post', 'url', 's', false, ''))),
-  );
+    );
     xnpTrimColumn($ar, 'xnpurl_item_detail', array_keys($ar), _CHARSET);
 
-  // register detail information
-  $sql = implode(',', array('url'.'=\''.addslashes($ar['url']).'\''));
+    // register detail information
+    $sql = implode(',', array('url'.'=\''.addslashes($ar['url']).'\''));
     $result = $xoopsDB->queryF('update '.$xoopsDB->prefix('xnpurl_item_detail')." set $sql where url_id = $item_id ");
     if ($result == false) {
         return false;
@@ -464,21 +465,21 @@ function xnpurlGetAdvancedSearchQuery(&$where, &$join)
 function xnpurlGetAdvancedSearchBlock(&$search_var)
 {
     // retrieve blocks of BasicInformation / Preview / IndexKeywords
-  $basic = xnpGetBasicInformationAdvancedSearchBlock('xnpurl', $search_var);
+    $basic = xnpGetBasicInformationAdvancedSearchBlock('xnpurl', $search_var);
     $search_var[] = 'xnpurl_url';
     $search_var[] = 'xnpurl_url_banner_file';
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
     $tpl->assign('basic', $basic);
     $tpl->assign('module_name', 'xnpurl');
     $tpl->assign('module_display_name', xnpGetItemTypeDisplayNameByDirname(basename(dirname(__DIR__)), 's'));
 
-  // return HTML content
-  return $tpl->fetch('db:xnpurl_search_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnpurl_search_block.html');
 }
 
 function xnpurlGetDetailInformationTotalSize($iids)
@@ -508,8 +509,8 @@ function xnpurlExportItem($export_path, $fhdl, $item_id, $attachment)
         return false;
     }
 
-  // retrieve detail information
-  $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpurl_item_detail')." where url_id=$item_id");
+    // retrieve detail information
+    $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpurl_item_detail')." where url_id=$item_id");
     if (!$result) {
         return false;
     }
@@ -542,10 +543,10 @@ function xnpurlGetModifiedFields($item_id)
                 array_push($ret, $v);
             }
         }
-    // is modified banner files ?
-    if (xnpIsAttachmentModified('url_banner_file', $item_id)) {
-        array_push($ret, _MD_XNPURL_URL_BANNER_FILE_LABEL);
-    }
+        // is modified banner files ?
+        if (xnpIsAttachmentModified('url_banner_file', $item_id)) {
+            array_push($ret, _MD_XNPURL_URL_BANNER_FILE_LABEL);
+        }
     }
 
     return $ret;
@@ -572,18 +573,18 @@ function xnpurlGetMetadata($prefix, $item_id)
     if (!in_array($prefix, array('oai_dc', 'junii2'))) {
         return false;
     }
-  // detail information
-  $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
+    // detail information
+    $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
     $detail_obj = &$detail_handler->get($item_id);
     if (empty($detail_obj)) {
         return false;
     }
     $detail = $detail_obj->getArray();
-  // basic information
-  $basic = xnpGetBasicInformationArray($item_id);
+    // basic information
+    $basic = xnpGetBasicInformationArray($item_id);
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
-  // indexes
-  $indexes = array();
+    // indexes
+    $indexes = array();
     if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
         foreach ($xids as $xid) {
             if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
@@ -591,24 +592,24 @@ function xnpurlGetMetadata($prefix, $item_id)
             }
         }
     }
-  // files
-  $files = array();
+    // files
+    $files = array();
     $mimetypes = array();
     $file_handler = &xoonips_gethandler('xoonips', 'file');
     $files = $file_handler->getFilesInfo($item_id, 'url_banner_file');
     $detail['banner_url'] = !empty($files) ? $files[0]['image_url'] : '';
-  // related to
-  $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
+    // related to
+    $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
     $related_to_ids = $related_to_handler->getChildItemIds($item_id);
     $related_tos = array();
     foreach ($related_to_ids as $related_to_id) {
         $related_tos[] = array(
-      'item_id' => $related_to_id,
-      'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
-    );
+        'item_id' => $related_to_id,
+        'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
+        );
     }
-  // repository configs
-  $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+    // repository configs
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $myxoopsConfigMetaFooter = &xoonips_get_xoops_configs(XOOPS_CONF_METAFOOTER);
     $repository = array(
     'download_file_compression' => $xconfig_handler->getValue('download_file_compression'),
@@ -616,9 +617,9 @@ function xnpurlGetMetadata($prefix, $item_id)
     'publisher' => $xconfig_handler->getValue('repository_publisher'),
     'institution' => $xconfig_handler->getValue('repository_institution'),
     'meta_author' => $myxoopsConfigMetaFooter['meta_author'],
-  );
-  // assign template
-  global $xoopsTpl;
+    );
+    // assign template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->plugins_dir[] = XOONIPS_PATH.'/class/smarty/plugins';
     $tpl->assign($xoopsTpl->get_template_vars());

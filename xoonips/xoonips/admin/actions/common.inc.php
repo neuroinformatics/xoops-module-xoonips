@@ -29,8 +29,8 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include '../condefs.php';
-include '../include/functions.php';
+require '../condefs.php';
+require '../include/functions.php';
 
 // initialize xoonips session
 $xsession_handler = &xoonips_getormhandler('xoonips', 'session');

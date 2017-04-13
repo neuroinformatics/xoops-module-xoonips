@@ -15,20 +15,20 @@ function smarty_modifier_xoonips_escape($text, $type = 'html')
 {
     if (!function_exists('xoonips_getutility')) {
         // return empty string if xoonips function not loaded.
-    return '';
+        return '';
     }
     $textutil = &xoonips_getutility('text');
     switch ($type) {
-  case 'html':
-    $text = $textutil->html_special_chars($text);
-    break;
-  case 'xml':
-    $text = $textutil->xml_special_chars($text, _CHARSET);
-    break;
-  case 'javascript':
-    $text = $textutil->javascript_special_chars($text);
-    break;
-  }
+    case 'html':
+        $text = $textutil->html_special_chars($text);
+        break;
+    case 'xml':
+        $text = $textutil->xml_special_chars($text, _CHARSET);
+        break;
+    case 'javascript':
+        $text = $textutil->javascript_special_chars($text);
+        break;
+    }
 
     return $text;
 }

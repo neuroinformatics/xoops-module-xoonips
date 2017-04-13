@@ -26,9 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
 
 /**
  * subclass of XooNIpsLogic(login).
@@ -38,8 +38,8 @@ class XooNIpsLogicLogin extends XooNIpsLogic
     /**
      * execute login.
      *
-     * @param[in] $vars[0] id (use '' if guest login)
-     * @param[in] $vars[1] pass (use '' if guest login)
+     * @param[in]  $vars[0] id (use '' if guest login)
+     * @param[in]  $vars[1] pass (use '' if guest login)
      * @param[out] $response->result true:success, false:failed
      * @param[out] $response->error error information
      * @param[out] $response->success session id

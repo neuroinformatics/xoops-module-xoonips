@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
 
 /**
  * subclass of XooNIpsLogic(searchItem).
@@ -92,10 +92,7 @@ class XooNIpsLogicSearchItem extends XooNIpsLogic
             $error->add(XNPERR_INVALID_PARAM, 'too long parameter 1');
         }
         $ar = explode(':', $vars[1]);
-        if (count($ar) < 2 || !in_array($ar[0], array(
-            'index',
-            'keyword',
-        ))) {
+        if (count($ar) < 2 || !in_array($ar[0], array('index', 'keyword'))) {
             $error->add(XNPERR_INVALID_PARAM, 'bad query parameter 2');
         }
         if (!is_int($vars[2]) && !ctype_digit($vars[2])) {
@@ -104,19 +101,19 @@ class XooNIpsLogicSearchItem extends XooNIpsLogic
         if (!is_int($vars[3]) && !ctype_digit($vars[3])) {
             $error->add(XNPERR_INVALID_PARAM, 'not integer parameter 3');
         }
-        if (!in_array($vars[4], array(
+        if (!in_array(
+            $vars[4], array(
             'title',
             'ext_id',
             'last_modified_date',
             'registration_date',
             'creation_date',
-        ))) {
+            )
+        )
+        ) {
             $error->add(XNPERR_INVALID_PARAM, 'unknown sort key parameter 4');
         }
-        if (!in_array($vars[5], array(
-            'asc',
-            'desc',
-        ))) {
+        if (!in_array($vars[5], array('asc', 'desc'))) {
             $error->add(XNPERR_INVALID_PARAM, 'unknown sort order parameter 5');
         }
 
@@ -148,41 +145,37 @@ class XooNIpsLogicSearchItem extends XooNIpsLogic
         $criteria->setStart($start);
         $criteria->setLimit($limit);
         switch ($sortkey) {
-            case 'title':
-                $join_sort_table = 'xoonips_item_title';
-                $criteria->add(new Criteria('title_id', 0));
-                $criteria->setSort('title');
-                break;
+        case 'title':
+            $join_sort_table = 'xoonips_item_title';
+            $criteria->add(new Criteria('title_id', 0));
+            $criteria->setSort('title');
+            break;
 
-            case 'ext_id':
-                $join_sort_table = false;
-                $criteria->setSort('doi');
-                break;
+        case 'ext_id':
+            $join_sort_table = false;
+            $criteria->setSort('doi');
+            break;
 
-            case 'last_modified_date':
-                $join_sort_table = false;
-                $criteria->setSort('last_update_date');
-                break;
+        case 'last_modified_date':
+            $join_sort_table = false;
+            $criteria->setSort('last_update_date');
+            break;
 
-            case 'registration_date':
-                $join_sort_table = false;
-                $criteria->setSort('creation_date');
-                break;
+        case 'registration_date':
+            $join_sort_table = false;
+            $criteria->setSort('creation_date');
+            break;
 
-            case 'creation_date':
-                $join_sort_table = false;
-                $criteria->setSort(array(
-                    'publication_year',
-                    'publication_month',
-                    'publication_mday',
-                ));
-                break;
+        case 'creation_date':
+            $join_sort_table = false;
+            $criteria->setSort(array('publication_year', 'publication_month', 'publication_mday'));
+            break;
 
-            default:
-                $error->add(XNPERR_INVALID_PARAM, 'unknown sort key parameter 4');
-                $response->setResult(false);
+        default:
+            $error->add(XNPERR_INVALID_PARAM, 'unknown sort key parameter 4');
+            $response->setResult(false);
 
-                return false;
+            return false;
                 break;
         }
 

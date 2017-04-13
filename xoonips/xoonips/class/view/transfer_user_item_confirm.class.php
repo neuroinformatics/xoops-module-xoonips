@@ -26,8 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once __DIR__.'/transfer.class.php';
-include_once dirname(__DIR__).'/base/gtickets.php';
+require_once __DIR__.'/transfer.class.php';
+require_once dirname(__DIR__).'/base/gtickets.php';
 
 /**
  * HTML view to list items to transfer for a user.
@@ -64,26 +64,16 @@ class XooNIpsViewTransferUserItemConfirm extends XooNIpsViewTransfer
         //create handler to include item_type.class.php
         $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
 
-        $xoopsOption['template_main']
-            = 'xoonips_transfer_user_item_confirm.html';
+        $xoopsOption['template_main'] = 'xoonips_transfer_user_item_confirm.html';
         include XOOPS_ROOT_PATH.'/header.php';
         $this->setXooNIpsStyleSheet($xoopsTpl);
 
+        $xoopsTpl->assign('token_hidden', $GLOBALS['xoopsGTicket']->getTicketHtml(__LINE__, 600, 'xoonips_transfer_user_item_confirm'));
+        $xoopsTpl->assign('to_uname', $textutil->html_special_chars($this->get_uname_by_uid($this->_params['to_uid'])));
+        $xoopsTpl->assign('transfer_items', $this->get_transfer_item_template_vars());
         $xoopsTpl->assign(
-            'token_hidden',
-            $GLOBALS['xoopsGTicket']->getTicketHtml(__LINE__, 600,
-              'xoonips_transfer_user_item_confirm'));
-        $xoopsTpl->assign(
-            'to_uname',
-            $textutil->html_special_chars($this->get_uname_by_uid($this->_params['to_uid'])));
-        $xoopsTpl->assign('transfer_items',
-                             $this->get_transfer_item_template_vars());
-        $xoopsTpl->assign(
-            'not_subscribed_group_message',
-            sprintf(
-                _MD_XOONIPS_TRANSFER_USER_ITEM_CONFIRM_USER_IS_NOT_SUBSCRIBED_TO_GROUPS,
-                $textutil->html_special_chars($this->get_uname_by_uid($this->_params['to_uid'])),
-                $this->get_gname_csv()));
+            'not_subscribed_group_message', sprintf(_MD_XOONIPS_TRANSFER_USER_ITEM_CONFIRM_USER_IS_NOT_SUBSCRIBED_TO_GROUPS, $textutil->html_special_chars($this->get_uname_by_uid($this->_params['to_uid'])), $this->get_gname_csv())
+        );
         foreach ($this->_params as $key => $val) {
             $xoopsTpl->assign($key, $val);
         }
@@ -93,8 +83,7 @@ class XooNIpsViewTransferUserItemConfirm extends XooNIpsViewTransfer
     public function get_child_item_ids_to_transfer()
     {
         $item_ids = array();
-        foreach (array_values($this->_params['child_item_ids_to_transfer'])
-                 as $child_item_ids) {
+        foreach (array_values($this->_params['child_item_ids_to_transfer']) as $child_item_ids) {
             $item_ids = array_merge($item_ids, $child_item_ids);
         }
 
@@ -105,8 +94,7 @@ class XooNIpsViewTransferUserItemConfirm extends XooNIpsViewTransfer
     {
         $result = array();
 
-        $item_ids = array_merge($this->_params['item_ids_to_transfer'],
-                                 $this->get_child_item_ids_to_transfer());
+        $item_ids = array_merge($this->_params['item_ids_to_transfer'], $this->get_child_item_ids_to_transfer());
         sort($item_ids);
 
         foreach ($item_ids as $item_id) {
@@ -127,13 +115,13 @@ class XooNIpsViewTransferUserItemConfirm extends XooNIpsViewTransfer
         $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
         $item = &$item_handler->get($item_id);
         $basic = &$item->getVar('basic');
-        $itemtype
-            = &$item_type_handler->get($basic->get('item_type_id'));
+        $itemtype = &$item_type_handler->get($basic->get('item_type_id'));
 
-        return array('item_id' => $item_id,
-                      'item_type_name' => $itemtype->getVar('display_name', 's'),
-                      'title' => $this->concatenate_titles(
-                          $item->getVar('titles')), );
+        return array(
+            'item_id' => $item_id,
+            'item_type_name' => $itemtype->getVar('display_name', 's'),
+            'title' => $this->concatenate_titles($item->getVar('titles')),
+        );
     }
 
     public function get_gname_csv()

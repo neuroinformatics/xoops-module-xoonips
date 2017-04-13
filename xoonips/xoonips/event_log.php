@@ -31,14 +31,14 @@
 // avoid IE's bug. see: http://jp2.php.net/header  Harry 10-Dec-2004 03:26
 session_cache_limiter('none');
 
-include 'include/common.inc.php';
-include 'include/eventlog.inc.php';
+require 'include/common.inc.php';
+require 'include/eventlog.inc.php';
 
 $textutil = &xoonips_getutility('text');
 
 if (!$xoopsUser) {
     // redirect login page and back here after login
-  redirect_header('user.php', 3, _NOPERM);
+    redirect_header('user.php', 3, _NOPERM);
     exit();
 }
 $uid = $xoopsUser->getVar('uid');

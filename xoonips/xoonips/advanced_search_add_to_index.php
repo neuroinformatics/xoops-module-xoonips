@@ -28,7 +28,7 @@
 
 // advanced search form for add to index
 
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
 // access permission check
 if (!$xoopsUser) {
@@ -43,8 +43,8 @@ $xoonipsURL = '';
 
 $xoopsOption['template_main'] = 'xoonips_advanced_search_add_to_index.html';
 
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
-include 'include/advanced_search.inc.php';
+require 'include/advanced_search.inc.php';
 
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';

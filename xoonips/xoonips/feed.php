@@ -25,7 +25,7 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
 $formdata = &xoonips_getutility('formdata');
 $type = $formdata->getValue('get', 'type', 's', false, 'rss');
@@ -78,7 +78,7 @@ function _create_item_description($item_id)
     }
     if (count($indexes) == 0) {
         // this item has been rejected
-    return false;
+        return false;
     }
 
     return _MD_XOONIPS_EVENT_ITEM_IS_SHOWN_IN.' : '.implode(', ', $indexes);

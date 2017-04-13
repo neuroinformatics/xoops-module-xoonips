@@ -25,7 +25,7 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
 function xoonips_get_backend()
 {
@@ -51,4 +51,4 @@ function xoonips_get_backend()
     return $backend;
 }
 
-include xoonips_get_backend();
+require xoonips_get_backend();

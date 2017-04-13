@@ -29,18 +29,18 @@ define('XOOPS_XMLRPC', 1);
 define('DEBUG_XMLRPC', 0);
 
 error_reporting(0);
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 restore_error_handler();
 
-include_once XOOPS_ROOT_PATH.'/class/xml/rpc/xmlrpctag.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcparser.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logicfactory.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcfault.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcrequest.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcviewfactory.class.php';
+require_once XOOPS_ROOT_PATH.'/class/xml/rpc/xmlrpctag.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcparser.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logicfactory.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcfault.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcrequest.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcviewfactory.class.php';
 
 error_reporting(E_ALL & ~E_NOTICE);
 ini_set('display_errors', 0);

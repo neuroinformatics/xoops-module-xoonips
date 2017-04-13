@@ -26,10 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once 'transfer.class.php';
-include_once dirname(dirname(__DIR__))
-    .'/include/transfer.inc.php';
-include_once dirname(__DIR__).'/base/gtickets.php';
+require_once 'transfer.class.php';
+require_once dirname(dirname(__DIR__)).'/include/transfer.inc.php';
+require_once dirname(__DIR__).'/base/gtickets.php';
 
 class XooNIpsActionTransferUserRequest extends XooNIpsActionTransfer
 {
@@ -59,48 +58,26 @@ class XooNIpsActionTransferUserRequest extends XooNIpsActionTransfer
 
         global $xoopsUser;
 
-        $all_of_item_ids_to_transfer = array_unique(
-            array_merge(
-                $this->get_item_ids_to_transfer(),
-                $this->get_child_item_ids_to_transfer()));
+        $all_of_item_ids_to_transfer = array_unique(array_merge($this->get_item_ids_to_transfer(), $this->get_child_item_ids_to_transfer()));
 
-        if (!xoonips_transfer_is_transferrable(
-            $xoopsUser->getVar('uid'),
-            $this->get_to_uid(),
-            $all_of_item_ids_to_transfer)) {
-            redirect_header(
-                XOOPS_URL
-                .'/modules/xoonips/transfer_item.php',
-                3, _MD_XOONIPS_TRANSFER_USER_REQUEST_ERROR);
+        if (!xoonips_transfer_is_transferrable($xoopsUser->getVar('uid'), $this->get_to_uid(), $all_of_item_ids_to_transfer)) {
+            redirect_header(XOOPS_URL.'/modules/xoonips/transfer_item.php', 3, _MD_XOONIPS_TRANSFER_USER_REQUEST_ERROR);
         }
 
-        if (!$this->is_user_in_group_of_items(
-            $this->get_to_uid(), $all_of_item_ids_to_transfer)) {
-            redirect_header(
-                XOOPS_URL
-                .'/modules/xoonips/transfer_item.php',
-                3, _MD_XOONIPS_TRANSFER_USER_REQUEST_ERROR_BAD_SUBSCRIBE_GROUP
-                );
+        if (!$this->is_user_in_group_of_items($this->get_to_uid(), $all_of_item_ids_to_transfer)) {
+            redirect_header(XOOPS_URL.'/modules/xoonips/transfer_item.php', 3, _MD_XOONIPS_TRANSFER_USER_REQUEST_ERROR_BAD_SUBSCRIBE_GROUP);
         }
 
-        $this->_params = array(
-            $all_of_item_ids_to_transfer,
-            $xoopsUser->getVar('uid'),
-            $this->get_to_uid(), );
+        $this->_params = array($all_of_item_ids_to_transfer, $xoopsUser->getVar('uid'), $this->get_to_uid());
     }
 
     public function postAction()
     {
-        xoonips_notification_user_item_transfer_request(
-            $this->get_to_uid());
+        xoonips_notification_user_item_transfer_request($this->get_to_uid());
         if ($this->_response->getResult()) {
-            redirect_header(XOOPS_URL
-                             .'/modules/xoonips/transfer_item.php',
-                             3, _MD_XOONIPS_TRANSFER_USER_REQUEST_COMPLETE);
+            redirect_header(XOOPS_URL.'/modules/xoonips/transfer_item.php', 3, _MD_XOONIPS_TRANSFER_USER_REQUEST_COMPLETE);
         } else {
-            redirect_header(XOOPS_URL
-                             .'/modules/xoonips/transfer_item.php',
-                             3, _MD_XOONIPS_TRANSFER_USER_REQUEST_ERROR);
+            redirect_header(XOOPS_URL.'/modules/xoonips/transfer_item.php', 3, _MD_XOONIPS_TRANSFER_USER_REQUEST_ERROR);
         }
     }
 

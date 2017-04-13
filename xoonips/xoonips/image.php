@@ -36,7 +36,7 @@
 define('PROTECTOR_SKIP_DOS_CHECK', 1);
 define('PROTECTOR_SKIP_FILESCHECKER', 1);
 
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 
@@ -136,18 +136,18 @@ if (!empty($thumbnail)) {
         exit();
     } else {
         // thumbnail doesn't available.
-    if (extension_loaded('fileinfo')) {
-        if ($magic_file_path == '') {
-            $finfo = finfo_open(FILEINFO_NONE);
+        if (extension_loaded('fileinfo')) {
+            if ($magic_file_path == '') {
+                $finfo = finfo_open(FILEINFO_NONE);
+            } else {
+                $finfo = finfo_open(FILEINFO_NONE, $magic_file_path);
+            }
+            $label = finfo_file($finfo, $file_path);
+            finfo_close($finfo);
         } else {
-            $finfo = finfo_open(FILEINFO_NONE, $magic_file_path);
+            // try to use mime_content_type();
+              $label = mime_content_type($file_path);
         }
-        $label = finfo_file($finfo, $file_path);
-        finfo_close($finfo);
-    } else {
-        // try to use mime_content_type();
-      $label = mime_content_type($file_path);
-    }
         if (preg_match('/^([^\\/]*)\\/(.*)$/', $mime_type, $matches)) {
             if ($matches[1] == 'audio') {
                 $img_type = 'audio';

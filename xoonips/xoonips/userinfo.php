@@ -27,7 +27,7 @@
 // ------------------------------------------------------------------------- //
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
 $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
@@ -64,7 +64,7 @@ if (!is_object($thisUser)) {
 }
 
 $xoopsOption['template_main'] = 'xoonips_userinfo.html';
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 if ($uid == $myuid || $is_admin) {
     $xoopsTpl->assign('user_ownpage', true);
     $xoopsTpl->assign('lang_editprofile', _US_EDITPROFILE);
@@ -174,7 +174,7 @@ if (is_object($xu_obj)) {
     }
 } else {
     // not xoonips user
-  $xoopsTpl->assign('xnp_user_ownpage', false);
+    $xoopsTpl->assign('xnp_user_ownpage', false);
 }
 
 // curriculum vitae
@@ -238,4 +238,4 @@ foreach ($mids as $mid) {
         unset($module);
     }
 }
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';

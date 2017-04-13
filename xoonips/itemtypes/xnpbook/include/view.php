@@ -47,7 +47,7 @@ function _xnpbook_get_detail_request($do_escape = false)
     'url' => 's',
     'attachment_dl_limit' => 'i',
     'attachment_dl_notify' => 'i',
-  );
+    );
     foreach ($keys as $key => $type) {
         $tmp = $formdata->getValue('post', $key, $type, false);
         if (is_null($tmp)) {
@@ -98,8 +98,8 @@ function xnpbookGetDetailInformation($item_id)
     $detail = array();
     foreach ($oItemDetail->getKeysArray() as $key) {
         $detail[$key] = array(
-      'value' => $oItemDetail->getVar($key, 'n'),
-    );
+        'value' => $oItemDetail->getVar($key, 'n'),
+        );
     }
     $detail['url']['value'] = preg_replace(array('/javascript:/i', '/[\\x00-\\x20\\x22\\x27]/'), array('', ''), $detail['url']['value']);
 
@@ -109,21 +109,21 @@ function xnpbookGetDetailInformation($item_id)
 function xnpbookGetListBlock($item_basic)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // - copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // - copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $xnpbook_handler = &xoonips_getormcompohandler('xnpbook', 'item');
     $tpl->assign('xoonips_item', $xnpbook_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_LIST, $item_basic['item_id'], $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpbook_list_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpbook_list_block.html');
 }
 
 function xnpbookGetPrinterFriendlyListBlock($item_basic)
@@ -134,14 +134,14 @@ function xnpbookGetPrinterFriendlyListBlock($item_basic)
 function xnpbookGetDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
     $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationDetailBlock($item_id));
     $tpl->assign('index', xnpGetIndexDetailBlock($item_id));
@@ -150,8 +150,8 @@ function xnpbookGetDetailBlock($item_id)
     $xnpbook_handler = &xoonips_getormcompohandler('xnpbook', 'item');
     $tpl->assign('xoonips_item', $xnpbook_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpbook_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpbook_detail_block.html');
 }
 
 function xnpbookGetDownloadConfirmationBlock($item_id, $download_file_id)
@@ -171,19 +171,19 @@ function xnpbookGetDownloadConfirmationRequired($item_id)
 function xnpbookGetPrinterFriendlyDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // get BasicInformation / RegisteredItem block
-  $basic = xnpGetBasicInformationDetailBlock($item_id);
+    // get BasicInformation / RegisteredItem block
+    $basic = xnpGetBasicInformationDetailBlock($item_id);
     $index = xnpGetIndexPrinterFriendlyBlock($item_id);
     $attachment = xnpGetAttachmentPrinterFriendlyBlock($item_id, 'book_pdf');
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
     $tpl->assign('attachment', $attachment);
@@ -191,8 +191,8 @@ function xnpbookGetPrinterFriendlyDetailBlock($item_id)
     $xnpbook_handler = &xoonips_getormcompohandler('xnpbook', 'item');
     $tpl->assign('xoonips_item', $xnpbook_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpbook_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpbook_detail_block.html');
 }
 
 function xnpbookGetRegisterBlock()
@@ -200,12 +200,12 @@ function xnpbookGetRegisterBlock()
     global $xoopsDB;
     $system_message = '';
 
-  // get BasicInformation / Preview / Readme / License / Rights / index block
-  $basic = xnpGetBasicInformationRegisterBlock();
+    // get BasicInformation / Preview / Readme / License / Rights / index block
+    $basic = xnpGetBasicInformationRegisterBlock();
     $index = xnpGetIndexRegisterBlock();
     $attachment = xnpGetAttachmentRegisterBlock('book_pdf');
-  // retrive variables from POST array
-  $req = _xnpbook_get_detail_request(true);
+    // retrive variables from POST array
+    $req = _xnpbook_get_detail_request(true);
     $detail = array();
     foreach ($req as $key => $val) {
         if ($val !== null) {
@@ -213,8 +213,8 @@ function xnpbookGetRegisterBlock()
         }
     }
 
-  // check amazon access key and secret access key
-  $mydirname = basename(dirname(__DIR__));
+    // check amazon access key and secret access key
+    $mydirname = basename(dirname(__DIR__));
     $mhandler = &xoops_gethandler('module');
     $module = &$mhandler->getByDirname($mydirname);
     $chandler = &xoops_gethandler('config');
@@ -224,11 +224,11 @@ function xnpbookGetRegisterBlock()
         $amazon_key_exist = false;
     }
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
     $tpl->assign('attachment', $attachment);
@@ -241,8 +241,8 @@ function xnpbookGetRegisterBlock()
     $tpl->assign('xnpbook_author', xoonips_get_multiple_field_template_vars(xoonips_get_orm_from_post('xnpbook', 'author'), 'xnpbook', 'author'));
     $tpl->assign('amazon_key_exist', $amazon_key_exist);
 
-  // return as HTML
-  return $tpl->fetch('db:xnpbook_register_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpbook_register_block.html');
 }
 
 function xnpbookGetEditBlock($item_id)
@@ -250,25 +250,25 @@ function xnpbookGetEditBlock($item_id)
     $textutil = &xoonips_getutility('text');
     $formdata = &xoonips_getutility('formdata');
 
-  // get BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationEditBlock($item_id);
+    // get BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationEditBlock($item_id);
     $index = xnpGetIndexEditBlock($item_id);
     $attachment = xnpGetAttachmentEditBlock($item_id, 'book_pdf');
-  // get DetailInformation
-  $detail = xnpbookGetDetailInformation($item_id);
-  // override values if post form request
-  foreach (_xnpbook_get_detail_request(true) as $key => $val) {
-      if ($val !== null) {
-          $detail[$key]['value'] = $val;
-      }
-  }
-  // html special chars for each value
-  foreach ($detail as $key => $val) {
-      $detail[$key]['value'] = $textutil->html_special_chars($detail[$key]['value']);
-  }
+    // get DetailInformation
+    $detail = xnpbookGetDetailInformation($item_id);
+    // override values if post form request
+    foreach (_xnpbook_get_detail_request(true) as $key => $val) {
+        if ($val !== null) {
+            $detail[$key]['value'] = $val;
+        }
+    }
+    // html special chars for each value
+    foreach ($detail as $key => $val) {
+        $detail[$key]['value'] = $textutil->html_special_chars($detail[$key]['value']);
+    }
 
-  // check amazon access key and secret access key
-  $mydirname = basename(dirname(__DIR__));
+    // check amazon access key and secret access key
+    $mydirname = basename(dirname(__DIR__));
     $mhandler = &xoops_gethandler('module');
     $module = &$mhandler->getByDirname($mydirname);
     $chandler = &xoops_gethandler('config');
@@ -278,11 +278,11 @@ function xnpbookGetEditBlock($item_id)
         $amazon_key_exist = false;
     }
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
     $tpl->assign('attachment', $attachment);
@@ -303,8 +303,8 @@ function xnpbookGetEditBlock($item_id)
     }
     $tpl->assign('amazon_key_exist', $amazon_key_exist);
 
-  // return as HTML
-  return $tpl->fetch('db:xnpbook_register_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpbook_register_block.html');
 }
 
 function xnpbookGetConfirmBlock($item_id)
@@ -314,13 +314,13 @@ function xnpbookGetConfirmBlock($item_id)
     $author_handler = &xoonips_getormhandler('xnpbook', 'author');
     $author_objs = &$formdata->getObjectArray('post', $author_handler->getTableName(), $author_handler, false);
 
-  // get BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationConfirmBlock($item_id);
+    // get BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationConfirmBlock($item_id);
     $index = xnpGetIndexConfirmBlock($item_id);
     $attachment = xnpGetAttachmentConfirmBlock($item_id, 'book_pdf');
 
-  // retrieve detail information
-  $detail = array();
+    // retrieve detail information
+    $detail = array();
     if (!empty($item_id)) {
         $detail = xnpbookGetDetailInformation($item_id);
     }
@@ -329,18 +329,18 @@ function xnpbookGetConfirmBlock($item_id)
         $detail[$key]['value'] = $val;
     }
 
-  // trim strings
-  xnpConfirmHtml($detail, 'xnpbook_item_detail', array_keys($detail), _CHARSET);
+    // trim strings
+    xnpConfirmHtml($detail, 'xnpbook_item_detail', array_keys($detail), _CHARSET);
     if (xnpHasWithout($basic) || xnpHasWithout($attachment) || xnpHasWithout($detail) || xoonips_is_multiple_field_too_long($author_objs, 'xnpbook', 'author')) {
         global $system_message;
         $system_message = _xnpbook_append_message($system_message, _MD_XOONIPS_ITEM_WARNING_FIELD_TRIM);
     }
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
     $tpl->assign('attachment', $attachment);
@@ -349,18 +349,18 @@ function xnpbookGetConfirmBlock($item_id)
     $tpl->assign('detail', $detail);
     $tpl->assign('xnpbook_author', xoonips_get_multiple_field_template_vars($author_objs, 'xnpbook', 'author'));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpbook_confirm_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpbook_confirm_block.html');
 }
 
 function xnpbookInsertItem(&$item_id)
 {
     // set fixed value for month and day
-  $_POST['publicationDateMonth'] = 1;
+    $_POST['publicationDateMonth'] = 1;
     $_POST['publicationDateDay'] = 1;
 
-  // register BasicInformation, Index, Attachment
-  $item_id = 0;
+    // register BasicInformation, Index, Attachment
+    $item_id = 0;
     $result = xnpInsertBasicInformation($item_id);
     if ($result) {
         $result = xnpUpdateIndex($item_id);
@@ -375,23 +375,23 @@ function xnpbookInsertItem(&$item_id)
         return false;
     }
 
-  // limit length
-  $ar = _xnpbook_get_detail_request();
+    // limit length
+    $ar = _xnpbook_get_detail_request();
     xnpTrimColumn($ar, 'xnpbook_item_detail', array_keys($ar), _CHARSET);
     $hItemDetail = &xoonips_getormhandler('xnpbook', 'item_detail');
     $oItemDetail = &$hItemDetail->create();
     $oItemDetail->setVar('book_id', $item_id, true);
-  // not gpc
-  $oItemDetail->setVars($ar, true);
-  // not gpc
-  if (!$hItemDetail->insert($oItemDetail)) {
-      error_log('xnpbook: cannot insert item_detail - '.implode(', ', $oItemDetail->getErrors()));
+    // not gpc
+    $oItemDetail->setVars($ar, true);
+    // not gpc
+    if (!$hItemDetail->insert($oItemDetail)) {
+        error_log('xnpbook: cannot insert item_detail - '.implode(', ', $oItemDetail->getErrors()));
 
-      return false;
-  }
+        return false;
+    }
 
-  // insert author
-  $formdata = &xoonips_getutility('formdata');
+    // insert author
+    $formdata = &xoonips_getutility('formdata');
     $author_handler = &xoonips_getormhandler('xnpbook', 'author');
     $author_objs = &$formdata->getObjectArray('post', $author_handler->getTableName(), $author_handler, false);
     if (!$author_handler->updateAllObjectsByForeignKey('book_id', $item_id, $author_objs)) {
@@ -404,12 +404,12 @@ function xnpbookInsertItem(&$item_id)
 function xnpbookUpdateItem($book_id)
 {
     // set fixed value for month and day
-  $_POST['publicationDateMonth'] = 1;
+    $_POST['publicationDateMonth'] = 1;
     $_POST['publicationDateDay'] = 1;
     $formdata = &xoonips_getutility('formdata');
 
-  // edit BasicInformation, Index, Preview, Attachment
-  $result = xnpUpdateBasicInformation($book_id);
+    // edit BasicInformation, Index, Preview, Attachment
+    $result = xnpUpdateBasicInformation($book_id);
     if ($result) {
         $result = xnpUpdateIndex($book_id);
         if ($result) {
@@ -434,21 +434,21 @@ function xnpbookUpdateItem($book_id)
         return false;
     }
 
-  // limit length
-  $ar = _xnpbook_get_detail_request();
+    // limit length
+    $ar = _xnpbook_get_detail_request();
     xnpTrimColumn($ar, 'xnpbook_item_detail', array_keys($ar), _CHARSET);
     $hItemDetail = &xoonips_getormhandler('xnpbook', 'item_detail');
     $oItemDetail = &$hItemDetail->get($book_id);
     $oItemDetail->setVars($ar, true);
-  // not gpc
-  if (!$hItemDetail->insert($oItemDetail)) {
-      error_log('xnpbook: cannot update item_detail - '.implode(', ', $oItemDetail->getErrors()));
+    // not gpc
+    if (!$hItemDetail->insert($oItemDetail)) {
+        error_log('xnpbook: cannot update item_detail - '.implode(', ', $oItemDetail->getErrors()));
 
-      return false;
-  }
+        return false;
+    }
 
-  // insert/update author
-  $formdata = &xoonips_getutility('formdata');
+    // insert/update author
+    $formdata = &xoonips_getutility('formdata');
     $author_handler = &xoonips_getormhandler('xnpbook', 'author');
     $author_objs = &$formdata->getObjectArray('post', $author_handler->getTableName(), $author_handler, false);
     if (!$author_handler->updateAllObjectsByForeignKey('book_id', $book_id, $author_objs)) {
@@ -469,13 +469,13 @@ function xnpbookCheckRegisterParameters(&$msg)
     $publisher = $formdata->getValue('post', 'publisher', 's', false);
     if ($publisher == '') {
         // publisher is not filled
-    $msg = _xnpbook_append_message($msg, _MD_XNPBOOK_PUBLISHER_REQUIRED);
+        $msg = _xnpbook_append_message($msg, _MD_XNPBOOK_PUBLISHER_REQUIRED);
         $result = false;
     }
     $publicationDateYear = $formdata->getValue('post', 'publicationDateYear', 'i', false);
     if ($publicationDateYear == 0) {
         // year is not filled
-    $msg = _xnpbook_append_message($msg, _MD_XNPBOOK_YEAR_REQUIRED);
+        $msg = _xnpbook_append_message($msg, _MD_XNPBOOK_YEAR_REQUIRED);
         $result = false;
     }
 
@@ -531,18 +531,18 @@ function xnpbookGetAdvancedSearchBlock(&$search_var)
     $search_var[] = 'xnpbook_isbn';
     $search_var[] = 'xnpbook_book_pdf';
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
     $tpl->assign($xoopsTpl->get_template_vars());
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign('basic', $basic);
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign('basic', $basic);
     $tpl->assign('module_name', 'xnpbook');
     $tpl->assign('module_display_name', xnpGetItemTypeDisplayNameByDirname(basename(dirname(__DIR__)), 's'));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpbook_search_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpbook_search_block.html');
 }
 
 function xnpbookGetAdvancedSearchQuery(&$where, &$join)
@@ -601,7 +601,7 @@ function xnpbookGetDetailInformationQuickSearchQuery(&$wheres, &$join, $keywords
     $book_table.'.editor',
     $book_table.'.publisher',
     "$book_author_table.author",
-  );
+    );
 
     $join = " INNER JOIN $book_author_table ON ".$book_author_table.'.book_id  = '.$xoopsDB->prefix('xoonips_item_basic').'.item_id ';
     $wheres = xnpGetKeywordsQueries($colnames, $keywords);
@@ -631,9 +631,9 @@ function xnpbookGetDetailInformationTotalSize($iids)
 function xnpbookExportItem($export_path, $fhdl, $item_id, $attachment)
 {
     // get DetailInformation
-  if (!$fhdl) {
-      return false;
-  }
+    if (!$fhdl) {
+        return false;
+    }
 
     $handler = &xoonips_getormhandler('xnpbook', 'item_detail');
     $detail = &$handler->get($item_id);
@@ -683,10 +683,10 @@ function xnpbookGetModifiedFields($item_id)
             }
         }
 
-    // was pdf file modified?
-    if (xnpIsAttachmentModified('book_pdf', $item_id)) {
-        array_push($ret, _MD_XNPBOOK_PDF_LABEL);
-    }
+        // was pdf file modified?
+        if (xnpIsAttachmentModified('book_pdf', $item_id)) {
+            array_push($ret, _MD_XNPBOOK_PDF_LABEL);
+        }
 
         $formdata = &xoonips_getutility('formdata');
         $author_handler = &xoonips_getormhandler('xnpbook', 'author');
@@ -750,8 +750,8 @@ function xnpbookGetMetadata($prefix, $item_id)
         return false;
     }
 
-  // detail information
-  $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
+    // detail information
+    $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
     $author_handler = &xoonips_getormhandler($mydirname, 'author');
     $detail_obj = &$detail_handler->get($item_id);
     if (empty($detail_obj)) {
@@ -765,11 +765,11 @@ function xnpbookGetMetadata($prefix, $item_id)
     foreach ($author_objs as $author_obj) {
         $detail['authors'][] = $author_obj->get('author');
     }
-  // basic information
-  $basic = xnpGetBasicInformationArray($item_id);
+    // basic information
+    $basic = xnpGetBasicInformationArray($item_id);
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
-  // indexes
-  $indexes = array();
+    // indexes
+    $indexes = array();
     if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
         foreach ($xids as $xid) {
             if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
@@ -777,8 +777,8 @@ function xnpbookGetMetadata($prefix, $item_id)
             }
         }
     }
-  // files
-  $files = array();
+    // files
+    $files = array();
     $mimetypes = array();
     if ($detail['attachment_dl_limit'] == 0) {
         $file_handler = &xoonips_gethandler('xoonips', 'file');
@@ -789,18 +789,18 @@ function xnpbookGetMetadata($prefix, $item_id)
             }
         }
     }
-  // related to
-  $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
+    // related to
+    $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
     $related_to_ids = $related_to_handler->getChildItemIds($item_id);
     $related_tos = array();
     foreach ($related_to_ids as $related_to_id) {
         $related_tos[] = array(
-      'item_id' => $related_to_id,
-      'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
-    );
+        'item_id' => $related_to_id,
+        'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
+        );
     }
-  // repository configs
-  $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+    // repository configs
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $myxoopsConfigMetaFooter = &xoonips_get_xoops_configs(XOOPS_CONF_METAFOOTER);
     $repository = array(
     'download_file_compression' => $xconfig_handler->getValue('download_file_compression'),
@@ -808,9 +808,9 @@ function xnpbookGetMetadata($prefix, $item_id)
     'publisher' => $xconfig_handler->getValue('repository_publisher'),
     'institution' => $xconfig_handler->getValue('repository_institution'),
     'meta_author' => $myxoopsConfigMetaFooter['meta_author'],
-  );
-  // assign template
-  global $xoopsTpl;
+    );
+    // assign template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->plugins_dir[] = XOONIPS_PATH.'/class/smarty/plugins';
     $tpl->assign($xoopsTpl->get_template_vars());

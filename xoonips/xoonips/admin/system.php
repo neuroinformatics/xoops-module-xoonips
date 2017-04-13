@@ -28,7 +28,7 @@
 require_once '../../../include/cp_header.php';
 
 // load common file.
-include 'actions/common.inc.php';
+require 'actions/common.inc.php';
 
 // page definition
 $pages = array();
@@ -66,4 +66,4 @@ $pages['check'] = array(
 xoonips_admin_initialize(__FILE__, 'system', $pages);
 
 // call action file
-include $xoonips_admin['myaction_path'];
+require $xoonips_admin['myaction_path'];

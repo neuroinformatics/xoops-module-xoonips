@@ -30,7 +30,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once dirname(dirname(__DIR__)).'/include/view.php';
+require_once dirname(dirname(__DIR__)).'/include/view.php';
 
 /**
  * XmlRpcTransform composer class for Binder type.

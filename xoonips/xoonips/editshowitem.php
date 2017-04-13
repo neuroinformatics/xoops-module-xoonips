@@ -25,12 +25,12 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
-include_once 'class/base/pagenavi.class.php';
-include_once 'class/base/gtickets.php';
-include_once 'include/AL.php';
-include_once 'include/lib.php';
+require_once 'class/base/pagenavi.class.php';
+require_once 'class/base/gtickets.php';
+require_once 'include/AL.php';
+require_once 'include/lib.php';
 
 $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 if ($myuid == UID_GUEST) {
@@ -144,7 +144,7 @@ foreach ($item_type_ids as $it_id) {
 // assign template values
 $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 $xoopsOption['template_main'] = 'xoonips_editshowitem.html';
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 // create item list block after loaded header.php,
 // because $GLOBALS['xoopsTpl'] variable is used in item list block generator
 $item_types = array();
@@ -180,7 +180,7 @@ $xoopsTpl->assign('hidden_checked_item_ids', $hidden_checked_item_ids);
 $xoopsTpl->assign('total_item_num', $total_item_count);
 $xoopsTpl->assign('checked_item_num', count($checked_item_ids));
 $xoopsTpl->assign('item_types', $item_types);
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';
 exit();
 
 /**
@@ -221,10 +221,10 @@ function _xoonips_editshowitem_update_item_ids($uid, $item_ids)
         $iid = $obj->get('item_id');
         if (!in_array($iid, $item_ids)) {
             // delete not selected item id
-      $is_handler->delete($obj);
+            $is_handler->delete($obj);
         } else {
             // already exists
-      $item_ids = array_diff($item_ids, array($iid));
+            $item_ids = array_diff($item_ids, array($iid));
         }
     }
     // insert non existant item ids

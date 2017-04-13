@@ -28,7 +28,7 @@
 $mydirname = basename(dirname(__DIR__));
 
 // load mainfile.php
-include dirname(dirname(dirname(__DIR__))).'/mainfile.php';
+require dirname(dirname(dirname(__DIR__))).'/mainfile.php';
 
 // set other D3 variables
 $mod_path = XOOPS_ROOT_PATH.'/modules/'.$mydirname;
@@ -40,10 +40,10 @@ if (file_exists($mod_path.'/mytrustdirname.php')) {
 }
 
 // load condition definitions
-include $mod_path.'/condefs.php';
+require $mod_path.'/condefs.php';
 
 // load basic functions
-include $mod_path.'/include/functions.php';
+require $mod_path.'/include/functions.php';
 
 // initialize xoonips session
 $xsession_handler = &xoonips_getormhandler('xoonips', 'session');

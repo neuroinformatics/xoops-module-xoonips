@@ -82,7 +82,7 @@ $count = count($config);
 if ($count < 1) {
     die('error : no config');
 }
-include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
+require_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
 $form = new XoopsThemeForm($title, 'xoonips_admin_system_module', $xoonips_admin['mypage_url']);
 $module_handler = &xoops_gethandler('module');
 $module = &$module_handler->get($module_id);
@@ -105,8 +105,8 @@ for ($i = 0; $i < $count; ++$i) {
     case 'textarea':
         if ($config[$i]->getVar('conf_valuetype') == 'array') {
             // this is exceptional.. only when value type is arrayneed a
-          // smarter way for this
-          $ele = ($config[$i]->getVar('conf_value') != '') ? new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), $textutil->html_special_chars(implode('|', $config[$i]->getConfValueForOutput())), 5, 50) : new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), '', 5, 50);
+            // smarter way for this
+            $ele = ($config[$i]->getVar('conf_value') != '') ? new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), $textutil->html_special_chars(implode('|', $config[$i]->getConfValueForOutput())), 5, 50) : new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), '', 5, 50);
         } else {
             $ele = new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), $textutil->html_special_chars($config[$i]->getConfValueForOutput()), 5, 50);
         }

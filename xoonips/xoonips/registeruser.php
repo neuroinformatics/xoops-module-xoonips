@@ -27,7 +27,7 @@
 // ------------------------------------------------------------------------- //
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 require_once 'include/notification.inc.php';
 require_once 'class/base/gtickets.php';
 
@@ -334,10 +334,10 @@ case 'finish':
             $xoopsMailer->setTemplateDir($langman->mail_template_dir());
             if ($is_certify_auto) {
                 // XOOPS : by user, XooNIps : auto
-            $xoopsMailer->setTemplate('xoonips_activate_by_user_certify_auto.tpl');
+                $xoopsMailer->setTemplate('xoonips_activate_by_user_certify_auto.tpl');
             } else {
                 // XOOPS : by user, XooNIps : moderator
-            $xoopsMailer->setTemplate('xoonips_activate_by_user_certify_manual.tpl');
+                $xoopsMailer->setTemplate('xoonips_activate_by_user_certify_manual.tpl');
             }
             $xoopsMailer->assign('X_UACTLINK', XOOPS_URL.'/modules/xoonips/user.php?op=actv&id='.$newid.'&actkey='.$actkey);
             $xoopsMailer->assign('SITENAME', $myxoopsConfig['sitename']);
@@ -362,11 +362,11 @@ case 'finish':
             //   specified by moderator_gid if certify_user is 'manual'
             if (!$is_certify_auto) {
                 // XOOPS : auto, XooNIps : moderator
-              xoonips_notification_account_certify_request($newid);
+                xoonips_notification_account_certify_request($newid);
                 echo _MD_XOONIPS_ACTIVATE_AUTO_CERTIFY_MANUAL;
             } else {
                 // XOOPS : auto, XooNIps : auto
-              xoonips_notification_account_certified($newid);
+                xoonips_notification_account_certified($newid);
                 redirect_header('user.php', 5, _MD_XOONIPS_ACTIVATE_AUTO_CERTIFY_AUTO, false);
             }
         } elseif ($myxoopsConfigUser['activation_type'] == 2) {

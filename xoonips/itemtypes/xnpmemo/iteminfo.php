@@ -30,7 +30,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include XOOPS_ROOT_PATH.'/modules/xoonips/include/iteminfo.inc.php';
+require XOOPS_ROOT_PATH.'/modules/xoonips/include/iteminfo.inc.php';
 
 $iteminfo['description'] = 'XooNIps Memo Item Type';
 $iteminfo['files']['main'] = 'memo_file';

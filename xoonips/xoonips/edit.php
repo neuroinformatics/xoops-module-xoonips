@@ -30,12 +30,12 @@
 session_cache_limiter('private');
 session_cache_expire(5);
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
-include_once 'include/item_limit_check.php';
-include_once 'include/lib.php';
-include_once 'include/AL.php';
-include_once 'include/extra_param.inc.php';
+require_once 'include/item_limit_check.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
+require_once 'include/extra_param.inc.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 
@@ -65,7 +65,8 @@ xoonips_deny_guest_access();
 $uid = $_SESSION['xoopsUserId'];
 //Uncertified user can't access(except XOOPS administrator).
 if (!$xoopsUser->isAdmin($xoopsModule->getVar('mid'))
-    && !xnp_is_activated($xnpsid, $uid)) {
+    && !xnp_is_activated($xnpsid, $uid)
+) {
     redirect_header(XOOPS_URL.'/modules/xoonips/index.php', 3, _MD_XOONIPS_MODERATOR_NOT_ACTIVATED);
     exit();
 }
@@ -100,7 +101,7 @@ if ($xoopsUser->getVar('uid') != $item['uid']) {
 }
 
 $xoopsOption['template_main'] = 'xoonips_edit.html';
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
 //Add group_owner_permission
 $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
@@ -124,7 +125,7 @@ if (!$item_type) {
     die('item type is not found');
 }
 
-include_once XOOPS_ROOT_PATH.'/modules/'.$item_type->get('viewphp');
+require_once XOOPS_ROOT_PATH.'/modules/'.$item_type->get('viewphp');
 $func = $item_type->get('name').'GetEditBlock';
 $body = $func($item_id);
 
@@ -160,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 header('Content-Type:text/html; charset='._CHARSET);
 //echo "\r\n"; flush();
 
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';
 
 /**
  * find whether that user have permission to read private index of the item.

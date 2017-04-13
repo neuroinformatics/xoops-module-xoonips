@@ -30,8 +30,8 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnpbinder/iteminfo.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnpbinder/iteminfo.php';
 
 /**
  * @brief Handler object that create,insert,update,get,delete XNPBinderCompo object.
@@ -93,8 +93,7 @@ class XNPBinderCompoHandler extends XooNIpsItemInfoCompoHandler
 
             foreach ($child_items as $item) {
                 foreach ($item->getVar('indexes') as $index_item_link) {
-                    $child_index = &$index_handler->get(
-                        $index_item_link->get('index_id'));
+                    $child_index = &$index_handler->get($index_item_link->get('index_id'));
                     if (!$child_index) {
                         continue;
                     }
@@ -142,14 +141,13 @@ class XNPBinderCompoHandler extends XooNIpsItemInfoCompoHandler
 
             foreach ($child_items as $item) {
                 foreach ($item->getVar('indexes') as $index_item_link) {
-                    $child_index = &$index_handler->get(
-                        $index_item_link->get('index_id'));
+                    $child_index = &$index_handler->get($index_item_link->get('index_id'));
                     if (!$child_index) {
                         continue;
                     }
                     if (OL_PUBLIC == $child_index->get('open_level')
-                        || OL_GROUP_ONLY
-                            == $child_index->get('open_level')) {
+                        || OL_GROUP_ONLY == $child_index->get('open_level')
+                    ) {
                         continue 2;
                     }
                 }
@@ -216,19 +214,15 @@ class XNPBinderCompoHandler extends XooNIpsItemInfoCompoHandler
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
             $result['detail'] = array('child_items' => array());
             foreach ($links as $link) {
-                $handler = &$this->get_item_compo_handler_by_item_id(
-                    $link->get('item_id'));
+                $handler = &$this->get_item_compo_handler_by_item_id($link->get('item_id'));
                 if (false === $handler) {
                     continue;
                 }
                 if ($handler->getPerm($item_id, $uid, 'read')) {
                     $result['detail']['child_items'][] = array(
-                        'filename' => 'db:'.$handler->getTemplateFileName(
-                            XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST),
-                        'var' => $handler->getTemplateVar(
-                            XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST,
-                            $link->get('item_id'),
-                            $uid), );
+                        'filename' => 'db:'.$handler->getTemplateFileName(XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST),
+                        'var' => $handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST, $link->get('item_id'), $uid),
+                    );
                 }
             }
 

@@ -30,8 +30,8 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once dirname(__DIR__).'/class/base/tableobject.class.php';
-include_once dirname(__DIR__).'/class/base/criteria.class.php';
+require_once dirname(__DIR__).'/class/base/tableobject.class.php';
+require_once dirname(__DIR__).'/class/base/criteria.class.php';
 
 /**
  * get xoonips version.
@@ -195,10 +195,10 @@ function &xoonips_getutility($name)
     if (!class_exists($cname)) {
         $cpath = dirname(__DIR__).'/class';
         if (!class_exists('XooNIpsUtility')) {
-            require_once $cpath.'/base/utility.class.php';
+            include_once $cpath.'/base/utility.class.php';
         }
         $path = $cpath.'/utility/'.$name.'.class.php';
-        require_once $path;
+        include_once $path;
     }
     $instance = new $cname();
     if ($instance->isSingleton()) {
@@ -524,8 +524,7 @@ function xoonips_allow_get_method()
  */
 function xoonips_allow_both_method()
 {
-    xoonips_validate_request($_SERVER['REQUEST_METHOD'] == 'GET'
-                              || $_SERVER['REQUEST_METHOD'] == 'POST');
+    xoonips_validate_request($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'POST');
 }
 
 /**

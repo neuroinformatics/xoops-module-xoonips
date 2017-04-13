@@ -25,9 +25,9 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-include 'include/common.inc.php';
-include 'include/group.inc.php';
-include 'class/base/gtickets.php';
+require 'include/common.inc.php';
+require 'include/group.inc.php';
+require 'class/base/gtickets.php';
 
 // privileges check : admin, group admin
 $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
@@ -80,14 +80,14 @@ case 'update':
     foreach ($guids as $guid) {
         if ($admin_xgroup_handler->isGroupAdmin($guid, $gid)) {
             // ignore if group administrator
-        continue;
+            continue;
         }
         if ($mode == 'add') {
             // subscribe to group
-        $admin_xgroup_handler->addUserToXooNIpsGroup($gid, $guid, false);
+            $admin_xgroup_handler->addUserToXooNIpsGroup($gid, $guid, false);
         } else {
             // unsubscribe from group
-        $admin_xgroup_handler->deleteUserFromXooNIpsGroup($gid, $guid);
+            $admin_xgroup_handler->deleteUserFromXooNIpsGroup($gid, $guid);
         }
     }
     $gids = array($gid);

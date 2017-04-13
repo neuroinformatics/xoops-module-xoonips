@@ -74,69 +74,69 @@ class XooNIpsOrmItemBasicHandler extends XooNIpsTableObjectHandler
         $this->__initHandler('XooNIpsOrmItemBasic', 'xoonips_item_basic', 'item_id', false);
     }
 
-  /**
-   * @brief set current time to creation_date and last_update_date if these are not initialized and call parent::insert.
-   */
-  public function insert(&$obj, $force = false)
-  {
-      $date = $obj->get('creation_date');
-      if ($obj->isNew() && !isset($date)) {
-          $obj->set('creation_date', time());
-      }
-      $date = $obj->get('last_update_date');
-      if ($obj->isDirty() && !isset($date)) {
-          // update last_update_date
-      $obj->set('last_update_date', time());
-      }
+    /**
+     * @brief set current time to creation_date and last_update_date if these are not initialized and call parent::insert.
+     */
+    public function insert(&$obj, $force = false)
+    {
+        $date = $obj->get('creation_date');
+        if ($obj->isNew() && !isset($date)) {
+            $obj->set('creation_date', time());
+        }
+        $date = $obj->get('last_update_date');
+        if ($obj->isDirty() && !isset($date)) {
+            // update last_update_date
+            $obj->set('last_update_date', time());
+        }
 
-      return parent::insert($obj, $force);
-  }
+        return parent::insert($obj, $force);
+    }
 
-  /**
-   * lock item.
-   *
-   * @param int $id item_id
-   */
-  public function lock($id)
-  {
-      $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
-      $item_lock_handler->lock($id);
-  }
+    /**
+     * lock item.
+     *
+     * @param int $id item_id
+     */
+    public function lock($id)
+    {
+        $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
+        $item_lock_handler->lock($id);
+    }
 
-  /**
-   * unlock item.
-   *
-   * @param int $id item_id
-   */
-  public function unlock($id)
-  {
-      $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
-      $item_lock_handler->unlock($id);
-  }
+    /**
+     * unlock item.
+     *
+     * @param int $id item_id
+     */
+    public function unlock($id)
+    {
+        $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
+        $item_lock_handler->unlock($id);
+    }
 
-  /**
-   * lock item and index.
-   *
-   * @param int $item_id  item_id
-   * @param int $index_id index_id
-   */
-  public function lockItemAndIndexes($item_id, $index_id)
-  {
-      $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
-      $item_lock_handler->lock($item_id);
-      $item_lock_handler->lockIndexes($index_id);
-  }
+    /**
+     * lock item and index.
+     *
+     * @param int $item_id  item_id
+     * @param int $index_id index_id
+     */
+    public function lockItemAndIndexes($item_id, $index_id)
+    {
+        $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
+        $item_lock_handler->lock($item_id);
+        $item_lock_handler->lockIndexes($index_id);
+    }
 
-  /**
-   * unlock item and index.
-   *
-   * @param int $item_id  item_id
-   * @param int $index_id index_id
-   */
-  public function unlockItemAndIndexes($item_id, $index_id)
-  {
-      $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
-      $item_lock_handler->unlock($item_id);
-      $item_lock_handler->unlockIndexes($index_id);
-  }
+    /**
+     * unlock item and index.
+     *
+     * @param int $item_id  item_id
+     * @param int $index_id index_id
+     */
+    public function unlockItemAndIndexes($item_id, $index_id)
+    {
+        $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
+        $item_lock_handler->unlock($item_id);
+        $item_lock_handler->unlockIndexes($index_id);
+    }
 }

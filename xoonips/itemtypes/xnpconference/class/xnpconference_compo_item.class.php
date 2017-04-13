@@ -30,9 +30,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnpconference/iteminfo.php';
-include_once dirname(__DIR__).'/include/view.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnpconference/iteminfo.php';
+require_once dirname(__DIR__).'/include/view.php';
 
 /**
  * @brief Handler object that create,insert,update,get,delete XNPConferenceCompo object.
@@ -109,10 +109,7 @@ class XNPConferenceCompoHandler extends XooNIpsItemInfoCompoHandler
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
-            $result['xnpconference_author']
-                = xoonips_get_multiple_field_template_vars($detail->getAuthors(),
-                                                          'xnpconference',
-                                                          'author');
+            $result['xnpconference_author'] = xoonips_get_multiple_field_template_vars($detail->getAuthors(), 'xnpconference', 'author');
             $result['detail'] = $detail->getVarArray('s');
             $result['detail']['presentation_type'] = $textutil->html_special_chars($this->get_presentation_type_label($detail->get('presentation_type')));
             $result['detail']['presentation_type_value'] = $detail->get('presentation_type', 's');

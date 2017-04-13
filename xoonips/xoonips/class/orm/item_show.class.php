@@ -58,27 +58,27 @@ class XooNIpsOrmItemShowHandler extends XooNIpsTableObjectHandler
         $this->__initHandler('XooNIpsOrmItemShow', 'xoonips_item_show', 'item_show_id', true);
     }
 
-  /**
-   * count user defined publications.
-   *
-   * @param int $uid user id
-   *
-   * @return array publication count by item type id
-   */
-  public function getCountPublications($uid)
-  {
-      $join = new XooNIpsJoinCriteria('xoonips_item_basic', 'item_id', 'item_id', 'INNER', 'ib');
-      $criteria = new Criteria('uid', $uid, '=', $this->db->prefix($this->__table_name));
-      $criteria->setGroupby('ib.item_type_id');
-      $res = $this->open($criteria, 'item_type_id, COUNT(DISTINCT ib.item_id)', false, $join);
-      $nums = array();
-      while ($obj = &$this->getNext($res)) {
-          $item_type_id = $obj->getExtraVar('item_type_id');
-          $count = $obj->getExtraVar('COUNT(DISTINCT ib.item_id)');
-          $nums[$item_type_id] = $count;
-      }
-      $this->close($res);
+    /**
+     * count user defined publications.
+     *
+     * @param int $uid user id
+     *
+     * @return array publication count by item type id
+     */
+    public function getCountPublications($uid)
+    {
+        $join = new XooNIpsJoinCriteria('xoonips_item_basic', 'item_id', 'item_id', 'INNER', 'ib');
+        $criteria = new Criteria('uid', $uid, '=', $this->db->prefix($this->__table_name));
+        $criteria->setGroupby('ib.item_type_id');
+        $res = $this->open($criteria, 'item_type_id, COUNT(DISTINCT ib.item_id)', false, $join);
+        $nums = array();
+        while ($obj = &$this->getNext($res)) {
+            $item_type_id = $obj->getExtraVar('item_type_id');
+            $count = $obj->getExtraVar('COUNT(DISTINCT ib.item_id)');
+            $nums[$item_type_id] = $count;
+        }
+        $this->close($res);
 
-      return $nums;
-  }
+        return $nums;
+    }
 }

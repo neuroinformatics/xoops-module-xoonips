@@ -57,8 +57,8 @@ function xnpconferenceGetTypes()
     return array('powerpoint' => 'PowerPoint', 'pdf' => 'PDF', 'illustrator' => 'Illustrator', 'other' => 'Other');
 }
 
-/** get DetailInformation by item_id
- *
+/**
+ * get DetailInformation by item_id.
  */
 function xnpconferenceGetDetailInformation($item_id)
 {
@@ -118,20 +118,20 @@ function xnpconferenceGetMetaInformation($item_id)
 function xnpconferenceGetListBlock($item_basic)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $xnpconference_handler = &xoonips_getormcompohandler('xnpconference', 'item');
     $tpl->assign('xoonips_item', $xnpconference_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_LIST, $item_basic['item_id'], $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpconference_list_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpconference_list_block.html');
 }
 
 function xnpconferenceGetPrinterFriendlyListBlock($item_basic)
@@ -142,15 +142,15 @@ function xnpconferenceGetPrinterFriendlyListBlock($item_basic)
 function xnpconferenceGetDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->assign($xoopsTpl->get_template_vars());
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationDetailBlock($item_id));
     $tpl->assign('index', xnpGetIndexDetailBlock($item_id));
     $tpl->assign('presentation_file', xnpGetAttachmentDetailBlock($item_id, 'conference_file'));
@@ -160,8 +160,8 @@ function xnpconferenceGetDetailBlock($item_id)
     $xnpconference_handler = &xoonips_getormcompohandler('xnpconference', 'item');
     $tpl->assign('xoonips_item', $xnpconference_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpconference_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpconference_detail_block.html');
 }
 
 function xnpconferenceGetDownloadConfirmationBlock($item_id, $download_file_id)
@@ -181,15 +181,15 @@ function xnpconferenceGetDownloadConfirmationRequired($item_id)
 function xnpconferenceGetPrinterFriendlyDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->assign($xoopsTpl->get_template_vars());
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign('editable', false);
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign('editable', false);
     $tpl->assign('basic', xnpGetBasicInformationPrinterFriendlyBlock($item_id));
     $tpl->assign('index', xnpGetIndexPrinterFriendlyBlock($item_id));
     $tpl->assign('presentation_file', xnpGetAttachmentPrinterFriendlyBlock($item_id, 'conference_file'));
@@ -198,8 +198,8 @@ function xnpconferenceGetPrinterFriendlyDetailBlock($item_id)
 
     $xnpconference_handler = &xoonips_getormcompohandler('xnpconference', 'item');
     $tpl->assign('xoonips_item', $xnpconference_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
-  // return as HTML
-  return $tpl->fetch('db:xnpconference_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpconference_detail_block.html');
 }
 
 function xnpconferenceGetRegisterBlock()
@@ -207,8 +207,8 @@ function xnpconferenceGetRegisterBlock()
     $textutil = &xoonips_getutility('text');
     $formdata = &xoonips_getutility('formdata');
 
-  // get DetailInformation
-  $tpl = new XoopsTpl();
+    // get DetailInformation
+    $tpl = new XoopsTpl();
     $presentation_type = $formdata->getValue('post', 'presentation_type', 's', false);
     $conferenceFromYear = $formdata->getValue('post', 'conferenceFromYear', 'i', false);
     $conferenceToYear = $formdata->getValue('post', 'conferenceToYear', 'i', false);
@@ -220,53 +220,53 @@ function xnpconferenceGetRegisterBlock()
             $tpl->assign('gmtimeTo', mktime(0, 0, 0, $formdata->getValue('post', 'conferenceToMonth', 'i', false, 1), $formdata->getValue('post', 'conferenceToDay', 'i', false, 1), $conferenceToYear));
         }
         $detail = array(
-      'presentation_type' => $textutil->html_special_chars($formdata->getValue('post', 'presentation_type', 's', false)),
-      'conference_title' => $textutil->html_special_chars($formdata->getValue('post', 'conference_title', 's', false)),
-      'place' => $textutil->html_special_chars($formdata->getValue('post', 'place', 's', false)),
-      'abstract' => $textutil->html_special_chars($formdata->getValue('post', 'abstract', 's', false)),
-      'conference_date' => array(
+        'presentation_type' => $textutil->html_special_chars($formdata->getValue('post', 'presentation_type', 's', false)),
+        'conference_title' => $textutil->html_special_chars($formdata->getValue('post', 'conference_title', 's', false)),
+        'place' => $textutil->html_special_chars($formdata->getValue('post', 'place', 's', false)),
+        'abstract' => $textutil->html_special_chars($formdata->getValue('post', 'abstract', 's', false)),
+        'conference_date' => array(
         'name' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
         'value' => $tpl->fetch('db:xnpconference_date.html'),
-      ),
-    );
+        ),
+        );
     } else {
         $tpl->assign('gmtimeFrom', time());
         $tpl->assign('gmtimeTo', time());
         $detail = array(
-      'presentation_type' => 'other',
-      'conference_date' => array(
+        'presentation_type' => 'other',
+        'conference_date' => array(
         'name' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
         'value' => $tpl->fetch('db:xnpconference_date.html'),
-      ),
-      'conference_year' => array(
+        ),
+        'conference_year' => array(
         'name' => _MD_XOONIPS_ITEM_PUBLICATION_YEAR_LABEL,
         'value' => $tpl->fetch('db:xnpconference_year.html'),
-      ),
-      'conference_month' => array(
+        ),
+        'conference_month' => array(
         'name' => _MD_XOONIPS_ITEM_PUBLICATION_MONTH_LABEL,
         'value' => $tpl->fetch('db:xnpconference_month.html'),
-      ),
-      'conference_mday' => array(
+        ),
+        'conference_mday' => array(
         'name' => _MD_XOONIPS_ITEM_PUBLICATION_MDAY_LABEL,
         'value' => $tpl->fetch('db:xnpconference_mday.html'),
-      ),
-    );
+        ),
+        );
     }
 
-  // get BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationRegisterBlock();
+    // get BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationRegisterBlock();
     $index = xnpGetIndexRegisterBlock();
     $presentation_file = xnpGetAttachmentRegisterBlock('conference_file');
     $conference_paper = xnpGetAttachmentRegisterBlock('conference_paper');
     $attachment_dl_limit = xnpGetDownloadLimitationOptionRegisterBlock('xnpconference');
     $attachment_dl_notify = xnpGetDownloadNotificationOptionRegisterBlock('xnpconference');
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->assign($xoopsTpl->get_template_vars());
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign('basic', $basic);
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
     $tpl->assign('presentation_file', $presentation_file);
     $tpl->assign('conference_paper', $conference_paper);
@@ -278,8 +278,8 @@ function xnpconferenceGetRegisterBlock()
     $tpl->assign('presentation_type', xnpconferenceGetTypes());
     $tpl->assign('presentation_type_selected', $detail['presentation_type']);
     $tpl->assign('conference_date', $detail['conference_date']);
-  // return as HTML
-  return $tpl->fetch('db:xnpconference_register_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpconference_register_block.html');
 }
 
 function xnpconferenceGetEditBlock($item_id)
@@ -287,27 +287,27 @@ function xnpconferenceGetEditBlock($item_id)
     $textutil = &xoonips_getutility('text');
     $formdata = &xoonips_getutility('formdata');
 
-  // get BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationEditBlock($item_id);
+    // get BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationEditBlock($item_id);
     $index = xnpGetIndexEditBlock($item_id);
     $presentation_file = xnpGetAttachmentEditBlock($item_id, 'conference_file');
     $conference_paper = xnpGetAttachmentEditBlock($item_id, 'conference_paper');
 
-  // get DetailInformation
-  $presentation_type = $formdata->getValue('post', 'presentation_type', 's', false);
+    // get DetailInformation
+    $presentation_type = $formdata->getValue('post', 'presentation_type', 's', false);
     if (isset($presentation_type)) {
         $detail = array(
-      'presentation_type' => $presentation_type,
-      'conference_title' => $formdata->getValue('post', 'conference_title', 's', false),
-      'place' => $formdata->getValue('post', 'place', 's', false),
-      'abstract' => $formdata->getValue('post', 'abstract', 's', false),
-      'conference_from_year' => $formdata->getValue('post', 'conferenceFromYear', 'i', false),
-      'conference_from_month' => $formdata->getValue('post', 'conferenceFromMonth', 'i', false),
-      'conference_from_mday' => $formdata->getValue('post', 'conferenceFromDay', 'i', false),
-      'conference_to_year' => $formdata->getValue('post', 'conferenceToYear', 'i', false),
-      'conference_to_month' => $formdata->getValue('post', 'conferenceToMonth', 'i', false),
-      'conference_to_mday' => $formdata->getValue('post', 'conferenceToDay', 'i', false),
-    );
+        'presentation_type' => $presentation_type,
+        'conference_title' => $formdata->getValue('post', 'conference_title', 's', false),
+        'place' => $formdata->getValue('post', 'place', 's', false),
+        'abstract' => $formdata->getValue('post', 'abstract', 's', false),
+        'conference_from_year' => $formdata->getValue('post', 'conferenceFromYear', 'i', false),
+        'conference_from_month' => $formdata->getValue('post', 'conferenceFromMonth', 'i', false),
+        'conference_from_mday' => $formdata->getValue('post', 'conferenceFromDay', 'i', false),
+        'conference_to_year' => $formdata->getValue('post', 'conferenceToYear', 'i', false),
+        'conference_to_month' => $formdata->getValue('post', 'conferenceToMonth', 'i', false),
+        'conference_to_mday' => $formdata->getValue('post', 'conferenceToDay', 'i', false),
+        );
         foreach ($detail as $key => $val) {
             $$key = $val;
         }
@@ -330,16 +330,16 @@ function xnpconferenceGetEditBlock($item_id)
     $detail['conference_date'] = array(
     'name' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
     'value' => $tpl->fetch('db:xnpconference_date.html'),
-  );
+    );
 
     $attachment_dl_limit = xnpGetDownloadLimitationOptionEditBlock('xnpconference', xnpconferenceGetAttachmentDownloadLimitOption($item_id));
     $attachment_dl_notify = xnpGetDownloadNotificationOptionEditBlock('xnpconference', xnpconferenceGetAttachmentDownloadNotifyOption($item_id));
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
@@ -362,8 +362,8 @@ function xnpconferenceGetEditBlock($item_id)
     $tpl->assign('presentation_type', xnpconferenceGetTypes());
     $tpl->assign('presentation_type_selected', $detail['presentation_type']);
 
-  // return as HTML
-  return $tpl->fetch('db:xnpconference_register_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpconference_register_block.html');
 }
 
 function xnpconferenceGetConfirmBlock($item_id)
@@ -373,50 +373,50 @@ function xnpconferenceGetConfirmBlock($item_id)
     $author_handler = &xoonips_getormhandler('xnpconference', 'author');
     $author_objs = &$formdata->getObjectArray('post', $author_handler->getTableName(), $author_handler, false);
 
-  // get BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationConfirmBlock($item_id);
+    // get BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationConfirmBlock($item_id);
     $index = xnpGetIndexConfirmBlock($item_id);
     $presentation_file = xnpGetAttachmentConfirmBlock($item_id, 'conference_file');
     $conference_paper = xnpGetAttachmentConfirmBlock($item_id, 'conference_paper');
     $attachment_dl_limit = xnpGetDownloadLimitationOptionConfirmBlock('xnpconference');
     $attachment_dl_notify = xnpGetDownloadNotificationOptionConfirmBlock('xnpconference');
-  // get DetailInformation
-  $conference_title = $formdata->getValue('post', 'conference_title', 's', false);
+    // get DetailInformation
+    $conference_title = $formdata->getValue('post', 'conference_title', 's', false);
     if (isset($conference_title)) {
         $detail = array(
-      'presentation_type' => array(
+        'presentation_type' => array(
         'value' => $textutil->html_special_chars($formdata->getValue('post', 'presentation_type', 's', false)),
-      ),
-      'conference_title' => array(
+        ),
+        'conference_title' => array(
         'value' => $textutil->html_special_chars($formdata->getValue('post', 'conference_title', 's', false)),
-      ),
-      'place' => array(
+        ),
+        'place' => array(
         'value' => $textutil->html_special_chars($formdata->getValue('post', 'place', 's', false)),
-      ),
-      'abstract' => array(
+        ),
+        'abstract' => array(
         'value' => $textutil->html_special_chars($formdata->getValue('post', 'abstract', 's', false)),
-      ),
-      'conference_from_year' => array(
+        ),
+        'conference_from_year' => array(
         'value' => $formdata->getValue('post', 'conferenceFromYear', 'i', false),
-      ),
-      'conference_from_month' => array(
+        ),
+        'conference_from_month' => array(
         'value' => $formdata->getValue('post', 'conferenceFromMonth', 'i', false),
-      ),
-      'conference_from_mday' => array(
+        ),
+        'conference_from_mday' => array(
         'value' => $formdata->getValue('post', 'conferenceFromDay', 'i', false),
-      ),
-      'conference_to_year' => array(
+        ),
+        'conference_to_year' => array(
         'value' => $formdata->getValue('post', 'conferenceToYear', 'i', false),
-      ),
-      'conference_to_month' => array(
+        ),
+        'conference_to_month' => array(
         'value' => $formdata->getValue('post', 'conferenceToMonth', 'i', false),
-      ),
-      'conference_to_mday' => array(
+        ),
+        'conference_to_mday' => array(
         'value' => $formdata->getValue('post', 'conferenceToDay', 'i', false),
-      ),
-    );
-    // trim strings
-    xnpConfirmHtml($detail, 'xnpconference_item_detail', array_keys($detail), _CHARSET);
+        ),
+        );
+        // trim strings
+        xnpConfirmHtml($detail, 'xnpconference_item_detail', array_keys($detail), _CHARSET);
         $types = xnpconferenceGetTypes();
         $detail['presentation_type_str']['value'] = $textutil->html_special_chars($types[$detail['presentation_type']['value']]);
         $conference_from = date(DATE_FORMAT, mktime(0, 0, 0, $detail['conference_from_month']['value'], $detail['conference_from_mday']['value'], $detail['conference_from_year']['value']));
@@ -431,11 +431,11 @@ function xnpconferenceGetConfirmBlock($item_id)
         $system_message = $system_message."\n<br /><font color='#ff0000'>"._MD_XOONIPS_ITEM_WARNING_FIELD_TRIM.'</font><br />';
     }
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
@@ -447,11 +447,12 @@ function xnpconferenceGetConfirmBlock($item_id)
     $tpl->assign('conference_date', array('name' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL, 'value' => $conference_date));
     $tpl->assign('xnpconference_author', xoonips_get_multiple_field_template_vars($author_objs, 'xnpconference', 'author'));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpconference_confirm_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpconference_confirm_block.html');
 }
 
-/** check DetailInformation input
+/**
+ * check DetailInformation input
  * called from confirm/registered page.
  */
 function xnpconferenceCheckRegisterParameters(&$message)
@@ -490,8 +491,8 @@ function xnpconferenceCheckRegisterParameters(&$message)
         $messages[] = _MD_XNPCONFERENCE_DATE_ERROR;
     }
 
-  // require Readme, License and Rights if register to public indexes
-  $xids = explode(',', $xoonipsCheckedXID);
+    // require Readme, License and Rights if register to public indexes
+    $xids = explode(',', $xoonipsCheckedXID);
     $indexes = array();
     if ($xids[0] != $xoonipsCheckedXID) {
         foreach ($xids as $i) {
@@ -514,7 +515,8 @@ function xnpconferenceCheckRegisterParameters(&$message)
     return false;
 }
 
-/** check DetailInformation input
+/**
+ * check DetailInformation input.
  */
 function xnpconferenceCheckEditParameters(&$message)
 {
@@ -527,8 +529,8 @@ function xnpconferenceInsertItem(&$item_id)
     $formdata = &xoonips_getutility('formdata');
     $xnpsid = $_SESSION['XNPSID'];
 
-  // register BasicInformation, Index, Attachment
-  $item_id = 0;
+    // register BasicInformation, Index, Attachment
+    $item_id = 0;
     $_POST['publicationDateYear'] = addslashes($formdata->getValue('post', 'conferenceFromYear', 'i', false));
     $_POST['publicationDateMonth'] = addslashes($formdata->getValue('post', 'conferenceFromMonth', 'i', false));
     $_POST['publicationDateDay'] = addslashes($formdata->getValue('post', 'conferenceFromDay', 'i', false));
@@ -556,20 +558,20 @@ function xnpconferenceInsertItem(&$item_id)
 
     $keys = implode(',', array('attachment_dl_limit', 'attachment_dl_notify', 'presentation_type', 'conference_title', 'place', 'abstract', 'conference_from_year', 'conference_from_month', 'conference_from_mday', 'conference_to_year', 'conference_to_month', 'conference_to_mday'));
 
-  // trim strings
-  $ar = array(
+    // trim strings
+    $ar = array(
     'presentation_type' => $formdata->getValue('post', 'presentation_type', 's', false),
     'conference_title' => $formdata->getValue('post', 'conference_title', 's', false),
     'place' => $formdata->getValue('post', 'place', 's', false),
     'abstract' => $formdata->getValue('post', 'abstract', 's', false),
-  );
+    );
     xnpTrimColumn($ar, 'xnpconference_item_detail', array_keys($ar), _CHARSET);
     $attachment_dl_limit = $formdata->getValue('post', 'attachment_dl_limit', 'i', false);
     $attachment_dl_notify = $formdata->getValue('post', 'attachment_dl_notify', 'i', false);
     $vals = implode('\',\'', array($attachment_dl_limit, $attachment_dl_limit ? $attachment_dl_notify : 0, addslashes($ar['presentation_type']), addslashes($ar['conference_title']), addslashes($ar['place']), addslashes($ar['abstract']), addslashes($formdata->getValue('post', 'conferenceFromYear', 'i', false)), addslashes($formdata->getValue('post', 'conferenceFromMonth', 'i', false)), addslashes($formdata->getValue('post', 'conferenceFromDay', 'i', false)), addslashes($formdata->getValue('post', 'conferenceToYear', 'i', false)), addslashes($formdata->getValue('post', 'conferenceToMonth', 'i', false)), addslashes($formdata->getValue('post', 'conferenceToDay', 'i', false))));
 
-  // register DetailInformation
-  $sql = 'insert into '.$xoopsDB->prefix('xnpconference_item_detail')." ( conference_id, $keys ) values ( $item_id, '$vals' ) ";
+    // register DetailInformation
+    $sql = 'insert into '.$xoopsDB->prefix('xnpconference_item_detail')." ( conference_id, $keys ) values ( $item_id, '$vals' ) ";
     $result = $xoopsDB->queryF($sql);
     if ($result == false) {
         echo 'cannot insert item_detail';
@@ -577,8 +579,8 @@ function xnpconferenceInsertItem(&$item_id)
         return false;
     }
 
-  // insert author
-  $author_handler = &xoonips_getormhandler('xnpconference', 'author');
+    // insert author
+    $author_handler = &xoonips_getormhandler('xnpconference', 'author');
     $author_objs = &$formdata->getObjectArray('post', $author_handler->getTableName(), $author_handler, false);
     if (!$author_handler->updateAllObjectsByForeignKey('conference_id', $item_id, $author_objs)) {
         return false;
@@ -593,8 +595,8 @@ function xnpconferenceUpdateItem($item_id)
     $formdata = &xoonips_getutility('formdata');
     $xnpsid = $_SESSION['XNPSID'];
 
-  // edit BasicInformation, Index, Preview, Attachment
-  $_POST['publicationDateYear'] = addslashes($formdata->getValue('post', 'conferenceFromYear', 'i', false));
+    // edit BasicInformation, Index, Preview, Attachment
+    $_POST['publicationDateYear'] = addslashes($formdata->getValue('post', 'conferenceFromYear', 'i', false));
     $_POST['publicationDateMonth'] = addslashes($formdata->getValue('post', 'conferenceFromMonth', 'i', false));
     $_POST['publicationDateDay'] = addslashes($formdata->getValue('post', 'conferenceFromDay', 'i', false));
     $result = xnpUpdateBasicInformation($item_id);
@@ -629,14 +631,14 @@ function xnpconferenceUpdateItem($item_id)
         return false;
     }
 
-  // register DetailInformation
-  // trim strings
-  $ar = array(
+    // register DetailInformation
+    // trim strings
+    $ar = array(
     'presentation_type' => $formdata->getValue('post', 'presentation_type', 's', false),
     'conference_title' => $formdata->getValue('post', 'conference_title', 's', false),
     'place' => $formdata->getValue('post', 'place', 's', false),
     'abstract' => $formdata->getValue('post', 'abstract', 's', false),
-  );
+    );
     xnpTrimColumn($ar, 'xnpconference_item_detail', array_keys($ar), _CHARSET);
 
     $attachment_dl_limit = $formdata->getValue('post', 'attachment_dl_limit', 'i', false);
@@ -647,8 +649,8 @@ function xnpconferenceUpdateItem($item_id)
         return false;
     }
 
-  // insert/update author
-  $author_handler = &xoonips_getormhandler('xnpconference', 'author');
+    // insert/update author
+    $author_handler = &xoonips_getormhandler('xnpconference', 'author');
     $author_objs = &$formdata->getObjectArray('post', $author_handler->getTableName(), $author_handler, false);
     if (!$author_handler->updateAllObjectsByForeignKey('conference_id', $item_id, $author_objs)) {
         return false;
@@ -736,18 +738,18 @@ function xnpconferenceGetAdvancedSearchQuery(&$where, &$join)
 function xnpconferenceGetAdvancedSearchBlock(&$search_var)
 {
     // get BasicInformation / Preview / IndexKeywords block
-  $basic = xnpGetBasicInformationAdvancedSearchBlock('xnpconference', $search_var);
+    $basic = xnpGetBasicInformationAdvancedSearchBlock('xnpconference', $search_var);
     $search_var[] = 'xnpconference_presentation_type';
     $search_var[] = 'xnpconference_conference_title';
     $search_var[] = 'xnpconference_place';
     $search_var[] = 'xnpconference_author';
     $search_var[] = 'xnpconference_abstract';
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('presentation_type', array_merge(array('' => 'Any'), xnpconferenceGetTypes()));
     $tpl->assign('presentation_type_selected', 'none');
@@ -755,8 +757,8 @@ function xnpconferenceGetAdvancedSearchBlock(&$search_var)
     $tpl->assign('module_name', 'xnpconference');
     $tpl->assign('module_display_name', xnpGetItemTypeDisplayNameByDirname(basename(dirname(__DIR__)), 's'));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpconference_search_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpconference_search_block.html');
 }
 
 function xnpconferenceGetDetailInformationTotalSize($iids)
@@ -768,8 +770,8 @@ function xnpconferenceGetLicenseRequired($item_id)
 {
     global $xoopsDB;
 
-  // get DetailInformation
-  $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpconference_item_detail')." where conference_id=$item_id");
+    // get DetailInformation
+    $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpconference_item_detail')." where conference_id=$item_id");
     if (!$result) {
         return null;
     }
@@ -782,8 +784,8 @@ function xnpconferenceGetLicenseStatement($item_id)
 {
     global $xoopsDB;
 
-  // get DetailInformation
-  $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpconference_item_detail')." where conference_id=$item_id");
+    // get DetailInformation
+    $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpconference_item_detail')." where conference_id=$item_id");
     if (!$result) {
         return null;
     }
@@ -809,9 +811,9 @@ function xnpconferenceGetLicenseStatement($item_id)
 function xnpconferenceExportItem($export_path, $fhdl, $item_id, $attachment)
 {
     // get DetailInformation
-  if (!$fhdl) {
-      return false;
-  }
+    if (!$fhdl) {
+        return false;
+    }
 
     $handler = &xoonips_getormhandler('xnpconference', 'item_detail');
     $detail = &$handler->get($item_id);
@@ -853,23 +855,23 @@ function xnpconferenceGetModifiedFields($item_id)
             }
         }
 
-    // was data file modified?
-    if (xnpIsAttachmentModified('conference_file', $item_id)) {
-        array_push($ret, _MD_XNPCONFERENCE_PRESENTATION_FILE_LABEL);
-    }
+        // was data file modified?
+        if (xnpIsAttachmentModified('conference_file', $item_id)) {
+            array_push($ret, _MD_XNPCONFERENCE_PRESENTATION_FILE_LABEL);
+        }
         if (xnpIsAttachmentModified('conference_paper', $item_id)) {
             array_push($ret, _MD_XNPCONFERENCE_CONFERENCE_PAPER_LABEL);
         }
 
-    // conference date
-    $date_map = array(
-      'conference_from_year' => 'conferenceFromYear',
-      'conference_from_month' => 'conferenceFromMonth',
-      'conference_from_mday' => 'conferenceFromDay',
-      'conference_to_year' => 'conferenceToYear',
-      'conference_to_month' => 'conferenceToMonth',
-      'conference_to_mday' => 'conferenceToDay',
-    );
+        // conference date
+        $date_map = array(
+        'conference_from_year' => 'conferenceFromYear',
+        'conference_from_month' => 'conferenceFromMonth',
+        'conference_from_mday' => 'conferenceFromDay',
+        'conference_to_year' => 'conferenceToYear',
+        'conference_to_month' => 'conferenceToMonth',
+        'conference_to_mday' => 'conferenceToDay',
+        );
         foreach ($date_map as $k => $v) {
             if ($detail[$k] != $formdata->getValue('post', $v, 'i', false)) {
                 array_push($ret, _MD_XNPCONFERENCE_DATE_LABEL);
@@ -944,8 +946,8 @@ function xnpconferenceGetMetadata($prefix, $item_id)
         return false;
     }
 
-  // detail information
-  $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
+    // detail information
+    $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
     $author_handler = &xoonips_getormhandler($mydirname, 'author');
     $detail_obj = &$detail_handler->get($item_id);
     if (empty($detail_obj)) {
@@ -963,11 +965,11 @@ function xnpconferenceGetMetadata($prefix, $item_id)
     $detail['conference_to_iso8601'] = xnpISO8601($detail['conference_to_year'], $detail['conference_to_month'], $detail['conference_to_mday']);
     $types = xnpconferenceGetTypes();
     $detail['presentation_type_display'] = $types[$detail['presentation_type']];
-  // basic information
-  $basic = xnpGetBasicInformationArray($item_id);
+    // basic information
+    $basic = xnpGetBasicInformationArray($item_id);
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
-  // indexes
-  $indexes = array();
+    // indexes
+    $indexes = array();
     if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
         foreach ($xids as $xid) {
             if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
@@ -975,8 +977,8 @@ function xnpconferenceGetMetadata($prefix, $item_id)
             }
         }
     }
-  // files
-  $files = array();
+    // files
+    $files = array();
     $mimetypes = array();
     $file_handler = &xoonips_gethandler('xoonips', 'file');
     if ($detail['attachment_dl_limit'] == 0) {
@@ -987,18 +989,18 @@ function xnpconferenceGetMetadata($prefix, $item_id)
             }
         }
     }
-  // related to
-  $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
+    // related to
+    $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
     $related_to_ids = $related_to_handler->getChildItemIds($item_id);
     $related_tos = array();
     foreach ($related_to_ids as $related_to_id) {
         $related_tos[] = array(
-      'item_id' => $related_to_id,
-      'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
-    );
+        'item_id' => $related_to_id,
+        'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
+        );
     }
-  // repository configs
-  $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+    // repository configs
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $myxoopsConfigMetaFooter = &xoonips_get_xoops_configs(XOOPS_CONF_METAFOOTER);
     $repository = array(
     'download_file_compression' => $xconfig_handler->getValue('download_file_compression'),
@@ -1006,47 +1008,47 @@ function xnpconferenceGetMetadata($prefix, $item_id)
     'publisher' => $xconfig_handler->getValue('repository_publisher'),
     'institution' => $xconfig_handler->getValue('repository_institution'),
     'meta_author' => $myxoopsConfigMetaFooter['meta_author'],
-  );
-  // conference date
-  if ($detail['conference_from_year'] == $detail['conference_to_year']) {
-      if ($detail['conference_from_month'] == $detail['conference_to_month']) {
-          if ($detail['conference_from_mday'] == $detail['conference_to_mday']) {
-              if ($basic['lang'] == 'jpn') {
-                  $fmt = "%1\$d\xe5\xb9\xb4%2\$d\xe6\x9c\x88%3\$d\xe6\x97\xa5";
-              } else {
-                  $fmt = '%7$s %3$d, %1$d';
-              }
-          } else {
-              if ($basic['lang'] == 'jpn') {
-                  $fmt = "%1\$d\xe5\xb9\xb4%2\$d\xe6\x9c\x88%3\$d\xe3\x80\x9c%6\$d\xe6\x97\xa5";
-              } else {
-                  $fmt = '%7$s %3$d-%6$d, %1$d';
-              }
-          }
-      } else {
-          if ($basic['lang'] == 'jpn') {
-              $fmt = "%1\$d\xe5\xb9\xb4%2\$d\xe6\x9c\x88%3\$d\xe6\x97\xa5\xe3\x80\x9c%5\$d\xe6\x9c\x88%6\$d\xe6\x97\xa5";
-          } else {
-              $fmt = '%7$s %3$d-%8$s %6$d, %1$d';
-          }
-      }
-  } else {
-      if ($basic['lang'] == 'jpn') {
-          $fmt = "%1\$d\xe5\xb9\xb4%2\$d\xe6\x9c\x88%3\$d\xe6\x97\xa5\xe3\x80\x9c%4\$d\xe5\xb9\xb4%5\$d\xe6\x9c\x88%6\$d\xe6\x97\xa5";
-      } else {
-          $fmt = '%7$s %3$d %1$d-%8$s %6$d %4$d';
-      }
-  }
+    );
+    // conference date
+    if ($detail['conference_from_year'] == $detail['conference_to_year']) {
+        if ($detail['conference_from_month'] == $detail['conference_to_month']) {
+            if ($detail['conference_from_mday'] == $detail['conference_to_mday']) {
+                if ($basic['lang'] == 'jpn') {
+                    $fmt = "%1\$d\xe5\xb9\xb4%2\$d\xe6\x9c\x88%3\$d\xe6\x97\xa5";
+                } else {
+                    $fmt = '%7$s %3$d, %1$d';
+                }
+            } else {
+                if ($basic['lang'] == 'jpn') {
+                    $fmt = "%1\$d\xe5\xb9\xb4%2\$d\xe6\x9c\x88%3\$d\xe3\x80\x9c%6\$d\xe6\x97\xa5";
+                } else {
+                    $fmt = '%7$s %3$d-%6$d, %1$d';
+                }
+            }
+        } else {
+            if ($basic['lang'] == 'jpn') {
+                $fmt = "%1\$d\xe5\xb9\xb4%2\$d\xe6\x9c\x88%3\$d\xe6\x97\xa5\xe3\x80\x9c%5\$d\xe6\x9c\x88%6\$d\xe6\x97\xa5";
+            } else {
+                $fmt = '%7$s %3$d-%8$s %6$d, %1$d';
+            }
+        }
+    } else {
+        if ($basic['lang'] == 'jpn') {
+            $fmt = "%1\$d\xe5\xb9\xb4%2\$d\xe6\x9c\x88%3\$d\xe6\x97\xa5\xe3\x80\x9c%4\$d\xe5\xb9\xb4%5\$d\xe6\x9c\x88%6\$d\xe6\x97\xa5";
+        } else {
+            $fmt = '%7$s %3$d %1$d-%8$s %6$d %4$d';
+        }
+    }
     $month_str = array(
     1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun',
     7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec',
-  );
+    );
     $detail['conference_date'] = sprintf($fmt, $detail['conference_from_year'], $detail['conference_from_month'], $detail['conference_from_mday'], $detail['conference_to_year'], $detail['conference_to_month'], $detail['conference_to_mday'], $month_str[$detail['conference_from_month']], $month_str[$detail['conference_to_month']]);
     if (_CHARSET != 'UTF-8' && $basic['lang'] = 'jpn') {
         $detail['conference_date'] = mb_convert_encoding($detail['conference_date'], _CHARSET, 'UTF-8');
     }
-  // assign template
-  global $xoopsTpl;
+    // assign template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->plugins_dir[] = XOONIPS_PATH.'/class/smarty/plugins';
     $tpl->assign($xoopsTpl->get_template_vars());

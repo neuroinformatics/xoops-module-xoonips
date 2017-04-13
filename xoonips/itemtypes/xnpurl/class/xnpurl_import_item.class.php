@@ -25,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-include_once dirname(dirname(__DIR__))
-    .'/xoonips/class/xoonips_import_item.class.php';
+
+require_once dirname(dirname(__DIR__)).'/xoonips/class/xoonips_import_item.class.php';
 
 class XNPUrlImportItem extends XooNIpsImportItem
 {
@@ -123,41 +123,26 @@ class XNPUrlImportItemHandler extends XooNIpsImportItemHandler
 
         case 'ITEM/DETAIL/FILE':
             if ($this->_url_banner_file_flag) {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_ATTACHMENT_HAS_REDUNDANT,
-                    "multiple $name attachments is not allowed"
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_ATTACHMENT_HAS_REDUNDANT, "multiple $name attachments is not allowed".$this->_get_parser_error_at());
                 break;
             }
-            $file_type_handler = &xoonips_getormhandler('xoonips',
-                                                        'file_type');
+            $file_type_handler = &xoonips_getormhandler('xoonips', 'file_type');
             $file_handler = &xoonips_getormhandler('xoonips', 'file');
-            $criteria = new Criteria(
-                'name', addslashes($attribs['FILE_TYPE_NAME']));
+            $criteria = new Criteria('name', addslashes($attribs['FILE_TYPE_NAME']));
             $file_type = &$file_type_handler->getObjects($criteria);
             if (count($file_type) == 0) {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_ATTR_NOT_FOUND,
-                    'file_type_id is not found:'.$attribs['FILE_TYPE_NAME']
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_ATTR_NOT_FOUND, 'file_type_id is not found:'.$attribs['FILE_TYPE_NAME'].$this->_get_parser_error_at());
                 break;
             }
 
             $unicode = &xoonips_getutility('unicode');
             $this->_url_banner_file = &$file_handler->create();
-            $this->_url_banner_file->setFilepath(
-                $this->_attachment_dir.'/'.$attribs['FILE_NAME']);
-            $this->_url_banner_file->set(
-'original_file_name',
-                                         $unicode->decode_utf8(
-                                             $attribs['ORIGINAL_FILE_NAME'],
-                                             xoonips_get_server_charset(),
-                                             'h'));
+            $this->_url_banner_file->setFilepath($this->_attachment_dir.'/'.$attribs['FILE_NAME']);
+            $this->_url_banner_file->set('original_file_name', $unicode->decode_utf8($attribs['ORIGINAL_FILE_NAME'], xoonips_get_server_charset(), 'h'));
             $this->_url_banner_file->set('mime_type', $attribs['MIME_TYPE']);
             $this->_url_banner_file->set('file_size', $attribs['FILE_SIZE']);
             $this->_url_banner_file->set('sess_id', session_id());
-            $this->_url_banner_file->set(
-'file_type_id', $file_type[0]->get('file_type_id'));
+            $this->_url_banner_file->set('file_type_id', $file_type[0]->get('file_type_id'));
             break;
 
         case 'ITEM/DETAIL/FILE/CAPTION':
@@ -178,47 +163,31 @@ class XNPUrlImportItemHandler extends XooNIpsImportItemHandler
         switch (implode('/', $this->_tag_stack)) {
         case 'ITEM/DETAIL':
             if (is_null($detail->get('url', 'n'))) {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_TAG_NOT_FOUND,
-                    ' no item_link'
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_TAG_NOT_FOUND, ' no item_link'.$this->_get_parser_error_at());
             }
             break;
 
         case 'ITEM/DETAIL/URL':
-            $detail->set('url',
-                         $unicode->decode_utf8($this->_cdata,
-                                               xoonips_get_server_charset(),
-                                               'h'), true);
+            $detail->set('url', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'), true);
             break;
 
         case 'ITEM/DETAIL/FILE':
             $this->_url_banner_file_flag = true;
             $file_handler = &xoonips_getormhandler('xoonips', 'file');
             if (!$file_handler->insert($this->_url_banner_file)) {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_DB_QUERY,
-                    "can't insert attachment file:"
-                    .$this->_url_banner_file->get('original_file_name')
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_DB_QUERY, "can't insert attachment file:".$this->_url_banner_file->get('original_file_name').$this->_get_parser_error_at());
             }
-            $this->_url_banner_file
-                = $file_handler->get($this->_url_banner_file->get('file_id'));
-            $this->_import_item->setVar('url_banner_file',
-                                        $this->_url_banner_file);
+            $this->_url_banner_file = $file_handler->get($this->_url_banner_file->get('file_id'));
+            $this->_import_item->setVar('url_banner_file', $this->_url_banner_file);
             $this->_import_item->setHasUrlBannerFile();
             break;
 
         case 'ITEM/DETAIL/FILE/CAPTION':
-            $this->_url_banner_file->set(
-                'caption',
-                $unicode->decode_utf8(
-                    $this->_cdata, xoonips_get_server_charset(), 'h'));
+            $this->_url_banner_file->set('caption', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'));
             break;
 
         case 'ITEM/DETAIL/FILE/THUMBNAIL':
-            $this->_url_banner_file->set('thumbnail_file',
-                                         base64_decode($this->_cdata));
+            $this->_url_banner_file->set('thumbnail_file', base64_decode($this->_cdata));
             break;
         }
 

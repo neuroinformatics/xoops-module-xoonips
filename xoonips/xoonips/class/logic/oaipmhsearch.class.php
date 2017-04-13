@@ -26,9 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
-include_once XOOPS_ROOT_PATH
-    .'/modules/xoonips/class/base/transaction.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
 
 /**
  * subclass of XooNIpsLogic(oampmhSearch).
@@ -64,16 +63,11 @@ class XooNIpsLogicOaipmhSearch extends XooNIpsLogic
         if (isset($vars[1]) && !is_int($vars[1]) && !ctype_digit($vars[1])) {
             $error->add(XNPERR_INVALID_PARAM, 'not integer parameter 2');
         }
-        if (isset($vars[1]) && isset($vars[2])
-            && intval($vars[1]) == 0 && empty($vars[2])) {
-            $error->add(XNPERR_INVALID_PARAM,
-                        'parameter 2(repository_id) or parameter 3(keyword)'
-                        .'is required.');
+        if (isset($vars[1]) && isset($vars[2]) && intval($vars[1]) == 0 && empty($vars[2])) {
+            $error->add(XNPERR_INVALID_PARAM, 'parameter 2(repository_id) or parameter 3(keyword)'.'is required.');
         }
-        if (isset($vars[3])
-            && !in_array($vars[3], array('title', 'identifier',
-                                           'last_update_date', 'creation_date',
-                                           'date', ))) {
+        if (isset($vars[3]) && !in_array($vars[3], array('title', 'identifier', 'last_update_date', 'creation_date', 'date'))
+        ) {
             $error->add(XNPERR_INVALID_PARAM, 'invalid parameter 4(order by)');
         }
         if (isset($vars[4]) && !in_array($vars[4], array('asc', 'desc'))) {
@@ -100,9 +94,7 @@ class XooNIpsLogicOaipmhSearch extends XooNIpsLogic
             return false;
         }
 
-        $cache_id = $this->searchMetadata(
-            $repository_id, $keyword, $this->getOrderByColumn($order_by),
-            $order_dir);
+        $cache_id = $this->searchMetadata($repository_id, $keyword, $this->getOrderByColumn($order_by), $order_dir);
         if (!$cache_id) {
             $error = &$response->getError();
             $error->add(XNPERR_SERVER_ERROR, 'failure in search');
@@ -127,8 +119,7 @@ class XooNIpsLogicOaipmhSearch extends XooNIpsLogic
     public function createCache($identifiers)
     {
         $cache_handler = &xoonips_getormhandler('xoonips', 'search_cache');
-        $cache_metadata_handler
-            = &xoonips_getormhandler('xoonips', 'search_cache_metadata');
+        $cache_metadata_handler = &xoonips_getormhandler('xoonips', 'search_cache_metadata');
 
         $cache = &$cache_handler->create();
         $cache->set('sess_id', session_id());
@@ -137,8 +128,7 @@ class XooNIpsLogicOaipmhSearch extends XooNIpsLogic
 
         foreach ($identifiers as $id) {
             $metadata = &$cache_metadata_handler->create();
-            $metadata->set('search_cache_id',
-                              $cache->get('search_cache_id'));
+            $metadata->set('search_cache_id', $cache->get('search_cache_id'));
             $metadata->set('identifier', $id);
             $cache_metadata_handler->insert($metadata);
         }
@@ -156,13 +146,10 @@ class XooNIpsLogicOaipmhSearch extends XooNIpsLogic
      */
     public function searchMetadata($repository_id, $keyword, $order_by, $order_dir)
     {
-        $metadata_handler = &xoonips_getormhandler(
-            'xoonips', 'oaipmh_metadata');
-        $repository_handler = &xoonips_getormhandler(
-            'xoonips', 'oaipmh_repositories');
+        $metadata_handler = &xoonips_getormhandler('xoonips', 'oaipmh_metadata');
+        $repository_handler = &xoonips_getormhandler('xoonips', 'oaipmh_repositories');
         $cache_handler = &xoonips_getormhandler('xoonips', 'search_cache');
-        $cache_metadata_handler
-            = &xoonips_getormhandler('xoonips', 'search_cache_metadata');
+        $cache_metadata_handler = &xoonips_getormhandler('xoonips', 'search_cache_metadata');
 
         if ($repository_id == 0 && strval($keyword) == '') {
             return $search_cache_id;
@@ -170,16 +157,13 @@ class XooNIpsLogicOaipmhSearch extends XooNIpsLogic
 
         $result = array();
         if (strval($keyword) == '') {
-            $metadata = &$metadata_handler->getObjects(
-                new Criteria('repository_id', $repository_id));
+            $metadata = &$metadata_handler->getObjects(new Criteria('repository_id', $repository_id));
             foreach ($metadata as $data) {
                 $result[] = $data->get('identifier');
             }
         } else {
-            if (!xnpSearchExec('quicksearch', $keyword, 'metadata',
-                                false, $errormessage, $item_ids,
-                                $search_var, $search_cache_id,
-                                'metadata')) {
+            if (!xnpSearchExec('quicksearch', $keyword, 'metadata', false, $errormessage, $item_ids, $search_var, $search_cache_id, 'metadata')
+            ) {
                 return false;
             }
             if ($repository_id == 0) {
@@ -192,13 +176,11 @@ class XooNIpsLogicOaipmhSearch extends XooNIpsLogic
             }
 
             $criteria = new CriteriaCompo();
-            $criteria->add(new Criteria('search_cache_id',
-                                            $search_cache_id));
+            $criteria->add(new Criteria('search_cache_id', $search_cache_id));
             $criteria->add(new Criteria('repository_id', $repository_id));
             $join = new XooNIpsJoinCriteria('xoonips_oaipmh_metadata', 'identifier', 'identifier', 'INNER');
 
-            $metadata_cache = $cache_metadata_handler
-                ->getObjects($criteria, false, '', false, $join);
+            $metadata_cache = $cache_metadata_handler->getObjects($criteria, false, '', false, $join);
 
             foreach ($metadata_cache as $cache) {
                 $result[] = $cache->get('identifier');

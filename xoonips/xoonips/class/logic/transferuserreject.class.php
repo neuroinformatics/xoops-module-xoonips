@@ -26,8 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/logic.class.php';
-include_once __DIR__.'/transfer.class.php';
+require_once dirname(__DIR__).'/base/logic.class.php';
+require_once __DIR__.'/transfer.class.php';
 
 class XooNIpsLogicTransferUserReject extends XooNIpsLogicTransfer
 {
@@ -58,13 +58,11 @@ class XooNIpsLogicTransferUserReject extends XooNIpsLogicTransfer
                 return false;
             }
 
-            if (false == $this->remove_item_from_transfer_request(
-                $error, $item_id)) {
+            if (false == $this->remove_item_from_transfer_request($error, $item_id)) {
                 return false;
             }
 
-            $item_lock_handler = &xoonips_getormhandler(
-                'xoonips', 'item_lock');
+            $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
             if (false == $item_lock_handler->unlock($item_id)) {
                 $error->add(XNPERR_SERVER_ERROR, 'cannot unlock item');
 

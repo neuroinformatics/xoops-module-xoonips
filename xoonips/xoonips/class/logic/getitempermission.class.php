@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
 
 /**
  * subclass of XooNIpsLogic(getItemPermission).
@@ -36,9 +36,9 @@ class XooNIpsLogicGetItemPermission extends XooNIpsLogic
     /**
      * execute getItemPermission.
      *
-     * @param[in] $vars[0] sessionid
-     * @param[in] $vars[1] id
-     * @param[in] $vars[2] id_type
+     * @param[in]  $vars[0] sessionid
+     * @param[in]  $vars[1] id
+     * @param[in]  $vars[2] id_type
      * @param[out] $response->result true:success, false:failed
      * @param[out] $response->error  error information
      * @param[out] $response->success array item permission structure
@@ -62,8 +62,7 @@ class XooNIpsLogicGetItemPermission extends XooNIpsLogic
             }
             if ($vars[2] == 'item_id') {
                 if (!is_int($vars[1]) && !ctype_digit($vars[1])) {
-                    $error->add(XNPERR_INVALID_PARAM,
-                                'not integer parameter 2');
+                    $error->add(XNPERR_INVALID_PARAM, 'not integer parameter 2');
                 }
                 if (strlen($vars[1]) > 10) {
                     $error->add(XNPERR_INVALID_PARAM, 'too long parameter 2');
@@ -118,8 +117,7 @@ class XooNIpsLogicGetItemPermission extends XooNIpsLogic
         $result = array(
             'read' => $item_compo_handler->getPerm($item_id, $uid, 'read'),
             'write' => $item_compo_handler->getPerm($item_id, $uid, 'write'),
-            'delete' => $item_compo_handler->getPerm($item_id, $uid,
-                                                      'delete'),
+            'delete' => $item_compo_handler->getPerm($item_id, $uid, 'delete'),
         );
         $response->setSuccess($result);
         $response->setResult(true);

@@ -54,7 +54,7 @@ class XooNIpsXmlRpcItemViewFactory
      * return XooNIpsXmlRpcItemView corresponding to $logic and $item(itemtype).
      *
      * @param string $logic logic name
-     * @param XooNIpsItemCompo item object
+     * @param  XooNIpsItemCompo item object
      * @retval XooNIpsXmlRpcItemViewElement corresponding to $logic
      * @retval false unknown logic or unknown item
      */
@@ -117,7 +117,7 @@ class XooNIpsXmlRpcViewFactory
      * return XooNIpsXmlRpcViewElement corresponding to $logic.
      *
      * @param string $logic logic name
-     * @param XooNIpsXmlRpcResponse response of logic
+     * @param  XooNIpsXmlRpcResponse response of logic
      * @retval XooNIpsXmlRpcViewElement corresponding to $logic
      * @retval false unknown logic
      */
@@ -126,7 +126,7 @@ class XooNIpsXmlRpcViewFactory
         $lc_logic = strtolower(trim($logic));
         $include_file = XOOPS_ROOT_PATH."/modules/xoonips/class/xmlrpc/view/{$lc_logic}.class.php";
         if (file_exists($include_file)) {
-            require_once $include_file;
+            include_once $include_file;
         }
         $class = 'XooNIpsXmlRpcView'.ucfirst(trim($logic));
         $view = new $class($response);

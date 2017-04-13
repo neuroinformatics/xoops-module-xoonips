@@ -26,10 +26,10 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
-include_once 'include/lib.php';
-include_once 'include/AL.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 if (is_object($xoopsUser)) {
@@ -39,7 +39,7 @@ if (is_object($xoopsUser)) {
 }
 
 $xoopsOption['template_main'] = 'xoonips_index.html';
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
 // exit at here if guest can't access /Public tree
 if (!xnp_is_valid_session_id($xnpsid)) {
@@ -56,7 +56,7 @@ foreach ($item_type_objs as $item_type_obj) {
     $name = $item_type_obj->get('name');
     $file = XOOPS_ROOT_PATH.'/modules/'.$item_type_obj->get('viewphp');
     if (file_exists($file)) {
-        require_once $file;
+        include_once $file;
     }
     $fname = $name.'GetTopBlock';
     if (function_exists($fname)) {
@@ -73,4 +73,4 @@ if (count($blocks) != 0) {
 }
 
 $xoopsTpl->assign('xoonips_editprofile_url', XOOPS_URL.'/modules/xoonips/edituser.php?uid='.$uid);
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';

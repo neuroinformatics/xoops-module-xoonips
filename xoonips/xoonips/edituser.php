@@ -27,9 +27,9 @@
 // ------------------------------------------------------------------------- //
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
-include 'class/base/gtickets.php';
-include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
+require 'include/common.inc.php';
+require 'class/base/gtickets.php';
+require_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
 
 require_once 'include/lib.php';
 require_once 'include/AL.php';
@@ -109,7 +109,7 @@ $u_obj = &$u_handler->get($uid);
 $xu_obj = &$xu_handler->get($uid);
 if (!is_object($u_obj) || !is_object($xu_obj)) {
     // user not found
-  redirect_header(XOOPS_URL.'/', 3, _US_SELECTNG);
+    redirect_header(XOOPS_URL.'/', 3, _US_SELECTNG);
     exit();
 }
 

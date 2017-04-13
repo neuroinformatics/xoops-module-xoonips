@@ -30,9 +30,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnppresentation/include/view.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnppresentation/iteminfo.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnppresentation/include/view.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnppresentation/iteminfo.php';
 
 /**
  * @brief Handler object that create,insert,update,get,delete XNPPresentationCompo object.
@@ -113,16 +113,12 @@ class XNPPresentationCompoHandler extends XooNIpsItemInfoCompoHandler
             return $result;
         case XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
-            $result['xnppresentation_creator']
-                = xoonips_get_multiple_field_template_vars($detail->getCreators(),
-                                                          'xnppresentation',
-                                                          'creator');
+            $result['xnppresentation_creator'] = xoonips_get_multiple_field_template_vars($detail->getCreators(), 'xnppresentation', 'creator');
 
             if (is_array($presentation->getVar('preview'))) {
                 $result['detail']['previews'] = array();
                 foreach ($presentation->getVar('preview') as $preview) {
-                    $result['detail']['previews'][]
-                        = $this->getPreviewTemplateVar($preview);
+                    $result['detail']['previews'][] = $this->getPreviewTemplateVar($preview);
                 }
             }
 

@@ -26,9 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipserror.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipsresponse.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipserror.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipsresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
 
 /**
  * @brief Class that executes logic specified by XML-RPC request
@@ -42,7 +42,7 @@ class XooNIpsXmlRpcLogic
     /**
      * load and execute xoonips logic. see [xoonips:00025].
      *
-     * @param[in] XooNIpsXmlRpcRequest $request
+     * @param[in]  XooNIpsXmlRpcRequest $request
      * @param[out] XooNIpsXmlRpcResponse $response result of logic(success/fault, response, error)
      */
     public function execute(&$request, &$response)
@@ -76,33 +76,33 @@ class XooNIpsXmlRpcLogic
         $title = $titles[0]->get('title');
 
         switch ($index->get('open_level')) {
-            case 1: //public
-                $open_level = 'public';
-                break;
+        case 1: //public
+            $open_level = 'public';
+            break;
 
-            case 2: //group
-                $groups_handler = &xoonips_getormhandler('xoonips', 'groups');
-                $group = $groups_handler->get($index->get('gid'));
-                if ($group) {
-                    $open_level = $group->get('gname');
-                } else {
-                    $response->addError(XNPERR_SERVER_ERROR, 'group of index is not found. index_id:'.$index->get('index_id'));
-
-                    return false;
-                }
-                break;
-
-            case 3: //private
-                $open_level = 'private';
-                if ($index->get('parent_index_id') == IID_ROOT && $index->get('uid') == $_SESSION['xoopsUserId']) {
-                    $title = XNP_PRIVATE_INDEX_TITLE; // title of /Private is not username but "Private"
-                }
-                break;
-
-            default:
-                $response->addError(XNPERR_SERVER_ERROR, 'unknown open level:'.$index->get('open_level'));
+        case 2: //group
+            $groups_handler = &xoonips_getormhandler('xoonips', 'groups');
+            $group = $groups_handler->get($index->get('gid'));
+            if ($group) {
+                $open_level = $group->get('gname');
+            } else {
+                $response->addError(XNPERR_SERVER_ERROR, 'group of index is not found. index_id:'.$index->get('index_id'));
 
                 return false;
+            }
+            break;
+
+        case 3: //private
+            $open_level = 'private';
+            if ($index->get('parent_index_id') == IID_ROOT && $index->get('uid') == $_SESSION['xoopsUserId']) {
+                $title = XNP_PRIVATE_INDEX_TITLE; // title of /Private is not username but "Private"
+            }
+            break;
+
+        default:
+            $response->addError(XNPERR_SERVER_ERROR, 'unknown open level:'.$index->get('open_level'));
+
+            return false;
         }
 
         $index_compo_handler = &xoonips_getormcompohandler('xoonips', 'index');

@@ -30,7 +30,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/orm/item_type.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/orm/item_type.class.php';
 
 /**
  * @brief Data object of Book detail information
@@ -41,13 +41,13 @@ class XNPBookOrmItemType extends XooNIpsOrmItemType
     {
         parent::XooNIpsOrmItemType('xnpbook');
         // detail
-/* $this->fields is obsoleted. use $this->iteminfo.
+        /* $this->fields is obsoleted. use $this->iteminfo.
         foreach($this->fields as $i => $f) {
             if ('publication_year' == $f['name']) {
                 $this->fields[$i]['required'] = true;
             }
         }
-*/
+        */
     }
 }
 

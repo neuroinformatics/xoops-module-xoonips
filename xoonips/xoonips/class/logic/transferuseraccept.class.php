@@ -26,8 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/logic.class.php';
-include_once __DIR__.'/transfer.class.php';
+require_once dirname(__DIR__).'/base/logic.class.php';
+require_once __DIR__.'/transfer.class.php';
 
 class XooNIpsLogicTransferUserAccept extends XooNIpsLogicTransfer
 {
@@ -60,24 +60,20 @@ class XooNIpsLogicTransferUserAccept extends XooNIpsLogicTransfer
 
         $from_uid_of_item = array();
         foreach ($item_ids as $item_id) {
-            if (false == $this->remove_item_from_transfer_request(
-                    $error, $item_id)) {
+            if (false == $this->remove_item_from_transfer_request($error, $item_id)) {
                 return false;
             }
 
-            if (false == $this->move_item_to_other_private_index(
-                    $error, $item_id, $index_id)) {
+            if (false == $this->move_item_to_other_private_index($error, $item_id, $index_id)) {
                 return false;
             }
 
-            if (false == $this->remove_item_from_achievements_if_needed(
-                    $error, $item_id)) {
+            if (false == $this->remove_item_from_achievements_if_needed($error, $item_id)) {
                 return false;
             }
 
             // update owner, last_udpate_date
-            $item_basic_handler = &xoonips_getormhandler('xoonips',
-                                                          'item_basic');
+            $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
             $item_basic = $item_basic_handler->get($item_id);
             $from_uid = $item_basic->get('uid');
             $from_uid_of_item[$item_id] = $from_uid;
@@ -89,8 +85,7 @@ class XooNIpsLogicTransferUserAccept extends XooNIpsLogicTransfer
                 return false;
             }
 
-            if (false == $this->insert_changelog(
-                    $error, $item_id, $from_uid, $to_uid)) {
+            if (false == $this->insert_changelog($error, $item_id, $from_uid, $to_uid)) {
                 return false;
             }
 
@@ -102,22 +97,19 @@ class XooNIpsLogicTransferUserAccept extends XooNIpsLogicTransfer
                 return false;
             }
 
-            $item_lock_handler = &xoonips_getormhandler('xoonips',
-                                                         'item_lock');
+            $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
             if (false == $item_lock_handler->unlock($item_id)) {
                 $error->add(XNPERR_SERVER_ERROR, 'cannot unlock item');
 
                 return false;
             }
 
-            if (false == $this->update_item_status_if_public_certified(
-                    $error, $item_id)) {
+            if (false == $this->update_item_status_if_public_certified($error, $item_id)) {
                 return false;
             }
         }
         foreach ($item_ids as $item_id) {
-            if (false == $this->remove_related_to_if_no_read_permission(
-                $item_id, $from_uid_of_item[$item_id], $to_uid)) {
+            if (false == $this->remove_related_to_if_no_read_permission($item_id, $from_uid_of_item[$item_id], $to_uid)) {
                 return false;
             }
         }
@@ -136,10 +128,7 @@ class XooNIpsLogicTransferUserAccept extends XooNIpsLogicTransfer
         $changelog->set('uid', $from_uid);
         $changelog->set('item_id', $item_id);
         $changelog->set('log_date', time());
-        $changelog->set('log',
-            sprintf(_MD_XOONIPS_TRANSFER_CHANGE_LOG_AUTOFILL_TEXT,
-                $from_user->getVar('uname', 'n'),
-                $to_user->getVar('uname', 'n')));
+        $changelog->set('log', sprintf(_MD_XOONIPS_TRANSFER_CHANGE_LOG_AUTOFILL_TEXT, $from_user->getVar('uname', 'n'), $to_user->getVar('uname', 'n')));
         if (false == $changelog_handler->insert($changelog)) {
             $error->add(XNPERR_SERVER_ERROR, 'cannot insert changelog');
 

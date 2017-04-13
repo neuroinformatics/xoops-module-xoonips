@@ -37,8 +37,8 @@ class XooNIpsOrmXoopsUsers extends XooNIpsTableObject
     public function XooNIpsOrmXoopsUsers()
     {
         parent::XooNIpsTableObject();
-    // from XooNIps_users table
-    $this->initVar('uid', XOBJ_DTYPE_INT, 0, false);
+        // from XooNIps_users table
+        $this->initVar('uid', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('name', XOBJ_DTYPE_TXTBOX, null, false, 60);
         $this->initVar('uname', XOBJ_DTYPE_TXTBOX, null, true, 25);
         $this->initVar('email', XOBJ_DTYPE_TXTBOX, null, true, 60);
@@ -63,8 +63,8 @@ class XooNIpsOrmXoopsUsers extends XooNIpsTableObject
         $this->initVar('last_login', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('umode', XOBJ_DTYPE_OTHER, null, false);
         $this->initVar('uorder', XOBJ_DTYPE_INT, 1, false);
-    // RMV-NOTIFY
-    $this->initVar('notify_method', XOBJ_DTYPE_OTHER, 1, false);
+        // RMV-NOTIFY
+        $this->initVar('notify_method', XOBJ_DTYPE_OTHER, 1, false);
         $this->initVar('notify_mode', XOBJ_DTYPE_OTHER, 0, false);
         $this->initVar('user_occ', XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar('bio', XOBJ_DTYPE_TXTAREA, null, false, null);
@@ -89,7 +89,7 @@ class XooNIpsOrmXoopsUsersHandler extends XooNIpsTableObjectHandler
         $obj = &parent::create($isNew);
         if ($isNew) {
             // override default values
-      $obj->set('name', '');
+            $obj->set('name', '');
             $obj->set('url', '');
             $obj->set('user_avatar', 'blank.gif');
             $obj->set('user_icq', '');

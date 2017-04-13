@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/logic.class.php';
+require_once dirname(__DIR__).'/base/logic.class.php';
 
 class XooNIpsLogicImportCheckConflict extends XooNIpsLogic
 {
@@ -41,9 +41,7 @@ class XooNIpsLogicImportCheckConflict extends XooNIpsLogic
         $handler = &xoonips_gethandler('xoonips', 'import_item');
         $handler->findDuplicateItems($this->_import_items);
 
-        $success = array('import_items' => $this->_import_items,
-                          'is_conflict' => $this->_is_conflict(
-                              $this->_import_items), );
+        $success = array('import_items' => $this->_import_items, 'is_conflict' => $this->_is_conflict($this->_import_items));
         $response->setResult(true);
         $response->setSuccess($success);
     }

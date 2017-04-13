@@ -107,31 +107,24 @@ class Junii2ListRecordsHandler extends ListRecordsHandler
 
     public function endElementHandler($parser, $name)
     {
-        if (isset($this->tagstack[3])
-            && $this->getElementName($this->tagstack[3]) == 'HEADER'
-            || !in_array($this->getElementName(end($this->tagstack)),
-                          $this->_support_tags)) {
+        if (isset($this->tagstack[3]) && $this->getElementName($this->tagstack[3]) == 'HEADER' || !in_array($this->getElementName(end($this->tagstack)), $this->_support_tags)
+        ) {
             parent::endElementHandler($parser, $name);
         } elseif ($this->getElementName(end($this->tagstack)) == 'DATE') {
             $this->_creation_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
-            $this->addMetadataField(end($this->tagstack), $this->_cdata_buf,
-                                    XOONIPS_METADATA_CATEGORY_DATE);
+            $this->addMetadataField(end($this->tagstack), $this->_cdata_buf, XOONIPS_METADATA_CATEGORY_DATE);
             array_pop($this->tagstack);
-        } elseif ($this->getElementName(end($this->tagstack))
-                  == 'DATEOFISSUED') {
+        } elseif ($this->getElementName(end($this->tagstack)) == 'DATEOFISSUED'
+        ) {
             $this->_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
-            $this->addMetadataField(
-                end($this->tagstack), $this->_cdata_buf,
-                XOONIPS_METADATA_CATEGORY_CREATION_DATE);
+            $this->addMetadataField(end($this->tagstack), $this->_cdata_buf, XOONIPS_METADATA_CATEGORY_CREATION_DATE);
             array_pop($this->tagstack);
         } elseif ($this->getElementName(end($this->tagstack)) == 'URI') {
             $this->_resource_url[] = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
-            $this->addMetadataField(
-                end($this->tagstack), $this->_cdata_buf,
-                XOONIPS_METADATA_CATEGORY_RESOURCE_LINK);
+            $this->addMetadataField(end($this->tagstack), $this->_cdata_buf, XOONIPS_METADATA_CATEGORY_RESOURCE_LINK);
             array_pop($this->tagstack);
         } else {
             $this->addMetadataField(end($this->tagstack), $this->_cdata_buf);

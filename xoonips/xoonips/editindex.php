@@ -42,10 +42,10 @@
  */
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
-include_once 'include/lib.php';
-include_once 'include/AL.php';
-include 'class/base/gtickets.php';
+require 'include/common.inc.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
+require 'class/base/gtickets.php';
 
 $xgroup_handler = &xoonips_gethandler('xoonips', 'group');
 
@@ -120,9 +120,10 @@ if ($result != RES_OK) {
     redirect_header(XOOPS_URL.'/index.php', 3, 'ERROR');
     exit;
 }
-if ($index['open_level'] == OL_PUBLIC && xnp_is_moderator($xnpsid, $uid) ||
-    $index['open_level'] == OL_GROUP_ONLY && $xgroup_handler->isGroupAdmin($uid, $index['owner_gid']) ||
-    $index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $uid) {
+if ($index['open_level'] == OL_PUBLIC && xnp_is_moderator($xnpsid, $uid)
+    || $index['open_level'] == OL_GROUP_ONLY && $xgroup_handler->isGroupAdmin($uid, $index['owner_gid'])
+    || $index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $uid
+) {
     // User has the right to write.
 } else {
     // User doesn't have the right to write.
@@ -152,7 +153,8 @@ function xoonipsGetTopIndex($xid)
         if ($index['open_level'] == $val['open_level']) {
             if ($index['open_level'] == OL_PUBLIC
                 || $index['open_level'] == OL_GROUP_ONLY && $index['owner_gid'] == $val['owner_gid']
-                || $index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $val['owner_uid']) {
+                || $index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $val['owner_uid']
+            ) {
                 return $val['item_id'];
             }
         }
@@ -167,7 +169,7 @@ $xoonipsEditIndex = true;
 $xoonipsSelectedTab = xoonipsGetTopIndex($xid);
 
 $xoopsOption['template_main'] = 'xoonips_editindex.html';
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
 $error_messages = array();
 
@@ -197,8 +199,8 @@ if ($op == 'add_to_public' && isset($check)) {
     foreach ($check as $index_id) {
         //ignore lock because of to make public a group index
         if ($item_lock_handler->isLocked($index_id)
-            && $item_lock_handler->getLockType($index_id)
-            == XOONIPS_LOCK_TYPE_PUBLICATION_GROUP_INDEX) {
+            && $item_lock_handler->getLockType($index_id) == XOONIPS_LOCK_TYPE_PUBLICATION_GROUP_INDEX
+        ) {
             continue;
         }
         xoonips_show_error_if_index_locked($index_id, $xid);
@@ -222,9 +224,7 @@ if ($op == 'add_to_public' && isset($check)) {
 
         $xoopsDB->queryF('COMMIT');
         $index_group_index_link_handler->notifyMakePublicGroupIndex(array($add_to_index_id_sel), $check, 'group_item_certify_request');
-        redirect_header(XOOPS_URL.'/modules/'
-                        .$xoopsModule->dirname().'/editindex.php?index_id='.$xid,
-                        5, "Succeed\n<br />"._MD_XOONIPS_ITEM_NEED_TO_BE_CERTIFIED);
+        redirect_header(XOOPS_URL.'/modules/'.$xoopsModule->dirname().'/editindex.php?index_id='.$xid, 5, "Succeed\n<br />"._MD_XOONIPS_ITEM_NEED_TO_BE_CERTIFIED);
     } elseif ($config_handler->getValue('certify_item') == 'auto') {
         if (!$index_group_index_link_handler->makePublic($add_to_index_id_sel, $check)) {
             $xoopsDB->queryF('ROLLBACK');
@@ -246,9 +246,9 @@ if ($op == 'add_to_public' && isset($check)) {
     exit();
 } elseif ($op == 'register') {
     // check token ticket
-  if (!$xoopsGTicket->check(true, 'xoonips_edit_index')) {
-      exit();
-  }
+    if (!$xoopsGTicket->check(true, 'xoonips_edit_index')) {
+        exit();
+    }
 
     $indexes = array();
     $result = xnp_get_indexes($xnpsid, $xid, array(), $indexes);
@@ -301,9 +301,7 @@ if ($op == 'add_to_public' && isset($check)) {
             // Record events(insert index)
             $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
             $eventlog_handler->recordInsertIndexEvent($new_xid);
-            header('Location: '.XOOPS_URL
-                   .'/modules/xoonips/editindex.php?index_id='
-                   .intval($xid));
+            header('Location: '.XOOPS_URL.'/modules/xoonips/editindex.php?index_id='.intval($xid));
         }
     } while (false);
 } elseif ($op == 'up' || $op == 'down') {
@@ -451,9 +449,10 @@ if ($op == 'add_to_public' && isset($check)) {
             $result1 = xnp_get_index($xnpsid, $moveto, $destIndex);
             $srcIndex = array();
             $result2 = xnp_get_index($xnpsid, $index_id, $srcIndex);
-            if ($destIndex['open_level'] != $srcIndex['open_level'] ||
-                $destIndex['owner_uid'] != $srcIndex['owner_uid'] ||
-                $destIndex['owner_gid'] != $srcIndex['owner_gid']) {
+            if ($destIndex['open_level'] != $srcIndex['open_level']
+                || $destIndex['owner_uid'] != $srcIndex['owner_uid']
+                || $destIndex['owner_gid'] != $srcIndex['owner_gid']
+            ) {
                 $error_messages[] = _MD_XOONIPS_INDEX_BAD_MOVE;
                 break;
             }
@@ -496,12 +495,11 @@ $xoopsTpl->assign('indexCount', $indexCount);
 $xoopsTpl->assign('indexNumberLimit', $indexNumberLimit);
 
 $xoopsTpl->assign('group_administrator', $xgroup_handler->isGroupAdmin($uid, $index['owner_gid']));
-$xoopsTpl->assign('create_permission',
-                  $index_handler->getPerm($xid, @$_SESSION['xoopsUserId'], 'create'));
-$xoopsTpl->assign('write_permission',
-                  $index_handler->getPerm($xid, @$_SESSION['xoopsUserId'], 'write'));
+$xoopsTpl->assign('create_permission', $index_handler->getPerm($xid, @$_SESSION['xoopsUserId'], 'create'));
+$xoopsTpl->assign('write_permission', $index_handler->getPerm($xid, @$_SESSION['xoopsUserId'], 'write'));
 
-/** generate character strings from result of xoonipsGetPathArray()
+/**
+ * generate character strings from result of xoonipsGetPathArray().
  */
 function xoonipsGetPathString($xnpsid, $xid)
 {
@@ -514,7 +512,8 @@ function xoonipsGetPathString($xnpsid, $xid)
     return '/'.implode('/', $ar);
 }
 
-/** return array of indexes (path from ROOT to xid, Don't contain ROOT)
+/**
+ * return array of indexes (path from ROOT to xid, Don't contain ROOT).
  */
 function xoonipsGetPathArray($xnpsid, $xid)
 {
@@ -691,7 +690,8 @@ function xoonipsGetIndexCountInfo($xnpsid, $xid)
     return array($limitLabel, $indexCount, $indexNumberLimit);
 }
 
-/** show error message and redirect if $locked_index_id is locked.
+/**
+ * show error message and redirect if $locked_index_id is locked.
  */
 function xoonips_show_error_if_index_locked($locked_index_id, $current_index_id)
 {

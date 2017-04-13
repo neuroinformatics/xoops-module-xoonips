@@ -25,8 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-include 'include/common.inc.php';
-include 'include/group.inc.php';
+require 'include/common.inc.php';
+require 'include/group.inc.php';
 
 // privileges check : user
 $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
@@ -50,7 +50,7 @@ $gids = $xgroup_handler->getGroupIds();
 $groups = xoonips_group_get_groups($uid, $gids);
 
 $xoopsOption['template_main'] = 'xoonips_group_list.html';
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 $xoopsTpl->assign('xoops_breadcrumbs', $breadcrumbs);
 $xoopsTpl->assign('groups', $groups);
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';

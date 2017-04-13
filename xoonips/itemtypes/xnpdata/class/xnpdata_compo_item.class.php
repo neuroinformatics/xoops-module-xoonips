@@ -30,9 +30,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnpdata/iteminfo.php';
-include_once dirname(__DIR__).'/include/view.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnpdata/iteminfo.php';
+require_once dirname(__DIR__).'/include/view.php';
 
 /**
  * @brief Handler object that create,insert,update,get,delete XNPDataCompo object.
@@ -107,10 +107,7 @@ class XNPDataCompoHandler extends XooNIpsItemInfoCompoHandler
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
-            $result['xnpdata_experimenter']
-                = xoonips_get_multiple_field_template_vars($detail->getExperimenters(),
-                                                          'xnpdata',
-                                                          'experimenter');
+            $result['xnpdata_experimenter'] = xoonips_get_multiple_field_template_vars($detail->getExperimenters(), 'xnpdata', 'experimenter');
             $result['detail'] = $detail->getVarArray('s');
             $result['detail']['data_type'] = $textutil->html_special_chars($this->get_data_type_label($detail->get('data_type')));
             $result['detail']['data_type_value'] = $detail->get('data_type', 's');
@@ -122,8 +119,7 @@ class XNPDataCompoHandler extends XooNIpsItemInfoCompoHandler
             if (is_array($data->getVar('preview'))) {
                 $result['detail']['previews'] = array();
                 foreach ($data->getVar('preview') as $preview) {
-                    $result['detail']['previews'][]
-                        = $this->getPreviewTemplateVar($preview);
+                    $result['detail']['previews'][] = $this->getPreviewTemplateVar($preview);
                 }
             }
 

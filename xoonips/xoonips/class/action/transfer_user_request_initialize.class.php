@@ -26,9 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once 'transfer.class.php';
-include_once dirname(dirname(__DIR__))
-    .'/include/transfer.inc.php';
+require_once 'transfer.class.php';
+require_once dirname(dirname(__DIR__)).'/include/transfer.inc.php';
 
 class XooNIpsActionTransferUserRequestInitialize extends XooNIpsActionTransfer
 {
@@ -55,16 +54,11 @@ class XooNIpsActionTransferUserRequestInitialize extends XooNIpsActionTransfer
         xoonips_allow_both_method();
 
         if (!is_null($this->_formdata->getValue('post', 'to_uid', 'i', false))) {
-            xoonips_validate_request(
-                $this->is_valid_transferee_user(
-                    $this->_formdata->getValue('post', 'to_uid', 'i', false)));
+            xoonips_validate_request($this->is_valid_transferee_user($this->_formdata->getValue('post', 'to_uid', 'i', false)));
         }
 
         if (!is_null($this->_formdata->getValueArray('post', 'item_ids_to_transfer', 'i', false))) {
-            xoonips_validate_request(
-                $this->is_readable_all_items(
-                    $this->_formdata->getValueArray('post', 'item_ids_to_transfer', 'i', false),
-                    $xoopsUser->getVar('uid')));
+            xoonips_validate_request($this->is_readable_all_items($this->_formdata->getValueArray('post', 'item_ids_to_transfer', 'i', false), $xoopsUser->getVar('uid')));
         }
     }
 
@@ -74,38 +68,21 @@ class XooNIpsActionTransferUserRequestInitialize extends XooNIpsActionTransfer
 
         $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
         if ($item_type_handler->getCount() <= 1) {
-            redirect_header(
-                XOOPS_URL.'/modules/xoonips/',
-                3, _MD_XOONIPS_TRANSFER_USER_REQUEST_ERROR_NO_ITEMTYPE
-                );
+            redirect_header(XOOPS_URL.'/modules/xoonips/', 3, _MD_XOONIPS_TRANSFER_USER_REQUEST_ERROR_NO_ITEMTYPE);
         }
 
-        $this->_view_params['to_uid']
-            = $this->_formdata->getValue('post', 'to_uid', 'i', false);
+        $this->_view_params['to_uid'] = $this->_formdata->getValue('post', 'to_uid', 'i', false);
 
-        $item_ids_to_transfer
-            = $this->_formdata->getValueArray('post', 'item_ids_to_transfer', 'i', false);
+        $item_ids_to_transfer = $this->_formdata->getValueArray('post', 'item_ids_to_transfer', 'i', false);
 
-        $this->_view_params['items_to_transfer']
-            = xoonips_transfer_get_transferrable_item_information(
-                $xoopsUser->getVar('uid'),
-                $item_ids_to_transfer);
+        $this->_view_params['items_to_transfer'] = xoonips_transfer_get_transferrable_item_information($xoopsUser->getVar('uid'), $item_ids_to_transfer);
 
-        $this->_view_params['to_user_options']
-            = xoonips_transfer_get_users_for_dropdown(
-                $xoopsUser->getVar('uid'));
+        $this->_view_params['to_user_options'] = xoonips_transfer_get_users_for_dropdown($xoopsUser->getVar('uid'));
 
         if (empty($this->_view_params['to_user_options'])) {
-            redirect_header(
-                XOOPS_URL
-                .'/modules/xoonips/',
-                3, _MD_XOONIPS_TRANSFER_USER_REQUEST_ERROR_NO_TRANSFEREE_USER
-                );
+            redirect_header(XOOPS_URL.'/modules/xoonips/', 3, _MD_XOONIPS_TRANSFER_USER_REQUEST_ERROR_NO_TRANSFEREE_USER);
         }
 
-        $this->_view_params['transfer_enable']
-            = $this->is_all_transferrable_items(
-                $xoopsUser->getVar('uid'),
-                $item_ids_to_transfer);
+        $this->_view_params['transfer_enable'] = $this->is_all_transferrable_items($xoopsUser->getVar('uid'), $item_ids_to_transfer);
     }
 }

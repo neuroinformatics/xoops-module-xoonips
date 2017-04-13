@@ -26,9 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once 'transfer.class.php';
-include_once dirname(dirname(__DIR__))
-    .'/include/transfer.inc.php';
+require_once 'transfer.class.php';
+require_once dirname(dirname(__DIR__)).'/include/transfer.inc.php';
 
 class XooNIpsActionTransferUserListItem extends XooNIpsActionTransfer
 {
@@ -59,25 +58,17 @@ class XooNIpsActionTransferUserListItem extends XooNIpsActionTransfer
 
         global $xoopsUser;
 
-        $item_ids_to_transfer
-            = $this->get_transfer_request_item_ids($xoopsUser->getVar('uid'));
+        $item_ids_to_transfer = $this->get_transfer_request_item_ids($xoopsUser->getVar('uid'));
 
-        if (!$this->is_user_in_group_of_items($xoopsUser->getVar('uid'),
-                                                 $item_ids_to_transfer)) {
-            $gnames = $this->get_unsubscribed_group_names(
-                $xoopsUser->getVar('uid'), $item_ids_to_transfer);
-            $msg = sprintf(
-                _MD_XOONIPS_TRANSFER_USER_LIST_ITEM_ERROR_BAD_SUBSCRIBE_GROUP_NAME,
-                $gnames[0]);
+        if (!$this->is_user_in_group_of_items($xoopsUser->getVar('uid'), $item_ids_to_transfer)) {
+            $gnames = $this->get_unsubscribed_group_names($xoopsUser->getVar('uid'), $item_ids_to_transfer);
+            $msg = sprintf(_MD_XOONIPS_TRANSFER_USER_LIST_ITEM_ERROR_BAD_SUBSCRIBE_GROUP_NAME, $gnames[0]);
             redirect_header(XOOPS_URL.'/', 3, $msg);
         }
 
-        $this->_view_params['item_ids_to_transfer'] =
-            $this->sort_item_ids_by_title($item_ids_to_transfer);
+        $this->_view_params['item_ids_to_transfer'] = $this->sort_item_ids_by_title($item_ids_to_transfer);
 
-        $this->_view_params['limit_check_result']
-            = $this->get_limit_check_result($xoopsUser->getVar('uid'),
-                                              $item_ids_to_transfer);
+        $this->_view_params['limit_check_result'] = $this->get_limit_check_result($xoopsUser->getVar('uid'), $item_ids_to_transfer);
 
         $user_hanlder = &xoonips_getormhandler('xoonips', 'users');
         $user = &$user_hanlder->get($xoopsUser->getVar('uid'));
@@ -93,11 +84,9 @@ class XooNIpsActionTransferUserListItem extends XooNIpsActionTransfer
      */
     public function get_transfer_request_item_ids($uid)
     {
-        $transfer_handler = &xoonips_getormhandler('xoonips',
-                                                    'transfer_request');
+        $transfer_handler = &xoonips_getormhandler('xoonips', 'transfer_request');
 
-        $transfers = &$transfer_handler->getObjects(
-            new Criteria('to_uid', $uid));
+        $transfers = &$transfer_handler->getObjects(new Criteria('to_uid', $uid));
         if (false === $transfers) {
             return array();
         }

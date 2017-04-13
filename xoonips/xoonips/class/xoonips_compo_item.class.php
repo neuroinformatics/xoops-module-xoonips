@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/relatedobject.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/relatedobject.class.php';
 
 define('XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL', 'transfer_item_detail');
 define('XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST', 'transfer_item_list');
@@ -208,12 +208,15 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
      */
     public function getPerm($item_id, $uid, $operation)
     {
-        if (!in_array($operation, array(
+        if (!in_array(
+            $operation, array(
             'read',
             'write',
             'delete',
             'export',
-        ))) {
+            )
+        )
+        ) {
             return false; // bad operation
         }
 
@@ -224,14 +227,16 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
         }
 
         $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
-        if (($operation == 'write' || $operation == 'delete') &&
-                $item_lock_handler->isLocked($item_id)) {
+        if (($operation == 'write' || $operation == 'delete')
+            && $item_lock_handler->isLocked($item_id)
+        ) {
             return false; // cannot write/delete locked item
         }
 
         $index_group_index_link_handler = &xoonips_getormhandler('xoonips', 'index_group_index_link');
         if (($operation == 'write' || $operation == 'delete')
-           && $index_group_index_link_handler->getObjectsByItemId($item_id)) {
+            && $index_group_index_link_handler->getObjectsByItemId($item_id)
+        ) {
             //cannot write/delete if item is in group index that is publication required.
             return false;
         }
@@ -443,11 +448,16 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
      */
     public function getTemplateVar($type, $item_id, $uid)
     {
-        if (!in_array($type,
-                       array(XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL,
-                              XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST,
-                              XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL,
-                              XOONIPS_TEMPLATE_TYPE_ITEM_LIST, ))) {
+        if (!in_array(
+            $type,
+            array(
+                XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL,
+                XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST,
+                XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL,
+                XOONIPS_TEMPLATE_TYPE_ITEM_LIST,
+            )
+        )
+        ) {
             return array();
         }
         $item = &$this->get($item_id);
@@ -470,11 +480,16 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
      */
     public function getBasicTemplateVar($type, &$item, $uid)
     {
-        if (!in_array($type,
-                       array(XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL,
-                              XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST,
-                              XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL,
-                              XOONIPS_TEMPLATE_TYPE_ITEM_LIST, ))) {
+        if (!in_array(
+            $type,
+            array(
+                XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL,
+                XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST,
+                XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL,
+                XOONIPS_TEMPLATE_TYPE_ITEM_LIST,
+            )
+        )
+        ) {
             return array();
         }
         $textutil = &xoonips_getutility('text');
@@ -489,18 +504,9 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
                 'doi' => $basic->getVar('doi', 's'),
                 'creation_date' => $basic->getVar('creation_date', 's'),
                 'last_update_date' => $basic->getVar('last_update_date', 's'),
-                'publication_year' => $this->get_year_template_var(
-                    $basic->get('publication_year'),
-                    $basic->get('publication_month'),
-                    $basic->get('publication_mday')),
-                'publication_month' => $this->get_month_template_var(
-                    $basic->get('publication_year'),
-                    $basic->get('publication_month'),
-                    $basic->get('publication_mday')),
-                'publication_mday' => $this->get_mday_template_var(
-                    $basic->get('publication_year'),
-                    $basic->get('publication_month'),
-                    $basic->get('publication_mday')),
+                'publication_year' => $this->get_year_template_var($basic->get('publication_year'), $basic->get('publication_month'), $basic->get('publication_mday')),
+                'publication_month' => $this->get_month_template_var($basic->get('publication_year'), $basic->get('publication_month'), $basic->get('publication_mday')),
+                'publication_mday' => $this->get_mday_template_var($basic->get('publication_year'), $basic->get('publication_month'), $basic->get('publication_mday')),
                 'lang' => $this->get_lang_label($basic->get('lang')), ),
             'contributor' => array(),
             'item_type' => array(),
@@ -567,8 +573,10 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
                 if ($item_compo_handler->getPerm($item_id, $uid, 'read')) {
                     $result['related_tos'][] = array(
                         'filename' => 'db:'.$item_compo_handler->getTemplateFileName(XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST),
-                        'var' => $item_compo_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST,
-                        $related_basic->get('item_id'), $uid), );
+                        'var' => $item_compo_handler->getTemplateVar(
+                            XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST,
+                            $related_basic->get('item_id'), $uid
+                        ), );
                 }
             }
         }
@@ -616,7 +624,8 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
     {
         $languages = $this->array_combine(
             explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_IDS),
-            explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_NAMES));
+            explode(',', _MD_XOONIPS_ITEM_LANG_OPTION_NAMES)
+        );
 
         if (in_array($lang, array_keys($languages))) {
             return $languages[$lang];
@@ -781,7 +790,8 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
         $base_url = XOOPS_URL.'/modules/'
             .$xoopsModule->dirname().'/detail.php';
         if ($basic->get('doi') == ''
-            || XNP_CONFIG_DOI_FIELD_PARAM_NAME == '') {
+            || XNP_CONFIG_DOI_FIELD_PARAM_NAME == ''
+        ) {
             return $base_url.'?item_id='.intval($item_id);
         }
 

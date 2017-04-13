@@ -26,10 +26,10 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/class/xml/rpc/xmlrpcapi.php';
+require_once XOOPS_ROOT_PATH.'/class/xml/rpc/xmlrpcapi.php';
 // for RSS update
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/AL.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/AL.php';
 
 /**
  * base class of Business Logic.
@@ -44,7 +44,7 @@ class XooNIpsLogic
      * implement of logic.
      *
      * @abstract
-     * @param[in] array $vars input parameters of logic
+     * @param[in]  array $vars input parameters of logic
      * @param[out] XooNIpsResponse $response result of logic(success/fault, response, error)
      */
     public function execute(&$vars, &$response)
@@ -267,7 +267,9 @@ class XooNIpsLogic
         return true;
     }
 
-    /** get ids of group-certified item.
+    /**
+     * get ids of group-certified item.
+     *
      * @param gid
      *
      * @return item_id[]
@@ -464,7 +466,8 @@ class XooNIpsLogic
         return true;
     }
 
-    /** convert prefixed number to a number(e.g. '4k' to 4096)
+    /**
+     * convert prefixed number to a number(e.g. '4k' to 4096).
      */
     public function returnBytes($val)
     {
@@ -492,7 +495,7 @@ class XooNIpsLogic
         return $val;
     }
 
-/*
+    /*
     function _check_missing_parameters( $params, $num_of_params ){
         if ( count($params) < $num_of_params ){
             $this -> _response->setResult(false);
@@ -510,24 +513,28 @@ class XooNIpsLogic
         }
         return true;
     }
-*/
+    */
 
-    /** convert lock type to string.
+    /**
+     * convert lock type to string.
      */
     public function getLockTypeString($lock_type)
     {
         switch ($lock_type) {
-        case XOONIPS_LOCK_TYPE_NOT_LOCKED: return 'not locked';
-        case XOONIPS_LOCK_TYPE_CERTIFY_REQUEST: return 'requested to certify';
-        case XOONIPS_LOCK_TYPE_TRANSFER_REQUEST: return 'requested to transfer';
+        case XOONIPS_LOCK_TYPE_NOT_LOCKED:
+            return 'not locked';
+        case XOONIPS_LOCK_TYPE_CERTIFY_REQUEST:
+            return 'requested to certify';
+        case XOONIPS_LOCK_TYPE_TRANSFER_REQUEST:
+            return 'requested to transfer';
         }
 
         return "(internal error: unsupported lock type. lock_type=$lock_type)";
     }
 
     public function isPublicationDateValid(&$response, $year, $month, $mday,
-        $year_required, $month_required, $mday_required)
-    {
+        $year_required, $month_required, $mday_required
+    ) {
         $error = &$response->getError();
         $year_valid = false;
         $month_valid = false;
@@ -545,11 +552,12 @@ class XooNIpsLogic
             $int_mday = intval($mday);
         }
 
-        if (!$year_valid ||
-            !$month_valid ||
-            !$mday_valid ||
-            $int_year == 0 && ($int_month != 0 || $int_mday != 0) ||
-            $int_month == 0 && $int_mday != 0) {
+        if (!$year_valid
+            || !$month_valid
+            || !$mday_valid
+            || $int_year == 0 && ($int_month != 0 || $int_mday != 0)
+            || $int_month == 0 && $int_mday != 0
+        ) {
             $error->add(XNPERR_INVALID_PARAM, 'invalid creation date');
 
             return false;

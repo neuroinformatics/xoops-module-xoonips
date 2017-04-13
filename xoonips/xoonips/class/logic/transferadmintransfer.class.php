@@ -26,8 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/logic.class.php';
-include_once __DIR__.'/transfer.class.php';
+require_once dirname(__DIR__).'/base/logic.class.php';
+require_once __DIR__.'/transfer.class.php';
 
 class XooNIpsLogicTransferAdminTransfer extends XooNIpsLogicTransfer
 {
@@ -61,8 +61,7 @@ class XooNIpsLogicTransferAdminTransfer extends XooNIpsLogicTransfer
             return false;
         }
 
-        if (false == xoonips_transfer_is_transferrable($from_uid,
-                                                         $to_uid, $item_ids)) {
+        if (false == xoonips_transfer_is_transferrable($from_uid, $to_uid, $item_ids)) {
             $error->add(XNPERR_SERVER_ERROR, 'not transferrable');
 
             return false;
@@ -75,18 +74,15 @@ class XooNIpsLogicTransferAdminTransfer extends XooNIpsLogicTransfer
         }
 
         foreach ($item_ids as $item_id) {
-            if (false == $this->move_item_to_other_private_index(
-                $error, $item_id, $index_id)) {
+            if (false == $this->move_item_to_other_private_index($error, $item_id, $index_id)) {
                 return false;
             }
 
-            if (false == $this->remove_item_from_achievements_if_needed(
-                $error, $item_id)) {
+            if (false == $this->remove_item_from_achievements_if_needed($error, $item_id)) {
                 return false;
             }
 
-            $item_basic_handler = &xoonips_getormhandler('xoonips',
-                                                          'item_basic');
+            $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
             $item_basic = $item_basic_handler->get($item_id);
             $item_basic->set('uid', $to_uid);
             if (false == $item_basic_handler->insert($item_basic)) {
@@ -102,14 +98,12 @@ class XooNIpsLogicTransferAdminTransfer extends XooNIpsLogicTransfer
                 return false;
             }
 
-            if (false == $this->update_item_status_if_public_certified(
-                $error, $item_id)) {
+            if (false == $this->update_item_status_if_public_certified($error, $item_id)) {
                 return false;
             }
         }
         foreach ($item_ids as $item_id) {
-            if (false == $this->remove_related_to_if_no_read_permission(
-                $item_id, $from_uid, $to_uid)) {
+            if (false == $this->remove_related_to_if_no_read_permission($item_id, $from_uid, $to_uid)) {
                 return false;
             }
         }
@@ -121,14 +115,12 @@ class XooNIpsLogicTransferAdminTransfer extends XooNIpsLogicTransfer
     {
         foreach ($gids as $gid) {
             // add to group
-            $groups_users_link_handler = &xoonips_getormhandler(
-                'xoonips', 'groups_users_link');
+            $groups_users_link_handler = &xoonips_getormhandler('xoonips', 'groups_users_link');
             $groups_users_link = $groups_users_link_handler->create();
             $groups_users_link->set('gid', $gid);
             $groups_users_link->set('uid', $uid);
             $groups_users_link->set('is_admin', 0);
-            if (false == $groups_users_link_handler->insert(
-                $groups_users_link)) {
+            if (false == $groups_users_link_handler->insert($groups_users_link)) {
                 $error->add(XNPERR_SERVER_ERROR, 'cannot add to group');
 
                 return false;

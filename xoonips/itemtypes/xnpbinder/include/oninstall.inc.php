@@ -33,23 +33,23 @@ function xoops_module_install_xnpbinder($xoopsMod)
 {
     global $xoopsDB;
 
-  // register itemtype
-  $table = $xoopsDB->prefix('xoonips_item_type');
+    // register itemtype
+    $table = $xoopsDB->prefix('xoonips_item_type');
     $mid = $xoopsMod->getVar('mid');
     $sql = "INSERT INTO $table ( name, display_name, mid, viewphp ) ".' VALUES ( \'xnpbinder\', \'Binder\', '." $mid, 'xnpbinder/include/view.php' )";
     if ($xoopsDB->query($sql) == false) {
         // cannot register itemtype
-    return false;
+        return false;
     }
     $item_type_id = $xoopsDB->getInsertId();
 
-  // get item_type_id of xoonips_binder
-  $result = $xoopsDB->query('SELECT item_type_id FROM '.$xoopsDB->prefix('xoonips_item_type').' WHERE name=\'xoonips_binder\'');
+    // get item_type_id of xoonips_binder
+    $result = $xoopsDB->query('SELECT item_type_id FROM '.$xoopsDB->prefix('xoonips_item_type').' WHERE name=\'xoonips_binder\'');
     if ($result !== false && $xoopsDB->getRowsNum($result) > 0) {
         list($old_item_type_id) = $xoopsDB->fetchRow($result);
 
-    // move binder_item_link data from XooNIps to Binder module
-    $table_from = $xoopsDB->prefix('xoonips_binder_item_link');
+        // move binder_item_link data from XooNIps to Binder module
+        $table_from = $xoopsDB->prefix('xoonips_binder_item_link');
         $table_to = $xoopsDB->prefix('xnpbinder_binder_item_link');
         $sql = "INSERT INTO $table_to SELECT * FROM $table_from";
         if ($xoopsDB->query($sql) == false) {
@@ -60,8 +60,8 @@ function xoops_module_install_xnpbinder($xoopsMod)
             return false;
         }
 
-    // insert binder_id to xnpbinder_item_detail fro xoonips_item_basic
-    $table_from = $xoopsDB->prefix('xoonips_item_basic');
+        // insert binder_id to xnpbinder_item_detail fro xoonips_item_basic
+        $table_from = $xoopsDB->prefix('xoonips_item_basic');
         $table_to = $xoopsDB->prefix('xnpbinder_item_detail');
         $sql = "INSERT INTO $table_to SELECT item_id,''  "." FROM $table_from  "." WHERE item_type_id=$old_item_type_id";
         if ($xoopsDB->query($sql) == false) {
@@ -74,17 +74,17 @@ function xoops_module_install_xnpbinder($xoopsMod)
             return false;
         }
 
-    // remove xoonips_binder from xoonips_item_type
-    $result = $xoopsDB->query('DELETE FROM '.$xoopsDB->prefix('xoonips_item_type').' WHERE name=\'xoonips_binder\'');
+        // remove xoonips_binder from xoonips_item_type
+        $result = $xoopsDB->query('DELETE FROM '.$xoopsDB->prefix('xoonips_item_type').' WHERE name=\'xoonips_binder\'');
         if ($result == false) {
             // cannot register itemtype
-      return false;
+            return false;
         }
     }
 
-  // Delete 'Module Access Rights' from all groups
-  // This allows to remove redundant module name in Main Menu
-  $member_handler = &xoops_gethandler('member');
+    // Delete 'Module Access Rights' from all groups
+    // This allows to remove redundant module name in Main Menu
+    $member_handler = &xoops_gethandler('member');
     $gperm_handler = &xoops_gethandler('groupperm');
     $groups = &$member_handler->getGroupList();
     $mid = $xoopsMod->getVar('mid');

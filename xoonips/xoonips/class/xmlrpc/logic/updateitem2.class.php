@@ -26,16 +26,11 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xoonipserror.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xoonipsresponse.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipserror.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipsresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
 
 /**
  * @brief Class that executes logic specified by XML-RPC updateItem2 request
@@ -88,9 +83,7 @@ class XooNIpsXmlRpcLogicUpdateItem2 extends XooNIpsXmlRpcLogic
         $itemtype = &$itemtype_handler->get($item_type_id);
         if (!$itemtype) {
             $response->setResult(false);
-            $response->setError(new XooNIpsError(
-                XNPERR_INVALID_PARAM,
-                "item type of $item_type_id is not found"));
+            $response->setError(new XooNIpsError(XNPERR_INVALID_PARAM, "item type of $item_type_id is not found"));
 
             return false;
         }
@@ -138,9 +131,7 @@ class XooNIpsXmlRpcLogicUpdateItem2 extends XooNIpsXmlRpcLogic
                 $fileobj = $trans->getObject($p);
                 if (!$fileobj) {
                     $response->setResult(false);
-                    $response->setError(
-                        new XooNIpsError(XNPERR_INVALID_PARAM,
-                                         "can't get file from XML"));
+                    $response->setError(new XooNIpsError(XNPERR_INVALID_PARAM, "can't get file from XML"));
 
                     return false;
                 }
@@ -152,9 +143,7 @@ class XooNIpsXmlRpcLogicUpdateItem2 extends XooNIpsXmlRpcLogic
                 }
                 if (!$h || $len != strlen($p['data'])) {
                     $response->setResult(false);
-                    $response->setError(
-                        new XooNIpsError(XNPERR_SERVER_ERROR,
-                                         "can't write to file $tmpfile"));
+                    $response->setError(new XooNIpsError(XNPERR_SERVER_ERROR, "can't write to file $tmpfile"));
 
                     return false;
                 }

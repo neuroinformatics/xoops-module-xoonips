@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
 
 /**
  * subclass of XooNIpsLogic(getSimpleItems).
@@ -36,9 +36,9 @@ class XooNIpsLogicGetSimpleItems extends XooNIpsLogic
     /**
      * execute getSimpleItems.
      *
-     * @param[in] $vars[0] sessionid
-     * @param[in] $vars[1] array of id
-     * @param[in] $vars[2] id_type
+     * @param[in]  $vars[0] sessionid
+     * @param[in]  $vars[1] array of id
+     * @param[in]  $vars[2] id_type
      * @param[out] $response->result true:success, false:failed
      * @param[out] $response->error  error information
      * @param[out] $response->success XooNIpsItem retrieved item object

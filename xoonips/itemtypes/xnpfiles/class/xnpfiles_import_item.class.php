@@ -26,8 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(dirname(__DIR__))
-    .'/xoonips/class/xoonips_import_item.class.php';
+require_once dirname(dirname(__DIR__)).'/xoonips/class/xoonips_import_item.class.php';
 
 class XNPFilesImportItem extends XooNIpsImportItem
 {
@@ -133,39 +132,26 @@ class XNPFilesImportItemHandler extends XooNIpsImportItemHandler
             break;
         case 'ITEM/DETAIL/FILE':
             if ($this->_files_file_flag) {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_ATTACHMENT_HAS_REDUNDANT,
-                    "multiple $name attachments is not allowed"
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_ATTACHMENT_HAS_REDUNDANT, "multiple $name attachments is not allowed".$this->_get_parser_error_at());
                 break;
             }
-            $file_type_handler = &xoonips_getormhandler('xoonips',
-                                                         'file_type');
+            $file_type_handler = &xoonips_getormhandler('xoonips', 'file_type');
             $file_handler = &xoonips_getormhandler('xoonips', 'file');
-            $criteria = new Criteria(
-                'name', addslashes($attribs['FILE_TYPE_NAME']));
+            $criteria = new Criteria('name', addslashes($attribs['FILE_TYPE_NAME']));
             $file_type = &$file_type_handler->getObjects($criteria);
             if (count($file_type) == 0) {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_ATTR_NOT_FOUND,
-                    'file_type_id is not found:'.$attribs['FILE_TYPE_NAME']
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_ATTR_NOT_FOUND, 'file_type_id is not found:'.$attribs['FILE_TYPE_NAME'].$this->_get_parser_error_at());
                 break;
             }
 
             $unicode = &xoonips_getutility('unicode');
             $this->_files_file = &$file_handler->create();
-            $this->_files_file->setFilepath(
-                $this->_attachment_dir.'/'.$attribs['FILE_NAME']);
-            $this->_files_file->set(
-                'original_file_name',
-                $unicode->decode_utf8($attribs['ORIGINAL_FILE_NAME'],
-                                      xoonips_get_server_charset(), 'h'));
+            $this->_files_file->setFilepath($this->_attachment_dir.'/'.$attribs['FILE_NAME']);
+            $this->_files_file->set('original_file_name', $unicode->decode_utf8($attribs['ORIGINAL_FILE_NAME'], xoonips_get_server_charset(), 'h'));
             $this->_files_file->set('mime_type', $attribs['MIME_TYPE']);
             $this->_files_file->set('file_size', $attribs['FILE_SIZE']);
             $this->_files_file->set('sess_id', session_id());
-            $this->_files_file->set(
-                'file_type_id', $file_type[0]->get('file_type_id'));
+            $this->_files_file->set('file_type_id', $file_type[0]->get('file_type_id'));
             break;
         case 'ITEM/DETAIL/FILE/CAPTION':
         case 'ITEM/DETAIL/FILE/THUMBNAIL':
@@ -188,60 +174,37 @@ class XNPFilesImportItemHandler extends XooNIpsImportItemHandler
                 'data_file_name',
                 'data_file_mimetype',
                 'data_file_filetype',
-                );
+            );
             foreach ($keys as $key) {
                 if (is_null($detail->get($key, 'n'))) {
-                    $this->_import_item->setErrors(
-                        E_XOONIPS_TAG_NOT_FOUND,
-                        " no $key"
-                        .$this->_get_parser_error_at());
+                    $this->_import_item->setErrors(E_XOONIPS_TAG_NOT_FOUND, " no $key".$this->_get_parser_error_at());
                 }
             }
             break;
         case 'ITEM/DETAIL/DATA_FILE_NAME':
-            $detail->set('data_file_name',
-                            $unicode->decode_utf8(
-                                $this->_cdata,
-                                xoonips_get_server_charset(), 'h'), true);
+            $detail->set('data_file_name', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'), true);
             break;
         case 'ITEM/DETAIL/DATA_FILE_MIMETYPE':
-            $detail->set('data_file_mimetype',
-                            $unicode->decode_utf8(
-                                $this->_cdata,
-                                xoonips_get_server_charset(), 'h'), true);
+            $detail->set('data_file_mimetype', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'), true);
             break;
         case 'ITEM/DETAIL/DATA_FILE_FILETYPE':
-            $detail->set('data_file_filetype',
-                            $unicode->decode_utf8(
-                                $this->_cdata,
-                                xoonips_get_server_charset(), 'h'), true);
+            $detail->set('data_file_filetype', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'), true);
             break;
         case 'ITEM/DETAIL/FILE':
             $this->_files_file_flag = true;
             $file_handler = &xoonips_getormhandler('xoonips', 'file');
             if (!$file_handler->insert($this->_files_file)) {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_DB_QUERY,
-                    "can't insert attachment file:"
-                    .$this->_files_file->get('original_file_name')
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_DB_QUERY, "can't insert attachment file:".$this->_files_file->get('original_file_name').$this->_get_parser_error_at());
             }
-            $this->_files_file = $file_handler->get(
-                $this->_files_file->get('file_id'));
-            $this->_import_item->setVar(
-                'files_file', $this->_files_file);
+            $this->_files_file = $file_handler->get($this->_files_file->get('file_id'));
+            $this->_import_item->setVar('files_file', $this->_files_file);
             $this->_import_item->setHasFilesFile();
             break;
         case 'ITEM/DETAIL/FILE/CAPTION':
-            $this->_files_file->set(
-                'caption',
-                $unicode->decode_utf8(
-                    $this->_cdata,
-                    xoonips_get_server_charset(), 'h'));
+            $this->_files_file->set('caption', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'));
             break;
         case 'ITEM/DETAIL/FILE/THUMBNAIL':
-            $this->_files_file->set('thumbnail_file',
-                                         base64_decode($this->_cdata));
+            $this->_files_file->set('thumbnail_file', base64_decode($this->_cdata));
             break;
         }
 
@@ -335,7 +298,7 @@ class XNPFilesImportItemHandler extends XooNIpsImportItemHandler
             $detail->unsetNew();
             $detail->setDirty();
 
-            //copy attachment file
+            // copy attachment file
             $files_file = &$item->getVar('files_file');
             if ($item->hasFilesFile()) {
                 $file_handler = &xoonips_getormhandler('xoonips', 'file');

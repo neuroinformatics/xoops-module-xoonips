@@ -29,8 +29,8 @@
 if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
-include_once XOOPS_ROOT_PATH.'/class/xoopslists.php';
-include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
+require_once XOOPS_ROOT_PATH.'/class/xoopslists.php';
+require_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
 
 $myxoopsConfig = &xoonips_get_xoops_configs(XOOPS_CONF);
 $myxoopsConfigUser = &xoonips_get_xoops_configs(XOOPS_CONF_USER);

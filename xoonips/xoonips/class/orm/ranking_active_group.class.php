@@ -59,44 +59,44 @@ class XooNIpsOrmRankingActiveGroupHandler extends XooNIpsOrmAbstractRankingHandl
         $this->_set_columns(array('gid', 'count'));
     }
 
-  /**
-   * insert/upldate/replace object.
-   *
-   * @param object &$obj
-   * @param bool   $force force operation
-   *
-   * @return bool false if failed
-   */
-  public function insert(&$obj, $force = false)
-  {
-      $gid = $obj->get('gid');
-      if ($gid == 0) {
-          // ignore if group id is zero
-      return true;
-      }
+    /**
+     * insert/upldate/replace object.
+     *
+     * @param object &$obj
+     * @param bool   $force force operation
+     *
+     * @return bool false if failed
+     */
+    public function insert(&$obj, $force = false)
+    {
+        $gid = $obj->get('gid');
+        if ($gid == 0) {
+            // ignore if group id is zero
+            return true;
+        }
 
-      return parent::insert($obj, $force);
-  }
+        return parent::insert($obj, $force);
+    }
 
-  /**
-   * increment active group counter for updating/rebuilding rankings.
-   *
-   * @param int $gid   group id
-   * @param int $delta counter delta
-   *
-   * @return bool FALSE if failed
-   */
-  public function increment($gid, $delta)
-  {
-      $obj = &$this->get($gid);
-      if (is_object($obj)) {
-          $delta += $obj->get('count');
-      } else {
-          $obj = &$this->create();
-          $obj->set('gid', $gid);
-      }
-      $obj->set('count', $delta);
-    // force insertion
-    return $this->insert($obj, true);
-  }
+    /**
+     * increment active group counter for updating/rebuilding rankings.
+     *
+     * @param int $gid   group id
+     * @param int $delta counter delta
+     *
+     * @return bool FALSE if failed
+     */
+    public function increment($gid, $delta)
+    {
+        $obj = &$this->get($gid);
+        if (is_object($obj)) {
+            $delta += $obj->get('count');
+        } else {
+            $obj = &$this->create();
+            $obj->set('gid', $gid);
+        }
+        $obj->set('count', $delta);
+        // force insertion
+        return $this->insert($obj, true);
+    }
 }

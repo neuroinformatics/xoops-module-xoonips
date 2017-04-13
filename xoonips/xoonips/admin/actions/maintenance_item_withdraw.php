@@ -39,4 +39,4 @@ $confirm_desc = _AM_XOONIPS_MAINTENANCE_ITEM_WITHDRAW_CONFIRM;
 $confirm = _AM_XOONIPS_MSG_EXECUTE_CONFIRM;
 $nextaction = 'wupdate';
 $submit = _AM_XOONIPS_MAINTENANCE_ITEM_WITHDRAW_LABEL_WITHDRAW;
-include 'actions/maintenance_item_idxselect.php';
+require 'actions/maintenance_item_idxselect.php';

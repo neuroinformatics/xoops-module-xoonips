@@ -26,15 +26,11 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipserror.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xoonipsresponse.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipserror.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipsresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
 
 /**
  * @brief Class that executes logic specified by XML-RPC getChildIndexes request
@@ -44,7 +40,7 @@ class XooNIpsXmlRpcLogicGetChildIndexes extends XooNIpsXmlRpcLogic
     /**
      * load and execute xoonips logic.
      *
-     * @param[in] XooNIpsXmlRpcRequest $request
+     * @param[in]  XooNIpsXmlRpcRequest $request
      * @param[out] XooNIpsXmlRpcResponse $response
      *  result of logic(success/fault, response, error)
      */
@@ -89,8 +85,7 @@ class XooNIpsXmlRpcLogicGetChildIndexes extends XooNIpsXmlRpcLogic
         if ($xoonips_response->getResult()) {
             $result = array();
             foreach ($xoonips_response->getSuccess() as $index_compo) {
-                $result[] = $this->convertIndexObjectToIndexStructure(
-                    $index_compo, $response);
+                $result[] = $this->convertIndexObjectToIndexStructure($index_compo, $response);
             }
             $response->setSuccess($result);
         }

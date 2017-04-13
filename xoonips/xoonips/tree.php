@@ -26,7 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-/** display tree in iframe. Tree's state(open/close) and state checkbox are memorized in cookie.
+/**
+ * display tree in iframe. Tree's state(open/close) and state checkbox are memorized in cookie.
  * input:
  *   $_GET['checkbox']
  *           0:no check in checkbox(default), 1:checked in checkbox
@@ -65,8 +66,8 @@
 
 */
 
-include 'include/common.inc.php';
-include 'include/AL.php';
+require 'include/common.inc.php';
+require 'include/AL.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 
@@ -108,7 +109,7 @@ $tree_image_url = str_replace(XOOPS_ROOT_PATH, XOOPS_URL, $tree_image_path);
 // check compat33 node image
 if (file_exists($tree_image_path.'/tree_root_normal.gif')) {
     // new node image found
-  $tree_image_compat33 = false;
+    $tree_image_compat33 = false;
 } else {
     $tree_image_compat33 = true;
 }
@@ -128,7 +129,7 @@ if ($uid == UID_GUEST && !public_item_target_user_all()) {
 }
 
 // get index tree structure
-include_once 'include/gentree.php';
+require_once 'include/gentree.php';
 $indexes = genIndexTree0($xnpsid);
 $is_moderator = xnp_is_moderator($xnpsid, $uid);
 if ($is_moderator && $get_vals['puid'] > 0) {

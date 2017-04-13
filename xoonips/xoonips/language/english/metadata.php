@@ -67,7 +67,8 @@
 82 : Koho shiryo - Kabu soshiki top page,
 83 : Koho shiryo - Kikan Koho shiryo
 */
-define('_MD_XOONIPS_METADATA_JUNII', '
+define(
+    '_MD_XOONIPS_METADATA_JUNII', '
 &#30740;&#31350;&#25104;&#26524;,
 &#30740;&#31350;&#25104;&#26524;&#8213;&#35542;&#25991;,
 &#30740;&#31350;&#25104;&#26524;&#8213;&#35542;&#25991;&#20197;&#22806;,/
@@ -101,7 +102,8 @@ define('_MD_XOONIPS_METADATA_JUNII', '
 &#24195;&#22577;&#36039;&#26009;&#8213;&#27231;&#38306;&#12488;&#12483;&#12503;&#12506;&#12540;&#12472;,
 &#24195;&#22577;&#36039;&#26009;&#8213;&#1259;&#37096;&#32068;&#32340;&#12488;&#12483;&#12503;&#12506;&#12540;&#12472;,
 &#24195;&#22577;&#36039;&#26009;&#8213;&#27231;&#38306;&#24195;&#22577;&#36039;&#26009;,
-');
+'
+);
 
 // Metadata: JUNII2 type (will be fixed by 2006-10-13)
 /* id : text
@@ -119,7 +121,8 @@ define('_MD_XOONIPS_METADATA_JUNII', '
 20 : Data or Dataset
 30 : Software
  */
-define('_MD_XOONIPS_METADATA_JUNII2', '
+define(
+    '_MD_XOONIPS_METADATA_JUNII2', '
 Journal Article,
 Thesis or Dissertation,
 Departmental Bulletin Paper,
@@ -133,4 +136,5 @@ Article,
 Learning Material,/
 Data or Dataset,/
 Software
-');
+'
+);

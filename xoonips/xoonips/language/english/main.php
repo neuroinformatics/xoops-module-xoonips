@@ -225,8 +225,10 @@ define('_MD_XOONIPS_RIGHTS_ALLOW_MODIFICATIONS', 'Allow modifications of your re
 define('_MD_XOONIPS_RIGHTS_YES_SA', 'Yes, as long as others share alike');
 
 /// following defines for moderator
-define('_MD_XOONIPS_MODERATOR_SHULD_BE_MODERATOR', "Sorry, you don't have the right to access this area. You should be a moderator to access.
-");
+define(
+    '_MD_XOONIPS_MODERATOR_SHULD_BE_MODERATOR', "Sorry, you don't have the right to access this area. You should be a moderator to access.
+"
+);
 
 // groups.php, groupadmin.php, editgroups.php
 define('_MD_XOONIPS_TITLE_GROUP_LIST', 'Group List');

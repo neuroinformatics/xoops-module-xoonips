@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
@@ -158,8 +158,7 @@ class XooNIpsIndexCompoHandler extends XooNIpsItemCompoHandler
         }
 
         $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
-        foreach ($index_item_link_handler->getObjects(new Criteria('index_id', $source_index->get('index_id')))
-                as $link) {
+        foreach ($index_item_link_handler->getObjects(new Criteria('index_id', $source_index->get('index_id'))) as $link) {
             if (!$index_item_link_handler->add($new_index->get('index_id'), $link->get('item_id'), CERTIFIED)) {
                 trigger_error('cannot register item to new index');
 
@@ -168,8 +167,7 @@ class XooNIpsIndexCompoHandler extends XooNIpsItemCompoHandler
         }
 
         foreach ($source_index->getAllChildren() as $child) {
-            if (!$this->duplicateIndexStructure($new_index->get('index_id'),
-                                                $child->get('index_id'))) {
+            if (!$this->duplicateIndexStructure($new_index->get('index_id'), $child->get('index_id'))) {
                 trigger_error('cannot duplicate sub index');
 
                 return false;

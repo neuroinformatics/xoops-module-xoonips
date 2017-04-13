@@ -26,9 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
 
 /**
  * subclass of XooNIpsLogic(putItem).
@@ -219,13 +219,16 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
             }
         }
 
-        if (!$this->isPublicationDateValid($response,
+        if (!$this->isPublicationDateValid(
+            $response,
             $basic->get('publication_year'),
             $basic->get('publication_month'),
             $basic->get('publication_mday'),
             $detail_item_type->getRequired('publication_year'),
             $detail_item_type->getRequired('publication_month'),
-            $detail_item_type->getRequired('publication_mday'))) {
+            $detail_item_type->getRequired('publication_mday')
+        )
+        ) {
             $response->setResult(false);
 
             return false;
@@ -251,10 +254,7 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
             if (isset($pseudo2files[$pseudo_file_id])) {
                 $error->add(XNPERR_INVALID_PARAM, "pseudo file_id conflicts(pseudo file_id=$pseudo_file_id)"); // test e12
             } else {
-                $pseudo2files[$pseudo_file_id] = array(
-                    'used' => false,
-                    'file' => $files[$i],
-                );
+                $pseudo2files[$pseudo_file_id] = array('used' => false, 'file' => $files[$i]);
             }
         }
         foreach ($detail_item_type->getFileTypeNames() as $field_name) {
@@ -266,9 +266,7 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
                     continue; // this filetype maybe optional and omitted.
                 }
 
-                $detail_files = array(
-                    $detail_file,
-                );
+                $detail_files = array($detail_file);
             }
             for ($i = 0; $i < count($detail_files); ++$i) {
                 $pseudo_id = $detail_files[$i]->get('file_id');

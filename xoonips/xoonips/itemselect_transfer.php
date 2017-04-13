@@ -32,20 +32,20 @@
 // (cached before login) don't display after login.
 session_cache_limiter('none');
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 
-include_once 'include/lib.php';
-include_once 'include/AL.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
 
 xoonips_deny_guest_access();
 
 xnpEncodeMacSafariPost();
 xnpEncodeMacSafariGet();
 
-include_once __DIR__.'/include/extra_param.inc.php';
-include_once __DIR__.'/include/item_list_header.inc.php';
+require_once __DIR__.'/include/extra_param.inc.php';
+require_once __DIR__.'/include/item_list_header.inc.php';
 
 $itemselect_private_only = true;
 $xoonipsTree['private_only'] = true;
@@ -63,8 +63,8 @@ if (in_array($op, $onclickidx_ops)) {
     $xoonipsTree['onclick_title'] = 'xoonips_itemselect_index';
 }
 
-include XOOPS_ROOT_PATH.'/header.php';
-include 'include/itemselect.inc.php';
+require XOOPS_ROOT_PATH.'/header.php';
+require 'include/itemselect.inc.php';
 
 $formdata = &xoonips_getutility('formdata');
 $submit_url = $formdata->getValue('post', 'submit_url', 's', false, '');
@@ -79,4 +79,4 @@ $xoopsTpl->assign('submit_url', $submit_url);
 if (isset($search_itemtype)) {
     $xoopsTpl->assign('search_itemtype', $search_itemtype);
 }
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';

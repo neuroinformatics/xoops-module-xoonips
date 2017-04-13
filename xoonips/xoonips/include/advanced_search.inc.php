@@ -26,8 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once 'AL.php';
-include_once 'lib.php';
+require_once 'AL.php';
+require_once 'lib.php';
 
 if (!defined('XOOPS_ROOT_PATH')) {
     exit();

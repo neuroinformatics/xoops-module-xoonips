@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once __DIR__.'/transfer.class.php';
+require_once __DIR__.'/transfer.class.php';
 
 /**
  * HTML view to list items to transfer and show select item menu for a user.
@@ -74,8 +74,7 @@ class XooNIpsViewTransferUserItemList extends XooNIpsViewTransfer
         include XOOPS_ROOT_PATH.'/header.php';
         $this->setXooNIpsStyleSheet($xoopsTpl);
 
-        $xoopsTpl->assign('transfer_items',
-                             $this->get_transfer_item_template_vars());
+        $xoopsTpl->assign('transfer_items', $this->get_transfer_item_template_vars());
         foreach ($this->_params as $key => $val) {
             $xoopsTpl->assign($key, $val);
         }
@@ -93,8 +92,7 @@ class XooNIpsViewTransferUserItemList extends XooNIpsViewTransfer
             $item_vars['have_another_parent'] = $item['have_another_parent'];
             $item_vars['child_items'] = array();
             foreach ($item['child_items'] as $child_item) {
-                $child
-                    = $this->get_item_template_vars($child_item['item_id']);
+                $child = $this->get_item_template_vars($child_item['item_id']);
                 $child['lock_type'] = $child_item['lock_type'];
                 $item_vars['child_items'][] = $child;
             }
@@ -115,12 +113,12 @@ class XooNIpsViewTransferUserItemList extends XooNIpsViewTransfer
         $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
         $item = &$item_handler->get($item_id);
         $basic = &$item->getVar('basic');
-        $itemtype
-            = &$item_type_handler->get($basic->get('item_type_id'));
+        $itemtype = &$item_type_handler->get($basic->get('item_type_id'));
 
-        return array('item_id' => $item_id,
-                      'item_type_name' => $itemtype->getVar('display_name', 's'),
-                      'title' => $this->concatenate_titles(
-                          $item->getVar('titles')), );
+        return array(
+            'item_id' => $item_id,
+            'item_type_name' => $itemtype->getVar('display_name', 's'),
+            'title' => $this->concatenate_titles($item->getVar('titles')),
+        );
     }
 }

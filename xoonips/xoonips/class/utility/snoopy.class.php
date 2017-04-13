@@ -126,7 +126,7 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
     public function XooNIpsUtilitySnoopy()
     {
         // get proxy configs
-      $proxy_configs = array('proxy_host', 'proxy_port', 'proxy_user', 'proxy_pass');
+        $proxy_configs = array('proxy_host', 'proxy_port', 'proxy_user', 'proxy_pass');
         $config_handler = &xoonips_getormhandler('xoonips', 'config');
         $criteria = new CriteriaCompo();
         foreach ($proxy_configs as $config) {
@@ -139,29 +139,29 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
             $value = $obj->getVar('value', 'n');
             $proxy[$key] = $value;
         }
-      // override proxy configs
-      if (!empty($proxy['proxy_host']) && !empty($proxy['proxy_port'])) {
-          $this->proxy_host = $proxy['proxy_host'];
-          $this->proxy_port = $proxy['proxy_port'];
-          if (!empty($proxy['proxy_user'])) {
-              $this->proxy_user = $proxy['proxy_user'];
-              $this->proxy_pass = $proxy['proxy_pass'];
-          }
-      }
-      // override curl path
-      if (defined('XOONIPS_CURL_PATH')) {
-          $this->curl_path = XOONIPS_CURL_PATH;
-      }
+        // override proxy configs
+        if (!empty($proxy['proxy_host']) && !empty($proxy['proxy_port'])) {
+            $this->proxy_host = $proxy['proxy_host'];
+            $this->proxy_port = $proxy['proxy_port'];
+            if (!empty($proxy['proxy_user'])) {
+                $this->proxy_user = $proxy['proxy_user'];
+                $this->proxy_pass = $proxy['proxy_pass'];
+            }
+        }
+        // override curl path
+        if (defined('XOONIPS_CURL_PATH')) {
+            $this->curl_path = XOONIPS_CURL_PATH;
+        }
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	fetch
     Purpose:	fetch the contents of a web page
                 (and possibly other protocols in the
                 future like ftp, nntp, gopher, etc.)
     Input:		$URI	the location of the page to fetch
     Output:		$this->results	the output text from the fetch
-\*======================================================================*/
+    \*======================================================================*/
 
     public function fetch($URI)
     {
@@ -181,78 +181,23 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         }
 
         switch (strtolower($URI_PARTS['scheme'])) {
-            case 'http':
-                $this->host = $URI_PARTS['host'];
-                if (!empty($URI_PARTS['port'])) {
-                    $this->port = $URI_PARTS['port'];
-                    $this->host_port = $URI_PARTS['port'];
-                }
-                if ($this->_connect($fp)) {
-                    if ($this->_isproxy) {
-                        // using proxy, send entire URI
-                        $this->_httprequest($URI, $fp, $URI, $this->_httpmethod);
-                    } else {
-                        $path = $URI_PARTS['path'].($URI_PARTS['query'] ? '?'.$URI_PARTS['query'] : '');
-                        // no proxy, send only the path
-                        $this->_httprequest($path, $fp, $URI, $this->_httpmethod);
-                    }
-
-                    $this->_disconnect($fp);
-
-                    if ($this->_redirectaddr) {
-                        /* url was redirected, check if we've hit the max depth */
-                        if ($this->maxredirs > $this->_redirectdepth) {
-                            // only follow redirect if it's on this site, or offsiteok is true
-                            if (preg_match('|^http://'.preg_quote($this->host).'|i', $this->_redirectaddr) || $this->offsiteok) {
-                                /* follow the redirect */
-                                ++$this->_redirectdepth;
-                                $this->lastredirectaddr = $this->_redirectaddr;
-                                $this->fetch($this->_redirectaddr);
-                            }
-                        }
-                    }
-
-                    if ($this->_framedepth < $this->maxframes && count($this->_frameurls) > 0) {
-                        $frameurls = $this->_frameurls;
-                        $this->_frameurls = array();
-
-                        while (list(, $frameurl) = each($frameurls)) {
-                            if ($this->_framedepth < $this->maxframes) {
-                                $this->fetch($frameurl);
-                                ++$this->_framedepth;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                } else {
-                    return false;
-                }
-
-                return true;
-                break;
-            case 'https':
-                if (!$this->curl_path) {
-                    return false;
-                }
-                if (function_exists('is_executable')) {
-                    if (!is_executable($this->curl_path)) {
-                        return false;
-                    }
-                }
-                $this->host = $URI_PARTS['host'];
-                if (!empty($URI_PARTS['port'])) {
-                    $this->port = $URI_PARTS['port'];
-                    $this->host_port = $URI_PARTS['port'];
-                }
+        case 'http':
+            $this->host = $URI_PARTS['host'];
+            if (!empty($URI_PARTS['port'])) {
+                $this->port = $URI_PARTS['port'];
+                $this->host_port = $URI_PARTS['port'];
+            }
+            if ($this->_connect($fp)) {
                 if ($this->_isproxy) {
                     // using proxy, send entire URI
-                    $this->_httpsrequest($URI, $URI, $this->_httpmethod);
+                    $this->_httprequest($URI, $fp, $URI, $this->_httpmethod);
                 } else {
                     $path = $URI_PARTS['path'].($URI_PARTS['query'] ? '?'.$URI_PARTS['query'] : '');
                     // no proxy, send only the path
-                    $this->_httpsrequest($path, $URI, $this->_httpmethod);
+                    $this->_httprequest($path, $fp, $URI, $this->_httpmethod);
                 }
+
+                $this->_disconnect($fp);
 
                 if ($this->_redirectaddr) {
                     /* url was redirected, check if we've hit the max depth */
@@ -280,21 +225,76 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
                         }
                     }
                 }
-
-                return true;
-                break;
-            default:
-                // not a valid protocol
-                $this->error = 'Invalid protocol "'.$URI_PARTS['scheme'].'"\n';
-
+            } else {
                 return false;
+            }
+
+            return true;
+                break;
+        case 'https':
+            if (!$this->curl_path) {
+                return false;
+            }
+            if (function_exists('is_executable')) {
+                if (!is_executable($this->curl_path)) {
+                    return false;
+                }
+            }
+            $this->host = $URI_PARTS['host'];
+            if (!empty($URI_PARTS['port'])) {
+                $this->port = $URI_PARTS['port'];
+                $this->host_port = $URI_PARTS['port'];
+            }
+            if ($this->_isproxy) {
+                // using proxy, send entire URI
+                $this->_httpsrequest($URI, $URI, $this->_httpmethod);
+            } else {
+                $path = $URI_PARTS['path'].($URI_PARTS['query'] ? '?'.$URI_PARTS['query'] : '');
+                // no proxy, send only the path
+                $this->_httpsrequest($path, $URI, $this->_httpmethod);
+            }
+
+            if ($this->_redirectaddr) {
+                /* url was redirected, check if we've hit the max depth */
+                if ($this->maxredirs > $this->_redirectdepth) {
+                    // only follow redirect if it's on this site, or offsiteok is true
+                    if (preg_match('|^http://'.preg_quote($this->host).'|i', $this->_redirectaddr) || $this->offsiteok) {
+                        /* follow the redirect */
+                        ++$this->_redirectdepth;
+                        $this->lastredirectaddr = $this->_redirectaddr;
+                        $this->fetch($this->_redirectaddr);
+                    }
+                }
+            }
+
+            if ($this->_framedepth < $this->maxframes && count($this->_frameurls) > 0) {
+                $frameurls = $this->_frameurls;
+                $this->_frameurls = array();
+
+                while (list(, $frameurl) = each($frameurls)) {
+                    if ($this->_framedepth < $this->maxframes) {
+                        $this->fetch($frameurl);
+                        ++$this->_framedepth;
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            return true;
+                break;
+        default:
+            // not a valid protocol
+            $this->error = 'Invalid protocol "'.$URI_PARTS['scheme'].'"\n';
+
+            return false;
                 break;
         }
 
         return true;
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	submit
     Purpose:	submit an http form
     Input:		$URI	the location to post the data
@@ -303,7 +303,7 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
                 $formfiles  an array of files to submit
                     format: $formfiles["var"] = "/dir/filename.ext";
     Output:		$this->results	the text output from the post
-\*======================================================================*/
+    \*======================================================================*/
 
     public function submit($URI, $formvars = '', $formfiles = '')
     {
@@ -326,87 +326,23 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         }
 
         switch (strtolower($URI_PARTS['scheme'])) {
-            case 'http':
-                $this->host = $URI_PARTS['host'];
-                if (!empty($URI_PARTS['port'])) {
-                    $this->port = $URI_PARTS['port'];
-                    $this->host_port = $URI_PARTS['port'];
-                }
-                if ($this->_connect($fp)) {
-                    if ($this->_isproxy) {
-                        // using proxy, send entire URI
-                        $this->_httprequest($URI, $fp, $URI, $this->_submit_method, $this->_submit_type, $postdata);
-                    } else {
-                        $path = $URI_PARTS['path'].($URI_PARTS['query'] ? '?'.$URI_PARTS['query'] : '');
-                        // no proxy, send only the path
-                        $this->_httprequest($path, $fp, $URI, $this->_submit_method, $this->_submit_type, $postdata);
-                    }
-
-                    $this->_disconnect($fp);
-
-                    if ($this->_redirectaddr) {
-                        /* url was redirected, check if we've hit the max depth */
-                        if ($this->maxredirs > $this->_redirectdepth) {
-                            if (!preg_match('|^'.$URI_PARTS['scheme'].'://|', $this->_redirectaddr)) {
-                                $this->_redirectaddr = $this->_expandlinks($this->_redirectaddr, $URI_PARTS['scheme'].'://'.$URI_PARTS['host']);
-                            }
-
-                            // only follow redirect if it's on this site, or offsiteok is true
-                            if (preg_match('|^http://'.preg_quote($this->host).'|i', $this->_redirectaddr) || $this->offsiteok) {
-                                /* follow the redirect */
-                                ++$this->_redirectdepth;
-                                $this->lastredirectaddr = $this->_redirectaddr;
-                                if (strpos($this->_redirectaddr, '?') > 0) {
-                                    $this->fetch($this->_redirectaddr);
-                                } // the redirect has changed the request method from post to get
-                                else {
-                                    $this->submit($this->_redirectaddr, $formvars, $formfiles);
-                                }
-                            }
-                        }
-                    }
-
-                    if ($this->_framedepth < $this->maxframes && count($this->_frameurls) > 0) {
-                        $frameurls = $this->_frameurls;
-                        $this->_frameurls = array();
-
-                        while (list(, $frameurl) = each($frameurls)) {
-                            if ($this->_framedepth < $this->maxframes) {
-                                $this->fetch($frameurl);
-                                ++$this->_framedepth;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                } else {
-                    return false;
-                }
-
-                return true;
-                break;
-            case 'https':
-                if (!$this->curl_path) {
-                    return false;
-                }
-                if (function_exists('is_executable')) {
-                    if (!is_executable($this->curl_path)) {
-                        return false;
-                    }
-                }
-                $this->host = $URI_PARTS['host'];
-                if (!empty($URI_PARTS['port'])) {
-                    $this->port = $URI_PARTS['port'];
-                    $this->host_port = $URI_PARTS['port'];
-                }
+        case 'http':
+            $this->host = $URI_PARTS['host'];
+            if (!empty($URI_PARTS['port'])) {
+                $this->port = $URI_PARTS['port'];
+                $this->host_port = $URI_PARTS['port'];
+            }
+            if ($this->_connect($fp)) {
                 if ($this->_isproxy) {
                     // using proxy, send entire URI
-                    $this->_httpsrequest($URI, $URI, $this->_submit_method, $this->_submit_type, $postdata);
+                    $this->_httprequest($URI, $fp, $URI, $this->_submit_method, $this->_submit_type, $postdata);
                 } else {
                     $path = $URI_PARTS['path'].($URI_PARTS['query'] ? '?'.$URI_PARTS['query'] : '');
                     // no proxy, send only the path
-                    $this->_httpsrequest($path, $URI, $this->_submit_method, $this->_submit_type, $postdata);
+                    $this->_httprequest($path, $fp, $URI, $this->_submit_method, $this->_submit_type, $postdata);
                 }
+
+                $this->_disconnect($fp);
 
                 if ($this->_redirectaddr) {
                     /* url was redirected, check if we've hit the max depth */
@@ -443,27 +379,91 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
                         }
                     }
                 }
+            } else {
+                return false;
+            }
 
-                return true;
+            return true;
+                break;
+        case 'https':
+            if (!$this->curl_path) {
+                return false;
+            }
+            if (function_exists('is_executable')) {
+                if (!is_executable($this->curl_path)) {
+                    return false;
+                }
+            }
+            $this->host = $URI_PARTS['host'];
+            if (!empty($URI_PARTS['port'])) {
+                $this->port = $URI_PARTS['port'];
+                $this->host_port = $URI_PARTS['port'];
+            }
+            if ($this->_isproxy) {
+                // using proxy, send entire URI
+                $this->_httpsrequest($URI, $URI, $this->_submit_method, $this->_submit_type, $postdata);
+            } else {
+                $path = $URI_PARTS['path'].($URI_PARTS['query'] ? '?'.$URI_PARTS['query'] : '');
+                // no proxy, send only the path
+                $this->_httpsrequest($path, $URI, $this->_submit_method, $this->_submit_type, $postdata);
+            }
+
+            if ($this->_redirectaddr) {
+                /* url was redirected, check if we've hit the max depth */
+                if ($this->maxredirs > $this->_redirectdepth) {
+                    if (!preg_match('|^'.$URI_PARTS['scheme'].'://|', $this->_redirectaddr)) {
+                        $this->_redirectaddr = $this->_expandlinks($this->_redirectaddr, $URI_PARTS['scheme'].'://'.$URI_PARTS['host']);
+                    }
+
+                    // only follow redirect if it's on this site, or offsiteok is true
+                    if (preg_match('|^http://'.preg_quote($this->host).'|i', $this->_redirectaddr) || $this->offsiteok) {
+                        /* follow the redirect */
+                        ++$this->_redirectdepth;
+                        $this->lastredirectaddr = $this->_redirectaddr;
+                        if (strpos($this->_redirectaddr, '?') > 0) {
+                            $this->fetch($this->_redirectaddr);
+                        } // the redirect has changed the request method from post to get
+                        else {
+                            $this->submit($this->_redirectaddr, $formvars, $formfiles);
+                        }
+                    }
+                }
+            }
+
+            if ($this->_framedepth < $this->maxframes && count($this->_frameurls) > 0) {
+                $frameurls = $this->_frameurls;
+                $this->_frameurls = array();
+
+                while (list(, $frameurl) = each($frameurls)) {
+                    if ($this->_framedepth < $this->maxframes) {
+                        $this->fetch($frameurl);
+                        ++$this->_framedepth;
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            return true;
                 break;
 
-            default:
-                // not a valid protocol
-                $this->error = 'Invalid protocol "'.$URI_PARTS['scheme'].'"\n';
+        default:
+            // not a valid protocol
+            $this->error = 'Invalid protocol "'.$URI_PARTS['scheme'].'"\n';
 
-                return false;
+            return false;
                 break;
         }
 
         return true;
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	fetchlinks
     Purpose:	fetch the links from a web page
     Input:		$URI	where you are fetching from
     Output:		$this->results	an array of the URLs
-\*======================================================================*/
+    \*======================================================================*/
 
     public function fetchlinks($URI)
     {
@@ -489,12 +489,12 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         }
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	fetchform
     Purpose:	fetch the form elements from a web page
     Input:		$URI	where you are fetching from
     Output:		$this->results	the resulting html form
-\*======================================================================*/
+    \*======================================================================*/
 
     public function fetchform($URI)
     {
@@ -513,12 +513,12 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         }
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	fetchtext
     Purpose:	fetch the text from a web page, stripping the links
     Input:		$URI	where you are fetching from
     Output:		$this->results	the text from the web page
-\*======================================================================*/
+    \*======================================================================*/
 
     public function fetchtext($URI)
     {
@@ -537,12 +537,12 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         }
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	submitlinks
     Purpose:	grab links from a form submission
     Input:		$URI	where you are submitting from
     Output:		$this->results	an array of the links from the post
-\*======================================================================*/
+    \*======================================================================*/
 
     public function submitlinks($URI, $formvars = '', $formfiles = '')
     {
@@ -570,12 +570,12 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         }
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	submittext
     Purpose:	grab text from a form submission
     Input:		$URI	where you are submitting from
     Output:		$this->results	the text from the web page
-\*======================================================================*/
+    \*======================================================================*/
 
     public function submittext($URI, $formvars = '', $formfiles = '')
     {
@@ -603,58 +603,60 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         }
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	set_submit_multipart
     Purpose:	Set the form submission content type to
                 multipart/form-data
-\*======================================================================*/
+    \*======================================================================*/
     public function set_submit_multipart()
     {
         $this->_submit_type = 'multipart/form-data';
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	set_submit_normal
     Purpose:	Set the form submission content type to
                 application/x-www-form-urlencoded
-\*======================================================================*/
+    \*======================================================================*/
     public function set_submit_normal()
     {
         $this->_submit_type = 'application/x-www-form-urlencoded';
     }
 
-// XOOPS2 Hack begin
-// Added on March 4, 2003 by onokazu@xoops.org
-/*======================================================================*\
+    // XOOPS2 Hack begin
+    // Added on March 4, 2003 by onokazu@xoops.org
+    /*======================================================================*\
     Function:	set_submit_xml
     Purpose:	Set the submission content type to
                 text/xml
-\*======================================================================*/
+    \*======================================================================*/
     public function set_submit_xml()
     {
         $this->_submit_type = 'text/xml';
     }
 
-// XOOPS2 Hack end
+    // XOOPS2 Hack end
 
-/*======================================================================*\
+    /*======================================================================*\
     Private functions
-\*======================================================================*/
+    \*======================================================================*/
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	_striplinks
     Purpose:	strip the hyperlinks from an html document
     Input:		$document	document to strip.
     Output:		$match		an array of the links
-\*======================================================================*/
+    \*======================================================================*/
 
     public function _striplinks($document)
     {
-        preg_match_all("'<\s*a\s.*?href\s*=\s*			# find <a href=
+        preg_match_all(
+            "'<\s*a\s.*?href\s*=\s*			# find <a href=
 						([\"\'])?					# find single or double quote
 						(?(1) (.*?)\\1 | ([^\s\>]+))		# if quote found, match up to next matching
 													# quote, otherwise match up to next space
-						'isx", $document, $links);
+						'isx", $document, $links
+        );
 
         // catenate the non-empty matches from the conditional subpattern
 
@@ -674,12 +676,12 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         return $match;
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	_stripform
     Purpose:	strip the form elements from an html document
     Input:		$document	document to strip.
     Output:		$match		an array of the links
-\*======================================================================*/
+    \*======================================================================*/
 
     public function _stripform($document)
     {
@@ -692,12 +694,12 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         return $match;
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	_striptext
     Purpose:	strip the text from an html document
     Input:		$document	document to strip.
     Output:		$text		the resulting text
-\*======================================================================*/
+    \*======================================================================*/
 
     public function _striptext($document)
     {
@@ -759,13 +761,13 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         return $text;
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	_expandlinks
     Purpose:	expand each link into a fully qualified URL
     Input:		$links			the links to qualify
                 $URI			the full URI to get the base from
     Output:		$expandedLinks	the expanded links
-\*======================================================================*/
+    \*======================================================================*/
 
     public function _expandlinks($links, $URI)
     {
@@ -796,7 +798,7 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         return $expandedLinks;
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	_httprequest
     Purpose:	go get the http data from the server
     Input:		$url		the url to fetch
@@ -804,7 +806,7 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
                 $URI		the full URI
                 $body		body contents to send if any (POST)
     Output:
-\*======================================================================*/
+    \*======================================================================*/
 
     public function _httprequest($url, $fp, $URI, $http_method, $content_type = '', $body = '')
     {
@@ -971,14 +973,14 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         return true;
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	_httpsrequest
     Purpose:	go get the https data from the server using curl
     Input:		$url		the url to fetch
                 $URI		the full URI
                 $body		body contents to send if any (POST)
     Output:
-\*======================================================================*/
+    \*======================================================================*/
 
     public function _httpsrequest($url, $URI, $http_method, $content_type = '', $body = '')
     {
@@ -1136,10 +1138,10 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         return true;
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	setcookies()
     Purpose:	set cookies for a redirection
-\*======================================================================*/
+    \*======================================================================*/
 
     public function setcookies()
     {
@@ -1150,11 +1152,11 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         }
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	_check_timeout
     Purpose:	checks whether timeout has occurred
     Input:		$fp	file pointer
-\*======================================================================*/
+    \*======================================================================*/
 
     public function _check_timeout($fp)
     {
@@ -1170,11 +1172,11 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         return false;
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	_connect
     Purpose:	make a socket connection
     Input:		$fp	file pointer
-\*======================================================================*/
+    \*======================================================================*/
 
     public function _connect(&$fp)
     {
@@ -1191,12 +1193,13 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         $this->status = 0;
 
         if ($fp = fsockopen(
-                    $host,
-                    $port,
-                    $errno,
-                    $errstr,
-                    $this->_fp_timeout
-                    )) {
+            $host,
+            $port,
+            $errno,
+            $errstr,
+            $this->_fp_timeout
+        )
+        ) {
             // socket connection succeeded
 
             return true;
@@ -1204,38 +1207,38 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
             // socket connection failed
             $this->status = $errno;
             switch ($errno) {
-                case -3:
-                    $this->error = 'socket creation failed (-3)';
-                case -4:
-                    $this->error = 'dns lookup failure (-4)';
-                case -5:
-                    $this->error = 'connection refused or timed out (-5)';
-                default:
-                    $this->error = 'connection failed ('.$errno.')';
+            case -3:
+                $this->error = 'socket creation failed (-3)';
+            case -4:
+                $this->error = 'dns lookup failure (-4)';
+            case -5:
+                $this->error = 'connection refused or timed out (-5)';
+            default:
+                $this->error = 'connection failed ('.$errno.')';
             }
 
             return false;
         }
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	_disconnect
     Purpose:	disconnect a socket connection
     Input:		$fp	file pointer
-\*======================================================================*/
+    \*======================================================================*/
 
     public function _disconnect($fp)
     {
         return fclose($fp);
     }
 
-/*======================================================================*\
+    /*======================================================================*\
     Function:	_prepare_post_body
     Purpose:	Prepare post body according to encoding type
     Input:		$formvars  - form variables
                 $formfiles - form upload files
     Output:		post body
-\*======================================================================*/
+    \*======================================================================*/
 
     public function _prepare_post_body($formvars, $formfiles)
     {
@@ -1248,63 +1251,63 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         }
 
         switch ($this->_submit_type) {
-            case 'application/x-www-form-urlencoded':
-                reset($formvars);
-                while (list($key, $val) = each($formvars)) {
-                    if (is_array($val) || is_object($val)) {
-                        while (list($cur_key, $cur_val) = each($val)) {
-                            $postdata .= urlencode($key).'[]='.urlencode($cur_val).'&';
-                        }
-                    } else {
-                        $postdata .= urlencode($key).'='.urlencode($val).'&';
+        case 'application/x-www-form-urlencoded':
+            reset($formvars);
+            while (list($key, $val) = each($formvars)) {
+                if (is_array($val) || is_object($val)) {
+                    while (list($cur_key, $cur_val) = each($val)) {
+                        $postdata .= urlencode($key).'[]='.urlencode($cur_val).'&';
                     }
+                } else {
+                    $postdata .= urlencode($key).'='.urlencode($val).'&';
                 }
-                break;
+            }
+            break;
 
-            case 'multipart/form-data':
-                $this->_mime_boundary = 'Snoopy'.md5(uniqid(microtime()));
+        case 'multipart/form-data':
+            $this->_mime_boundary = 'Snoopy'.md5(uniqid(microtime()));
 
-                reset($formvars);
-                while (list($key, $val) = each($formvars)) {
-                    if (is_array($val) || is_object($val)) {
-                        while (list($cur_key, $cur_val) = each($val)) {
-                            $postdata .= '--'.$this->_mime_boundary."\r\n";
-                            $postdata .= "Content-Disposition: form-data; name=\"$key\[\]\"\r\n\r\n";
-                            $postdata .= "$cur_val\r\n";
-                        }
-                    } else {
+            reset($formvars);
+            while (list($key, $val) = each($formvars)) {
+                if (is_array($val) || is_object($val)) {
+                    while (list($cur_key, $cur_val) = each($val)) {
                         $postdata .= '--'.$this->_mime_boundary."\r\n";
-                        $postdata .= "Content-Disposition: form-data; name=\"$key\"\r\n\r\n";
-                        $postdata .= "$val\r\n";
+                        $postdata .= "Content-Disposition: form-data; name=\"$key\[\]\"\r\n\r\n";
+                        $postdata .= "$cur_val\r\n";
                     }
+                } else {
+                    $postdata .= '--'.$this->_mime_boundary."\r\n";
+                    $postdata .= "Content-Disposition: form-data; name=\"$key\"\r\n\r\n";
+                    $postdata .= "$val\r\n";
                 }
+            }
 
-                reset($formfiles);
-                while (list($field_name, $file_names) = each($formfiles)) {
-                    settype($file_names, 'array');
-                    while (list(, $file_name) = each($file_names)) {
-                        if (!is_readable($file_name)) {
-                            continue;
-                        }
-
-                        $fp = fopen($file_name, 'r');
-                        $file_content = fread($fp, filesize($file_name));
-                        fclose($fp);
-                        $base_name = basename($file_name);
-
-                        $postdata .= '--'.$this->_mime_boundary."\r\n";
-                        $postdata .= "Content-Disposition: form-data; name=\"$field_name\"; filename=\"$base_name\"\r\n\r\n";
-                        $postdata .= "$file_content\r\n";
+            reset($formfiles);
+            while (list($field_name, $file_names) = each($formfiles)) {
+                settype($file_names, 'array');
+                while (list(, $file_name) = each($file_names)) {
+                    if (!is_readable($file_name)) {
+                        continue;
                     }
+
+                    $fp = fopen($file_name, 'r');
+                    $file_content = fread($fp, filesize($file_name));
+                    fclose($fp);
+                    $base_name = basename($file_name);
+
+                    $postdata .= '--'.$this->_mime_boundary."\r\n";
+                    $postdata .= "Content-Disposition: form-data; name=\"$field_name\"; filename=\"$base_name\"\r\n\r\n";
+                    $postdata .= "$file_content\r\n";
                 }
-                $postdata .= '--'.$this->_mime_boundary."--\r\n";
-                break;
+            }
+            $postdata .= '--'.$this->_mime_boundary."--\r\n";
+            break;
             // XOOPS2 Hack begin
             // Added on March 4, 2003 by onokazu@xoops.org
-            case 'text/xml':
-            default:
-                $postdata = $formvars[0];
-                break;
+        case 'text/xml':
+        default:
+            $postdata = $formvars[0];
+            break;
             // XOOPS2 Hack end
         }
 

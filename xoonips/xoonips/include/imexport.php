@@ -25,7 +25,7 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-include_once 'lib.php';
+require_once 'lib.php';
 
 /**
  * Return xml with Basic information.
@@ -233,9 +233,9 @@ function xnpExportFile($export_path, $fhdl, $item_id)
         $file = array();
         list($file['file_id'], $file['file_type_name'], $file['original_file_name'], $file['file_size'], $file['mime_type'], $file['thumbnail_file'], $file['caption']) = $f;
 
-    // copy atatchment file $file['file_id'] to $dir and renamed to original file name
-    // output <file> to file handle $fhdl
-    $hdl = fopen(xnpGetUploadFilePath($file['file_id']), 'rb');
+        // copy atatchment file $file['file_id'] to $dir and renamed to original file name
+        // output <file> to file handle $fhdl
+        $hdl = fopen(xnpGetUploadFilePath($file['file_id']), 'rb');
         if (file_exists(xnpGetUploadFilePath($file['file_id']))) {
             if (!copy(xnpGetUploadFilePath($file['file_id']), $dir.'/'.$file['file_id'])) {
                 xoonips_error('can\'t write a file \''.$dir.'/'.$file['file_id']."' of the item(ID=${item_id})");
@@ -554,9 +554,9 @@ function _xoonips_import_indexStartElement($parser, $name, $attribs, &$parser_ha
             'titles' => array(),
         );
         array_push($parser_hash['indexes'], $ar);
-       break;
+        break;
     case '/INDEXES':
-       break;
+        break;
     }
 }
 
@@ -677,7 +677,7 @@ function _xoonips_import_indexcheckCharacterData($parser, $data, &$parser_hash)
     $tags = '/'.implode('/', $parser_hash['tagstack']);
 
     switch ($tags) {
-        case '/INDEXES/INDEX/TITLE':
+    case '/INDEXES/INDEX/TITLE':
         $parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles'][count($parser_hash['indexes'][count($parser_hash['indexes']) - 1]['titles']) - 1] .= $data;
         break;
     }

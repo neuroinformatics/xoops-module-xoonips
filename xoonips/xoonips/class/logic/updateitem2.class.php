@@ -26,9 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/base/transaction.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/logic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
 
 /**
  * subclass of XooNIpsLogic(updateItem2).
@@ -55,39 +54,31 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
                 $error->add(XNPERR_INVALID_PARAM, 'too long parameter 1');
             }
             if (!is_subclass_of($vars[1], 'XooNIpsItemInfoCompo')) {
-                $error->add(XNPERR_INVALID_PARAM,
-                            'parameter2 must be subclass of XooNIpsItemCompo');
+                $error->add(XNPERR_INVALID_PARAM, 'parameter2 must be subclass of XooNIpsItemCompo');
             }
             $basic = $vars[1]->getVar('basic');
             if ($basic->get('item_id') == false) {
-                $error->add(XNPERR_MISSING_PARAM,
-                            'parameter 2 missing basic.item_id');
+                $error->add(XNPERR_MISSING_PARAM, 'parameter 2 missing basic.item_id');
             }
             if ($basic->get('item_type_id') == false) {
-                $error->add(XNPERR_MISSING_PARAM,
-                            'parameter 2 missing basic.item_type_id');
+                $error->add(XNPERR_MISSING_PARAM, 'parameter 2 missing basic.item_type_id');
             }
 
             $upload_max_filesize =
                 $this->returnBytes(ini_get('upload_max_filesize'));
             for ($i = 0; $i < count($vars[2]); ++$i) {
-                if (filesize($vars[2][$i]->getFilepath())
-                    > $upload_max_filesize) {
-                    $error->add(XNPERR_INVALID_PARAM,
-                                'too large file(file_id='
-                                .$vars[2][$i]->get('file_id').')');
+                if (filesize($vars[2][$i]->getFilepath()) > $upload_max_filesize
+                ) {
+                    $error->add(XNPERR_INVALID_PARAM, 'too large file(file_id='.$vars[2][$i]->get('file_id').')');
                 }
-                $vars[2][$i]->set('file_size',
-                                  filesize($vars[2][$i]->getFilepath()));
+                $vars[2][$i]->set('file_size', filesize($vars[2][$i]->getFilepath()));
             }
             if (!is_array($vars[3])) {
-                $error->add(XNPERR_INVALID_PARAM,
-                            'parameter 4 must be array of int');
+                $error->add(XNPERR_INVALID_PARAM, 'parameter 4 must be array of int');
             } else {
                 foreach ($vars[3] as $file_id) {
                     if (!is_int($file_id) && !ctype_digit($file_id)) {
-                        $error->add(XNPERR_INVALID_PARAM,
-                                    'parameter 4 must be array of int');
+                        $error->add(XNPERR_INVALID_PARAM, 'parameter 4 must be array of int');
                         break;
                     }
                 }
@@ -130,14 +121,10 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
 
         // check permission
         if (!$item_compo_handler->getPerm($item_id, $uid, 'write')) {
-            $item_lock_handler = &xoonips_getormhandler(
-                'xoonips', 'item_lock');
+            $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
             $response->setResult(false);
             if ($item_lock_handler->isLocked($item_id)) {
-                $error->add(XNPERR_ACCESS_FORBIDDEN,
-                    'cannot update item because item is '.
-                    $this->getLockTypeString(
-                        $item_lock_handler->getLockType($item_id)));
+                $error->add(XNPERR_ACCESS_FORBIDDEN, 'cannot update item because item is '.$this->getLockTypeString($item_lock_handler->getLockType($item_id)));
             } else {
                 $error->add(XNPERR_ACCESS_FORBIDDEN);
             }
@@ -156,17 +143,14 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
 
             return false;
         }
-        $item_handler = &xoonips_getormcompohandler($item_type->get('name'),
-                                                    'item');
+        $item_handler = &xoonips_getormcompohandler($item_type->get('name'), 'item');
         //
         // check ext_id(doi) confliction
         $basic = $item->getVar('basic');
         $ext_id = $basic->get('doi');
         if (strlen($ext_id)) {
-            $item_basic_handler = &xoonips_getormhandler('xoonips',
-                                                         'item_basic');
-            $criteria = new CriteriaCompo(
-                new Criteria('doi', addslashes($ext_id)));
+            $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
+            $criteria = new CriteriaCompo(new Criteria('doi', addslashes($ext_id)));
             $criteria->add(new Criteria('item_id', $item_id, '<>'));
             $objs = &$item_basic_handler->getObjects($criteria);
             if (count($objs) > 0) {
@@ -189,20 +173,17 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
         }
         // item_type_id -> item_type_name, detail_item_type_handler
         $item_type_name = $item_type->get('name');
-        $detail_item_type_handler = &xoonips_getormhandler($item_type_name,
-                                                           'item_type');
+        $detail_item_type_handler = &xoonips_getormhandler($item_type_name, 'item_type');
         if (!$detail_item_type_handler) {
             $response->setResult(false);
-            $error->add(XNPERR_ERROR,
-                        "unsupported itemtype(item_type_id=$item_type_id)");
+            $error->add(XNPERR_ERROR, "unsupported itemtype(item_type_id=$item_type_id)");
 
             return false;
         }
         $detail_item_type = $detail_item_type_handler->get($item_type_id);
         if (!$detail_item_type) {
             $response->setResult(false);
-            $error->add(XNPERR_ERROR,
-                        "unsupported itemtype(item_type_id=$item_type_id)");
+            $error->add(XNPERR_ERROR, "unsupported itemtype(item_type_id=$item_type_id)");
 
             return false;
         }
@@ -216,18 +197,16 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
         if ($old_basic->get('uid') != $basic->get('uid')) {
             $error->add(XNPERR_INVALID_PARAM, 'cannot change username');
         }
-        if ($old_basic->get('last_update_date')
-            != $basic->get('last_update_date')) {
-            $error->add(XNPERR_INVALID_PARAM,
-                        'cannot change last_update_date');
+        if ($old_basic->get('last_update_date') != $basic->get('last_update_date')
+        ) {
+            $error->add(XNPERR_INVALID_PARAM, 'cannot change last_update_date');
         }
-        if ($old_basic->get('creation_date')
-            != $basic->get('creation_date')) {
-            $error->add(XNPERR_INVALID_PARAM,
-                        'cannot change registration_date');
+        if ($old_basic->get('creation_date') != $basic->get('creation_date')
+        ) {
+            $error->add(XNPERR_INVALID_PARAM, 'cannot change registration_date');
         }
-        if ($old_basic->get('item_type_id')
-            != $basic->get('item_type_id')) {
+        if ($old_basic->get('item_type_id') != $basic->get('item_type_id')
+        ) {
             $error->add(XNPERR_INVALID_PARAM, 'cannot change itemtype');
             $response->setResult(false);
 
@@ -241,8 +220,7 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
 
         // can access that indexes?
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
-        $index_item_link_handler = &xoonips_getormhandler('xoonips',
-                                                          'index_item_link');
+        $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
         $index_item_links = $item->getVar('indexes');
         $add_to_private = false;
         $add_to_group = false;
@@ -251,12 +229,10 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
             $index_id = $index_item_link->get('index_id');
             $index = $index_handler->get($index_id);
             if (false == $index) {
-                $error->add(XNPERR_NOT_FOUND,
-                            "no such index(index_id=$index_id)");
+                $error->add(XNPERR_NOT_FOUND, "no such index(index_id=$index_id)");
             } else {
                 if (!$index_handler->getPerm($index_id, $uid, 'read')) {
-                    $error->add(XNPERR_ACCESS_FORBIDDEN,
-                                "cannot access index(index_id=$index_id)");
+                    $error->add(XNPERR_ACCESS_FORBIDDEN, "cannot access index(index_id=$index_id)");
                 }
                 $open_level = $index->get('open_level');
                 if ($open_level == OL_PRIVATE) {
@@ -270,8 +246,7 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
         }
         // error if no private index is selected.
         if (!$add_to_private) {
-            $error->add(XNPERR_INVALID_PARAM,
-                        'select at least 1 private index');
+            $error->add(XNPERR_INVALID_PARAM, 'select at least 1 private index');
         }
         // related_to items exist?
         $related_tos = $item->getVar('related_tos');
@@ -280,13 +255,9 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
             $related_item_id = $related_to->get('item_id');
             $related_item_basic = $item_basic_handler->get($related_item_id);
             if (!$related_item_basic) {
-                $error->add(XNPERR_INVALID_PARAM,
-                            "no such related_to(item_id=$related_item_id)");
-            } elseif (!$item_handler->getPerm(
-                $related_item_id, $uid, 'read')) {
-                $error->add(
-                    XNPERR_ACCESS_FORBIDDEN,
-                    "cannot access related_tos(item_id=$related_item_id)");
+                $error->add(XNPERR_INVALID_PARAM, "no such related_to(item_id=$related_item_id)");
+            } elseif (!$item_handler->getPerm($related_item_id, $uid, 'read')) {
+                $error->add(XNPERR_ACCESS_FORBIDDEN, "cannot access related_tos(item_id=$related_item_id)");
             }
         }
         if ($error->get()) {
@@ -299,32 +270,30 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
         if ($add_to_public || $add_to_group) {
             if (!$item_handler->isValidForPubicOrGroupShared($item)) {
                 $response->setResult(false);
-                $error->add(XNPERR_INCOMPLETE_PARAM,
-                            'item cannot be public nor group-shared');
+                $error->add(XNPERR_INCOMPLETE_PARAM, 'item cannot be public nor group-shared');
 
                 return false;
             }
         }
 
-        if (!$this->isPublicationDateValid($response,
+        if (!$this->isPublicationDateValid(
+            $response,
             $basic->get('publication_year'),
             $basic->get('publication_month'),
             $basic->get('publication_mday'),
             $detail_item_type->getRequired('publication_year'),
             $detail_item_type->getRequired('publication_month'),
-            $detail_item_type->getRequired('publication_mday'))) {
+            $detail_item_type->getRequired('publication_mday')
+        )
+        ) {
             $response->setResult(false);
 
             return false;
         }
 
         // get old and new file ids
-        $old_file_id_to_types
-            = $this->extractFileIdToTypesFromItem(
-                $detail_item_type, $old_item);
-        $new_file_id_to_types
-            = $this->extractFileIdToTypesFromItem($detail_item_type, $item);
-
+        $old_file_id_to_types = $this->extractFileIdToTypesFromItem($detail_item_type, $old_item);
+        $new_file_id_to_types = $this->extractFileIdToTypesFromItem($detail_item_type, $item);
         //remove files to be deleted from $new_file_id_to_types
         foreach ($delete_file_ids as $file_id) {
             unset($new_file_id_to_types[$file_id]);
@@ -340,13 +309,10 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
 
                 return false;
             }
-            $file_type = $file_type_handler->get(
-                $file->get('file_type_id'));
-            if (!in_array($file_type->get('name'),
-                            $valid_file_type_names)) {
+            $file_type = $file_type_handler->get($file->get('file_type_id'));
+            if (!in_array($file_type->get('name'), $valid_file_type_names)) {
                 $response->setResult(false);
-                $error->add(XNPERR_INVALID_PARAM,
-                            "filetype not match(pseudo file_id=$file_id)");
+                $error->add(XNPERR_INVALID_PARAM, "filetype not match(pseudo file_id=$file_id)");
 
                 return false;
             }
@@ -355,17 +321,13 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
         // check item storage/number limit(private/group)
         $new_size = $this->getSizeOfItem($item);
         $old_size = $this->getSizeOfItem($old_item);
-        if (!$this->isEnoughSpace($error, $uid, $new_size,
-                                  $item->getVar('indexes'),
-                                  $old_size, $old_item->getVar('indexes'))) {
+        if (!$this->isEnoughSpace($error, $uid, $new_size, $item->getVar('indexes'), $old_size, $old_item->getVar('indexes'))) {
             $response->setResult(false);
 
             return false;
         }
 
-        if (!$this->isFilesConsistent($error, $old_file_id_to_types,
-                                         $new_file_id_to_types, $add_files,
-                                         $delete_file_ids)) {
+        if (!$this->isFilesConsistent($error, $old_file_id_to_types, $new_file_id_to_types, $add_files, $delete_file_ids)) {
             $response->setResult(false);
 
             return false;
@@ -394,11 +356,10 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
             return false;
         }
 
-        if (count($add_files) == 0 &&
-            count($delete_file_ids) == 0 &&
-            $this->isOnlyPrivateIndexChanged($error,
-                                             $detail_item_type->getIteminfo(),
-                                             $item, $old_item)) {
+        if (count($add_files) == 0
+            && count($delete_file_ids) == 0
+            && $this->isOnlyPrivateIndexChanged($error, $detail_item_type->getIteminfo(), $item, $old_item)
+        ) {
             $transaction->commit();
             $response->setSuccess($item_id);
             $response->setResult(true);
@@ -409,11 +370,9 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
         // add new files
         $file_handler = &xoonips_getormhandler('xoonips', 'file');
         for ($i = 0; $i < count($add_files); ++$i) {
-            $add_files[$i]->setVar('mime_type',
-                                   $this->guessMimeType($add_files[$i]),
-                                   true);
-            if ($new_file_id_to_types[$add_files[$i]->get('file_id')]
-                 == $detail_item_type->getPreviewFileName()) {
+            $add_files[$i]->setVar('mime_type', $this->guessMimeType($add_files[$i]), true);
+            if ($new_file_id_to_types[$add_files[$i]->get('file_id')] == $detail_item_type->getPreviewFileName()
+            ) {
                 $this->createThumbnail($error, $add_files[$i]);
             }
             $add_files[$i]->setNew();
@@ -451,7 +410,8 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
         // change certify_state,
         // send notification, update RSS, update item_status.
         if (!$only_private_index_changed
-            && !$this->touchItem1($error, $item, $uid)) {
+            && !$this->touchItem1($error, $item, $uid)
+        ) {
             $transaction->rollback();
             $response->setResult(false);
 
@@ -480,8 +440,7 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
             $file_handler->deleteFile($file);
 
             // delete search_text
-            $search_text_handler = &xoonips_getormhandler('xoonips',
-                                                          'search_text');
+            $search_text_handler = &xoonips_getormhandler('xoonips', 'search_text');
             $search_text = $search_text_handler->get($file_id);
             if ($search_text) {
                 $search_text_handler->delete($search_text);
@@ -511,8 +470,8 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
      * return true if only private index was changed.
      */
     public function isOnlyPrivateIndexChanged(&$error, $iteminfo, $new_item,
-                                       $old_item)
-    {
+        $old_item
+    ) {
         foreach ($iteminfo['orm'] as $orminfo) {
             $key = $orminfo['field'];
             if ($key != 'indexes') {
@@ -529,14 +488,14 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
                     }
                 } else {
                     if ($new_orm == false && $old_orm != false
-                        || !$new_orm->equals($old_orm)) {
+                        || !$new_orm->equals($old_orm)
+                    ) {
                         return false;
                     }
                 }
             }
         }
-        $index_item_link_handler = &xoonips_getormhandler('xoonips',
-                                                          'index_item_link');
+        $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
         $new_index_ids = array();
         foreach ($new_item->getVar('indexes') as $link) {
             $new_index_ids[] = $link->get('index_id');
@@ -545,22 +504,16 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
         foreach ($old_item->getVar('indexes') as $link) {
             $old_index_ids[] = $link->get('index_id');
         }
-        $changed_index_ids = array_merge(
-            array_diff($new_index_ids, $old_index_ids),
-            array_diff($old_index_ids, $new_index_ids));
+        $changed_index_ids = array_merge(array_diff($new_index_ids, $old_index_ids), array_diff($old_index_ids, $new_index_ids));
         if (empty($changed_index_ids)) {
             return true; // not changed
         }
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
-        $criteria = new CriteriaCompo(
-            new Criteria('open_level', OL_PRIVATE, '<>'));
-        $criteria->add(
-            new Criteria('index_id',
-                         '('.implode(',', $changed_index_ids).')', 'in'));
+        $criteria = new CriteriaCompo(new Criteria('open_level', OL_PRIVATE, '<>'));
+        $criteria->add(new Criteria('index_id', '('.implode(',', $changed_index_ids).')', 'in'));
         $indexes = &$index_handler->getObjects($criteria);
         if ($indexes === false) {
-            $error->add(XNPERR_SERVER_ERROR,
-                        'cannot get changed nonprivate index');
+            $error->add(XNPERR_SERVER_ERROR, 'cannot get changed nonprivate index');
 
             return false;
         }
@@ -584,12 +537,10 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
             $files = $item_compo->getVar($file_type_name);
             if (is_array($files)) {
                 foreach ($files as $file) {
-                    $file_id_to_filetypes[intval($file->get('file_id'))]
-                        = $file_type_name;
+                    $file_id_to_filetypes[intval($file->get('file_id'))] = $file_type_name;
                 }
             } elseif ($files && $files->get('file_id')) {
-                $file_id_to_filetypes[intval($files->get('file_id'))]
-                    = $file_type_name;
+                $file_id_to_filetypes[intval($files->get('file_id'))] = $file_type_name;
             }
         }
 
@@ -608,52 +559,51 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
      * @return bool true if consistent
      */
     public function isFilesConsistent(&$error, $old_file_id_to_types,
-                                $new_file_id_to_types, $add_files,
-                                $delete_file_ids)
-    {
+        $new_file_id_to_types, $add_files,
+        $delete_file_ids
+    ) {
         $file_type_handler = &xoonips_getormhandler('xoonips', 'file_type');
         $file_handler = &xoonips_getormhandler('xoonips', 'file');
         $add_file_id_to_types = array();
         foreach ($add_files as $file) {
-            $file_type
-                = $file_type_handler->get($file->get('file_type_id'));
-            $add_file_id_to_types[intval($file->get('file_id'))]
-                = $file_type->get('name');
+            $file_type = $file_type_handler->get($file->get('file_type_id'));
+            $add_file_id_to_types[intval($file->get('file_id'))] = $file_type->get('name');
         }
 
         $all_file_ids = array_merge(
             array_keys($old_file_id_to_types),
             array_keys($new_file_id_to_types),
             array_keys($add_file_id_to_types),
-            $delete_file_ids);
+            $delete_file_ids
+        );
 
         $is_consistent = true;
         foreach ($all_file_ids as $file_id) {
-            if (isset($old_file_id_to_types[$file_id]) &&
-                isset($new_file_id_to_types[$file_id]) &&
-                !isset($add_file_id_to_types[$file_id]) &&
-                !in_array($file_id, $delete_file_ids) &&
-                $old_file_id_to_types[$file_id]
-                 == $new_file_id_to_types[$file_id]) {
+            if (isset($old_file_id_to_types[$file_id])
+                && isset($new_file_id_to_types[$file_id])
+                && !isset($add_file_id_to_types[$file_id])
+                && !in_array($file_id, $delete_file_ids)
+                && $old_file_id_to_types[$file_id] == $new_file_id_to_types[$file_id]
+            ) {
                 continue; // not modify this file
             }
-            if (!isset($old_file_id_to_types[$file_id]) &&
-                isset($new_file_id_to_types[$file_id]) &&
-                isset($add_file_id_to_types[$file_id]) &&
-                !in_array($file_id, $delete_file_ids) &&
-                $add_file_id_to_types[$file_id]
-                 == $new_file_id_to_types[$file_id]) {
+            if (!isset($old_file_id_to_types[$file_id])
+                && isset($new_file_id_to_types[$file_id])
+                && isset($add_file_id_to_types[$file_id])
+                && !in_array($file_id, $delete_file_ids)
+                && $add_file_id_to_types[$file_id] == $new_file_id_to_types[$file_id]
+            ) {
                 continue; // add this file
             }
-            if (isset($old_file_id_to_types[$file_id]) &&
-                !isset($new_file_id_to_types[$file_id]) &&
-                !isset($add_file_id_to_types[$file_id]) &&
-                in_array($file_id, $delete_file_ids)) {
+            if (isset($old_file_id_to_types[$file_id])
+                && !isset($new_file_id_to_types[$file_id])
+                && !isset($add_file_id_to_types[$file_id])
+                && in_array($file_id, $delete_file_ids)
+            ) {
                 continue; // delete this file
             }
 
-            $error->add(XNPERR_INVALID_PARAM,
-                        "add or delete file id inconsistent(file_id=$file_id)");
+            $error->add(XNPERR_INVALID_PARAM, "add or delete file id inconsistent(file_id=$file_id)");
             $is_consistent = false;
         }
 

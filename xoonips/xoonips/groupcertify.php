@@ -25,9 +25,9 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-include 'include/common.inc.php';
-include_once 'include/lib.php';
-include 'class/base/gtickets.php';
+require 'include/common.inc.php';
+require_once 'include/lib.php';
+require 'class/base/gtickets.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 $formdata = &xoonips_getutility('formdata');
@@ -91,16 +91,16 @@ foreach ($index_group_index_link_handler->getObjects() as $link) {
             continue;
         }
         $group_indexes[$link->get('group_index_id')] = array(
-      'group_index_id' => $link->get('group_index_id'),
-      'indexes' => array(),
-      'group_index_path' => $textutil->html_special_chars('/'.join('/', $group_index_path)),
-    );
+        'group_index_id' => $link->get('group_index_id'),
+        'indexes' => array(),
+        'group_index_path' => $textutil->html_special_chars('/'.join('/', $group_index_path)),
+        );
     }
     array_push($group_indexes[$link->get('group_index_id')]['indexes'], array('id' => $link->get('index_id'), 'path' => $textutil->html_special_chars('/'.join('/', $index_compo_handler->getIndexPathNames($link->get('index_id'))))));
 }
 
 $xoopsOption['template_main'] = 'xoonips_groupcertify.html';
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
 $xoopsTpl->assign('pankuzu', $pankuzu);
 $xoopsTpl->assign('certify_button_label', _MD_XOONIPS_ITEM_CERTIFY_BUTTON_LABEL);
@@ -115,12 +115,12 @@ $xoopsTpl->assign('xoonips_editprofile_url', XOOPS_URL.'/modules/xoonips/edituse
 $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, 'xoonips_group_certify_index');
 $xoopsTpl->assign('token_ticket', $token_ticket);
 
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';
 
 function certify($to_index_ids, $group_index_id)
 {
     // transaction
-    require_once __DIR__.'/class/base/transaction.class.php';
+    include_once __DIR__.'/class/base/transaction.class.php';
     $transaction = &XooNIpsTransaction::getInstance();
     $transaction->start();
 
@@ -143,7 +143,7 @@ function certify($to_index_ids, $group_index_id)
 function uncertify($to_index_ids, $group_index_id)
 {
     // transaction
-    require_once __DIR__.'/class/base/transaction.class.php';
+    include_once __DIR__.'/class/base/transaction.class.php';
     $transaction = &XooNIpsTransaction::getInstance();
     $transaction->start();
 

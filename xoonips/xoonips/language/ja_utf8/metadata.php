@@ -67,7 +67,8 @@
 82 : 広報資料—下部組織トップページ,
 83 : 広報資料—機関広報資料
 */
-define('_MD_XOONIPS_METADATA_JUNII', '
+define(
+    '_MD_XOONIPS_METADATA_JUNII', '
 研究成果,
 研究成果—論文,
 研究成果—論文以外,/
@@ -101,7 +102,8 @@ define('_MD_XOONIPS_METADATA_JUNII', '
 広報資料—機関トップページ,
 広報資料—下部組織トップページ,
 広報資料—機関広報資料
-');
+'
+);
 
 // Metadata: JUNII2 type (will be fixed by 2006-10-13)
 /* id : text
@@ -119,7 +121,8 @@ define('_MD_XOONIPS_METADATA_JUNII', '
 20 : Data or Dataset
 30 : Software
  */
-define('_MD_XOONIPS_METADATA_JUNII2', '
+define(
+    '_MD_XOONIPS_METADATA_JUNII2', '
 Journal Article,
 Thesis or Dissertation,
 Departmental Bulletin Paper,
@@ -133,4 +136,5 @@ Article,
 Learning Material,/
 Data or Dataset,/
 Software
-');
+'
+);

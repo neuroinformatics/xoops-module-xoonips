@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/logic.class.php';
+require_once dirname(__DIR__).'/base/logic.class.php';
 
 class XooNIpsLogicImportCheckImport extends XooNIpsLogic
 {
@@ -63,8 +63,8 @@ class XooNIpsLogicImportCheckImport extends XooNIpsLogic
                 if (count($vars[0][$key]->getDuplicateLockedItemId()) > 0) {
                     continue;
                 }
-                if (count($vars[0][$key]->getDuplicateUpdatableItemId())
-                    > 0) {
+                if (count($vars[0][$key]->getDuplicateUpdatableItemId()) > 0
+                ) {
                     continue;
                 }
                 $vars[0][$key]->setImportAsNewFlag(true);
@@ -73,11 +73,9 @@ class XooNIpsLogicImportCheckImport extends XooNIpsLogic
 
         $success = array(
             'import_items' => $vars[0],
-            'private_item_number_limit_over' => $this->_is_private_item_number_limit_over($vars[0],
-                                                             $vars[1]),
-            'private_item_storage_limit_over' => $this->_is_private_item_storage_limit_over($vars[0],
-                                                                 $vars[1]),
-            );
+            'private_item_number_limit_over' => $this->_is_private_item_number_limit_over($vars[0], $vars[1]),
+            'private_item_storage_limit_over' => $this->_is_private_item_storage_limit_over($vars[0], $vars[1]),
+        );
         $response->setResult(true);
         $response->setSuccess($success);
     }
@@ -90,35 +88,27 @@ class XooNIpsLogicImportCheckImport extends XooNIpsLogic
                 ++$import_item_count;
             }
         }
-        $index_item_link_handler = &xoonips_getormhandler('xoonips',
-                                                           'index_item_link');
+        $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
         $user_handler = &xoonips_getormhandler('xoonips', 'users');
         $user = &$user_handler->get($uid);
         if (!$user) {
             return true;
         }
 
-        return $import_item_count
-            + count($index_item_link_handler
-                     ->getAllPrivateOnlyItemId($uid))
-            > $user->get('private_item_number_limit');
+        return $import_item_count + count($index_item_link_handler->getAllPrivateOnlyItemId($uid)) > $user->get('private_item_number_limit');
     }
 
     public function _is_private_item_storage_limit_over(&$import_items, $uid)
     {
-        $import_item_filesize
-            = $this->_get_total_file_size_of_import_items($import_items);
-        $remove_filesize
-            = $this->_get_total_file_size_of_update_items($import_items);
+        $import_item_filesize = $this->_get_total_file_size_of_import_items($import_items);
+        $remove_filesize = $this->_get_total_file_size_of_update_items($import_items);
         $user_handler = &xoonips_getormhandler('xoonips', 'users');
         $user = &$user_handler->get($uid);
         if (!$user) {
             return true;
         }
 
-        return $import_item_filesize - $remove_filesize
-            + $this->_filesize_private()
-            > $user->get('private_item_storage_limit');
+        return $import_item_filesize - $remove_filesize + $this->_filesize_private() > $user->get('private_item_storage_limit');
     }
 
     public function _get_toal_file_size_of_item($item_id)
@@ -126,8 +116,7 @@ class XooNIpsLogicImportCheckImport extends XooNIpsLogic
         $size = 0;
         $handler = &xoonips_getormhandler('xoonips', 'file');
         $join = new XooNIpsJoinCriteria('xoonips_index_item_link', 'item_id', 'item_id', 'LEFT', 'tlink');
-        $criteria = new CriteriaCompo(new Criteria('tlink.item_id',
-                                                     $item_id));
+        $criteria = new CriteriaCompo(new Criteria('tlink.item_id', $item_id));
         $criteria->add(new Criteria('certify_state', CERTIFIED, '!='));
         $files = &$handler->getObjects($criteria, '', false, '', $join);
         if (!$files || count($files) == 0) {
@@ -147,8 +136,7 @@ class XooNIpsLogicImportCheckImport extends XooNIpsLogic
             //remove old file of updated item
             if ($item->getUpdateFlag()) {
                 foreach ($item->getDuplicateUpdatableItemId() as $item_id) {
-                    $remove_filesize
-                        += $this->_get_toal_file_size_of_item($item_id);
+                    $remove_filesize += $this->_get_toal_file_size_of_item($item_id);
                 }
             }
         }
@@ -169,9 +157,7 @@ class XooNIpsLogicImportCheckImport extends XooNIpsLogic
     public function _filesize_private()
     {
         $iids = array();
-        if (xnp_get_private_item_id($_SESSION['XNPSID'],
-                                     $_SESSION['xoopsUserId'], $iids)
-            != RES_OK) {
+        if (xnp_get_private_item_id($_SESSION['XNPSID'], $_SESSION['xoopsUserId'], $iids) != RES_OK) {
             return 0;
         }
 

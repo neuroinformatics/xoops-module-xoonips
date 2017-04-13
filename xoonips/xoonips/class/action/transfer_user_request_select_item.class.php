@@ -26,11 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once 'transfer.class.php';
-include_once dirname(dirname(__DIR__))
-    .'/include/transfer.inc.php';
-include_once dirname(dirname(__DIR__))
-    .'/include/extra_param.inc.php';
+require_once 'transfer.class.php';
+require_once dirname(dirname(__DIR__)).'/include/transfer.inc.php';
+require_once dirname(dirname(__DIR__)).'/include/extra_param.inc.php';
 
 class XooNIpsActionTransferUserRequestSelectItem extends XooNIpsActionTransfer
 {
@@ -57,17 +55,10 @@ class XooNIpsActionTransferUserRequestSelectItem extends XooNIpsActionTransfer
         xoonips_allow_post_method();
 
         $extra_params = xoonips_extra_param_restore();
-        xoonips_validate_request(
-            $this->is_valid_transferee_user(@$extra_params['to_uid']));
+        xoonips_validate_request($this->is_valid_transferee_user(@$extra_params['to_uid']));
 
-        if (count($this->get_selected()) > 0
-            || count($this->get_selected_hidden()) > 0) {
-            xoonips_validate_request(
-                $this->is_readable_all_items(
-                    array_merge(
-                        $this->get_selected(),
-                        $this->get_selected_hidden()),
-                    $xoopsUser->getVar('uid')));
+        if (count($this->get_selected()) > 0 || count($this->get_selected_hidden()) > 0) {
+            xoonips_validate_request($this->is_readable_all_items(array_merge($this->get_selected(), $this->get_selected_hidden()), $xoopsUser->getVar('uid')));
         }
     }
 
@@ -82,30 +73,18 @@ class XooNIpsActionTransferUserRequestSelectItem extends XooNIpsActionTransfer
 
         $item_ids_to_transfer = array();
         if ('add_selected_item' == $this->_formdata->getValue('post', 'op', 's', false)) {
-            $item_ids_to_transfer = array_merge(
-                $this->get_selected(),
-                $this->get_selected_hidden());
+            $item_ids_to_transfer = array_merge($this->get_selected(), $this->get_selected_hidden());
         } else {
-            $item_ids_to_transfer
-                = $this->_formdata->getValueArray('post', 'selected_original', 'i', false);
+            $item_ids_to_transfer = $this->_formdata->getValueArray('post', 'selected_original', 'i', false);
         }
 
-        $item_ids_to_transfer =
-            $this->sort_item_ids_by_title($item_ids_to_transfer);
+        $item_ids_to_transfer = $this->sort_item_ids_by_title($item_ids_to_transfer);
 
-        $this->_view_params['items_to_transfer']
-            = xoonips_transfer_get_transferrable_item_information(
-                $xoopsUser->getVar('uid'),
-                $item_ids_to_transfer);
+        $this->_view_params['items_to_transfer'] = xoonips_transfer_get_transferrable_item_information($xoopsUser->getVar('uid'), $item_ids_to_transfer);
 
-        $this->_view_params['to_user_options']
-            = xoonips_transfer_get_users_for_dropdown(
-                $xoopsUser->getVar('uid'));
+        $this->_view_params['to_user_options'] = xoonips_transfer_get_users_for_dropdown($xoopsUser->getVar('uid'));
 
-        $this->_view_params['transfer_enable']
-            = $this->is_all_transferrable_items(
-                $xoopsUser->getVar('uid'),
-                $item_ids_to_transfer);
+        $this->_view_params['transfer_enable'] = $this->is_all_transferrable_items($xoopsUser->getVar('uid'), $item_ids_to_transfer);
     }
 
     public function get_selected()

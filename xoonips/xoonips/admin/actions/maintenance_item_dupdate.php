@@ -38,8 +38,8 @@ if (!$xoopsGTicket->check(true, $ticket_area, false)) {
 }
 
 // load libraries
-include '../include/lib.php';
-include '../include/libitem.php';
+require '../include/lib.php';
+require '../include/libitem.php';
 require_once '../class/base/logicfactory.class.php';
 require_once '../class/xoonipsresponse.class.php';
 require_once '../class/xoonipserror.class.php';
@@ -130,7 +130,7 @@ if (count($tree_ids) > 0) {
 
             if (xoonips_admin_maintenance_item_delete_item($iid)) {
                 // succeed
-               ++$succeed;
+                ++$succeed;
             } else {
                 // error occured
                 ++$failed;

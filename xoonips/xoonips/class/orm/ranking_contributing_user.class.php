@@ -61,43 +61,43 @@ class XooNIpsOrmRankingContributingUserHandler extends XooNIpsOrmAbstractRanking
         $this->_set_columns(array('item_id', 'uid', 'timestamp'));
     }
 
-  /**
-   * insert/upldate/replace object.
-   *
-   * @param object &$obj
-   * @param bool   $force force operation
-   *
-   * @return bool false if failed
-   */
-  public function insert(&$obj, $force = false)
-  {
-      $item_id = $obj->get('item_id');
-      $uid = $obj->get('uid');
-      if ($item_id == 0 || $uid == 0) {
-          // ignore if item id or user id is zero
-      return true;
-      }
+    /**
+     * insert/upldate/replace object.
+     *
+     * @param object &$obj
+     * @param bool   $force force operation
+     *
+     * @return bool false if failed
+     */
+    public function insert(&$obj, $force = false)
+    {
+        $item_id = $obj->get('item_id');
+        $uid = $obj->get('uid');
+        if ($item_id == 0 || $uid == 0) {
+            // ignore if item id or user id is zero
+            return true;
+        }
 
-      return parent::insert($obj, $force);
-  }
+        return parent::insert($obj, $force);
+    }
 
-  /**
-   * replace contributing user raking data for updating/rebuilding rankings.
-   *
-   * @param int $item_id   item id
-   * @param int $uid       user id
-   * @param int $timestamp timestamp
-   *
-   * @return bool FALSE if failed
-   */
-  public function replace($item_id, $uid, $timestamp)
-  {
-      $obj = &$this->create();
-      $obj->setReplace();
-      $obj->set('item_id', $item_id);
-      $obj->set('uid', $uid);
-      $obj->set('timestamp', date('Y-m-d H:i:s', $timestamp));
-    // force insertion
-    return $this->insert($obj, true);
-  }
+    /**
+     * replace contributing user raking data for updating/rebuilding rankings.
+     *
+     * @param int $item_id   item id
+     * @param int $uid       user id
+     * @param int $timestamp timestamp
+     *
+     * @return bool FALSE if failed
+     */
+    public function replace($item_id, $uid, $timestamp)
+    {
+        $obj = &$this->create();
+        $obj->setReplace();
+        $obj->set('item_id', $item_id);
+        $obj->set('uid', $uid);
+        $obj->set('timestamp', date('Y-m-d H:i:s', $timestamp));
+        // force insertion
+        return $this->insert($obj, true);
+    }
 }

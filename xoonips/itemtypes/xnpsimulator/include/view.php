@@ -55,7 +55,7 @@ function xnpsimulator_get_type_array()
     'mathematica',
     'program',
     'other',
-  );
+    );
     $value = explode("\t", _MD_XNPSIMULATOR_SIMULATOR_TYPE_SELECT);
     $ret = array();
     if (count($key) != count($value)) {
@@ -68,7 +68,8 @@ function xnpsimulator_get_type_array()
     return $ret;
 }
 
-/** retrieve Detail Information that specified by item_id
+/**
+ * retrieve Detail Information that specified by item_id
  * return array(only keys, no values) if item_id is wrong.
  *
  * @return array as result
@@ -90,21 +91,21 @@ function xnpsimulatorGetDetailInformation($item_id)
     'value' => $item['simulator_type'],
     'select' => xnpsimulator_get_type_array(),
     'display_value' => $simulator_types[$item['simulator_type']],
-  ), 'readme' => array(
+    ), 'readme' => array(
     'value' => $item['readme'],
-  ), 'rights' => array(
+    ), 'rights' => array(
     'value' => $item['rights'],
-  ), 'use_cc' => array(
+    ), 'use_cc' => array(
     'value' => $item['use_cc'],
-  ), 'cc_commercial_use' => array(
+    ), 'cc_commercial_use' => array(
     'value' => $item['cc_commercial_use'],
-  ), 'cc_modification' => array(
+    ), 'cc_modification' => array(
     'value' => $item['cc_modification'],
-  ), 'attachment_dl_limit' => array(
+    ), 'attachment_dl_limit' => array(
     'value' => $item['attachment_dl_limit'],
-  ), 'attachment_dl_notify' => array(
+    ), 'attachment_dl_notify' => array(
     'value' => $item['attachment_dl_notify'],
-  ));
+    ));
 
     return false;
 }
@@ -112,21 +113,21 @@ function xnpsimulatorGetDetailInformation($item_id)
 function xnpsimulatorGetListBlock($item_basic)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $xnpsimulator_handler = &xoonips_getormcompohandler('xnpsimulator', 'item');
     $tpl->assign('xoonips_item', $xnpsimulator_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_LIST, $item_basic['item_id'], $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpsimulator_list_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpsimulator_list_block.html');
 }
 
 function xnpsimulatorGetPrinterFriendlyListBlock($item_basic)
@@ -137,22 +138,22 @@ function xnpsimulatorGetPrinterFriendlyListBlock($item_basic)
 function xnpsimulatorGetDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
     global $xoopsTpl;
 
-  // get DetailInformation
-  $detail_handler = &xoonips_getormhandler('xnpsimulator', 'item_detail');
+    // get DetailInformation
+    $detail_handler = &xoonips_getormhandler('xnpsimulator', 'item_detail');
     $detail_orm = &$detail_handler->get($item_id);
     if (!$detail_orm) {
         return '';
     }
 
-  // set to template
-  $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // set to template
+    $tpl = new XoopsTpl();
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationDetailBlock($item_id));
@@ -165,8 +166,8 @@ function xnpsimulatorGetDetailBlock($item_id)
     $xnpsimulator_handler = &xoonips_getormcompohandler('xnpsimulator', 'item');
     $tpl->assign('xoonips_item', $xnpsimulator_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpsimulator_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpsimulator_detail_block.html');
 }
 
 function xnpsimulatorGetDownloadConfirmationBlock($item_id, $download_file_id)
@@ -184,22 +185,22 @@ function xnpsimulatorGetDownloadConfirmationRequired($item_id)
 function xnpsimulatorGetPrinterFriendlyDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
     global $xoopsTpl;
 
-  // get DetailInformation
-  $detail_handler = &xoonips_getormhandler('xnpsimulator', 'item_detail');
+    // get DetailInformation
+    $detail_handler = &xoonips_getormhandler('xnpsimulator', 'item_detail');
     $detail_orm = &$detail_handler->get($item_id);
     if (!$detail_orm) {
         return '';
     }
 
-  // set to template
-  $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // set to template
+    $tpl = new XoopsTpl();
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationPrinterFriendlyBlock($item_id));
@@ -212,16 +213,16 @@ function xnpsimulatorGetPrinterFriendlyDetailBlock($item_id)
     $xnpsimulator_handler = &xoonips_getormcompohandler('xnpsimulator', 'item');
     $tpl->assign('xoonips_item', $xnpsimulator_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpsimulator_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpsimulator_detail_block.html');
 }
 
 function xnpsimulatorGetRegisterBlock()
 {
     $formdata = &xoonips_getutility('formdata');
 
-  // retrieve detail information
-  $detail = array();
+    // retrieve detail information
+    $detail = array();
     $simulator_types = xnpsimulator_get_type_array();
     $post_id = $formdata->getValue('get', 'post_id', 's', false);
     if (is_null($post_id)) {
@@ -236,22 +237,22 @@ function xnpsimulatorGetRegisterBlock()
     'value' => $simulator_type,
     'display_value' => $simulator_types[$simulator_type],
     'select' => $simulator_types,
-  );
+    );
 
-  // retrieve blocks of BasicInformation / Preview / Readme / License / index
-  $basic = xnpGetBasicInformationRegisterBlock();
+    // retrieve blocks of BasicInformation / Preview / Readme / License / index
+    $basic = xnpGetBasicInformationRegisterBlock();
     $preview = xnpGetPreviewRegisterBlock();
     $index = xnpGetIndexRegisterBlock();
     $attachment = xnpGetAttachmentRegisterBlock('simulator_data');
     $readme = xnpGetTextFileRegisterBlock('readme');
     $rights = xnpGetRightsRegisterBlock();
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('preview', $preview);
@@ -269,16 +270,16 @@ function xnpsimulatorGetRegisterBlock()
     }
     $tpl->assign('xnpsimulator_developer', xoonips_get_multiple_field_template_vars(xoonips_get_orm_from_post('xnpsimulator', 'developer'), 'xnpsimulator', 'developer'));
 
-  // return HTML content
-  return $tpl->fetch('db:xnpsimulator_register_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnpsimulator_register_block.html');
 }
 
 function xnpsimulatorGetEditBlock($item_id)
 {
     $formdata = &xoonips_getutility('formdata');
 
-  // retrieve detail information
-  $detail = xnpsimulatorGetDetailInformation($item_id);
+    // retrieve detail information
+    $detail = xnpsimulatorGetDetailInformation($item_id);
     $simulator_types = xnpsimulator_get_type_array();
     $post_id = $formdata->getValue('get', 'post_id', 's', false);
     if (!is_null($post_id)) {
@@ -287,14 +288,14 @@ function xnpsimulatorGetEditBlock($item_id)
             list($simulator_type) = each($simulator_types);
         }
         $detail['simulator_type'] = array(
-      'value' => $simulator_type,
-      'display_value' => $simulator_types[$simulator_type],
-      'select' => $simulator_types,
-    );
+        'value' => $simulator_type,
+        'display_value' => $simulator_types[$simulator_type],
+        'select' => $simulator_types,
+        );
     }
 
-  // retrieve blocks of BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationEditBlock($item_id);
+    // retrieve blocks of BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationEditBlock($item_id);
 
     $preview = xnpGetPreviewEditBlock($item_id);
     $index = xnpGetIndexEditBlock($item_id);
@@ -303,12 +304,12 @@ function xnpsimulatorGetEditBlock($item_id)
     $readme = xnpGetTextFileEditBlock($item_id, 'readme', $detail['readme']['value']);
     $rights = xnpGetRightsEditBlock($item_id, $detail['use_cc']['value'], $detail['rights']['value'], $detail['cc_commercial_use']['value'], $detail['cc_modification']['value']);
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('preview', $preview);
@@ -328,8 +329,8 @@ function xnpsimulatorGetEditBlock($item_id)
         $tpl->assign('xnpsimulator_developer', xoonips_get_multiple_field_template_vars(xoonips_get_orm_from_post('xnpsimulator', 'developer'), 'xnpsimulator', 'developer'));
     }
 
-  // return HTML content
-  return $tpl->fetch('db:xnpsimulator_register_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnpsimulator_register_block.html');
 }
 
 function xnpsimulatorGetConfirmBlock($item_id)
@@ -339,19 +340,19 @@ function xnpsimulatorGetConfirmBlock($item_id)
     $developer_handler = &xoonips_getormhandler('xnpsimulator', 'developer');
     $developer_objs = &$formdata->getObjectArray('post', $developer_handler->getTableName(), $developer_handler, false);
 
-  // retrive detail information
-  $detail = array();
+    // retrive detail information
+    $detail = array();
     $simulator_type = $formdata->getValue('post', 'simulator_type', 's', false);
     if ($simulator_type !== false) {
         $simulator_types = xnpsimulator_get_type_array();
         $detail['simulator_type'] = array(
-      'value' => $textutil->html_special_chars($simulator_type),
-      'display_value' => $textutil->html_special_chars($simulator_types[$simulator_type]),
-    );
+        'value' => $textutil->html_special_chars($simulator_type),
+        'display_value' => $textutil->html_special_chars($simulator_types[$simulator_type]),
+        );
     }
 
-  // retrieve blocks of BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationConfirmBlock($item_id);
+    // retrieve blocks of BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationConfirmBlock($item_id);
     xnpConfirmHtml($detail, 'xnpsimulator_item_detail', array_keys($detail), _CHARSET);
     $preview = xnpGetPreviewConfirmBlock($item_id);
     $attachment = xnpGetAttachmentConfirmBlock($item_id, 'simulator_data');
@@ -365,12 +366,12 @@ function xnpsimulatorGetConfirmBlock($item_id)
         $system_message = $system_message."\n<br /><font color='#ff0000'>"._MD_XOONIPS_ITEM_WARNING_FIELD_TRIM.'</font><br />';
     }
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('preview', $preview);
@@ -389,8 +390,8 @@ function xnpsimulatorGetConfirmBlock($item_id)
     }
     $tpl->assign('xnpsimulator_developer', xoonips_get_multiple_field_template_vars($developer_objs, 'xnpsimulator', 'developer'));
 
-  // return HTML content
-  return $tpl->fetch('db:xnpsimulator_confirm_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnpsimulator_confirm_block.html');
 }
 
 function xnpsimulatorInsertItem(&$item_id)
@@ -400,8 +401,8 @@ function xnpsimulatorInsertItem(&$item_id)
 
     $xnpsid = $_SESSION['XNPSID'];
 
-  // retister BasicInformation, Index and Attachment
-  $item_id = 0;
+    // retister BasicInformation, Index and Attachment
+    $item_id = 0;
     $result = xnpInsertBasicInformation($item_id);
     if ($result) {
         $result = xnpUpdateIndex($item_id);
@@ -421,15 +422,15 @@ function xnpsimulatorInsertItem(&$item_id)
         return false;
     }
 
-  // register detail information
-  list($rights, $use_cc, $cc_commercial_use, $cc_modification) = xnpGetRights();
+    // register detail information
+    list($rights, $use_cc, $cc_commercial_use, $cc_modification) = xnpGetRights();
 
-  // it makes string with constant length
-  $ar = array(
+    // it makes string with constant length
+    $ar = array(
     'simulator_type' => $formdata->getValue('post', 'simulator_type', 's', false),
     'readme' => xnpGetTextFile('readme'),
     'rights' => $rights,
-  );
+    );
     xnpTrimColumn($ar, 'xnpsimulator_item_detail', array_keys($ar), _CHARSET);
 
     $keys = implode(',', array('simulator_type', 'readme', 'rights', 'use_cc', 'cc_commercial_use', 'cc_modification', 'attachment_dl_limit', 'attachment_dl_notify'));
@@ -445,8 +446,8 @@ function xnpsimulatorInsertItem(&$item_id)
         return false;
     }
 
-  // insert developer
-  $formdata = &xoonips_getutility('formdata');
+    // insert developer
+    $formdata = &xoonips_getutility('formdata');
     $developer_handler = &xoonips_getormhandler('xnpsimulator', 'developer');
     $developer_objs = &$formdata->getObjectArray('post', $developer_handler->getTableName(), $developer_handler, false);
     if (!$developer_handler->updateAllObjectsByForeignKey('simulator_id', $item_id, $developer_objs)) {
@@ -463,8 +464,8 @@ function xnpsimulatorUpdateItem($simulator_id)
 
     $xnpsid = $_SESSION['XNPSID'];
 
-  // modify BasicInformation, Index, Preview and Attachment.
-  $result = xnpUpdateBasicInformation($simulator_id);
+    // modify BasicInformation, Index, Preview and Attachment.
+    $result = xnpUpdateBasicInformation($simulator_id);
     if ($result) {
         $result = xnpUpdateIndex($simulator_id);
         if ($result) {
@@ -495,12 +496,12 @@ function xnpsimulatorUpdateItem($simulator_id)
 
     list($rights, $use_cc, $cc_commercial_use, $cc_modification) = xnpGetRights();
 
-  // it makes string with constant length
-  $ar = array(
+    // it makes string with constant length
+    $ar = array(
     'simulator_type' => $formdata->getValue('post', 'simulator_type', 's', false),
     'readme' => xnpGetTextFile('readme'),
     'rights' => $rights,
-  );
+    );
     xnpTrimColumn($ar, 'xnpsimulator_item_detail', array_keys($ar), _CHARSET);
     $attachment_dl_limit = $formdata->getValue('post', 'attachment_dl_limit', 'i', false);
     $attachment_dl_notify = $formdata->getValue('post', 'attachment_dl_notify', 'i', false);
@@ -513,10 +514,10 @@ function xnpsimulatorUpdateItem($simulator_id)
     'cc_modification=\''.$cc_modification.'\'',
     'attachment_dl_limit'.'=\''.$attachment_dl_limit.'\'',
     'attachment_dl_notify'.'=\''.($attachment_dl_limit ? $attachment_dl_notify : 0).'\'',
-  );
+    );
 
-  // modify detail information
-  $sql = 'update '.$xoopsDB->prefix('xnpsimulator_item_detail').' set '.implode(', ', $keyval)." where simulator_id=$simulator_id";
+    // modify detail information
+    $sql = 'update '.$xoopsDB->prefix('xnpsimulator_item_detail').' set '.implode(', ', $keyval)." where simulator_id=$simulator_id";
     $result = $xoopsDB->queryF($sql);
     if ($result == false) {
         echo 'cannot update item_detail';
@@ -524,8 +525,8 @@ function xnpsimulatorUpdateItem($simulator_id)
         return false;
     }
 
-  // insert/update developer
-  $developer_handler = &xoonips_getormhandler('xnpsimulator', 'developer');
+    // insert/update developer
+    $developer_handler = &xoonips_getormhandler('xnpsimulator', 'developer');
     $developer_objs = &$formdata->getObjectArray('post', $developer_handler->getTableName(), $developer_handler, false);
     if (!$developer_handler->updateAllObjectsByForeignKey('simulator_id', $simulator_id, $developer_objs)) {
         return false;
@@ -551,16 +552,16 @@ function xnpsimulatorCheckRegisterParameters(&$msg)
 
     if (empty($developer)) {
         // developer is not filled
-    $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPSIMULATOR_DEVELOPER_REQUIRED.'</font>';
+        $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPSIMULATOR_DEVELOPER_REQUIRED.'</font>';
         $result = false;
     }
     if ((empty($simulator_data) || $simulator_data['name'] == '') && $simulator_dataFileID == '') {
         // simulator_data is not filled
-    $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPSIMULATOR_SIMULATOR_FILE_REQUIRED.'</font>';
+        $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPSIMULATOR_SIMULATOR_FILE_REQUIRED.'</font>';
         $result = false;
     }
-  // notify that license statement is required when register into public indexes.
-  $xids = explode(',', $xoonipsCheckedXID);
+    // notify that license statement is required when register into public indexes.
+    $xids = explode(',', $xoonipsCheckedXID);
     $indexes = array();
     if ($xids[0] != $xoonipsCheckedXID) {
         foreach ($xids as $i) {
@@ -582,12 +583,12 @@ function xnpsimulatorCheckRegisterParameters(&$msg)
                 $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
                 if ($readmeEncText == '') {
                     // readme is not filled
-          $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPSIMULATOR_README_REQUIRED.'</font>';
+                    $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPSIMULATOR_README_REQUIRED.'</font>';
                     $result = false;
                 }
                 if ($rightsEncText == '' && $rightsUseCC == '0') {
                     // license is not filled
-          $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPSIMULATOR_RIGHTS_REQUIRED.'</font>';
+                    $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPSIMULATOR_RIGHTS_REQUIRED.'</font>';
                     $result = false;
                 }
                 break;
@@ -645,20 +646,20 @@ function xnpsimulatorGetAdvancedSearchBlock(&$search_var)
     $search_var[] = 'xnpsimulator_developer';
     $search_var[] = 'xnpsimulator_caption';
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
     $tpl->assign('basic', $basic);
     $tpl->assign('module_name', 'xnpsimulator');
     $simulator_type = xnpsimulator_get_type_array();
     $tpl->assign('simulator_type_option', $simulator_type);
     $tpl->assign('module_display_name', xnpGetItemTypeDisplayNameByDirname(basename(dirname(__DIR__)), 's'));
 
-  // return HTML content
-  return $tpl->fetch('db:xnpsimulator_search_block.html');
+    // return HTML content
+    return $tpl->fetch('db:xnpsimulator_search_block.html');
 }
 
 function xnpsimulatorGetAdvancedSearchQuery(&$where, &$join)
@@ -701,7 +702,7 @@ function xnpsimulatorGetDetailInformationQuickSearchQuery(&$wheres, &$join, $key
     $colnames = array(
     "$simulator_developer_table.developer",
     "$file_table.caption",
-  );
+    );
     $wheres = xnpGetKeywordsQueries($colnames, $keywords);
     $join = " join $simulator_developer_table on ".$simulator_developer_table.'.simulator_id  = '.$xoopsDB->prefix('xoonips_item_basic').'.item_id ';
 
@@ -717,8 +718,8 @@ function xnpsimulatorGetLicenseRequired($item_id)
 {
     global $xoopsDB;
 
-  // retrieve detail information
-  $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpsimulator_item_detail')." where simulator_id=$item_id");
+    // retrieve detail information
+    $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpsimulator_item_detail')." where simulator_id=$item_id");
     if (!$result) {
         return null;
     }
@@ -731,8 +732,8 @@ function xnpsimulatorGetLicenseStatement($item_id)
 {
     global $xoopsDB;
 
-  // retrieve detail information
-  $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpsimulator_item_detail')." where simulator_id=$item_id");
+    // retrieve detail information
+    $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpsimulator_item_detail')." where simulator_id=$item_id");
     if (!$result) {
         return null;
     }
@@ -756,9 +757,9 @@ function xnpsimulatorGetLicenseStatement($item_id)
 function xnpsimulatorExportItem($export_path, $fhdl, $item_id, $attachment)
 {
     // get DetailInformation
-  if (!$fhdl) {
-      return false;
-  }
+    if (!$fhdl) {
+        return false;
+    }
 
     $handler = &xoonips_getormhandler('xnpsimulator', 'item_detail');
     $detail = &$handler->get($item_id);
@@ -808,19 +809,19 @@ function xnpsimulatorGetModifiedFields($item_id)
                 array_push($ret, $v);
             }
         }
-    // is readme modified ?
-    foreach (array('readme' => _MD_XOONIPS_ITEM_README_LABEL) as $k => $v) {
-        $tmp = $formdata->getValue('post', "${k}EncText", 's', false);
-        if (!array_key_exists($k, $detail) || $tmp === null) {
-            continue;
+        // is readme modified ?
+        foreach (array('readme' => _MD_XOONIPS_ITEM_README_LABEL) as $k => $v) {
+            $tmp = $formdata->getValue('post', "${k}EncText", 's', false);
+            if (!array_key_exists($k, $detail) || $tmp === null) {
+                continue;
+            }
+            if ($detail[$k]['value'] != $tmp) {
+                array_push($ret, $v);
+            }
         }
-        if ($detail[$k]['value'] != $tmp) {
-            array_push($ret, $v);
-        }
-    }
 
-    // is rights modified ?
-    $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
+        // is rights modified ?
+        $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
         $rightsEncText = $formdata->getValue('post', 'rightsEncText', 's', false);
         if ($rightsUseCC !== null) {
             if ($rightsUseCC == 0) {
@@ -841,10 +842,10 @@ function xnpsimulatorGetModifiedFields($item_id)
             }
         }
 
-    // is modified data files ?
-    if (xnpIsAttachmentModified('simulator_data', $item_id)) {
-        array_push($ret, _MD_XNPSIMULATOR_SIMULATOR_FILE);
-    }
+        // is modified data files ?
+        if (xnpIsAttachmentModified('simulator_data', $item_id)) {
+            array_push($ret, _MD_XNPSIMULATOR_SIMULATOR_FILE);
+        }
 
         $developer_handler = &xoonips_getormhandler('xnpsimulator', 'developer');
         $developer_objs = &$formdata->getObjectArray('post', $developer_handler->getTableName(), $developer_handler, false);
@@ -912,8 +913,8 @@ function xnpsimulatorGetMetadata($prefix, $item_id)
     if (!in_array($prefix, array('oai_dc', 'junii2'))) {
         return false;
     }
-  // detail information
-  $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
+    // detail information
+    $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
     $developer_handler = &xoonips_getormhandler($mydirname, 'developer');
     $detail_obj = &$detail_handler->get($item_id);
     if (empty($detail_obj)) {
@@ -929,11 +930,11 @@ function xnpsimulatorGetMetadata($prefix, $item_id)
     }
     $types = xnpsimulator_get_type_array();
     $detail['simulator_type_display'] = $types[$detail['simulator_type']];
-  // basic information
-  $basic = xnpGetBasicInformationArray($item_id);
+    // basic information
+    $basic = xnpGetBasicInformationArray($item_id);
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
-  // indexes
-  $indexes = array();
+    // indexes
+    $indexes = array();
     if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
         foreach ($xids as $xid) {
             if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
@@ -941,8 +942,8 @@ function xnpsimulatorGetMetadata($prefix, $item_id)
             }
         }
     }
-  // files
-  $files = array();
+    // files
+    $files = array();
     $mimetypes = array();
     $file_handler = &xoonips_gethandler('xoonips', 'file');
     if ($detail['attachment_dl_limit'] == 0) {
@@ -954,8 +955,8 @@ function xnpsimulatorGetMetadata($prefix, $item_id)
         }
     }
     $previews = $file_handler->getFilesInfo($item_id, 'preview');
-  // rights
-  $detail['rights_cc_url'] = '';
+    // rights
+    $detail['rights_cc_url'] = '';
     if ($detail['use_cc'] == 1) {
         $cond = 'by';
         if ($detail['cc_commercial_use'] == 0) {
@@ -968,18 +969,18 @@ function xnpsimulatorGetMetadata($prefix, $item_id)
         }
         $detail['rights_cc_url'] = sprintf('http://creativecommons.org/licenses/%s/2.5/', $cond);
     }
-  // related to
-  $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
+    // related to
+    $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
     $related_to_ids = $related_to_handler->getChildItemIds($item_id);
     $related_tos = array();
     foreach ($related_to_ids as $related_to_id) {
         $related_tos[] = array(
-      'item_id' => $related_to_id,
-      'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
-    );
+        'item_id' => $related_to_id,
+        'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
+        );
     }
-  // repository configs
-  $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+    // repository configs
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $myxoopsConfigMetaFooter = &xoonips_get_xoops_configs(XOOPS_CONF_METAFOOTER);
     $repository = array(
     'download_file_compression' => $xconfig_handler->getValue('download_file_compression'),
@@ -987,9 +988,9 @@ function xnpsimulatorGetMetadata($prefix, $item_id)
     'publisher' => $xconfig_handler->getValue('repository_publisher'),
     'institution' => $xconfig_handler->getValue('repository_institution'),
     'meta_author' => $myxoopsConfigMetaFooter['meta_author'],
-  );
-  // assign template
-  global $xoopsTpl;
+    );
+    // assign template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->plugins_dir[] = XOONIPS_PATH.'/class/smarty/plugins';
     $tpl->assign($xoopsTpl->get_template_vars());

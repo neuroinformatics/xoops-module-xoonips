@@ -26,11 +26,10 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/action.class.php';
-include_once dirname(__DIR__).'/base/logicfactory.class.php';
+require_once dirname(__DIR__).'/base/action.class.php';
+require_once dirname(__DIR__).'/base/logicfactory.class.php';
 require_once dirname(__DIR__).'/base/gtickets.php';
-include_once dirname(dirname(__DIR__))
-    .'/include/imexport.php';
+require_once dirname(dirname(__DIR__)).'/include/imexport.php';
 
 class XooNIpsActionImportImportIndexTree extends XooNIpsAction
 {
@@ -60,19 +59,15 @@ class XooNIpsActionImportImportIndexTree extends XooNIpsAction
 
     public function doAction()
     {
-        include_once dirname(dirname(__DIR__))
-            .'/include/imexport.php';
+        include_once dirname(dirname(__DIR__)).'/include/imexport.php';
         global $xoopsDB, $xoopsConfig, $xoopsUser,$xoopsLogger, $xoopsUserIsAdmin;
 
-        if (!isset($_SESSION['xoonips_import_file_path'])
-            || !isset($_SESSION['xoonips_import_index_ids'])) {
-            header('Location: '.XOOPS_URL
-                    .'/modules/xoonips/import.php?action=default');
+        if (!isset($_SESSION['xoonips_import_file_path']) || !isset($_SESSION['xoonips_import_index_ids'])) {
+            header('Location: '.XOOPS_URL.'/modules/xoonips/import.php?action=default');
         }
 
         $uploadfile = $_SESSION['xoonips_import_file_path'];
-        $import_index_ids
-            = unserialize($_SESSION['xoonips_import_index_ids']);
+        $import_index_ids = unserialize($_SESSION['xoonips_import_index_ids']);
 
         unset($_SESSION['xoonips_import_file_path']);
         unset($_SESSION['xoonips_import_index_ids']);
@@ -129,9 +124,7 @@ class XooNIpsActionImportImportIndexTree extends XooNIpsAction
             $index_handler = &xoonips_getormhandler('xoonips', 'index');
             echo "<p>\n";
             foreach ($created_xids as $index_id) {
-                echo "<a href='".XOOPS_URL
-                    .'/modules/xoonips/listitem.php?index_id='
-                    .$index_id."'>"
+                echo "<a href='".XOOPS_URL.'/modules/xoonips/listitem.php?index_id='.$index_id."'>"
                     .htmlspecialchars($this->_get_index_path_str($index_id, $xoopsUser->getVar('uid')), ENT_QUOTES)
                     ."</a><br />\n";
             }
@@ -161,9 +154,7 @@ class XooNIpsActionImportImportIndexTree extends XooNIpsAction
             return '';
         }
         do {
-            if ($user
-                && $index->get('index_id')
-                == $user->get('private_index_id')) {
+            if ($user && $index->get('index_id') == $user->get('private_index_id')) {
                 $path[] = 'Private';
             } else {
                 $path[] = $index->getExtraVar('title');
@@ -184,8 +175,7 @@ class XooNIpsActionImportImportIndexTree extends XooNIpsAction
         $criteria = new CriteriaCompo(new Criteria('index_id', $index_id));
         $criteria->add(new Criteria('title_id', 0));
         $join = new XooNIpsJoinCriteria('xoonips_item_title', 'index_id', 'item_id');
-        $indexes = &$index_handler->getObjects($criteria, false,
-                                                  '', false, $join);
+        $indexes = &$index_handler->getObjects($criteria, false, '', false, $join);
 
         if (count($indexes) == 0) {
             return $falseVar;

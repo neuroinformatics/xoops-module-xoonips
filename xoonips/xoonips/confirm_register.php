@@ -29,11 +29,11 @@
 //  page for confirm to register items
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
-include_once 'include/item_limit_check.php';
-include_once 'include/lib.php';
-include_once 'include/AL.php';
+require_once 'include/item_limit_check.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
 require_once 'class/base/gtickets.php';
 
 $xgroup_handler = &xoonips_gethandler('xoonips', 'group');
@@ -77,7 +77,7 @@ if (!isset($itemtype)) {
 }
 
 //include view.php
-include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
 
 //check required field
 $title = $formdata->getValue('post', 'title', 's', false);
@@ -160,14 +160,13 @@ if (XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') {
     $doi = $formdata->getValue('post', 'doi', 's', false);
     if ($doi != '') {
         $matches = array();
-        $res = preg_match('/'.XNP_CONFIG_DOI_FIELD_PARAM_PATTERN
-                           .'/', $doi, $matches);
+        $res = preg_match('/'.XNP_CONFIG_DOI_FIELD_PARAM_PATTERN.'/', $doi, $matches);
         if (strlen($doi) > XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN
-            || $res == 0 || $matches[0] != $doi) {
+            || $res == 0 || $matches[0] != $doi
+        ) {
             $op = '';
             $system_message .= "\n".'<br /><span style="color: red;">'
-                .sprintf(_MD_XOONIPS_ITEM_DOI_INVALID_ID,
-                          XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN).'</span><br />';
+                .sprintf(_MD_XOONIPS_ITEM_DOI_INVALID_ID, XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN).'</span><br />';
         }
         //check doi duplication
         if (xnpIsDoiExists($doi)) {
@@ -215,8 +214,7 @@ if (isset($op) && $op == 'register') {
         // lock item and indexes if certify required
         $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
-        $index_item_link_handler = &xoonips_getormhandler(
-            'xoonips', 'index_item_link');
+        $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
         $index_item_links = &$index_item_link_handler->getObjects(new Criteria('item_id', $item_id));
         $certify_required = false;
         foreach ($index_item_links as $index_item_link) {
@@ -265,8 +263,7 @@ if (isset($op) && $op == 'register') {
         // if any private indexes are not selected.
         $account = array();
         if (RES_OK != xnp_get_account($xnpsid, $uid, $account)) {
-            redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_account. '
-                            .xnp_get_last_error_string());
+            redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_account. '.xnp_get_last_error_string());
             break;
         }
         if (!$private_index_flag) {

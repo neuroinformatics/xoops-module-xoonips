@@ -44,7 +44,9 @@ class XooNIpsMemberHandler
         $this->_aHandler = &xoonips_getormcompohandler('xoonips', 'user');
     }
 
-    /** authenticate and return XooNIpsUser object.
+    /**
+     * authenticate and return XooNIpsUser object.
+     *
      * @param uname user name
      * @param pass password
      *
@@ -65,7 +67,9 @@ class XooNIpsMemberHandler
         return $user[0];
     }
 
-    /** check if $uid is moderator. todo: should be cached?
+    /**
+     * check if $uid is moderator. todo: should be cached?
+     *
      * @param uid user ID
      *
      * @return true if $uid is moderator. false otherwise.
@@ -88,7 +92,9 @@ class XooNIpsMemberHandler
         return in_array((int) $moderator_gid, $groups);
     }
 
-    /** check if $uid is xoonips admin. todo: should be cached?
+    /**
+     * check if $uid is xoonips admin. todo: should be cached?
+     *
      * @param uid user ID
      *
      * @return true if $uid is xoonips admin. false otherwise.
@@ -151,14 +157,14 @@ class XooNIpsMemberHandler
             $val = $xconfig_handler->getValue($key);
             if ($val == 'off') {
                 // 'optional off' means 'required'
-               $xu_obj->setVar($field, $dummy_field, true); // not gpc
+                $xu_obj->setVar($field, $dummy_field, true); // not gpc
             }
             unset($xc_obj);
         }
         // register user information
         if (!$xu_handler->insert($xu_obj)) {
             // TODO: delete created private index
-           return false;
+            return false;
         }
 
         // record event logs

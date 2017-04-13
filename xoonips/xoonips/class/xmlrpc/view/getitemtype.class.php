@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.class.php';
 
 /**
  * @brief Class that generate response of XML-RPC getItemtype request
@@ -72,20 +72,14 @@ class XooNIpsXmlRpcViewGetItemtype extends XooNIpsXmlRpcViewElement
 
             $field = new XoopsXmlRpcStruct();
             $field->add('name', new XoopsXmlRpcString(implode('.', $i['xmlrpc']['field'])));
-            $field->add('display_name', new XoopsXmlRpcString(
-                $unicode->encode_utf8(
-                    constant($i['xmlrpc']['display_name']),
-                    xoonips_get_server_charset())));
+            $field->add('display_name', new XoopsXmlRpcString($unicode->encode_utf8(constant($i['xmlrpc']['display_name']), xoonips_get_server_charset())));
             $field->add('type', new XoopsXmlRpcString($datatype));
             if (isset($i['xmlrpc']['options'])) {
                 $options = new XoopsXmlRpcArray();
                 foreach ($i['xmlrpc']['options'] as $option_key => $option_val) {
                     $option = new XoopsXmlRpcStruct();
                     $option->add('option', new XoopsXmlRpcString($option_val['option']));
-                    $option->add('display_name', new XoopsXmlRpcString(
-                        $unicode->encode_utf8(
-                            constant($option_val['display_name']),
-                            xoonips_get_server_charset())));
+                    $option->add('display_name', new XoopsXmlRpcString($unicode->encode_utf8(constant($option_val['display_name']), xoonips_get_server_charset())));
                     $options->add($option);
                     unset($option);
                 }

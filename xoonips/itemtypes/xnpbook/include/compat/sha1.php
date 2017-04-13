@@ -3,17 +3,17 @@
 /**
  * Replace sha1().
  *
- * @category    PHP
+ * @category PHP
  *
- * @license     LGPL - http://www.gnu.org/licenses/lgpl.html
- * @copyright   2004-2007 Aidan Lister <aidan@php.net>, Arpad Ray <arpad@php.net>
+ * @license   LGPL - http://www.gnu.org/licenses/lgpl.html
+ * @copyright 2004-2007 Aidan Lister <aidan@php.net>, Arpad Ray <arpad@php.net>
  *
- * @see        http://php.net/function.sha1
+ * @see http://php.net/function.sha1
  *
- * @author      revulo <revulon@gmail.com>
+ * @author revulo <revulon@gmail.com>
  *
- * @since       PHP 4.3.0
- * @require     PHP 4.0.0
+ * @since   PHP 4.3.0
+ * @require PHP 4.0.0
  */
 function php_compat_sha1($str, $raw_output = false)
 {
@@ -64,10 +64,14 @@ function php_compat_sha1($str, $raw_output = false)
             }
 
             $t = php_compat_sha1_add32_helper(
-                 php_compat_sha1_add32_helper(
-                 php_compat_sha1_add32_helper(
-                 php_compat_sha1_add32_helper(
-                 php_compat_sha1_rotl_helper($a, 5), $f), $e), $k), $w[$j]);
+                php_compat_sha1_add32_helper(
+                    php_compat_sha1_add32_helper(
+                        php_compat_sha1_add32_helper(
+                            php_compat_sha1_rotl_helper($a, 5), $f
+                        ), $e
+                    ), $k
+                ), $w[$j]
+            );
 
             $e = $d;
             $d = $c;

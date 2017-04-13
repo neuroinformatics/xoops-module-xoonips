@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/view.class.php';
+require_once dirname(__DIR__).'/base/view.class.php';
 
 /**
  * base class of transfer view.
@@ -111,8 +111,7 @@ class XooNIpsViewTransfer extends XooNIpsView
         $user = &$user_handler->get($index->get('uid'));
 
         $handler = &xoonips_getormcompohandler('xoonips', 'index');
-        $index_names = $handler->getIndexPathNames(
-            $index_id, $user->get('private_index_id'), 's');
+        $index_names = $handler->getIndexPathNames($index_id, $user->get('private_index_id'), 's');
 
         return '/'.implode('/', $index_names);
     }

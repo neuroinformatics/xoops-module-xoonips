@@ -77,115 +77,115 @@ class XooNIpsOrmItemType extends XooNIpsTableObject
         $this->initVar('viewphp', XOBJ_DTYPE_TXTBOX, null, true, 255);
     }
 
-  /**
-   * get field information by name.
-   *
-   * @param $ormName field name of orm
-   * @param $fieldName field name
-   *
-   * @return field information if found. false if not found.
-   */
-  public function getFieldByName($ormName, $fieldName)
-  {
-      // return false if $ormName is not found in iteminfo
-    if (!in_array($ormName, array_keys($this->iteminfo['ormfield']))) {
+    /**
+     * get field information by name.
+     *
+     * @param $ormName field name of orm
+     * @param $fieldName field name
+     *
+     * @return field information if found. false if not found.
+     */
+    public function getFieldByName($ormName, $fieldName)
+    {
+        // return false if $ormName is not found in iteminfo
+        if (!in_array($ormName, array_keys($this->iteminfo['ormfield']))) {
+            return false;
+        }
+        // find fieldName in iteminfo['ormfield']
+        foreach ($this->iteminfo['ormfield'][$ormName] as $field) {
+            if ($field['name'] == $fieldName) {
+                return $field;
+            }
+        }
+
         return false;
     }
-    // find fieldName in iteminfo['ormfield']
-    foreach ($this->iteminfo['ormfield'][$ormName] as $field) {
-        if ($field['name'] == $fieldName) {
-            return $field;
-        }
+
+    /**
+     * @brief get description
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
-      return false;
-  }
+    /**
+     * @brief get field name of mainfile
+     */
+    public function getMainFileName()
+    {
+        return $this->mainFileName;
+    }
 
-  /**
-   * @brief get description
-   */
-  public function getDescription()
-  {
-      return $this->description;
-  }
+    /**
+     * @brief get field name of previewfile
+     */
+    public function getPreviewFileName()
+    {
+        return $this->previewFileName;
+    }
 
-  /**
-   * @brief get field name of mainfile
-   */
-  public function getMainFileName()
-  {
-      return $this->mainFileName;
-  }
+    /**
+     * get iteminfo array.
+     */
+    public function getIteminfo()
+    {
+        return $this->iteminfo;
+    }
 
-  /**
-   * @brief get field name of previewfile
-   */
-  public function getPreviewFileName()
-  {
-      return $this->previewFileName;
-  }
+    /**
+     * return names of all file type used in the item type.
+     *
+     * @return array array of file type name string
+     */
+    public function getFileTypeNames()
+    {
+        $ar = array();
+        if (isset($this->iteminfo['files']['main'])) {
+            $ar[] = $this->iteminfo['files']['main'];
+        }
+        if (isset($this->iteminfo['files']['preview'])) {
+            $ar[] = $this->iteminfo['files']['preview'];
+        }
 
-  /**
-   * get iteminfo array.
-   */
-  public function getIteminfo()
-  {
-      return $this->iteminfo;
-  }
+        return array_merge($ar, isset($this->iteminfo['files']['others']) ? $this->iteminfo['files']['others'] : array());
+    }
 
-  /**
-   * return names of all file type used in the item type.
-   *
-   * @return array array of file type name string
-   */
-  public function getFileTypeNames()
-  {
-      $ar = array();
-      if (isset($this->iteminfo['files']['main'])) {
-          $ar[] = $this->iteminfo['files']['main'];
-      }
-      if (isset($this->iteminfo['files']['preview'])) {
-          $ar[] = $this->iteminfo['files']['preview'];
-      }
+    /**
+     * return field has multiple value or not.
+     *
+     * @param string field name of orm
+     *
+     * @return bool true if the field can have multiple value
+     */
+    public function getMultiple($fieldname)
+    {
+        foreach ($this->iteminfo['orm'] as $i) {
+            if ($i['field'] == $fieldname) {
+                return isset($i['multiple']) ? $i['multiple'] : false;
+            }
+        }
 
-      return array_merge($ar, isset($this->iteminfo['files']['others']) ? $this->iteminfo['files']['others'] : array());
-  }
+        return false;
+    }
 
-  /**
-   * return field has multiple value or not.
-   *
-   * @param string field name of orm
-   *
-   * @return bool true if the field can have multiple value
-   */
-  public function getMultiple($fieldname)
-  {
-      foreach ($this->iteminfo['orm'] as $i) {
-          if ($i['field'] == $fieldname) {
-              return isset($i['multiple']) ? $i['multiple'] : false;
-          }
-      }
+    /**
+     * return that field is required or not.
+     *
+     * @param string field name of orm
+     *
+     * @return bool true if the field is required
+     */
+    public function getRequired($fieldname)
+    {
+        foreach ($this->iteminfo['orm'] as $i) {
+            if ($i['field'] == $fieldname) {
+                return isset($i['required']) ? $i['required'] : false;
+            }
+        }
 
-      return false;
-  }
-
-  /**
-   * return that field is required or not.
-   *
-   * @param string field name of orm
-   *
-   * @return bool true if the field is required
-   */
-  public function getRequired($fieldname)
-  {
-      foreach ($this->iteminfo['orm'] as $i) {
-          if ($i['field'] == $fieldname) {
-              return isset($i['required']) ? $i['required'] : false;
-          }
-      }
-
-      return false;
-  }
+        return false;
+    }
 }
 
 /**
@@ -201,43 +201,43 @@ class XooNIpsOrmItemTypeHandler extends XooNIpsTableObjectHandler
         $this->__initHandler('XooNIpsOrmItemType', 'xoonips_item_type', 'item_type_id', false);
     }
 
-  /**
-   * get item type objects sort by weight.
-   *
-   * @return array objects
-   */
-  public function &getObjectsSortByWeight()
-  {
-      // TODO: xoonips_item_type table should have itemtype sort order.
-    $table = $this->db->prefix($this->getTableName());
-      $criteria = new Criteria('name', addslashes('xoonips_index'), '!=', $table);
-      $criteria->setSort('weight');
-      $criteria->setOrder('ASC');
-      $join = new XooNIpsJoinCriteria('modules', 'mid', 'mid', 'INNER');
-      $fields = sprintf('item_type_id, %s.name, %s.mid, display_name, viewphp, weight', $table, $table);
-      $objs = &$this->getObjects($criteria, false, $fields, false, $join);
-      if (count($objs) != 0) {
-          usort($objs, array($this, '_order_weight_cmp'));
-      }
+    /**
+     * get item type objects sort by weight.
+     *
+     * @return array objects
+     */
+    public function &getObjectsSortByWeight()
+    {
+        // TODO: xoonips_item_type table should have itemtype sort order.
+        $table = $this->db->prefix($this->getTableName());
+        $criteria = new Criteria('name', addslashes('xoonips_index'), '!=', $table);
+        $criteria->setSort('weight');
+        $criteria->setOrder('ASC');
+        $join = new XooNIpsJoinCriteria('modules', 'mid', 'mid', 'INNER');
+        $fields = sprintf('item_type_id, %s.name, %s.mid, display_name, viewphp, weight', $table, $table);
+        $objs = &$this->getObjects($criteria, false, $fields, false, $join);
+        if (count($objs) != 0) {
+            usort($objs, array($this, '_order_weight_cmp'));
+        }
 
-      return $objs;
-  }
+        return $objs;
+    }
 
-  /**
-   * sort function for item type order.
-   *
-   * @param object &$a
-   * @param object &$b
-   *
-   * @return order
-   */
-  public function _order_weight_cmp(&$a, &$b)
-  {
-      if ($a->getExtraVar('weight') == $b->getExtraVar('weight')) {
-          // mid must be uniq
-      return($a->get('mid') < $b->get('mid')) ? -1 : 1;
-      }
+    /**
+     * sort function for item type order.
+     *
+     * @param object &$a
+     * @param object &$b
+     *
+     * @return order
+     */
+    public function _order_weight_cmp(&$a, &$b)
+    {
+        if ($a->getExtraVar('weight') == $b->getExtraVar('weight')) {
+            // mid must be uniq
+            return($a->get('mid') < $b->get('mid')) ? -1 : 1;
+        }
 
-      return($a->getExtraVar('weight') < $b->getExtraVar('weight')) ? -1 : 1;
-  }
+        return($a->getExtraVar('weight') < $b->getExtraVar('weight')) ? -1 : 1;
+    }
 }

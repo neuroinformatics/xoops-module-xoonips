@@ -30,8 +30,8 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnpbook/iteminfo.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnpbook/iteminfo.php';
 
 /**
  * @brief Handler object that create,insert,update,get,delete
@@ -104,22 +104,18 @@ class XNPBookCompoHandler extends XooNIpsItemInfoCompoHandler
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
-            $result['xnpbook_author']
-                = xoonips_get_multiple_field_template_vars($detail->getAuthors(),
-                                                          'xnpbook',
-                                                          'author');
-            $result['detail']
-                = array('editor' => $detail->getVar('editor', 's'),
-                         'publisher' => $detail->getVar('publisher', 's'),
-                         'isbn' => $detail->getVar('isbn', 's'),
-                         'url' => $detail->getVar('url', 's'),
-                         'attachment_dl_limit' => $detail->get('attachment_dl_limit'),
-                         'attachment_dl_notify' => $detail->get('attachment_dl_notify'), );
+            $result['xnpbook_author'] = xoonips_get_multiple_field_template_vars($detail->getAuthors(), 'xnpbook', 'author');
+            $result['detail'] = array(
+                'editor' => $detail->getVar('editor', 's'),
+                'publisher' => $detail->getVar('publisher', 's'),
+                'isbn' => $detail->getVar('isbn', 's'),
+                'url' => $detail->getVar('url', 's'),
+                'attachment_dl_limit' => $detail->get('attachment_dl_limit'),
+                'attachment_dl_notify' => $detail->get('attachment_dl_notify'),
+            );
             $book_pdf = $book->getVar('book_pdf');
             if ($book_pdf->get('item_id') == $item_id) {
-                $result['detail']['book_pdf']
-                    = $this->getAttachmentTemplateVar(
-                        $book->getVar('book_pdf'));
+                $result['detail']['book_pdf'] = $this->getAttachmentTemplateVar($book->getVar('book_pdf'));
             }
 
             return $result;

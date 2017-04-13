@@ -28,21 +28,21 @@
 
 //  advanced search form for register binder
 
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
 // disable to link index tree
 $xoonipsURL = '';
 
 $xoopsOption['template_main'] = 'xoonips_advanced_search_itemselect.html';
 
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
-include_once 'include/extra_param.inc.php';
+require_once 'include/extra_param.inc.php';
 $formdata = &xoonips_getutility('formdata');
 $textutil = &xoonips_getutility('text');
 $xoopsTpl->assign('extra_param', $textutil->html_special_chars(serialize(xoonips_extra_param_restore())));
 $xoopsTpl->assign('submit_url', $textutil->html_special_chars($formdata->getValue('post', 'submit_url', 's', false)));
 $xoopsTpl->assign('selected_original', $formdata->getValueArray('post', 'selected_original', 'i', false));
-include 'include/advanced_search.inc.php';
+require 'include/advanced_search.inc.php';
 
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';

@@ -26,9 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/logic.class.php';
-include_once dirname(__DIR__).'/base/transaction.class.php';
-include_once dirname(__DIR__).'/xoonipserror.class.php';
+require_once dirname(__DIR__).'/base/logic.class.php';
+require_once dirname(__DIR__).'/base/transaction.class.php';
+require_once dirname(__DIR__).'/xoonipserror.class.php';
 
 /**
  * base class of XooNIpsLogicTransfer*.
@@ -105,16 +105,11 @@ class XooNIpsLogicTransfer extends XooNIpsLogic
     public function move_item_to_other_private_index(&$error, $item_id, $index_id)
     {
         // remove from private index
-        $index_item_link_handler = &xoonips_getormhandler('xoonips',
-                                                           'index_item_link');
-        $index_item_links
-            = $index_item_link_handler->getByItemId($item_id,
-                                                     array(OL_PRIVATE));
+        $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
+        $index_item_links = $index_item_link_handler->getByItemId($item_id, array(OL_PRIVATE));
         foreach ($index_item_links as $index_item_link) {
-            if (false
-                 == $index_item_link_handler->delete($index_item_link)) {
-                $error->add(XNPERR_SERVER_ERROR,
-                            'cannot remove from private index');
+            if (false == $index_item_link_handler->delete($index_item_link)) {
+                $error->add(XNPERR_SERVER_ERROR, 'cannot remove from private index');
 
                 return false;
             }
@@ -143,11 +138,8 @@ class XooNIpsLogicTransfer extends XooNIpsLogic
      */
     public function _is_public_certified_item($item_id)
     {
-        $index_item_link_handler = &xoonips_getormhandler('xoonips',
-                                                           'index_item_link');
-        $index_item_links
-            = $index_item_link_handler->getByItemId($item_id,
-                                                     array(OL_PUBLIC));
+        $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
+        $index_item_links = $index_item_link_handler->getByItemId($item_id, array(OL_PUBLIC));
         foreach ($index_item_links as $index_item_link) {
             if ($index_item_link->get('certify_state') == CERTIFIED) {
                 return true;
@@ -168,15 +160,13 @@ class XooNIpsLogicTransfer extends XooNIpsLogic
      */
     public function update_item_status_if_public_certified(&$error, $item_id)
     {
-        $item_status_handler = &xoonips_getormhandler('xoonips',
-                                                       'item_status');
+        $item_status_handler = &xoonips_getormhandler('xoonips', 'item_status');
         if ($this->_is_public_certified_item($item_id)) {
             $item_status = $item_status_handler->get($item_id);
             if ($item_status) {
                 $item_status->set('modified_timestamp', time());
                 if (false == $item_status_handler->insert($item_status)) {
-                    $error->add(XNPERR_SERVER_ERROR,
-                                'cannot update item status');
+                    $error->add(XNPERR_SERVER_ERROR, 'cannot update item status');
 
                     return false;
                 }
@@ -196,8 +186,7 @@ class XooNIpsLogicTransfer extends XooNIpsLogic
      */
     public function remove_item_from_transfer_request(&$error, $item_id)
     {
-        $transfer_request_handler
-            = &xoonips_getormhandler('xoonips', 'transfer_request');
+        $transfer_request_handler = &xoonips_getormhandler('xoonips', 'transfer_request');
         $transfer_request = $transfer_request_handler->get($item_id);
         if ($transfer_request == false) {
             $error->add(XNPERR_SERVER_ERROR, 'cannot get transfer_request');
@@ -222,22 +211,19 @@ class XooNIpsLogicTransfer extends XooNIpsLogic
      *
      * @return bool true if succeeded
      */
-    public function remove_related_to_if_no_read_permission($item_id,
-                                                      $from_uid, $to_uid)
+    public function remove_related_to_if_no_read_permission($item_id, $from_uid, $to_uid)
     {
         $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
         $item_compo_handler = &xoonips_getormcompohandler('xoonips', 'item');
         $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
 
         // relation from $item_id to items of $from_uid
-        $related_tos = &$related_to_handler->getObjects(
-            new Criteria('parent_id', $item_id));
+        $related_tos = &$related_to_handler->getObjects(new Criteria('parent_id', $item_id));
         if (false === $related_tos) {
             return false;
         }
         foreach ($related_tos as $related_to) {
-            if (!$item_compo_handler->getPerm(
-                $related_to->get('item_id'), $to_uid, 'read')) {
+            if (!$item_compo_handler->getPerm($related_to->get('item_id'), $to_uid, 'read')) {
                 if (false == $related_to_handler->delete($related_to)) {
                     return false;
                 }
@@ -246,14 +232,12 @@ class XooNIpsLogicTransfer extends XooNIpsLogic
 
         // relation from items of $from_uid to $item_id
         if (!$item_compo_handler->getPerm($item_id, $from_uid, 'read')) {
-            $related_tos = &$related_to_handler->getObjects(
-                new Criteria('item_id', $item_id));
+            $related_tos = &$related_to_handler->getObjects(new Criteria('item_id', $item_id));
             if (false === $related_tos) {
                 return false;
             }
             foreach ($related_tos as $related_to) {
-                $item_basic = $item_basic_handler->get(
-                    $related_to->get('parent_id'));
+                $item_basic = $item_basic_handler->get($related_to->get('parent_id'));
                 if (false === $item_basic) {
                     return false;
                 }
@@ -272,9 +256,7 @@ class XooNIpsLogicTransfer extends XooNIpsLogic
     {
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $index = $index_handler->get($index_id);
-        if ($index == false ||
-            $index->get('open_level') != OL_PRIVATE ||
-            $index->get('uid') != $uid) {
+        if ($index == false || $index->get('open_level') != OL_PRIVATE || $index->get('uid') != $uid) {
             return false;
         }
 

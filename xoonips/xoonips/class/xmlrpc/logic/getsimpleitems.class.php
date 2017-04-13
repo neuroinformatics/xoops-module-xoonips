@@ -26,16 +26,11 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xoonipserror.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xoonipsresponse.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipserror.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonipsresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpctransform.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/logic/xmlrpclogic.class.php';
 
 /**
  * @brief Class that executes logic specified by XML-RPC updateFile request
@@ -45,7 +40,7 @@ class XooNIpsXmlRpcLogicGetSimpleItems extends XooNIpsXmlRpcLogic
     /**
      * load and execute xoonips logic.
      *
-     * @param[in] XooNIpsXmlRpcRequest $request
+     * @param[in]  XooNIpsXmlRpcRequest $request
      * @param[out] XooNIpsXmlRpcResponse $response
      *  result of logic(success/fault, response, error)
      */
@@ -84,8 +79,7 @@ class XooNIpsXmlRpcLogicGetSimpleItems extends XooNIpsXmlRpcLogic
         $unicode = &xoonips_getutility('unicode');
         $vars[1] = array();
         foreach ($params[1] as $key => $val) {
-            $vars[1][$key] = $unicode->decode_utf8(
-                $val, xoonips_get_server_charset(), 'h');
+            $vars[1][$key] = $unicode->decode_utf8($val, xoonips_get_server_charset(), 'h');
         }
         $vars[2] = $params[2];
 

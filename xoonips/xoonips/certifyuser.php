@@ -27,11 +27,11 @@
 // ------------------------------------------------------------------------- //
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
-include_once 'include/lib.php';
-include_once 'include/AL.php';
-include_once 'include/notification.inc.php';
-include 'class/base/gtickets.php';
+require 'include/common.inc.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
+require_once 'include/notification.inc.php';
+require 'class/base/gtickets.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 
@@ -39,7 +39,8 @@ xoonips_deny_guest_access('user.php');
 
 //User(Not Moderater) can't control(except XOOPS administrator).
 if (!$xoopsUser->isAdmin($xoopsModule->getVar('mid'))
-    && !xnp_is_moderator($xnpsid, $xoopsUser->getVar('uid'))) {
+    && !xnp_is_moderator($xnpsid, $xoopsUser->getVar('uid'))
+) {
     redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_MODERATOR_SHULD_BE_MODERATOR);
     exit();
 }
@@ -122,7 +123,7 @@ if ($op == 'certify') {
     $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, 'xoonips_certify_user_uncertfy');
     $xoopsTpl->assign('token_ticket', $token_ticket);
 
-    require XOOPS_ROOT_PATH.'/footer.php';
+    include XOOPS_ROOT_PATH.'/footer.php';
     exit(); //terminate rendering
 } elseif ($op == 'uncertify') {
     if (!isset($_POST['is_exec'])) {
@@ -140,8 +141,7 @@ if ($op == 'certify') {
     $user = array();
     $result_get_account = xnp_get_account($xnpsid, $certify_uid, $user);
     if ($result_get_account != RES_OK) {
-        redirect_header('certifyuser.php', 3, _MD_XOONIPS_ACCOUNT_CANNOT_ACQUIRE_USER_INFO."(in xnp_get_account result={$result_get_account})"
-        );
+        redirect_header('certifyuser.php', 3, _MD_XOONIPS_ACCOUNT_CANNOT_ACQUIRE_USER_INFO."(in xnp_get_account result={$result_get_account})");
         exit;
     }
 

@@ -37,398 +37,398 @@ if (!defined('XOOPS_ROOT_PATH')) {
 class XooNIpsUtilityDirectory extends XooNIpsUtility
 {
     /**
-   * flag for windows.
-   *
-   * @var bool
-   */
-  public $is_windows = false;
+     * flag for windows.
+     *
+     * @var bool
+     */
+    public $is_windows = false;
 
-  /**
-   * constractor.
-   */
-  public function XooNIpsUtilityDirectory()
-  {
-      $this->setSingleton();
-      $this->is_windows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
-  }
+    /**
+     * constractor.
+     */
+    public function XooNIpsUtilityDirectory()
+    {
+        $this->setSingleton();
+        $this->is_windows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
+    }
 
-  /**
-   * get temorary directory.
-   *
-   * @return string temorary directory
-   */
-  public function get_tempdir()
-  {
-      // try to use sys_get_temp_dir() function ( >= PHP 5.2.1 )
-    if (function_exists('sys_get_temp_dir')) {
-        $path = $this->realpath(sys_get_temp_dir());
-        if ($path !== false && $this->_check_dir_perm($path)) {
+    /**
+     * get temorary directory.
+     *
+     * @return string temorary directory
+     */
+    public function get_tempdir()
+    {
+        // try to use sys_get_temp_dir() function ( >= PHP 5.2.1 )
+        if (function_exists('sys_get_temp_dir')) {
+            $path = $this->realpath(sys_get_temp_dir());
+            if ($path !== false && $this->_check_dir_perm($path)) {
+                return $path;
+            }
+        }
+        // try to get temporary directory by environment variables
+        $envs = array(
+        'TMP',
+        'TMPDIR',
+        'TEMP',
+        );
+        foreach ($envs as $env) {
+            if (!empty($_ENV[$env])) {
+                $path = $this->realpath($_ENV[$env]);
+                if ($path !== false && $this->_check_dir_perm($path)) {
+                    return $path;
+                }
+            }
+        }
+        // try to use dirname of tempnam() function result
+        $tempfile = @tempnam(uniqid(mt_rand(), true), 'XooNIps');
+        if (file_exists($tempfile)) {
+            @unlink($tempfile);
+            $path = $this->realpath(dirname($tempfile));
+            if ($path !== false && $this->_check_dir_perm($path)) {
+                return $path;
+            }
+        }
+        // give up
+        $this->_fatal_error('failed to get temporary directory path', __LINE__);
+    }
+
+    /**
+     * get template string for mkdtemp() and mkstemp() method.
+     *
+     * @param string $prefix
+     *
+     * @return string created template string
+     */
+    public function get_template($prefix)
+    {
+        $template = sprintf('%s/%sXXXXXX', $this->get_tempdir(), $prefix);
+
+        return $template;
+    }
+
+    /**
+     * create a name for tempoaray file.
+     *
+     * @param string $dir    temporary directory
+     * @param string $prefix prefix name of temporary file
+     *
+     * @return string created temporary file name
+     */
+    public function tempnam($dir, $prefix)
+    {
+        if (empty($dir) || !$this->_check_dir_perm($dir)) {
+            $dir = $this->get_tempdir();
+        }
+        $template = sprintf('%s/%sXXXXXX', $dir, $prefix);
+        $fp = $this->_mktemp_body($template, true);
+        if ($fp === false) {
+            return false;
+        }
+        fclose($fp);
+
+        return $template;
+    }
+
+    /**
+     * create a unique tempoaray file.
+     *
+     * @param string &$template template of temporary directory
+     *
+     * @return resource created temporary file resource
+     */
+    public function mkstemp(&$template)
+    {
+        return $this->_mktemp_body($template, true);
+    }
+
+    /**
+     * create a unique tempoaray directory.
+     *
+     * @param string &$template template of temporary directory
+     *
+     * @return bool false if failure
+     */
+    public function mkdtemp(&$template)
+    {
+        return $this->_mktemp_body($template, false);
+    }
+
+    /**
+     * make directory recursive (like 'mkdir -p' command).
+     *
+     * @param string $path directory path
+     * @param int    $mode creation directory mode
+     *
+     * @return bool false if failure
+     */
+    public function mkdir($path, $mode)
+    {
+        // clear file status caches
+        clearstatcache();
+        // normalize directory name
+        $path = $this->_normalize_dirname($path);
+        // create parent directory if not exists
+        $mydirname = dirname($path);
+        if (!is_dir($mydirname)) {
+            if (!$this->mkdir($mydirname, $mode)) {
+                // failed to create parent directory
+                return false;
+            }
+        }
+        if (is_dir($path)) {
+            // already exists
+            return true;
+        }
+
+        return @mkdir($path, $mode);
+    }
+
+    /**
+     * remove directory recursive (like 'rm -rf' command).
+     *
+     * @param string $path directory path
+     *
+     * @return bool false if failure
+     */
+    public function rmdir($path)
+    {
+        // clear file status caches
+        clearstatcache();
+        // normalize directory name
+        $path = $this->_normalize_dirname($path);
+        if (!is_dir($path)) {
+            // not directory
+            return false;
+        }
+        if (is_link($path)) {
+            // unlink symblic link
+            return @unlink($path);
+        }
+        if ($dh = opendir($path)) {
+            while (($sf = readdir($dh)) !== false) {
+                if ($sf == '.' || $sf == '..') {
+                    continue;
+                }
+                $subpath = $path.'/'.$sf;
+                if (is_dir($subpath)) {
+                    // directory
+                    if (!$this->rmdir($subpath)) {
+                        // failed to delete sub directory
+                              return false;
+                    }
+                } else {
+                    // file
+                    if (@unlink($subpath) === false) {
+                        // failed to remove file
+                              return false;
+                    }
+                }
+            }
+            closedir($dh);
+        }
+
+        return @rmdir($path);
+    }
+
+    /**
+     * get real path.
+     *
+     * @return string real path
+     */
+    public function realpath($path)
+    {
+        $path = realpath($path);
+        if ($path === false) {
+            // failed to resolv real path
             return $path;
         }
+
+        return $this->_normalize_dirname($path);
     }
-    // try to get temporary directory by environment variables
-    $envs = array(
-      'TMP',
-      'TMPDIR',
-      'TEMP',
-    );
-      foreach ($envs as $env) {
-          if (!empty($_ENV[$env])) {
-              $path = $this->realpath($_ENV[$env]);
-              if ($path !== false && $this->_check_dir_perm($path)) {
-                  return $path;
-              }
-          }
-      }
-    // try to use dirname of tempnam() function result
-    $tempfile = @tempnam(uniqid(mt_rand(), true), 'XooNIps');
-      if (file_exists($tempfile)) {
-          @unlink($tempfile);
-          $path = $this->realpath(dirname($tempfile));
-          if ($path !== false && $this->_check_dir_perm($path)) {
-              return $path;
-          }
-      }
-    // give up
-    $this->_fatal_error('failed to get temporary directory path', __LINE__);
-  }
 
-  /**
-   * get template string for mkdtemp() and mkstemp() method.
-   *
-   * @param string $prefix
-   *
-   * @return string created template string
-   */
-  public function get_template($prefix)
-  {
-      $template = sprintf('%s/%sXXXXXX', $this->get_tempdir(), $prefix);
+    /**
+     * normalize directory path
+     *  - use '/' file separator for windows
+     *  - remove '/' from tail if given.
+     *
+     * @param string $path
+     *
+     * @return string normalized directory path
+     */
+    public function _normalize_dirname($path)
+    {
+        if ($this->is_windows) {
+            // use '/' for file separator for windows platform
+            $path = str_replace('\\', '/', $path);
+        }
+        // remove '/' from tail if given
+        if (substr($path, -1) == '/') {
+            $path = substr($path, 0, strlen($path) - 1);
+        }
 
-      return $template;
-  }
+        return $path;
+    }
 
-  /**
-   * create a name for tempoaray file.
-   *
-   * @param string $dir    temporary directory
-   * @param string $prefix prefix name of temporary file
-   *
-   * @return string created temporary file name
-   */
-  public function tempnam($dir, $prefix)
-  {
-      if (empty($dir) || !$this->_check_dir_perm($dir)) {
-          $dir = $this->get_tempdir();
-      }
-      $template = sprintf('%s/%sXXXXXX', $dir, $prefix);
-      $fp = $this->_mktemp_body($template, true);
-      if ($fp === false) {
-          return false;
-      }
-      fclose($fp);
+    /**
+     * tells whether the filename is writable.
+     *
+     * @param string $path
+     *
+     * @return bool false if writable
+     * @see:   http://www.php.net/manual/en/function.is-writable.php
+     */
+    public function _is_writable($path)
+    {
+        if (!$this->is_windows) {
+            // it works if not IIS
+            return is_writable($path);
+        }
+        //will work in despite of Windows ACLs bug
+        //NOTE: use a trailing slash for folders!!!
+        //see http://bugs.php.net/bug.php?id=27609
+        //see http://bugs.php.net/bug.php?id=30931
+        if ($path[strlen($path) - 1] == '/') {
+            // recursively return a temporary file path
+            return $this->_is_writable($path.uniqid(mt_rand()).'.tmp');
+        } elseif (is_dir($path)) {
+            return $this->_is_writable($path.'/'.uniqid(mt_rand()).'.tmp');
+        }
+        // check tmp file for read/write capabilities
+        $rm = file_exists($path);
+        $f = @fopen($path, 'a');
+        if ($f === false) {
+            return false;
+        }
+        fclose($f);
+        if (!$rm) {
+            unlink($path);
+        }
 
-      return $template;
-  }
+        return true;
+    }
 
-  /**
-   * create a unique tempoaray file.
-   *
-   * @param string &$template template of temporary directory
-   *
-   * @return resource created temporary file resource
-   */
-  public function mkstemp(&$template)
-  {
-      return $this->_mktemp_body($template, true);
-  }
+    /**
+     * check writable directory permission.
+     *
+     * @param string $path
+     *
+     * @return bool false if not temporary directory
+     */
+    public function _check_dir_perm($path)
+    {
+        // use real path
+        $path = $this->realpath($path);
+        if ($path === false) {
+            // path not found
+            return false;
+        }
+        if (!is_dir($path)) {
+            // not direcotry
+            return false;
+        }
+        if (!$this->_is_writable($path) || (!$this->is_windows && (!is_readable($path) || !is_executable($path)))) {
+            // not operatable permission
+            return false;
+        }
 
-  /**
-   * create a unique tempoaray directory.
-   *
-   * @param string &$template template of temporary directory
-   *
-   * @return bool false if failure
-   */
-  public function mkdtemp(&$template)
-  {
-      return $this->_mktemp_body($template, false);
-  }
+        return true;
+    }
 
-  /**
-   * make directory recursive (like 'mkdir -p' command).
-   *
-   * @param string $path directory path
-   * @param int    $mode creation directory mode
-   *
-   * @return bool false if failure
-   */
-  public function mkdir($path, $mode)
-  {
-      // clear file status caches
-    clearstatcache();
-    // normalize directory name
-    $path = $this->_normalize_dirname($path);
-    // create parent directory if not exists
-    $mydirname = dirname($path);
-      if (!is_dir($mydirname)) {
-          if (!$this->mkdir($mydirname, $mode)) {
-              // failed to create parent directory
+    /**
+     * create temporary file or direcotry.
+     *
+     * @param string &$path   path string, last 6 char must be 'XXXXXX'
+     * @param bool   $is_file true if create file, false if create directory
+     *
+     * @return mixed
+     *               - false: failure
+     *               - resource: created file resource
+     *               - true: success to create directory
+     */
+    public function _mktemp_body(&$path, $is_file)
+    {
+        // clear file status caches
+        clearstatcache();
+        // use absolete path
+        $mydirname = $this->realpath(dirname($path));
+        if ($mydirname === false || !$this->_check_dir_perm($mydirname)) {
+            // parent directory not found or invalid permission
+            return false;
+        }
+        $fpath = $mydirname.'/'.basename($path);
+        // get base name of path
+        if (!preg_match('/(.+)XXXXXX$/', $fpath, $matches)) {
+            // doesn't supply XXXXXX suffix
+            return false;
+        }
+        $prefix = $matches[1];
+
+        // try to create file or directory three times
+        for ($try = 0; $try < 3; ++$try) {
+            $issue = $this->_get_random_issue();
+            $fpath = $prefix.$issue;
+            if ($is_file) {
+                // file creation mode
+                if (!file_exists($fpath)) {
+                    // open file with O_EXCL|O_CREAT flag
+                      $fp = @fopen($fpath, 'xb');
+                    if ($fp !== false) {
+                        @chmod($fpath, 0600);
+                        $path = $fpath;
+
+                        return $fp;
+                    }
+                }
+            } else {
+                // directory creation mode
+                if (!is_dir($fpath)) {
+                    if ($this->mkdir($fpath, 0700)) {
+                        $path = $fpath;
+
+                        return true;
+                    }
+                }
+            }
+        }
+
         return false;
-          }
-      }
-      if (is_dir($path)) {
-          // already exists
-      return true;
-      }
-
-      return @mkdir($path, $mode);
-  }
-
-  /**
-   * remove directory recursive (like 'rm -rf' command).
-   *
-   * @param string $path directory path
-   *
-   * @return bool false if failure
-   */
-  public function rmdir($path)
-  {
-      // clear file status caches
-    clearstatcache();
-    // normalize directory name
-    $path = $this->_normalize_dirname($path);
-      if (!is_dir($path)) {
-          // not directory
-      return false;
-      }
-      if (is_link($path)) {
-          // unlink symblic link
-      return @unlink($path);
-      }
-      if ($dh = opendir($path)) {
-          while (($sf = readdir($dh)) !== false) {
-              if ($sf == '.' || $sf == '..') {
-                  continue;
-              }
-              $subpath = $path.'/'.$sf;
-              if (is_dir($subpath)) {
-                  // directory
-          if (!$this->rmdir($subpath)) {
-              // failed to delete sub directory
-            return false;
-          }
-              } else {
-                  // file
-          if (@unlink($subpath) === false) {
-              // failed to remove file
-            return false;
-          }
-              }
-          }
-          closedir($dh);
-      }
-
-      return @rmdir($path);
-  }
-
-  /**
-   * get real path.
-   *
-   * @return string real path
-   */
-  public function realpath($path)
-  {
-      $path = realpath($path);
-      if ($path === false) {
-          // failed to resolv real path
-      return $path;
-      }
-
-      return $this->_normalize_dirname($path);
-  }
-
-  /**
-   * normalize directory path
-   *  - use '/' file separator for windows
-   *  - remove '/' from tail if given.
-   *
-   * @param string $path
-   *
-   * @return string normalized directory path
-   */
-  public function _normalize_dirname($path)
-  {
-      if ($this->is_windows) {
-          // use '/' for file separator for windows platform
-      $path = str_replace('\\', '/', $path);
-      }
-    // remove '/' from tail if given
-    if (substr($path, -1) == '/') {
-        $path = substr($path, 0, strlen($path) - 1);
     }
 
-      return $path;
-  }
-
-  /**
-   * tells whether the filename is writable.
-   *
-   * @param string $path
-   *
-   * @return bool false if writable
-   * @see: http://www.php.net/manual/en/function.is-writable.php
-   */
-  public function _is_writable($path)
-  {
-      if (!$this->is_windows) {
-          // it works if not IIS
-      return is_writable($path);
-      }
-    //will work in despite of Windows ACLs bug
-    //NOTE: use a trailing slash for folders!!!
-    //see http://bugs.php.net/bug.php?id=27609
-    //see http://bugs.php.net/bug.php?id=30931
-    if ($path[strlen($path) - 1] == '/') {
-        // recursively return a temporary file path
-      return $this->_is_writable($path.uniqid(mt_rand()).'.tmp');
-    } elseif (is_dir($path)) {
-        return $this->_is_writable($path.'/'.uniqid(mt_rand()).'.tmp');
-    }
-    // check tmp file for read/write capabilities
-    $rm = file_exists($path);
-      $f = @fopen($path, 'a');
-      if ($f === false) {
-          return false;
-      }
-      fclose($f);
-      if (!$rm) {
-          unlink($path);
-      }
-
-      return true;
-  }
-
-  /**
-   * check writable directory permission.
-   *
-   * @param string $path
-   *
-   * @return bool false if not temporary directory
-   */
-  public function _check_dir_perm($path)
-  {
-      // use real path
-    $path = $this->realpath($path);
-      if ($path === false) {
-          // path not found
-      return false;
-      }
-      if (!is_dir($path)) {
-          // not direcotry
-      return false;
-      }
-      if (!$this->_is_writable($path) || (!$this->is_windows && (!is_readable($path) || !is_executable($path)))) {
-          // not operatable permission
-      return false;
-      }
-
-      return true;
-  }
-
-  /**
-   * create temporary file or direcotry.
-   *
-   * @param string &$path   path string, last 6 char must be 'XXXXXX'
-   * @param bool   $is_file true if create file, false if create directory
-   *
-   * @return mixed
-   *               - false: failure
-   *               - resource: created file resource
-   *               - true: success to create directory
-   */
-  public function _mktemp_body(&$path, $is_file)
-  {
-      // clear file status caches
-    clearstatcache();
-    // use absolete path
-    $mydirname = $this->realpath(dirname($path));
-      if ($mydirname === false || !$this->_check_dir_perm($mydirname)) {
-          // parent directory not found or invalid permission
-      return false;
-      }
-      $fpath = $mydirname.'/'.basename($path);
-    // get base name of path
-    if (!preg_match('/(.+)XXXXXX$/', $fpath, $matches)) {
-        // doesn't supply XXXXXX suffix
-      return false;
-    }
-      $prefix = $matches[1];
-
-    // try to create file or directory three times
-    for ($try = 0; $try < 3; ++$try) {
-        $issue = $this->_get_random_issue();
-        $fpath = $prefix.$issue;
-        if ($is_file) {
-            // file creation mode
-        if (!file_exists($fpath)) {
-            // open file with O_EXCL|O_CREAT flag
-          $fp = @fopen($fpath, 'xb');
-            if ($fp !== false) {
-                @chmod($fpath, 0600);
-                $path = $fpath;
-
-                return $fp;
-            }
+    /**
+     * get random issue of 6 chars.
+     *
+     * @return string random issue
+     */
+    public function _get_random_issue()
+    {
+        static $random_state = false;
+        // set random state
+        if ($random_state === false) {
+            $random_state = getmypid();
         }
-        } else {
-            // directory creation mode
-        if (!is_dir($fpath)) {
-            if ($this->mkdir($fpath, 0700)) {
-                $path = $fpath;
+        // generate random chars
+        $random_state = md5(uniqid(mt_rand().$random_state, true).session_id());
+        $random_chars = substr($random_state, 0, 6);
 
-                return true;
-            }
-        }
-        }
+        return $random_chars;
     }
 
-      return false;
-  }
-
-  /**
-   * get random issue of 6 chars.
-   *
-   * @return string random issue
-   */
-  public function _get_random_issue()
-  {
-      static $random_state = false;
-    // set random state
-    if ($random_state === false) {
-        $random_state = getmypid();
+    /**
+     * fatal error.
+     *
+     * @param string $msg  error message
+     * @param int    $line line number
+     */
+    public function _fatal_error($msg, $line)
+    {
+        if (XOONIPS_DEBUG_MODE) {
+            echo '<pre>';
+            print_r(debug_backtrace());
+            echo '</pre>';
+        }
+        die('fatal error : '.$msg.' in '.__FILE__.' at '.$line);
     }
-    // generate random chars
-    $random_state = md5(uniqid(mt_rand().$random_state, true).session_id());
-      $random_chars = substr($random_state, 0, 6);
-
-      return $random_chars;
-  }
-
-  /**
-   * fatal error.
-   *
-   * @param string $msg  error message
-   * @param int    $line line number
-   */
-  public function _fatal_error($msg, $line)
-  {
-      if (XOONIPS_DEBUG_MODE) {
-          echo '<pre>';
-          print_r(debug_backtrace());
-          echo '</pre>';
-      }
-      die('fatal error : '.$msg.' in '.__FILE__.' at '.$line);
-  }
 }
 
 /*

@@ -26,24 +26,24 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
-include 'include/AL.php';
-include 'include/lib.php';
+require 'include/AL.php';
+require 'include/lib.php';
 
 $xoopsOption['template_main'] = 'xoonips_advanced_search_itemselect_transfer.html';
 
 // disable to link index tree
 $xoonipsURL = '';
 
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
-include_once 'include/extra_param.inc.php';
+require_once 'include/extra_param.inc.php';
 $formdata = &xoonips_getutility('formdata');
 $textutil = &xoonips_getutility('text');
 $xoopsTpl->assign('extra_param', $textutil->html_special_chars(serialize(xoonips_extra_param_restore())));
 $xoopsTpl->assign('submit_url', $formdata->getValue('post', 'submit_url', 's', false));
 $xoopsTpl->assign('selected_original', $formdata->getValueArray('post', 'selected_original', 'i', false));
-include 'include/advanced_search.inc.php';
+require 'include/advanced_search.inc.php';
 
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';

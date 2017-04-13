@@ -58,45 +58,45 @@ class XooNIpsOrmCvitaesHandler extends XooNIpsTableObjectHandler
         $this->__initHandler('XooNIpsOrmCvitaes', 'xoonips_cvitaes', 'cvitae_id');
     }
 
-  /**
-   * insert/update/replace object.
-   *
-   * @param object $obj
-   * @param bool   $force force operation
-   *
-   * @return bool FALSE if failed
-   */
-  public function insert(&$obj, $force = false)
-  {
-      if ($obj->isNew() && !$obj->doReplace()) {
-          // set cvitae_order
-      $uid = $obj->get('uid');
-          $criteria = new Criteria('uid', $uid);
-          $tmp = &$this->getObjects($criteria, false, 'MAX(`cvitae_order`) AS `max`');
-          if (is_object($tmp)) {
-              $max = $tmp->getExtraVar('max');
-          } else {
-              $max = 0;
-          }
-          $obj->set('cvitae_order', $max + 1);
-      }
+    /**
+     * insert/update/replace object.
+     *
+     * @param object $obj
+     * @param bool   $force force operation
+     *
+     * @return bool FALSE if failed
+     */
+    public function insert(&$obj, $force = false)
+    {
+        if ($obj->isNew() && !$obj->doReplace()) {
+            // set cvitae_order
+            $uid = $obj->get('uid');
+            $criteria = new Criteria('uid', $uid);
+            $tmp = &$this->getObjects($criteria, false, 'MAX(`cvitae_order`) AS `max`');
+            if (is_object($tmp)) {
+                $max = $tmp->getExtraVar('max');
+            } else {
+                $max = 0;
+            }
+            $obj->set('cvitae_order', $max + 1);
+        }
 
-      return parent::insert($obj, $force);
-  }
+        return parent::insert($obj, $force);
+    }
 
-  /**
-   * get curriculum vitae list.
-   *
-   * @param int $uid user id
-   *
-   * @return array object instance array
-   */
-  public function &getCVs($uid)
-  {
-      $criteria = new Criteria('uid', $uid);
-      $criteria->setSort('cvitae_order');
-      $criteria->setOrder('ASC');
+    /**
+     * get curriculum vitae list.
+     *
+     * @param int $uid user id
+     *
+     * @return array object instance array
+     */
+    public function &getCVs($uid)
+    {
+        $criteria = new Criteria('uid', $uid);
+        $criteria->setSort('cvitae_order');
+        $criteria->setOrder('ASC');
 
-      return $this->getObjects($criteria);
-  }
+        return $this->getObjects($criteria);
+    }
 }

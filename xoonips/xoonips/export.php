@@ -57,11 +57,11 @@
 //   Undefine .... No
 session_cache_limiter('none'); // Escape IE's Bug 1 -> http://jp2.php.net/header  Harry 10-Dec-2004 03:26
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
-include_once 'include/lib.php';
-include_once 'include/AL.php';
-include_once 'include/imexport.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
+require_once 'include/imexport.php';
 
 xoonips_deny_guest_access();
 
@@ -289,7 +289,8 @@ EOT;
             $item_basic = array();
             $res = xnp_get_item($_SESSION['XNPSID'], $i, $item_basic); //TODO TO FIX THAT XNP_GET_ITEM CAN'T GET ITEM
             if ($res == RES_OK
-                && array_key_exists($item_basic['item_type_id'], $itemtypes)) {
+                && array_key_exists($item_basic['item_type_id'], $itemtypes)
+            ) {
                 $func_license_required = $itemtypes[$item_basic['item_type_id']]['name'].'GetLicenseRequired';
                 $func_license = $itemtypes[$item_basic['item_type_id']]['name'].'GetLicenseStatement';
                 $func_html = $itemtypes[$item_basic['item_type_id']]['name'].'GetListBlock';

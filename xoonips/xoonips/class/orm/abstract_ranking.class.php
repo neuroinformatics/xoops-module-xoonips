@@ -35,64 +35,64 @@ if (!defined('XOOPS_ROOT_PATH')) {
 class XooNIpsOrmAbstractRankingHandler extends XooNIpsTableObjectHandler
 {
     /**
-   * object column names.
-   *
-   * @var array
-   */
-  public $columns = array();
+     * object column names.
+     *
+     * @var array
+     */
+    public $columns = array();
 
-  /**
-   * flag of sum table handler.
-   *
-   * @var bool
-   */
-  public $is_sum_table = false;
+    /**
+     * flag of sum table handler.
+     *
+     * @var bool
+     */
+    public $is_sum_table = false;
 
-  /**
-   * get object column names.
-   *
-   * @param array $columns
-   */
-  public function get_columns()
-  {
-      return $this->columns;
-  }
+    /**
+     * get object column names.
+     *
+     * @param array $columns
+     */
+    public function get_columns()
+    {
+        return $this->columns;
+    }
 
-  /**
-   * set object column names.
-   *
-   * @param array $columns
-   */
-  public function _set_columns($columns)
-  {
-      $this->columns = $columns;
-  }
+    /**
+     * set object column names.
+     *
+     * @param array $columns
+     */
+    public function _set_columns($columns)
+    {
+        $this->columns = $columns;
+    }
 
-  /**
-   * set sum table flag.
-   */
-  public function _set_sum_table()
-  {
-      $this->is_sum_table = true;
-  }
+    /**
+     * set sum table flag.
+     */
+    public function _set_sum_table()
+    {
+        $this->is_sum_table = true;
+    }
 
-  /**
-   * copy ranking data from ranking_sum_* table for rebuild rankings.
-   *
-   * @return bool FALSE if failed
-   */
-  public function copy_from_sum_table()
-  {
-      if ($this->is_sum_table) {
-          die('invalid operation found in '.__FILE__.' at '.__LINE__);
-      }
-      $columns = implode(', ', $this->columns);
-      $name = $this->__table_name;
-      $table = $this->db->prefix($name);
-      $sum_name = str_replace('ranking_', 'ranking_sum_', $name);
-      $sum_table = $this->db->prefix($sum_name);
-      $sql = 'INSERT INTO '.$table.' ( '.$columns.' ) SELECT '.$columns.' FROM '.$sum_table;
+    /**
+     * copy ranking data from ranking_sum_* table for rebuild rankings.
+     *
+     * @return bool FALSE if failed
+     */
+    public function copy_from_sum_table()
+    {
+        if ($this->is_sum_table) {
+            die('invalid operation found in '.__FILE__.' at '.__LINE__);
+        }
+        $columns = implode(', ', $this->columns);
+        $name = $this->__table_name;
+        $table = $this->db->prefix($name);
+        $sum_name = str_replace('ranking_', 'ranking_sum_', $name);
+        $sum_table = $this->db->prefix($sum_name);
+        $sql = 'INSERT INTO '.$table.' ( '.$columns.' ) SELECT '.$columns.' FROM '.$sum_table;
 
-      return $this->_query($sql, true);
-  }
+        return $this->_query($sql, true);
+    }
 }

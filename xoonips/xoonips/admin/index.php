@@ -25,10 +25,10 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-include '../../../include/cp_header.php';
+require '../../../include/cp_header.php';
 
 // load common file.
-include 'actions/common.inc.php';
+require 'actions/common.inc.php';
 
 // page definition
 $pages = array();
@@ -38,4 +38,4 @@ $pages['main'] = array();
 xoonips_admin_initialize(__FILE__, 'index', $pages);
 
 // call action file
-include $xoonips_admin['myaction_path'];
+require $xoonips_admin['myaction_path'];

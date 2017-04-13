@@ -34,27 +34,27 @@ function xoops_module_install_xnpurl($xoopsMod)
 {
     global $xoopsDB;
 
-  // register itemtype
-  $table = $xoopsDB->prefix('xoonips_item_type');
+    // register itemtype
+    $table = $xoopsDB->prefix('xoonips_item_type');
     $mid = $xoopsMod->getVar('mid');
     $sql = "INSERT INTO $table ( name, display_name, mid, viewphp ) VALUES ( 'xnpurl', 'Url', $mid, 'xnpurl/include/view.php' )";
     if ($xoopsDB->query($sql) == false) {
         // cannot register itemtype
-    return false;
+        return false;
     }
 
-  // register filetype
-  $table = $xoopsDB->prefix('xoonips_file_type');
+    // register filetype
+    $table = $xoopsDB->prefix('xoonips_file_type');
     $mid = $xoopsMod->getVar('mid');
     $sql = "INSERT INTO $table ( name, display_name, mid ) VALUES ( 'url_banner_file', 'Banner', $mid )";
     if ($xoopsDB->query($sql) == false) {
         // cannot register itemtype
-    return false;
+        return false;
     }
 
-  // Delete 'Module Access Rights' from all groups
-  // This allows to remove redundant module name in Main Menu
-  $member_handler = &xoops_gethandler('member');
+    // Delete 'Module Access Rights' from all groups
+    // This allows to remove redundant module name in Main Menu
+    $member_handler = &xoops_gethandler('member');
     $gperm_handler = &xoops_gethandler('groupperm');
     $groups = &$member_handler->getGroupList();
     foreach ($groups as $groupid2 => $groupname) {
@@ -71,6 +71,6 @@ function xoops_module_install_xnpurl($xoopsMod)
         }
     }
 
-  // $item_type_id = $xoopsDB->getInsertId();
-  return true;
+    // $item_type_id = $xoopsDB->getInsertId();
+    return true;
 }

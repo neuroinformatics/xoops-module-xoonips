@@ -66,19 +66,19 @@ class XooNIpsOrmTitleHandler extends XooNIpsTableObjectHandler
         $this->__initHandler('XooNIpsOrmTitle', 'xoonips_item_title', 'seq_id');
     }
 
-  /**
-   * get titles.
-   *
-   * @param int $item_id
-   *
-   * @return array object array
-   */
-  public function &getTitles($item_id)
-  {
-      $criteria = new Criteria('item_id', $item_id);
-      $criteria->setSort('title_id');
-      $criteria->setOrder('ASC');
+    /**
+     * get titles.
+     *
+     * @param int $item_id
+     *
+     * @return array object array
+     */
+    public function &getTitles($item_id)
+    {
+        $criteria = new Criteria('item_id', $item_id);
+        $criteria->setSort('title_id');
+        $criteria->setOrder('ASC');
 
-      return $this->getObjects($criteria);
-  }
+        return $this->getObjects($criteria);
+    }
 }

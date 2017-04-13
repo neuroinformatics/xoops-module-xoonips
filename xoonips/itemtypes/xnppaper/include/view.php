@@ -163,20 +163,20 @@ function xnppaperGetMetaInformation($item_id)
 function xnppaperGetListBlock($item_basic)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
 
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $xnppaper_handler = &xoonips_getormcompohandler('xnppaper', 'item');
     $tpl->assign('xoonips_item', $xnppaper_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_LIST, $item_basic['item_id'], $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnppaper_list_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnppaper_list_block.html');
 }
 
 function xnppaperGetPrinterFriendlyListBlock($item_basic)
@@ -187,7 +187,7 @@ function xnppaperGetPrinterFriendlyListBlock($item_basic)
 function xnppaperGetDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
     global $xoopsTpl;
     $mhandler = &xoops_gethandler('module');
@@ -196,31 +196,31 @@ function xnppaperGetDetailBlock($item_id)
     $module = $mhandler->getByDirname('xnppaper');
     $assoc = $chandler->getConfigsByCat(false, $module->mid());
 
-  // set to template
-  $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // set to template
+    $tpl = new XoopsTpl();
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationDetailBlock($item_id));
     $tpl->assign('index', xnpGetIndexDetailBlock($item_id));
     $tpl->assign('paper_pdf_reprint', xnpGetAttachmentDetailBlock($item_id, 'paper_pdf_reprint'));
 
-  // Make sure that this user access to item_id is permitted or not
-  $tpl->assign('show_pdf', ($assoc['pdf_access_rights'] <= xnpGetAccessRights($item_id)));
+    // Make sure that this user access to item_id is permitted or not
+    $tpl->assign('show_pdf', ($assoc['pdf_access_rights'] <= xnpGetAccessRights($item_id)));
     $tpl->assign('show_abstract', ($assoc['abstract_access_rights'] <= xnpGetAccessRights($item_id)));
 
     $xnppaper_handler = &xoonips_getormcompohandler('xnppaper', 'item');
     $tpl->assign('xoonips_item', $xnppaper_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnppaper_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnppaper_detail_block.html');
 }
 
 function xnppaperGetPrinterFriendlyDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
     global $xoopsTpl;
     $mhandler = &xoops_gethandler('module');
@@ -229,25 +229,25 @@ function xnppaperGetPrinterFriendlyDetailBlock($item_id)
     $module = $mhandler->getByDirname('xnppaper');
     $assoc = $chandler->getConfigsByCat(false, $module->mid());
 
-  // set to template
-  $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // set to template
+    $tpl = new XoopsTpl();
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationPrinterFriendlyBlock($item_id));
     $tpl->assign('index', xnpGetIndexPrinterFriendlyBlock($item_id));
     $tpl->assign('paper_pdf_reprint', xnpGetAttachmentPrinterFriendlyBlock($item_id, 'paper_pdf_reprint'));
 
-  // Make sure that this user access to item_id is permitted or not
-  $tpl->assign('show_pdf', ($assoc['pdf_access_rights'] <= xnpGetAccessRights($item_id)));
+    // Make sure that this user access to item_id is permitted or not
+    $tpl->assign('show_pdf', ($assoc['pdf_access_rights'] <= xnpGetAccessRights($item_id)));
     $tpl->assign('show_abstract', ($assoc['abstract_access_rights'] <= xnpGetAccessRights($item_id)));
 
     $xnppaper_handler = &xoonips_getormcompohandler('xnppaper', 'item');
     $tpl->assign('xoonips_item', $xnppaper_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnppaper_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnppaper_detail_block.html');
 }
 
 function xnppaperGetRegisterBlock()
@@ -264,28 +264,28 @@ function xnppaperGetRegisterBlock()
         $detail = array();
     }
 
-  // retrieve blocks of BasicInformation / index block
-  $basic = xnpGetBasicInformationRegisterBlock();
+    // retrieve blocks of BasicInformation / index block
+    $basic = xnpGetBasicInformationRegisterBlock();
     $index = xnpGetIndexRegisterBlock();
     $paper_pdf_reprint = xnpGetAttachmentRegisterBlock('paper_pdf_reprint');
 
-  // assingn to template
-  global $xoopsTpl;
+    // assingn to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->assign($xoopsTpl->get_template_vars());
-  // variables assigned to xoopsTpl are copied to $tpl
-  $tpl->assign('basic', $basic);
+    // variables assigned to xoopsTpl are copied to $tpl
+    $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
     $tpl->assign('paper_pdf_reprint', $paper_pdf_reprint);
     $tpl->assign('detail', $detail);
     $tpl->assign('xnppaper_author', xoonips_get_multiple_field_template_vars(xoonips_get_orm_from_post('xnppaper', 'author'), 'xnppaper', 'author'));
 
-  // for pubmed fillin
-  $tpl->assign('is_register', true);
+    // for pubmed fillin
+    $tpl->assign('is_register', true);
     $tpl->assign('myurl', XOOPS_URL.'/modules/xoonips/edit.php');
 
-  // return HTML
-  return $tpl->fetch('db:xnppaper_register_block.html');
+    // return HTML
+    return $tpl->fetch('db:xnppaper_register_block.html');
 }
 
 function xnppaperGetEditBlock($item_id)
@@ -294,13 +294,13 @@ function xnppaperGetEditBlock($item_id)
     $formdata = &xoonips_getutility('formdata');
     $textutil = &xoonips_getutility('text');
 
-  // retrieve blocks of BasicInformation / index
-  $basic = xnpGetBasicInformationEditBlock($item_id);
+    // retrieve blocks of BasicInformation / index
+    $basic = xnpGetBasicInformationEditBlock($item_id);
     $index = xnpGetIndexEditBlock($item_id);
     $paper_pdf_reprint = xnpGetAttachmentEditBlock($item_id, 'paper_pdf_reprint');
 
-  // retrieve DetailInformation
-  $title = $formdata->getValue('post', 'title', 's', false);
+    // retrieve DetailInformation
+    $title = $formdata->getValue('post', 'title', 's', false);
     if (isset($title)) {
         $detail = _xnppaper_get_form_request();
     } elseif (!empty($item_id)) {
@@ -314,12 +314,12 @@ function xnppaperGetEditBlock($item_id)
         $detail[$key] = $textutil->html_special_chars($detail[$key]);
     }
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->assign($xoopsTpl->get_template_vars());
-  // variables assigned to xoopsTpl are copied to $tpl
-  $tpl->assign('basic', $basic);
+    // variables assigned to xoopsTpl are copied to $tpl
+    $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
     $tpl->assign('paper_pdf_reprint', $paper_pdf_reprint);
     $tpl->assign('detail', $detail);
@@ -332,12 +332,12 @@ function xnppaperGetEditBlock($item_id)
         $tpl->assign('xnppaper_author', xoonips_get_multiple_field_template_vars(xoonips_get_orm_from_post('xnppaper', 'author'), 'xnppaper', 'author'));
     }
 
-  // for pubmed fillin
-  $tpl->assign('is_register', false);
+    // for pubmed fillin
+    $tpl->assign('is_register', false);
     $tpl->assign('myurl', XOOPS_URL.'/modules/xoonips/edit.php');
 
-  // return HTML
-  return $tpl->fetch('db:xnppaper_register_block.html');
+    // return HTML
+    return $tpl->fetch('db:xnppaper_register_block.html');
 }
 
 function xnppaperGetConfirmBlock($item_id)
@@ -347,55 +347,55 @@ function xnppaperGetConfirmBlock($item_id)
     $author_handler = &xoonips_getormhandler('xnppaper', 'author');
     $author_objs = &$formdata->getObjectArray('post', $author_handler->getTableName(), $author_handler, false);
 
-  // retrieve blocks of BasicInformation / index
-  $basic = xnpGetBasicInformationConfirmBlock($item_id);
+    // retrieve blocks of BasicInformation / index
+    $basic = xnpGetBasicInformationConfirmBlock($item_id);
     $index = xnpGetIndexConfirmBlock($item_id);
     $paper_pdf_reprint = xnpGetAttachmentConfirmBlock($item_id, 'paper_pdf_reprint');
 
-  // retrieve DetailInformation
-  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-      $detail = array(
-      'journal' => array(
+    // retrieve DetailInformation
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $detail = array(
+        'journal' => array(
         'value' => $textutil->html_special_chars($formdata->getValue('post', 'journal', 's', false)),
-      ),
-      'volume' => array(
+        ),
+        'volume' => array(
         'value' => $formdata->getValue('post', 'volume', 'i', false),
-      ),
-      'number' => array(
+        ),
+        'number' => array(
         'value' => $formdata->getValue('post', 'number', 'i', false),
-      ),
-      'page' => array(
+        ),
+        'page' => array(
         'value' => $textutil->html_special_chars($formdata->getValue('post', 'page', 's', false)),
-      ),
-      'abstract' => array(
+        ),
+        'abstract' => array(
         'value' => $textutil->html_special_chars($formdata->getValue('post', 'abstract', 's', false)),
-      ),
-      'pubmed_id' => array(
+        ),
+        'pubmed_id' => array(
         'value' => $textutil->html_special_chars($formdata->getValue('post', 'pubmed_id', 's', false)),
-      ),
-    );
-  } else {
-      $detail = array();
-  }
-  // trim strings
-  xnpConfirmHtml($detail, 'xnppaper_item_detail', array_keys($detail), _CHARSET);
+        ),
+        );
+    } else {
+        $detail = array();
+    }
+    // trim strings
+    xnpConfirmHtml($detail, 'xnppaper_item_detail', array_keys($detail), _CHARSET);
     if (xnpHasWithout($basic) || xnpHasWithout($paper_pdf_reprint) || xnpHasWithout($detail) || xoonips_is_multiple_field_too_long($author_objs, 'xnppaper', 'author')) {
         global $system_message;
         $system_message = $system_message."\n<br /><font color='#ff0000'>"._MD_XOONIPS_ITEM_WARNING_FIELD_TRIM.'</font><br />';
     }
-  // TODO: formdata integration
-  if ($detail['volume']['value'] == 0) {
-      $detail['volume']['value'] = '';
-  }
+    // TODO: formdata integration
+    if ($detail['volume']['value'] == 0) {
+        $detail['volume']['value'] = '';
+    }
     if ($detail['number']['value'] == 0) {
         $detail['number']['value'] = '';
     }
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
@@ -403,11 +403,12 @@ function xnppaperGetConfirmBlock($item_id)
     $tpl->assign('detail', $detail);
     $tpl->assign('xnppaper_author', xoonips_get_multiple_field_template_vars($author_objs, 'xnppaper', 'author'));
 
-  // return HTML
-  return $tpl->fetch('db:xnppaper_confirm_block.html');
+    // return HTML
+    return $tpl->fetch('db:xnppaper_confirm_block.html');
 }
 
-/** make sure that enterd detail information is correctly or not.
+/**
+ * make sure that enterd detail information is correctly or not.
  * called from register confirmation and edit confirmation.
  */
 function xnppaperCheckRegisterParameters(&$message)
@@ -435,7 +436,8 @@ function xnppaperCheckRegisterParameters(&$message)
     return false;
 }
 
-/** make sure that enterd detail information is correctly or not.
+/**
+ * make sure that enterd detail information is correctly or not.
  */
 function xnppaperCheckEditParameters(&$message)
 {
@@ -448,8 +450,8 @@ function xnppaperInsertItem(&$item_id)
     $formdata = &xoonips_getutility('formdata');
     $xnpsid = $_SESSION['XNPSID'];
 
-  // register BasicInformation, Index, Attachment
-  $item_id = 0;
+    // register BasicInformation, Index, Attachment
+    $item_id = 0;
     $result = xnpInsertBasicInformation($item_id);
     if ($result) {
         $result = xnpUpdateIndex($item_id);
@@ -466,8 +468,8 @@ function xnppaperInsertItem(&$item_id)
         return false;
     }
 
-  // limit length
-  $journal = $formdata->getValue('post', 'journal', 's', false);
+    // limit length
+    $journal = $formdata->getValue('post', 'journal', 's', false);
     $volume = $formdata->getValue('post', 'volume', 's', false);
     $number = $formdata->getValue('post', 'number', 's', false);
     $page = $formdata->getValue('post', 'page', 's', false);
@@ -479,20 +481,20 @@ function xnppaperInsertItem(&$item_id)
     'page' => $page,
     'abstract' => $abstract,
     'pubmed_id' => $pubmed_id,
-  );
+    );
     xnpTrimColumn($ar, 'xnppaper_item_detail', array_keys($ar), _CHARSET);
 
     $keys = implode(',', array('journal', 'volume', 'number', 'page', 'abstract', 'pubmed_id'));
     $vals = implode(',', array('\''.addslashes($ar['journal']).'\'', strlen($volume) == 0 ? 'null' : (int) $volume, strlen($number) == 0 ? 'null' : (int) $number, strlen($page) == 0 ? 'null' : '\''.addslashes($ar['page']).'\'', strlen($abstract) == 0 ? 'null' : '\''.addslashes($ar['abstract']).'\'', strlen($pubmed_id) == 0 ? 'null' : '\''.addslashes($ar['pubmed_id']).'\''));
 
-  // register detail information
-  $sql = 'insert into '.$xoopsDB->prefix('xnppaper_item_detail')." ( paper_id, $keys ) values ( $item_id, $vals ) ";
+    // register detail information
+    $sql = 'insert into '.$xoopsDB->prefix('xnppaper_item_detail')." ( paper_id, $keys ) values ( $item_id, $vals ) ";
     $result = $xoopsDB->queryF($sql);
     if ($result == false) {
         return false;
     }
-  // insert author
-  $author_handler = &xoonips_getormhandler('xnppaper', 'author');
+    // insert author
+    $author_handler = &xoonips_getormhandler('xnppaper', 'author');
     $author_objs = &$formdata->getObjectArray('post', $author_handler->getTableName(), $author_handler, false);
     if (!$author_handler->updateAllObjectsByForeignKey('paper_id', $item_id, $author_objs)) {
         return false;
@@ -508,8 +510,8 @@ function xnppaperUpdateItem($item_id)
 
     $xnpsid = $_SESSION['XNPSID'];
 
-  // modify BasicInformation, Index, Attachment
-  $result = xnpUpdateBasicInformation($item_id);
+    // modify BasicInformation, Index, Attachment
+    $result = xnpUpdateBasicInformation($item_id);
     if ($result) {
         $result = xnpUpdateIndex($item_id);
         if ($result) {
@@ -533,8 +535,8 @@ function xnppaperUpdateItem($item_id)
         return false;
     }
 
-  // trim strings
-  $journal = $formdata->getValue('post', 'journal', 's', false);
+    // trim strings
+    $journal = $formdata->getValue('post', 'journal', 's', false);
     $volume = $formdata->getValue('post', 'volume', 's', false);
     $number = $formdata->getValue('post', 'number', 's', false);
     $page = $formdata->getValue('post', 'page', 's', false);
@@ -545,18 +547,18 @@ function xnppaperUpdateItem($item_id)
     'page' => $page,
     'abstract' => $abstract,
     'pubmed_id' => $pubmed_id,
-  );
+    );
     xnpTrimColumn($ar, 'xnppaper_item_detail', array_keys($ar), _CHARSET);
 
-  // register detail information
-  $sql = implode(',', array('journal'.'=\''.addslashes($ar['journal']).'\'', 'volume'.'='.(strlen($volume) == 0 ? 'null' : (int) $volume), 'number'.'='.(strlen($number) == 0 ? 'null' : (int) $number), 'page'.'='.(strlen($page) == 0 ? 'null' : '\''.addslashes($ar['page']).'\''), 'abstract'.'='.(strlen($abstract) == 0 ? 'null' : '\''.addslashes($ar['abstract']).'\''), 'pubmed_id'.'='.(strlen($pubmed_id) == 0 ? 'null' : '\''.addslashes($ar['pubmed_id']).'\'')));
+    // register detail information
+    $sql = implode(',', array('journal'.'=\''.addslashes($ar['journal']).'\'', 'volume'.'='.(strlen($volume) == 0 ? 'null' : (int) $volume), 'number'.'='.(strlen($number) == 0 ? 'null' : (int) $number), 'page'.'='.(strlen($page) == 0 ? 'null' : '\''.addslashes($ar['page']).'\''), 'abstract'.'='.(strlen($abstract) == 0 ? 'null' : '\''.addslashes($ar['abstract']).'\''), 'pubmed_id'.'='.(strlen($pubmed_id) == 0 ? 'null' : '\''.addslashes($ar['pubmed_id']).'\'')));
     $result = $xoopsDB->queryF('update '.$xoopsDB->prefix('xnppaper_item_detail')." set $sql where paper_id = $item_id ");
     if ($result == false) {
         return false;
     }
 
-  // insert/update author
-  $author_handler = &xoonips_getormhandler('xnppaper', 'author');
+    // insert/update author
+    $author_handler = &xoonips_getormhandler('xnppaper', 'author');
     $author_objs = &$formdata->getObjectArray('post', $author_handler->getTableName(), $author_handler, false);
     if (!$author_handler->updateAllObjectsByForeignKey('paper_id', $item_id, $author_objs)) {
         return false;
@@ -636,7 +638,7 @@ function xnppaperGetAdvancedSearchQuery(&$where, &$join)
 function xnppaperGetAdvancedSearchBlock(&$search_var)
 {
     // retrieve blocs of BasicInformation / IndexKeywords
-  $basic = xnpGetBasicInformationAdvancedSearchBlock('xnppaper', $search_var);
+    $basic = xnpGetBasicInformationAdvancedSearchBlock('xnppaper', $search_var);
     $search_var[] = 'xnppaper_author';
     $search_var[] = 'xnppaper_journal';
     $search_var[] = 'xnppaper_volume';
@@ -645,18 +647,18 @@ function xnppaperGetAdvancedSearchBlock(&$search_var)
     $search_var[] = 'xnppaper_pubmed_id';
     $search_var[] = 'xnppaper_paper_pdf_reprint';
 
-  // assign to template
-  global $xoopsTpl;
+    // assign to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // variables assigned to xoopsTpl are copied to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // variables assigned to xoopsTpl are copied to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('module_name', 'xnppaper');
     $tpl->assign('module_display_name', xnpGetItemTypeDisplayNameByDirname(basename(dirname(__DIR__)), 's'));
 
-  // return HTML
-  return $tpl->fetch('db:xnppaper_search_block.html');
+    // return HTML
+    return $tpl->fetch('db:xnppaper_search_block.html');
 }
 
 function xnppaperGetDetailInformationTotalSize($iids)
@@ -681,9 +683,9 @@ function xnppaperGetDetailInformationTotalSize($iids)
 function xnppaperExportItem($export_path, $fhdl, $item_id, $attachment)
 {
     // get DetailInformation
-  if (!$fhdl) {
-      return false;
-  }
+    if (!$fhdl) {
+        return false;
+    }
 
     $handler = &xoonips_getormhandler('xnppaper', 'item_detail');
     $detail = &$handler->get($item_id);
@@ -734,10 +736,10 @@ function xnppaperGetModifiedFields($item_id)
             }
         }
 
-    // is modified pdf files?
-    if (xnpIsAttachmentModified('paper_pdf_reprint', $item_id)) {
-        array_push($ret, _MD_XNPPAPER_PDF_REPRINT_LABEL);
-    }
+        // is modified pdf files?
+        if (xnpIsAttachmentModified('paper_pdf_reprint', $item_id)) {
+            array_push($ret, _MD_XNPPAPER_PDF_REPRINT_LABEL);
+        }
 
         $author_handler = &xoonips_getormhandler('xnppaper', 'author');
         $author_objs = &$formdata->getObjectArray('post', $author_handler->getTableName(), $author_handler, false);
@@ -773,13 +775,13 @@ function xnppaperGetMetadata($prefix, $item_id)
     if (!in_array($prefix, array('oai_dc', 'junii2'))) {
         return false;
     }
-  // module config
-  $mhandler = &xoops_gethandler('module');
+    // module config
+    $mhandler = &xoops_gethandler('module');
     $chandler = &xoops_gethandler('config');
     $module = $mhandler->getByDirname($mydirname);
     $mconfig = $chandler->getConfigsByCat(false, $module->get('mid'));
-  // detail information
-  $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
+    // detail information
+    $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
     $author_handler = &xoonips_getormhandler($mydirname, 'author');
     $detail_obj = &$detail_handler->get($item_id);
     if (empty($detail_obj)) {
@@ -811,13 +813,13 @@ function xnppaperGetMetadata($prefix, $item_id)
     }
     if ($mconfig['abstract_access_rights'] != 1) {
         // abstract has no rights to the public
-    $detail['abstract'] = '';
+        $detail['abstract'] = '';
     }
-  // basic information
-  $basic = xnpGetBasicInformationArray($item_id);
+    // basic information
+    $basic = xnpGetBasicInformationArray($item_id);
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
-  // indexes
-  $indexes = array();
+    // indexes
+    $indexes = array();
     if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
         foreach ($xids as $xid) {
             if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
@@ -825,8 +827,8 @@ function xnppaperGetMetadata($prefix, $item_id)
             }
         }
     }
-  // files
-  $files = array();
+    // files
+    $files = array();
     $mimetypes = array();
     $file_handler = &xoonips_gethandler('xoonips', 'file');
     if ($mconfig['pdf_access_rights'] == 1) {
@@ -837,18 +839,18 @@ function xnppaperGetMetadata($prefix, $item_id)
             }
         }
     }
-  // related to
-  $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
+    // related to
+    $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
     $related_to_ids = $related_to_handler->getChildItemIds($item_id);
     $related_tos = array();
     foreach ($related_to_ids as $related_to_id) {
         $related_tos[] = array(
-      'item_id' => $related_to_id,
-      'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
-    );
+        'item_id' => $related_to_id,
+        'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
+        );
     }
-  // repository configs
-  $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+    // repository configs
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $myxoopsConfigMetaFooter = &xoonips_get_xoops_configs(XOOPS_CONF_METAFOOTER);
     $repository = array(
     'download_file_compression' => $xconfig_handler->getValue('download_file_compression'),
@@ -856,9 +858,9 @@ function xnppaperGetMetadata($prefix, $item_id)
     'publisher' => $xconfig_handler->getValue('repository_publisher'),
     'institution' => $xconfig_handler->getValue('repository_institution'),
     'meta_author' => $myxoopsConfigMetaFooter['meta_author'],
-  );
-  // assign template
-  global $xoopsTpl;
+    );
+    // assign template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->plugins_dir[] = XOONIPS_PATH.'/class/smarty/plugins';
     $tpl->assign($xoopsTpl->get_template_vars());

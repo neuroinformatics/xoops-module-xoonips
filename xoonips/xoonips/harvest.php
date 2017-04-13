@@ -29,17 +29,17 @@
 //  Process of Harvest in OAI-PMH
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
-include_once 'include/lib.php';
-include_once 'include/AL.php';
-include_once 'include/item_limit_check.php';
+require 'include/common.inc.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
+require_once 'include/item_limit_check.php';
 
 // how to show output results
 //  $mode='text' : plain text for external command
 //  $mode='html' : html for web browser
 $mode = 'text';
 
-include_once 'class/base/oaipmh.class.php';
+require_once 'class/base/oaipmh.class.php';
 
 // if connection is guest access then basic authentication required
 if (!$xoopsUser) {

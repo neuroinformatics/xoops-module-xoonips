@@ -81,20 +81,20 @@ function xnpmemoGetMetaInformation($item_id)
 function xnpmemoGetListBlock($item_basic)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $xnpmemo_handler = &xoonips_getormcompohandler('xnpmemo', 'item');
     $tpl->assign('xoonips_item', $xnpmemo_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_LIST, $item_basic['item_id'], $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpmemo_list_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpmemo_list_block.html');
 }
 
 function xnpmemoGetPrinterFriendlyListBlock($item_basic)
@@ -105,15 +105,15 @@ function xnpmemoGetPrinterFriendlyListBlock($item_basic)
 function xnpmemoGetDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->assign($xoopsTpl->get_template_vars());
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationDetailBlock($item_id));
     $tpl->assign('index', xnpGetIndexDetailBlock($item_id));
     $tpl->assign('memo_file', xnpGetAttachmentDetailBlock($item_id, 'memo_file'));
@@ -121,22 +121,22 @@ function xnpmemoGetDetailBlock($item_id)
     $xnpmemo_handler = &xoonips_getormcompohandler('xnpmemo', 'item');
     $tpl->assign('xoonips_item', $xnpmemo_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpmemo_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpmemo_detail_block.html');
 }
 
 function xnpmemoGetPrinterFriendlyDetailBlock($item_id)
 {
     // get uid
-  global $xoopsUser;
+    global $xoopsUser;
     $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->assign($xoopsTpl->get_template_vars());
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign('editable', xnp_get_item_permission($_SESSION['XNPSID'], $item_id, OP_MODIFY));
     $tpl->assign('basic', xnpGetBasicInformationPrinterFriendlyBlock($item_id));
     $tpl->assign('index', xnpGetIndexPrinterFriendlyBlock($item_id));
     $tpl->assign('memo_file', xnpGetAttachmentPrinterFriendlyBlock($item_id, 'memo_file'));
@@ -144,93 +144,93 @@ function xnpmemoGetPrinterFriendlyDetailBlock($item_id)
     $xnpmemo_handler = &xoonips_getormcompohandler('xnpmemo', 'item');
     $tpl->assign('xoonips_item', $xnpmemo_handler->getTemplateVar(XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL, $item_id, $myuid));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpmemo_detail_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpmemo_detail_block.html');
 }
 
 function xnpmemoGetRegisterBlock()
 {
     $textutil = &xoonips_getutility('text');
     $formdata = &xoonips_getutility('formdata');
-  // get DetailInformation
-  if ($formdata->getValue('get', 'post_id', 's', false)) {
-      $detail = array(
-      'item_link' => $textutil->html_special_chars($formdata->getValue('post', 'item_link', 's', true)),
-    );
-  } else {
-      $detail = array(
-      'item_link' => '',
-    );
-  }
+    // get DetailInformation
+    if ($formdata->getValue('get', 'post_id', 's', false)) {
+        $detail = array(
+        'item_link' => $textutil->html_special_chars($formdata->getValue('post', 'item_link', 's', true)),
+        );
+    } else {
+        $detail = array(
+        'item_link' => '',
+        );
+    }
 
-  // get BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationRegisterBlock();
+    // get BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationRegisterBlock();
     $index = xnpGetIndexRegisterBlock();
     $memo_file = xnpGetAttachmentRegisterBlock('memo_file');
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
     $tpl->assign('memo_file', $memo_file);
     $tpl->assign('detail', $detail);
-  // return as HTML
-  return $tpl->fetch('db:xnpmemo_register_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpmemo_register_block.html');
 }
 
 function xnpmemoGetEditBlock($item_id)
 {
     $formdata = &xoonips_getutility('formdata');
-  // get BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationEditBlock($item_id);
+    // get BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationEditBlock($item_id);
     $index = xnpGetIndexEditBlock($item_id);
     $memo_file = xnpGetAttachmentEditBlock($item_id, 'memo_file');
 
-  // get DetailInformation
-  $item_link = $formdata->getValue('post', 'item_link', 's', false);
+    // get DetailInformation
+    $item_link = $formdata->getValue('post', 'item_link', 's', false);
     if (isset($item_link)) {
         $detail = array(
-      'item_link' => $item_link,
-    );
+        'item_link' => $item_link,
+        );
     } elseif (!empty($item_id)) {
         $detail = xnpmemoGetDetailInformation($item_id);
     } else {
         $detail = array();
     }
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
     $tpl->assign('memo_file', $memo_file);
     $tpl->assign('detail', $detail);
 
-  // return as HTML
-  return $tpl->fetch('db:xnpmemo_register_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpmemo_register_block.html');
 }
 
 function xnpmemoGetConfirmBlock($item_id)
 {
     $formdata = &xoonips_getutility('formdata');
-  // get BasicInformation / Preview / index block
-  $basic = xnpGetBasicInformationConfirmBlock($item_id);
+    // get BasicInformation / Preview / index block
+    $basic = xnpGetBasicInformationConfirmBlock($item_id);
     $index = xnpGetIndexConfirmBlock($item_id);
     $memo_file = xnpGetAttachmentConfirmBlock($item_id, 'memo_file');
-  // get DetailInformation
-  $item_link = $formdata->getValue('post', 'item_link', 's', false);
+    // get DetailInformation
+    $item_link = $formdata->getValue('post', 'item_link', 's', false);
     if (isset($item_link)) {
         $detail = array(
-      'item_link' => array(
+        'item_link' => array(
         'value' => $item_link,
-      ),
-    );
+        ),
+        );
         xnpConfirmHtml($detail, 'xnpmemo_item_detail', array_keys($detail), _CHARSET);
     } else {
         $detail = array();
@@ -247,18 +247,18 @@ function xnpmemoGetConfirmBlock($item_id)
         }
     }
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('index', $index);
     $tpl->assign('memo_file', $memo_file);
     $tpl->assign('detail', $detail);
-  // return as HTML
-  return $tpl->fetch('db:xnpmemo_confirm_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpmemo_confirm_block.html');
 }
 
 /**
@@ -290,8 +290,8 @@ function xnpmemoInsertItem(&$item_id)
     $formdata = &xoonips_getutility('formdata');
     $xnpsid = $_SESSION['XNPSID'];
 
-  // register BasicInformation, Index, Attachment
-  $item_id = 0;
+    // register BasicInformation, Index, Attachment
+    $item_id = 0;
     $result = xnpInsertBasicInformation($item_id);
     if ($result) {
         $result = xnpUpdateIndex($item_id);
@@ -310,13 +310,13 @@ function xnpmemoInsertItem(&$item_id)
 
     $ar = array(
     'item_link' => preg_replace('/javascript:/i', '', preg_replace('/[\\x00-\\x20\\x22\\x27]/', '', $formdata->getValue('post', 'item_link', 's', false))),
-  );
+    );
     xnpTrimColumn($ar, 'xnpmemo_item_detail', array_keys($ar), _CHARSET);
 
     $escval = addslashes($ar['item_link']);
 
-  // register DetailInformation
-  $sql = 'insert into '.$xoopsDB->prefix('xnpmemo_item_detail')." ( memo_id, item_link ) values ( $item_id, '$escval' ) ";
+    // register DetailInformation
+    $sql = 'insert into '.$xoopsDB->prefix('xnpmemo_item_detail')." ( memo_id, item_link ) values ( $item_id, '$escval' ) ";
     $result = $xoopsDB->queryF($sql);
     if ($result == false) {
         echo 'cannot insert item_detail';
@@ -333,8 +333,8 @@ function xnpmemoUpdateItem($item_id)
     $formdata = &xoonips_getutility('formdata');
     $xnpsid = $_SESSION['XNPSID'];
 
-  // edit BasicInformation, Index, Preview, Attachment
-  $result = xnpUpdateBasicInformation($item_id);
+    // edit BasicInformation, Index, Preview, Attachment
+    $result = xnpUpdateBasicInformation($item_id);
     if ($result) {
         $result = xnpUpdateIndex($item_id);
         if ($result) {
@@ -360,11 +360,11 @@ function xnpmemoUpdateItem($item_id)
 
     $ar = array(
     'item_link' => preg_replace('/javascript:/i', '', preg_replace('/[\\x00-\\x20\\x22\\x27]/', '', $formdata->getValue('post', 'item_link', 's', false))),
-  );
+    );
     xnpTrimColumn($ar, 'xnpmemo_item_detail', array_keys($ar), _CHARSET);
 
-  // register DetailInformation
-  $sql = implode(',', array('item_link'.'=\''.addslashes($ar['item_link']).'\''));
+    // register DetailInformation
+    $sql = implode(',', array('item_link'.'=\''.addslashes($ar['item_link']).'\''));
     $result = $xoopsDB->queryF('update '.$xoopsDB->prefix('xnpmemo_item_detail')." set $sql where memo_id = $item_id ");
     if ($result == false) {
         return false;
@@ -403,21 +403,21 @@ function xnpmemoGetAdvancedSearchQuery(&$where, &$join)
 function xnpmemoGetAdvancedSearchBlock(&$search_var)
 {
     // get BasicInformation / Preview / IndexKeywords block
-  $basic = xnpGetBasicInformationAdvancedSearchBlock('xnpmemo', $search_var);
+    $basic = xnpGetBasicInformationAdvancedSearchBlock('xnpmemo', $search_var);
     $search_var[] = 'xnpmemo_url';
 
-  // set to template
-  global $xoopsTpl;
+    // set to template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
-  // copy variables in $xoopsTpl to $tpl
-  $tpl->assign($xoopsTpl->get_template_vars());
+    // copy variables in $xoopsTpl to $tpl
+    $tpl->assign($xoopsTpl->get_template_vars());
 
     $tpl->assign('basic', $basic);
     $tpl->assign('module_name', 'xnpmemo');
     $tpl->assign('module_display_name', xnpGetItemTypeDisplayNameByDirname(basename(dirname(__DIR__)), 's'));
 
-  // return as HTML
-  return $tpl->fetch('db:xnpmemo_search_block.html');
+    // return as HTML
+    return $tpl->fetch('db:xnpmemo_search_block.html');
 }
 
 function xnpmemoGetDetailInformationTotalSize($iids)
@@ -447,8 +447,8 @@ function xnpmemoExportItem($export_path, $fhdl, $item_id, $attachment)
         return false;
     }
 
-  // get DetailInformation
-  $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpmemo_item_detail')." where memo_id=$item_id");
+    // get DetailInformation
+    $result = $xoopsDB->query('select * from '.$xoopsDB->prefix('xnpmemo_item_detail')." where memo_id=$item_id");
     if (!$result) {
         return false;
     }
@@ -481,10 +481,10 @@ function xnpmemoGetModifiedFields($item_id)
                 array_push($ret, $v);
             }
         }
-    // was banner file modified?
-    if (xnpIsAttachmentModified('memo_file', $item_id)) {
-        array_push($ret, _MD_XNPMEMO_MEMO_FILE_LABEL);
-    }
+        // was banner file modified?
+        if (xnpIsAttachmentModified('memo_file', $item_id)) {
+            array_push($ret, _MD_XNPMEMO_MEMO_FILE_LABEL);
+        }
     }
 
     return $ret;
@@ -512,18 +512,18 @@ function xnpmemoGetMetadata($prefix, $item_id)
         return false;
     }
 
-  // detail information
-  $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
+    // detail information
+    $detail_handler = &xoonips_getormhandler($mydirname, 'item_detail');
     $detail_obj = &$detail_handler->get($item_id);
     if (empty($detail_obj)) {
         return false;
     }
     $detail = $detail_obj->getArray();
-  // basic information
-  $basic = xnpGetBasicInformationArray($item_id);
+    // basic information
+    $basic = xnpGetBasicInformationArray($item_id);
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
-  // indexes
-  $indexes = array();
+    // indexes
+    $indexes = array();
     if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
         foreach ($xids as $xid) {
             if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
@@ -531,8 +531,8 @@ function xnpmemoGetMetadata($prefix, $item_id)
             }
         }
     }
-  // files
-  $files = array();
+    // files
+    $files = array();
     $mimetypes = array();
     $file_handler = &xoonips_gethandler('xoonips', 'file');
     $files = $file_handler->getFilesInfo($item_id, 'memo_file');
@@ -541,28 +541,28 @@ function xnpmemoGetMetadata($prefix, $item_id)
             $mimetypes[] = $file['mime_type'];
         }
     }
-  // related to
-  $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
+    // related to
+    $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');
     $related_to_ids = $related_to_handler->getChildItemIds($item_id);
     $related_tos = array();
     foreach ($related_to_ids as $related_to_id) {
         $related_tos[] = array(
-      'item_id' => $related_to_id,
-      'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
-    );
+        'item_id' => $related_to_id,
+        'item_url' => XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$related_to_id,
+        );
     }
-  // repository configs
-  $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
+    // repository configs
+    $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $myxoopsConfigMetaFooter = &xoonips_get_xoops_configs(XOOPS_CONF_METAFOOTER);
     $repository = array(
-   'download_file_compression' => $xconfig_handler->getValue('download_file_compression'),
-   'nijc_code' => $xconfig_handler->getValue('repository_nijc_code'),
-   'publisher' => $xconfig_handler->getValue('repository_publisher'),
-   'institution' => $xconfig_handler->getValue('repository_institution'),
-   'meta_author' => $myxoopsConfigMetaFooter['meta_author'],
-  );
-  // assign template
-  global $xoopsTpl;
+    'download_file_compression' => $xconfig_handler->getValue('download_file_compression'),
+    'nijc_code' => $xconfig_handler->getValue('repository_nijc_code'),
+    'publisher' => $xconfig_handler->getValue('repository_publisher'),
+    'institution' => $xconfig_handler->getValue('repository_institution'),
+    'meta_author' => $myxoopsConfigMetaFooter['meta_author'],
+    );
+    // assign template
+    global $xoopsTpl;
     $tpl = new XoopsTpl();
     $tpl->plugins_dir[] = XOONIPS_PATH.'/class/smarty/plugins';
     $tpl->assign($xoopsTpl->get_template_vars());

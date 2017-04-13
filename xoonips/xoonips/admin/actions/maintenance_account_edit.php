@@ -32,7 +32,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
 // resources
 $langman->read_pagetype('user.php');
 $langman->read_pagetype('notification.php');
-include XOOPS_ROOT_PATH.'/include/notification_constants.php';
+require XOOPS_ROOT_PATH.'/include/notification_constants.php';
 
 // class files
 require_once XOOPS_ROOT_PATH.'/class/xoopslists.php';
@@ -95,7 +95,7 @@ function get_user_info($uid)
             'offset' => $offset,
             'name' => $textutil->html_special_chars($name),
             'selected' => ($offset == $user['xoops']['timezone_offset']) ? 'selected="selected"' : '',
-       );
+        );
     }
     // umode - comment display mode
     $user['umode'] = array();

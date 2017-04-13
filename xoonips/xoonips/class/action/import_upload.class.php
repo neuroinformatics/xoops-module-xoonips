@@ -26,9 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/action.class.php';
-include_once dirname(__DIR__).'/base/logicfactory.class.php';
-include_once dirname(__DIR__).'/base/gtickets.php';
+require_once dirname(__DIR__).'/base/action.class.php';
+require_once dirname(__DIR__).'/base/logicfactory.class.php';
+require_once dirname(__DIR__).'/base/gtickets.php';
 
 class XooNIpsActionImportUpload extends XooNIpsAction
 {
@@ -56,32 +56,22 @@ class XooNIpsActionImportUpload extends XooNIpsAction
         xoonips_allow_post_method();
 
         $filetype = $this->_formdata->getValue('post', 'filetype', 's', false);
-        xoonips_validate_request(
-            'localfile' == $filetype
-            || 'remotefile' == $filetype
-            && $xoopsUser && $xoopsUser->isAdmin());
+        xoonips_validate_request('localfile' == $filetype || 'remotefile' == $filetype && $xoopsUser && $xoopsUser->isAdmin());
 
-        xoonips_validate_request($this->_is_importable_index_id(
-            $this->_get_xoonips_checked_index_ids(
-                $this->_formdata->getValue('post', 'xoonipsCheckedXID', 's', false)
-            )));
+        xoonips_validate_request($this->_is_importable_index_id($this->_get_xoonips_checked_index_ids($this->_formdata->getValue('post', 'xoonipsCheckedXID', 's', false))));
     }
 
     public function doAction()
     {
         global $xoopsUser;
 
-        include_once dirname(dirname(__DIR__))
-            .'/include/imexport.php';
+        include_once dirname(dirname(__DIR__)).'/include/imexport.php';
 
         $filetype = $this->_formdata->getValue('post', 'filetype', 's', false);
         $remotefile = $this->_formdata->getValue('post', 'remotefile', 's', false);
         $zipfile = $this->_formdata->getFile('zipfile', false);
-        if ($filetype == 'localfile' && (empty($zipfile['name'])
-                                          || $zipfile['size'] == 0)
-            || $filetype == 'remotefile' && empty($remotefile)) {
-            redirect_header('import.php?action=default', 3,
-                             _MD_XOONIPS_IMPORT_FILE_NOT_SPECIFIED);
+        if ($filetype == 'localfile' && (empty($zipfile['name']) || $zipfile['size'] == 0) || $filetype == 'remotefile' && empty($remotefile)) {
+            redirect_header('import.php?action=default', 3, _MD_XOONIPS_IMPORT_FILE_NOT_SPECIFIED);
             exit();
         }
 
@@ -93,25 +83,18 @@ class XooNIpsActionImportUpload extends XooNIpsAction
         }
 
         if (!file_exists($uploadfile)) {
-            redirect_header('import.php?action=default', 3,
-                             _MD_XOONIPS_IMPORT_FILE_NOT_FOUND);
+            redirect_header('import.php?action=default', 3, _MD_XOONIPS_IMPORT_FILE_NOT_FOUND);
             exit();
         }
 
         if ($this->_is_index_xml_in_import_file($uploadfile)) {
-            $this->_read_index_tree(
-                $uploadfile,
-                $this->_formdata->getValue('post', 'error_check_only', 's', false),
-                $this->_get_xoonips_checked_index_ids(
-                    $this->_formdata->getValue('post', 'xoonipsCheckedXID', 's', false)));
+            $this->_read_index_tree($uploadfile, $this->_formdata->getValue('post', 'error_check_only', 's', false), $this->_get_xoonips_checked_index_ids($this->_formdata->getValue('post', 'xoonipsCheckedXID', 's', false)));
 
             return;
         }
 
         $this->_params[] = $uploadfile;
-        $this->_params[]
-            = $this->_get_xoonips_checked_index_ids(
-                $this->_formdata->getValue('post', 'xoonipsCheckedXID', 's', false));
+        $this->_params[] = $this->_get_xoonips_checked_index_ids($this->_formdata->getValue('post', 'xoonipsCheckedXID', 's', false));
         $factory = &XooNIpsLogicFactory::getInstance();
         $logic = &$factory->create('importReadFile');
         $logic->execute($this->_params, $this->_response);
@@ -119,21 +102,16 @@ class XooNIpsActionImportUpload extends XooNIpsAction
         @unlink($uploadfile);
 
         $success = &$this->_response->getSuccess();
-        if (!$this->_response->getResult()
-            || $this->_import_item_have_errors($success['import_items'])) {
+        if (!$this->_response->getResult() || $this->_import_item_have_errors($success['import_items'])) {
             $this->_view_params['result'] = false;
             $success = $this->_response->getSuccess();
             $this->_view_params['import_items'] = $success['import_items'];
             $this->_view_params['uname'] = $xoopsUser->getVar('uname');
-            $this->_view_params['filename'] =
-                $filetype == 'localfile' ? $zipfile['name'] : $remotefile;
+            $this->_view_params['filename'] = $filetype == 'localfile' ? $zipfile['name'] : $remotefile;
             $this->_view_params['errors'] = array();
             foreach ($success['import_items'] as $item) {
                 foreach (array_unique($item->getErrorCodes()) as $code) {
-                    $this->_view_params['errors'][]
-                        = array(
-                            'code' => $code,
-                            'extra' => $item->getPseudoId(), );
+                    $this->_view_params['errors'][] = array('code' => $code, 'extra' => $item->getPseudoId());
                 }
             }
             $this->_view_name = 'import_log';
@@ -157,21 +135,16 @@ class XooNIpsActionImportUpload extends XooNIpsAction
         $this->_set_errors_to_import_items($success['import_items']);
         if (!is_null($this->_formdata->getValue('post', 'error_check_only', 's', false))
             || $this->_import_item_have_errors($success['import_items'])
-            || !$this->_response->getResult()) {
-            $this->_view_params['result']
-                = $this->_response->getResult()
-                && !$this->_import_item_have_errors(
-                    $success['import_items']);
+            || !$this->_response->getResult()
+        ) {
+            $this->_view_params['result'] = $this->_response->getResult() && !$this->_import_item_have_errors($success['import_items']);
             $this->_view_params['uname'] = $xoopsUser->getVar('uname');
-            $this->_view_params['filename']
-                = $filetype == 'localfile' ? $zipfile['name'] : $remotefile;
+            $this->_view_params['filename'] = $filetype == 'localfile' ? $zipfile['name'] : $remotefile;
             $this->_view_params['import_items'] = $success['import_items'];
             $this->_view_params['errors'] = array();
             foreach ($success['import_items'] as $item) {
                 foreach (array_unique($item->getErrorCodes()) as $code) {
-                    $this->_view_params['errors'][]
-                        = array('code' => $code,
-                                 'extra' => $item->getPseudoId(), );
+                    $this->_view_params['errors'][] = array('code' => $code, 'extra' => $item->getPseudoId());
                 }
             }
             $this->_view_name = 'import_log';
@@ -190,40 +163,30 @@ class XooNIpsActionImportUpload extends XooNIpsAction
 
             $success = &$this->_response->getSuccess();
             if ($success['private_item_number_limit_over']
-                || $success['private_item_storage_limit_over']) {
+                || $success['private_item_storage_limit_over']
+            ) {
                 if ($success['private_item_number_limit_over']) {
-                    $collection->addError(
-                        'Private item number limit exceeds.');
+                    $collection->addError('Private item number limit exceeds.');
                 } elseif ($success['private_item_storage_limit_over']) {
-                    $collection->addError(
-                        'Too large file of item to import.');
+                    $collection->addError('Too large file of item to import.');
                 }
                 $this->_view_params['result'] = false;
-                $this->_view_params['uname']
-                    = $xoopsUser->getVar('uname');
-                $this->_view_params['filename']
-                    = $filetype == 'localfile' ? $zipfile['name'] : $remotefile;
+                $this->_view_params['uname'] = $xoopsUser->getVar('uname');
+                $this->_view_params['filename'] = $filetype == 'localfile' ? $zipfile['name'] : $remotefile;
                 $this->_view_params['errors'] = array();
-                $this->_view_params['import_items']
-                    = $success['import_items'];
+                $this->_view_params['import_items'] = $success['import_items'];
                 foreach ($success['import_items'] as $item) {
-                    foreach (array_unique($item->getErrorCodes())
-                             as $code) {
-                        $this->_view_params['errors'][]
-                            = array('code' => $code,
-                                     'extra' => $item->getPseudoId(), );
+                    foreach (array_unique($item->getErrorCodes()) as $code) {
+                        $this->_view_params['errors'][] = array('code' => $code, 'extra' => $item->getPseudoId());
                     }
                 }
                 foreach ($collection->getErrors() as $err) {
-                    $this->_view_params['errors'][]
-                        = array('extra' => $err);
+                    $this->_view_params['errors'][] = array('extra' => $err);
                 }
 
                 $this->_view_name = 'import_log';
             } else {
-                $this->_view_params['ticket_html']
-                    = $GLOBALS['xoopsGTicket']->getTicketHtml(__LINE__, 600,
-                       'import');
+                $this->_view_params['ticket_html'] = $GLOBALS['xoopsGTicket']->getTicketHtml(__LINE__, 600, 'import');
                 $this->_view_name = 'import_confirm';
             }
         }
@@ -231,8 +194,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
         foreach ($success['import_items'] as $i) {
             $collection->addItem($i);
         }
-        $collection->setLoggingOption(!is_null(
-            $this->_formdata->getValue('post', 'logging', 's', false)));
+        $collection->setLoggingOption(!is_null($this->_formdata->getValue('post', 'logging', 's', false)));
         if ($filetype == 'localfile') {
             $collection->setImportFileName($zipfile['name']);
         } else {
@@ -242,8 +204,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
         $sess_handler = &xoonips_getormhandler('xoonips', 'session');
         $sess = &$sess_handler->get(session_id());
         $session = unserialize($sess->get('sess_data'));
-        $session['xoonips_import_items'] = base64_encode(
-            gzcompress(serialize($collection)));
+        $session['xoonips_import_items'] = base64_encode(gzcompress(serialize($collection)));
         $sess->set('sess_data', serialize($session));
         $sess_handler->insert($sess);
     }
@@ -323,9 +284,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
     {
         foreach (array_keys($import_items) as $key) {
             if ($import_items[$key]->getDoiConflictFlag()) {
-                $import_items[$key]->setErrors(
-                    E_XOONIPS_DOI_CONFLICT,
-                    'doi conflict with following items in exitsing item.');
+                $import_items[$key]->setErrors(E_XOONIPS_DOI_CONFLICT, 'doi conflict with following items in exitsing item.');
             }
         }
     }
@@ -334,8 +293,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
      * @param $uploadfile string import file path
      * @pram $error_check_only string 'on' or else
      */
-    public function _read_index_tree($uploadfile, $error_check_only,
-                              $import_index_ids = array())
+    public function _read_index_tree($uploadfile, $error_check_only, $import_index_ids = array())
     {
         global $xoopsDB, $xoopsConfig, $xoopsUser,$xoopsLogger, $xoopsUserIsAdmin;
         //
@@ -413,10 +371,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
                     }
                     $visited[] = $parent['index_id'];
                     $unicode = &xoonips_getutility('unicode');
-                    array_push($path,
-                                $unicode->decode_utf8(
-                                    $parent['titles'][0],
-                                    xoonips_get_server_charset(), 'h'));
+                    array_push($path, $unicode->decode_utf8($parent['titles'][0], xoonips_get_server_charset(), 'h'));
                     $index = $parent;
                 }
                 $str_indexes .= htmlspecialchars(implode('/', array_reverse($path)), ENT_QUOTES)
@@ -460,8 +415,7 @@ EOT;
                 unlink($uploadfile);
             } else {
                 $_SESSION['xoonips_import_file_path'] = $uploadfile;
-                $_SESSION['xoonips_import_index_ids']
-                    = serialize($import_index_ids);
+                $_SESSION['xoonips_import_index_ids'] = serialize($import_index_ids);
 
                 $submit = _MD_XOONIPS_IMPORT_UPLOAD_SUBMIT;
                 $message = _MD_XOONIPS_IMPORT_FOLLOWING_INDEX;
@@ -533,8 +487,7 @@ EOT;
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $session_handler = &xoonips_getormhandler('xoonips', 'session');
 
-        $su_users = &$session_handler->getObjects(
-            new Criteria('su_uid', $xoopsUser->getVar('uid')));
+        $su_users = &$session_handler->getObjects(new Criteria('su_uid', $xoopsUser->getVar('uid')));
 
         foreach ($index_ids as $id) {
             $index = &$index_handler->get((int) $id);
@@ -542,17 +495,14 @@ EOT;
                 return false;
             }
 
-            if ($xoopsUser->isAdmin()
-                && OL_PUBLIC == $index->get('open_level')) {
+            if ($xoopsUser->isAdmin() && OL_PUBLIC == $index->get('open_level')) {
                 continue;
             }
-            if ($su_users
-                && OL_PUBLIC == $index->get('open_level')) {
+            if ($su_users && OL_PUBLIC == $index->get('open_level')) {
                 continue;
             }
 
-            if (OL_PRIVATE == $index->get('open_level')
-                && $index->get('uid') == $xoopsUser->getVar('uid')) {
+            if (OL_PRIVATE == $index->get('open_level') && $index->get('uid') == $xoopsUser->getVar('uid')) {
                 continue;
             }
 

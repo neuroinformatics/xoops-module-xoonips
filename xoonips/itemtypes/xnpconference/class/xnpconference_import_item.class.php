@@ -26,8 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(dirname(__DIR__))
-    .'/xoonips/class/xoonips_import_item.class.php';
+require_once dirname(dirname(__DIR__)).'/xoonips/class/xoonips_import_item.class.php';
 
 class XNPConferenceImportItem extends XooNIpsImportItem
 {
@@ -172,14 +171,10 @@ class XNPConferenceImportItemHandler extends XooNIpsImportItemHandler
             // validate version and set it to 'version' variable
             //
             if (!empty($attribs['VERSION'])) {
-                if (in_array($attribs['VERSION'],
-                              $this->_import_file_version)) {
+                if (in_array($attribs['VERSION'], $this->_import_file_version)) {
                     $this->_detail_version = $attribs['VERSION'];
                 } else {
-                    $this->_import_item->setErrors(
-                        E_XOONIPS_INVALID_VALUE,
-                        'unsupported version('.$attribs['VERSION'].') '
-                        .$this->_get_parser_error_at());
+                    $this->_import_item->setErrors(E_XOONIPS_INVALID_VALUE, 'unsupported version('.$attribs['VERSION'].') '.$this->_get_parser_error_at());
                 }
             } else {
                 $this->_detail_version = '1.00';
@@ -188,63 +183,38 @@ class XNPConferenceImportItemHandler extends XooNIpsImportItemHandler
         case 'ITEM/DETAIL/FILE':
             $this->_file_type_attribute = $attribs['FILE_TYPE_NAME'];
 
-            $file_type_handler = &xoonips_getormhandler('xoonips',
-                                                         'file_type');
+            $file_type_handler = &xoonips_getormhandler('xoonips', 'file_type');
             $file_handler = &xoonips_getormhandler('xoonips', 'file');
-            $criteria = new Criteria('name',
-                                      addslashes($attribs['FILE_TYPE_NAME']));
+            $criteria = new Criteria('name', addslashes($attribs['FILE_TYPE_NAME']));
             $file_type = &$file_type_handler->getObjects($criteria);
             if (count($file_type) == 0) {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_ATTR_NOT_FOUND,
-                    'file_type_id is not found:'.$attribs['FILE_TYPE_NAME']
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_ATTR_NOT_FOUND, 'file_type_id is not found:'.$attribs['FILE_TYPE_NAME'].$this->_get_parser_error_at());
                 break;
             }
 
             $unicode = &xoonips_getutility('unicode');
             if ($this->_file_type_attribute == 'conference_file') {
                 if ($this->_conference_file_flag) {
-                    $this->_import_item->setErrors(
-                        E_XOONIPS_ATTACHMENT_HAS_REDUNDANT,
-                        "multiple $name attachments is not allowed"
-                        .$this->_get_parser_error_at());
+                    $this->_import_item->setErrors(E_XOONIPS_ATTACHMENT_HAS_REDUNDANT, "multiple $name attachments is not allowed".$this->_get_parser_error_at());
                     break;
                 }
                 $this->_conference_file = &$file_handler->create();
-                $this->_conference_file->setFilepath(
-                    $this->_attachment_dir.'/'.$attribs['FILE_NAME']);
-                $this->_conference_file->set(
-                    'original_file_name',
-                    $unicode->decode_utf8($attribs['ORIGINAL_FILE_NAME'],
-                                          xoonips_get_server_charset(), 'h'));
-                $this->_conference_file->set('mime_type',
-                                                  $attribs['MIME_TYPE']);
-                $this->_conference_file->set('file_size',
-                                                  $attribs['FILE_SIZE']);
+                $this->_conference_file->setFilepath($this->_attachment_dir.'/'.$attribs['FILE_NAME']);
+                $this->_conference_file->set('original_file_name', $unicode->decode_utf8($attribs['ORIGINAL_FILE_NAME'], xoonips_get_server_charset(), 'h'));
+                $this->_conference_file->set('mime_type', $attribs['MIME_TYPE']);
+                $this->_conference_file->set('file_size', $attribs['FILE_SIZE']);
                 $this->_conference_file->set('sess_id', session_id());
-                $this->_conference_file->set(
-                    'file_type_id', $file_type[0]->get('file_type_id'));
+                $this->_conference_file->set('file_type_id', $file_type[0]->get('file_type_id'));
             } elseif ($this->_file_type_attribute == 'conference_paper') {
                 $this->_conference_paper = &$file_handler->create();
-                $this->_conference_paper->setFilepath(
-                    $this->_attachment_dir.'/'.$attribs['FILE_NAME']);
-                $this->_conference_paper->set(
-                    'original_file_name',
-                    $unicode->decode_utf8($attribs['ORIGINAL_FILE_NAME'],
-                                          xoonips_get_server_charset(), 'h'));
-                $this->_conference_paper->set('mime_type',
-                                                   $attribs['MIME_TYPE']);
-                $this->_conference_paper->set('file_size',
-                                                   $attribs['FILE_SIZE']);
+                $this->_conference_paper->setFilepath($this->_attachment_dir.'/'.$attribs['FILE_NAME']);
+                $this->_conference_paper->set('original_file_name', $unicode->decode_utf8($attribs['ORIGINAL_FILE_NAME'], xoonips_get_server_charset(), 'h'));
+                $this->_conference_paper->set('mime_type', $attribs['MIME_TYPE']);
+                $this->_conference_paper->set('file_size', $attribs['FILE_SIZE']);
                 $this->_conference_paper->set('sess_id', session_id());
-                $this->_conference_paper->set(
-                    'file_type_id', $file_type[0]->get('file_type_id'));
+                $this->_conference_paper->set('file_type_id', $file_type[0]->get('file_type_id'));
             } else {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_ATTR_NOT_FOUND,
-                    'file_type_id is not found:'.$attribs['FILE_TYPE_NAME']
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_ATTR_NOT_FOUND, 'file_type_id is not found:'.$attribs['FILE_TYPE_NAME'].$this->_get_parser_error_at());
                 break;
             }
             break;
@@ -282,20 +252,18 @@ class XNPConferenceImportItemHandler extends XooNIpsImportItemHandler
                 'conference_to_mday',
                 ) as $key) {
                 if (is_null($detail->get($key, 'n'))) {
-                    $this->_import_item->setErrors(
-                        E_XOONIPS_TAG_NOT_FOUND, " no $key"
-                        .$this->_get_parser_error_at());
+                    $this->_import_item->setErrors(E_XOONIPS_TAG_NOT_FOUND, " no $key".$this->_get_parser_error_at());
                 }
             }
             //error if no authors
             if (count($this->_import_item->getVar('author')) == 0) {
-                $this->_import_item->setErrors(E_XOONIPS_TAG_NOT_FOUND, ' no author'
-                                                   .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_TAG_NOT_FOUND, ' no author'.$this->_get_parser_error_at());
             }
             break;
         case 'ITEM/DETAIL/AUTHORS/AUTHOR':
             if ($this->_detail_version != '1.01'
-                && $this->_detail_version != '1.02') {
+                && $this->_detail_version != '1.02'
+            ) {
                 break;
             }
 
@@ -304,8 +272,7 @@ class XNPConferenceImportItemHandler extends XooNIpsImportItemHandler
             $author_handler = &xoonips_getormhandler('xnpconference', 'author');
             $author = &$author_handler->create();
 
-            $author->set('author', $unicode->decode_utf8($this->_cdata,
-                                                         xoonips_get_server_charset(), 'h'));
+            $author->set('author', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'));
             $author->set('author_order', count($authors));
 
             $authors[] = $author;
@@ -320,8 +287,7 @@ class XNPConferenceImportItemHandler extends XooNIpsImportItemHandler
             $author_handler = &xoonips_getormhandler('xnpconference', 'author');
             $author = &$author_handler->create();
 
-            $author->set('author', $unicode->decode_utf8($this->_cdata,
-                                                         xoonips_get_server_charset(), 'h'));
+            $author->set('author', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'));
             $author->set('author_order', 0);
 
             $authors[0] = $author;
@@ -337,45 +303,26 @@ class XNPConferenceImportItemHandler extends XooNIpsImportItemHandler
         case 'ITEM/DETAIL/CONFERENCE_TO_MONTH':
         case 'ITEM/DETAIL/CONFERENCE_TO_MDAY':
             $unicode = &xoonips_getutility('unicode');
-            $detail->set(strtolower(end($this->_tag_stack)),
-                            $unicode->decode_utf8(
-                                $this->_cdata,
-                                xoonips_get_server_charset(), 'h'), true);
+            $detail->set(strtolower(end($this->_tag_stack)), $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'), true);
             break;
         case 'ITEM/DETAIL/ATTACHMENT_DL_LIMIT':
             if ($this->_attachment_dl_limit_flag) {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_TAG_REDUNDANT,
-                    'attachment_dl_limit is redundant'
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_TAG_REDUNDANT, 'attachment_dl_limit is redundant'.$this->_get_parser_error_at());
             } elseif (ctype_digit($this->_cdata)) {
-                $detail->set('attachment_dl_limit',
-                                intval($this->_cdata));
+                $detail->set('attachment_dl_limit', intval($this->_cdata));
                 $this->_attachment_dl_limit_flag = true;
             } else {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_INVALID_VALUE,
-                    'invalid value('.$this->_cdata
-                    .') of attachment_dl_limit'
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_INVALID_VALUE, 'invalid value('.$this->_cdata.') of attachment_dl_limit'.$this->_get_parser_error_at());
             }
             break;
         case 'ITEM/DETAIL/ATTACHMENT_DL_NOTIFY':
             if ($this->_attachment_dl_notify_limit_flag) {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_TAG_REDUNDANT,
-                    'attachment_dl_notify is redundant'
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_TAG_REDUNDANT, 'attachment_dl_notify is redundant'.$this->_get_parser_error_at());
             } elseif (ctype_digit($this->_cdata)) {
-                $detail->set('attachment_dl_notify',
-                                intval($this->_cdata));
+                $detail->set('attachment_dl_notify', intval($this->_cdata));
                 $this->_attachment_dl_notify_limit_flag = true;
             } else {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_INVALID_VALUE,
-                    'invalid value('.$this->_cdata
-                    .') of attachment_dl_notify'
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_INVALID_VALUE, 'invalid value('.$this->_cdata.') of attachment_dl_notify'.$this->_get_parser_error_at());
             }
             break;
         case 'ITEM/DETAIL/FILE':
@@ -383,34 +330,19 @@ class XNPConferenceImportItemHandler extends XooNIpsImportItemHandler
             if ($this->_file_type_attribute == 'conference_file') {
                 $this->_conference_file_flag = true;
                 if (!$file_handler->insert($this->_conference_file)) {
-                    $this->_import_item->setErrors(
-                        E_XOONIPS_DB_QUERY,
-                        "can't insert attachment file:"
-                        .$this->_conference_file->get(
-                            'original_file_name')
-                        .$this->_get_parser_error_at());
+                    $this->_import_item->setErrors(E_XOONIPS_DB_QUERY, "can't insert attachment file:".$this->_conference_file->get('original_file_name').$this->_get_parser_error_at());
                 }
-                $this->_conference_file = $file_handler->get(
-                    $this->_conference_file->get('file_id'));
-                $this->_import_item->setVar(
-                    'conference_file', $this->_conference_file);
+                $this->_conference_file = $file_handler->get($this->_conference_file->get('file_id'));
+                $this->_import_item->setVar('conference_file', $this->_conference_file);
                 $this->_import_item->setHasConferenceFile();
                 $this->_file_type_attribute = null;
             } elseif ($this->_file_type_attribute == 'conference_paper') {
                 $this->_conference_paper_flag = true;
                 if (!$file_handler->insert($this->_conference_paper)) {
-                    $this->_import_item->setErrors(
-                        E_XOONIPS_DB_QUERY,
-                        "can't insert attachment file:"
-                        .$this->_conference_paper->get(
-                            'original_file_name')
-                        .$this->_get_parser_error_at());
+                    $this->_import_item->setErrors(E_XOONIPS_DB_QUERY, "can't insert attachment file:".$this->_conference_paper->get('original_file_name').$this->_get_parser_error_at());
                 }
-                $this->_conference_paper
-                    = $file_handler->get(
-                        $this->_conference_paper->get('file_id'));
-                $this->_import_item->setVar('conference_paper',
-                                                 $this->_conference_paper);
+                $this->_conference_paper = $file_handler->get($this->_conference_paper->get('file_id'));
+                $this->_import_item->setVar('conference_paper', $this->_conference_paper);
                 $this->_import_item->setHasConferencePaper();
                 $this->_file_type_attribute = null;
             } else {
@@ -421,24 +353,16 @@ class XNPConferenceImportItemHandler extends XooNIpsImportItemHandler
         case 'ITEM/DETAIL/FILE/CAPTION':
             $unicode = &xoonips_getutility('unicode');
             if ($this->_file_type_attribute == 'conference_file') {
-                $this->_conference_file->set(
-                    'caption',
-                    $unicode->decode_utf8(
-                        $this->_cdata, xoonips_get_server_charset(), 'h'));
+                $this->_conference_file->set('caption', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'));
             } elseif ($this->_file_type_attribute == 'conference_paper') {
-                $this->_conference_paper->set(
-                    'caption',
-                    $unicode->decode_utf8(
-                        $this->_cdata, xoonips_get_server_charset(), 'h'));
+                $this->_conference_paper->set('caption', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'));
             }
             break;
         case 'ITEM/DETAIL/FILE/THUMBNAIL':
             if ($this->_file_type_attribute == 'conference_file') {
-                $this->_conference_file->set(
-                    'thumbnail_file', base64_decode($this->_cdata));
+                $this->_conference_file->set('thumbnail_file', base64_decode($this->_cdata));
             } elseif ($this->_file_type_attribute == 'conference_paper') {
-                $this->_conference_paper->set(
-                    'thumbnail_file', base64_decode($this->_cdata));
+                $this->_conference_paper->set('thumbnail_file', base64_decode($this->_cdata));
             }
             break;
         }

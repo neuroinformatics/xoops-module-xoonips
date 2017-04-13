@@ -79,7 +79,7 @@ $modversion['templates'][9]['file'] = 'xnppaper_oaipmh_junii2.xml';
 $modversion['templates'][9]['description'] = 'OAI-PMH junii2';
 
 // config
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/condefs.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/condefs.php';
 
 $modversion['config'][1]['name'] = 'abstract_access_rights';
 $modversion['config'][1]['title'] = '_MI_XNPPAPER_CFG_SHOW_ABST';

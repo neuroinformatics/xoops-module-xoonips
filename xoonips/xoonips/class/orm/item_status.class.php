@@ -62,71 +62,71 @@ class XooNIpsOrmItemStatusHandler extends XooNIpsTableObjectHandler
         $this->__initHandler('XooNIpsOrmItemStatus', 'xoonips_item_status', 'item_id', false);
     }
 
-  /**
-   * update item status table.
-   *
-   * @param int $item_id Item ID to update item status
-   *
-   * @return bool
-   */
-  public function updateItemStatus($item_id)
-  {
-      $index_handler = &xoonips_getormhandler('xoonips', 'index');
-      $item_status_handler = &xoonips_getormhandler('xoonips', 'item_status');
-      $criteria1 = new CriteriaCompo();
-      $criteria1->add(new Criteria('certify_state', CERTIFIED));
-      $criteria1->add(new Criteria('open_level', OL_PUBLIC));
-      $criteria1->add(new Criteria('item_id', intval($item_id), '=', 'txil'));
-      $join = new XooNIpsJoinCriteria('xoonips_index_item_link', 'index_id', 'index_id', 'LEFT', 'txil');
-      $join->cascade(new XooNIpsJoinCriteria('xoonips_item_status', 'item_id', 'item_id', 'LEFT', 'tis'), 'txil', true);
-      $results = &$index_handler->getObjects($criteria1, false, 'txil.item_id, tis.is_deleted', true, $join);
-      foreach ($results as $row) {
-          if (is_null($row->getExtraVar('is_deleted'))) {
-              $item_status = &$item_status_handler->create();
-              $item_status->set('created_timestamp', time());
-          } else {
-              $item_status = &$item_status_handler->get($row->getExtraVar('item_id'));
-              $item_status->set('modified_timestamp', time());
-          }
-          if (!$item_status) {
-              // item_status not found
-        return false;
-          }
+    /**
+     * update item status table.
+     *
+     * @param int $item_id Item ID to update item status
+     *
+     * @return bool
+     */
+    public function updateItemStatus($item_id)
+    {
+        $index_handler = &xoonips_getormhandler('xoonips', 'index');
+        $item_status_handler = &xoonips_getormhandler('xoonips', 'item_status');
+        $criteria1 = new CriteriaCompo();
+        $criteria1->add(new Criteria('certify_state', CERTIFIED));
+        $criteria1->add(new Criteria('open_level', OL_PUBLIC));
+        $criteria1->add(new Criteria('item_id', intval($item_id), '=', 'txil'));
+        $join = new XooNIpsJoinCriteria('xoonips_index_item_link', 'index_id', 'index_id', 'LEFT', 'txil');
+        $join->cascade(new XooNIpsJoinCriteria('xoonips_item_status', 'item_id', 'item_id', 'LEFT', 'tis'), 'txil', true);
+        $results = &$index_handler->getObjects($criteria1, false, 'txil.item_id, tis.is_deleted', true, $join);
+        foreach ($results as $row) {
+            if (is_null($row->getExtraVar('is_deleted'))) {
+                $item_status = &$item_status_handler->create();
+                $item_status->set('created_timestamp', time());
+            } else {
+                $item_status = &$item_status_handler->get($row->getExtraVar('item_id'));
+                $item_status->set('modified_timestamp', time());
+            }
+            if (!$item_status) {
+                // item_status not found
+                return false;
+            }
 
-      // insert or update item_status
-      $item_status->set('item_id', $row->getExtraVar('item_id'));
-          $item_status->set('is_deleted', 0);
-          if (!$item_status_handler->insert($item_status)) {
-              return false;
-          }
-      }
+            // insert or update item_status
+            $item_status->set('item_id', $row->getExtraVar('item_id'));
+            $item_status->set('is_deleted', 0);
+            if (!$item_status_handler->insert($item_status)) {
+                return false;
+            }
+        }
 
-      $item_status_handler = &xoonips_getormhandler('xoonips', 'item_status');
-      $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
-      $criteria2 = new CriteriaCompo();
-      $criteria2->add(new Criteria('is_deleted', 0));
-      $criteria2->add(new Criteria('item_id', intval($item_id)));
-      $rows = &$item_status_handler->getObjects($criteria2);
-      if (!$rows) {
-          return false;
-      }
-      foreach ($rows as $row) {
-          $criteria3 = new CriteriaCompo();
-          $criteria3->add(new Criteria('certify_state', CERTIFIED));
-          $criteria3->add(new Criteria('open_level', OL_PUBLIC));
-          $criteria3->add(new Criteria('item_id', $row->get('item_id')));
-          $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id', 'LEFT', 'tx');
-          $results = &$index_item_link_handler->getObjects($criteria3, false, 'count(*)', true, $join);
-          if (!$results) {
-              return false;
-          }
-          if ($results[0]->getExtraVar('count(*)') == 0) {
-              $row->set('is_deleted', 1);
-              $row->set('deleted_timestamp', time());
-              $item_status_handler->insert($row);
-          }
-      }
+        $item_status_handler = &xoonips_getormhandler('xoonips', 'item_status');
+        $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
+        $criteria2 = new CriteriaCompo();
+        $criteria2->add(new Criteria('is_deleted', 0));
+        $criteria2->add(new Criteria('item_id', intval($item_id)));
+        $rows = &$item_status_handler->getObjects($criteria2);
+        if (!$rows) {
+            return false;
+        }
+        foreach ($rows as $row) {
+            $criteria3 = new CriteriaCompo();
+            $criteria3->add(new Criteria('certify_state', CERTIFIED));
+            $criteria3->add(new Criteria('open_level', OL_PUBLIC));
+            $criteria3->add(new Criteria('item_id', $row->get('item_id')));
+            $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id', 'LEFT', 'tx');
+            $results = &$index_item_link_handler->getObjects($criteria3, false, 'count(*)', true, $join);
+            if (!$results) {
+                return false;
+            }
+            if ($results[0]->getExtraVar('count(*)') == 0) {
+                $row->set('is_deleted', 1);
+                $row->set('deleted_timestamp', time());
+                $item_status_handler->insert($row);
+            }
+        }
 
-      return true;
-  }
+        return true;
+    }
 }

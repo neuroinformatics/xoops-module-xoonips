@@ -76,7 +76,7 @@ class XooNIpsUtilityZip extends XooNIpsUtility
      * Converts an Unix timestamp to a four byte DOS date and time format (date
      * in high two bytes, time in low two bytes allowing magnitude comparison).
      *
-     * @param  int  the current Unix timestamp
+     * @param int  the current Unix timestamp
      *
      * @return int the current date in a four byte DOS format
      */
@@ -97,7 +97,7 @@ class XooNIpsUtilityZip extends XooNIpsUtility
                 ($timearray['hours'] << 11) | ($timearray['minutes'] << 5) | ($timearray['seconds'] >> 1);
     }
 
- // end of the 'unix2DosTime()' method
+    // end of the 'unix2DosTime()' method
 
     /**
      * open zip file.
@@ -118,14 +118,14 @@ class XooNIpsUtilityZip extends XooNIpsUtility
         return true;
     }
 
- // end of the 'open()' method
+    // end of the 'open()' method
 
     /**
      * Adds "file" to archive.
      *
-     * @param  string   local file path
-     * @param  string   name of the file in the archive (may contains the path)
-     * @param  int  the current timestamp
+     * @param string   local file path
+     * @param string   name of the file in the archive (may contains the path)
+     * @param int  the current timestamp
      *
      * @return bool result status, false if failed
      */
@@ -241,7 +241,7 @@ class XooNIpsUtilityZip extends XooNIpsUtility
         return true;
     }
 
- // end of the 'add()' method
+    // end of the 'add()' method
 
     /**
      * Close zip file.
@@ -277,6 +277,6 @@ class XooNIpsUtilityZip extends XooNIpsUtility
         return true;
     }
 
- // end of the 'close()' method
+    // end of the 'close()' method
 } // end of the 'XooNIpsUtilityZip' class
 // php-indent: enable

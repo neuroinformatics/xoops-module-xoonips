@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
 
 /**
  * @brief Class that transform associative array of XML-RPC argument(parsed by XoopsXmlRpcParser) to DataObject
@@ -336,9 +336,7 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
                 foreach ($in_array['detail_field'] as $field) {
                     if (trim($field['name']) == $input['xmlrpc']['field'][1]) {
                         if (isset($in_field) && !is_array($in_field)) {
-                            $in_field = array(
-                            $in_field,
-                        );
+                            $in_field = array($in_field);
                         }
                         if (is_array($in_field)) {
                             $in_field[] = $field['value'];
@@ -391,13 +389,9 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
                     }
 
                     // evaluate
-                    $in_var = array(
-                        $v,
-                    );
+                    $in_var = array($v);
                     $out_var = array();
-                    $context = array(
-                        'position' => $pos,
-                    );
+                    $context = array('position' => $pos);
                     eval(isset($input['eval']['xmlrpc2orm']) ? $input['eval']['xmlrpc2orm'] : '$out_var[0] = $in_var[0];');
 
                     for ($i = 0; $i < count($input['orm']['field']); ++$i) {
@@ -414,8 +408,7 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
             } else {
                 // convert to numeric reference
                 if (is_string($in_field)) {
-                    $in_field = $unicode->decode_utf8(
-                        $in_field, xoonips_get_server_charset(), 'h');
+                    $in_field = $unicode->decode_utf8($in_field, xoonips_get_server_charset(), 'h');
                 }
 
                 //

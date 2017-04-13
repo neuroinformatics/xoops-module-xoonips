@@ -26,9 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once 'transfer.class.php';
-include_once dirname(dirname(__DIR__))
-    .'/include/transfer.inc.php';
+require_once 'transfer.class.php';
+require_once dirname(dirname(__DIR__)).'/include/transfer.inc.php';
 
 class XooNIpsActionTransferAdminCheck extends XooNIpsActionTransfer
 {
@@ -56,80 +55,44 @@ class XooNIpsActionTransferAdminCheck extends XooNIpsActionTransfer
     {
         global $xoopsUser;
 
-        $this->_view_params['from_uid']
-            = $this->_formdata->getValue('post', 'from_uid', 'i', true);
+        $this->_view_params['from_uid'] = $this->_formdata->getValue('post', 'from_uid', 'i', true);
 
-        $this->_view_params['from_index_id']
-            = $this->_formdata->getValue('post', 'from_index_id', 'i', true);
+        $this->_view_params['from_index_id'] = $this->_formdata->getValue('post', 'from_index_id', 'i', true);
 
-        $this->_view_params['to_uid']
-            = $this->_formdata->getValue('post', 'to_uid', 'i', true);
+        $this->_view_params['to_uid'] = $this->_formdata->getValue('post', 'to_uid', 'i', true);
 
-        $this->_view_params['to_index_id']
-            = $this->_formdata->getValue('post', 'to_index_id', 'i', true);
+        $this->_view_params['to_index_id'] = $this->_formdata->getValue('post', 'to_index_id', 'i', true);
 
         $error_message = false;
         if (!$this->is_valid_uid($this->_view_params['from_uid'])) {
-            $error_message =
-                _AM_XOONIPS_MAINTENANCE_TRANSFER_ITEM_ERROR_NO_FROM_UID_SELECTED;
+            $error_message = _AM_XOONIPS_MAINTENANCE_TRANSFER_ITEM_ERROR_NO_FROM_UID_SELECTED;
         } elseif (!$this->is_valid_uid($this->_view_params['to_uid'])) {
-            $error_message =
-                _AM_XOONIPS_MAINTENANCE_TRANSFER_ITEM_ERROR_NO_TO_UID_SELECTED;
-        } elseif (!$this->is_private_index_id_of(
-            $this->_view_params['from_index_id'],
-            $this->_view_params['from_uid'])) {
-            $error_message =
-                _AM_XOONIPS_MAINTENANCE_TRANSFER_ITEM_ERROR_NO_FROM_INDEX_ID_SELECTED;
-        } elseif (!$this->is_private_index_id_of(
-            $this->_view_params['to_index_id'],
-            $this->_view_params['to_uid'])) {
-            $error_message =
-                _AM_XOONIPS_MAINTENANCE_TRANSFER_ITEM_ERROR_NO_TO_INDEX_ID_SELECTED;
+            $error_message = _AM_XOONIPS_MAINTENANCE_TRANSFER_ITEM_ERROR_NO_TO_UID_SELECTED;
+        } elseif (!$this->is_private_index_id_of($this->_view_params['from_index_id'], $this->_view_params['from_uid'])) {
+            $error_message = _AM_XOONIPS_MAINTENANCE_TRANSFER_ITEM_ERROR_NO_FROM_INDEX_ID_SELECTED;
+        } elseif (!$this->is_private_index_id_of($this->_view_params['to_index_id'], $this->_view_params['to_uid'])) {
+            $error_message = _AM_XOONIPS_MAINTENANCE_TRANSFER_ITEM_ERROR_NO_TO_INDEX_ID_SELECTED;
         }
         if ($error_message) {
-            redirect_header(
-                XOOPS_URL
-                .'/modules/xoonips/admin/maintenance.php?page=item',
-                3,
-                $error_message
-                );
+            redirect_header(XOOPS_URL.'/modules/xoonips/admin/maintenance.php?page=item', 3, $error_message);
         }
 
-        $this->_view_params['item_ids_to_transfer']
-            = $this->sort_item_ids_by_title(
-                $this->_formdata->getValueArray('post', 'checked_item_ids', 'i', false));
+        $this->_view_params['item_ids_to_transfer'] = $this->sort_item_ids_by_title($this->_formdata->getValueArray('post', 'checked_item_ids', 'i', false));
 
-        $this->_view_params['child_items'] = $this->get_child_items(
-            $this->_formdata->getValue('post', 'from_uid', 'i', true),
-            $this->_formdata->getValueArray('post', 'checked_item_ids', 'i', false));
+        $this->_view_params['child_items'] = $this->get_child_items($this->_formdata->getValue('post', 'from_uid', 'i', true), $this->_formdata->getValueArray('post', 'checked_item_ids', 'i', false));
 
-        $this->_view_params['limit_check_result']
-            = $this->get_limit_check_result(
-                $this->_formdata->getValue('post', 'to_uid', 'i', true),
-                $this->_formdata->getValueArray('post', 'checked_item_ids', 'i', false));
+        $this->_view_params['limit_check_result'] = $this->get_limit_check_result($this->_formdata->getValue('post', 'to_uid', 'i', true), $this->_formdata->getValueArray('post', 'checked_item_ids', 'i', false));
 
-        $this->_view_params['group_ids_to_subscribe']
-            = xoonips_transfer_get_group_ids_of_items(
-                $this->_formdata->getValueArray('post', 'checked_item_ids', 'i', false));
+        $this->_view_params['group_ids_to_subscribe'] = xoonips_transfer_get_group_ids_of_items($this->_formdata->getValueArray('post', 'checked_item_ids', 'i', false));
+        $this->_view_params['item_ids_transfer_disabled'] = $this->get_transfer_disabled_item_ids($this->_formdata->getValue('post', 'from_uid', 'i', true), $this->_formdata->getValueArray('post', 'checked_item_ids', 'i', false));
 
-        $this->_view_params['item_ids_transfer_disabled']
-            = $this->get_transfer_disabled_item_ids(
-                $this->_formdata->getValue('post', 'from_uid', 'i', true),
-                $this->_formdata->getValueArray('post', 'checked_item_ids', 'i', false));
-
-        $this->_view_params['can_not_transfer_items'] =
-            $this->get_untransferrable_reasons_and_items(
-                $this->_formdata->getValue('post', 'from_uid', 'i', true),
-                $this->_formdata->getValueArray('post', 'checked_item_ids', 'i', false));
+        $this->_view_params['can_not_transfer_items'] = $this->get_untransferrable_reasons_and_items($this->_formdata->getValue('post', 'from_uid', 'i', true), $this->_formdata->getValueArray('post', 'checked_item_ids', 'i', false));
     }
 
     public function get_child_items($from_uid, $item_ids)
     {
         $result = array();
-        foreach (xoonips_transfer_get_transferrable_item_information(
-            $from_uid,
-            $item_ids)
-                 as $info) {
+        foreach (xoonips_transfer_get_transferrable_item_information($from_uid, $item_ids) as $info) {
             $result[$info['item_id']] = array();
             foreach ($info['child_items'] as $child_item) {
                 $result[$info['item_id']][] = $child_item['item_id'];
@@ -153,9 +116,7 @@ class XooNIpsActionTransferAdminCheck extends XooNIpsActionTransfer
     public function get_transfer_disabled_item_ids($from_uid, $item_ids)
     {
         $result = array();
-        foreach (xoonips_transfer_get_transferrable_item_information($from_uid,
-                                                                      $item_ids)
-                 as $info) {
+        foreach (xoonips_transfer_get_transferrable_item_information($from_uid, $item_ids) as $info) {
             if (!$info['transfer_enable']) {
                 $result[] = $info['item_id'];
             }
@@ -167,9 +128,7 @@ class XooNIpsActionTransferAdminCheck extends XooNIpsActionTransfer
     public function get_cause_of_transfer_disable($from_uid, $item_ids)
     {
         $result = array();
-        foreach (xoonips_transfer_get_transferrable_item_information($from_uid,
-                                                                      $item_ids)
-                 as $info) {
+        foreach (xoonips_transfer_get_transferrable_item_information($from_uid, $item_ids) as $info) {
             if (!$info['transfer_enable']) {
                 $result[] = $info['item_id'];
             }
@@ -193,9 +152,7 @@ class XooNIpsActionTransferAdminCheck extends XooNIpsActionTransfer
     {
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $index = $index_handler->get($index_id);
-        if ($index == false ||
-            $index->get('open_level') != OL_PRIVATE ||
-            $index->get('uid') != $uid) {
+        if ($index == false || $index->get('open_level') != OL_PRIVATE || $index->get('uid') != $uid) {
             return false;
         }
 

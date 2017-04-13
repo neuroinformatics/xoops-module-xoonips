@@ -26,8 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/action.class.php';
-include_once dirname(__DIR__).'/base/logicfactory.class.php';
+require_once dirname(__DIR__).'/base/action.class.php';
+require_once dirname(__DIR__).'/base/logicfactory.class.php';
 require_once dirname(__DIR__).'/base/gtickets.php';
 
 class XooNIpsActionImportImport extends XooNIpsAction
@@ -64,15 +64,13 @@ class XooNIpsActionImportImport extends XooNIpsAction
             if ('xoonips_index' == $itemtype->get('name')) {
                 continue;
             }
-            $handler = &xoonips_gethandler($itemtype->get('name'),
-                                            'import_item');
+            $handler = &xoonips_gethandler($itemtype->get('name'), 'import_item');
             $handler->create();
         }
         $sess_handler = &xoonips_getormhandler('xoonips', 'session');
         $sess = &$sess_handler->get(session_id());
         $session = unserialize($sess->get('sess_data'));
-        $this->_collection = unserialize(gzuncompress(
-            base64_decode($session['xoonips_import_items'])));
+        $this->_collection = unserialize(gzuncompress(base64_decode($session['xoonips_import_items'])));
         xoonips_validate_request($this->_collection);
 
         $this->_make_clone_of_update_item($this->_collection);
@@ -92,14 +90,7 @@ class XooNIpsActionImportImport extends XooNIpsAction
                     }
                     $titles = &$item->getVar('titles');
                     $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
-                    redirect_header(
-                        XOOPS_URL.'/modules/xoonips/import.php?action=default',
-                        5, sprintf(
-                            _MD_XOONIPS_ERROR_CANNOT_OVERWRITE_LOCKED_ITEM,
-                            $titles[0]->get('title'),
-                            xoonips_get_lock_type_string(
-                                $item_lock_handler->getLockType(
-                                    $item->getUpdateItemId()))));
+                    redirect_header(XOOPS_URL.'/modules/xoonips/import.php?action=default', 5, sprintf(_MD_XOONIPS_ERROR_CANNOT_OVERWRITE_LOCKED_ITEM, $titles[0]->get('title'), xoonips_get_lock_type_string($item_lock_handler->getLockType($item->getUpdateItemId()))));
                 }
             }
         }
@@ -110,15 +101,12 @@ class XooNIpsActionImportImport extends XooNIpsAction
         $this->_view_params['import_items'] = $success['import_items'];
         $this->_view_params['begin_time'] = $this->_begin_time;
         $this->_view_params['finish_time'] = $this->_finish_time;
-        $this->_view_params['filename']
-            = $this->_collection->getImportFileName();
+        $this->_view_params['filename'] = $this->_collection->getImportFileName();
         $this->_view_params['uname'] = $xoopsUser->getVar('uname');
         $this->_view_params['errors'] = array();
         foreach ($success['import_items'] as $item) {
             foreach (array_unique($item->getErrorCodes()) as $code) {
-                $this->_view_params['errors'][]
-                    = array('code' => $code,
-                             'extra' => $item->getPseudoId(), );
+                $this->_view_params['errors'][] = array('code' => $code, 'extra' => $item->getPseudoId());
             }
         }
     }
@@ -132,13 +120,11 @@ class XooNIpsActionImportImport extends XooNIpsAction
             }
 
             if (count($items[$key]->getDuplicateUpdatableItemId()) == 1) {
-                $update_item_ids
-                    = $items[$key]->getDuplicateUpdatableItemId();
+                $update_item_ids = $items[$key]->getDuplicateUpdatableItemId();
                 $items[$key]->setUpdateItemId($update_item_ids[0]);
             } else {
                 $i = 0;
-                foreach ($items[$key]->getDuplicateUpdatableItemId()
-                         as $update_item_id) {
+                foreach ($items[$key]->getDuplicateUpdatableItemId() as $update_item_id) {
                     if ($i == 0) {
                         $items[$key]->setUpdateItemId($update_item_id);
                         $i = 1;

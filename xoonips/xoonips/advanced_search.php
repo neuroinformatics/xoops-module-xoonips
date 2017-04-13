@@ -32,9 +32,9 @@ session_cache_limiter('none');
 session_cache_expire(5);
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
-include 'include/lib.php';
-include 'include/AL.php';
+require 'include/common.inc.php';
+require 'include/lib.php';
+require 'include/AL.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 
@@ -57,6 +57,6 @@ if ($xnpsid != 0) {
 
 $xoopsOption['template_main'] = 'xoonips_advanced_search.html';
 
-include XOOPS_ROOT_PATH.'/header.php';
-include 'include/advanced_search.inc.php';
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/header.php';
+require 'include/advanced_search.inc.php';
+require XOOPS_ROOT_PATH.'/footer.php';

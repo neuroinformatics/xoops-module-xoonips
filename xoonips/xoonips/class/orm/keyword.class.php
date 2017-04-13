@@ -66,19 +66,19 @@ class XooNIpsOrmKeywordHandler extends XooNIpsTableObjectHandler
         $this->__initHandler('XooNIpsOrmKeyword', 'xoonips_item_keyword', 'seq_id');
     }
 
-  /**
-   * get keywords.
-   *
-   * @param int $item_id
-   *
-   * @return array object array
-   */
-  public function &getKeywords($item_id)
-  {
-      $criteria = new Criteria('item_id', $item_id);
-      $criteria->setSort('keyword_id');
-      $criteria->setOrder('ASC');
+    /**
+     * get keywords.
+     *
+     * @param int $item_id
+     *
+     * @return array object array
+     */
+    public function &getKeywords($item_id)
+    {
+        $criteria = new Criteria('item_id', $item_id);
+        $criteria->setSort('keyword_id');
+        $criteria->setOrder('ASC');
 
-      return $this->getObjects($criteria);
-  }
+        return $this->getObjects($criteria);
+    }
 }

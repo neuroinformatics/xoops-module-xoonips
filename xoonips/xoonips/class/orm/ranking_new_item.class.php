@@ -59,51 +59,51 @@ class XooNIpsOrmRankingNewItemHandler extends XooNIpsOrmAbstractRankingHandler
         $this->_set_columns(array('item_id', 'timestamp'));
     }
 
-  /**
-   * insert/upldate/replace object.
-   *
-   * @param object &$obj
-   * @param bool   $force force operation
-   *
-   * @return bool false if failed
-   */
-  public function insert(&$obj, $force = false)
-  {
-      $item_id = $obj->get('item_id');
-      if ($item_id == 0) {
-          // ignore if item id is zero
-      return true;
-      }
+    /**
+     * insert/upldate/replace object.
+     *
+     * @param object &$obj
+     * @param bool   $force force operation
+     *
+     * @return bool false if failed
+     */
+    public function insert(&$obj, $force = false)
+    {
+        $item_id = $obj->get('item_id');
+        if ($item_id == 0) {
+            // ignore if item id is zero
+            return true;
+        }
 
-      return parent::insert($obj, $force);
-  }
-
-  /**
-   * delete old entries for updating/rebuilding rankings.
-   *
-   * @param int $num_rows number of new entries
-   *
-   * @return bool FALSE if failed
-   */
-  public function trim($num_rows)
-  {
-      $field = 'timestamp';
-      $criteria = new CriteriaElement();
-      $criteria->setSort('timestamp');
-      $criteria->setOrder('DESC');
-      $criteria->setStart($num_rows);
-      $criteria->setLimit(1);
-      $objs = &$this->getObjects($criteria, false, $field);
-      if (empty($objs)) {
-          return true;
-      }
-      $timestamp = $objs[0]->get('timestamp');
-      $criteria = new Criteria($field, $timestamp, '<');
-    // force deletion
-    if (!$this->deleteAll($criteria, true)) {
-        return false;
+        return parent::insert($obj, $force);
     }
 
-      return true;
-  }
+    /**
+     * delete old entries for updating/rebuilding rankings.
+     *
+     * @param int $num_rows number of new entries
+     *
+     * @return bool FALSE if failed
+     */
+    public function trim($num_rows)
+    {
+        $field = 'timestamp';
+        $criteria = new CriteriaElement();
+        $criteria->setSort('timestamp');
+        $criteria->setOrder('DESC');
+        $criteria->setStart($num_rows);
+        $criteria->setLimit(1);
+        $objs = &$this->getObjects($criteria, false, $field);
+        if (empty($objs)) {
+            return true;
+        }
+        $timestamp = $objs[0]->get('timestamp');
+        $criteria = new Criteria($field, $timestamp, '<');
+        // force deletion
+        if (!$this->deleteAll($criteria, true)) {
+            return false;
+        }
+
+        return true;
+    }
 }

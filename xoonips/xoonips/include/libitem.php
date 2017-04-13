@@ -35,8 +35,10 @@ define('XNPITMGR_LISTMODE_ALL', 0);
 define('XNPITMGR_LISTMODE_PUBLICONLY', 1);
 define('XNPITMGR_LISTMODE_PRIVATEONLY', 2);
 
-/** list index tree
- *  @param  mode XNPITMGR_LISTINDEXTREEMODE_PUBLICONLY<br />
+/**
+ * list index tree.
+ *
+ *  @param mode XNPITMGR_LISTINDEXTREEMODE_PUBLICONLY<br />
  *                  return public tree only.<br />
  *                XNPITMGR_LISTINDEXTREEMODE_PRIVATEONLY<br />
  *                  eturn all index tree.
@@ -134,7 +136,9 @@ function xnpitmgrListIndexTree($mode = XNPITMGR_LISTMODE_ALL, $uid = 0)
     return $result;
 }
 
-/** list index tree items
+/**
+ * list index tree items.
+ *
  * @param index_ids index id(array) of examined object
  *
  * @return item_id array
@@ -159,7 +163,9 @@ function xnpitmgrListIndexItems($index_ids)
     return $result;
 }
 
-/** get item basic information
+/**
+ * get item basic information.
+ *
  *  @param item_id item id
  *
  *  @return item detail<br />
@@ -188,7 +194,9 @@ function xnpitmgrGetItemBasicInfo($item_id)
     return $result;
 }
 
-/** get item type info from item_type_id
+/**
+ * get item type info from item_type_id.
+ *
  *  @param item_type_id
  *
  *  @return array of item type info
@@ -217,7 +225,9 @@ function xnpitmgrGetItemTypeNameById($item_type_id)
     return $result;
 }
 
-/** get item certify state<br />
+/**
+ * get item certify state<br />.
+ *
  * @param xid item(item_id param) registered index id
  * @param iid item id
  *
@@ -243,7 +253,9 @@ function xnpitmgrGetCertifyState($xid, $iid)
     return $result;
 }
 
-/** item delete in index
+/**
+ * item delete in index.
+ *
  * @param xid item(item_id param) registered index id
  * @param iid item id
  *
@@ -284,7 +296,9 @@ function xnpitmgrUnregisterItem($xid, $iid)
     return $ret;
 }
 
-/** get remote_host
+/**
+ * get remote_host.
+ *
  *    @return remoto host
  */
 function getRemoteHost()
@@ -292,7 +306,9 @@ function getRemoteHost()
     return isset($_SERVER['REMOTE_HOST']) ? $_SERVER['REMOTE_HOST'] : $_SERVER['REMOTE_ADDR'];
 }
 
-/** withdraw item
+/**
+ * withdraw item.
+ *
  *  @param xid     item(item_id param) registered index id
  *  @param item_id item id
  *

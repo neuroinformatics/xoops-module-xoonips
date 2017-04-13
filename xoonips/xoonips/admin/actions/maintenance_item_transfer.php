@@ -32,7 +32,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
 // resouces
 $langman->read('main.php');
 
-include_once '../class/base/actionfactory.class.php';
+require_once '../class/base/actionfactory.class.php';
 
 $factory = &XooNIpsActionFactory::getInstance();
 $action = &$factory->create('transfer_admin_initialize');

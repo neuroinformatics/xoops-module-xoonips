@@ -40,7 +40,7 @@ function b_xoonips_itemtypes_show()
         $target_user = $xconfig_handler->getValue('public_item_target_user');
         if ($target_user != 'all') {
             // 'platform'
-        return false;
+            return false;
         }
     }
 
@@ -52,7 +52,7 @@ function b_xoonips_itemtypes_show()
         return false;
     }
 
-    require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
+    include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
 
     // get installed itemtypes
     $block = array();
@@ -63,7 +63,7 @@ function b_xoonips_itemtypes_show()
         $name = $item_type_obj->get('name');
         $file = XOOPS_ROOT_PATH.'/modules/'.$item_type_obj->get('viewphp');
         if (file_exists($file)) {
-            require_once $file;
+            include_once $file;
         }
         $fname = $name.'GetTopBlock';
         if (function_exists($fname)) {

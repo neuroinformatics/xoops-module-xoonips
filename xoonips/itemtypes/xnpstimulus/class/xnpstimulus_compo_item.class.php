@@ -30,9 +30,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnpstimulus/include/view.php';
-include_once XOOPS_ROOT_PATH.'/modules/xnpstimulus/iteminfo.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnpstimulus/include/view.php';
+require_once XOOPS_ROOT_PATH.'/modules/xnpstimulus/iteminfo.php';
 
 /**
  * @brief Handler object that create,insert,update,get,delete XNPStimulusCompo object.
@@ -113,16 +113,12 @@ class XNPStimulusCompoHandler extends XooNIpsItemInfoCompoHandler
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_ITEM_DETAIL:
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
-            $result['xnpstimulus_developer']
-                = xoonips_get_multiple_field_template_vars($detail->getDevelopers(),
-                                                          'xnpstimulus',
-                                                          'developer');
+            $result['xnpstimulus_developer'] = xoonips_get_multiple_field_template_vars($detail->getDevelopers(), 'xnpstimulus', 'developer');
 
             if (is_array($stimulus->getVar('preview'))) {
                 $result['detail']['previews'] = array();
                 foreach ($stimulus->getVar('preview') as $preview) {
-                    $result['detail']['previews'][]
-                        = $this->getPreviewTemplateVar($preview);
+                    $result['detail']['previews'][] = $this->getPreviewTemplateVar($preview);
                 }
             }
 

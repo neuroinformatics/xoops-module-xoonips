@@ -27,10 +27,10 @@
 // ------------------------------------------------------------------------- //
 
 $xoopsOption['pagetype'] = 'user';
-include 'include/common.inc.php';
-include_once 'include/AL.php';
-include_once 'include/lib.php';
-include_once 'class/base/pagenavi.class.php';
+require 'include/common.inc.php';
+require_once 'include/AL.php';
+require_once 'include/lib.php';
+require_once 'class/base/pagenavi.class.php';
 
 $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
@@ -126,7 +126,7 @@ if (count($item_counts) != 0) {
 
 // assign template
 $xoopsOption['template_main'] = 'xoonips_showusers.html';
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 $xoopsTpl->assign('xoops_breadcrumbs', $breadcrumbs);
 $xoopsTpl->assign('is_owner', $is_owner);
 $xoopsTpl->assign('is_editable', $is_editable);
@@ -144,7 +144,7 @@ $xoopsTpl->assign('cvitaes', _xoonips_showusers_get_cvitaes($uid));
 $xoopsTpl->assign('tabs', $pagetabs);
 $xoopsTpl->assign('navi', $pagenavi);
 $xoopsTpl->assign('publications', itemid2ListBlock($item_ids));
-include XOOPS_ROOT_PATH.'/footer.php';
+require XOOPS_ROOT_PATH.'/footer.php';
 exit();
 
 function _xoonips_showusers_get_position($posi_id)
@@ -305,18 +305,18 @@ while ($row = $xoopsDB->fetchArray($res)) {
         $itid = intval($row2['item_id']);
             // var_dump($itid);
             switch ($val) {
-                case 0:
-                $sql3 = 'SELECT i2.item_id FROM '.$xoopsDB->prefix('xoonips_item_basic').' as i1, '.$xoopsDB->prefix('xoonips_item_show').' as i2 WHERE i1.item_id='.$itid.' AND i1.uid='.$uid.' AND i1.item_id=i2.item_id AND i1.uid=i2.uid';
-                $res3 = $xoopsDB->query($sql3);
-                $num_of_data = $xoopsDB->getRowsNum($res3);
-                $sum_of_data = $sum_of_data + $num_of_data;
-                break;
+        case 0:
+            $sql3 = 'SELECT i2.item_id FROM '.$xoopsDB->prefix('xoonips_item_basic').' as i1, '.$xoopsDB->prefix('xoonips_item_show').' as i2 WHERE i1.item_id='.$itid.' AND i1.uid='.$uid.' AND i1.item_id=i2.item_id AND i1.uid=i2.uid';
+            $res3 = $xoopsDB->query($sql3);
+            $num_of_data = $xoopsDB->getRowsNum($res3);
+            $sum_of_data = $sum_of_data + $num_of_data;
+            break;
 
-                case 1:
-                $sql3 = 'SELECT item_id FROM '.$xoopsDB->prefix('xoonips_item_show').' WHERE item_id='.$itid.' AND uid='.$uid.'';
-                $res3 = $xoopsDB->query($sql3);
-                $num_of_data = $xoopsDB->getRowsNum($res3);
-                $sum_of_data = $sum_of_data + $num_of_data;
+        case 1:
+            $sql3 = 'SELECT item_id FROM '.$xoopsDB->prefix('xoonips_item_show').' WHERE item_id='.$itid.' AND uid='.$uid.'';
+            $res3 = $xoopsDB->query($sql3);
+            $num_of_data = $xoopsDB->getRowsNum($res3);
+            $sum_of_data = $sum_of_data + $num_of_data;
             }
     }
     if (!is_numeric($sum_of_data)) {
@@ -326,19 +326,19 @@ while ($row = $xoopsDB->fetchArray($res)) {
 
 // calculate maximum number of pages and offset value
     $w_last = intval($sum_of_data / 20);
-    if ($w_last < 1) {
-        $w_last = 1;
-    }
+if ($w_last < 1) {
+    $w_last = 1;
+}
     $page = $formdata->getValue('get', 'page', 'i', false, 0);
-        if ($page <= 0) {
-            $w_page = page_optimize(1, $w_last);
-        } else {
-            $w_page = page_optimize($page, $w_last);
-        }
+if ($page <= 0) {
+    $w_page = page_optimize(1, $w_last);
+} else {
+    $w_page = page_optimize($page, $w_last);
+}
     $w_offset = intval(($w_page - 1) * 20);
-    if ($w_offset < 0) {
-        $w_offset = 0;
-    }
+if ($w_offset < 0) {
+    $w_offset = 0;
+}
     $xoopsTpl->assign('sum_of_data', $sum_of_data);
 
 // create page links
@@ -401,49 +401,49 @@ while ($itop = $xoopsDB->fetchArray($res)) {
 }
 
 $item_htmls = array();
-    if ($sum_of_data !== 0) {
-        $tab_name1 = $xoopsDB->prefix('xoonips_item_show');
-        $tab_name2 = $xoopsDB->prefix('xoonips_item_basic');
-        $tab_name3 = $xoopsDB->prefix('xoonips_index_item_link');
-        $tab_name4 = $xoopsDB->prefix('xoonips_index');
-        $tab_name5 = $xoopsDB->prefix('xoonips_item_type');
-        $tab_name6 = $xoopsDB->prefix('modules');
-        switch ($val) {
-        case 0:
-            $sql = 'SELECT DISTINCT i1.item_id, i2.item_type_id FROM '.$tab_name1.' as i1, '.$tab_name2.' as i2, '.$tab_name3.' as i3, '.$tab_name4.' as i4, '.$tab_name5.' as i5, '.$tab_name6.' as i6';
-            $sql .= ' WHERE i1.uid='.$uid.' AND i1.item_id=i2.item_id AND i2.item_id=i3.item_id AND i3.index_id=i4.index_id AND i4.uid IS NULL AND i4.gid IS NULL';
-            $sql .= ' AND i3.certify_state=2 AND i2.item_type_id=i5.item_type_id AND i5.mid=i6.mid AND i2.uid='.$uid.'';
-            $sql .= ' ORDER BY i6.weight ASC, i2.publication_year DESC, i2.publication_month DESC, i2.publication_mday DESC, i2.last_update_date DESC';
-            $res = $xoopsDB->query($sql);
-            break;
-        case 1:
-            $sql = 'SELECT DISTINCT i1.item_id, i2.item_type_id FROM '.$tab_name1.' as i1, '.$tab_name2.' as i2, '.$tab_name3.' as i3, '.$tab_name4.' as i4, '.$tab_name5.' as i5, '.$tab_name6.' as i6';
-            $sql .= ' WHERE i1.uid='.$uid.' AND i1.item_id=i2.item_id AND i2.item_id=i3.item_id AND i3.index_id=i4.index_id AND i4.uid IS NULL AND i4.gid IS NULL';
-            $sql .= ' AND i3.certify_state=2 AND i2.item_type_id=i5.item_type_id AND i5.mid=i6.mid';
-            $sql .= ' ORDER BY i6.weight ASC, i2.publication_year DESC, i2.publication_month DESC, i2.publication_mday DESC, i2.last_update_date DESC';
-            $res = $xoopsDB->query($sql);
-        }
-        $ch_a = '';
-        while ($row = $xoopsDB->fetchArray($res)) {
-            // show item_type's name
-            $ch_b = intval($row['item_type_id']);
-            if (empty($ch_a) || $ch_a !== $ch_b) {
-                $tab_name = $xoopsDB->prefix('xoonips_item_type');
-                $tsql = 'SELECT display_name FROM '.$tab_name.' WHERE item_type_id='.$ch_b.'';
-                $tres = $xoopsDB->query($tsql);
-                $trow = $xoopsDB->fetchArray($tres);
-                $item_type_title = $ts->htmlSpecialChars($trow['display_name']);
-                $title_t = '<table><tr><td>&nbsp;&nbsp;'.$item_type_title.'</td></tr></table>';
-                $item_htmls[] = array('html' => $title_t, 'th' => 'on');
-            }
-            // make item block
-            $tmp = itemid2ListBlock(intval($row['item_id']));
-            foreach ($tmp as $key => $value) {
-                $item_htmls[] = array('html' => $value);
-            }
-            $ch_a = intval($row['item_type_id']);
-        }
+if ($sum_of_data !== 0) {
+    $tab_name1 = $xoopsDB->prefix('xoonips_item_show');
+    $tab_name2 = $xoopsDB->prefix('xoonips_item_basic');
+    $tab_name3 = $xoopsDB->prefix('xoonips_index_item_link');
+    $tab_name4 = $xoopsDB->prefix('xoonips_index');
+    $tab_name5 = $xoopsDB->prefix('xoonips_item_type');
+    $tab_name6 = $xoopsDB->prefix('modules');
+    switch ($val) {
+    case 0:
+        $sql = 'SELECT DISTINCT i1.item_id, i2.item_type_id FROM '.$tab_name1.' as i1, '.$tab_name2.' as i2, '.$tab_name3.' as i3, '.$tab_name4.' as i4, '.$tab_name5.' as i5, '.$tab_name6.' as i6';
+        $sql .= ' WHERE i1.uid='.$uid.' AND i1.item_id=i2.item_id AND i2.item_id=i3.item_id AND i3.index_id=i4.index_id AND i4.uid IS NULL AND i4.gid IS NULL';
+        $sql .= ' AND i3.certify_state=2 AND i2.item_type_id=i5.item_type_id AND i5.mid=i6.mid AND i2.uid='.$uid.'';
+        $sql .= ' ORDER BY i6.weight ASC, i2.publication_year DESC, i2.publication_month DESC, i2.publication_mday DESC, i2.last_update_date DESC';
+        $res = $xoopsDB->query($sql);
+        break;
+    case 1:
+        $sql = 'SELECT DISTINCT i1.item_id, i2.item_type_id FROM '.$tab_name1.' as i1, '.$tab_name2.' as i2, '.$tab_name3.' as i3, '.$tab_name4.' as i4, '.$tab_name5.' as i5, '.$tab_name6.' as i6';
+        $sql .= ' WHERE i1.uid='.$uid.' AND i1.item_id=i2.item_id AND i2.item_id=i3.item_id AND i3.index_id=i4.index_id AND i4.uid IS NULL AND i4.gid IS NULL';
+        $sql .= ' AND i3.certify_state=2 AND i2.item_type_id=i5.item_type_id AND i5.mid=i6.mid';
+        $sql .= ' ORDER BY i6.weight ASC, i2.publication_year DESC, i2.publication_month DESC, i2.publication_mday DESC, i2.last_update_date DESC';
+        $res = $xoopsDB->query($sql);
     }
+    $ch_a = '';
+    while ($row = $xoopsDB->fetchArray($res)) {
+        // show item_type's name
+        $ch_b = intval($row['item_type_id']);
+        if (empty($ch_a) || $ch_a !== $ch_b) {
+            $tab_name = $xoopsDB->prefix('xoonips_item_type');
+            $tsql = 'SELECT display_name FROM '.$tab_name.' WHERE item_type_id='.$ch_b.'';
+            $tres = $xoopsDB->query($tsql);
+            $trow = $xoopsDB->fetchArray($tres);
+            $item_type_title = $ts->htmlSpecialChars($trow['display_name']);
+            $title_t = '<table><tr><td>&nbsp;&nbsp;'.$item_type_title.'</td></tr></table>';
+            $item_htmls[] = array('html' => $title_t, 'th' => 'on');
+        }
+        // make item block
+        $tmp = itemid2ListBlock(intval($row['item_id']));
+        foreach ($tmp as $key => $value) {
+            $item_htmls[] = array('html' => $value);
+        }
+        $ch_a = intval($row['item_type_id']);
+    }
+}
     $xoopsTpl->assign('item_htmls', $item_htmls);
 
 if (isset($_SESSION['xoopsUserId'])) {

@@ -30,7 +30,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-include_once 'include/extra_param.inc.php';
+require_once 'include/extra_param.inc.php';
 /*
  *
  * $_POST['op'] :
@@ -140,8 +140,7 @@ case 'quicksearch':
 
     $url_keyword = urlencode($keyword);
     $url_search_itemtype = urlencode($search_itemtype);
-    $xoopsTpl->assign('url_for_get', XOOPS_URL."/modules/xoonips/itemselect.php?op=$op&amp;search_itemtype=$url_search_itemtype&amp;keyword=$url_keyword".
-                      "&amp;page=$page&amp;item_per_page=$item_per_page&amp;orderby=$url_orderby&amp;orderdir=$url_orderdir");
+    $xoopsTpl->assign('url_for_get', XOOPS_URL."/modules/xoonips/itemselect.php?op=$op&amp;search_itemtype=$url_search_itemtype&amp;keyword=$url_keyword"."&amp;page=$page&amp;item_per_page=$item_per_page&amp;orderby=$url_orderby&amp;orderdir=$url_orderdir");
 
     $metadata_count = xoonips_get_metadata_count_from_search_cache($search_cache_id);
     $item_count = xoonips_get_item_count_from_search_cache($search_cache_id);
@@ -151,16 +150,20 @@ case 'quicksearch':
     $criteria = new Criteria('name', $search_itemtype);
     $item_types = &$item_type_handler->getObjects($criteria);
     if (count($item_types) > 0) {
-        $xoopsTpl->assign('search_tabs', array(
+        $xoopsTpl->assign(
+            'search_tabs', array(
             array('search_tab' => 'item', 'label' => _MD_XOONIPS_ITEM_SEARCH_TAB_ITEM, 'count' => $item_count),
             array('search_tab' => 'file', 'label' => _MD_XOONIPS_ITEM_SEARCH_TAB_FILE, 'count' => $file_count),
-        ));
+            )
+        );
     } elseif ($search_itemtype == 'all') {
-        $xoopsTpl->assign('search_tabs', array(
+        $xoopsTpl->assign(
+            'search_tabs', array(
             array('search_tab' => 'item', 'label' => _MD_XOONIPS_ITEM_SEARCH_TAB_ITEM, 'count' => $item_count),
             array('search_tab' => 'metadata', 'label' => _MD_XOONIPS_ITEM_SEARCH_TAB_METADATA, 'count' => $metadata_count),
             array('search_tab' => 'file', 'label' => _MD_XOONIPS_ITEM_SEARCH_TAB_FILE, 'count' => $file_count),
-        ));
+            )
+        );
     }
 
     if ($search_tab == 'metadata' || $search_itemtype == 'metadata') {
@@ -204,17 +207,21 @@ case 'quicksearch':
             $ar = array();
             list($ar['identifier'], $ar['repository_id'], $title) = $row;
             $ar['title'] = $textutil->html_special_chars($title);
-            $ar['params'] = urlencode(implode('&', array(
-                'op'.'='.urlencode($op),
-                'keyword'.'='.urlencode($keyword),
-                'search_itemtype'.'='.urlencode($search_itemtype),
-                'search_cache_id'.'='.urlencode($search_cache_id),
-                'order_by'.'='.urlencode($order_by),
-                'order_dir'.'='.urlencode($order_dir),
-                'item_per_page'.'='.urlencode($item_per_page),
-                'page'.'='.urlencode($page),
-                'search_tab'.'='.urlencode($search_tab),
-            )));
+            $ar['params'] = urlencode(
+                implode(
+                    '&', array(
+                    'op'.'='.urlencode($op),
+                    'keyword'.'='.urlencode($keyword),
+                    'search_itemtype'.'='.urlencode($search_itemtype),
+                    'search_cache_id'.'='.urlencode($search_cache_id),
+                    'order_by'.'='.urlencode($order_by),
+                    'order_dir'.'='.urlencode($order_dir),
+                    'item_per_page'.'='.urlencode($item_per_page),
+                    'page'.'='.urlencode($page),
+                    'search_tab'.'='.urlencode($search_tab),
+                    )
+                )
+            );
             $items[] = $ar;
             $metadata[] = $ar;
         }
@@ -297,47 +304,47 @@ case 'select_item_advancedsearch_pagenavi':
     $xoopsOption['template_main'] = 'xoonips_itemselect_select_item.html';
     break;
 case 'select_item_index':
-  // select item from indexed item
-  // - initialize $selected
-  $selected = $selected_original;
-  $selected_hidden = array();
-  // - reset page number
-  $page = 1;
+    // select item from indexed item
+    // - initialize $selected
+    $selected = $selected_original;
+    $selected_hidden = array();
+    // - reset page number
+    $page = 1;
 case 'select_item_index_pagenavi':
-  // change page no of select item from indexed item
-  if ($index_id == IID_ROOT) {
-      // access denied to IID_ROOT
-      header('Location: '.XOOPS_URL.'/modules/xoonips/itemselect.php');
-      exit();
-  }
-  $myuid = $xoopsUser->getVar('uid');
-  // get private index id
-  $xu_ohandler = &xoonips_getormhandler('xoonips', 'users');
-  $xu_obj = &$xu_ohandler->get($myuid);
-  $private_index_id = $xu_obj->get('private_index_id');
+    // change page no of select item from indexed item
+    if ($index_id == IID_ROOT) {
+        // access denied to IID_ROOT
+        header('Location: '.XOOPS_URL.'/modules/xoonips/itemselect.php');
+        exit();
+    }
+    $myuid = $xoopsUser->getVar('uid');
+    // get private index id
+    $xu_ohandler = &xoonips_getormhandler('xoonips', 'users');
+    $xu_obj = &$xu_ohandler->get($myuid);
+    $private_index_id = $xu_obj->get('private_index_id');
 
-  $index_handler = &xoonips_gethandler('xoonips', 'index');
-  if (isset($itemselect_private_only) && $itemselect_private_only) {
-      // only if select items from private indexes.
-      // this case is used for transferring items in user menu
-      $index_obj = &$index_handler->getIndexObject($index_id);
-      if ($index_obj->get('uid') != $myuid || $index_obj->get('open_level') != OL_PRIVATE) {
-          // if target index is not user's own index, override index id to
-      // user's private root index
-      $index_id = $private_index_id;
-      }
-  }
-  // get item ids into target index
-  $iids = $index_handler->getItemIds($index_id, $myuid, 'read');
-  $indexes_vars = $index_handler->getIndexPathArray($index_id, 's');
-  if ($indexes_vars[0]['index_id'] == $private_index_id) {
-      $indexes_vars[0]['title'] = XNP_PRIVATE_INDEX_TITLE;
-  }
-  // assign template variables
-  $xoopsTpl->assign('indexes', $indexes_vars);
-  $xoopsTpl->assign('op', 'select_item_index');
-  $xoopsOption['template_main'] = 'xoonips_itemselect_select_item.html';
-  break;
+    $index_handler = &xoonips_gethandler('xoonips', 'index');
+    if (isset($itemselect_private_only) && $itemselect_private_only) {
+        // only if select items from private indexes.
+        // this case is used for transferring items in user menu
+        $index_obj = &$index_handler->getIndexObject($index_id);
+        if ($index_obj->get('uid') != $myuid || $index_obj->get('open_level') != OL_PRIVATE) {
+            // if target index is not user's own index, override index id to
+            // user's private root index
+            $index_id = $private_index_id;
+        }
+    }
+    // get item ids into target index
+    $iids = $index_handler->getItemIds($index_id, $myuid, 'read');
+    $indexes_vars = $index_handler->getIndexPathArray($index_id, 's');
+    if ($indexes_vars[0]['index_id'] == $private_index_id) {
+        $indexes_vars[0]['title'] = XNP_PRIVATE_INDEX_TITLE;
+    }
+    // assign template variables
+    $xoopsTpl->assign('indexes', $indexes_vars);
+    $xoopsTpl->assign('op', 'select_item_index');
+    $xoopsOption['template_main'] = 'xoonips_itemselect_select_item.html';
+    break;
 case 'select_item_useritem'://select item from user's items
     $selected = $selected_original; //initialize $selected
     $selected_hidden = array();
@@ -354,11 +361,11 @@ case 'select_item_useritem_pagenavi':
 case 'related_to_from_index':
      $items = xoonips_get_indexed_items($index_id, empty($xoopsUser) ? UID_GUEST : $xoopsUser->getVar('uid'));
      $iids = array();
-     foreach ($items as $item) {
-         $basic = $item->getVar('basic');
-         $iids[] = $basic->get('item_id');
-     }
-     break;
+    foreach ($items as $item) {
+        $basic = $item->getVar('basic');
+        $iids[] = $basic->get('item_id');
+    }
+    break;
 default:
     xoonips_deny_guest_access();
 
@@ -372,7 +379,8 @@ default:
 }
 
 if (isset($itemselect_private_only) && $itemselect_private_only
-    && count($iids) > 0) {
+    && count($iids) > 0
+) {
     $iids = get_only_own_items($iids);
 }
 
@@ -629,8 +637,8 @@ function xoonips_get_indexed_items($index_id, $uid)
  *
  * @param $index_id integer id of index item is registerd to
  * @param $uid integer user id of executor
- * @param $old_selected_item_ids array id of all of already registerd items to the index($index_id)
- * @param $new_selected_item_ids array id of all of items to be registered to the index($index_id)
+ * @param old_selected_item_ids array id of all of already registerd items to the index( $index_id)
+ * @param new_selected_item_ids array id of all of items to be registered to the index(  $index_id)
  */
 function xoonips_add_selected_item($index_id, $uid, $old_selected_item_ids, $new_selected_item_ids)
 {
@@ -675,7 +683,8 @@ function xoonips_add_selected_item($index_id, $uid, $old_selected_item_ids, $new
         $criteria = $criteria->add(new Criteria('item_id', $item_id));
         $index_item_link = &$index_item_link_handler->getObjects($criteria);
         if (isset($index_item_link[0]) && $index_item_link[0]->get('certify_state') == CERTIFY_REQUIRED
-            || isset($index_item_link[0]) && $index_item_link[0]->get('certify_state') == CERTIFIED) {
+            || isset($index_item_link[0]) && $index_item_link[0]->get('certify_state') == CERTIFIED
+        ) {
             continue;
         }
 
@@ -695,8 +704,7 @@ function xoonips_add_selected_item($index_id, $uid, $old_selected_item_ids, $new
         $change_log->set('uid', $uid);
         $change_log->set('item_id', $item_id);
         $change_log->set('log_date', time());
-        $change_log->set('log', sprintf(_MD_XOONIPS_ITEM_CHANGE_LOG_AUTOFILL_TEXT,
-                                            implode(_MD_XOONIPS_ITEM_CHANGE_LOG_AUTOFILL_DELIMITER, array(_MD_XOONIPS_ITEM_INDEX_LABEL))));
+        $change_log->set('log', sprintf(_MD_XOONIPS_ITEM_CHANGE_LOG_AUTOFILL_TEXT, implode(_MD_XOONIPS_ITEM_CHANGE_LOG_AUTOFILL_DELIMITER, array(_MD_XOONIPS_ITEM_INDEX_LABEL))));
 
         $item_handler = &xoonips_getormcompohandler('xoonips', 'item');
         $item = $item_handler->get($item_id);
@@ -721,8 +729,9 @@ function xoonips_add_selected_item($index_id, $uid, $old_selected_item_ids, $new
         foreach ($index_item_links as $index_item_link) {
             if ($index_item_link->get('certify_state') == CERTIFY_REQUIRED) {
                 $index = $index_handler->get($index_item_link->get('index_id'));
-                if ($index->get('open_level') == OL_PUBLIC ||
-                     $index->get('open_level') == OL_GROUP_ONLY) {
+                if ($index->get('open_level') == OL_PUBLIC
+                    || $index->get('open_level') == OL_GROUP_ONLY
+                ) {
                     $basic = &$item->getVar('basic');
                     $item_basic_handler->lockItemAndIndexes($basic->get('item_id'), $index_item_link->get('index_id'));
                 }
@@ -734,7 +743,8 @@ function xoonips_add_selected_item($index_id, $uid, $old_selected_item_ids, $new
         $eventlog_handler->recordUpdateItemEvent($item_id);
 
         if (OL_PUBLIC == $index->get('open_level')
-             || OL_GROUP_ONLY == $index->get('open_level')) {
+            || OL_GROUP_ONLY == $index->get('open_level')
+        ) {
             $certify_item = $xoonips_config_handler->getValue(XNP_CONFIG_CERTIFY_ITEM_KEY);
             switch ($certify_item) {
             case 'auto':
@@ -843,12 +853,12 @@ function xoonips_get_item_count_from_search_cache($search_cache_id)
 
     return $c;
 
-/*
+    /*
     $search_cache_item =& $search_cache_item_handler->getObjects( new Criteria( 'search_cache_id', $search_cache_id ), false, 'count(tb.item_id)', false, $join );
     if( count( $search_cache_item ) == 0 ) return 0;
     var_dump( $search_cache_item[0] -> getExtraVar( 'count(tb.item_id)' ) );
     return $search_cache_item[0] -> getExtraVar( 'count(tb.item_id)' );
-*/
+    */
 }
 
 /**

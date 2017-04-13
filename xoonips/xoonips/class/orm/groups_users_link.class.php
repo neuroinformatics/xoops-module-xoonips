@@ -60,53 +60,53 @@ class XooNIpsOrmGroupsUsersLinkHandler extends XooNIpsTableObjectHandler
         $this->__initHandler('XooNIpsOrmGroupsUsersLink', 'xoonips_groups_users_link', 'groups_users_link_id');
     }
 
-  /**
-   * remove a member from a group. cannot remove if member
-   * shares(certified or certify request) items to this group.
-   *
-   * @param int $gid group id
-   * @param int $uid user id
-   *
-   * @return bool FALSE if failed
-   */
-  public function remove($gid, $uid)
-  {
-      // is $uid a member of $gid ?
-    $criteria = new CriteriaCompo();
-      $criteria->add(new Criteria('gid', $gid));
-      $criteria->add(new Criteria('uid', $uid));
-      $groups_users_links = &$this->getObjects($criteria);
-      if ($groups_users_links === false) {
-          // error
-      return false;
-      }
-      if (count($groups_users_links) != 1) {
-          // not a member
-      return false;
-      }
+    /**
+     * remove a member from a group. cannot remove if member
+     * shares(certified or certify request) items to this group.
+     *
+     * @param int $gid group id
+     * @param int $uid user id
+     *
+     * @return bool FALSE if failed
+     */
+    public function remove($gid, $uid)
+    {
+        // is $uid a member of $gid ?
+        $criteria = new CriteriaCompo();
+        $criteria->add(new Criteria('gid', $gid));
+        $criteria->add(new Criteria('uid', $uid));
+        $groups_users_links = &$this->getObjects($criteria);
+        if ($groups_users_links === false) {
+            // error
+            return false;
+        }
+        if (count($groups_users_links) != 1) {
+            // not a member
+            return false;
+        }
 
-    /* select from item_basic
+        /* select from item_basic
          left join $join(index_item_link)
          left join $join2(index)
-       where item_basic.uid=$uid and index.gid=$gid
-    */
-    $criteria = new CriteriaCompo();
-      $criteria->add(new Criteria('uid', $uid, '=', $this->db->prefix('xoonips_item_basic')));
-      $criteria->add(new Criteria('gid', $gid, '=', 'tx'));
-      $join = new XooNIpsJoinCriteria('xoonips_index_item_link', 'item_id', 'item_id');
-      $join2 = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id', 'LEFT', 'tx');
-      $join->cascade($join2);
-      $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
-      $item_basics = &$item_basic_handler->getObjects($criteria, false, '', false, $join);
-      if ($item_basics === false) {
-          // error
-      return false;
-      }
-      if (count($item_basics) != 0) {
-          // cannot remove because user shares items to this group.
-      return false;
-      }
+         where item_basic.uid=$uid and index.gid=$gid
+        */
+        $criteria = new CriteriaCompo();
+        $criteria->add(new Criteria('uid', $uid, '=', $this->db->prefix('xoonips_item_basic')));
+        $criteria->add(new Criteria('gid', $gid, '=', 'tx'));
+        $join = new XooNIpsJoinCriteria('xoonips_index_item_link', 'item_id', 'item_id');
+        $join2 = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id', 'LEFT', 'tx');
+        $join->cascade($join2);
+        $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
+        $item_basics = &$item_basic_handler->getObjects($criteria, false, '', false, $join);
+        if ($item_basics === false) {
+            // error
+            return false;
+        }
+        if (count($item_basics) != 0) {
+            // cannot remove because user shares items to this group.
+            return false;
+        }
 
-      return $this->delete($groups_users_links[0]);
-  }
+        return $this->delete($groups_users_links[0]);
+    }
 }

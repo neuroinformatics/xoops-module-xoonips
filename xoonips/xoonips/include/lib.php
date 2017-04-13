@@ -28,9 +28,9 @@
 
 //  functions called from ItemTypeModules
 
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/imexport.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/notification.inc.php';
-include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/imexport.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/notification.inc.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
 
 function xnpGetBasicInformationArray($item_id, $fmt = 'n')
 {
@@ -255,7 +255,8 @@ function xnpIsCommaSeparatedNumber($str)
     return  1 == preg_match('/^([0-9,]+)$/', $str, $ar);
 }
 
-/** get directory name stored attachment files that related to items.
+/**
+ * get directory name stored attachment files that related to items.
  *  not contain '/' in end of character strings.
  */
 function xnpGetUploadDir()
@@ -276,7 +277,9 @@ function xnpGetUploadDir()
     return $uploadDir;
 }
 
-/** make path stored files from file_id.
+/**
+ * make path stored files from file_id.
+ *
  * @param file_id file_id
  */
 function xnpGetUploadFilePath($file_id)
@@ -284,7 +287,9 @@ function xnpGetUploadFilePath($file_id)
     return xnpGetUploadDir().'/'.(int) $file_id;
 }
 
-/** get corresponding culumns to condition from 'prefix("xoonips_file")' table.
+/**
+ * get corresponding culumns to condition from 'prefix("xoonips_file")' table.
+ *
  * @param columns acquired culumns
  * @param condition query of SQL. t_file and t_file_type are possible to use for tablename.
  * ex.  $files = xnpGetFileInfo( "t_file.file_id, t_file.", "t_file_type.name='preview' and is_deleted=0 and ( item_id=$item_id or sid = $sid )" );
@@ -366,7 +371,7 @@ function xnpGetIndexPathServerString($xnpsid, $xid)
 
     for ($p_xid = $xid; $p_xid != IID_ROOT; $p_xid = (int) ($index['parent_index_id'])) {
         // get $index
-    $index = array();
+        $index = array();
         $result = xnp_get_index($xnpsid, $p_xid, $index);
         if ($result != 0) {
             break;
@@ -440,7 +445,8 @@ function xnpMakeTable($in, $col)
     return implode('', $out);
 }
 
-/** get PreviewBlock for detail page.
+/**
+ * get PreviewBlock for detail page.
  */
 function xnpGetPreviewDetailBlock($item_id)
 {
@@ -471,7 +477,8 @@ function xnpGetPreviewDetailBlock($item_id)
     );
 }
 
-/** get AttachmentBlock for detail page.
+/**
+ * get AttachmentBlock for detail page.
  * display a warning dialog if link clicked( the case which download of the attachment file has been permitted ).
  *
  * @param item_id item_id
@@ -582,7 +589,8 @@ function xnpGetAttachmentDetailBlock($item_id, $name)
     return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html, 'hidden' => $hidden);
 }
 
-/** get Confirmation block for detail page.
+/**
+ * get Confirmation block for detail page.
  * display confirmation block if xoonips_download_confirmation() is called.
  *
  * @param item_id item_id
@@ -600,9 +608,8 @@ function xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $attachmen
         return '';
     }
 
-    require_once dirname(__DIR__).'/class/base/gtickets.php';
-    $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name, t_file.file_size, t_file.mime_type, unix_timestamp(t_file.timestamp) ',
-    'sess_id is NULL and is_deleted=0', $item_id);
+    include_once dirname(__DIR__).'/class/base/gtickets.php';
+    $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name, t_file.file_size, t_file.mime_type, unix_timestamp(t_file.timestamp) ', 'sess_id is NULL and is_deleted=0', $item_id);
 
     if ($files == false || count($files) == 0) {
         return '';
@@ -685,7 +692,9 @@ function xoonips_get_download_filename($file_id)
     }
 }
 
-/** get FilenameBlock of attachment
+/**
+ * get FilenameBlock of attachment.
+ *
  * @param item_id item_id
  * @param name name of file type
  */
@@ -708,7 +717,9 @@ function xnpGetAttachmentFilenameBlock($item_id, $name)
 
     return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html);
 }
-/** get MimetypeBlock of Attachment
+/**
+ * get MimetypeBlock of Attachment.
+ *
  * @param item_id item_id
  * @param name name of file type
  */
@@ -727,7 +738,9 @@ function xnpGetAttachmentMimetypeBlock($item_id, $name)
 
     return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html);
 }
-/** get FiletypeBlock of Attachment
+/**
+ * get FiletypeBlock of Attachment.
+ *
  * @param item_id item_id
  * @param name name of file type
  */
@@ -753,7 +766,9 @@ function xnpGetAttachmentFiletypeBlock($item_id, $name)
     return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html);
 }
 
-/** get TextFileBlock for detail page
+/**
+ * get TextFileBlock for detail page.
+ *
  * @param item_id item_id
  * @param name name of file type
  */
@@ -862,7 +877,8 @@ function xnpGetIndexDetailBlock($item_id, $button_flag = true)
     return false;
 }
 
-/** upload file inserts into database. and file is moved at hand.
+/**
+ * upload file inserts into database. and file is moved at hand.
  * todo: Should I check the authority of the item_id?
  *
  * @param name input tag name used in upload
@@ -955,7 +971,9 @@ function xnpUploadFile($name, $keyval)
     return array($fileID, false);
 }
 
-/** generate PreviewBlock HTML in edit page
+/**
+ * generate PreviewBlock HTML in edit page.
+ *
  * @param item_id false(no HTML)
  */
 function xnpGetPreviewEditBlock($item_id)
@@ -1090,16 +1108,16 @@ function xnpGetAttachmentEditBlock($item_id, $name)
     $fileID = $formdata->getValue('post', $name.'FileID', 'i', false);
     if (isset($fileID)) {
         // user comes from Confirm/Edit/Register page.
-    if ($fileID) {
-        $fileInfo = xnpGetFileInfo($sql, "t_file.file_id = $fileID", $item_id);
-    }
-    // there is a deletion demand of a file
-    $deleteFileID = $formdata->getValue('post', 'fileID', 'i', false);
+        if ($fileID) {
+            $fileInfo = xnpGetFileInfo($sql, "t_file.file_id = $fileID", $item_id);
+        }
+        // there is a deletion demand of a file
+        $deleteFileID = $formdata->getValue('post', 'fileID', 'i', false);
         if ($formdata->getValue('post', 'mode', 's', false, '') == 'Delete' && $fileID == $deleteFileID) {
             $fileInfo = false;
         }
     } elseif (!empty($item_id)) { // get default value from database.
-    $fileInfo = xnpGetFileInfo($sql, "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
+        $fileInfo = xnpGetFileInfo($sql, "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
     }
 
     // generate html
@@ -1285,7 +1303,7 @@ function xnpGetTextFileEditBlock($item_id, $name, $defaultText)
     $text = $formdata->getValue('post', $name.'EncText', 's', false);
     if (!isset($text)) {
         // There is no initial value specification by POST. use the value of $defaultText.
-    $text = $defaultText;
+        $text = $defaultText;
     }
 
     $showText = xnpHeadText($text);
@@ -1368,17 +1386,17 @@ function xnpGetPreviewConfirmBlock($item_id)
         $html = '';
     } else {
         // illegal inputs are removed.
-    if (!xnpIsCommaSeparatedNumber($previewFileID)) {
-        echo 'Error: bad previewFileID';
+        if (!xnpIsCommaSeparatedNumber($previewFileID)) {
+            echo 'Error: bad previewFileID';
 
-        return false;
-    }
+            return false;
+        }
 
-    // get preview file
-    $files = xnpGetFileInfo('t_file.file_id, t_file.caption', "t_file_type.name='preview' and t_file.file_id in ($previewFileID)", $item_id);
+        // get preview file
+        $files = xnpGetFileInfo('t_file.file_id, t_file.caption', "t_file_type.name='preview' and t_file.file_id in ($previewFileID)", $item_id);
 
-    // generate html
-    reset($files);
+        // generate html
+        reset($files);
         $imageHtml1 = array();
         $imageHtml2 = array();
         while (list($dummy, list($fileID, $caption)) = each($files)) {
@@ -1400,8 +1418,8 @@ function xnpGetAttachmentConfirmBlock($item_id, $name)
     $formdata = &xoonips_getutility('formdata');
     if (!empty($_FILES[$name]['name'])) {
         xnpEncodeMacSafariFiles($name);
-    // Upload file
-    list($fileID, $errorMessage) = xnpUploadFile($name, false);
+        // Upload file
+        list($fileID, $errorMessage) = xnpUploadFile($name, false);
         if ($fileID == false) {
             global $system_message;
             $system_message = $system_message."\n".'<br /><span style="color: red;">'.$textutil->html_special_chars($errorMessage).'</span><br />';
@@ -1413,7 +1431,7 @@ function xnpGetAttachmentConfirmBlock($item_id, $name)
     } else {
         $attachmentFileID = $formdata->getValue('post', $name.'FileID', 'i', false, 0);
         if ($attachmentFileID == 0) { // no attachment file.
-        $sql = ' 0 ';
+            $sql = ' 0 ';
         } else {
             $sql = "t_file.file_id = $attachmentFileID";
         }
@@ -1690,7 +1708,9 @@ function xnpUpdateAttachment($item_id, $name)
     return true;
 }
 
-/** function of getting readme/rights contents on the following page of confirm.
+/**
+ * function of getting readme/rights contents on the following page of confirm.
+ *
  * @param name  readme/rights
  *
  * @return contents empty character strings in error
@@ -1737,7 +1757,8 @@ function xnpGetBasicInformationAdvancedSearchBlock($moduleName, &$search_var)
     );
 }
 
-/** Input keyword is divided into the unit of the retrieval.
+/**
+ * Input keyword is divided into the unit of the retrieval.
  *  the unit of the retrieval: character strings enclosed with delimitation by blank or double-quote.
  *
  * @param keywords Input keyword
@@ -1792,7 +1813,8 @@ function xnpSplitKeywords($keywords)
         252が&#252;にヒットするのは仕方が無い．
 */
 
-/** the unit of the retrieval and syntax are pulled out from input keyword.
+/**
+ * the unit of the retrieval and syntax are pulled out from input keyword.
  * the unit of the retrieval: 1.character strings don't contain blank and parentheses, and double-quote.
  *                            2.character strings enclosed with double-quote.
  * syntax: the unit of the retrieval in input keyword change 'string', and 'and' operator is supplemented to the 'string'.
@@ -1868,7 +1890,9 @@ function xnpSplitKeywords2($keyword)
     return array($elements, $keywords, false);
 }
 
-/** generate a sentense from retrieval keyword (sentense is used in WHERE of SQL)
+/**
+ * generate a sentense from retrieval keyword (sentense is used in WHERE of SQL).
+ *
  * @param elements input keyword is resolved with xnpSplitKeywords2
  * @param wheres character strings in retrieval keyword is converted into SQL sentense
  */
@@ -1895,7 +1919,9 @@ function xnpUnsplitKeywords2($elements, $wheres)
     return '('.implode(' ', $ar).')';
 }
 
-/** return query of SQL generated from input keywords. If there is no condition, return "".
+/**
+ * return query of SQL generated from input keywords. If there is no condition, return "".
+ *
  * @param dbVarName    table name, and column name in database
  * @param postVarName  Name of variables posted
  */
@@ -1920,7 +1946,9 @@ function xnpGetKeywordQuery($dbVarName, $postVarName)
     return implode(' and ', $ar);
 }
 
-/** return query of SQL generated from the keywords input.
+/**
+ * return query of SQL generated from the keywords input.
+ *
  * @param dbVarNames    array of table name and column name in database
  * @param keywords      array of keywords
  *
@@ -1975,7 +2003,8 @@ function xnpGetKeywordQueryEntity($dbVarName, $escKeyword)
     return $wk;
 }
 
-/** generate query of SQL
+/**
+ * generate query of SQL
  "ifnull(y,0)*10000+ifnull(m,0)*100+ifnull(d,0)" is compared.
  */
 function xnpGetFromQuery($dbVarName, $postVarName)
@@ -2017,7 +2046,9 @@ function xnpGetToQuery($dbVarName, $postVarName)
     return " ( ($yyyymmdd >= IFNULL(${dbVarName}_year,0)*10000 + IFNULL(${dbVarName}_month,0)*100 + IFNULL(${dbVarName}_mday,0)) OR (${dbVarName}_mday = 0 AND $yyyymm >= IFNULL(${dbVarName}_year,0)*10000 + IFNULL(${dbVarName}_month,0)*100) OR (${dbVarName}_month = 0 AND ${dbVarName}_mday = 0 AND $yyyy >= IFNULL(${dbVarName}_year,0)*10000) )";
 }
 
-/** return query of SQL for retrieve Basic Information in Advanced Search. If there is no condition in input, return empty character strings.
+/**
+ * return query of SQL for retrieve Basic Information in Advanced Search. If there is no condition in input, return empty character strings.
+ *
  * @param moduleName name of module
  *
  * @return query of SQL
@@ -2064,7 +2095,9 @@ function xnpGetBasicInformationAdvancedSearchQuery($moduleName)
     return implode(' AND ', $wheres);
 }
 
-/** sum of file size in items specified with iids
+/**
+ * sum of file size in items specified with iids.
+ *
  * @param iids  array of item_id
  *
  * @return sum of file size
@@ -2487,7 +2520,9 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
     return true;
 }
 
-/** get relative path string of $xid to $base_index_id
+/**
+ * get relative path string of $xid to $base_index_id.
+ *
  * @param $xid
  * @param $base_index_id
  */
@@ -2520,9 +2555,9 @@ function xnpGetExportPathString($xid, $base_index_id)
  * @param fhdl file handle writes outputs
  * @param item item information to make XML
  * @param is_absolute  true:index tags are absolute path. false: index tags are relative path to base_index_id.
- * @param base_index_id  is_absolute == false && base_index_id == false: outputs only 1 empty index tag "<index></index>"
- *                       is_absolute == false && base_index_id != false: outputs only descendants of base_index_id
- *                       is_absolute == true: ignored
+ * @param base_index_id  is_absolute == false            && base_index_id == false: outputs only 1 empty index tag "<index></index>"
+ *                                                          is_absolute == false && base_index_id != false: outputs only descendants
+ *                                                          of base_index_id is_absolute == true: ignored
  *
  * @return true:success, false:failure
  */
@@ -2578,7 +2613,8 @@ function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = fa
         $keywords .= '<keyword>'.$myts->htmlSpecialChars($keyword).'</keyword>'."\n";
     }
 
-    if (!fwrite($fhdl, "<basic id=\"${item['item_id']}\">\n"
+    if (!fwrite(
+        $fhdl, "<basic id=\"${item['item_id']}\">\n"
                 ."<itemtype>${itemtype}</itemtype>\n"
                 .'<titles>'.$titles."</titles>\n"
                 ."<contributor uname='".$myts->htmlSpecialChars($account['uname'])."'>".$myts->htmlSpecialChars($contributor)."</contributor>\n"
@@ -2591,7 +2627,9 @@ function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = fa
                 ."<publication_month>${item['publication_month']}</publication_month>\n"
                 ."<publication_mday>${item['publication_mday']}</publication_mday>\n"
                 ."<lang>${item['lang']}</lang>\n"
-                .'<url>'.XOOPS_URL."/modules/xoonips/detail.php?item_id=${item['item_id']}</url>\n")) {
+        .'<url>'.XOOPS_URL."/modules/xoonips/detail.php?item_id=${item['item_id']}</url>\n"
+    )
+    ) {
         return false;
     }
     if (!xnpExportChangeLog($fhdl, $item['item_id'])) {
@@ -2682,7 +2720,8 @@ function xnpGetModifiedFields($item_id)
                         'lang' => _MD_XOONIPS_ITEM_LANG_LABEL, ) as $k => $v) {
             $tmp = $formdata->getValue('post', $k, 'n', false);
             if (!array_key_exists($k, $item)
-                || $tmp === null) {
+                || $tmp === null
+            ) {
                 continue;
             }
             if (str_replace("\r\n", "\r", $item[$k]) != str_replace("\r\n", "\r", $tmp)) {
@@ -2719,7 +2758,8 @@ function xnpGetModifiedFields($item_id)
         $res = xnp_get_index_id_by_item_id($xnpsid, $item['item_id'], $old_index);
         if ($res == RES_OK) {
             if (count(array_diff($old_index, $new_index)) > 0
-                || count(array_diff($new_index, $old_index)) > 0) {
+                || count(array_diff($new_index, $old_index)) > 0
+            ) {
                 array_push($ret, _MD_XOONIPS_ITEM_INDEX_LABEL); // if you change this label, don't forget to modify xnpUpdateBasicInformation()
             }
         }
@@ -2745,7 +2785,8 @@ function xnpGetModifiedFields($item_id)
 
     if ($res == RES_OK) {
         if (count(array_diff($old_related_to, $new_related_to)) > 0
-        || count(array_diff($new_related_to, $old_related_to)) > 0) {
+            || count(array_diff($new_related_to, $old_related_to)) > 0
+        ) {
             array_push($ret, _MD_XOONIPS_ITEM_RELATED_TO_LABEL);
         }
     }
@@ -2762,7 +2803,8 @@ function xnpGetModifiedFields($item_id)
         $new_files = explode(',', $previewFileID);
     }
     if (count(array_diff($old_files, $new_files)) > 0
-        || count(array_diff($new_files, $old_files)) > 0) {
+        || count(array_diff($new_files, $old_files)) > 0
+    ) {
         //preview is modified
         array_push($ret, _MD_XOONIPS_ITEM_PREVIEW_LABEL);
     }
@@ -2930,7 +2972,9 @@ function xnpGetBasicInformationMetadata($metadataPrefix, $item_id)
     return false;
 }
 
-/** get Rights in detail page
+/**
+ * get Rights in detail page.
+ *
  * @param item_id item_id
  * @param text Rights text or html
  */
@@ -2967,7 +3011,7 @@ function xnpGetRightsEditBlock($item_id, $use_cc = 1, $text = '', $cc_commercial
     $formdata = &xoonips_getutility('formdata');
     $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
     if (isset($rightsUseCC)) { // There is initial value specification by POST.
-    $text = $formdata->getValue('post', 'rightsEncText', 's', false, '');
+        $text = $formdata->getValue('post', 'rightsEncText', 's', false, '');
         $use_cc = $rightsUseCC;
         $cc_commercial_use = $formdata->getValue('post', 'rightsCCCommercialUse', 'i', false, 0);
         $cc_modification = $formdata->getValue('post', 'rightsCCModification', 'i', false, 0);
@@ -3084,7 +3128,9 @@ function xnpGetRightsRegisterBlock()
     return xnpGetRightsEditBlock(false);
 }
 
-/** function of getting rights contents on the following page of confirm.
+/**
+ * function of getting rights contents on the following page of confirm.
+ *
  * @return contents empty character strings in error
  */
 function xnpGetRights()
@@ -3224,8 +3270,8 @@ function xnpGetMacSafariAcceptCharset()
     return $accept_charset;
 }
 
-/** eucのmultibyte文字列にwindowをかけてbin2hex()する。
- output_trailing: trailingを出力するならtrue
+/**
+ * eucのmultibyte文字列にwindowをかけてbin2hex()する。
  */
 function xnpWindowString($str, $output_leading, $output_trailing)
 {
@@ -3305,22 +3351,24 @@ function xnpWordSeparation($str, $output_leading = true, $output_trailing = true
     while ($w1 < $end) {
         if ($multibyte_mode) {
             while ($w1 < $end && mb_ereg('[^\x20-\x7e]', mb_substr($str, $w1, 1, $encoding)) && $mb_env) { // 連続するmultibyteを抽出
-        ++$w1;
+                ++$w1;
             }
-            $ar = xnpWindowString(mb_substr($str, $w0, $w1 - $w0, $encoding),
-                             $w0 != 0 || $output_leading,
-                             $w1 != $end || $output_trailing);
+            $ar = xnpWindowString(
+                mb_substr($str, $w0, $w1 - $w0, $encoding),
+                $w0 != 0 || $output_leading,
+                $w1 != $end || $output_trailing
+            );
         } else {
             while ($w1 < $end && (mb_ereg('[\x20-\x7e]', mb_substr($str, $w1, 1, $encoding)) || !$mb_env)) { // 連続するsinglebyteを抽出
-        ++$w1;
+                ++$w1;
             }
             $ar = explode(' ', mb_substr($str, $w0, $w1 - $w0, $encoding));
         }
 
         $ct = count($ar); // $arを$wordsの末尾に追加．array_mergeは遅いので．
-    for ($j = 0; $j < $ct; ++$j) {
-        $words[] = $ar[$j];
-    }
+        for ($j = 0; $j < $ct; ++$j) {
+            $words[] = $ar[$j];
+        }
 
         $w0 = $w1;
         $multibyte_mode = !$multibyte_mode;
@@ -3354,10 +3402,10 @@ function xnpTrimString($src, $len, $enc = null)
     $within = preg_replace('/^(.*)&[^;]*$/s', '$1', $dst);
     $without = substr($src, strlen($within));
     if ($within == $dst) {    // $dstの末尾が、数値文字参照の途中ではない。
-    return array($within, $without);
+        return array($within, $without);
     }
     if (preg_match('/^&#([0-9]+|[Xx][0-9A-Fa-f]+);/', $without)) { // $withoutの頭が、数値文字参照である
-    return array($within, $without);
+        return array($within, $without);
     }
 
     return array($dst, substr($src, strlen($dst)));
@@ -3379,7 +3427,9 @@ function xnpHasWithout($ar)
     return false;
 }
 
-/** テーブルのカラム長(文字列型のカラムのみ)を得る
+/**
+ * テーブルのカラム長(文字列型のカラムのみ)を得る.
+ *
  * @param $table_wo_prefix: テーブル名(prefixを除く)
  *
  * @return array( name1 => length1, name2 => length2, ... ) あるいはエラーならfalse
@@ -3437,11 +3487,11 @@ function xnpTrimColumn(&$assoc, $table_wo_prefix, $names = null, $enc = null)
 
     foreach ($lengths as $name => $len) {
         //echo "xnpTrimColumn: name=$name len=$len type=$type <br />\n";
-    if (isset($assoc[$name]) && (is_null($names) || in_array($name, $names))) {
-        list($within, $without) = xnpTrimString($assoc[$name], $len, $enc);
-        //echo $assoc[$name] . " within=$within, without=$without <br />\n";
-        $assoc[$name] = $within;
-    }
+        if (isset($assoc[$name]) && (is_null($names) || in_array($name, $names))) {
+            list($within, $without) = xnpTrimString($assoc[$name], $len, $enc);
+            //echo $assoc[$name] . " within=$within, without=$without <br />\n";
+            $assoc[$name] = $within;
+        }
     }
 }
 
@@ -3463,11 +3513,11 @@ function xnpConfirmHtml(&$assoc, $table_wo_prefix, $names = null, $enc = null)
 
     foreach ($lengths as $name => $len) {
         //echo "xnpTrimColumn: name=$name len=$len type=$type <br />\n";
-    if (isset($assoc[$name]) && (is_null($names) || in_array($name, $names))) {
-        $assoc[$name]['html_string'] = $textutil->html_special_chars($assoc[$name]['value']);
-        list($assoc[$name]['within'], $assoc[$name]['without']) = xnpTrimString($assoc[$name]['value'], $len, $enc);
-        $assoc[$name]['value'] = xnpWithinWithoutHtml($assoc[$name]['within'], $assoc[$name]['without']);
-    }
+        if (isset($assoc[$name]) && (is_null($names) || in_array($name, $names))) {
+            $assoc[$name]['html_string'] = $textutil->html_special_chars($assoc[$name]['value']);
+            list($assoc[$name]['within'], $assoc[$name]['without']) = xnpTrimString($assoc[$name]['value'], $len, $enc);
+            $assoc[$name]['value'] = xnpWithinWithoutHtml($assoc[$name]['within'], $assoc[$name]['without']);
+        }
     }
 }
 
@@ -3608,7 +3658,9 @@ function xnpIsDoiExists($doi)
     return false;
 }
 
-/** get item basic information
+/**
+ * get item basic information.
+ *
  *  @param item_id item id
  *
  *  @return item detail<br />
@@ -3637,14 +3689,16 @@ function xnpGetItemBasicInfo($item_id)
     return $result;
 }
 
-/** list index tree
- *  @param  mode XOONIPS_LISTINDEX_MODE_PUBLICONLY<br />
+/**
+ * list index tree.
+ *
+ *  @param mode XOONIPS_LISTINDEX_MODE_PUBLICONLY<br />
  *                  return public tree only.<br />
  *                XOONIPS_LISTINDEX_MODE_PRIVATEONLY<br />
  *                  return private tree only.<br />
  *                XOONIPS_LISTINDEX_MODE_ALL<br />
  *                  return all index tree.
- *  @param  assoc_array_mode true: return index id assoc array, false: return normal array
+ *  @param assoc_array_mode true: return index id assoc array, false: return normal array
  *
  *  @return array: return index tree<br />
  *     format(if assoc_array_mode true):<br />
@@ -3733,18 +3787,18 @@ function xnpListIndexTree($mode = XOONIPS_LISTINDEX_MODE_ALL, $assoc_array_mode 
     foreach ($tree_items as $k => $v) {
         $parent_path = $parent_full_path[$v['parent_index_id']];
         $parent_id_path = $parent_id_full_path[$v['parent_index_id']];
-    // exclude check.
-    if ($v['index_id'] == IID_ROOT) {
-        continue;
-    }
-    // delete "ROOT" string.
-    $idx = strpos($parent_path, '/');
+        // exclude check.
+        if ($v['index_id'] == IID_ROOT) {
+            continue;
+        }
+        // delete "ROOT" string.
+        $idx = strpos($parent_path, '/');
         $parent_path = substr($parent_path, $idx, strlen($parent_path));
-    // delete "ROOT" id.
-    $idx = strpos($parent_id_path, ',');
+        // delete "ROOT" id.
+        $idx = strpos($parent_id_path, ',');
         $parent_id_path = substr($parent_id_path, $idx + 1, strlen($parent_id_path));
-    // set value to result array
-    $a = array();
+        // set value to result array
+        $a = array();
         $a['id'] = $k;
         $a['fullpath'] = $parent_path.$v['title'];
         $a['id_fullpath'] = $parent_id_path.$v['index_id'];
@@ -4039,9 +4093,9 @@ class XooNIpsItemLibraryObject
             $item_htmls = array();
             foreach ($this->_getRelatedToHtmlArray('e') as $id => $html) {
                 $item_htmls[$id] = array(
-            'html' => $html,
-            'check' => empty($basic['related_to_check_all']) || in_array($id, $basic['related_to_check']),
-            );
+                'html' => $html,
+                'check' => empty($basic['related_to_check_all']) || in_array($id, $basic['related_to_check']),
+                );
             }
             $tpl->assign('item_htmls', $item_htmls);
             $related_to = $tpl->fetch('db:xoonips_edit_related_to.html');
@@ -4574,9 +4628,9 @@ class XooNIpsItemLibraryObject
             $itemlib_obj = &$itemlib_handler->get($item_id);
             if (!is_object($itemlib_obj)) {
                 // broken related to item id found
-            if (XOONIPS_DEBUG_MODE) {
-                error_log('BROKEN RELATED TO ITEM ID FOUND : PARENT('.$this->_item_basic_obj->get('item_id').') - CHILD('.$item_id.')');
-            }
+                if (XOONIPS_DEBUG_MODE) {
+                    error_log('BROKEN RELATED TO ITEM ID FOUND : PARENT('.$this->_item_basic_obj->get('item_id').') - CHILD('.$item_id.')');
+                }
                 continue;
             }
             $htmls[$item_id] = $itemlib_obj->getItemListBlock();
@@ -4812,7 +4866,7 @@ class XooNIpsItemLibraryHandler
             $post_id = $formdata->getValue('get', 'post_id', 's', false);
             if (is_null($post_id)) {
                 // first item registeration
-        return;
+                return;
             }
         }
         // title

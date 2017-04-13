@@ -81,19 +81,19 @@ class XooNIpsOrmOaipmhMetadataHandler extends XooNIpsTableObjectHandler
         $this->__initHandler('XooNIpsOrmOaipmhMetadata', 'xoonips_oaipmh_metadata', 'metadata_id', true);
     }
 
-  /**
-   * @param string $identifier identifier string of OAI-PMH
-   *
-   * @return XooNIpsOrmOaipmhMetadata object or false
-   */
-  public function getByIdentifier($identifier)
-  {
-      $criteria = new Criteria('identifier', $identifier);
-      $result = &$this->getObjects($criteria);
-      if (!$result) {
-          return false;
-      }
+    /**
+     * @param string $identifier identifier string of OAI-PMH
+     *
+     * @return XooNIpsOrmOaipmhMetadata object or false
+     */
+    public function getByIdentifier($identifier)
+    {
+        $criteria = new Criteria('identifier', $identifier);
+        $result = &$this->getObjects($criteria);
+        if (!$result) {
+            return false;
+        }
 
-      return $result[0];
-  }
+        return $result[0];
+    }
 }

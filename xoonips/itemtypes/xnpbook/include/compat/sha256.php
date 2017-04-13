@@ -3,15 +3,15 @@
 /**
  * PHP implementation of SHA-256 hash function.
  *
- * @category    PHP
+ * @category PHP
  *
- * @license     LGPL - http://www.gnu.org/licenses/lgpl.html
- * @copyright   2004-2007 Aidan Lister <aidan@php.net>, Arpad Ray <arpad@php.net>
+ * @license   LGPL - http://www.gnu.org/licenses/lgpl.html
+ * @copyright 2004-2007 Aidan Lister <aidan@php.net>, Arpad Ray <arpad@php.net>
  *
- * @see        http://php.net/function.hash
+ * @see http://php.net/function.hash
  *
- * @author      revulo <revulon@gmail.com>
- * @require     PHP 4.0.0
+ * @author  revulo <revulon@gmail.com>
+ * @require PHP 4.0.0
  */
 function php_compat_sha256($str, $raw_output = false)
 {
@@ -68,8 +68,10 @@ function php_compat_sha256($str, $raw_output = false)
                 ^ php_compat_sha256_shr_helper($w[$j - 2], 10);
 
             $w[$j] = php_compat_sha256_add32_helper(
-                     php_compat_sha256_add32_helper(
-                     php_compat_sha256_add32_helper($w[$j - 16], $s0), $w[$j - 7]), $s1);
+                php_compat_sha256_add32_helper(
+                    php_compat_sha256_add32_helper($w[$j - 16], $s0), $w[$j - 7]
+                ), $s1
+            );
         }
 
         $a = $h0;
@@ -95,9 +97,12 @@ function php_compat_sha256($str, $raw_output = false)
             $maj = ($a & $b) ^ ($a & $c) ^ ($b & $c);
 
             $t1 = php_compat_sha256_add32_helper(
-                  php_compat_sha256_add32_helper(
-                  php_compat_sha256_add32_helper(
-                  php_compat_sha256_add32_helper($h, $s1), $ch), $k[$j]), $w[$j]);
+                php_compat_sha256_add32_helper(
+                    php_compat_sha256_add32_helper(
+                        php_compat_sha256_add32_helper($h, $s1), $ch
+                    ), $k[$j]
+                ), $w[$j]
+            );
 
             $t2 = php_compat_sha256_add32_helper($s0, $maj);
 

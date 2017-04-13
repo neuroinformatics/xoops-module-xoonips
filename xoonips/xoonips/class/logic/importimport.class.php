@@ -26,9 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(__DIR__).'/base/logic.class.php';
-include_once XOOPS_ROOT_PATH
-.'/modules/xoonips/class/base/transaction.class.php';
+require_once dirname(__DIR__).'/base/logic.class.php';
+require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
 
 class XooNIpsLogicImportImport extends XooNIpsLogic
 {
@@ -49,33 +48,25 @@ class XooNIpsLogicImportImport extends XooNIpsLogic
 
         $itemtype_handler = &xoonips_getormhandler('xoonips', 'item_type');
         foreach (array_keys($vars[0]) as $key) {
-            assert(!($vars[0][$key]->getImportAsNewFlag()
-                       && $vars[0][$key]->getUpdateFlag()));
+            assert(!($vars[0][$key]->getImportAsNewFlag() && $vars[0][$key]->getUpdateFlag()));
             //skip this item if don't import as new and update
             if (!$vars[0][$key]->getImportAsNewFlag()
-                && !$vars[0][$key]->getUpdateFlag()) {
+                && !$vars[0][$key]->getUpdateFlag()
+            ) {
                 continue;
             }
 
             $item_handler = &xoonips_getormcompohandler('xoonips', 'item');
-            if ($vars[0][$key]->getUpdateFlag()
-                && !$item_handler->getPerm(
-                    $vars[0][$key]->getUpdateItemId(),
-                    $xoopsUser->getVar('uid'), 'write')) {
+            if ($vars[0][$key]->getUpdateFlag() && !$item_handler->getPerm($vars[0][$key]->getUpdateItemId(), $xoopsUser->getVar('uid'), 'write')) {
                 //no write permission to updating exist item -> error
-                $vars[0][$key]->setErrors(
-                    E_XOONIPS_UPDATE_CERTIFY_REQUEST_LOCKED,
-                    "can't update locked item("
-                    .$vars[0][$key]->getUpdateItemId().')');
+                $vars[0][$key]->setErrors(E_XOONIPS_UPDATE_CERTIFY_REQUEST_LOCKED, "can't update locked item(".$vars[0][$key]->getUpdateItemId().')');
                 $error = true;
                 break;
             }
 
             $basic = &$vars[0][$key]->getVar('basic');
-            $itemtype = &$itemtype_handler->get(
-                $basic->get('item_type_id'));
-            $handler = &xoonips_gethandler($itemtype->get('name'),
-                                            'import_item');
+            $itemtype = &$itemtype_handler->get($basic->get('item_type_id'));
+            $handler = &xoonips_gethandler($itemtype->get('name'), 'import_item');
             $handler->import($vars[0][$key]);
             $error = $error || count($vars[0][$key]->getErrors()) > 0;
         }
@@ -85,10 +76,8 @@ class XooNIpsLogicImportImport extends XooNIpsLogic
         } else {
             foreach (array_keys($vars[0]) as $key) {
                 $basic = &$vars[0][$key]->getVar('basic');
-                $itemtype = &$itemtype_handler->get(
-                    $basic->get('item_type_id'));
-                $handler = &xoonips_gethandler($itemtype->get('name'),
-                                                'import_item');
+                $itemtype = &$itemtype_handler->get($basic->get('item_type_id'));
+                $handler = &xoonips_gethandler($itemtype->get('name'), 'import_item');
                 $handler->onImportFinished($vars[0][$key], $vars[0]);
                 $error = $error || count($vars[0][$key]->getErrors()) > 0;
             }

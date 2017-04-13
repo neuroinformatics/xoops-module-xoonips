@@ -25,7 +25,7 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-include '../include/common.inc.php';
+require '../include/common.inc.php';
 
 // remove ob filters
 $handlers = ob_list_handlers();
@@ -149,7 +149,7 @@ imagealphablending($im, true);
 $font_color = imagecolorallocate($im, $font_color[0], $font_color[1], $font_color[2]);
 if ($text_shadow) {
     // shadow
-  $shadow_color = imagecolorallocate($im, 128, 128, 128);
+    $shadow_color = imagecolorallocate($im, 128, 128, 128);
     imagettftext($im, $font_size, $font_angle, $x + 1, $y + 1, $shadow_color, $font_path, $text_utf8);
 }
 imagettftext($im, $font_size, $font_angle, $x, $y, $font_color, $font_path, $text_utf8);

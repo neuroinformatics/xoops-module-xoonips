@@ -26,8 +26,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/class/template.php';
-include_once __DIR__.'/transfer.class.php';
+require_once XOOPS_ROOT_PATH.'/class/template.php';
+require_once __DIR__.'/transfer.class.php';
 
 /**
  * HTML view to select item to transfer for administrator.
@@ -88,24 +88,20 @@ class XooNIpsViewTransferAdminItemSelect extends XooNIpsViewTransfer
         $this->setXooNIpsStyleSheet($xoopsTpl);
 
         $transfer_item_options = $this->get_transfer_item_template_vars();
+        $xoopsTpl->assign('transfer_item_options', array_slice($transfer_item_options, ($this->_params['page'] - 1) * 50, 50));
         $xoopsTpl->assign(
-            'transfer_item_options',
-            array_slice($transfer_item_options,
-                         ($this->_params['page'] - 1) * 50, 50));
-        $xoopsTpl->assign(
-            'transfer_item_options_hidden',
-            array_merge(array_slice($transfer_item_options,
-                                      0, ($this->_params['page'] - 1) * 50),
-                         array_slice($transfer_item_options,
-                                      ($this->_params['page']) * 50)));
+            'transfer_item_options_hidden', array_merge(
+                array_slice($transfer_item_options, 0, ($this->_params['page'] - 1) * 50),
+                array_slice($transfer_item_options, ($this->_params['page']) * 50)
+            )
+        );
         foreach ($this->_params as $key => $val) {
             $xoopsTpl->assign($key, $val);
         }
         $xoopsTpl->assign('pages', $this->get_page_number_array());
         $xoopsTpl->assign('maxpage', $this->get_max_page());
 
-        $form = $xoopsTpl->fetch(
-            'db:xoonips_transfer_admin_item_select.html');
+        $form = $xoopsTpl->fetch('db:xoonips_transfer_admin_item_select.html');
 
         global $xoonips_admin;
 
@@ -114,20 +110,14 @@ class XooNIpsViewTransferAdminItemSelect extends XooNIpsViewTransfer
 
         // breadcrumbs
         $breadcrumbs = array(
-          array('type' => 'top',
-                 'label' => _AM_XOONIPS_TITLE,
-                 'url' => $xoonips_admin['admin_url'].'/', ),
-          array('type' => 'link',
-                 'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
-                 'url' => $xoonips_admin['myfile_url'], ),
-          array('type' => 'link',
-                 'label' => _AM_XOONIPS_MAINTENANCE_ITEM_TITLE,
-                 'url' => $xoonips_admin['mypage_url'], ),
-          array('type' => 'label', 'label' => $title, 'url' => ''),
+            array('type' => 'top', 'label' => _AM_XOONIPS_TITLE, 'url' => $xoonips_admin['admin_url'].'/'),
+            array('type' => 'link', 'label' => _AM_XOONIPS_MAINTENANCE_TITLE, 'url' => $xoonips_admin['myfile_url']),
+            array('type' => 'link', 'label' => _AM_XOONIPS_MAINTENANCE_ITEM_TITLE, 'url' => $xoonips_admin['mypage_url']),
+            array('type' => 'label', 'label' => $title, 'url' => ''),
         );
 
         // templates
-        require_once '../class/base/pattemplate.class.php';
+        include_once '../class/base/pattemplate.class.php';
         $tmpl = new PatTemplate();
 
         $tmpl->setBaseDir('templates');
@@ -156,29 +146,23 @@ class XooNIpsViewTransferAdminItemSelect extends XooNIpsViewTransfer
         $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
 
         foreach ($this->_params['from_index_item_ids'] as $item_id) {
-            $childs = array_key_exists(
-                $item_id, $this->_params['child_items'])
-                ? $this->_params['child_items'][$item_id] : array();
+            $childs = array_key_exists($item_id, $this->_params['child_items']) ? $this->_params['child_items'][$item_id] : array();
             $item = &$item_handler->get($item_id);
             $basic = &$item->getVar('basic');
-            $itemtype
-                = &$item_type_handler->get($basic->get('item_type_id'));
+            $itemtype = &$item_type_handler->get($basic->get('item_type_id'));
 
             $child_titles = array();
             foreach ($childs as $child_item_id) {
                 $child_item = &$item_handler->get($child_item_id);
-                $child_titles[] = $this->concatenate_titles(
-                    $child_item->getVar('titles'));
+                $child_titles[] = $this->concatenate_titles($child_item->getVar('titles'));
             }
             $result[] = array(
-                'checked' => in_array($item_id,
-                                       $this->_params['selected_item_ids']),
+                'checked' => in_array($item_id, $this->_params['selected_item_ids']),
                 'item_id' => $item_id,
                 'item_type_name' => $itemtype->getVar('display_name', 's'),
-                'title' => $this->concatenate_titles(
-                    $item->getVar('titles')),
+                'title' => $this->concatenate_titles($item->getVar('titles')),
                 'child_titles' => $child_titles,
-                );
+            );
         }
 
         return $result;
@@ -186,8 +170,7 @@ class XooNIpsViewTransferAdminItemSelect extends XooNIpsViewTransfer
 
     public function get_max_page()
     {
-        return ceil(count($this->_params['from_index_item_ids'])
-                     / $this->_number_of_item_per_page);
+        return ceil(count($this->_params['from_index_item_ids']) / $this->_number_of_item_per_page);
     }
 
     public function get_page_number_array()

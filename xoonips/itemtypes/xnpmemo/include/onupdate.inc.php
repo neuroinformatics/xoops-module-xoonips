@@ -36,21 +36,21 @@ function xoops_module_update_xnpmemo($xoopsMod, $oldversion)
     echo '<code>Updating modules...</code><br />';
     switch ($oldversion) {
     // remember that version is multiplied with 100 to get an integer
-  case 200:
-    $sql = 'ALTER TABLE '.$xoopsDB->prefix('xnpmemo_item_detail').' TYPE = innodb';
-    $result = $xoopsDB->query($sql);
-    if (!$result) {
-        echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
+    case 200:
+        $sql = 'ALTER TABLE '.$xoopsDB->prefix('xnpmemo_item_detail').' TYPE = innodb';
+        $result = $xoopsDB->query($sql);
+        if (!$result) {
+            echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
-        return false;
+            return false;
+        }
+    case 311:
+    case 330:
+    case 331:
+    case 332:
+    case 340:
+    default:
     }
-  case 311:
-  case 330:
-  case 331:
-  case 332:
-  case 340:
-  default:
-  }
 
     return true;
 }

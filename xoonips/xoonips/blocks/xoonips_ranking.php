@@ -42,7 +42,7 @@ function xoonips_ranking_show($is_arrival)
         $target_user = $xconfig_handler->getValue('public_item_target_user');
         if ($target_user != 'all') {
             // 'platform'
-        return false;
+            return false;
         }
     }
 
@@ -160,7 +160,7 @@ function xoonips_ranking_show($is_arrival)
             $block['rankings'][$config['order'][0]] = array(
                 'items' => $items,
                 'title' => $label,
-           );
+            );
             unset($items);
         }
 

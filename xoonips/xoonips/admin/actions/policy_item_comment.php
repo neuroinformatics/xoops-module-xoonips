@@ -70,7 +70,7 @@ $config_keys = array(
 $config_values = xoonips_admin_get_configs($config_keys, 'e');
 
 // get d3forum module list
-include XOOPS_ROOT_PATH.'/class/xoopslists.php';
+require XOOPS_ROOT_PATH.'/class/xoopslists.php';
 $module_handler = &xoops_gethandler('module');
 $mod_dirnames = &XoopsLists::getModulesList();
 $d3forum_not_found = true;

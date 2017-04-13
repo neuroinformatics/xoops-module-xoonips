@@ -25,9 +25,9 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-include 'include/common.inc.php';
-include 'include/group.inc.php';
-include 'class/base/gtickets.php';
+require 'include/common.inc.php';
+require 'include/group.inc.php';
+require 'class/base/gtickets.php';
 
 // privileges check : admin, moderator
 $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;

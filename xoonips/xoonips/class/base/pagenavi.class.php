@@ -33,7 +33,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
  * The XooNIps page navigation class.
  *
  * @copyright copyright &copy; 2005-2011 RIKEN, Japan
- * @author  Yoshihiro OKUMURA <orrisroot@users.sourceforge.jp>
+ * @author    Yoshihiro OKUMURA <orrisroot@users.sourceforge.jp>
  */
 class XooNIpsPageNavi
 {
@@ -141,15 +141,15 @@ class XooNIpsPageNavi
         $vars['next'] = ($this->_page < $this->_maxpage) ? $this->_page + 1 : null;
         $vars['prev'] = ($this->_page > 1) ? $this->_page - 1 : null;
         $vars['maxpage'] = $this->_maxpage;
-    // counter
-    $vars['total'] = $this->_count;
+        // counter
+        $vars['total'] = $this->_count;
         $vars['start'] = $this->_start + 1;
         $vars['end'] = $this->_start + $this->_limit;
         if ($vars['end'] > $vars['total']) {
             $vars['end'] = $vars['total'];
         }
-    // navigation pages
-    $diff_max = floor($show_cols / 2);
+        // navigation pages
+        $diff_max = floor($show_cols / 2);
         $diff_min = $show_cols - $diff_max - 1;
         $show_minpage = $this->_page - $diff_min;
         $show_maxpage = $this->_page + $diff_max;

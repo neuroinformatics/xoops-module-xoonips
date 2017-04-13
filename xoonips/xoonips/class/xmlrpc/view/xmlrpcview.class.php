@@ -26,7 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/class/xml/rpc/xmlrpctag.php';
+require_once XOOPS_ROOT_PATH.'/class/xml/rpc/xmlrpctag.php';
 
 /**
  * @brief class that generates XML-RPC response
@@ -108,9 +108,10 @@ class XooNIpsXmlRpcItemView extends XooNIpsXmlRpcViewElement
      */
     public function isServerAndClientJapanese()
     {
-        if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) &&
-            substr_count($_SERVER['HTTP_ACCEPT_LANGUAGE'], 'ja') > 0 &&
-            _CHARSET == 'EUC-JP') {
+        if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])
+            && substr_count($_SERVER['HTTP_ACCEPT_LANGUAGE'], 'ja') > 0
+            && _CHARSET == 'EUC-JP'
+        ) {
             return true;
         } else {
             return false;
@@ -128,23 +129,23 @@ class XooNIpsXmlRpcItemView extends XooNIpsXmlRpcViewElement
     {
         $tag = null;
         switch ($type) {
-            case 'int':
-                $tag = new XoopsXmlRpcInt($var);
-                break;
+        case 'int':
+            $tag = new XoopsXmlRpcInt($var);
+            break;
 
-            case 'string':
-                $textutil = &xoonips_getutility('text');
-                $tag = new XoopsXmlRpcString($textutil->xml_special_chars($var, _CHARSET));
-                break;
+        case 'string':
+            $textutil = &xoonips_getutility('text');
+            $tag = new XoopsXmlRpcString($textutil->xml_special_chars($var, _CHARSET));
+            break;
 
-            case 'dateTime.iso8601':
-                $tag = new XoopsXmlRpcDatetime($var);
-                break;
+        case 'dateTime.iso8601':
+            $tag = new XoopsXmlRpcDatetime($var);
+            break;
 
-            default:
-                trigger_error("unsupported XML-RPC data type '$type'.");
+        default:
+            trigger_error("unsupported XML-RPC data type '$type'.");
 
-                return false;
+            return false;
         }
 
         return $tag;
@@ -209,8 +210,8 @@ class XooNIpsXmlRpcItemView extends XooNIpsXmlRpcViewElement
     public function render_field($output)
     {
         $result = array();
-        if (isset($output['xmlrpc']['multiple'])
-            ? $output['xmlrpc']['multiple'] : false) {
+        if (isset($output['xmlrpc']['multiple']) ? $output['xmlrpc']['multiple'] : false
+        ) {
             $orm = $this->item->getVar($output['orm']['field'][0]['orm']);
             if ($output['xmlrpc']['field'][0] != 'detail_field') {
                 $result[0] = new XoopsXmlRpcArray();
@@ -220,26 +221,15 @@ class XooNIpsXmlRpcItemView extends XooNIpsXmlRpcViewElement
                 foreach ($orm as $o) {
                     $in_var = array($o->get($output['orm']['field'][0]['field']));
                     $out_var = array();
-                    $context = array(
-                        'position' => $pos,
-                        );
-                    eval(isset($output['eval']['orm2xmlrpc'])
-                         ? $output['eval']['orm2xmlrpc']
-                         : '$out_var[0] = $in_var[0];');
+                    $context = array('position' => $pos);
+                    eval(isset($output['eval']['orm2xmlrpc']) ? $output['eval']['orm2xmlrpc'] : '$out_var[0] = $in_var[0];');
                     if ($output['xmlrpc']['field'][0] == 'detail_field') {
                         $struct = new XoopsXmlRpcStruct();
-                        $struct->add('name',
-                                        new XoopsXmlRpcString(
-                                            $output['xmlrpc']['field'][1]));
-                        $struct->add('value',
-                                        $this->createTag(
-                                            $output['xmlrpc']['type'],
-                                            $out_var[0]));
+                        $struct->add('name', new XoopsXmlRpcString($output['xmlrpc']['field'][1]));
+                        $struct->add('value', $this->createTag($output['xmlrpc']['type'], $out_var[0]));
                         $result[] = $struct;
                     } else {
-                        $result[0]->add(
-                            $this->createTag($output['xmlrpc']['type'],
-                                             $out_var[0]));
+                        $result[0]->add($this->createTag($output['xmlrpc']['type'], $out_var[0]));
                     }
                     ++$pos;
                 }
@@ -263,19 +253,14 @@ class XooNIpsXmlRpcItemView extends XooNIpsXmlRpcViewElement
                     $in_var[] = $orm->get($from['field']);
                 }
             }
-            eval(isset($output['eval']['orm2xmlrpc'])
-                 ? $output['eval']['orm2xmlrpc']
-                 : '$out_var[0] = $in_var[0];');
+            eval(isset($output['eval']['orm2xmlrpc']) ? $output['eval']['orm2xmlrpc'] : '$out_var[0] = $in_var[0];');
             if ($output['xmlrpc']['field'][0] == 'detail_field') {
                 $struct = new XoopsXmlRpcStruct();
-                $struct->add('name', new XoopsXmlRpcString(
-                    $output['xmlrpc']['field'][1]));
-                $struct->add('value', $this->createTag(
-                    $output['xmlrpc']['type'], $out_var[0]));
+                $struct->add('name', new XoopsXmlRpcString($output['xmlrpc']['field'][1]));
+                $struct->add('value', $this->createTag($output['xmlrpc']['type'], $out_var[0]));
                 $result[] = $struct;
             } else {
-                $result[] = $this->createTag($output['xmlrpc']['type'],
-                                             $out_var[0]);
+                $result[] = $this->createTag($output['xmlrpc']['type'], $out_var[0]);
             }
         }
 

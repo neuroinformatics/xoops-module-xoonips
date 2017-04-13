@@ -25,10 +25,10 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include 'include/common.inc.php';
+require 'include/common.inc.php';
 
-include_once 'include/lib.php';
-include_once 'include/AL.php';
+require_once 'include/lib.php';
+require_once 'include/AL.php';
 
 // If not a user, redirect
 if (!$xoopsUser) {
@@ -43,10 +43,10 @@ xoops_header(false);
 <body>
 <table border="0" cellspacing="5" cellpadding="0">
  <tr>
-  <td id="leftcolumn">	          
+  <td id="leftcolumn">              
 <?php
 $xoopsConfig['nocommon'] = '';
-include XOOPS_ROOT_PATH.'/header.php';
+require XOOPS_ROOT_PATH.'/header.php';
 
 require_once '../../class/template.php';
 require_once 'blocks/xoonips_blocks.php';
@@ -61,7 +61,8 @@ $blocks = array();
 foreach ($mod_blocks as $b) {
     if ($b->getVar('mid') == $xoopsModule->getVar('mid')) {
         if ($b->getVar('show_func') == 'b_xoonips_quick_search_show'
-            || $b->getVar('show_func') == 'b_xoonips_tree_show') {
+            || $b->getVar('show_func') == 'b_xoonips_tree_show'
+        ) {
             $blocks[$b->getVar('show_func')] = $b;
         }
     }
@@ -122,7 +123,7 @@ if (!isset($op) || empty($op)) {
 }
 $formdata->set('post', 'index_id', $formdata->getValue('both', 'index_id', 'i', false));
 
-include 'include/itemselect.inc.php';
+require 'include/itemselect.inc.php';
 $xoopsTpl->display('db:xoonips_related_to_itemselect.html');
 
 ?>

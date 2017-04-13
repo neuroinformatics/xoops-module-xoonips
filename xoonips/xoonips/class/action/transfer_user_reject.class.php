@@ -26,10 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once 'transfer.class.php';
-include_once dirname(dirname(__DIR__))
-    .'/include/transfer.inc.php';
-include_once dirname(__DIR__).'/base/gtickets.php';
+require_once 'transfer.class.php';
+require_once dirname(dirname(__DIR__)).'/include/transfer.inc.php';
+require_once dirname(__DIR__).'/base/gtickets.php';
 
 class XooNIpsActionTransferUserReject extends XooNIpsActionTransfer
 {
@@ -59,11 +58,7 @@ class XooNIpsActionTransferUserReject extends XooNIpsActionTransfer
 
         $item_ids = $this->get_item_ids_to_transfer();
         if (empty($item_ids)) {
-            redirect_header(
-                XOOPS_URL.'/',
-                3,
-                _MD_XOONIPS_TRANSFER_USER_REJECT_ERROR_NO_ITEM
-                );
+            redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_TRANSFER_USER_REJECT_ERROR_NO_ITEM);
         }
 
         $this->_params[] = $this->_formdata->getValueArray('post', 'item_ids_to_transfer', 'i', false);
@@ -74,13 +69,9 @@ class XooNIpsActionTransferUserReject extends XooNIpsActionTransfer
         if ($this->_response->getResult()) {
             $this->notify_transfer_rejected();
 
-            redirect_header(XOOPS_URL.'/',
-                             3, _MD_XOONIPS_TRANSFER_USER_REJECT_COMPLETE);
+            redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_TRANSFER_USER_REJECT_COMPLETE);
         } else {
-            redirect_header(XOOPS_URL
-                             .'/modules/xoonips/transfer_item.php'
-                             .'?action=list_item',
-                             3, _MD_XOONIPS_TRANSFER_USER_REJECT_ERROR);
+            redirect_header(XOOPS_URL.'/modules/xoonips/transfer_item.php'.'?action=list_item', 3, _MD_XOONIPS_TRANSFER_USER_REJECT_ERROR);
         }
     }
 
@@ -88,12 +79,8 @@ class XooNIpsActionTransferUserReject extends XooNIpsActionTransfer
     {
         global $xoopsUser;
 
-        foreach ($this->getMapOfUidTOItemId($this->get_item_ids_to_transfer())
-                 as $transferer_uid => $item_ids) {
-            xoonips_notification_user_item_transfer_rejected(
-                $transferer_uid,
-                $xoopsUser->getVar('uid'),//transferee user id
-                $item_ids);
+        foreach ($this->getMapOfUidTOItemId($this->get_item_ids_to_transfer()) as $transferer_uid => $item_ids) {
+            xoonips_notification_user_item_transfer_rejected($transferer_uid, $xoopsUser->getVar('uid'), $item_ids);
         }
     }
 

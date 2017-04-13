@@ -68,8 +68,7 @@ function xoonips_notification_get_item_tags($item_id)
         return false;
     }
 
-    $compo_handler = &xoonips_getormcompohandler(
-        $item_type->get('name'), 'item');
+    $compo_handler = &xoonips_getormcompohandler($item_type->get('name'), 'item');
     $compo = $compo_handler->get($item_id);
     if (!$compo) {
         return false;
@@ -149,10 +148,8 @@ function xoonips_notification_item_transfer($from_uid, $to_uid, $item_ids, $uid_
     $to_user = $xoops_user_handler->get($to_uid);
     $from_user = $xoops_user_handler->get($from_uid);
 
-    $item_titles
-        = _xoonips_notification_get_title_of_items($item_ids);
-    $item_urls
-        = _xoonips_notification_get_detail_urls($item_ids);
+    $item_titles = _xoonips_notification_get_title_of_items($item_ids);
+    $item_urls = _xoonips_notification_get_detail_urls($item_ids);
 
     $item_list = array();
     while (false !== current($item_titles)
@@ -174,12 +171,14 @@ function xoonips_notification_item_transfer($from_uid, $to_uid, $item_ids, $uid_
         );
 
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
-    $nhandler->triggerEvent2('administrator', 0, 'item_transfer',
-                              _MD_XOONIPS_ITEM_TRANSFER_NOTIFYSBJ,
-                              $nhandler->getTemplateDirByMid(),
-                              'administrator_item_transfer_notify',
-                              $tags,
-                              $uid_to_notify);
+    $nhandler->triggerEvent2(
+        'administrator', 0, 'item_transfer',
+        _MD_XOONIPS_ITEM_TRANSFER_NOTIFYSBJ,
+        $nhandler->getTemplateDirByMid(),
+        'administrator_item_transfer_notify',
+        $tags,
+        $uid_to_notify
+    );
 }
 
 /**
@@ -190,12 +189,14 @@ function xoonips_notification_item_transfer($from_uid, $to_uid, $item_ids, $uid_
 function xoonips_notification_account_certify_request($user_id)
 {
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
-    $nhandler->triggerEvent2('administrator', 0, 'account_certify',
+    $nhandler->triggerEvent2(
+        'administrator', 0, 'account_certify',
         _MD_XOONIPS_ACCOUNT_CERTIFY_REQUEST_NOTIFYSBJ,
         $nhandler->getTemplateDirByMid(),
         'administrator_account_certify_request_notify',
         _xoonips_notification_get_user_tags($user_id),
-        xoonips_notification_get_moderator_uids());
+        xoonips_notification_get_moderator_uids()
+    );
 }
 
 /**
@@ -206,12 +207,14 @@ function xoonips_notification_account_certify_request($user_id)
 function xoonips_notification_account_certified($user_id)
 {
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
-    $nhandler->triggerEvent2('administrator', 0, 'account_certify',
+    $nhandler->triggerEvent2(
+        'administrator', 0, 'account_certify',
         _MD_XOONIPS_ACCOUNT_CERTIFIED_NOTIFYSBJ,
         $nhandler->getTemplateDirByMid(),
         'administrator_account_certified_notify',
         _xoonips_notification_get_user_tags($user_id),
-        xoonips_notification_get_moderator_uids());
+        xoonips_notification_get_moderator_uids()
+    );
 }
 
 /**
@@ -225,12 +228,14 @@ function xoonips_notification_account_rejected($user_id, $comments)
     $tags = _xoonips_notification_get_user_tags($user_id);
     $tags['REVIEWERS_COMMENTS'] = $comments;
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
-    $nhandler->triggerEvent2('administrator', 0, 'account_certify',
+    $nhandler->triggerEvent2(
+        'administrator', 0, 'account_certify',
         _MD_XOONIPS_ACCOUNT_REJECTED_NOTIFYSBJ,
         $nhandler->getTemplateDirByMid(),
         'administrator_account_rejected_notify',
         $tags,
-        xoonips_notification_get_moderator_uids());
+        xoonips_notification_get_moderator_uids()
+    );
 }
 
 function xoonips_notification_get_index_path_string($index_id)
@@ -280,9 +285,11 @@ function xoonips_notification_item_certify($item_id, $index_id, $subject, $templ
     $tags['ITEM_CERTIFY_URL'] = XOOPS_URL.'/modules/xoonips/certify.php';
 
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
-    $nhandler->triggerEvent2('administrator', 0, 'item_certify',
-    $subject, $nhandler->getTemplateDirByMid(),
-    $template_name, $tags, $uids);
+    $nhandler->triggerEvent2(
+        'administrator', 0, 'item_certify',
+        $subject, $nhandler->getTemplateDirByMid(),
+        $template_name, $tags, $uids
+    );
 }
 
 /**
@@ -293,9 +300,7 @@ function xoonips_notification_item_certify($item_id, $index_id, $subject, $templ
  */
 function xoonips_notification_item_certify_request($item_id, $index_id)
 {
-    xoonips_notification_item_certify($item_id, $index_id,
-        _MD_XOONIPS_ITEM_CERTIFY_REQUEST_NOTIFYSBJ,
-        'administrator_item_certify_request_notify');
+    xoonips_notification_item_certify($item_id, $index_id, _MD_XOONIPS_ITEM_CERTIFY_REQUEST_NOTIFYSBJ, 'administrator_item_certify_request_notify');
 }
 
 /**
@@ -306,23 +311,17 @@ function xoonips_notification_item_certify_request($item_id, $index_id)
  */
 function xoonips_notification_item_certified_auto($item_id, $index_id)
 {
-    xoonips_notification_item_certify($item_id, $index_id,
-        _MD_XOONIPS_ITEM_CERTIFIED_AUTO_NOTIFYSBJ,
-        'administrator_item_certified_auto_notify');
+    xoonips_notification_item_certify($item_id, $index_id, _MD_XOONIPS_ITEM_CERTIFIED_AUTO_NOTIFYSBJ, 'administrator_item_certified_auto_notify');
 }
 
 function xoonips_notification_item_certified($item_id, $index_id)
 {
-    xoonips_notification_item_certify($item_id, $index_id,
-        _MD_XOONIPS_ITEM_CERTIFIED_NOTIFYSBJ,
-        'administrator_item_certified_notify');
+    xoonips_notification_item_certify($item_id, $index_id, _MD_XOONIPS_ITEM_CERTIFIED_NOTIFYSBJ, 'administrator_item_certified_notify');
 }
 
 function xoonips_notification_item_rejected($item_id, $index_id)
 {
-    xoonips_notification_item_certify($item_id, $index_id,
-        _MD_XOONIPS_ITEM_REJECTED_NOTIFYSBJ,
-        'administrator_item_rejected_notify');
+    xoonips_notification_item_certify($item_id, $index_id, _MD_XOONIPS_ITEM_REJECTED_NOTIFYSBJ, 'administrator_item_rejected_notify');
 }
 
 function xoonips_notification_user_item_transfer_request($to_uid)
@@ -332,11 +331,13 @@ function xoonips_notification_user_item_transfer_request($to_uid)
     );
 
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
-    $nhandler->triggerEvent2('user', 0, 'item_transfer',
+    $nhandler->triggerEvent2(
+        'user', 0, 'item_transfer',
         _MD_XOONIPS_USER_ITEM_TRANSFER_REQUEST_NOTIFYSBJ,
         $nhandler->getTemplateDirByMid(),
         'user_item_transfer_request_notify',
-        $tags, array($to_uid));
+        $tags, array($to_uid)
+    );
 }
 
 function xoonips_notification_user_item_transfer_accepted($from_uid, $to_uid, $item_ids)
@@ -350,11 +351,13 @@ function xoonips_notification_user_item_transfer_accepted($from_uid, $to_uid, $i
     );
 
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
-    $nhandler->triggerEvent2('user', 0, 'item_transfer',
+    $nhandler->triggerEvent2(
+        'user', 0, 'item_transfer',
         _MD_XOONIPS_USER_ITEM_TRANSFER_ACCEPTED_NOTIFYSBJ,
         $nhandler->getTemplateDirByMid(),
         'user_item_transfer_accepted_notify',
-        $tags, array($from_uid));
+        $tags, array($from_uid)
+    );
 }
 
 function xoonips_notification_user_item_transfer_rejected($from_uid, $to_uid, $item_ids)
@@ -365,16 +368,17 @@ function xoonips_notification_user_item_transfer_rejected($from_uid, $to_uid, $i
 
     $tags = array(
         'TO_UNAME' => $to_user->getVar('uname'),
-        'ITEM_LIST' => _xoonips_notification_get_item_list($from_uid,
-                                                           $item_ids),
+        'ITEM_LIST' => _xoonips_notification_get_item_list($from_uid, $item_ids),
     );
 
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
-    $nhandler->triggerEvent2('user', 0, 'item_transfer',
+    $nhandler->triggerEvent2(
+        'user', 0, 'item_transfer',
         _MD_XOONIPS_USER_ITEM_TRANSFER_REJECTED_NOTIFYSBJ,
         $nhandler->getTemplateDirByMid(),
         'user_item_transfer_rejected_notify',
-        $tags, array($from_uid));
+        $tags, array($from_uid)
+    );
 }
 
 function _xoonips_notification_get_descendant_index_ids($index_id)
@@ -434,8 +438,7 @@ function _xoonips_notification_get_title_of_items($item_ids)
 
 function xoonips_notification_send_user_index_notification($context, $subject, $template_name)
 {
-    $new_index_path = xoonips_notification_get_index_path_string(
-        $context['index_id']);
+    $new_index_path = xoonips_notification_get_index_path_string($context['index_id']);
 
     foreach ($context['affected_items'] as $uid => $item_ids) {
         $item_list = array();
@@ -459,9 +462,11 @@ function xoonips_notification_send_user_index_notification($context, $subject, $
         );
 
         $nhandler = &xoonips_gethandler('xoonips', 'notification');
-        $nhandler->triggerEvent2('user', 0, 'item_updated',
+        $nhandler->triggerEvent2(
+            'user', 0, 'item_updated',
             $subject, $nhandler->getTemplateDirByMid(),
-            $template_name, $tags, array($uid));
+            $template_name, $tags, array($uid)
+        );
     }
 }
 
@@ -477,9 +482,7 @@ function xoonips_notification_before_user_index_renamed($index_id)
 
 function xoonips_notification_after_user_index_renamed($context)
 {
-    xoonips_notification_send_user_index_notification($context,
-        _MD_XOONIPS_USER_INDEX_RENAMED_NOTIFYSBJ,
-        'user_index_renamed_notify');
+    xoonips_notification_send_user_index_notification($context, _MD_XOONIPS_USER_INDEX_RENAMED_NOTIFYSBJ, 'user_index_renamed_notify');
 }
 
 function xoonips_notification_before_user_index_moved($index_id)
@@ -494,9 +497,7 @@ function xoonips_notification_before_user_index_moved($index_id)
 
 function xoonips_notification_after_user_index_moved($context)
 {
-    xoonips_notification_send_user_index_notification($context,
-        _MD_XOONIPS_USER_INDEX_MOVED_NOTIFYSBJ,
-        'user_index_moved_notify');
+    xoonips_notification_send_user_index_notification($context, _MD_XOONIPS_USER_INDEX_MOVED_NOTIFYSBJ, 'user_index_moved_notify');
 }
 
 function xoonips_notification_before_user_index_deleted($index_id)
@@ -514,9 +515,7 @@ function xoonips_notification_before_user_index_deleted($index_id)
 
 function xoonips_notification_after_user_index_deleted($context)
 {
-    xoonips_notification_send_user_index_notification($context,
-        _MD_XOONIPS_USER_INDEX_DELETED_NOTIFYSBJ,
-        'user_index_deleted_notify');
+    xoonips_notification_send_user_index_notification($context, _MD_XOONIPS_USER_INDEX_DELETED_NOTIFYSBJ, 'user_index_deleted_notify');
 }
 
 function xoonips_notification_user_item_certified($item_id, $index_ids)
@@ -533,11 +532,13 @@ function xoonips_notification_user_item_certified($item_id, $index_ids)
     $item_basic = $item_basic_handler->get($item_id);
 
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
-    $nhandler->triggerEvent2('user', 0, 'item_certified',
+    $nhandler->triggerEvent2(
+        'user', 0, 'item_certified',
         _MD_XOONIPS_USER_ITEM_CERTIFIED_NOTIFYSBJ,
         $nhandler->getTemplateDirByMid(),
         'user_item_certified_notify',
-        $tags, array($item_basic->get('uid')));
+        $tags, array($item_basic->get('uid'))
+    );
 }
 
 function xoonips_notification_user_item_rejected($item_id, $index_ids)
@@ -554,11 +555,13 @@ function xoonips_notification_user_item_rejected($item_id, $index_ids)
     $item_basic = $item_basic_handler->get($item_id);
 
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
-    $nhandler->triggerEvent2('user', 0, 'item_rejected',
+    $nhandler->triggerEvent2(
+        'user', 0, 'item_rejected',
         _MD_XOONIPS_USER_ITEM_REJECTED_NOTIFYSBJ,
         $nhandler->getTemplateDirByMid(),
         'user_item_rejected_notify',
-        $tags, array($item_basic->get('uid')));
+        $tags, array($item_basic->get('uid'))
+    );
 }
 
 function xoonips_notification_user_file_downloaded($file_id, $downloader_uid)
@@ -576,11 +579,13 @@ function xoonips_notification_user_file_downloaded($file_id, $downloader_uid)
     $tags['UNAME'] = $user->getVar('uname');
 
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
-    $nhandler->triggerEvent2('user', 0, 'file_downloaded',
+    $nhandler->triggerEvent2(
+        'user', 0, 'file_downloaded',
         _MD_XOONIPS_USER_FILE_DOWNLOADED_NOTIFYSBJ,
         $nhandler->getTemplateDirByMid(),
         'user_file_downloaded_notify',
-        $tags, array($item_basic->get('uid')));
+        $tags, array($item_basic->get('uid'))
+    );
 }
 
 function _xoonips_notification_get_detail_urls($item_ids)
@@ -599,8 +604,7 @@ function _xoonips_notification_get_item_list($transfer_uid, $item_ids)
     $item_list = array();
     $handler = &xoonips_getormcompohandler('xoonips', 'item');
     foreach ($item_ids as $item_id) {
-        $item_titles
-            = _xoonips_notification_get_title_of_items(array($item_id));
+        $item_titles = _xoonips_notification_get_title_of_items(array($item_id));
         $item_urls = _xoonips_notification_get_detail_urls(array($item_id));
         $item_list[] =
             _MD_XOONIPS_TRANSFER_NOTIFICATION_ITEM_TITLE

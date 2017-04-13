@@ -26,17 +26,17 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include '../../../include/cp_header.php';
+require '../../../include/cp_header.php';
 
 $title = _AM_XNPSTIMULUS_TITLE;
 
 $mid = $xoopsModule->getVar('mid');
 if (defined('XOOPS_CUBE_LEGACY')) {
     // for XOOPS Cube 2.1 Legacy
-  $pref_url = XOOPS_URL.'/modules/legacy/admin/index.php?action=PreferenceEdit&confmod_id='.$mid;
+    $pref_url = XOOPS_URL.'/modules/legacy/admin/index.php?action=PreferenceEdit&confmod_id='.$mid;
 } else {
     // for XOOPS 2.0
-  $pref_url = XOOPS_URL.'/modules/system/admin.php?fct=preferences&op=showmod&mod='.$mid;
+    $pref_url = XOOPS_URL.'/modules/system/admin.php?fct=preferences&op=showmod&mod='.$mid;
 }
 $pref_title = _PREFERENCES;
 $pref_url = htmlspecialchars($prefedit_url, ENT_QUOTES);

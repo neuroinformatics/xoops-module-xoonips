@@ -26,9 +26,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once XOOPS_ROOT_PATH.'/class/template.php';
-include_once __DIR__.'/transfer.class.php';
-include_once dirname(__DIR__).'/base/gtickets.php';
+require_once XOOPS_ROOT_PATH.'/class/template.php';
+require_once __DIR__.'/transfer.class.php';
+require_once dirname(__DIR__).'/base/gtickets.php';
 
 /**
  * HTML view to list item to transfer for administrator.
@@ -64,30 +64,15 @@ class XooNIpsViewTransferAdminItemList extends XooNIpsViewTransfer
         $xoopsTpl = new XoopsTpl();
         $this->setXooNIpsStyleSheet($xoopsTpl);
 
-        $xoopsTpl->assign(
-            'token_hidden',
-            $GLOBALS['xoopsGTicket']->getTicketHtml(__LINE__, 600,
-              'xoonips_transfer_admin_list_item', 600));
-        $xoopsTpl->assign(
-            'from_uname',
-            $textutil->html_special_chars($this->get_uname_by_uid($this->_params['from_uid'])));
-        $xoopsTpl->assign(
-            'to_uname',
-            $textutil->html_special_chars($this->get_uname_by_uid($this->_params['to_uid'])));
-        $xoopsTpl->assign('from_index_path',
-                             $this->get_index_path_by_index_id(
-                                 $this->_params['from_index_id']));
-        $xoopsTpl->assign('to_index_path',
-                            $this->get_index_path_by_index_id(
-                                $this->_params['to_index_id']));
-        $xoopsTpl->assign('transfer_items',
-                             $this->get_transfer_item_template_vars());
-        $xoopsTpl->assign('group_names_to_subscribe',
-                             $this->get_gnames_to_subscribe());
-        $xoopsTpl->assign('group_names_to_subscribe_messages',
-                             $this->get_gnames_to_subscribe_messages());
-        $xoopsTpl->assign('child_item_ids_to_transfer',
-                             $this->get_child_item_ids_to_transfer());
+        $xoopsTpl->assign('token_hidden', $GLOBALS['xoopsGTicket']->getTicketHtml(__LINE__, 600, 'xoonips_transfer_admin_list_item', 600));
+        $xoopsTpl->assign('from_uname', $textutil->html_special_chars($this->get_uname_by_uid($this->_params['from_uid'])));
+        $xoopsTpl->assign('to_uname', $textutil->html_special_chars($this->get_uname_by_uid($this->_params['to_uid'])));
+        $xoopsTpl->assign('from_index_path', $this->get_index_path_by_index_id($this->_params['from_index_id']));
+        $xoopsTpl->assign('to_index_path', $this->get_index_path_by_index_id($this->_params['to_index_id']));
+        $xoopsTpl->assign('transfer_items', $this->get_transfer_item_template_vars());
+        $xoopsTpl->assign('group_names_to_subscribe', $this->get_gnames_to_subscribe());
+        $xoopsTpl->assign('group_names_to_subscribe_messages', $this->get_gnames_to_subscribe_messages());
+        $xoopsTpl->assign('child_item_ids_to_transfer', $this->get_child_item_ids_to_transfer());
         foreach ($this->_params as $key => $val) {
             $xoopsTpl->assign($key, $val);
         }
@@ -100,22 +85,30 @@ class XooNIpsViewTransferAdminItemList extends XooNIpsViewTransfer
 
         // breadcrumbs
         $breadcrumbs = array(
-          array('type' => 'top',
-                 'label' => _AM_XOONIPS_TITLE,
-                 'url' => $xoonips_admin['admin_url'].'/', ),
-          array('type' => 'link',
-                 'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
-                 'url' => $xoonips_admin['myfile_url'], ),
-          array('type' => 'link',
-                 'label' => _AM_XOONIPS_MAINTENANCE_ITEM_TITLE,
-                 'url' => $xoonips_admin['mypage_url'], ),
-          array('type' => 'label',
-                 'label' => $title,
-                 'url' => '', ),
+            array(
+                'type' => 'top',
+                'label' => _AM_XOONIPS_TITLE,
+                'url' => $xoonips_admin['admin_url'].'/',
+            ),
+            array(
+                'type' => 'link',
+                'label' => _AM_XOONIPS_MAINTENANCE_TITLE,
+                'url' => $xoonips_admin['myfile_url'],
+            ),
+            array(
+                'type' => 'link',
+                'label' => _AM_XOONIPS_MAINTENANCE_ITEM_TITLE,
+                'url' => $xoonips_admin['mypage_url'],
+            ),
+            array(
+                'type' => 'label',
+                'label' => $title,
+                'url' => '',
+            ),
         );
 
         // templates
-        require_once '../class/base/pattemplate.class.php';
+        include_once '../class/base/pattemplate.class.php';
         $tmpl = new PatTemplate();
         $tmpl->setBaseDir('templates');
         $tmpl->readTemplatesFromFile('maintenance_item_transfer.tmpl.html');
@@ -146,28 +139,21 @@ class XooNIpsViewTransferAdminItemList extends XooNIpsViewTransfer
         foreach ($item_ids as $item_id) {
             $item = &$item_handler->get($item_id);
             $basic = &$item->getVar('basic');
-            $itemtype
-                = &$item_type_handler->get($basic->get('item_type_id'));
+            $itemtype = &$item_type_handler->get($basic->get('item_type_id'));
 
             $child_titles = array();
-            $childs = array_key_exists(
-                $item_id,
-                $this->_params['child_items'])
-                ? $this->_params['child_items'][$item_id] : array();
+            $childs = array_key_exists($item_id, $this->_params['child_items']) ? $this->_params['child_items'][$item_id] : array();
             foreach ($childs as $child_item_id) {
                 $child_item = &$item_handler->get($child_item_id);
-                $child_titles[]
-                    = $this->concatenate_titles(
-                        $child_item->getVar('titles'));
+                $child_titles[] = $this->concatenate_titles($child_item->getVar('titles'));
             }
 
             $result[] = array(
                 'item_id' => $item_id,
                 'item_type_name' => $itemtype->getVar('display_name', 's'),
-                'title' => $this->concatenate_titles(
-                    $item->getVar('titles')),
+                'title' => $this->concatenate_titles($item->getVar('titles')),
                 'child_titles' => $child_titles,
-                );
+            );
         }
 
         return $result;
@@ -197,10 +183,7 @@ class XooNIpsViewTransferAdminItemList extends XooNIpsViewTransfer
         $textutil = &xoonips_getutility('text');
         $result = array();
         foreach ($this->get_gnames_to_subscribe() as $gname) {
-            $result[] = sprintf(
-                _AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_LIST_SUBSCRIBE_USER_TO_GROUP,
-                $gname,
-                $textutil->html_special_chars($this->get_uname_by_uid($this->_params['to_uid'])));
+            $result[] = sprintf(_AM_XOONIPS_MAINTENANCE_TRANSFER_ADMIN_ITEM_LIST_SUBSCRIBE_USER_TO_GROUP, $gname, $textutil->html_special_chars($this->get_uname_by_uid($this->_params['to_uid'])));
         }
 
         return $result;
@@ -209,8 +192,7 @@ class XooNIpsViewTransferAdminItemList extends XooNIpsViewTransfer
     public function get_child_item_ids_to_transfer()
     {
         $item_ids = array();
-        foreach (array_values($this->_params['child_items'])
-                 as $child_item_ids) {
+        foreach (array_values($this->_params['child_items']) as $child_item_ids) {
             $item_ids = array_merge($item_ids, $child_item_ids);
         }
 

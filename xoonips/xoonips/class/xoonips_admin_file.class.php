@@ -156,7 +156,7 @@ class XooNIpsAdminFileHandler extends XooNIpsFileHandler
 
         if ($is_deleted || !is_readable($file_path) || is_null($fs_name)) {
             // clear search plugin informations
-        $xf_obj->setDefault('search_module_name');
+            $xf_obj->setDefault('search_module_name');
             $xf_obj->setDefault('search_module_version');
 
             return $this->xf_handler->insert($xf_obj);
@@ -198,7 +198,7 @@ class XooNIpsAdminFileHandler extends XooNIpsFileHandler
         $result = $xoopsDB->queryF($sql);
         if ($result === false) {
             // - try to load data from direcotry of mysql client
-        $sql = sprintf('LOAD DATA LOCAL INFILE \'%s\' INTO TABLE %s ( file_id, search_text )', $esc_tmpfile, $xst_table);
+            $sql = sprintf('LOAD DATA LOCAL INFILE \'%s\' INTO TABLE %s ( file_id, search_text )', $esc_tmpfile, $xst_table);
             $result = $xoopsDB->queryF($sql);
         }
 
@@ -267,7 +267,7 @@ class XooNIpsAdminFileHandler extends XooNIpsFileHandler
     public function _load_file_search_plugins()
     {
         $this->fsearch_plugins = array();
-        require_once __DIR__.'/base/filesearchplugin.class.php';
+        include_once __DIR__.'/base/filesearchplugin.class.php';
         $fs_path = dirname(__DIR__).'/filesearch';
         $plugins = array();
         if ($dir = opendir($fs_path)) {
@@ -281,7 +281,7 @@ class XooNIpsAdminFileHandler extends XooNIpsFileHandler
                 $fs_name = $module['name'];
                 $plugins[$fs_name] = $module;
                 // load indexer class
-                require_once $fs_path.'/'.$module['php_file_name'];
+                include_once $fs_path.'/'.$module['php_file_name'];
             }
             closedir($dir);
         }

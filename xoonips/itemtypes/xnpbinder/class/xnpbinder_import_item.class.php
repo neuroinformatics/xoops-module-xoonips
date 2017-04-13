@@ -26,8 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-include_once dirname(dirname(__DIR__))
-    .'/xoonips/class/xoonips_import_item.class.php';
+require_once dirname(dirname(__DIR__)).'/xoonips/class/xoonips_import_item.class.php';
 
 class XNPBinderImportItem extends XooNIpsImportItem
 {
@@ -56,25 +55,19 @@ class XNPBinderImportItemHandler extends XooNIpsImportItemHandler
     public function xmlEndElementHandler($parser, $name)
     {
         global $xoopsDB;
-        $binder_item_links = &$this->_import_item->getVar(
-            'binder_item_links');
+        $binder_item_links = &$this->_import_item->getVar('binder_item_links');
         $unicode = &xoonips_getutility('unicode');
 
         switch (implode('/', $this->_tag_stack)) {
         case 'ITEM/DETAIL':
             if (count($binder_item_links) == 0) {
-                $this->_import_item->setErrors(
-                    E_XOONIPS_TAG_NOT_FOUND, ' no binder_item_link'
-                    .$this->_get_parser_error_at());
+                $this->_import_item->setErrors(E_XOONIPS_TAG_NOT_FOUND, ' no binder_item_link'.$this->_get_parser_error_at());
             }
             break;
         case 'ITEM/DETAIL/BINDER_ITEM_LINK':
-            $handler = &xoonips_getormhandler('xnpbinder',
-                                               'binder_item_link');
+            $handler = &xoonips_getormhandler('xnpbinder', 'binder_item_link');
             $link = &$handler->create();
-            $link->set('item_id', intval(
-                $unicode->decode_utf8(
-                    $this->_cdata, xoonips_get_server_charset(), 'h')));
+            $link->set('item_id', intval($unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h')));
             $binder_item_links[] = &$link;
             break;
         }
@@ -102,24 +95,17 @@ class XNPBinderImportItemHandler extends XooNIpsImportItemHandler
 
         $child_items = array();
         foreach (array_keys($import_items) as $key) {
-            if (in_array($import_items[$key]->getPseudoId(),
-                         $child_item_ids)) {
+            if (in_array($import_items[$key]->getPseudoId(), $child_item_ids)) {
                 $child_items[] = &$import_items[$key];
             }
         }
 
         $binder_handler = &xoonips_gethandler('xnpbinder', 'import_item');
-        if ($binder_handler->publicBinderHasNotPublicItems($child_items,
-                                                             $index_ids)) {
-            $item->setErrors(
-                E_XOONIPS_INVALID_VALUE,
-                'public binder cannot have private and group items');
+        if ($binder_handler->publicBinderHasNotPublicItems($child_items, $index_ids)) {
+            $item->setErrors(E_XOONIPS_INVALID_VALUE, 'public binder cannot have private and group items');
         }
-        if ($binder_handler->groupBinderHasPrivateItems($child_items,
-                                                          $index_ids)) {
-            $item->setErrors(
-                E_XOONIPS_INVALID_VALUE,
-                'group binder cannot have private items');
+        if ($binder_handler->groupBinderHasPrivateItems($child_items, $index_ids)) {
+            $item->setErrors(E_XOONIPS_INVALID_VALUE, 'group binder cannot have private items');
         }
 
         parent::onReadFileFinished($item, $import_items);
@@ -149,11 +135,9 @@ class XNPBinderImportItemHandler extends XooNIpsImportItemHandler
                 continue;
             }
             if (array_key_exists($i->getPseudoId(), $pseudo_id2id)) {
-                $pseudo_id2id[$i->getPseudoId()][]
-                    = $basic->get('item_id');
+                $pseudo_id2id[$i->getPseudoId()][] = $basic->get('item_id');
             } else {
-                $pseudo_id2id[$i->getPseudoId()]
-                    = array($basic->get('item_id'));
+                $pseudo_id2id[$i->getPseudoId()] = array($basic->get('item_id'));
             }
         }
 
@@ -163,12 +147,10 @@ class XNPBinderImportItemHandler extends XooNIpsImportItemHandler
         $links = &$item->getVar('binder_item_links');
         $new_links = array();
         foreach (array_keys($links) as $key) {
-            if (!array_key_exists($links[$key]->get('item_id'),
-                                   $pseudo_id2id)) {
+            if (!array_key_exists($links[$key]->get('item_id'), $pseudo_id2id)) {
                 continue;
             }
-            foreach ($pseudo_id2id[$links[$key]->get('item_id')]
-                     as $item_id) {
+            foreach ($pseudo_id2id[$links[$key]->get('item_id')] as $item_id) {
                 $l = &$handler->create();
                 $l->set('binder_id', $links[$key]->get('binder_id'));
                 $l->set('item_id', $item_id);
@@ -330,9 +312,8 @@ class XNPBinderImportItemHandler extends XooNIpsImportItemHandler
                     if (!$child_index) {
                         continue;
                     }
-                    if (OL_PUBLIC == $child_index->get('open_level')
-                        || OL_GROUP_ONLY
-                        == $child_index->get('open_level')) {
+                    if (OL_PUBLIC == $child_index->get('open_level') || OL_GROUP_ONLY == $child_index->get('open_level')
+                    ) {
                         continue 2;
                     }
                 }

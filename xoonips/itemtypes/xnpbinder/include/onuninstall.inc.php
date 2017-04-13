@@ -47,8 +47,8 @@ function xoops_module_uninstall_xnpbinder($xoopsMod)
         return false;
     }
 
-  // set Deleted state to repository item_status table.
-  $table = $xoopsDB->prefix('xoonips_item_basic');
+    // set Deleted state to repository item_status table.
+    $table = $xoopsDB->prefix('xoonips_item_basic');
     $sql = "SELECT item_id from ${table} WHERE item_type_id = $item_type_id";
     $result = $xoopsDB->query($sql);
     if (!$result) {
@@ -72,8 +72,8 @@ function xoops_module_uninstall_xnpbinder($xoopsMod)
         }
     }
 
-  // remove basic information
-  $table = $xoopsDB->prefix('xoonips_item_basic');
+    // remove basic information
+    $table = $xoopsDB->prefix('xoonips_item_basic');
     $sql = "DELETE FROM $table where item_type_id = $item_type_id";
     if ($xoopsDB->query($sql) == false) {
         echo mysql_error();
@@ -82,8 +82,8 @@ function xoops_module_uninstall_xnpbinder($xoopsMod)
         return false;
     }
 
-  // unregister itemtype
-  $table = $xoopsDB->prefix('xoonips_item_type');
+    // unregister itemtype
+    $table = $xoopsDB->prefix('xoonips_item_type');
     $mid = $xoopsMod->getVar('mid');
     $sql = "DELETE FROM $table where mid = $mid";
     if ($xoopsDB->query($sql) == false) {

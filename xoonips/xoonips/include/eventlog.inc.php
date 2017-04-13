@@ -481,7 +481,7 @@ function _xoonips_eventlog_logtype2vars($log_type_id)
     13 => array('newuser', ETID_CERTIFY_ACCOUNT, 'month', _MD_XOONIPS_EVENTLOG_NEW_USERS_LABEL, _MD_XOONIPS_EVENTLOG_NEW_USER_MONTHS_TITLE),
     // - number of newly registered users and items (item)
     14 => array('newitem', ETID_INSERT_ITEM, 'month', _MD_XOONIPS_EVENTLOG_NEW_ITEMS_LABEL, _MD_XOONIPS_EVENTLOG_NEW_ITEM_MONTHS_TITLE),
-  );
+    );
 
     return $typemap[$log_type_id];
 }
@@ -866,8 +866,8 @@ function xoonips_eventlog_download($is_post, $log_type_id)
             $line = array();
             $line[] = $myuname;
             $line[] = ''; // title
-          $line[] = ''; // item type
-          $total = 0;
+            $line[] = ''; // item type
+            $total = 0;
             foreach ($month_labels as $label) {
                 if (isset($months[$label])) {
                     $line[] = $months[$label];
@@ -882,7 +882,7 @@ function xoonips_eventlog_download($is_post, $log_type_id)
                 $item_months = $logs[$myuname][$item_id];
                 $line = array();
                 $line[] = ''; // uname
-            $line[] = $names[$item_id]['title'];
+                $line[] = $names[$item_id]['title'];
                 $line[] = $names[$item_id]['item_type'];
                 foreach ($month_labels as $label) {
                     $line[] = isset($item_months[$label]) ? $item_months[$label] : '';
