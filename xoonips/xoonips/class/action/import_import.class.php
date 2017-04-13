@@ -35,9 +35,9 @@ class XooNIpsActionImportImport extends XooNIpsAction
     public $_view_name = null;
     public $_collection = null;
 
-    public function XooNIpsActionImportImport()
+    public function __construct()
     {
-        parent::XooNIpsAction();
+        parent::__construct();
     }
 
     public function _get_logic_name()

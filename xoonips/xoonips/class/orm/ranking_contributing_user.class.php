@@ -40,9 +40,9 @@ require_once __DIR__.'/abstract_ranking.class.php';
  */
 class XooNIpsOrmRankingContributingUser extends XooNIpsTableObject
 {
-    public function XooNIpsOrmRankingContributingUser()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('item_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('uid', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('timestamp', XOBJ_DTYPE_OTHER, null, false);
@@ -54,9 +54,9 @@ class XooNIpsOrmRankingContributingUser extends XooNIpsTableObject
  */
 class XooNIpsOrmRankingContributingUserHandler extends XooNIpsOrmAbstractRankingHandler
 {
-    public function XooNIpsOrmRankingContributingUserHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmRankingContributingUser', 'xoonips_ranking_contributing_user', 'item_id', false);
         $this->_set_columns(array('item_id', 'uid', 'timestamp'));
     }

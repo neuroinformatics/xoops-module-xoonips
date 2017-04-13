@@ -30,7 +30,7 @@ require_once dirname(dirname(__DIR__)).'/xoonips/class/xoonips_import_item.class
 
 class XNPBinderImportItem extends XooNIpsImportItem
 {
-    public function XNPBinderImportItem()
+    public function __construct()
     {
         $handler = &xoonips_getormcompohandler('xnpbinder', 'item');
         $this->_item = &$handler->create();
@@ -39,9 +39,9 @@ class XNPBinderImportItem extends XooNIpsImportItem
 
 class XNPBinderImportItemHandler extends XooNIpsImportItemHandler
 {
-    public function XNPBinderImportItemHandler()
+    public function __construct()
     {
-        parent::XooNIpsImportItemHandler();
+        parent::__construct();
     }
 
     public function create()

@@ -65,7 +65,7 @@ class XooNIpsFileSearchPlugin
     /**
      * constractor.
      */
-    public function XooNIpsFileSearchPlugin()
+    public function __construct()
     {
     }
 

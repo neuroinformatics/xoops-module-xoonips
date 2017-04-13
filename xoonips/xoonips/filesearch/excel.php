@@ -33,9 +33,9 @@ class XooNIpsFileSearchPluginEXCEL extends XooNIpsFileSearchPlugin
     /**
      * constractor.
      */
-    public function XooNIpsFileSearchPluginEXCEL()
+    public function __construct()
     {
-        parent::XooNIpsFileSearchPlugin();
+        parent::__construct();
         $this->is_xml = true;
         $this->is_utf8 = true;
     }

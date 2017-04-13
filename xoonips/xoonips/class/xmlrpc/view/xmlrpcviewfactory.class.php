@@ -31,7 +31,7 @@
  */
 class XooNIpsXmlRpcItemViewFactory
 {
-    public function XooNIpsXmlRpcItemViewFactory()
+    public function __construct()
     {
     }
 
@@ -94,7 +94,7 @@ class XooNIpsXmlRpcItemViewFactory
  */
 class XooNIpsXmlRpcViewFactory
 {
-    public function XooNIpsXmlRpcViewFactory()
+    public function __construct()
     {
     }
 

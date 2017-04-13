@@ -35,9 +35,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XNPDataXmlRpcTransformCompo extends XooNIpsXmlRpcTransformCompo
 {
-    public function XNPDataXmlRpcTransformCompo()
+    public function __construct()
     {
-        parent::XooNIpsXmlRpcTransformCompo('xnpdata');
+        parent::__construct('xnpdata');
     }
 
     /**

@@ -108,7 +108,7 @@ class XooNIpsGraphData
      *
      * normally, this is called from child classes only
      */
-    public function XooNIpsGraphData()
+    public function __construct()
     {
         // nothing to do
     }
@@ -244,9 +244,9 @@ class XooNIpsGraphDataPoint extends XooNIpsGraphData
      *
      * @param array $values data array
      */
-    public function XooNIpsGraphDataPoint($values)
+    public function __construct($values)
     {
-        parent::XooNIpsGraphData();
+        parent::__construct();
         $this->values = &$values;
         $this->data_type = 'none';
     }
@@ -292,9 +292,9 @@ class XooNIpsGraphDataLine extends XooNIpsGraphDataPoint
      *
      * @param array $values data array
      */
-    public function XooNIpsGraphDataLine($values)
+    public function __construct($values)
     {
-        parent::XooNIpsGraphData();
+        parent::__construct();
         $this->values = &$values;
         $this->data_type = 'line';
         $this->setPoint('none');
@@ -314,9 +314,9 @@ class XooNIpsGraphDataDashLine extends XooNIpsGraphDataLine
      *
      * @param array $values data array
      */
-    public function XooNIpsGraphDataDashLine($values)
+    public function __construct($values)
     {
-        parent::XooNIpsGraphData();
+        parent::__construct();
         $this->values = &$values;
         $this->data_type = 'dash';
         $this->setPoint('none');
@@ -350,9 +350,9 @@ class XooNIpsGraphDataBrushLine extends XooNIpsGraphDataLine
      *
      * @param array $values data array
      */
-    public function XooNIpsGraphDataBrushLine($values)
+    public function __construct($values)
     {
-        parent::XooNIpsGraphData();
+        parent::__construct();
         $this->values = &$values;
         $this->data_type = 'brush';
         $this->setPoint('none');
@@ -412,9 +412,9 @@ class XooNIpsGraphDataBar extends XooNIpsGraphData
      *
      * @param array $values data array
      */
-    public function XooNIpsGraphDataBar($values)
+    public function __construct($values)
     {
-        parent::XooNIpsGraphData();
+        parent::__construct();
         $this->values = &$values;
         $this->data_type = 'bar';
     }
@@ -468,9 +468,9 @@ class XooNIpsGraphDataArea extends XooNIpsGraphData
      *
      * @param array $values data array
      */
-    public function XooNIpsGraphDataArea($values)
+    public function __construct($values)
     {
-        parent::XooNIpsGraphData();
+        parent::__construct();
         $this->values = &$values;
         $this->data_type = 'area';
     }
@@ -551,7 +551,7 @@ class XooNIpsGraphAxis
     /**
      * constructor.
      */
-    public function XooNIpsGraphAxis()
+    public function __construct()
     {
         // nothing to do
     }
@@ -656,7 +656,7 @@ class XooNIpsGraphFrame
     /**
      * constructor.
      */
-    public function XooNIpsGraphFrame()
+    public function __construct()
     {
         // nothing to do
     }
@@ -769,7 +769,7 @@ class XooNIpsGraph
      * @param int $width  width of graph image
      * @param int $height height of graph image
      */
-    public function XooNIpsGraph($width, $height)
+    public function __construct($width, $height)
     {
         $this->module_path = dirname(dirname(__DIR__));
         $this->graph = new XooNIpsGraphLib($width, $height);

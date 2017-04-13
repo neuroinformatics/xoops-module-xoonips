@@ -31,7 +31,7 @@
  */
 class XooNIpsViewFactory
 {
-    public function XooNIpsViewFactory()
+    public function __construct()
     {
     }
 

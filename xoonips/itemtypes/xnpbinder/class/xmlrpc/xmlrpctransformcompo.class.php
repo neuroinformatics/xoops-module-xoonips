@@ -37,9 +37,9 @@ require_once dirname(dirname(__DIR__)).'/include/view.php';
  */
 class XNPBinderXmlRpcTransformCompo extends XooNIpsXmlRpcTransformCompo
 {
-    public function XNPBinderXmlRpcTransformCompo()
+    public function __construct()
     {
-        parent::XooNIpsXmlRpcTransformCompo('xnpbinder');
+        parent::__construct('xnpbinder');
     }
 
     /**

@@ -32,7 +32,7 @@ class XNPUrlImportItem extends XooNIpsImportItem
 {
     public $_has_url_banner_file = false;
 
-    public function XNPUrlImportItem()
+    public function __construct()
     {
         $handler = &xoonips_getormcompohandler('xnpurl', 'item');
         $this->_item = &$handler->create();
@@ -99,9 +99,9 @@ class XNPUrlImportItemHandler extends XooNIpsImportItemHandler
      */
     public $_attachment_dl_notify_limit_flag = false;
 
-    public function XNPUrlImportItemHandler()
+    public function __construct()
     {
-        parent::XooNIpsImportItemHandler();
+        parent::__construct();
     }
 
     public function create()

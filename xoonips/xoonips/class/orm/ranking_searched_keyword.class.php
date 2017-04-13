@@ -39,9 +39,9 @@ require_once __DIR__.'/abstract_ranking.class.php';
  */
 class XooNIpsOrmRankingSearchedKeyword extends XooNIpsTableObject
 {
-    public function XooNIpsOrmRankingSearchedKeyword()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('keyword', XOBJ_DTYPE_BINARY, '', false, 255);
         $this->initVar('count', XOBJ_DTYPE_INT, 0, true);
     }
@@ -52,9 +52,9 @@ class XooNIpsOrmRankingSearchedKeyword extends XooNIpsTableObject
  */
 class XooNIpsOrmRankingSearchedKeywordHandler extends XooNIpsOrmAbstractRankingHandler
 {
-    public function XooNIpsOrmRankingSearchedKeywordHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmRankingSearchedKeyword', 'xoonips_ranking_searched_keyword', 'keyword', false, true);
         $this->_set_columns(array('keyword', 'count'));
     }

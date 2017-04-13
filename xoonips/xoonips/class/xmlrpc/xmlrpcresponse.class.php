@@ -43,7 +43,7 @@ class XooNIpsXmlRpcResponse
      */
     public $vars = array();
 
-    public function XooNIpsXmlRpcResponse()
+    public function __construct()
     {
         $this->set('result', false);
         $this->set('error', new XooNIpsError());

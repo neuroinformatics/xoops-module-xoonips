@@ -37,9 +37,9 @@ require_once __DIR__.'/ranking_searched_keyword.class.php';
  */
 class XooNIpsOrmRankingSumSearchedKeywordHandler extends XooNIpsOrmRankingSearchedKeywordHandler
 {
-    public function XooNIpsOrmRankingSumSearchedKeywordHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmRankingSearchedKeyword', 'xoonips_ranking_sum_searched_keyword', 'keyword', false, true);
         $this->_set_columns(array('keyword', 'count'));
         $this->_set_sum_table();

@@ -38,7 +38,7 @@ class XooNIpsAction
     public $_view_params = null;
     public $_formdata = null;
 
-    public function XooNIpsAction()
+    public function __construct()
     {
         $this->_params = array();
         $this->_response = new XooNIpsResponse();

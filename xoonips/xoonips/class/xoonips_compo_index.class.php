@@ -35,9 +35,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xoonips_compo_item.class.ph
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - -
 class XooNIpsIndexCompoHandler extends XooNIpsItemCompoHandler
 {
-    public function XooNIpsIndexCompoHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsItemCompoHandler($db);
+        parent::__construct($db);
         $this->addHandler('index', xoonips_getormhandler('xoonips', 'index'), 'index_id');
     }
 
@@ -208,9 +208,9 @@ class XooNIpsIndexCompoHandler extends XooNIpsItemCompoHandler
  */
 class XooNIpsIndexCompo extends XooNIpsItemCompo
 {
-    public function XooNIpsIndexCompo()
+    public function __construct()
     {
-        parent::XooNIpsItemCompo();
+        parent::__construct();
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $this->initVar('index', $index_handler->create(), true);
     }

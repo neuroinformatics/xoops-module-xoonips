@@ -75,9 +75,9 @@ class XooNIpsViewTransferAdminItemSelect extends XooNIpsViewTransfer
      *                       - $params['to_index_options']:
      *                       array same structure with 'from_index_options'
      */
-    public function XooNIpsViewTransferAdminItemSelect($params)
+    public function __construct($params)
     {
-        parent::XooNIpsView($params);
+        parent::__construct($params);
     }
 
     public function render()

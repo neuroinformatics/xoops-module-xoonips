@@ -33,9 +33,9 @@ class XooNIpsFileSearchPluginTEXT extends XooNIpsFileSearchPlugin
     /**
      * constractor.
      */
-    public function XooNIpsFileSearchPluginTEXT()
+    public function __construct()
     {
-        parent::XooNIpsFileSearchPlugin();
+        parent::__construct();
         $this->is_xml = false;
         $this->is_utf8 = false;
     }

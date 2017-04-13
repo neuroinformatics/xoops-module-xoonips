@@ -76,9 +76,9 @@ class XooNIpsTableObject extends XoopsObject
      *
      * normally, this is called from child classes only
      */
-    public function XooNIpsTableObject()
+    public function __construct()
     {
-        $this->XoopsObject();
+        parent::__construct();
     }
 
     /**
@@ -406,8 +406,8 @@ class XooNIpsTableObject extends XoopsObject
     /**
      * @brief set a sanitized value
      *
-     * @param string $key name of the variable to assign
-     * @param  mixed value of variable to assin
+     * @param string $key   $key name of the variable to assign
+     * @param mixed  $value value of variable to assin
      *
      * @return bool false if failed
      */
@@ -711,9 +711,9 @@ class XooNIpsTableObjectHandler extends XoopsObjectHandler
      *
      * @param XoopsDatabase &$db XoopsDatabase instance
      */
-    public function XooNIpsTableObjectHandler(&$db)
+    public function __construct(&$db)
     {
-        $this->XoopsObjectHandler($db);
+        parent::__construct($db);
     }
 
     /**

@@ -38,9 +38,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xnpfiles/iteminfo.php';
  */
 class XNPFilesCompoHandler extends XooNIpsItemInfoCompoHandler
 {
-    public function XNPFilesCompoHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsItemInfoCompoHandler($db, 'xnpfiles');
+        parent::__construct($db, 'xnpfiles');
     }
 
     public function &create()
@@ -120,8 +120,8 @@ class XNPFilesCompoHandler extends XooNIpsItemInfoCompoHandler
  */
 class XNPFilesCompo extends XooNIpsItemInfoCompo
 {
-    public function XNPFilesCompo()
+    public function __construct()
     {
-        parent::XooNIpsItemInfoCompo('xnpfiles');
+        parent::__construct('xnpfiles');
     }
 }

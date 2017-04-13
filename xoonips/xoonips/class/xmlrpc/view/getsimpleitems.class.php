@@ -33,9 +33,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/view/xmlrpcview.clas
  */
 class XooNIpsXmlRpcViewGetSimpleItems extends XooNIpsXmlRpcViewElement
 {
-    public function XooNIpsXmlRpcViewGetSimpleItems(&$response)
+    public function __construct(&$response)
     {
-        parent::XooNIpsXmlRpcViewElement($response);
+        parent::__construct($response);
         $factory = &XooNIpsXmlRpcItemViewFactory::getInstance();
         $items = $response->getSuccess();
         $len = count($items);

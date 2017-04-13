@@ -30,9 +30,9 @@ require_once dirname(dirname(__DIR__)).'/class/base/action.class.php';
 
 class XooNIpsActionOaipmhSearchDefault extends XooNIpsAction
 {
-    public function XooNIpsActionOaipmhSearchDefault()
+    public function __construct()
     {
-        parent::XooNIpsAction();
+        parent::__construct();
     }
 
     public function _get_logic_name()

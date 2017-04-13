@@ -38,9 +38,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xnpbinder/iteminfo.php';
  */
 class XNPBinderCompoHandler extends XooNIpsItemInfoCompoHandler
 {
-    public function XNPBinderCompoHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsItemInfoCompoHandler($db, 'xnpbinder');
+        parent::__construct($db, 'xnpbinder');
     }
 
     public function &create()
@@ -276,9 +276,9 @@ class XNPBinderCompoHandler extends XooNIpsItemInfoCompoHandler
  */
 class XNPBinderCompo extends XooNIpsItemInfoCompo
 {
-    public function XNPBinderCompo()
+    public function __construct()
     {
-        parent::XooNIpsItemInfoCompo('xnpbinder');
+        parent::__construct('xnpbinder');
     }
 
     /**

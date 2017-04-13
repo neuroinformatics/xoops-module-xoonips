@@ -39,7 +39,7 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
     /**
      * constructor.
      */
-    public function XooNIpsUtilityFormdata()
+    public function __construct()
     {
         $this->setSingleton();
     }

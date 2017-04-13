@@ -39,9 +39,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xnpbook/iteminfo.php';
  */
 class XNPBookCompoHandler extends XooNIpsItemInfoCompoHandler
 {
-    public function XNPBookCompoHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsItemInfoCompoHandler($db, 'xnpbook');
+        parent::__construct($db, 'xnpbook');
     }
 
     public function &create()
@@ -128,8 +128,8 @@ class XNPBookCompoHandler extends XooNIpsItemInfoCompoHandler
  */
 class XNPBookCompo extends XooNIpsItemInfoCompo
 {
-    public function XNPBookCompo()
+    public function __construct()
     {
-        parent::XooNIpsItemInfoCompo('xnpbook');
+        parent::__construct('xnpbook');
     }
 }

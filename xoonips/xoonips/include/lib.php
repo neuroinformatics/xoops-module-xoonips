@@ -3830,7 +3830,7 @@ class XooNIpsItemLibraryObject
     public $_related_to_check_all_ids = array(); // for edit
     public $_changelog = ''; // for edit
 
-    public function XooNIpsItemLibraryObject(&$meta)
+    public function __construct(&$meta)
     {
         $this->_item_basic_obj = &$meta['item_basic'];
         $this->_xoops_users_obj = &$meta['xoops_user'];
@@ -4771,7 +4771,7 @@ class XooNIpsItemLibraryHandler
     /**
      * constructor.
      */
-    public function XooNIpsItemLibraryHandler()
+    public function __construct()
     {
         $this->_item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $this->_xoops_users_handler = &xoonips_getormhandler('xoonips', 'xoops_users');

@@ -37,9 +37,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/orm/item_type.class.php';
  */
 class XNPBookOrmItemType extends XooNIpsOrmItemType
 {
-    public function XNPBookOrmItemType()
+    public function __construct()
     {
-        parent::XooNIpsOrmItemType('xnpbook');
+        parent::__construct('xnpbook');
         // detail
         /* $this->fields is obsoleted. use $this->iteminfo.
         foreach($this->fields as $i => $f) {
@@ -56,9 +56,9 @@ class XNPBookOrmItemType extends XooNIpsOrmItemType
  */
 class XNPBookOrmItemTypeHandler extends XooNIpsOrmItemTypeHandler
 {
-    public function XNPBookOrmItemTypeHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsOrmItemTypeHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPBookOrmItemType', 'xoonips_item_type', 'item_type_id', false);
     }
 }

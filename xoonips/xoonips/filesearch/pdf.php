@@ -33,9 +33,9 @@ class XooNIpsFileSearchPluginPDF extends XooNIpsFileSearchPlugin
     /**
      * constractor.
      */
-    public function XooNIpsFileSearchPluginPDF()
+    public function __construct()
     {
-        parent::XooNIpsFileSearchPlugin();
+        parent::__construct();
         $this->is_xml = false;
         $this->is_utf8 = true;
     }

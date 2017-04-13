@@ -42,9 +42,9 @@ class XooNIpsXmlRpcParser extends XoopsXmlRpcParser
      *
      * @see
      */
-    public function XooNIpsXmlRpcParser(&$input)
+    public function __construct(&$input)
     {
-        $this->XoopsXmlRpcParser($input);
+        parent::__construct($input);
         $this->addTagHandler(new RpcMethodNameHandler());
         $this->addTagHandler(new RpcIntHandler());
         $this->addTagHandler(new RpcDoubleHandler());

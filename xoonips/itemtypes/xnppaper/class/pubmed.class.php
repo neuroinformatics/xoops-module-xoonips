@@ -67,10 +67,10 @@ if (!class_exists('XooNIps_PubMed_ArticleSet')) {
          */
         public $_pmids = array();
 
-        public function XooNIps_PubMed_ArticleSet()
+        public function __construct()
         {
             // call parent constructor
-            parent::XooNIpsXMLParser();
+            parent::__construct();
             // set fetcher conditions
             $this->_fetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi';
             $this->_fetch_arguments['db'] = 'pubmed';
@@ -316,10 +316,10 @@ if (!class_exists('XooNIps_PubMed_ArticleSet')) {
          */
         public $_title_abbreviation = '';
 
-        public function XooNIps_PubMed_JournalEsearch()
+        public function __construct()
         {
             // call parent constructor
-            parent::XooNIpsXMLParser();
+            parent::__construct();
             // set fetcher conditions
             $this->_fetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi';
             $this->_fetch_arguments['db'] = 'journals';
@@ -425,10 +425,10 @@ if (!class_exists('XooNIps_PubMed_ArticleSet')) {
          */
         public $_journal_ids = array();
 
-        public function XooNIps_PubMed_JournalEsummary()
+        public function __construct()
         {
             // call parent constructor
-            parent::XooNIpsXMLParser();
+            parent::__construct();
             // set fetcher conditions
             $this->_fetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi';
             $this->_fetch_arguments['db'] = 'journals';

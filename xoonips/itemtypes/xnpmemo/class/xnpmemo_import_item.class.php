@@ -32,7 +32,7 @@ class XNPMemoImportItem extends XooNIpsImportItem
 {
     public $_has_memo_file = false;
 
-    public function XNPMemoImportItem()
+    public function __construct()
     {
         $handler = &xoonips_getormcompohandler('xnpmemo', 'item');
         $this->_item = &$handler->create();
@@ -99,9 +99,9 @@ class XNPMemoImportItemHandler extends XooNIpsImportItemHandler
      */
     public $_attachment_dl_notify_limit_flag = false;
 
-    public function XNPMemoImportItemHandler()
+    public function __construct()
     {
-        parent::XooNIpsImportItemHandler();
+        parent::__construct();
     }
 
     public function create()

@@ -151,9 +151,9 @@ function xnpExportItem($export_path, $item_id, $attachment = false, $is_absolute
 /**
  * export index.
  *
- * @param fhdl file handle that indexes are exported to
- * @param index_id id of index to display
- * @param recurse true:export recursively index that hangs under index_id
+ * @param $fhdl     file handle that indexes are exported to
+ * @param $index_id id of index to display
+ * @param $recurse  true:export recursively index that hangs under index_id
  *
  * @return true:success, false:failure
  */
@@ -258,8 +258,10 @@ function xnpExportFile($export_path, $fhdl, $item_id)
 /**
  * export Basic information of item.
  *
- * @param fhdl file handle that items are exported to
- * @param item_id id of the item to change into XML
+ * @param $fhdl          file handle that items are exported to
+ * @param $item_id       id of the item to change into XML
+ * @param $is_absolute
+ * @param $base_index_id
  *
  * @return true:success, false:failure
  */
@@ -284,8 +286,8 @@ function xnpExportBasic($fhdl, $item_id, $is_absolute, $base_index_id = false)
 /**
  * export ChangeLog of item.
  *
- * @param fhdl file handle that changelogs are exported to
- * @param item id of the item to export
+ * @param $fhdl    file handle that changelogs are exported to
+ * @param $item_id item id of the item to export
  *
  * @return true:success, false:failure
  */
@@ -322,7 +324,7 @@ function xnpExportChangeLog($fhdl, $item_id)
 /**
  * export 'Related to' information of an item.
  *
- * @param parent_id id of the item to export
+ * @param $parent_id id of the item to export
  *
  * @return generated XML or NULL
  */
@@ -350,10 +352,10 @@ function xnpExportRelatedTo($parent_id)
 $parser_hash = array();
 
 /**
- * @param string XML characters (UTF-8)
- * @param parent_id index_id of import place
- * @param array( 'pseudo ID' => 'actual ID', ... ) effected index ids
- * @param errmsg reference recieve error message
+ * @param string $str       XML characters (UTF-8)
+ * @param int    $parent_id index_id of import place
+ * @param array  &$id_table array( 'pseudo ID' => 'actual ID', ... ) effected index ids
+ * @param string &$errmsg   reference recieve error message
  *
  * @return bool false if falure. refer $errmsg.
  */
@@ -687,22 +689,22 @@ function _xoonips_import_indexcheckCharacterData($parser, $data, &$parser_hash)
  * Importing indexes to a index that is specified by $parent_index_id.
  * Associations of pseudo ID and Real index ID are sotred to $id_table.
  *
- * @param parent_index_id index_id that indexes is imported to
- * @param $indexes array of index information to be imported.
- * $indexes = array(
- *                   array( 'titles' => array( TITLE1, TITLE2, ... )
- *                          'parent_id' => pseudo id of parent index
- *                          'item_id' => pseudo id of own index
- *                          'child' => array( [0] => array( 'titles' => ..., 'parent_id' => ..., 'child' => ....)
- *                                            [1] => array( same above ),
- *                                            ....
- *                           )
- *                         ),
- *                   array( 'titles' => array( TITLE1, TITLE2, ... )
- *                          same above ... ),
- *                   ...
- *                   );
- * @param id_table reference of associative array for output( [pseudo id] => [real index id] )
+ * @param int   $parent_index_id index_id that indexes is imported to
+ * @param array &$indexes        array of index information to be imported.
+ *                               $indexes = array(
+ *                               array( 'titles' => array( TITLE1, TITLE2, ... )
+ *                               'parent_id' => pseudo id of parent index
+ *                               'item_id' => pseudo id of own index
+ *                               'child' => array( [0] => array( 'titles' => ..., 'parent_id' => ..., 'child' => ....)
+ *                               [1] => array( same above ),
+ *                               ....
+ *                               )
+ *                               ),
+ *                               array( 'titles' => array( TITLE1, TITLE2, ... )
+ *                               same above ... ),
+ *                               ...
+ *                               );
+ * @param int   &$id_table       reference of associative array for output( [pseudo id] => [real index id] )
  *
  * @return no return value
  */
@@ -758,10 +760,10 @@ function _xoonips_import_index($parent_index_id, &$indexes, &$id_table)
  * Return value of this function has information of this index and the childs of this index.
  * This function is called recursive by own.
  *
- * @param p2c $p2c[ Parent ID of the index ] = array( ID of child index of the index[0], ...[1], ...[2], .... )
- * @param index_by_id assosiative array of index( index information that is associated by own index ID )
- *                    $index_by_id[ ID of the index 'A' ] = array( information of the index 'A' )
- * @param root_id Index ID of the root of the index tree structure that you want to get
+ * @param array $p2c         p2c[ Parent ID of the index ] = array( ID of child index of the index[0], ...[1], ...[2], .... )
+ * @param int   $index_by_id assosiative array of index( index information that is associated by own index ID )
+ *                           $index_by_id[ ID of the index 'A' ] = array( information of the index 'A' )
+ * @param int   $root_id     Index ID of the root of the index tree structure that you want to get
  *
  * @return assosiative array of index tree
  */

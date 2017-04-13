@@ -32,7 +32,7 @@ class XNPBookImportItem extends XooNIpsImportItem
 {
     public $_has_book_pdf = false;
 
-    public function XNPBookImportItem()
+    public function __construct()
     {
         $handler = &xoonips_getormcompohandler('xnpbook', 'item');
         $this->_item = &$handler->create();
@@ -109,9 +109,9 @@ class XNPBookImportItemHandler extends XooNIpsImportItemHandler
      */
     public $_attachment_dl_notify_limit_flag = false;
 
-    public function XNPBookImportItemHandler()
+    public function __construct()
     {
-        parent::XooNIpsImportItemHandler();
+        parent::__construct();
     }
 
     public function create()

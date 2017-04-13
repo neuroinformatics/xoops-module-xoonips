@@ -37,9 +37,9 @@ require_once __DIR__.'/ranking_active_group.class.php';
  */
 class XooNIpsOrmRankingSumActiveGroupHandler extends XooNIpsOrmRankingActiveGroupHandler
 {
-    public function XooNIpsOrmRankingSumActiveGroupHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmRankingActiveGroup', 'xoonips_ranking_sum_active_group', 'gid', false);
         $this->_set_columns(array('gid', 'count'));
         $this->_set_sum_table();

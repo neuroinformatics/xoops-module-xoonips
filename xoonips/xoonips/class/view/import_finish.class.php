@@ -30,9 +30,9 @@ require_once dirname(__DIR__).'/base/view.class.php';
 
 class XooNIpsViewImportFinish extends XooNIpsView
 {
-    public function XooNIpsViewImportFinish($params)
+    public function __construct($params)
     {
-        parent::XooNIpsView($params);
+        parent::__construct($params);
     }
 
     public function render()

@@ -37,7 +37,7 @@ class XooNIpsGroupHandler
     public $_xg_handler;
     public $_xgl_handler;
 
-    public function XooNIpsGroupHandler()
+    public function __construct()
     {
         $this->_xg_handler = &xoonips_getormhandler('xoonips', 'groups');
         $this->_xgl_handler = &xoonips_getormhandler('xoonips', 'groups_users_link');

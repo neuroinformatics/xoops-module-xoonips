@@ -37,9 +37,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/orm/item_type.class.php';
  */
 class XNPStimulusOrmItemType extends XooNIpsOrmItemType
 {
-    public function XNPStimulusOrmItemType()
+    public function __construct()
     {
-        parent::XooNIpsOrmItemType('xnpstimulus');
+        parent::__construct('xnpstimulus');
     }
 }
 
@@ -48,9 +48,9 @@ class XNPStimulusOrmItemType extends XooNIpsOrmItemType
  */
 class XNPStimulusOrmItemTypeHandler extends XooNIpsOrmItemTypeHandler
 {
-    public function XNPStimulusOrmItemTypeHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsOrmItemTypeHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPStimulusOrmItemType', 'xoonips_item_type', 'item_type_id', false);
     }
 }

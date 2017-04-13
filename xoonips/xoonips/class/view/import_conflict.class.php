@@ -32,9 +32,9 @@ class XooNIpsViewImportConflict extends XooNIpsView
 {
     public $_item_per_page = 50;
 
-    public function XooNIpsViewImportConflict($params)
+    public function __construct($params)
     {
-        parent::XooNIpsView($params);
+        parent::__construct($params);
     }
 
     public function render()

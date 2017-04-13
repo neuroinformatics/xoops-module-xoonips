@@ -38,9 +38,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xnpmemo/iteminfo.php';
  */
 class XNPMemoCompoHandler extends XooNIpsItemInfoCompoHandler
 {
-    public function XNPMemoCompoHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsItemInfoCompoHandler($db, 'xnpmemo');
+        parent::__construct($db, 'xnpmemo');
     }
 
     public function &create()
@@ -121,8 +121,8 @@ class XNPMemoCompoHandler extends XooNIpsItemInfoCompoHandler
  */
 class XNPMemoCompo extends XooNIpsItemInfoCompo
 {
-    public function XNPMemoCompo()
+    public function __construct()
     {
-        parent::XooNIpsItemInfoCompo('xnpmemo');
+        parent::__construct('xnpmemo');
     }
 }

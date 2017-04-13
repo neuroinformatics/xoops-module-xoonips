@@ -35,9 +35,9 @@ require_once dirname(__DIR__).'/xoonipserror.class.php';
  */
 class XooNIpsLogicTransfer extends XooNIpsLogic
 {
-    public function XooNIpsLogicTransfer()
+    public function __construct()
     {
-        parent::XooNIpsLogic();
+        parent::__construct();
     }
 
     public function execute(&$vars, &$response)

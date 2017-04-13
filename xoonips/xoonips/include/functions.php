@@ -602,9 +602,9 @@ function xoonips_get_multi_field_array_from_post($module, $name)
  * - return true when at least one field value is too long
  * - regards $name as field name of ormObjects.
  *
- * @param XooNIpsTableObject[] orm to get template vars
- * @param string $module module name for xoonips_getormhandler
- * @param string $name   name for xoonips_getormhandler
+ * @param XooNIpsTableObject[] $ormObjects orm to get template vars
+ * @param string               $module     module name for xoonips_getormhandler
+ * @param string               $name       name for xoonips_getormhandler
  *
  * @see xoonips_getormhandler
  */
@@ -625,8 +625,9 @@ function xoonips_is_multiple_field_too_long($ormObjects, $module, $name)
 /**
  * return template variables for 'xoonips_multiple_filed_confirm' template.
  *
- * @param XooNIpsTableObject[] orm to get template vars
- * @param string $field_name orm field name that is used as value to show
+ * @param XooNIpsTableObject[] $ormObjects orm to get template vars
+ * @param string               $module     module name
+ * @pamra string               $name       field name that is used as value to show
  */
 function xoonips_get_multiple_field_template_vars($ormObjects, $module, $name)
 {

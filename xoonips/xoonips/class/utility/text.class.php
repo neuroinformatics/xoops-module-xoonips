@@ -159,7 +159,7 @@ class XooNIpsUtilityText extends XooNIpsUtility
     /**
      * constructor.
      */
-    public function XooNIpsUtilityText()
+    public function __construct()
     {
         $this->setSingleton();
     }

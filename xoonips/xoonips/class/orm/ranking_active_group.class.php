@@ -39,9 +39,9 @@ require_once __DIR__.'/abstract_ranking.class.php';
  */
 class XooNIpsOrmRankingActiveGroup extends XooNIpsTableObject
 {
-    public function XooNIpsOrmRankingActiveGroup()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('gid', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('count', XOBJ_DTYPE_INT, 0, true);
     }
@@ -52,9 +52,9 @@ class XooNIpsOrmRankingActiveGroup extends XooNIpsTableObject
  */
 class XooNIpsOrmRankingActiveGroupHandler extends XooNIpsOrmAbstractRankingHandler
 {
-    public function XooNIpsOrmRankingActiveGroupHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmRankingActiveGroup', 'xoonips_ranking_active_group', 'gid', false);
         $this->_set_columns(array('gid', 'count'));
     }

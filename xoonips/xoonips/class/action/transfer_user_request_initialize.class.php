@@ -31,9 +31,9 @@ require_once dirname(dirname(__DIR__)).'/include/transfer.inc.php';
 
 class XooNIpsActionTransferUserRequestInitialize extends XooNIpsActionTransfer
 {
-    public function XooNIpsActionTransferUserRequestInitialize()
+    public function __construct()
     {
-        parent::XooNIpsAction();
+        parent::__construct();
     }
 
     public function _get_logic_name()

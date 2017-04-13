@@ -10,7 +10,7 @@ if (!class_exists('XoopsGTicket')) {
         public $_latest_token = '';
         public $messages = array();
 
-        public function XoopsGTicket()
+        public function __construct()
         {
             $myxoopsConfig = &xoonips_get_xoops_configs(XOOPS_CONF);
 

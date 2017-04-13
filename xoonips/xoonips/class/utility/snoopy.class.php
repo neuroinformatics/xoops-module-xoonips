@@ -123,7 +123,7 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
     public $_fp_timeout = 30;                    // timeout for socket connection
 
     // XooNIps
-    public function XooNIpsUtilitySnoopy()
+    public function __construct()
     {
         // get proxy configs
         $proxy_configs = array('proxy_host', 'proxy_port', 'proxy_user', 'proxy_pass');

@@ -39,9 +39,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xnpsimulator/iteminfo.php';
  */
 class XNPSimulatorCompoHandler extends XooNIpsItemInfoCompoHandler
 {
-    public function XNPSimulatorCompoHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsItemInfoCompoHandler($db, 'xnpsimulator');
+        parent::__construct($db, 'xnpsimulator');
     }
 
     public function &create()
@@ -145,8 +145,8 @@ class XNPSimulatorCompoHandler extends XooNIpsItemInfoCompoHandler
  */
 class XNPSimulatorCompo extends XooNIpsItemInfoCompo
 {
-    public function XNPSimulatorCompo()
+    public function __construct()
     {
-        parent::XooNIpsItemInfoCompo('xnpsimulator');
+        parent::__construct('xnpsimulator');
     }
 }

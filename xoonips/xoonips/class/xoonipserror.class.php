@@ -67,7 +67,7 @@ class XooNIpsError
      * @param int    $code  error code
      * @param string $extra extra information of err(null if omitted)
      */
-    public function XooNIpsError($code = null, $extra = null)
+    public function __construct($code = null, $extra = null)
     {
         if (!is_null($code)) {
             $this->add($code, $extra);

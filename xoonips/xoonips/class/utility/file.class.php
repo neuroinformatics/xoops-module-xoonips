@@ -153,7 +153,7 @@ class XooNIpsUtilityFile extends XooNIpsUtility
     /**
      * constructor.
      */
-    public function XooNIpsUtilityFile()
+    public function __construct()
     {
         $this->setSingleton();
         $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');

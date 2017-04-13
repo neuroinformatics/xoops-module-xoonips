@@ -34,7 +34,7 @@ class XNPConferenceImportItem extends XooNIpsImportItem
 
     public $_has_conference_paper = false;
 
-    public function XNPConferenceImportItem()
+    public function __construct()
     {
         $handler = &xoonips_getormcompohandler('xnpconference', 'item');
         $this->_item = &$handler->create();
@@ -146,9 +146,9 @@ class XNPConferenceImportItemHandler extends XooNIpsImportItemHandler
 
     public $_file_type_attribute = null;
 
-    public function XNPConferenceImportItemHandler()
+    public function __construct()
     {
-        parent::XooNIpsImportItemHandler();
+        parent::__construct();
     }
 
     public function create()

@@ -36,9 +36,9 @@ class XooNIpsActionImportResolveConflict extends XooNIpsAction
 
     public $_collection = null;
 
-    public function XooNIpsActionImportResolveConflict()
+    public function __construct()
     {
-        parent::XooNIpsAction();
+        parent::__construct();
     }
 
     public function _get_logic_name()

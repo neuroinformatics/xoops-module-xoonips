@@ -45,7 +45,7 @@ class XooNIpsPageNavi
     public $_order = null;
     public $_sort = null;
 
-    public function XooNIpsPageNavi($count, $limit, $page)
+    public function __construct($count, $limit, $page)
     {
         if ($count <= 0) {
             $count = 0;

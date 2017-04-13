@@ -77,15 +77,10 @@ class JuniiListRecordsHandler extends ListRecordsHandler
         'AHDNG',
         'AID', );
 
-    public function JuniiListRecordsHandler($_parser, $_baseURL)
-    {
-        parent::ListRecordsHandler($_parser, $_baseURL, 'junii');
-        $this->_identifierTypeAttr = '';
-    }
-
     public function __construct($_parser, $_baseURL)
     {
-        $this->JuniiListRecordsHandler($_parser, $_baseURL);
+        parent::__construct($_parser, $_baseURL, 'junii');
+        $this->_identifierTypeAttr = '';
     }
 
     public function startElementHandler($parser, $name, $attribs)

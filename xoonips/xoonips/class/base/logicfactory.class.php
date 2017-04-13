@@ -31,7 +31,7 @@
  */
 class XooNIpsLogicFactory
 {
-    public function XooNIpsLogicFactory()
+    public function __construct()
     {
     }
 

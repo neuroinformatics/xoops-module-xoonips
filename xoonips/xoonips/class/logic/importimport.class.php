@@ -31,9 +31,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php'
 
 class XooNIpsLogicImportImport extends XooNIpsLogic
 {
-    public function XooNIpsLogicImportImport()
+    public function __construct()
     {
-        parent::XooNIpsLogic();
+        parent::__construct();
     }
 
     public function execute(&$vars, &$response)

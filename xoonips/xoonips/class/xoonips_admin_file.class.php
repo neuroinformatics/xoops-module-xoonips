@@ -50,9 +50,9 @@ class XooNIpsAdminFileHandler extends XooNIpsFileHandler
      */
     public $preview_ftid;
 
-    public function XooNIpsAdminFileHandler()
+    public function __construct()
     {
-        parent::XooNIpsFileHandler();
+        parent::__construct();
         $xc_handler = &xoonips_getormhandler('xoonips', 'config');
         $this->_load_file_search_plugins();
         $xft_handler = &xoonips_getormhandler('xoonips', 'file_type');

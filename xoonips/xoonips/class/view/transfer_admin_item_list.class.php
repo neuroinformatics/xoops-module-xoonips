@@ -52,9 +52,9 @@ class XooNIpsViewTransferAdminItemList extends XooNIpsViewTransfer
      *                       - $params['group_ids_to_subscribe']:
      *                       array of integer group id(s) that subscribe to_uid
      */
-    public function XooNIpsViewTransferAdminItemList($params)
+    public function __construct($params)
     {
-        parent::XooNIpsView($params);
+        parent::__construct($params);
     }
 
     public function render()

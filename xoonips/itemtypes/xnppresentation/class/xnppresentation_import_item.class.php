@@ -33,7 +33,7 @@ class XNPPresentationImportItem extends XooNIpsImportItem
     public $_has_presentation_file = false;
     public $_has_preview = false;
 
-    public function XNPPresentationImportItem()
+    public function __construct()
     {
         $handler = &xoonips_getormcompohandler('xnppresentation', 'item');
         $this->_item = &$handler->create();
@@ -143,9 +143,9 @@ class XNPPresentationImportItemHandler extends XooNIpsImportItemHandler
 
     public $_file_type_attribute = null;
 
-    public function XNPPresentationImportItemHandler()
+    public function __construct()
     {
-        parent::XooNIpsImportItemHandler();
+        parent::__construct();
     }
 
     public function create()

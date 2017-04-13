@@ -53,7 +53,7 @@ class XooNIpsImportItemCollection
      */
     public $_error_messages = array();
 
-    public function XooNIpsImportItemCollection()
+    public function __construct()
     {
     }
 
@@ -251,7 +251,7 @@ class XooNIpsImportItem extends XoopsObject
      */
     public $_doi_conflict_flag = false;
 
-    public function XooNIpsImportItem()
+    public function __construct()
     {
         $handler = &xoonips_getormcompohandler('xoonips', 'item');
         $this->_item = &$handler->create();
@@ -654,7 +654,7 @@ class XooNIpsImportItemHandler
 
     public $_import_index_ids = array();
 
-    public function XooNIpsImportItemHandler()
+    public function __construct()
     {
     }
 

@@ -37,9 +37,9 @@ require_once __DIR__.'/ranking_new_item.class.php';
  */
 class XooNIpsOrmRankingSumNewItemHandler extends XooNIpsOrmRankingNewItemHandler
 {
-    public function XooNIpsOrmRankingSumNewItemHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmRankingNewItem', 'xoonips_ranking_sum_new_item', 'item_id', false);
         $this->_set_columns(array('item_id', 'timestamp'));
         $this->_set_sum_table();

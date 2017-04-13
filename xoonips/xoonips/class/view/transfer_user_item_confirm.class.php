@@ -51,9 +51,9 @@ class XooNIpsViewTransferUserItemConfirm extends XooNIpsViewTransfer
      *                       - $params['gids_to_subscribe']:
      *                       array group id(s) to subscribe transferee to complete transfer.<br />
      */
-    public function XooNIpsViewTransferUserItemConfirm($params)
+    public function __construct($params)
     {
-        parent::XooNIpsView($params);
+        parent::__construct($params);
     }
 
     public function render()

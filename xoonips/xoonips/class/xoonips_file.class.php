@@ -58,7 +58,7 @@ class XooNIpsFileHandler
     /**
      * constractor.
      */
-    public function XooNIpsFileHandler()
+    public function __construct()
     {
         $this->xf_handler = &xoonips_getormhandler('xoonips', 'file');
         $this->xst_handler = &xoonips_getormhandler('xoonips', 'search_text');

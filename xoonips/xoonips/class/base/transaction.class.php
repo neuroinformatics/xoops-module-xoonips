@@ -43,7 +43,7 @@ class XooNIpsTransaction
      *
      * @param object &$db XoopsDatabase
      */
-    public function XooNIpsTransaction(&$db)
+    public function __construct(&$db)
     {
         $this->db = &$db;
     }

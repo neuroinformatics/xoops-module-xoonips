@@ -50,9 +50,9 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
      */
     public $_items = array();
 
-    public function XooNIpsLogicImportReadFile()
+    public function __construct()
     {
-        parent::XooNIpsLogic();
+        parent::__construct();
     }
 
     public function execute(&$vars, &$response)

@@ -50,7 +50,7 @@ class XooNIpsRankingHandler
     /**
      * constractor.
      */
-    public function XooNIpsRankingHandler()
+    public function __construct()
     {
         // set base name of ranking tables
         $this->basenames = array(

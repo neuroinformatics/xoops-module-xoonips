@@ -28,14 +28,9 @@
 
 class OaidcListRecordsHandler extends ListRecordsHandler
 {
-    public function OaidcListRecordsHandler($_parser, $_baseURL)
-    {
-        parent::ListRecordsHandler($_parser, $_baseURL, 'oai_dc');
-    }
-
     public function __construct($_parser, $_baseURL)
     {
-        $this->OaidcListRecordsHandler($_parser, $_baseURL);
+        parent::__construct($_parser, $_baseURL, 'oai_dc');
     }
 
     public function startElementHandler($parser, $name, $attrs)

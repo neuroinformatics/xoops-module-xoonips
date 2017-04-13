@@ -28,7 +28,7 @@
 
 class XooNIpsActionFactory
 {
-    public function XooNIpsActionFactory()
+    public function __construct()
     {
     }
 

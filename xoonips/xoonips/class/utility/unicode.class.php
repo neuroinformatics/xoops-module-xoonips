@@ -48,7 +48,7 @@ class XooNIpsUtilityUnicode extends XooNIpsUtility
     /**
      * constructor.
      */
-    public function XooNIpsUtilityUnicode()
+    public function __construct()
     {
         $this->setSingleton();
     }

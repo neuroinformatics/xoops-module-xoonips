@@ -99,7 +99,7 @@ class XooNIpsUtilityFeed extends XooNIpsUtility
     /**
      * constructor.
      */
-    public function XooNIpsUtilityFeed()
+    public function __construct()
     {
         $myxoopsConfig = &xoonips_get_xoops_configs(XOOPS_CONF);
         $myxoopsConfigMetaFooter = &xoonips_get_xoops_configs(XOOPS_CONF_METAFOOTER);

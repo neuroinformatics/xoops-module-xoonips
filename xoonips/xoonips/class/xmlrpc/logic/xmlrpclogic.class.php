@@ -35,7 +35,7 @@ require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcresponse.class
  */
 class XooNIpsXmlRpcLogic
 {
-    public function XooNIpsXmlRpcLogic()
+    public function __construct()
     {
     }
 
@@ -121,7 +121,7 @@ class XooNIpsXmlRpcLogic
 }
 class XooNIpsXmlRpcLogicFactory
 {
-    public function XooNIpsXmlRpcLogicFactory()
+    public function __construct()
     {
     }
 

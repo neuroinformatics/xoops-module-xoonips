@@ -29,11 +29,11 @@
 require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/relatedobject.class.php';
 class XooNIpsUserCompoHandler extends XooNIpsRelatedObjectHandler
 {
-    public function XooNIpsUserCompoHandler(&$db)
+    public function __construct(&$db)
     {
         $u_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
         $xu_handler = &xoonips_getormhandler('xoonips', 'users');
-        parent::XooNIpsRelatedObjectHandler($db);
+        parent::__construct($db);
         parent::__init_handler('xoops_user', $u_handler, 'uid');
         $this->addHandler('xoonips_user', $xu_handler, 'uid');
     }
@@ -124,9 +124,9 @@ class XooNIpsUserCompoHandler extends XooNIpsRelatedObjectHandler
 }
 class XooNIpsUserCompo extends XooNIpsRelatedObject
 {
-    public function XooNIpsUserCompo()
+    public function __construct()
     {
-        parent::XooNIpsRelatedObject();
+        parent::__construct();
         $u_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
         $u_obj = &$u_handler->create();
         $xu_handler = &xoonips_getormhandler('xoonips', 'users');

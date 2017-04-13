@@ -135,7 +135,7 @@ class XooNIpsGraphLib
     );
 
     // XooNIps - renamed class name
-    public function XooNIpsGraphLib()
+    public function __construct()
     {
         if (func_num_args() == 2) {
             $this->parameter['width'] = func_get_arg(0);

@@ -39,9 +39,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xnppresentation/iteminfo.php';
  */
 class XNPPresentationCompoHandler extends XooNIpsItemInfoCompoHandler
 {
-    public function XNPPresentationCompoHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsItemInfoCompoHandler($db, 'xnppresentation');
+        parent::__construct($db, 'xnppresentation');
     }
 
     public function &create()
@@ -146,8 +146,8 @@ class XNPPresentationCompoHandler extends XooNIpsItemInfoCompoHandler
  */
 class XNPPresentationCompo extends XooNIpsItemInfoCompo
 {
-    public function XNPPresentationCompo()
+    public function __construct()
     {
-        parent::XooNIpsItemInfoCompo('xnppresentation');
+        parent::__construct('xnppresentation');
     }
 }

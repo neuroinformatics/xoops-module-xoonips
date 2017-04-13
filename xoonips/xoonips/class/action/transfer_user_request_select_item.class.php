@@ -32,9 +32,9 @@ require_once dirname(dirname(__DIR__)).'/include/extra_param.inc.php';
 
 class XooNIpsActionTransferUserRequestSelectItem extends XooNIpsActionTransfer
 {
-    public function XooNIpsActionTransferUserRequestSelectItem()
+    public function __construct()
     {
-        parent::XooNIpsAction();
+        parent::__construct();
     }
 
     public function _get_logic_name()

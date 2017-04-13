@@ -67,7 +67,7 @@ class XooNIpsUtilityDownload extends XooNIpsUtility
     /**
      * constractor.
      */
-    public function XooNIpsUtilityDownload()
+    public function __construct()
     {
         $this->ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
         $this->al = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : '';

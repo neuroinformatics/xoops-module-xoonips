@@ -32,9 +32,9 @@ require_once dirname(__DIR__).'/base/gtickets.php';
 
 class XooNIpsActionTransferUserRequest extends XooNIpsActionTransfer
 {
-    public function XooNIpsActionTransferUserRequest()
+    public function __construct()
     {
-        parent::XooNIpsAction();
+        parent::__construct();
     }
 
     public function _get_logic_name()

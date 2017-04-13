@@ -58,9 +58,9 @@ class XooNIpsViewTransferUserItemList extends XooNIpsViewTransfer
      *                       - $params['transfer_enable']:
      *                       boolean true if all items can be transfered.
      */
-    public function XooNIpsViewTransferUserItemList($params)
+    public function __construct($params)
     {
-        parent::XooNIpsView($params);
+        parent::__construct($params);
     }
 
     public function render()

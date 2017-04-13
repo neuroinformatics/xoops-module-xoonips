@@ -43,9 +43,9 @@ class XooNIpsActionTransferUserAccept extends XooNIpsActionTransfer
      */
     public $_notify_uid_transferer_transferee_item_ids_map = null;
 
-    public function XooNIpsActionTransferUserAccept()
+    public function __construct()
     {
-        parent::XooNIpsAction();
+        parent::__construct();
     }
 
     public function _get_logic_name()

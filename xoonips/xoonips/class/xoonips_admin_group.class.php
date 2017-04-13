@@ -36,9 +36,9 @@ require_once __DIR__.'/xoonips_group.class.php';
  */
 class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
 {
-    public function XooNIpsAdminGroupHandler()
+    public function __construct()
     {
-        parent::XooNIpsGroupHandler();
+        parent::__construct();
     }
 
     /**

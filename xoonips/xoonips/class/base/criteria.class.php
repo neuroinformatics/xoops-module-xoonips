@@ -90,7 +90,7 @@ class XooNIpsJoinCriteria
      * @param string $join_type      join type
      * @param bool   $subtable_alias assign alias name for joining sub table
      */
-    public function XooNIpsJoinCriteria($subtable_name, $main_field, $sub_field, $join_type = 'LEFT', $subtable_alias = false)
+    public function __construct($subtable_name, $main_field, $sub_field, $join_type = 'LEFT', $subtable_alias = false)
     {
         $this->_subtable_name = $subtable_name;
         $this->_main_field = $main_field;
@@ -103,9 +103,9 @@ class XooNIpsJoinCriteria
     /**
      * append next JOIN criteria.
      *
-     * @param object &$join_criteria object instance of next join criteria
-     * @param string joining main table name, false if use default main table
-     * @param bool $next_maintable_is_alias flag for next main table name is alias
+     * @param object &$join_criteria          object instance of next join criteria
+     * @param string $next_maintable_name     joining main table name, false if use default main table
+     * @param bool   $next_maintable_is_alias flag for next main table name is alias
      *
      * @return string
      **/
@@ -206,7 +206,7 @@ class XooNIpsFulltextCriteria extends CriteriaElement
      * @param bool   $in_boolean_mode flag for 'IN BOOLEAN MODE'
      * @param mixed  $prefix          table prefix(es)
      **/
-    public function XooNIpsFulltextCriteria($column, $expr, $in_boolean_mode, $prefix = '')
+    public function __construct($column, $expr, $in_boolean_mode, $prefix = '')
     {
         $this->_column = $column;
         $this->_expr = $expr;

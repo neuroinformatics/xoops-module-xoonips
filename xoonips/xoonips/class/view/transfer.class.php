@@ -36,9 +36,9 @@ class XooNIpsViewTransfer extends XooNIpsView
     /**
      * create view.
      */
-    public function XooNIpsViewTransfer($params)
+    public function __construct($params)
     {
-        parent::XooNIpsView($params);
+        parent::__construct($params);
     }
 
     /**

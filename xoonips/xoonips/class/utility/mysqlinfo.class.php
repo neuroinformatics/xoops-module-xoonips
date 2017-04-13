@@ -62,7 +62,7 @@ class XooNIpsUtilityMysqlinfo extends XooNIpsUtility
      *
      * this class is singleton
      */
-    public function XooNIpsUtilityMysqlinfo()
+    public function __construct()
     {
         $this->setSingleton();
 

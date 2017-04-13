@@ -31,9 +31,9 @@ require_once __DIR__.'/transfer.class.php';
 
 class XooNIpsLogicTransferUserRequest extends XooNIpsLogicTransfer
 {
-    public function XooNIpsLogicTransferUserRequest()
+    public function __construct()
     {
-        parent::XooNIpsLogic();
+        parent::__construct();
     }
 
     /**

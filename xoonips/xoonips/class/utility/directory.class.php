@@ -46,7 +46,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
     /**
      * constractor.
      */
-    public function XooNIpsUtilityDirectory()
+    public function __construct()
     {
         $this->setSingleton();
         $this->is_windows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');

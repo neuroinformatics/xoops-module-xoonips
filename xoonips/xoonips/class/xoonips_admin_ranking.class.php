@@ -33,9 +33,9 @@ require_once __DIR__.'/xoonips_ranking.class.php';
 
 class XooNIpsAdminRankingHandler extends XooNIpsRankingHandler
 {
-    public function XooNIpsAdminRankingHandler()
+    public function __construct()
     {
-        parent::XooNIpsRankingHandler();
+        parent::__construct();
     }
 
     /**

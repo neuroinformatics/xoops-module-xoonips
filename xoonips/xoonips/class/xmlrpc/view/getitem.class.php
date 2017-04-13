@@ -34,9 +34,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/xmlrpcfault.class.ph
  */
 class XooNIpsXmlRpcViewGetItem extends XooNIpsXmlRpcViewElement
 {
-    public function XooNIpsXmlRpcViewGetItem(&$response)
+    public function __construct(&$response)
     {
-        parent::XooNIpsXmlRpcViewElement($response);
+        parent::__construct($response);
         $factory = &XooNIpsXmlRpcItemViewFactory::getInstance();
         $item = &$response->getSuccess();
         $view = &$factory->create('getItem', $item);

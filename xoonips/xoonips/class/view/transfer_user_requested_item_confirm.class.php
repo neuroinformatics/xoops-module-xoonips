@@ -51,9 +51,9 @@ class XooNIpsViewTransferUserRequestedItemConfirm extends XooNIpsViewTransfer
      *                       - $params['limit_check_result']:
      *                       boolean true if number of item or storage is out of bounds
      */
-    public function XooNIpsViewTransferUserRequestedItemConfirm($params)
+    public function __construct($params)
     {
-        parent::XooNIpsView($params);
+        parent::__construct($params);
     }
 
     public function render()

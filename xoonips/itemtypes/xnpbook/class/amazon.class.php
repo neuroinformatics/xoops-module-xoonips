@@ -68,7 +68,7 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
      */
     public $_secret_access_key = '';
 
-    public function XooNIps_Amazon_ECS40()
+    public function __construct()
     {
         // get module config
         $mydirname = basename(dirname(__DIR__));
@@ -78,7 +78,7 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
         $mconfig = $chandler->getConfigsByCat(false, $module->mid());
 
         // call parent constructor
-        parent::XooNIpsXMLParser();
+        parent::__construct();
         // set fetcher conditions
         $this->_fetch_url = 'http://ecs.amazonaws.com/onca/xml';
         $this->_fetch_arguments['Service'] = 'AWSECommerceService';

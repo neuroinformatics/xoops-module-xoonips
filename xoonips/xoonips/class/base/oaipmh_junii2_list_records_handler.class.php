@@ -85,14 +85,9 @@ class Junii2ListRecordsHandler extends ListRecordsHandler
         'TEXTVERSION',
         );
 
-    public function Junii2ListRecordsHandler($_parser, $_baseURL)
-    {
-        parent::ListRecordsHandler($_parser, $_baseURL, 'junii2');
-    }
-
     public function __construct($_parser, $_baseURL)
     {
-        $this->Junii2ListRecordsHandler($_parser, $_baseURL);
+        parent::__construct($_parser, $_baseURL, 'junii2');
     }
 
     public function startElementHandler($parser, $name, $attrs)

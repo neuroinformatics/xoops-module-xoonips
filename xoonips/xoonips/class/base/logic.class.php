@@ -36,7 +36,7 @@ require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/AL.php';
  */
 class XooNIpsLogic
 {
-    public function XooNIpsLogic()
+    public function __construct()
     {
     }
 
@@ -532,9 +532,8 @@ class XooNIpsLogic
         return "(internal error: unsupported lock type. lock_type=$lock_type)";
     }
 
-    public function isPublicationDateValid(&$response, $year, $month, $mday,
-        $year_required, $month_required, $mday_required
-    ) {
+    public function isPublicationDateValid(&$response, $year, $month, $mday, $year_required, $month_required, $mday_required)
+    {
         $error = &$response->getError();
         $year_valid = false;
         $month_valid = false;

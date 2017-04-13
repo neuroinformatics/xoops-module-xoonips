@@ -35,8 +35,8 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XNPMemoXmlRpcTransformCompo extends XooNIpsXmlRpcTransformCompo
 {
-    public function XNPMemoXmlRpcTransformCompo()
+    public function __construct()
     {
-        parent::XooNIpsXmlRpcTransformCompo('xnpmemo');
+        parent::__construct('xnpmemo');
     }
 }

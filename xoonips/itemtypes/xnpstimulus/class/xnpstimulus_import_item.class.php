@@ -33,7 +33,7 @@ class XNPStimulusImportItem extends XooNIpsImportItem
     public $_has_stimulus_data = false;
     public $_has_preview = false;
 
-    public function XNPStimulusImportItem()
+    public function __construct()
     {
         $handler = &xoonips_getormcompohandler('xnpstimulus', 'item');
         $this->_item = &$handler->create();
@@ -141,9 +141,9 @@ class XNPStimulusImportItemHandler extends XooNIpsImportItemHandler
      */
     public $_attachment_dl_notify_limit_flag = false;
 
-    public function XNPStimulusImportItemHandler()
+    public function __construct()
     {
-        parent::XooNIpsImportItemHandler();
+        parent::__construct();
     }
 
     public function create()

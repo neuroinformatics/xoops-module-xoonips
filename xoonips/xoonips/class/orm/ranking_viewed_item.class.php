@@ -39,9 +39,9 @@ require_once __DIR__.'/abstract_ranking.class.php';
  */
 class XooNIpsOrmRankingViewedItem extends XooNIpsTableObject
 {
-    public function XooNIpsOrmRankingViewedItem()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('item_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('count', XOBJ_DTYPE_INT, 0, true);
     }
@@ -52,9 +52,9 @@ class XooNIpsOrmRankingViewedItem extends XooNIpsTableObject
  */
 class XooNIpsOrmRankingViewedItemHandler extends XooNIpsOrmAbstractRankingHandler
 {
-    public function XooNIpsOrmRankingViewedItemHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmRankingViewedItem', 'xoonips_ranking_viewed_item', 'item_id', false);
         $this->_set_columns(array('item_id', 'count'));
     }

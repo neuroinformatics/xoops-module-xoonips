@@ -37,9 +37,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/orm/item_type.class.php';
  */
 class XNPUrlOrmItemType extends XooNIpsOrmItemType
 {
-    public function XNPUrlOrmItemType()
+    public function __construct()
     {
-        parent::XooNIpsOrmItemType('xnpurl');
+        parent::__construct('xnpurl');
     }
 }
 
@@ -48,9 +48,9 @@ class XNPUrlOrmItemType extends XooNIpsOrmItemType
  */
 class XNPUrlOrmItemTypeHandler extends XooNIpsOrmItemTypeHandler
 {
-    public function XNPUrlOrmItemTypeHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsOrmItemTypeHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPUrlOrmItemType', 'xoonips_item_type', 'item_type_id', false);
     }
 }

@@ -40,9 +40,9 @@ class XooNIpsViewTransferUserRequestedItemDetail extends XooNIpsViewTransfer
      *                       - $params['template_file_name']:
      *                       - $params['template_vars']:
      */
-    public function XooNIpsViewTransferUserRequestedItemDetail($params)
+    public function __construct($params)
     {
-        parent::XooNIpsView($params);
+        parent::__construct($params);
     }
 
     public function render()

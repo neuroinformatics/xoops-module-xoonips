@@ -35,8 +35,8 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XNPUrlXmlRpcTransformCompo extends XooNIpsXmlRpcTransformCompo
 {
-    public function XNPUrlXmlRpcTransformCompo()
+    public function __construct()
     {
-        parent::XooNIpsXmlRpcTransformCompo('xnpurl');
+        parent::__construct('xnpurl');
     }
 }

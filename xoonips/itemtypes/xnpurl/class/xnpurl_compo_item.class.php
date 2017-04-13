@@ -38,9 +38,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xnpurl/iteminfo.php';
  */
 class XNPUrlCompoHandler extends XooNIpsItemInfoCompoHandler
 {
-    public function XNPUrlCompoHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsItemInfoCompoHandler($db, 'xnpurl');
+        parent::__construct($db, 'xnpurl');
     }
 
     public function &create()
@@ -109,8 +109,8 @@ class XNPUrlCompoHandler extends XooNIpsItemInfoCompoHandler
  */
 class XNPUrlCompo extends XooNIpsItemInfoCompo
 {
-    public function XNPUrlCompo()
+    public function __construct()
     {
-        parent::XooNIpsItemInfoCompo('xnpurl');
+        parent::__construct('xnpurl');
     }
 }

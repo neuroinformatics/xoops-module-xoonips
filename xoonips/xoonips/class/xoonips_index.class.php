@@ -40,7 +40,7 @@ class XooNIpsIndexHandler
     /**
      * constractor.
      */
-    public function XooNIpsIndexHandler()
+    public function __construct()
     {
         $this->_x_handler = &xoonips_getormhandler('xoonips', 'index');
         $this->_xil_handler = &xoonips_getormhandler('xoonips', 'index_item_link');

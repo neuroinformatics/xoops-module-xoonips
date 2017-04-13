@@ -94,7 +94,7 @@ class XooNIpsXMLParser
      * constructor
      * normally, the is called from child classes only.
      */
-    public function XooNIpsXMLParser()
+    public function __construct()
     {
     }
 

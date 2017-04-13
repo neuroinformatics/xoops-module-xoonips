@@ -48,7 +48,7 @@ class XooNIpsAdminSystemCheckResult
     public $result;
     public $messages = array();
 
-    public function XooNIpsAdminSystemCheckResult($name)
+    public function __construct($name)
     {
         $this->name = $name;
     }
@@ -111,7 +111,7 @@ class XooNIpsAdminSystemCheckCategory
     public $errortype = _XASC_ERRORTYPE_NONE;
     public $errorlevel = _XASC_STATUS_OK;
 
-    public function XooNIpsAdminSystemCheckCategory($name)
+    public function __construct($name)
     {
         $this->name = $name;
     }
@@ -144,7 +144,7 @@ class XooNIpsAdminSystemCheck
 {
     public $categories = array();
 
-    public function XooNIpsAdminSystemCheck()
+    public function __construct()
     {
     }
 

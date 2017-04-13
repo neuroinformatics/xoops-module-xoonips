@@ -34,9 +34,9 @@ require_once XOOPS_ROOT_PATH.'/kernel/notification.php';
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - -
 class XooNIpsNotificationHandler extends XoopsNotificationHandler
 {
-    public function XooNIpsNotificationHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XoopsNotificationHandler($db);
+        parent::__construct($db);
     }
 
     public function triggerEvent2($category, $item_id, $event, $subject, $template_dir, $template, $extra_tags = array(), $user_list = array(), $module_id = null, $omit_user_id = null)

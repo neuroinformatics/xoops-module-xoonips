@@ -52,7 +52,7 @@ class XooNIpsXmlRpcViewElement
     /**
      * @param[in] XooNIpsResponse $response response of logic
      */
-    public function XooNIpsXmlRpcViewElement(&$response)
+    public function __construct(&$response)
     {
         $this->response = &$response;
     }
@@ -154,7 +154,7 @@ class XooNIpsXmlRpcItemView extends XooNIpsXmlRpcViewElement
     /**
      * @param[in] XooNIpsItem $item Item object to be rendered
      */
-    public function XooNIpsXmlRpcItemView(&$item)
+    public function __construct(&$item)
     {
         $this->item = &$item;
     }

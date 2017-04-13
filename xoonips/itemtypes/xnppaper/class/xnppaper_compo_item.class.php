@@ -39,9 +39,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xnppaper/include/view.php';
  */
 class XNPPaperCompoHandler extends XooNIpsItemInfoCompoHandler
 {
-    public function XNPPaperCompoHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsItemInfoCompoHandler($db, 'xnppaper');
+        parent::__construct($db, 'xnppaper');
     }
 
     public function &create()
@@ -201,8 +201,8 @@ class XNPPaperCompoHandler extends XooNIpsItemInfoCompoHandler
  */
 class XNPPaperCompo extends XooNIpsItemInfoCompo
 {
-    public function XNPPaperCompo()
+    public function __construct()
     {
-        parent::XooNIpsItemInfoCompo('xnppaper');
+        parent::__construct('xnppaper');
     }
 }

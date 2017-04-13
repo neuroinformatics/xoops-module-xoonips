@@ -30,9 +30,9 @@ require_once dirname(__DIR__).'/base/logic.class.php';
 
 class XooNIpsLogicImportCheckImport extends XooNIpsLogic
 {
-    public function XooNIpsLogicImportCheckImport()
+    public function __construct()
     {
-        parent::XooNIpsLogic();
+        parent::__construct();
     }
 
     /**

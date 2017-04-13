@@ -685,18 +685,13 @@ class HarvesterHandler
     public $parser;
     public $lastError;
 
-    public function HarvesterHandler($_parser)
+    public function __construct($_parser)
     {
         $this->lastError = null;
         $this->parser = $_parser;
         xml_set_object($this->parser, $this);
         xml_set_element_handler($this->parser, 'startElementHandler', 'endElementHandler');
         xml_set_character_data_handler($this->parser, 'characterDataHandler');
-    }
-
-    public function __construct($_parser)
-    {
-        $this->HarvesterHandler($_parser);
     }
 
     public function startElementHandler($parser, $name, $attribs)

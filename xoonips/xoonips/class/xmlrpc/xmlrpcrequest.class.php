@@ -47,7 +47,7 @@ class XooNIpsXmlRpcRequest
      * @param[in] string $request logic name
      * @param[in] array $params array of parameters to logic
      */
-    public function XooNIpsXmlRpcRequest($request, &$params)
+    public function __construct($request, &$params)
     {
         $this->request = $request;
         $this->params = $params;

@@ -35,7 +35,7 @@ class XooNIpsAdminXoopsHandler
     /**
      * constructor.
      */
-    public function XooNIpsAdminXoopsHandler()
+    public function __construct()
     {
     }
 

@@ -39,7 +39,7 @@ class XooNIpsMemberHandler
     /**
      * constructor.
      */
-    public function XooNIpsMemberHandler(&$db)
+    public function __construct(&$db)
     {
         $this->_aHandler = &xoonips_getormcompohandler('xoonips', 'user');
     }

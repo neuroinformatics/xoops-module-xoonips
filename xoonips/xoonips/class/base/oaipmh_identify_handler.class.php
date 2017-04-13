@@ -33,18 +33,13 @@ class IdentifyHandler extends HarvesterHandler
     public $_tagstack;
     public $_repositoryName;
 
-    public function IdentifyHandler($_parser)
+    public function __construct($_parser)
     {
-        parent::HarvesterHandler($_parser);
+        parent::__construct($_parser);
         $this->_earliestDatestamp = null;
         $this->_dateFormat = null;
         $this->_tagstack = array();
         $this->_repositoryName = '';
-    }
-
-    public function __construct($_parser)
-    {
-        $this->IdentifyHandler($_parser);
     }
 
     public function startElementHandler($parser, $name, $attribs)

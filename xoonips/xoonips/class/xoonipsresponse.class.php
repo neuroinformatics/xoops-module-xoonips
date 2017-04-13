@@ -57,7 +57,7 @@ class XooNIpsResponse
     /**
      * create XooNIpsResponse.
      */
-    public function XooNIpsResponse()
+    public function __construct()
     {
         $this->error = new XooNIpsError();
     }

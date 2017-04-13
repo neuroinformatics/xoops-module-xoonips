@@ -53,7 +53,7 @@ class XooNIpsRelatedObjectHandler
      */
     public $primary_handler_name = null;
 
-    public function XooNIpsRelatedObjectHandler()
+    public function __construct()
     {
     }
 
@@ -330,11 +330,11 @@ class XooNIpsRelatedObjectHandler
     /**
      * add handler.
      *
-     * @param string handler name(must be same of item field name)
-     * @param XooNIpsRelatedObjectHandler handler
-     * @param string key name to be joined to xoonips_item_basic.item_id
-     * @param bool     $multiple true if this field has more than one data objects
-     * @param Criteria $criteria
+     * @param string                      $key         handler name(must be same of item field name)
+     * @param XooNIpsRelatedObjectHandler &$handler
+     * @param string                      $foreign_key key name to be joined to xoonips_item_basic.item_id
+     * @param bool                        $multiple    true if this field has more than one data objects
+     * @param Criteria                    $criteria
      */
     public function addHandler($key, &$handler, $foreign_key, $multiple = false, $criteria = null)
     {
@@ -417,7 +417,7 @@ class XooNIpsRelatedObject
 {
     public $vars = array();
 
-    public function XooNIpsRelatedObject()
+    public function __construct()
     {
     }
 

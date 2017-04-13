@@ -37,9 +37,9 @@ require_once __DIR__.'/ranking_contributing_user.class.php';
  */
 class XooNIpsOrmRankingSumContributingUserHandler extends XooNIpsOrmRankingContributingUserHandler
 {
-    public function XooNIpsOrmRankingSumContributingUserHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmRankingContributingUser', 'xoonips_ranking_sum_contributing_user', 'item_id', false);
         $this->_set_columns(array('item_id', 'uid', 'timestamp'));
         $this->_set_sum_table();

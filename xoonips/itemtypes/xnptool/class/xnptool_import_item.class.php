@@ -33,7 +33,7 @@ class XNPToolImportItem extends XooNIpsImportItem
     public $_has_tool_data = false;
     public $_has_preview = false;
 
-    public function XNPToolImportItem()
+    public function __construct()
     {
         $handler = &xoonips_getormcompohandler('xnptool', 'item');
         $this->_item = &$handler->create();
@@ -146,9 +146,9 @@ class XNPToolImportItemHandler extends XooNIpsImportItemHandler
      */
     public $_attachment_dl_notify_limit_flag = false;
 
-    public function XNPToolImportItemHandler()
+    public function __construct()
     {
-        parent::XooNIpsImportItemHandler();
+        parent::__construct();
     }
 
     public function create()

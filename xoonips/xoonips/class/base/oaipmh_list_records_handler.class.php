@@ -45,9 +45,9 @@ class ListRecordsHandler extends HarvesterHandler
     public $_cdata_buf;
     public $_datestamp;
 
-    public function ListRecordsHandler($_parser, $_baseURL, $_metadataPrefix)
+    public function __construct($_parser, $_baseURL, $_metadataPrefix)
     {
-        parent::HarvesterHandler($_parser);
+        parent::__construct($_parser);
 
         $this->resumptionToken = null;
         $this->identifier = null;
@@ -66,11 +66,6 @@ class ListRecordsHandler extends HarvesterHandler
         $this->_metadata = array();
         $this->_cdata_buf = '';
         $this->_datestamp = '';
-    }
-
-    public function __construct($_parser, $_baseURL, $_metadataPrefix)
-    {
-        $this->ListRecordsHandler($_parser, $_baseURL, $_metadataPrefix);
     }
 
     public function startElementHandler($parser, $name, $attribs)

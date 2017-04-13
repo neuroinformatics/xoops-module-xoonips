@@ -81,7 +81,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
     /**
      * constractor.
      */
-    public function XooNIpsUtilitySearch()
+    public function __construct()
     {
         $this->setSingleton();
         $this->_load_stopwords();

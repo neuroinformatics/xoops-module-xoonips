@@ -67,7 +67,7 @@ class XooNIpsUtilityLanguagemanager extends XooNIpsUtility
     /**
      * constractor.
      */
-    public function XooNIpsUtilityLanguagemanager()
+    public function __construct()
     {
         $this->setSingleton();
         $myxoopsConfig = &xoonips_get_xoops_configs(XOOPS_CONF);

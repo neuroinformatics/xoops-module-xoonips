@@ -39,9 +39,9 @@ require_once dirname(__DIR__).'/include/view.php';
  */
 class XNPDataCompoHandler extends XooNIpsItemInfoCompoHandler
 {
-    public function XNPDataCompoHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsItemInfoCompoHandler($db, 'xnpdata');
+        parent::__construct($db, 'xnpdata');
     }
 
     public function &create()
@@ -145,8 +145,8 @@ class XNPDataCompoHandler extends XooNIpsItemInfoCompoHandler
  */
 class XNPDataCompo extends XooNIpsItemInfoCompo
 {
-    public function XNPDataCompo()
+    public function __construct()
     {
-        parent::XooNIpsItemInfoCompo('xnpdata');
+        parent::__construct('xnpdata');
     }
 }

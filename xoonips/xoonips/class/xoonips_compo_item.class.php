@@ -49,10 +49,10 @@ class XooNIpsItemCompoHandler extends XooNIpsRelatedObjectHandler
 {
     public $db = null;
 
-    public function XooNIpsItemCompoHandler(&$db)
+    public function __construct(&$db)
     {
         $this->db = &$db;
-        parent::XooNIpsRelatedObjectHandler($db);
+        parent::__construct($db);
         parent::__init_handler('basic', xoonips_getormhandler('xoonips', 'item_basic'), 'item_id');
         $this->addHandler('titles', xoonips_getormhandler('xoonips', 'title'), 'item_id', true);
         $this->addHandler('keywords', xoonips_getormhandler('xoonips', 'keyword'), 'item_id', true);
@@ -153,9 +153,9 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
     public $iteminfo = null;
     public $db = null;
 
-    public function XooNIpsItemInfoCompoHandler(&$db, $module = null)
+    public function __construct(&$db, $module = null)
     {
-        parent::XooNIpsRelatedObjectHandler($db);
+        parent::__construct($db);
         $this->db = &$db;
         if (isset($module) && is_null($this->iteminfo)) {
             include XOOPS_ROOT_PATH.'/modules/'.$module.'/iteminfo.php';
@@ -891,7 +891,7 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
  */
 class XooNIpsItemCompo extends XooNIpsRelatedObject
 {
-    public function XooNIpsItemCompo()
+    public function __construct()
     {
         // basic
         $basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
@@ -942,7 +942,7 @@ class XooNIpsItemInfoCompo extends XooNIpsRelatedObject
 {
     public $iteminfo = null;
 
-    public function XooNIpsItemInfoCompo($module = null)
+    public function __construct($module = null)
     {
         if (isset($module) && is_null($this->iteminfo)) {
             include XOOPS_ROOT_PATH.'/modules/'.$module.'/iteminfo.php';

@@ -37,9 +37,9 @@ class XooNIpsActionOaipmhSearchSearch extends XooNIpsAction
     public $_metadataPerPage = 20;
     public $_logicName = null;
 
-    public function XooNIpsActionOaipmhSearchSearch()
+    public function __construct()
     {
-        parent::XooNIpsAction();
+        parent::__construct();
     }
 
     public function _get_logic_name()
@@ -164,9 +164,8 @@ class XooNIpsActionOaipmhSearchSearch extends XooNIpsAction
      *
      * @return array of metadata associative array
      */
-    public function getMetadataArrays($search_cache_id, $order_by,
-        $order_dir, $start_count, $end_count
-    ) {
+    public function getMetadataArrays($search_cache_id, $order_by, $order_dir, $start_count, $end_count)
+    {
         global $xoopsDB;
 
         $textutil = &xoonips_getutility('text');

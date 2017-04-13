@@ -37,7 +37,7 @@ class OAIPMHHarvester
     public $_repositoryName;
 
     //public
-    public function OAIPMHHarvester($_baseUrl)
+    public function __construct($_baseUrl)
     {
         $this->_baseUrl = $_baseUrl;
         $this->_lastError = null;
@@ -46,12 +46,6 @@ class OAIPMHHarvester
         $this->_dateFormat = null;
         $this->_earliestDatestamp = null;
         $this->_repositoryName = '';
-    }
-
-    public function __construct($_baseUrl)
-    {
-        /* constructer for PHP5 */
-        $this->OAIPMHHarvester($_baseUrl);
     }
 
     public function harvest()
