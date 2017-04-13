@@ -260,9 +260,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
                 $op = false;
                 $val = new Criteria($field, $token, $cr_op, $prefix);
             }
-            // php-indent: disable
             $stack[] = array($op, $val);
-            // php-indent: enable
             unset($op, $val);
         }
         $cnt = count($stack);
@@ -335,9 +333,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
                 $op = false;
                 $val = sprintf($fmt, addslashes($token));
             }
-            // php-indent: disable
             $stack[] = array($op, $val);
-            // php-indent: enable
         }
         $cnt = count($stack);
         if ($cnt == 0) {
@@ -745,19 +741,17 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
     public function _initialize_regex_patterns()
     {
         // latin1 character codes - http://en.wikipedia.org/wiki/Latin-1
-        // php-indent: disable
         $latin1 = array();
         $ascii = array(
-        'letter' => '0-9a-zA-Z',
-        'symbol' => '\\x21\\x23-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\x7e',
-        'noprint' => '\\x00-\\x1f\\x7f',
+            'letter' => '0-9a-zA-Z',
+            'symbol' => '\\x21\\x23-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\x7e',
+            'noprint' => '\\x00-\\x1f\\x7f',
         );
         $ranges = array(
-        'letter' => array(array(0xc0, 0xd6), array(0xd8, 0xf6), array(0xf8, 0xff)),
-        'symbol' => array(array(0xa0, 0xbf), 0xd7, 0xf7),
-        'noprint' => array(array(0x80, 0x9f)),
+            'letter' => array(array(0xc0, 0xd6), array(0xd8, 0xf6), array(0xf8, 0xff)),
+            'symbol' => array(array(0xa0, 0xbf), 0xd7, 0xf7),
+            'noprint' => array(array(0x80, 0x9f)),
         );
-        // php-indent: enable
         foreach ($ranges as $name => $range) {
             $chars = array();
             foreach ($range as $code) {

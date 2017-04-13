@@ -25,10 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-/**
- * definition file of MS-Excel file search.
- */
-// php-indent: disable
+
+// definition file of MS-Excel file search.
 $module['class_name'] = 'XooNIpsFileSearchPluginEXCEL';
 $module['php_file_name'] = 'excel.php';
 $module['name'] = 'excel';
@@ -36,4 +34,3 @@ $module['display_name'] = 'MS-Excel 95/97/2000/XP/2003';
 $module['mime_type'] = array('application/vnd.ms-excel', 'application/msword');
 $module['extensions'] = array('xls', 'xlt', 'xlm', 'xld', 'xla', 'xlc', 'xlw', 'xll');
 $module['version'] = '2.0';
-// php-indent: enable

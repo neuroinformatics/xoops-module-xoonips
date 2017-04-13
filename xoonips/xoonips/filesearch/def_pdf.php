@@ -25,10 +25,8 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-/**
- * definition file of PDF file search.
- */
-// php-indent: disable
+
+// definition file of PDF file search.
 $module['class_name'] = 'XooNIpsFileSearchPluginPDF';
 $module['php_file_name'] = 'pdf.php';
 $module['name'] = 'pdf';
@@ -36,4 +34,3 @@ $module['display_name'] = 'PDF';
 $module['mime_type'] = array('application/pdf');
 $module['extensions'] = array('pdf');
 $module['version'] = '2.0';
-// php-indent: enable

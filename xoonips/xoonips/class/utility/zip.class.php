@@ -16,7 +16,6 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-// php-indent: disable
 /**
  * Zip file creation class.
  * Makes zip files.
@@ -279,4 +278,3 @@ class XooNIpsUtilityZip extends XooNIpsUtility
 
     // end of the 'close()' method
 } // end of the 'XooNIpsUtilityZip' class
-// php-indent: enable

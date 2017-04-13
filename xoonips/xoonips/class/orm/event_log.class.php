@@ -72,46 +72,44 @@ class XooNIpsOrmEventLog extends XooNIpsTableObject
             $this->setErrors("invalid event_type_id(${event_type_id})");
         } else {
             $result = true;
-            // php-indent: disable
             static $fields = array('timestamp', 'exec_uid', 'index_id', 'item_id', 'file_id', 'uid', 'gid', 'search_keyword', 'additional_info');
             static $eventValidFields = array(
-            array(0, 0, 0, 0, 0, 0, 0, 0, 0), //  0: (dummy)
-            array(1, 1, 0, 0, 0, 0, 0, 0, 1), //  1: ETID_LOGIN_FAILURE
-            array(1, 1, 0, 0, 0, 0, 0, 0, 0), //  2: ETID_LOGIN_SUCCESS
-            array(1, 1, 0, 0, 0, 0, 0, 0, 0), //  3: ETID_LOGOUT
-            array(1, 1, 0, 1, 0, 0, 0, 0, 0), //  4: ETID_INSERT_ITEM
-            array(1, 1, 0, 1, 0, 0, 0, 0, 0), //  5: ETID_UPDATE_ITEM
-            array(1, 1, 0, 1, 0, 0, 0, 0, 0), //  6: ETID_DELETE_ITEM
-            array(1, 1, 0, 1, 0, 0, 0, 0, 0), //  7: ETID_VIEW_ITEM
-            array(1, 1, 0, 1, 1, 0, 0, 0, 0), //  8: ETID_DOWNLOAD_FILE
-            array(1, 1, 1, 1, 0, 0, 0, 0, 0), //  9: ETID_REQUEST_CERTIFY_ITEM
-            array(1, 1, 1, 0, 0, 0, 0, 0, 0), // 10: ETID_INSERT_INDEX
-            array(1, 1, 1, 0, 0, 0, 0, 0, 0), // 11: ETID_UPDATE_INDEX
-            array(1, 1, 1, 0, 0, 0, 0, 0, 0), // 12: ETID_DELETE_INDEX
-            array(1, 1, 1, 1, 0, 0, 0, 0, 0), // 13: ETID_CERTIFY_ITEM
-            array(1, 1, 1, 1, 0, 0, 0, 0, 0), // 14: ETID_REJECT_ITEM
-            array(1, 0, 0, 0, 0, 1, 0, 0, 0), // 15: ETID_REQUEST_INSERT_ACCOUNT
-            array(1, 1, 0, 0, 0, 1, 0, 0, 0), // 16: ETID_CERTIFY_ACCOUNT
-            array(1, 1, 0, 0, 0, 0, 1, 0, 0), // 17: ETID_INSERT_GROUP
-            array(1, 1, 0, 0, 0, 0, 1, 0, 0), // 18: ETID_UPDATE_GROUP
-            array(1, 1, 0, 0, 0, 0, 1, 0, 0), // 19: ETID_DELETE_GROUP
-            array(1, 1, 0, 0, 0, 1, 1, 0, 0), // 20: ETID_INSERT_GROUP_MEMBER
-            array(1, 1, 0, 0, 0, 1, 1, 0, 0), // 21: ETID_DELETE_GROUP_MEMBER
-            array(1, 1, 0, 0, 0, 0, 0, 0, 0), // 22: ETID_VIEW_TOP_PAGE
-            array(1, 1, 0, 0, 0, 0, 0, 1, 0), // 23: ETID_QUICK_SEARCH
-            array(1, 1, 0, 0, 0, 0, 0, 1, 0), // 24: ETID_ADVANCED_SEARCH
-            array(1, 1, 0, 0, 0, 1, 0, 0, 0), // 25: ETID_START_SU
-            array(1, 1, 0, 0, 0, 1, 0, 0, 0), // 26: ETID_END_SU
-            array(1, 1, 0, 1, 0, 1, 0, 0, 0), // 27: ETID_REQUEST_TRANSFER_ITEM
-            array(1, 1, 1, 1, 0, 1, 0, 0, 0), // 28: ETID_TRANSFER_ITEM
-            array(1, 1, 0, 1, 0, 0, 0, 0, 0), // 29: ETID_REJECT_TRANSFER_ITEM
-            array(1, 1, 1, 0, 0, 0, 0, 0, 0), // 30: ETID_CERTIFY_GROUP_INDEX
-            array(1, 1, 1, 0, 0, 0, 0, 0, 0), // 31: ETID_REJECT_GROUP_INDEX
-            array(1, 1, 1, 1, 0, 0, 1, 0, 1), // 32: ETID_GROUP_INDEX_TO_PUBLIC
-            array(1, 1, 0, 0, 0, 1, 0, 0, 0), // 33: ETID_DELETE_ACCOUNT
-            array(1, 1, 0, 0, 0, 1, 0, 0, 1), // 34: ETID_UNCERTIFY_ACCOUNT
+                array(0, 0, 0, 0, 0, 0, 0, 0, 0), //  0: (dummy)
+                array(1, 1, 0, 0, 0, 0, 0, 0, 1), //  1: ETID_LOGIN_FAILURE
+                array(1, 1, 0, 0, 0, 0, 0, 0, 0), //  2: ETID_LOGIN_SUCCESS
+                array(1, 1, 0, 0, 0, 0, 0, 0, 0), //  3: ETID_LOGOUT
+                array(1, 1, 0, 1, 0, 0, 0, 0, 0), //  4: ETID_INSERT_ITEM
+                array(1, 1, 0, 1, 0, 0, 0, 0, 0), //  5: ETID_UPDATE_ITEM
+                array(1, 1, 0, 1, 0, 0, 0, 0, 0), //  6: ETID_DELETE_ITEM
+                array(1, 1, 0, 1, 0, 0, 0, 0, 0), //  7: ETID_VIEW_ITEM
+                array(1, 1, 0, 1, 1, 0, 0, 0, 0), //  8: ETID_DOWNLOAD_FILE
+                array(1, 1, 1, 1, 0, 0, 0, 0, 0), //  9: ETID_REQUEST_CERTIFY_ITEM
+                array(1, 1, 1, 0, 0, 0, 0, 0, 0), // 10: ETID_INSERT_INDEX
+                array(1, 1, 1, 0, 0, 0, 0, 0, 0), // 11: ETID_UPDATE_INDEX
+                array(1, 1, 1, 0, 0, 0, 0, 0, 0), // 12: ETID_DELETE_INDEX
+                array(1, 1, 1, 1, 0, 0, 0, 0, 0), // 13: ETID_CERTIFY_ITEM
+                array(1, 1, 1, 1, 0, 0, 0, 0, 0), // 14: ETID_REJECT_ITEM
+                array(1, 0, 0, 0, 0, 1, 0, 0, 0), // 15: ETID_REQUEST_INSERT_ACCOUNT
+                array(1, 1, 0, 0, 0, 1, 0, 0, 0), // 16: ETID_CERTIFY_ACCOUNT
+                array(1, 1, 0, 0, 0, 0, 1, 0, 0), // 17: ETID_INSERT_GROUP
+                array(1, 1, 0, 0, 0, 0, 1, 0, 0), // 18: ETID_UPDATE_GROUP
+                array(1, 1, 0, 0, 0, 0, 1, 0, 0), // 19: ETID_DELETE_GROUP
+                array(1, 1, 0, 0, 0, 1, 1, 0, 0), // 20: ETID_INSERT_GROUP_MEMBER
+                array(1, 1, 0, 0, 0, 1, 1, 0, 0), // 21: ETID_DELETE_GROUP_MEMBER
+                array(1, 1, 0, 0, 0, 0, 0, 0, 0), // 22: ETID_VIEW_TOP_PAGE
+                array(1, 1, 0, 0, 0, 0, 0, 1, 0), // 23: ETID_QUICK_SEARCH
+                array(1, 1, 0, 0, 0, 0, 0, 1, 0), // 24: ETID_ADVANCED_SEARCH
+                array(1, 1, 0, 0, 0, 1, 0, 0, 0), // 25: ETID_START_SU
+                array(1, 1, 0, 0, 0, 1, 0, 0, 0), // 26: ETID_END_SU
+                array(1, 1, 0, 1, 0, 1, 0, 0, 0), // 27: ETID_REQUEST_TRANSFER_ITEM
+                array(1, 1, 1, 1, 0, 1, 0, 0, 0), // 28: ETID_TRANSFER_ITEM
+                array(1, 1, 0, 1, 0, 0, 0, 0, 0), // 29: ETID_REJECT_TRANSFER_ITEM
+                array(1, 1, 1, 0, 0, 0, 0, 0, 0), // 30: ETID_CERTIFY_GROUP_INDEX
+                array(1, 1, 1, 0, 0, 0, 0, 0, 0), // 31: ETID_REJECT_GROUP_INDEX
+                array(1, 1, 1, 1, 0, 0, 1, 0, 1), // 32: ETID_GROUP_INDEX_TO_PUBLIC
+                array(1, 1, 0, 0, 0, 1, 0, 0, 0), // 33: ETID_DELETE_ACCOUNT
+                array(1, 1, 0, 0, 0, 1, 0, 0, 1), // 34: ETID_UNCERTIFY_ACCOUNT
             );
-            // php-indent: enable
             foreach ($fields as $i => $field) {
                 // check unnecessary && specified values
                 if ($eventValidFields[$event_type_id][$i] == 0 && !is_null($this->vars[$field]['value'])) {

@@ -8,7 +8,6 @@ if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
 
-// php-indent: disable
 /*************************************************
 
 Snoopy - the PHP net client
@@ -1314,4 +1313,3 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         return $postdata;
     }
 }
-// php-indent: enable

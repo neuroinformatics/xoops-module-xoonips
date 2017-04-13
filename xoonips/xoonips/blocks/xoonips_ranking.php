@@ -335,7 +335,11 @@ function xoonips_ranking_show($is_arrival)
             while ($obj = &$handler->getNext($res)) {
                 $keyword = $obj->getVar('keyword', 'n');
                 $title = $textutil->html_special_chars($keyword);
-                $title = preg_replace('/[\\x00-\\x20]/se', 'urlencode("\\0")', $title);
+                $title = preg_replace_callback(
+                    '/[\\x00-\\x20]/s', function ($m) {
+                        return urlencode($m[0]);
+                    }, $title
+                );
                 $title = $textutil->truncate($title, $maxlen, $etc);
                 $count = $obj->getVar('count', 'n');
                 $url = XOOPS_URL.'/modules/xoonips/itemselect.php?op=quicksearch&amp;search_itemtype=all&amp;keyword='.urlencode($keyword);
