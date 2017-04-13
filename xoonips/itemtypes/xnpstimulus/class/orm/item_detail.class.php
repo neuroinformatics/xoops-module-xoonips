@@ -50,9 +50,9 @@ class XNPStimulusOrmItemDetail extends XooNIpsTableObject
         'attachment_dl_notify' => 1,
     );
 
-    public function XNPStimulusOrmItemDetail()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('stimulus_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('stimulus_type', XOBJ_DTYPE_TXTBOX, null, false, $this->lengths['stimulus_type']);
         $this->initVar('rights', XOBJ_DTYPE_TXTBOX, null, false, $this->lengths['rights']);
@@ -88,9 +88,9 @@ class XNPStimulusOrmItemDetail extends XooNIpsTableObject
  */
 class XNPStimulusOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPStimulusOrmItemDetailHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPStimulusOrmItemDetail', 'xnpstimulus_item_detail', 'stimulus_id', false);
     }
 

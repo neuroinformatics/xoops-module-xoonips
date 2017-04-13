@@ -37,9 +37,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmTransferRequest extends XooNIpsTableObject
 {
-    public function XooNIpsOrmTransferRequest()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('item_id', XOBJ_DTYPE_INT, null, true, null);
         $this->initVar('to_uid', XOBJ_DTYPE_INT, null, true, null);
     }
@@ -50,9 +50,9 @@ class XooNIpsOrmTransferRequest extends XooNIpsTableObject
  */
 class XooNIpsOrmTransferRequestHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmTransferRequestHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmTransferRequest', 'xoonips_transfer_request', 'item_id', false);
     }
 }

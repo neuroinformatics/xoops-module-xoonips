@@ -55,9 +55,9 @@ class XNPBookOrmItemDetail extends XooNIpsTableObject
         'attachment_dl_notify' => 1,
     );
 
-    public function XNPBookOrmItemDetail()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('book_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('editor', XOBJ_DTYPE_TXTBOX, null, false, $this->lengths['editor']);
         $this->initVar('publisher', XOBJ_DTYPE_TXTBOX, null, true, $this->lengths['publisher']);
@@ -91,9 +91,9 @@ class XNPBookOrmItemDetail extends XooNIpsTableObject
  */
 class XNPBookOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPBookOrmItemDetailHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPBookOrmItemDetail', 'xnpbook_item_detail', 'book_id', false);
     }
 }

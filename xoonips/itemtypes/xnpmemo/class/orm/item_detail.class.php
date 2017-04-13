@@ -43,9 +43,9 @@ class XNPMemoOrmItemDetail extends XooNIpsTableObject
         'item_link' => 255,
     );
 
-    public function XNPMemoOrmItemDetail()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('memo_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('item_link', XOBJ_DTYPE_TXTBOX, null, false, $this->lengths['item_link']);
     }
@@ -56,9 +56,9 @@ class XNPMemoOrmItemDetail extends XooNIpsTableObject
  */
 class XNPMemoOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPMemoOrmItemDetailHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPMemoOrmItemDetail', 'xnpmemo_item_detail', 'memo_id', false);
     }
 }

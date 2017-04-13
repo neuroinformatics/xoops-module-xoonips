@@ -42,9 +42,9 @@ define('XOONIPS_LOCK_TYPE_PUBLICATION_GROUP_INDEX', 3);
  */
 class XooNIpsOrmItemLock extends XooNIpsTableObject
 {
-    public function XooNIpsOrmItemLock()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('item_id', XOBJ_DTYPE_INT, null, true, null);
         $this->initVar('lock_count', XOBJ_DTYPE_INT, null, true, null);
     }
@@ -55,9 +55,9 @@ class XooNIpsOrmItemLock extends XooNIpsTableObject
  */
 class XooNIpsOrmItemLockHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmItemLockHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmItemLock', 'xoonips_item_lock', 'item_id', false);
     }
 

@@ -34,9 +34,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmXoopsUsers extends XooNIpsTableObject
 {
-    public function XooNIpsOrmXoopsUsers()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         // from XooNIps_users table
         $this->initVar('uid', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('name', XOBJ_DTYPE_TXTBOX, null, false, 60);
@@ -78,9 +78,9 @@ class XooNIpsOrmXoopsUsers extends XooNIpsTableObject
  */
 class XooNIpsOrmXoopsUsersHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmXoopsUsersHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmXoopsUsers', 'users', 'uid', false);
     }
 

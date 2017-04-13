@@ -47,9 +47,9 @@ ALTER TABLE `x_xoonips_search_cache_metadata`
  */
 class XooNIpsOrmSearchCacheMetadata extends XooNIpsTableObject
 {
-    public function XooNIpsOrmSearchCacheMetadata()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('search_cache_metadata_id', XOBJ_DTYPE_INT, null, true, null);
         $this->initVar('search_cache_id', XOBJ_DTYPE_INT, null, true, null);
         $this->initVar('identifier', XOBJ_DTYPE_TXTBOX, null, true, null);
@@ -61,9 +61,9 @@ class XooNIpsOrmSearchCacheMetadata extends XooNIpsTableObject
  */
 class XooNIpsOrmSearchCacheMetadataHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmSearchCacheMetadataHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmSearchCacheMetadata', 'xoonips_search_cache_metadata', 'search_cache_metadata_id', true);
     }
 }

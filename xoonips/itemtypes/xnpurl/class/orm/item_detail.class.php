@@ -44,9 +44,9 @@ class XNPUrlOrmItemDetail extends XooNIpsTableObject
         'url_count' => 10,
     );
 
-    public function XNPUrlOrmItemDetail()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('url_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('url', XOBJ_DTYPE_TXTBOX, '', true, $this->lengths['url']);
         $this->initVar('url_count', XOBJ_DTYPE_INT, 0, true);
@@ -58,9 +58,9 @@ class XNPUrlOrmItemDetail extends XooNIpsTableObject
  */
 class XNPUrlOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPUrlOrmItemDetailHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPUrlOrmItemDetail', 'xnpurl_item_detail', 'url_id', false);
     }
 }

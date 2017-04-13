@@ -37,9 +37,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XNPBinderOrmItemDetail extends XooNIpsTableObject
 {
-    public function XNPBinderOrmItemDetail()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('binder_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('extra', XOBJ_DTYPE_TXTBOX, '', false, 255);
     }
@@ -50,9 +50,9 @@ class XNPBinderOrmItemDetail extends XooNIpsTableObject
  */
 class XNPBinderOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPBinderOrmItemDetailHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPBinderOrmItemDetail', 'xnpbinder_item_detail', 'binder_id', false);
     }
 }

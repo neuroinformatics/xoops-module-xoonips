@@ -50,9 +50,9 @@ class XNPSimulatorOrmItemDetail extends XooNIpsTableObject
         'attachment_dl_notify' => 1,
     );
 
-    public function XNPSimulatorOrmItemDetail()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('simulator_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('simulator_type', XOBJ_DTYPE_TXTBOX, null, false, $this->lengths['simulator_type']);
         $this->initVar('rights', XOBJ_DTYPE_TXTBOX, null, false, $this->lengths['rights']);
@@ -88,9 +88,9 @@ class XNPSimulatorOrmItemDetail extends XooNIpsTableObject
  */
 class XNPSimulatorOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPSimulatorOrmItemDetailHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPSimulatorOrmItemDetail', 'xnpsimulator_item_detail', 'simulator_id', false);
     }
 

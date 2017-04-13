@@ -39,9 +39,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmSession extends XooNIpsTableObject
 {
-    public function XooNIpsOrmSession()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('sess_id', XOBJ_DTYPE_TXTBOX, null, true, 32);
         $this->initVar('updated', XOBJ_DTYPE_INT, null, true, null);
         $this->initVar('uid', XOBJ_DTYPE_INT, null, true, null);
@@ -57,9 +57,9 @@ class XooNIpsOrmSession extends XooNIpsTableObject
  */
 class XooNIpsOrmSessionHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmSessionHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmSession', 'xoonips_session', 'sess_id', false, true);
     }
 

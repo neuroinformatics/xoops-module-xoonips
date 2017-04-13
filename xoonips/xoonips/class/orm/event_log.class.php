@@ -47,9 +47,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmEventLog extends XooNIpsTableObject
 {
-    public function XooNIpsOrmEventLog()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('event_id', XOBJ_DTYPE_INT, null, false, null);
         $this->initVar('event_type_id', XOBJ_DTYPE_INT, null, true, null);
         $this->initVar('timestamp', XOBJ_DTYPE_INT, null, true, null);
@@ -132,9 +132,9 @@ class XooNIpsOrmEventLog extends XooNIpsTableObject
  */
 class XooNIpsOrmEventLogHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmEventLogHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmEventLog', 'xoonips_event_log', 'event_id');
     }
 

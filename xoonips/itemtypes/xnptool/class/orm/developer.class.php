@@ -34,9 +34,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XNPToolOrmDeveloper extends XooNIpsTableObject
 {
-    public function XNPToolOrmDeveloper()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('tool_developer_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('tool_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('developer', XOBJ_DTYPE_TXTBOX, '', true);
@@ -49,9 +49,9 @@ class XNPToolOrmDeveloper extends XooNIpsTableObject
  */
 class XNPToolOrmDeveloperHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPToolOrmDeveloperHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPToolOrmDeveloper', 'xnptool_developer', 'tool_developer_id', false);
     }
 }

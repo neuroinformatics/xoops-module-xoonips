@@ -50,9 +50,9 @@ ALTER TABLE `x_xoonips_search_cache_item` ADD `matchfor_file`  TINYINT( 1 ) NOT 
  */
 class XooNIpsOrmSearchCacheItem extends XooNIpsTableObject
 {
-    public function XooNIpsOrmSearchCacheItem()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('search_cache_item_id', XOBJ_DTYPE_INT, null, false, null);
         $this->initVar('search_cache_id', XOBJ_DTYPE_INT, null, true, null);
         $this->initVar('item_id', XOBJ_DTYPE_INT, null, true, null);
@@ -67,9 +67,9 @@ class XooNIpsOrmSearchCacheItem extends XooNIpsTableObject
  */
 class XooNIpsOrmSearchCacheItemHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmSearchCacheItemHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmSearchCacheItem', 'xoonips_search_cache_item', 'search_cache_item_id', true);
     }
 }

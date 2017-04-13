@@ -39,7 +39,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmFileType extends XooNIpsTableObject
 {
-    public function XooNIpsOrmFileType()
+    public function __construct()
     {
         $this->initVar('file_type_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('name', XOBJ_DTYPE_TXTBOX, null, true, 30);
@@ -53,9 +53,9 @@ class XooNIpsOrmFileType extends XooNIpsTableObject
  */
 class XooNIpsOrmFileTypeHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmFileTypeHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmFileType', 'xoonips_file_type', 'file_type_id');
     }
 }

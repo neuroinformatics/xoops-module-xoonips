@@ -40,9 +40,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmItemStatus extends XooNIpsTableObject
 {
-    public function XooNIpsOrmItemStatus()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('item_id', XOBJ_DTYPE_INT, null, false, null);
         $this->initVar('created_timestamp', XOBJ_DTYPE_INT, null, true, null);
         $this->initVar('modified_timestamp', XOBJ_DTYPE_INT, null, true, null);
@@ -56,9 +56,9 @@ class XooNIpsOrmItemStatus extends XooNIpsTableObject
  */
 class XooNIpsOrmItemStatusHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmItemStatusHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmItemStatus', 'xoonips_item_status', 'item_id', false);
     }
 

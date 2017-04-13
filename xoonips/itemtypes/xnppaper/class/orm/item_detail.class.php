@@ -46,9 +46,9 @@ class XNPPaperOrmItemDetail extends XooNIpsTableObject
         'pubmed_id' => 30,
     );
 
-    public function XNPPaperOrmItemDetail()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('paper_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('journal', XOBJ_DTYPE_TXTBOX, '', true, $this->lengths['journal']);
         $this->initVar('volume', XOBJ_DTYPE_INT, null, false);
@@ -83,9 +83,9 @@ class XNPPaperOrmItemDetail extends XooNIpsTableObject
  */
 class XNPPaperOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPPaperOrmItemDetailHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPPaperOrmItemDetail', 'xnppaper_item_detail', 'paper_id', false);
     }
 }

@@ -42,9 +42,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmGroups extends XooNIpsTableObject
 {
-    public function XooNIpsOrmGroups()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         // from XooNIps_users table
         $this->initVar('gid', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('gname', XOBJ_DTYPE_TXTBOX, '', true, 255);
@@ -75,9 +75,9 @@ class XooNIpsOrmGroups extends XooNIpsTableObject
  */
 class XooNIpsOrmGroupsHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmGroupsHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmGroups', 'xoonips_groups', 'gid');
     }
 

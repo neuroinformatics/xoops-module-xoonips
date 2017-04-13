@@ -39,9 +39,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmIndexGroupIndexLink extends XooNIpsTableObject
 {
-    public function XooNIpsOrmIndexGroupIndexLink()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('index_group_index_link_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('index_id', XOBJ_DTYPE_INT, null, true);
         $this->initVar('group_index_id', XOBJ_DTYPE_INT, null, false);
@@ -55,9 +55,9 @@ class XooNIpsOrmIndexGroupIndexLink extends XooNIpsTableObject
  */
 class XooNIpsOrmIndexGroupIndexLinkHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmIndexGroupIndexLinkHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmIndexGroupIndexLink', 'xoonips_index_group_index_link', 'index_group_index_link_id');
     }
 

@@ -51,9 +51,9 @@ class XNPToolOrmItemDetail extends XooNIpsTableObject
         'attachment_dl_notify' => 1,
     );
 
-    public function XNPToolOrmItemDetail()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('tool_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('tool_type', XOBJ_DTYPE_TXTBOX, null, false, $this->lengths['tool_type']);
         $this->initVar('rights', XOBJ_DTYPE_TXTBOX, null, false, $this->lengths['rights']);
@@ -89,9 +89,9 @@ class XNPToolOrmItemDetail extends XooNIpsTableObject
  */
 class XNPToolOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPToolOrmItemDetailHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPToolOrmItemDetail', 'xnptool_item_detail', 'tool_id', false);
     }
 

@@ -45,9 +45,9 @@ class XNPFilesOrmItemDetail extends XooNIpsTableObject
         'data_file_filetype' => 255,
     );
 
-    public function XNPFilesOrmItemDetail()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('files_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('data_file_name', XOBJ_DTYPE_TXTBOX, null, true, $this->lengths['data_file_name']);
         $this->initVar('data_file_mimetype', XOBJ_DTYPE_TXTBOX, null, false, $this->lengths['data_file_mimetype']);
@@ -60,9 +60,9 @@ class XNPFilesOrmItemDetail extends XooNIpsTableObject
  */
 class XNPFilesOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPFilesOrmItemDetailHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPFilesOrmItemDetail', 'xnpfiles_item_detail', 'files_id', false);
     }
 }

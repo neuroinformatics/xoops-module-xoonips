@@ -54,9 +54,9 @@ class XooNIpsOrmItemType extends XooNIpsTableObject
 
     public $iteminfo = null;
 
-    public function XooNIpsOrmItemType($module = null)
+    public function __construct($module = null)
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         if (isset($module) && is_null($this->iteminfo)) {
             include XOOPS_ROOT_PATH.'/modules/'.$module.'/iteminfo.php';
             $this->iteminfo = &$iteminfo;
@@ -195,9 +195,9 @@ class XooNIpsOrmItemType extends XooNIpsTableObject
  */
 class XooNIpsOrmItemTypeHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmItemTypeHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmItemType', 'xoonips_item_type', 'item_type_id', false);
     }
 

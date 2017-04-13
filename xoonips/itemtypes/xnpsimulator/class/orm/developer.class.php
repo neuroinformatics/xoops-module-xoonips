@@ -35,9 +35,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XNPSimulatorOrmDeveloper extends XooNIpsTableObject
 {
-    public function XNPSimulatorOrmDeveloper()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('simulator_developer_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('simulator_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('developer', XOBJ_DTYPE_TXTBOX, '', true);
@@ -50,9 +50,9 @@ class XNPSimulatorOrmDeveloper extends XooNIpsTableObject
  */
 class XNPSimulatorOrmDeveloperHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPSimulatorOrmDeveloperHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPSimulatorOrmDeveloper', 'xnpsimulator_developer', 'simulator_developer_id', false);
     }
 }

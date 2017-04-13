@@ -37,9 +37,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmSearchCacheFile extends XooNIpsTableObject
 {
-    public function XooNIpsOrmSearchCacheFile()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('search_cache_id', XOBJ_DTYPE_TXTBOX, null, true, null);
         $this->initVar('file_id', XOBJ_DTYPE_INT, null, true, null);
     }
@@ -50,9 +50,9 @@ class XooNIpsOrmSearchCacheFile extends XooNIpsTableObject
  */
 class XooNIpsOrmSearchCacheFileHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmSearchCacheFileHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmSearchCacheFile', 'xoonips_search_cache_file', 'search_cache_id', false);
     }
 }

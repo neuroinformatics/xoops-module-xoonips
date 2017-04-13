@@ -42,7 +42,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmOaipmhMetadataField extends XooNIpsTableObject
 {
-    public function XooNIpsOrmOaipmhMetadataField()
+    public function __construct()
     {
         $this->initVar('metadata_field_id', XOBJ_DTYPE_INT, 0, false, 10);
         $this->initVar('metadata_id', XOBJ_DTYPE_INT, 0, true, 10);
@@ -61,9 +61,9 @@ class XooNIpsOrmOaipmhMetadataField extends XooNIpsTableObject
  */
 class XooNIpsOrmOaipmhMetadataFieldHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmOaipmhMetadataFieldHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmOaipmhMetadataField', 'xoonips_oaipmh_metadata_field', 'metadata_field_id', true);
     }
 

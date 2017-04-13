@@ -35,9 +35,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XNPPaperOrmAuthor extends XooNIpsTableObject
 {
-    public function XNPPaperOrmAuthor()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('paper_author_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('paper_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('author', XOBJ_DTYPE_TXTBOX, '', true);
@@ -50,9 +50,9 @@ class XNPPaperOrmAuthor extends XooNIpsTableObject
  */
 class XNPPaperOrmAuthorHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPPaperOrmAuthorHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPPaperOrmAuthor', 'xnppaper_author', 'paper_author_id', false);
     }
 }

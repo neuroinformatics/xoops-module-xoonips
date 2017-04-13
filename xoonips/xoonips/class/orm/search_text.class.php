@@ -40,9 +40,9 @@ require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/AL.php';
  */
 class XooNIpsOrmSearchText extends XooNIpsTableObject
 {
-    public function XooNIpsOrmSearchText()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('file_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('search_text', XOBJ_DTYPE_TXTBOX, null, false);
     }
@@ -53,9 +53,9 @@ class XooNIpsOrmSearchText extends XooNIpsTableObject
  */
 class XooNIpsOrmSearchTextHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmSearchTextHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmSearchText', 'xoonips_search_text', 'file_id', false);
     }
 

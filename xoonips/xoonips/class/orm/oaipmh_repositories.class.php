@@ -45,7 +45,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmOaipmhRepositories extends XooNIpsTableObject
 {
-    public function XooNIpsOrmOaipmhRepositories()
+    public function __construct()
     {
         $this->initVar('repository_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('URL', XOBJ_DTYPE_TXTBOX, null, false, 255);
@@ -65,9 +65,9 @@ class XooNIpsOrmOaipmhRepositories extends XooNIpsTableObject
  */
 class XooNIpsOrmOaipmhRepositoriesHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmOaipmhRepositoriesHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmOaipmhRepositories', 'xoonips_oaipmh_repositories', 'repository_id', true);
     }
 

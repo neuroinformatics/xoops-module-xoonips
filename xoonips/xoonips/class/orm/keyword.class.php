@@ -46,7 +46,7 @@ ALTER TABLE `x_xoonips_item_keyword` ADD UNIQUE (`item_id` ,`keyword_id` );
  */
 class XooNIpsOrmKeyword extends XooNIpsTableObject
 {
-    public function XooNIpsOrmKeyword()
+    public function __construct()
     {
         $this->initVar('seq_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('item_id', XOBJ_DTYPE_INT, null, false);
@@ -60,9 +60,9 @@ class XooNIpsOrmKeyword extends XooNIpsTableObject
  */
 class XooNIpsOrmKeywordHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmKeywordHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmKeyword', 'xoonips_item_keyword', 'seq_id');
     }
 

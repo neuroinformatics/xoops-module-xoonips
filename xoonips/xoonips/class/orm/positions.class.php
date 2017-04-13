@@ -38,7 +38,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmPositions extends XooNIpsTableObject
 {
-    public function XooNIpsOrmPositions()
+    public function __construct()
     {
         $this->initVar('posi_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('posi_title', XOBJ_DTYPE_TXTBOX, '', true, 50);
@@ -51,9 +51,9 @@ class XooNIpsOrmPositions extends XooNIpsTableObject
  */
 class XooNIpsOrmPositionsHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmPositionsHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmPositions', 'xoonips_positions', 'posi_id', true);
     }
 

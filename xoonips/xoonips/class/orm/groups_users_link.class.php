@@ -39,9 +39,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmGroupsUsersLink extends XooNIpsTableObject
 {
-    public function XooNIpsOrmGroupsUsersLink()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('groups_users_link_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('gid', XOBJ_DTYPE_INT, null, true);
         $this->initVar('uid', XOBJ_DTYPE_INT, null, true);
@@ -54,9 +54,9 @@ class XooNIpsOrmGroupsUsersLink extends XooNIpsTableObject
  */
 class XooNIpsOrmGroupsUsersLinkHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmGroupsUsersLinkHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmGroupsUsersLink', 'xoonips_groups_users_link', 'groups_users_link_id');
     }
 

@@ -50,7 +50,7 @@ ALTER TABLE `x_xoonips_item_basic`  DROP `title`,  DROP `keywords`;
  */
 class XooNIpsOrmItemBasic extends XooNIpsTableObject
 {
-    public function XooNIpsOrmItemBasic()
+    public function __construct()
     {
         $this->initVar('item_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('uid', XOBJ_DTYPE_TXTBOX, null, false, 10);
@@ -68,9 +68,9 @@ class XooNIpsOrmItemBasic extends XooNIpsTableObject
 }
 class XooNIpsOrmItemBasicHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmItemBasicHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmItemBasic', 'xoonips_item_basic', 'item_id', false);
     }
 

@@ -40,9 +40,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XooNIpsOrmChangelog extends XooNIpsTableObject
 {
-    public function XooNIpsOrmChangelog()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('log_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('uid', XOBJ_DTYPE_INT, null, true);
         $this->initVar('item_id', XOBJ_DTYPE_INT, null, false);
@@ -56,9 +56,9 @@ class XooNIpsOrmChangelog extends XooNIpsTableObject
  */
 class XooNIpsOrmChangelogHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmChangelogHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmChangelog', 'xoonips_changelog', 'log_id');
     }
 

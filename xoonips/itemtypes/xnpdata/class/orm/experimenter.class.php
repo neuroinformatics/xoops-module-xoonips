@@ -35,9 +35,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
  */
 class XNPDataOrmExperimenter extends XooNIpsTableObject
 {
-    public function XNPDataOrmExperimenter()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('data_experimenter_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('data_id', XOBJ_DTYPE_INT, 0, true);
         $this->initVar('experimenter', XOBJ_DTYPE_TXTBOX, '', true);
@@ -50,9 +50,9 @@ class XNPDataOrmExperimenter extends XooNIpsTableObject
  */
 class XNPDataOrmExperimenterHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPDataOrmExperimenterHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPDataOrmExperimenter', 'xnpdata_experimenter', 'data_experimenter_id', false);
     }
 }

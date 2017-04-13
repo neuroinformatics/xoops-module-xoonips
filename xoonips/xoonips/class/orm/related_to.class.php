@@ -44,7 +44,7 @@ ALTER TABLE `x_xoonips_related_to` CHANGE `parent_id` `parent_id` INT( 10 ) NOT 
  */
 class XooNIpsOrmRelatedTo extends XooNIpsTableObject
 {
-    public function XooNIpsOrmRelatedTo()
+    public function __construct()
     {
         $this->initVar('related_to_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('parent_id', XOBJ_DTYPE_TXTBOX, null, false);
@@ -57,9 +57,9 @@ class XooNIpsOrmRelatedTo extends XooNIpsTableObject
  */
 class XooNIpsOrmRelatedToHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmRelatedToHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmRelatedTo', 'xoonips_related_to', 'related_to_id');
     }
 

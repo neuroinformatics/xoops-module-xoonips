@@ -54,9 +54,9 @@ class XNPConferenceOrmItemDetail extends XooNIpsTableObject
         'attachment_dl_notify' => 1,
     );
 
-    public function XNPConferenceOrmItemDetail()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('conference_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('presentation_type', XOBJ_DTYPE_TXTBOX, '', true, $this->lengths['presentation_type']);
         $this->initVar('conference_title', XOBJ_DTYPE_TXTBOX, '', true, $this->lengths['conference_title']);
@@ -96,9 +96,9 @@ class XNPConferenceOrmItemDetail extends XooNIpsTableObject
  */
 class XNPConferenceOrmItemDetailHandler extends XooNIpsTableObjectHandler
 {
-    public function XNPConferenceOrmItemDetailHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XNPConferenceOrmItemDetail', 'xnpconference_item_detail', 'conference_id', false);
     }
 }

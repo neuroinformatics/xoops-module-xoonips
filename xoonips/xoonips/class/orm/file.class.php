@@ -59,9 +59,9 @@ class XooNIpsOrmFile extends XooNIpsTableObject
      */
     public $filepath = null;
 
-    public function XooNIpsOrmFile()
+    public function __construct()
     {
-        parent::XooNIpsTableObject();
+        parent::__construct();
         $this->initVar('file_id', XOBJ_DTYPE_INT, 0, false);
         $this->initVar('item_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('original_file_name', XOBJ_DTYPE_TXTBOX, null, true, 255);
@@ -96,9 +96,9 @@ class XooNIpsOrmFile extends XooNIpsTableObject
  */
 class XooNIpsOrmFileHandler extends XooNIpsTableObjectHandler
 {
-    public function XooNIpsOrmFileHandler(&$db)
+    public function __construct(&$db)
     {
-        parent::XooNIpsTableObjectHandler($db);
+        parent::__construct($db);
         $this->__initHandler('XooNIpsOrmFile', 'xoonips_file', 'file_id');
     }
 
