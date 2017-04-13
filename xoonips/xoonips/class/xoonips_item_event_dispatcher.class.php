@@ -30,7 +30,7 @@ class XooNIpsItemEventDispatcher
 {
     public $_listeners = array();
 
-    public function &getInstance()
+    public static function &getInstance()
     {
         static $singleton_;
         if ($singleton_ == null) {

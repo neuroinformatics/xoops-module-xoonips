@@ -4788,7 +4788,7 @@ class XooNIpsItemLibraryHandler
      *
      * @return object instance of class XooNIpsItemLibraryHandler
      */
-    public function &getInstance()
+    public static function &getInstance()
     {
         static $instance = null;
         if (is_null($instance)) {

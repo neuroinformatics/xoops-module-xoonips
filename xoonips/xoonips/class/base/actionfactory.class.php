@@ -37,7 +37,7 @@ class XooNIpsActionFactory
      *
      * @return XooNIpsActionFactory
      */
-    public function &getInstance()
+    public static function &getInstance()
     {
         static $singleton = null;
         if (!isset($singleton)) {

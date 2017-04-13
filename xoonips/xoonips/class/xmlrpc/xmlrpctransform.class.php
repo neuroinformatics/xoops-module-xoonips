@@ -451,7 +451,7 @@ class XooNIpsXmlRpcTransformFactory
      *
      * @return XooNIpsLogicFactory
      */
-    public function &getInstance()
+    public static function &getInstance()
     {
         static $singleton = null;
         if (!isset($singleton)) {
@@ -521,7 +521,7 @@ class XooNIpsXmlRpcTransformCompoFactory
      *
      * @return XooNIpsLogicFactory
      */
-    public function &getInstance()
+    public static function &getInstance()
     {
         static $singleton = null;
         if (!isset($singleton)) {

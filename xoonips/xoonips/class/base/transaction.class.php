@@ -77,7 +77,7 @@ class XooNIpsTransaction
      *
      * @return object instance of XooNIpsTransaction
      */
-    public function &getInstance()
+    public static function &getInstance()
     {
         static $singleton = null;
         if (!isset($singleton)) {

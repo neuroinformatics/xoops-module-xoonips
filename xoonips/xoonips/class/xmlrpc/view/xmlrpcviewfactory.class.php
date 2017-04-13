@@ -40,7 +40,7 @@ class XooNIpsXmlRpcItemViewFactory
      *
      * @return XooNIpsXmlRpcItemViewFactory
      */
-    public function &getInstance()
+    public static function &getInstance()
     {
         static $singleton = null;
         if (!isset($singleton)) {
@@ -103,7 +103,7 @@ class XooNIpsXmlRpcViewFactory
      *
      * @return XooNIpsXmlRpcViewFactory
      */
-    public function &getInstance()
+    public static function &getInstance()
     {
         static $singleton = null;
         if (!isset($singleton)) {
