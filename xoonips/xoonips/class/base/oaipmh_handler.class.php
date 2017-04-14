@@ -53,7 +53,7 @@ class OAIPMHHarvester
         global $xoopsDB;
         $handler = &xoonips_getormhandler('xoonips', 'oaipmh_repositories');
 
-        (method_exists(MyTextSanitizer, sGetInstance) and $ts = &MyTextSanitizer::sGetInstance()) || $ts = &MyTextSanitizer::getInstance();
+        (method_exists('MyTextSanitizer', 'sGetInstance') and $ts = &MyTextSanitizer::sGetInstance()) || $ts = &MyTextSanitizer::getInstance();
 
         $criteria = new Criteria('URL', $this->_baseUrl);
         $repository = &$handler->getObjects($criteria);

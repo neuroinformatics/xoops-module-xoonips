@@ -779,7 +779,7 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
      */
     public function getItemDetailUrl($item_id)
     {
-        (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
+        (method_exists('MyTextSanitizer', 'sGetInstance') and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
         $basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $basic = &$basic_handler->get($item_id);
         if (!$basic) {

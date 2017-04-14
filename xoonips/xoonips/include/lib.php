@@ -1356,7 +1356,7 @@ function xnpGetAttachmentPrinterFriendlyBlock($item_id, $name)
 
 function xnpGetTextFilePrinterFriendlyBlock($item_id, $name, $text)
 {
-    (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
+    (method_exists('MyTextSanitizer', 'sGetInstance') and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
     $textutil = &xoonips_getutility('text');
 
     return array('name' => _MD_XOONIPS_ITEM_TEXTFILE_LABEL, 'value' => $myts->nl2Br($textutil->html_special_chars($text)));
@@ -2563,7 +2563,7 @@ function xnpGetExportPathString($xid, $base_index_id)
  */
 function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = false)
 {
-    (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
+    (method_exists('MyTextSanitizer', 'sGetInstance') and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
     if (!$fhdl) {
         return false;
     }

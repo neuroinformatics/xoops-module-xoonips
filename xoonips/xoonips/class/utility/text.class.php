@@ -411,7 +411,7 @@ class XooNIpsUtilityText extends XooNIpsUtility
      */
     public function display_text_area($text, $html, $smiley, $xcode, $image, $br)
     {
-        (method_exists(MyTextSanitizer, sGetInstance) and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
+        (method_exists('MyTextSanitizer', 'sGetInstance') and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
         if (!$html) {
             // html not allowed
             $text = $this->html_special_chars($text);
