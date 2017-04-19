@@ -35,10 +35,8 @@ if (!defined('XOOPS_ROOT_PATH')) {
 $modversion['name'] = _MI_XNPTOOL_NAME;
 $modversion['version'] = 3.48;
 $modversion['description'] = _MI_XNPTOOL_DESC;
-$modversion['credits'] =
-  'RIKEN, Japan (http://www.riken.jp/)';
-$modversion['author'] =
-  'The XooNIps Project (http://sourceforge.jp/projects/xoonips/)';
+$modversion['credits'] = 'RIKEN, Japan (http://www.riken.jp/)';
+$modversion['author'] = 'The XooNIps Project (http://sourceforge.jp/projects/xoonips/)';
 $modversion['license'] = 'GPL see LICENSE';
 $modversion['official'] = 0;
 $modversion['image'] = 'images/xnptool_slogo.png';

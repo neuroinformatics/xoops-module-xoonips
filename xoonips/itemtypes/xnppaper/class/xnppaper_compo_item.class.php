@@ -131,27 +131,27 @@ class XNPPaperCompoHandler extends XooNIpsItemInfoCompoHandler
         $file_handler = &xoonips_getormhandler('xoonips', 'file');
         $file = &$file_handler->get($file_id);
         if (!$file) {
-            return false;
-        } // no such file
+            return false; // no such file
+        }
 
         $item_id = $file->get('item_id');
         if (!$item_id) {
-            return false;
-        } // file is not belong to any item
+            return false; // file is not belong to any item
+        }
 
         $item_compo = $this->get($item_id);
         if (!$item_compo) {
-            return false;
-        } // bad item
+            return false; // bad item
+        }
 
         $detail = $item_compo->getVar('detail');
         if (!$detail) {
-            return false;
-        } // bad item
+            return false; // bad item
+        }
 
         if (!$this->getPerm($item_id, $uid, 'read')) {
-            return false;
-        } // no permission
+            return false; // no permission
+        }
 
         // retrieve config of pdf and abstract
         $mhandler = &xoops_gethandler('module');

@@ -355,24 +355,24 @@ function xnppaperGetConfirmBlock($item_id)
     // retrieve DetailInformation
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $detail = array(
-        'journal' => array(
-        'value' => $textutil->html_special_chars($formdata->getValue('post', 'journal', 's', false)),
-        ),
-        'volume' => array(
-        'value' => $formdata->getValue('post', 'volume', 'i', false),
-        ),
-        'number' => array(
-        'value' => $formdata->getValue('post', 'number', 'i', false),
-        ),
-        'page' => array(
-        'value' => $textutil->html_special_chars($formdata->getValue('post', 'page', 's', false)),
-        ),
-        'abstract' => array(
-        'value' => $textutil->html_special_chars($formdata->getValue('post', 'abstract', 's', false)),
-        ),
-        'pubmed_id' => array(
-        'value' => $textutil->html_special_chars($formdata->getValue('post', 'pubmed_id', 's', false)),
-        ),
+            'journal' => array(
+                'value' => $textutil->html_special_chars($formdata->getValue('post', 'journal', 's', false)),
+            ),
+            'volume' => array(
+                'value' => $formdata->getValue('post', 'volume', 'i', false),
+            ),
+            'number' => array(
+                'value' => $formdata->getValue('post', 'number', 'i', false),
+            ),
+            'page' => array(
+                'value' => $textutil->html_special_chars($formdata->getValue('post', 'page', 's', false)),
+            ),
+            'abstract' => array(
+                'value' => $textutil->html_special_chars($formdata->getValue('post', 'abstract', 's', false)),
+            ),
+            'pubmed_id' => array(
+                'value' => $textutil->html_special_chars($formdata->getValue('post', 'pubmed_id', 's', false)),
+            ),
         );
     } else {
         $detail = array();

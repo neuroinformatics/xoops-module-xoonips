@@ -107,7 +107,7 @@ class XNPPaperImportItemHandler extends XooNIpsImportItemHandler
     public $_attachment_dl_limit_flag = false;
 
     /**
-     * attachment_dl__notify_limit flag.
+     * attachment_dl_notify_limit flag.
      */
     public $_attachment_dl_notify_limit_flag = false;
 
@@ -184,12 +184,7 @@ class XNPPaperImportItemHandler extends XooNIpsImportItemHandler
 
         switch (implode('/', $this->_tag_stack)) {
         case 'ITEM/DETAIL':
-            foreach (array('journal',
-                             'volume',
-                             'number',
-                             'page',
-                             'abstract',
-                             'pubmed_id', ) as $key) {
+            foreach (array('journal', 'volume', 'number', 'page', 'abstract', 'pubmed_id', ) as $key) {
                 if (is_null($detail->get($key, 'n'))) {
                     $this->_import_item->setErrors(E_XOONIPS_TAG_NOT_FOUND, " no $key".$this->_get_parser_error_at());
                 }

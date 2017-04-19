@@ -35,10 +35,8 @@ if (!defined('XOOPS_ROOT_PATH')) {
 $modversion['name'] = _MI_XNPCONFERENCE_NAME;
 $modversion['version'] = 3.48;
 $modversion['description'] = _MI_XNPCONFERENCE_DESC;
-$modversion['credits'] =
-  'RIKEN, Japan (http://www.riken.jp/)';
-$modversion['author'] =
-  'The XooNIps Project (http://sourceforge.jp/projects/xoonips/)';
+$modversion['credits'] = 'RIKEN, Japan (http://www.riken.jp/)';
+$modversion['author'] = 'The XooNIps Project (http://sourceforge.jp/projects/xoonips/)';
 $modversion['license'] = 'GPL see LICENSE';
 $modversion['official'] = 0;
 $modversion['image'] = 'images/xnpconference_slogo.png';
