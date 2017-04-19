@@ -2,7 +2,7 @@
 
 //
 // customized Snoopy class for the XooNIps
-// $Revision: 1.1.2.7 $
+// $Revision:$
 //
 if (!defined('XOOPS_ROOT_PATH')) {
     exit();
