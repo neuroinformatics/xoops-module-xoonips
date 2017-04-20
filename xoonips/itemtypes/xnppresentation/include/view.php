@@ -258,7 +258,7 @@ function xnppresentationGetRegisterBlock()
 function xnppresentationGetEditBlock($item_id)
 {
     global $xoopsDB;
-    $myts = &MyTextsanitizer::getInstance();
+    (method_exists('MyTextSanitizer', 'sGetInstance') and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
     $formdata = &xoonips_getutility('formdata');
 
     // get DetailInformation
