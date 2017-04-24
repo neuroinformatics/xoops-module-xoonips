@@ -1093,9 +1093,9 @@ function xnp_criteria2str($cri)
         $orders = array();
         foreach ($cri['orders'] as $o) {
             if (isset($o['order']) && isset($o['name']) && $o['order'] == 0) {
-                $orders[] = $o['name'].' ASC';
+                $orders[] = '`'.addslashes($o['name']).'` ASC';
             } elseif (isset($o['order']) && isset($o['name']) && $o['order'] == 1) {
-                $orders[] = $o['name'].' DESC';
+                $orders[] = '`'.addslashes($o['name']).'` DESC';
             }
         }
         if (count($orders) > 0) {
