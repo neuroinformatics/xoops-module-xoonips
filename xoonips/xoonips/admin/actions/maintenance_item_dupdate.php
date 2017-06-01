@@ -82,6 +82,7 @@ function xoonips_admin_maintenance_item_unlock_item($item_id)
     if ($item_lock_handler->isLocked($item_id)) {
         $lock_type = $item_lock_handler->getLockType($item_id);
         if ($lock_type == XOONIPS_LOCK_TYPE_CERTIFY_REQUEST) {
+            $indexIds = array();
             $index_item_links = &$index_item_link_handler->getObjects(new Criteria('item_id', $item_id));
             foreach ($index_item_links as $index_item_link) {
                 if ($index_item_link->get('certify_state') == CERTIFY_REQUIRED) {
@@ -91,9 +92,12 @@ function xoonips_admin_maintenance_item_unlock_item($item_id)
                         $item_basic_handler->unlockItemAndIndexes($item_id, $index_id);
                         $event_log_handler->recordRejectItemEvent($item_id, $index_id);
                         $index_item_link_handler->delete($index_item_link);
-                        xoonips_notification_item_rejected($item_id, $index_id);
+                        $indexIds[] = $index_id;
                     }
                 }
+            }
+            if (!empty($indexIds)) {
+                xoonips_notification_item_rejected($item_id, $indexIds);
             }
         } else {
             // TODO: unlock if transfer request

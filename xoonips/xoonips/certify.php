@@ -96,23 +96,25 @@ if ($op == 'certify' || $op == 'uncertify') {
         exit();
     }
     $succeeded_index_ids = array();
-    foreach ($index_ids as $index_id) {
-        if ($op == 'uncertify') {
+    if ($op == 'uncertify') {
+        foreach ($index_ids as $index_id) {
             if (xoonips_reject_item($uid, $item_id, $index_id)) {
-                xoonips_notification_item_rejected($item_id, $index_id);
                 $succeeded_index_ids[] = $index_id;
             }
-        } elseif ($op == 'certify') {
+        }
+    } elseif ($op == 'certify') {
+        foreach ($index_ids as $index_id) {
             if (xoonips_certify_item($uid, $item_id, $index_id)) {
-                xoonips_notification_item_certified($item_id, $index_id);
                 $succeeded_index_ids[] = $index_id;
             }
         }
     }
     if (!empty($succeeded_index_ids)) {
         if ($op == 'uncertify') {
+            xoonips_notification_item_rejected($item_id, $succeeded_index_ids);
             xoonips_notification_user_item_rejected($item_id, $succeeded_index_ids);
         } elseif ($op == 'certify') {
+            xoonips_notification_item_certified($item_id, $succeeded_index_ids);
             xoonips_notification_user_item_certified($item_id, $succeeded_index_ids);
         }
     }

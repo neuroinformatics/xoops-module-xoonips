@@ -33,11 +33,10 @@ $items[] array of item information to be certified
      <td>
       <form name='xoonips_certify<{$i.item_id}>' action="certify.php<{if !empty($menu_id)}>?menu_id=<{$menu_id}><{/if}>" method="post">
       <{foreach item=j from=$i.indexes}>
-        <input type='checkbox' name='index_ids[]' value='<{$j.id}>' />
-      <a href="listitem.php?index_id=<{$j.id}>"><{$j.path}></a><br />
+        <input type='hidden' name='index_ids[]' value='<{$j.id}>' />
+        <a href="listitem.php?index_id=<{$j.id}>"><{$j.path}></a><br />
       <{/foreach}>
        <img src="images/arrow_ltr.png" alt="arrow" />
-       With selected: 
        <input class="formButton" type="button" value="<{$smarty.const._MD_XOONIPS_ITEM_CERTIFY_BUTTON_LABEL}>" onclick="this.form.op.value='certify'; submit();" />
        <input class="formButton" type="button" value="<{$smarty.const._MD_XOONIPS_ITEM_UNCERTIFY_BUTTON_LABEL}>" onclick="this.form.op.value='uncertify'; submit();" />
        <input type='hidden' name='op' value='' />

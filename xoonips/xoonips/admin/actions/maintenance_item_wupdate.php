@@ -75,6 +75,7 @@ if (count($tree_ids) > 0) {
 
     $modified_item_ids = array();
 
+    $targetIndexIds = array();
     // execute item withdraw
     foreach ($tree_ids as $xid) {
         $succeed = 0;
@@ -97,7 +98,10 @@ if (count($tree_ids) > 0) {
                     ++$succeed;
                     $event_log_handler->recordRejectItemEvent($item_id, $xid);
                     $modified_item_ids[$item_id] = $item_id;
-                    xoonips_notification_item_rejected($item_id, $xid);
+                    if (!isset($targetIndexIds[$item_id])) {
+                        $targetIndexIds[$item_id] = array();
+                    }
+                    $targetIndexIds[$item_id][] = $xid;
                 } else {
                     // error occured
                     ++$failed;
@@ -115,7 +119,9 @@ if (count($tree_ids) > 0) {
         );
         $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
     }
-
+    foreach ($targetIndexIds as $item_id => $indexIds) {
+        xoonips_notification_item_rejected($item_id, $indexIds);
+    }
     // update item_status and item_basic. delete item_show
     foreach ($modified_item_ids as $item_id) {
         // update last_update

@@ -1612,14 +1612,15 @@ function xoonips_insert_event_and_send_notification_of_certification($item_id)
             // record events(request certify item)
             $eventlog_handler->recordRequestCertifyItemEvent($item_id, $i);
             if ($certify_item == 'auto') {
-                xoonips_notification_item_certified_auto($item_id, $i);
-
                 // record events(certify item)
                 $eventlog_handler->recordCertifyItemEvent($item_id, $i);
-            } elseif ($certify_item == 'on') {
-                xoonips_notification_item_certify_request($item_id, $i);
             }
         }
+    }
+    if ($certify_item == 'auto') {
+        xoonips_notification_item_certified_auto($item_id, $index_ids);
+    } elseif ($certify_item == 'on') {
+        xoonips_notification_item_certify_request($item_id, $index_ids);
     }
 }
 

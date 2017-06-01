@@ -133,25 +133,24 @@ if ($op == 'reject_certify' || $op == 'accept_certify' || $op == 'withdraw') {
         }
         if ($op == 'reject_certify') {
             if (xoonips_reject_item($uid, $item_id, $index_id)) {
-                xoonips_notification_item_rejected($item_id, $index_id);
                 $succeeded_index_ids[] = $index_id;
             }
         } elseif ($op == 'withdraw') {
             if (xoonips_withdraw_item($uid, $item_id, $index_id)) {
-                xoonips_notification_item_rejected($item_id, $index_id);
                 $succeeded_index_ids[] = $index_id;
             }
         } elseif ($op == 'accept_certify') {
             if (xoonips_certify_item($uid, $item_id, $index_id)) {
-                xoonips_notification_item_certified($item_id, $index_id);
                 $succeeded_index_ids[] = $index_id;
             }
         }
     }
     if (!empty($succeeded_index_ids)) {
         if ($op == 'reject_certify' || $op == 'withdraw') {
+            xoonips_notification_item_rejected($item_id, $succeeded_index_ids);
             xoonips_notification_user_item_rejected($item_id, $succeeded_index_ids);
         } elseif ($op == 'accept_certify') {
+            xoonips_notification_item_certified($item_id, $succeeded_index_ids);
             xoonips_notification_user_item_certified($item_id, $succeeded_index_ids);
         }
     }

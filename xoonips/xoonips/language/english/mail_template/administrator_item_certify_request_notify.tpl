@@ -1,4 +1,5 @@
-Item has been registered to index{INDEX_PATH}
+Item has been registered to index:
+{INDEX_PATH}
 
 Follow this link to judge:
 {ITEM_CERTIFY_URL}

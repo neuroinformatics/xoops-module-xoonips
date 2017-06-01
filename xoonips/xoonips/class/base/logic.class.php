@@ -256,12 +256,23 @@ class XooNIpsLogic
         // notify
         $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
         $index_item_links = $index_item_link_handler->getByItemId($item_id, array(OL_GROUP_ONLY, OL_PUBLIC));
+        $indexIds = array(
+            CERTIFY_REQUIRED => array(),
+            CERTIFIED => array(),
+        );
         foreach ($index_item_links as $link) {
+            $indexId = $link->get('index_id');
             if ($link->get('certify_state') == CERTIFY_REQUIRED) {
-                xoonips_notification_item_certify_request($link->get('item_id'), $link->get('index_id'));
+                $indexIds[CERTIFY_REQUIRED][] = $indexId;
             } elseif ($link->get('certify_state') == CERTIFIED) {
-                xoonips_notification_item_certified_auto($link->get('item_id'), $link->get('index_id'));
+                $indexIds[CERTIFIED][] = $indexId;
             }
+        }
+        if (!empty($indexIds[CERTIFY_REQUIRED])) {
+            xoonips_notification_item_certify_request($item_id, $indexIds[CERTIFY_REQUIRED]);
+        }
+        if (!empty($indexIds[CERTIFIED])) {
+            xoonips_notification_item_certified_auto($item_id, $indexIds[CERTIFIED]);
         }
 
         return true;

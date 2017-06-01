@@ -266,62 +266,74 @@ function xoonips_notification_get_index_path_string($index_id)
  * @param[in] $subject  subject of notification
  * @param[in] $template_name  template file name of notification
  */
-function xoonips_notification_item_certify($item_id, $index_id, $subject, $template_name)
+function _xoonips_notification_item_certify($item_id, $index_ids, $subject, $template_name)
 {
     $index_handler = &xoonips_getormhandler('xoonips', 'index');
-    $index = $index_handler->get($index_id);
-    if ($index->get('open_level') == OL_PUBLIC) {
-        $uids = xoonips_notification_get_moderator_uids();
-    } elseif ($index->get('open_level') == OL_GROUP_ONLY) {
-        // get uids of group admin
-        $xg_handler = &xoonips_gethandler('xoonips', 'group');
-        $uids = $xg_handler->getUserIds($index->get('gid'), true);
-    } else { // private index
-        return;
+    $xg_handler = &xoonips_gethandler('xoonips', 'group');
+    if (!is_array($index_ids)) {
+        $index_ids = array($index_ids);
     }
-
+    $targetUids = array();
+    $targetPaths = array();
+    foreach ($index_ids as $index_id) {
+        $index = $index_handler->get($index_id);
+        $gid = 0;
+        if ($index->get('open_level') == OL_PUBLIC) {
+            // public index
+            if (!isset($targetUids[$gid])) {
+                $targetUids[$gid] = xoonips_notification_get_moderator_uids();
+                $targetPaths[$gid] = array();
+            }
+        } elseif ($index->get('open_level') == OL_GROUP_ONLY) {
+            // group index
+            $gid = $index->get('gid');
+            if (!isset($targetUids[$gid])) {
+                $targetUids[$gid] = $xg_handler->getUserIds($gid, true);
+                $targetPaths[$gid] = array();
+            }
+        } else {
+            // private index
+            continue;
+        }
+        $targetPaths[$gid][] = xoonips_notification_get_index_path_string($index_id);
+    }
     $tags = xoonips_notification_get_item_tags($item_id);
-    $tags['INDEX_PATH'] = xoonips_notification_get_index_path_string($index_id);
     $tags['ITEM_CERTIFY_URL'] = XOOPS_URL.'/modules/xoonips/certify.php';
-
     $nhandler = &xoonips_gethandler('xoonips', 'notification');
-    $nhandler->triggerEvent2(
-        'administrator', 0, 'item_certify',
-        $subject, $nhandler->getTemplateDirByMid(),
-        $template_name, $tags, $uids
-    );
+    foreach ($targetUids as $gid => $uids) {
+        $tags['INDEX_PATH'] = implode("\n", $targetPaths[$gid]);
+        $nhandler->triggerEvent2(
+            'administrator', 0, 'item_certify',
+            $subject, $nhandler->getTemplateDirByMid(),
+            $template_name, $tags, $uids
+        );
+    }
 }
 
 /**
  * @brief notify that item waits for certification
  *
  * @param[in] $item_id item id
- * @param[in] $index_id index id
+ * @param[in] $index_id index ids
  */
-function xoonips_notification_item_certify_request($item_id, $index_id)
+function xoonips_notification_item_certify_request($item_id, $index_ids)
 {
-    xoonips_notification_item_certify($item_id, $index_id, _MD_XOONIPS_ITEM_CERTIFY_REQUEST_NOTIFYSBJ, 'administrator_item_certify_request_notify');
+    _xoonips_notification_item_certify($item_id, $index_ids, _MD_XOONIPS_ITEM_CERTIFY_REQUEST_NOTIFYSBJ, 'administrator_item_certify_request_notify');
 }
 
-/**
- * @brief notify that item waits for certification
- *
- * @param[in] $item_id item id
- * @param[in] $index_id index id
- */
-function xoonips_notification_item_certified_auto($item_id, $index_id)
+function xoonips_notification_item_certified_auto($item_id, $index_ids)
 {
-    xoonips_notification_item_certify($item_id, $index_id, _MD_XOONIPS_ITEM_CERTIFIED_AUTO_NOTIFYSBJ, 'administrator_item_certified_auto_notify');
+    _xoonips_notification_item_certify($item_id, $index_ids, _MD_XOONIPS_ITEM_CERTIFIED_AUTO_NOTIFYSBJ, 'administrator_item_certified_auto_notify');
 }
 
-function xoonips_notification_item_certified($item_id, $index_id)
+function xoonips_notification_item_certified($item_id, $index_ids)
 {
-    xoonips_notification_item_certify($item_id, $index_id, _MD_XOONIPS_ITEM_CERTIFIED_NOTIFYSBJ, 'administrator_item_certified_notify');
+    _xoonips_notification_item_certify($item_id, $index_ids, _MD_XOONIPS_ITEM_CERTIFIED_NOTIFYSBJ, 'administrator_item_certified_notify');
 }
 
-function xoonips_notification_item_rejected($item_id, $index_id)
+function xoonips_notification_item_rejected($item_id, $index_ids)
 {
-    xoonips_notification_item_certify($item_id, $index_id, _MD_XOONIPS_ITEM_REJECTED_NOTIFYSBJ, 'administrator_item_rejected_notify');
+    _xoonips_notification_item_certify($item_id, $index_ids, _MD_XOONIPS_ITEM_REJECTED_NOTIFYSBJ, 'administrator_item_rejected_notify');
 }
 
 function xoonips_notification_user_item_transfer_request($to_uid)
