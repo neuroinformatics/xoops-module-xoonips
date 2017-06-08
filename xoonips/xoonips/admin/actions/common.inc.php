@@ -99,6 +99,9 @@ function xoonips_admin_get_requests($method, $keys)
     return $ret;
 }
 
+/**
+ * @param string $fmt
+ */
 function xoonips_admin_get_configs($keys, $fmt)
 {
     $textutil = &xoonips_getutility('text');

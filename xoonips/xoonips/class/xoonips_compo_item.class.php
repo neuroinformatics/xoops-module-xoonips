@@ -70,7 +70,6 @@ class XooNIpsItemCompoHandler extends XooNIpsRelatedObjectHandler
     /**
      * gets a value object.
      *
-     * @param string $ext_id extended item_id
      * @retval XooNIpsItemCompo
      * @retval false
      */
@@ -97,9 +96,9 @@ class XooNIpsItemCompoHandler extends XooNIpsRelatedObjectHandler
      *
      * @param id id of item
      * @param uid uid who access to this item
-     * @param operation read|write|delete
+     * @param operation string
      *
-     * @return true if permitted
+     * @return boolean if permitted
      */
     public function getPerm($id, $uid, $operation)
     {
@@ -152,6 +151,9 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
     public $iteminfo = null;
     public $db = null;
 
+    /**
+     * @param string $module
+     */
     public function __construct(&$db, $module = null)
     {
         parent::__construct($db);
@@ -174,7 +176,6 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
     /**
      * gets a value object.
      *
-     * @param string $ext_id extended item_id
      * @retval XooNIpsItemInfoCompo
      * @retval false
      */
@@ -203,7 +204,7 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
      * @param uid uid who access to this item
      * @param operation read|write|delete|export
      *
-     * @return true if permitted
+     * @return boolean if permitted
      */
     public function getPerm($item_id, $uid, $operation)
     {
@@ -418,7 +419,7 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
      *                     XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
      *                     or XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LISTL
      *
-     * @return template filename
+     * @return string filename
      */
     public function getTemplateFileName($type)
     {
@@ -941,6 +942,9 @@ class XooNIpsItemInfoCompo extends XooNIpsRelatedObject
 {
     public $iteminfo = null;
 
+    /**
+     * @param string $module
+     */
     public function __construct($module = null)
     {
         if (isset($module) && is_null($this->iteminfo)) {

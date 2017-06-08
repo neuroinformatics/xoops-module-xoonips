@@ -95,6 +95,7 @@ class XooNIpsOrmConfigHandler extends XooNIpsTableObjectHandler
      * get a configuration value object.
      *
      * @param string key configuration key
+     * @param string $key
      *
      * @return object XooNIpsOrmConfig. return false if key was not found.
      */

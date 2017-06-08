@@ -152,11 +152,17 @@ function php_compat_sha256_add32_helper($x, $y)
     return ($msw << 16) | ($lsw & 0xffff);
 }
 
+/**
+ * @param integer $n
+ */
 function php_compat_sha256_shr_helper($x, $n)
 {
     return ($x >> $n) & (0x7fffffff >> ($n - 1));
 }
 
+/**
+ * @param integer $n
+ */
 function php_compat_sha256_rotr_helper($x, $n)
 {
     return ($x << (32 - $n)) | ($x >> $n) & (0x7fffffff >> ($n - 1));

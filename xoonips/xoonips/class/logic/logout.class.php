@@ -39,8 +39,8 @@ class XooNIpsLogicLogout extends XooNIpsLogic
      * @param[out] $response->result true:success, false:failed
      * @param[out] $response->error error information
      *
-     * @return true  logged out
-     * @return false if error
+     * @return null|boolean  logged out
+     * @return null|boolean if error
      */
     public function execute(&$vars, &$response)
     {

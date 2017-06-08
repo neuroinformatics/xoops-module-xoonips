@@ -262,6 +262,8 @@ function xoonips_notification_get_index_path_string($index_id)
  * @param[in] $index_id index id
  * @param[in] $subject  subject of notification
  * @param[in] $template_name  template file name of notification
+ * @param string $subject
+ * @param string $template_name
  */
 function _xoonips_notification_item_certify($item_id, $index_ids, $subject, $template_name)
 {
@@ -445,6 +447,10 @@ function _xoonips_notification_get_title_of_items($item_ids)
     return $item_titles;
 }
 
+/**
+ * @param string $subject
+ * @param string $template_name
+ */
 function xoonips_notification_send_user_index_notification($context, $subject, $template_name)
 {
     $new_index_path = xoonips_notification_get_index_path_string($context['index_id']);
@@ -573,6 +579,9 @@ function xoonips_notification_user_item_rejected($item_id, $index_ids)
     );
 }
 
+/**
+ * @param integer $file_id
+ */
 function xoonips_notification_user_file_downloaded($file_id, $downloader_uid)
 {
     $file_handler = &xoonips_getormhandler('xoonips', 'file');

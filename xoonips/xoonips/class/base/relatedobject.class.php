@@ -267,6 +267,7 @@ class XooNIpsRelatedObjectHandler
      * @param bool   $id_as_key
      * @param string $fieldlist fieldlist for distinct select
      * @param bool   $distinct
+     * @param XooNIpsJoinCriteria $joindef
      *
      * @return array objects
      */
@@ -379,6 +380,9 @@ class XooNIpsRelatedObjectHandler
         $this->callForeachVars($obj, 'unsetDirty');
     }
 
+    /**
+     * @param string $methodName
+     */
     public function callForeachVars(&$obj, $methodName)
     {
         foreach (array_keys($obj->getVars()) as $key) {
@@ -440,7 +444,7 @@ class XooNIpsRelatedObject
      * assign a value to a variable.
      *
      * @param string $key   name of the variable to assign
-     * @param mixed  $value value to assign
+     * @param mixed  $val value to assign
      */
     public function setVar($key, $val)
     {

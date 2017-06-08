@@ -182,7 +182,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
     /**
      * get file data.
      *
-     * @param string $filename
+     * @param string $fname
      *
      * @return string file data
      */
@@ -529,7 +529,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
     /**
      * read local file header.
      *
-     * @return array file entry header information
+     * @return boolean file entry header information
      */
     private function _read_local_file_header()
     {
@@ -593,6 +593,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
     /**
      * read unpacked data from file.
      *
+     * @param string $type
      * @return mixed data
      */
     private function _fread_unpack($type)

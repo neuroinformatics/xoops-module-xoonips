@@ -399,7 +399,7 @@ class XooNIpsUtilityText extends XooNIpsUtility
      *
      * @param string $text
      * @param bool   $html
-     * @param bool   $smily
+     * @param bool   $smiley
      * @param bool   $xcode
      * @param bool   $image
      * @param bool   $br
@@ -442,7 +442,7 @@ class XooNIpsUtilityText extends XooNIpsUtility
      *
      * @param int $value input timestamp
      *
-     * @return encoded string
+     * @return string string
      */
     public function timestamp_to_iso8601($value)
     {

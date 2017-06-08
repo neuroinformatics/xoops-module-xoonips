@@ -42,8 +42,8 @@ class XooNIpsLogicGetItem extends XooNIpsLogic
      * @param[out] $response->error  error information
      * @param[out] $response->success array of child indexes
      *
-     * @return XooNIpsItem retrieved item object
-     * @return false       if fault
+     * @return boolean retrieved item object
+     * @return boolean       if fault
      */
     public function execute(&$vars, &$response)
     {

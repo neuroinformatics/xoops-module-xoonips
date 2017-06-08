@@ -325,7 +325,7 @@ function xnpExportChangeLog($fhdl, $item_id)
  *
  * @param $parent_id id of the item to export
  *
- * @return generated XML or NULL
+ * @return null|string XML or NULL
  */
 function xnpExportRelatedTo($parent_id)
 {
@@ -352,11 +352,11 @@ $parser_hash = array();
 
 /**
  * @param string $str       XML characters (UTF-8)
- * @param int    $parent_id index_id of import place
+ * @param int    $parent_index_id index_id of import place
  * @param array  &$id_table array( 'pseudo ID' => 'actual ID', ... ) effected index ids
  * @param string &$errmsg   reference recieve error message
  *
- * @return bool false if falure. refer $errmsg.
+ * @return null|boolean false if falure. refer $errmsg.
  */
 function xnpImportIndex($str, $parent_index_id, &$id_table, &$errmsg)
 {

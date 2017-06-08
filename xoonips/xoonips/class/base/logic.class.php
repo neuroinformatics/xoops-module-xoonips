@@ -128,7 +128,7 @@ class XooNIpsLogic
      * @param response XooNIpsResponse object
      * @param item XooNIpsItem object
      *
-     * @return result true if succeeded
+     * @return boolean true if succeeded
      */
     public function touchItem1(&$error, &$item, $uid)
     {
@@ -245,7 +245,7 @@ class XooNIpsLogic
      * @param response XooNIpsResponse object
      * @param item XooNIpsItem object
      *
-     * @return result true if succeeded
+     * @return boolean true if succeeded
      */
     public function touchItem2(&$error, &$item, $uid)
     {
@@ -478,6 +478,7 @@ class XooNIpsLogic
 
     /**
      * convert prefixed number to a number(e.g. '4k' to 4096).
+     * @param string $val
      */
     public function returnBytes($val)
     {

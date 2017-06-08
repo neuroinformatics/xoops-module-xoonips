@@ -661,6 +661,10 @@ function xoonips_sql_queries($sqls)
     return !$error;
 }
 
+/**
+ * @param string $table
+ * @param string $name
+ */
 function xoonips_sql_has_index($table, $name)
 {
     global $xoopsDB;

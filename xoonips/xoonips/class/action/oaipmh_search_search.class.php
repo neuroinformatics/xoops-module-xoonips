@@ -302,6 +302,9 @@ class XooNIpsActionOaipmhSearchSearch extends XooNIpsAction
         return $result;
     }
 
+    /**
+     * @param string $order_by
+     */
     public function getOrderByColumn($order_by)
     {
         switch ($order_by) {
@@ -322,7 +325,7 @@ class XooNIpsActionOaipmhSearchSearch extends XooNIpsAction
 
     /**
      * @param $page integer current page number
-     * @param $maxpage integer max page number
+     * @param double $maxpage integer max page number
      *
      * @return array of integer page numbers
      */

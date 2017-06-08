@@ -51,6 +51,9 @@ class XooNIpsOrmItemType extends XooNIpsTableObject
 
     public $iteminfo = null;
 
+    /**
+     * @param string $module
+     */
     public function __construct($module = null)
     {
         parent::__construct();
@@ -226,7 +229,7 @@ class XooNIpsOrmItemTypeHandler extends XooNIpsTableObjectHandler
      * @param object &$a
      * @param object &$b
      *
-     * @return order
+     * @return integer
      */
     public function _order_weight_cmp(&$a, &$b)
     {

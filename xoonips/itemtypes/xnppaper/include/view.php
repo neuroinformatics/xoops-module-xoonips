@@ -60,6 +60,9 @@ function &_xnppaper_get_detail_information_objs($item_id)
     return $ret;
 }
 
+/**
+ * @param string $fmt
+ */
 function _xnppaper_get_detail_information_array($meta, $fmt)
 {
     $ret = array();

@@ -62,7 +62,7 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
     public $iteminfo = null;
 
     /**
-     * @param string $itemtype itemtype name to create in getObject
+     * @param string $module
      */
     public function __construct($module = null)
     {
@@ -448,7 +448,7 @@ class XooNIpsXmlRpcTransformFactory
     /**
      * return XooNIpsLogicFactory instance.
      *
-     * @return XooNIpsLogicFactory
+     * @return XooNIpsXmlRpcTransformFactory
      */
     public static function &getInstance()
     {
@@ -518,7 +518,7 @@ class XooNIpsXmlRpcTransformCompoFactory
     /**
      * return XooNIpsLogicFactory instance.
      *
-     * @return XooNIpsLogicFactory
+     * @return XooNIpsXmlRpcTransformCompoFactory
      */
     public static function &getInstance()
     {
@@ -534,7 +534,6 @@ class XooNIpsXmlRpcTransformCompoFactory
      * return XooNIpsLogic corresponding to $logic.
      *
      * @param string $module module name
-     * @param string $name   name of TransformCompo
      * @retval XooNIpsXmlRpcTransformCompo corresponding to $module and $name
      * @retval false unknown logic
      */

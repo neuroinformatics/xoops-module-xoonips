@@ -160,7 +160,7 @@ class XooNIpsOrmSessionHandler extends XooNIpsTableObjectHandler
      * @param int  $uid       user id
      * @param bool $do_logout logout if invalid xoonips user
      *
-     * @return bool validation result
+     * @return boolean|null validation result
      */
     public function validateUser($uid, $do_logout)
     {

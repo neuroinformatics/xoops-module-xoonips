@@ -254,7 +254,7 @@ class XooNIpsUtilityDownload extends XooNIpsUtility
     /**
      * generate file name for 'Content-Disposition:' header.
      *
-     * @param string $filename file name on server environment
+     * @param string $file_name file name on server environment
      *
      * @return string generated file name
      */

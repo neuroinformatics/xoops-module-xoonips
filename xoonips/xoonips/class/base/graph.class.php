@@ -114,6 +114,7 @@ class XooNIpsGraphData
      * set data color.
      *
      * @parem string $color data color
+     * @param string $color
      */
     public function setColor($color)
     {
@@ -134,6 +135,7 @@ class XooNIpsGraphData
      * set shadow color.
      *
      * @parem string $color shadow color, 'none' means don't draw.
+     * @param string $color
      */
     public function setShadowColor($color)
     {
@@ -438,6 +440,7 @@ class XooNIpsGraphDataBar extends XooNIpsGraphData
      *   <1 bars won't touch.
      *    1 is full width.
      *   >1 means bars will overlap.
+     * @param double $size
      */
     public function setBarSize($size)
     {
@@ -951,7 +954,6 @@ class XooNIpsGraph
     /**
      * set axis ticks length.
      *
-     * @param string $xy  which axis position 'x' or 'y'
      * @param string $len axis ticks length
      */
     public function setAxisTicksLength($len)

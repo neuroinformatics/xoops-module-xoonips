@@ -123,6 +123,10 @@ class XooNIpsTableObject extends XoopsObject
      * @parem bool $doxcode use xcode
      * @parem bool $dosmiley use smiley marks
      * @parem bool $dobr use <br /> new line
+     * @param boolean $dohtml
+     * @param boolean $doxcode
+     * @param boolean $dosmiley
+     * @param boolean $dobr
      */
     public function setTextAreaDisplayAttributes($dohtml, $doxcode, $dosmiley, $dobr)
     {
@@ -144,7 +148,7 @@ class XooNIpsTableObject extends XoopsObject
      * @param mixed
      * @param bool   $required  require html form input?
      * @param int    $maxlength for XOBJ_DTYPE_TXTBOX type only
-     * @param string $option    does this data have any select options?
+     * @param string $options    does this data have any select options?
      */
     public function initVar($key, $data_type, $value = null, $required = false, $maxlength = null, $options = '')
     {
@@ -171,7 +175,7 @@ class XooNIpsTableObject extends XoopsObject
      * @param mixed  $value   value to assign
      * @param bool   $not_gpc
      *
-     * @return bool false if failed
+     * @return null|boolean false if failed
      */
     public function setVar($key, $value, $not_gpc = false)
     {
@@ -438,7 +442,7 @@ class XooNIpsTableObject extends XoopsObject
      *
      * @param obj XooNIpsTableObject or empty value
      *
-     * @return true if all vars equal to obj vars
+     * @return boolean if all vars equal to obj vars
      */
     public function equals($obj)
     {
@@ -550,7 +554,7 @@ class XooNIpsTableObject extends XoopsObject
     /**
      * assign values to multiple variables in a batch.
      *
-     * @param array $var_array ssociative array of values to assign
+     * @param array $var_arr ssociative array of values to assign
      *
      * @return bool false if failed
      */
@@ -1058,7 +1062,7 @@ class XooNIpsTableObjectHandler extends XoopsObjectHandler
      * gets union objects.
      *
      * @param array  $vars
-     * @param bool   $id_bas_key
+     * @param bool   $id_as_key
      * @param bool   $unionall      true if use UNION ALL(default is UNION)
      * @param object $unioncriteria
      *

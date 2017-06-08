@@ -43,7 +43,7 @@ class XooNIpsLogicLogin extends XooNIpsLogic
      * @param[out] $response->error error information
      * @param[out] $response->success session id
      *
-     * @return false if error
+     * @return null|boolean if error
      */
     public function execute(&$vars, &$response)
     {

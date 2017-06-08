@@ -81,7 +81,7 @@ class XooNIpsUtilityLanguagemanager extends XooNIpsUtility
     /**
      * read language resouce on current language.
      *
-     * @param string $resouce        resource file name
+     * @param string $resource        resource file name
      * @param string $mydirname      module directory name
      * @param string $mytrustdirname module trust directory name
      * @param bool   $read_once      true if read by require_once
@@ -106,7 +106,7 @@ class XooNIpsUtilityLanguagemanager extends XooNIpsUtility
     /**
      * read language resouce file on current language.
      *
-     * @param string $resouce        resource file name
+     * @param string $resource        resource file name
      * @param string $mydirname      module directory name
      * @param string $mytrustdirname module trust directory name
      *

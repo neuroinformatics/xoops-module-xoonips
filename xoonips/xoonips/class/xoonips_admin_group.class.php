@@ -45,7 +45,7 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
      * @param int  $uid      user id
      * @param bool $is_admin true if user will be group admin
      *
-     * @return bool false if failure
+     * @return boolean|null false if failure
      */
     public function addUserToXooNIpsGroup($gid, $uid, $is_admin)
     {
@@ -109,7 +109,7 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
      *
      * @param int $uid user id
      *
-     * @return bool false if failure
+     * @return boolean|null false if failure
      */
     public function addUserToDefaultXooNIpsGroup($uid)
     {
@@ -123,7 +123,7 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
      * @param int  $gid   group id
      * @param bool $force force deletion
      *
-     * @return bool false if failure
+     * @return boolean|null false if failure
      */
     public function deleteUserFromXooNIpsGroup($gid, $uid, $force = false)
     {

@@ -174,6 +174,9 @@ class XooNIpsActionTransferAdminInitialize extends XooNIpsActionTransfer
         return $result;
     }
 
+    /**
+     * @return integer
+     */
     public function get_private_index_id($uid)
     {
         $user_hanlder = &xoonips_getormhandler('xoonips', 'users');

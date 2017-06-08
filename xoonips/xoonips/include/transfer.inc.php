@@ -378,6 +378,9 @@ function xoonips_transfer_get_private_indexes_for_dropdown($user_id)
     return $result;
 }
 
+/**
+ * @param integer $depth
+ */
 function xoonips_transfer_get_index_tree_for_dropdown($index_id, &$result, $depth)
 {
     $index_compo_handler = &xoonips_getormcompohandler('xoonips', 'index');

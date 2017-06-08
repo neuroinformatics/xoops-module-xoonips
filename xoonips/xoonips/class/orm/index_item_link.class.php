@@ -203,7 +203,7 @@ class XooNIpsOrmIndexItemLinkHandler extends XooNIpsTableObjectHandler
      * @param uid uid who access to this item
      * @param operation accept|reject|withdraw
      *
-     * @return true if permitted
+     * @return boolean if permitted
      */
     public function getPerm($index_id, $item_id, $uid, $operation)
     {

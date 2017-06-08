@@ -26,6 +26,9 @@
 // ------------------------------------------------------------------------- //
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
+/**
+ * @param string $ini
+ */
 function inival2num($ini)
 {
     $len = strlen($ini);
@@ -55,6 +58,9 @@ function inival2num($ini)
     return $num;
 }
 
+/**
+ * @param string $ini
+ */
 function inival2bool($ini)
 {
     if (is_bool($ini)) {

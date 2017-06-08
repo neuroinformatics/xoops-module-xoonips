@@ -162,7 +162,7 @@ class XooNIpsFileSearchPlugin
     /**
      * get last log.
      *
-     * @return string last log
+     * @return resource last log
      */
     public function getLastLog()
     {

@@ -311,8 +311,8 @@ function getRemoteHost()
  *  @param xid     item(item_id param) registered index id
  *  @param item_id item id
  *
- *  @return true  success
- *  @return false failed
+ *  @return boolean|null  success
+ *  @return boolean|null failed
  */
 function xnpitmgrWithDrawItem($xnpsid, $xid, $item_id)
 {

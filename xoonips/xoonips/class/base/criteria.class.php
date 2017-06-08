@@ -103,6 +103,7 @@ class XooNIpsJoinCriteria
      * @param object &$join_criteria          object instance of next join criteria
      * @param string $next_maintable_name     joining main table name, false if use default main table
      * @param bool   $next_maintable_is_alias flag for next main table name is alias
+     * @param XooNIpsJoinCriteria $join_criteria
      *
      * @return string
      **/
@@ -198,10 +199,10 @@ class XooNIpsFulltextCriteria extends CriteriaElement
     /**
      * constructor.
      *
-     * @param mixed  $column          full-text search column(s)
+     * @param string  $column          full-text search column(s)
      * @param string $expr            full-text search expression
      * @param bool   $in_boolean_mode flag for 'IN BOOLEAN MODE'
-     * @param mixed  $prefix          table prefix(es)
+     * @param string  $prefix          table prefix(es)
      **/
     public function __construct($column, $expr, $in_boolean_mode, $prefix = '')
     {

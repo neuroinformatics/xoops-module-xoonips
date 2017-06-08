@@ -95,7 +95,7 @@ function _xoonips_eventlog_text2csv($text)
  * convert text array to csv line.
  *
  * @param object $download XooNIpsDownload instance
- * @param array  $online   input text array
+ * @param array  $oneline   input text array
  *
  * @return string one line of csv text
  */
@@ -313,7 +313,7 @@ function &_xoonips_eventlog_get($start_time, $end_time, $event_type_id, $query_t
 /**
  * get user's names from database.
  *
- * @return array user's names(uname)
+ * @return string[] user's names(uname)
  */
 function _xoonips_eventlog_get_usermap()
 {
