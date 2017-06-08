@@ -26,6 +26,9 @@
 // ------------------------------------------------------------------------- //
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
+/**
+ * @param string $command
+ */
 function system_check_find_path($command)
 {
     $is_windows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');

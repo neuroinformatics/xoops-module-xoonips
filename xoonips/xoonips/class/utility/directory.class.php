@@ -338,7 +338,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
      * @param string &$path   path string, last 6 char must be 'XXXXXX'
      * @param bool   $is_file true if create file, false if create directory
      *
-     * @return mixed
+     * @return resource
      *               - false: failure
      *               - resource: created file resource
      *               - true: success to create directory

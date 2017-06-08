@@ -127,7 +127,7 @@ class XooNIpsXmlRpcLogicFactory
     /**
      * return XooNIpsLogicFactory instance.
      *
-     * @return XooNIpsLogicFactory
+     * @return XooNIpsXmlRpcLogicFactory
      */
     public static function &getInstance()
     {

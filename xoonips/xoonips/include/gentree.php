@@ -35,12 +35,13 @@
 /**
  * A child is added recursively. (Caution) not add parentXID.
  *
- * @param $parentXID parentXID
+ * @param integer $parentXID parentXID
  * @param $in  XID->index Conversion table
  * @param $childFinder  XID->array(childXID) Conversion table
  * @param $out Output place. Priority is given to the depth when searching.
  *             Brothers output in result sorted by sort_number.  $out[] = index
  *             ROOT's depth = 0 ($out don't contain ROOT.)
+ * @param integer $depth
  *
  * @return nothing
  */

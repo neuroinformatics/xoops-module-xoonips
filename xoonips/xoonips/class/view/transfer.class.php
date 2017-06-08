@@ -96,7 +96,7 @@ class XooNIpsViewTransfer extends XooNIpsView
      *
      * @param int $index_id
      *
-     * @return index path string like '/user/foo/bar'
+     * @return string path string like '/user/foo/bar'
      */
     public function get_index_path_by_index_id($index_id)
     {

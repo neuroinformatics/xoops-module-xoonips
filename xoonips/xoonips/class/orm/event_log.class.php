@@ -689,7 +689,6 @@ class XooNIpsOrmEventLogHandler extends XooNIpsTableObjectHandler
      * record request transfer item event (ETID_REQUEST_TRANSFER_ITEM: 27).
      *
      * @param int $item_id requested item id
-     * @param int $uid     requested to user id
      *
      * @return bool false if failure
      */
@@ -779,7 +778,7 @@ class XooNIpsOrmEventLogHandler extends XooNIpsTableObjectHandler
     /**
      * record group index to public event (ETID_GROUP_INDEX_TO_PUBLIC: 32).
      *
-     * @param int $pubilc_index_id public index id that add group index to
+     * @param int $public_index_id public index id that add group index to
      * @param int $group_index_id  group index id that is added to public index
      * @param int $gid
      *

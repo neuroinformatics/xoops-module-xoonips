@@ -118,7 +118,6 @@ class XooNIpsXmlRpcItemView extends XooNIpsXmlRpcViewElement
     }
 
     /**
-     * @param string $name field name
      * @param string $type type
      * @param mixed  $var  value of field
      *

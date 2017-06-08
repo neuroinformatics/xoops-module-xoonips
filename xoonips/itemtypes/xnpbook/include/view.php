@@ -71,6 +71,9 @@ function _xnpbook_get_detail_request($do_escape = false)
     return $detail;
 }
 
+/**
+ * @param string $msg
+ */
 function _xnpbook_append_message($html, $msg)
 {
     if ($html != '') {

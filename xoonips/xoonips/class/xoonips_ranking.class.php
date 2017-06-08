@@ -73,7 +73,7 @@ class XooNIpsRankingHandler
     /**
      * update rankings.
      *
-     * @return bool false if failure
+     * @return boolean|null false if failure
      */
     public function update()
     {
@@ -110,7 +110,7 @@ class XooNIpsRankingHandler
      *
      * @param bool $is_update flag for update mode
      *
-     * @return bool false if failure
+     * @return boolean|null false if failure
      */
     public function _recalc($is_update)
     {
@@ -191,7 +191,7 @@ class XooNIpsRankingHandler
      * @param object &$sub_days_criteria
      * @param bool   $update_sum         flag for update sum tables
      *
-     * @return bool false if failure
+     * @return boolean|null false if failure
      */
     public function _recalc_sql(&$add_days_criteria, &$sub_days_criteria, $update_sum)
     {

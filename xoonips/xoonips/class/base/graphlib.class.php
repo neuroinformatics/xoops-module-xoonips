@@ -1777,6 +1777,11 @@ class XooNIpsGraphLib
     }
 
     // function to draw line. would prefer to use gdBrush but this is not supported yet.
+
+    /**
+     * @param double $y0
+     * @param double $y1
+     */
     public function draw_brush_line($x0, $y0, $x1, $y1, $size, $type, $colour)
     {
         //$this->dbug("line: $x0, $y0, $x1, $y1");

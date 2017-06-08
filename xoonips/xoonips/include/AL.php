@@ -122,7 +122,7 @@ function _xnpal_insertIndexInternal($sid, $index, &$xid)
  * 2.update titles
  * 3.insert new titles
  *
- * @param caller name of caller function
+ * @param caller string of caller function
  * @param item_id ID of the item that be updated
  * @param titles string of new title or array of new titles(no need to be addslashes)
  *
@@ -171,7 +171,7 @@ function _xnpal_updateTitles($caller, $item_id, $titles)
  * 2.update keywords
  * 3.insert new keywords
  *
- * @param caller name of caller function
+ * @param caller string of caller function
  * @param item_id ID of the item that be updated
  * @param keywords string of new keyword or array of new keywords.(no need to be addslashes)
  *
@@ -220,13 +220,13 @@ function _xnpal_updateKeywords($caller, $item_id, $keywords)
  * @param sid session ID
  * @param item registration item information
  * @param itemid reference of registered item id
- * @param direct true if set last_update_date, creation_date of item parameter
+ * @param direct boolean if set last_update_date, creation_date of item parameter
  *
- * @return RES_OK
- * @return RES_ERROR
- * @return RES_NO_SUCH_SESSION
- * @return RES_DB_QUERY_ERROR
- * @return RES_NO_WRITE_ACCESS_RIGHT
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function _xnpal_insertItemInternal($sid, $item, &$itemid, $direct)
 {
@@ -312,6 +312,9 @@ function _xnpal_insertItemInternal($sid, $item, &$itemid, $direct)
     return $ret;
 }
 
+/**
+ * @param integer $uid
+ */
 function _xnpal_updateIndexInternal($sess_id, $uid, $newIndex, $oldIndex, $newParentIndex, $oldParentIndex)
 {
     global $xoopsDB;
@@ -569,8 +572,9 @@ function _xnpal_updateItemStatus()
  * just query SQL.
  *
  * @param sql sql
+ * @param string $functionName
  *
- * @return result_t
+ * @return integer
  */
 function _xnpal_querySimple($functionName, $sql)
 {
@@ -589,10 +593,11 @@ function _xnpal_querySimple($functionName, $sql)
 /**
  * query SQL and get first integer result (if value is null then use zero).
  *
- * @param sql sql
+ * @param sql string
  * @param uint reference of result variable
+ * @param string $functionName
  *
- * @return result_t
+ * @return integer
  */
 function _xnpal_queryGetUnsignedInt($functionName, $sql, &$uint)
 {
@@ -721,6 +726,9 @@ function _xnpal_isWritableInternal($sess_id, $uid, $index)
     return _xnpal_isWritableInternal2($sess_id, $uid, $index['owner_uid'], $index['owner_gid'], $index['open_level']);
 }
 
+/**
+ * @param integer $me
+ */
 function _xnpal_insertMetadataEvent($me, $iid)
 {
     global $xoopsDB;
@@ -780,7 +788,7 @@ function _xnpal_isActivatedBySession($sess_id)
  * @param string $sess_id  session id
  * @param int    $sess_uid returned use id
  *
- * @return bool false if failure
+ * @return integer false if failure
  */
 function _xnpal_sessionID2UID($sess_id, &$sess_uid)
 {
@@ -826,6 +834,9 @@ function _xnpal_sessionID2UID($sess_id, &$sess_uid)
     return RES_NO_SUCH_SESSION;
 }
 
+/**
+ * @param integer $xid
+ */
 function _xnpal_deleteIndexInternal($sess_id, $xid, &$index, &$descXID, &$affectedIIDs)
 {
     $functionName = 'deleteIndex';
@@ -952,9 +963,9 @@ function _xnpal_deleteIndexInternal($sess_id, $xid, &$index, &$descXID, &$affect
  *  it can uses tx(index), ti(item), tlink(group_user_link) for table names
  * @param uid  user id
  * @param indexes returened indexes
- * @param criteriaString order,limit part of SQL
+ * @param criteriaString string part of SQL
  *
- * @return bool RES_OK if success
+ * @return integer RES_OK if success
  */
 function _xnpal_getIndexesInternal($sess_id, $cond, $uid, &$indexes, $criteriaString)
 {
@@ -1314,10 +1325,10 @@ function xnp_get_related_to($sid, $parentid, &$itemids)
  * @param xids 承認待ちアイテムの登録先インデックスのIDを受け取る配列のリファレンス
  * @param iids 承認待ちアイテムのIDを受け取る配列のリファレンス
  *
- * @return RES_OK
- * @return RES_NO_SUCH_SESSION
- * @return RES_DB_QUERY_ERROR
- * @return RES_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_get_uncertified_link($sid, &$xids, &$iids)
 {
@@ -1368,11 +1379,11 @@ function xnp_get_uncertified_link($sid, &$xids, &$iids)
  * @param itemid 変更履歴を記録するアイテムのID
  * @param log ログ内容
  *
- * @return RES_OK
- * @return RES_NO_SUCH_SESSION
- * @return RES_DB_QUERY_ERROR
- * @return RES_NO_WRITE_ACCESS_RIGHT
- * @return RES_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_insert_change_log($sid, $itemid, $log)
 {
@@ -1409,7 +1420,7 @@ function xnp_insert_change_log($sid, $itemid, $log)
  * @param index 登録するインデックスキーワード情報(ハッシュ)
  * @param xid 登録したインデックスのItemIDを受け取る変数のリファレンス
  *
- * @return RES_OK 成功
+ * @return integer 成功
  */
 function xnp_insert_index($sid, $index, &$xid)
 {
@@ -1465,6 +1476,9 @@ function xnp_insert_index($sid, $index, &$xid)
     return $result;
 }
 
+/**
+ * @param integer $itemid
+ */
 function xnp_insert_item($sid, $item, &$itemid)
 {
     return _xnpal_insertItemInternal($sid, $item, $itemid, false);
@@ -1475,11 +1489,11 @@ function xnp_insert_item($sid, $item, &$itemid)
  *
  * XOOPSの管理者は常にtrueを返す.
  *
- * @param sid セッションID
- * @param uid 状態を取得したいユーザのUID
+ * @param sid string
+ * @param uid integer
  *
- * @return true  承認済み
- * @return false 未承認
+ * @return boolean  承認済み
+ * @return boolean 未承認
  */
 function xnp_is_activated($sid, $uid)
 {
@@ -1522,8 +1536,8 @@ function xnp_is_activated($sid, $uid)
  * @param sid セッションID
  * @param uid 問い合わせたいユーザのUID
  *
- * @return true  権限あり
- * @return false 権限なし
+ * @return boolean  権限あり
+ * @return boolean 権限なし
  */
 function xnp_is_moderator($sid, $uid)
 {
@@ -1566,8 +1580,8 @@ function xnp_is_moderator($sid, $uid)
  *
  * @param sid session id that is validated
  *
- * @return true  valid
- * @return false invalid
+ * @return boolean  valid
+ * @return boolean invalid
  */
 function xnp_is_valid_session_id($sid)
 {
@@ -1634,11 +1648,11 @@ function xnp_is_valid_session_id($sid)
  * @param xid 処理対象のインデックスのID
  * @param iid インデックスに追加したいアイテムのID
  *
- * @return RES_OK
- * @return RES_DB_QUERY_ERROR
- * @return RES_NO_SUCH_SESSION
- * @return RES_NO_WRITE_ACCESS_RIGHT
- * @return RES_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_register_item($sid, $xid, $iid)
 {
@@ -1692,7 +1706,7 @@ function xnp_register_item($sid, $xid, $iid)
  * @param from, until  選択範囲(1970/1/1からの経過秒数)  from=0なら最も古い時刻から until=0なら現在まで
  * @param set          set条件．":"区切りのindex[インデックスID]で階層をしめしたもの．指定した以降の階層にあるデータが対象となる
  * @param startIID     startIID<=item_idであるようなitem_idのみを得る
- * @param limit        返すitem_idの個数の上限
+ * @param limit        integer
  * @param iids         item_idを返す配列のリファレンス(item_idの小さいものから配列に入る)．書式は以下のとおり<br />
  *                        iids[0]['item_id'] :      item id<br />
  *                        iids[0]['item_type_id'] : item type id<br />
@@ -1709,6 +1723,8 @@ function xnp_register_item($sid, $xid, $iid)
  *                        iids[n]['item_id']<br />
  *                        iids[n]['item_type_id'] : item type id<br />
  *                        iids[n][ .]
+ * @param integer $from
+ * @param integer $until
  */
 function xnp_selective_harvesting($from, $until, $set, $startIID, $limit, &$iids)
 {
@@ -1809,7 +1825,7 @@ function xnp_selective_harvesting($from, $until, $set, $startIID, $limit, &$iids
  * @param xid1 入れ替えたいインデックスキーワードのXID
  * @param xid2 入れ替えたいインデックスキーワードのXID
  *
- * @return RES_OK 成功
+ * @return integer 成功
  */
 function xnp_swap_index_sort_number($sid, $xid1, $xid2)
 {
@@ -1879,11 +1895,11 @@ function xnp_swap_index_sort_number($sid, $xid1, $xid2)
  * @param xid 処理対象のインデックスのID
  * @param iid インデックスから削除したいアイテムのID
  *
- * @return RES_OK
- * @return RES_DB_QUERY_ERROR
- * @return RES_NO_SUCH_SESSION
- * @return RES_NO_WRITE_ACCESS_RIGHT
- * @return RES_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_unregister_item($sid, $xid, $iid)
 {
@@ -1933,11 +1949,11 @@ function xnp_unregister_item($sid, $xid, $iid)
  * @param sid セッションID
  * @param account 変更したいアカウント情報
  *
- * @return RES_OK
- * @return RES_NO_SUCH_SESSION
- * @return RES_DB_QUERY_ERROR
- * @return RES_NO_SUCH_USER
- * @return RES_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_update_account($sid, $account)
 {
@@ -2206,10 +2222,10 @@ function xnp_delete_index($sess_id, $index_id)
  * @param criteria 結果の範囲指定，ソート条件指定
  * @param iids 取得結果を書き込む配列
  *
- * @return RES_OK
- * @return RES_DB_NOT_INITIALIZED
- * @return RES_NO_SUCH_SESSION
- * @return RES_DB_QUERY_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_dump_item_id($sess_id, $criteria, &$iids)
 {
@@ -2281,10 +2297,10 @@ function xnp_dump_item_id($sess_id, $criteria, &$iids)
  * @param criteria 結果の範囲指定，ソート条件指定
  * @param uids ユーザのUIDの出力先配列
  *
- * @return RES_OK
- * @return RES_DB_NOT_INITIALIZED
- * @return RES_NO_SUCH_SESSION
- * @return RES_DB_QUERY_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  *
  * @see freeUID
  */
@@ -2322,10 +2338,10 @@ function xnp_dump_uids($sess_id, $criteria, &$uids)
  * @param iids item_idの配列
  * @param public_iids 取得結果を受け取る配列
  *
- * @return RES_OK
- * @return RES_DB_NOT_INITIALIZED
- * @return RES_NO_SUCH_SESSION
- * @return RES_DB_QUERY_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_extract_public_item_id($sess_id, $iids, &$public_iids)
 {
@@ -2387,6 +2403,7 @@ function xnp_get_account($sess_id, $uid, &$account)
 
 /**
  * 条件に一致するアカウントの情報を得る。<br />.
+ * @param integer[] $uids
  */
 function xnp_get_accounts($sess_id, $uids, $criteria, &$accounts)
 {
@@ -2479,7 +2496,7 @@ function xnp_get_accounts($sess_id, $uids, $criteria, &$accounts)
  * @param criteria 結果の範囲指定，ソート条件指定
  * @param indexes インデックスの一覧を返す配列
  *
- * @return RES_OK
+ * @return integer
  */
 function xnp_get_all_indexes($sess_id, $criteria, &$indexes)
 {
@@ -2501,10 +2518,10 @@ function xnp_get_all_indexes($sess_id, $criteria, &$indexes)
  * @param sid セッションID
  * @param xid 対象アイテムが登録されているインデックスのID
  * @param iid 対象アイテムのID
- * @param state 承認状態を受け取る引数
+ * @param state integer
  *
- * @return RES_OK
- * @return RES_NO_WRITE_ACCESS_RIGHT
+ * @return integer
+ * @return integer
  */
 function xnp_get_certify_state($sess_id, $xid, $iid, &$state)
 {
@@ -2528,11 +2545,11 @@ function xnp_get_certify_state($sess_id, $xid, $iid, &$state)
  * @param itemid 変更履歴を取得するアイテムのID
  * @param logs ログ内容を受け取る配列
  *
- * @return RES_OK
- * @return RES_NO_SUCH_SESSION
- * @return RES_NO_READ_ACCESS_RIGHT
- * @return RES_DB_NOT_INITIALIZED
- * @return RES_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_get_change_logs($sess_id, $item_id, &$logs)
 {
@@ -2570,12 +2587,12 @@ function xnp_get_change_logs($sess_id, $item_id, &$logs)
 /**
  * 設定名keyに対応する値をvauleに取得する．.
  *
- * @param key 設定キー名
+ * @param key string
  * @param value 設定値を受け取る変数
  *
- * @return RES_OK
- * @return RES_DB_QUERY_ERROR
- * @return RES_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_get_config_value($key, &$value)
 {
@@ -2610,7 +2627,7 @@ function xnp_get_config_value($key, &$value)
  * @param index_id 取得するインデックスのID
  * @param index 取得結果を受け取る連想配列
  *
- * @return RES_OK
+ * @return integer
  */
 function xnp_get_index($sess_id, $index_id, &$index)
 {
@@ -2672,7 +2689,7 @@ function xnp_get_index_id_by_item_id($sess_id, $item_id, &$xids)
  * @param criteria 結果の範囲指定，ソート条件指定
  * @param indexes 結果を受け取る配列
  *
- * @return RES_OK
+ * @return integer
  */
 function xnp_get_indexes($sess_id, $parent_xid, $criteria, &$indexes)
 {
@@ -2696,11 +2713,11 @@ function xnp_get_indexes($sess_id, $parent_xid, $criteria, &$indexes)
  * @param iid 取得したいアイテムのID
  * @param item 結果のアイテム情報を受け取る連想配列
  *
- * @return RES_OK
- * @return RES_DB_NOT_INITIALIZED
- * @return RES_NO_SUCH_SESSION
- * @return RES_NO_SUCH_ITEM
- * @return RES_DB_QUERY_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_get_item($sess_id, $iid, &$item)
 {
@@ -2778,10 +2795,10 @@ function xnp_get_item_count_group_by_index($sess_id, &$counts)
  *
  * @param sess_id セッションID
  * @param iid チェック対象となるアイテムのID
- * @param op アクセスの種類
+ * @param op integer
  *
- * @return true  権限あり
- * @return false 権限なし
+ * @return boolean  権限あり
+ * @return boolean 権限なし
  */
 function xnp_get_item_permission($sess_id, $iid, $op)
 {
@@ -2858,10 +2875,10 @@ function xnp_get_item_permission($sess_id, $iid, $op)
  *
  * @param sid セッションID
  * @param xid チェック対象となるインデックスのID
- * @param op アクセスの種類
+ * @param op integer
  *
- * @return true  権限あり
- * @return false 権限なし
+ * @return boolean  権限あり
+ * @return boolean 権限なし
  */
 function xnp_get_index_permission($sess_id, $xid, $op)
 {
@@ -2903,8 +2920,8 @@ function xnp_get_index_permission($sess_id, $xid, $op)
  * @param iid  item ID
  * @param status  状態を受け取る連想配列。以下のキーを含む。 created_timestamp, modified_timestamp, deleted_timestamp, is_deleted
  *
- * @return RES_OK
- * @return RES_NO_SUCH_ITEM
+ * @return integer
+ * @return integer
  */
 function xnp_get_item_status($iid, &$status)
 {
@@ -2934,11 +2951,11 @@ function xnp_get_item_status($iid, &$status)
 /**
  * @param types
  *
- * @return RES_OK
- * @return RES_DB_NOT_INITIALIZED
- * @return RES_NO_SUCH_SESSION
- * @return RES_DB_QUERY_ERROR
- * @return RES_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_get_item_types(&$types)
 {
@@ -2968,10 +2985,10 @@ function xnp_get_item_types(&$types)
  * @param criteria 結果の範囲指定，ソート条件指定
  * @param items 検索結果のを書き込む配列
  *
- * @return RES_OK
- * @return RES_DB_NOT_INITIALIZED
- * @return RES_NO_SUCH_SESSION
- * @return RES_DB_QUERY_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_get_items($sess_id, $iids, $criteria, &$items)
 {

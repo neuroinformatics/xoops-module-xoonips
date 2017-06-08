@@ -48,7 +48,6 @@ class XooNIpsOrmAbstractRankingHandler extends XooNIpsTableObjectHandler
     /**
      * get object column names.
      *
-     * @param array $columns
      */
     public function get_columns()
     {
@@ -58,7 +57,7 @@ class XooNIpsOrmAbstractRankingHandler extends XooNIpsTableObjectHandler
     /**
      * set object column names.
      *
-     * @param array $columns
+     * @param string[] $columns
      */
     public function _set_columns($columns)
     {
@@ -76,7 +75,7 @@ class XooNIpsOrmAbstractRankingHandler extends XooNIpsTableObjectHandler
     /**
      * copy ranking data from ranking_sum_* table for rebuild rankings.
      *
-     * @return bool FALSE if failed
+     * @return null|resource FALSE if failed
      */
     public function copy_from_sum_table()
     {

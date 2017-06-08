@@ -1140,6 +1140,7 @@ if (!class_exists('patTemplate')) {
          *
          * @param string $name  name of the template
          * @param string &$temp content of the parsed Template
+         * @param string $temp
          *
          * @see parseTemplate(), addGlobalVar(), addGlobalVars()
          */
@@ -1442,7 +1443,6 @@ if (!class_exists('patTemplate')) {
          * return value depends on iteration value
          *
          * @param string $name  name of the template
-         * @param int    $index iteration number
          *
          * @return string $content    plain content of the template
          */
@@ -1506,9 +1506,6 @@ if (!class_exists('patTemplate')) {
          *
          *    @param string $template name of the template
          *    @param string $var      name of the variable
-         *    @param int    $index    no of repetition
-         *
-         *    @return mixed    $value        value of the variable / false if it doesn't exist
          */
         public function getVar($template, $var)
         {

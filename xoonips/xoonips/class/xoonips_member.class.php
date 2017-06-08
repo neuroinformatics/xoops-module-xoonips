@@ -71,7 +71,7 @@ class XooNIpsMemberHandler
      *
      * @param uid user ID
      *
-     * @return true if $uid is moderator. false otherwise.
+     * @return boolean if $uid is moderator. false otherwise.
      */
     public function isModerator($uid)
     {
@@ -96,7 +96,7 @@ class XooNIpsMemberHandler
      *
      * @param uid user ID
      *
-     * @return true if $uid is xoonips admin. false otherwise.
+     * @return boolean if $uid is xoonips admin. false otherwise.
      */
     public function isAdmin($uid)
     {

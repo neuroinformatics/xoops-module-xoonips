@@ -171,7 +171,6 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
      * create url string for Amazon API.
      *
      * @param string $url    fetch url
-     * @param array  $params url encoded parameters
      *
      * @return string created url string
      */
@@ -198,8 +197,6 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
     /**
      * override function of start element handler.
      *
-     * @param resource $parser parser resource
-     * @param string   $tag    xml tag
      */
     public function parser_start_element($attribs)
     {
@@ -225,8 +222,6 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
     /**
      * override function of end element handler.
      *
-     * @param resource $parser parser resource
-     * @param string   $tag    xml tag
      */
     public function parser_end_element()
     {
@@ -243,7 +238,6 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
     /**
      * override function of character data handler.
      *
-     * @param resource $parser parser resource
      * @param string   $cdata  character data
      */
     public function parser_character_data($cdata)

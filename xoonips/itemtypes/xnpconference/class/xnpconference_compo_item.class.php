@@ -55,7 +55,7 @@ class XNPConferenceCompoHandler extends XooNIpsItemInfoCompoHandler
      *                     XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
      *                     or XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LISTL
      *
-     * @return template filename
+     * @return string filename
      */
     public function getTemplateFileName($type)
     {
@@ -145,7 +145,7 @@ class XNPConferenceCompoHandler extends XooNIpsItemInfoCompoHandler
     /**
      * get confernece date string.
      *
-     * @param XooNIpsConferenceItemDetail $detai
+     * @param XooNIpsConferenceItemDetail $detail
      *
      * @return string conference date(from and to)
      */

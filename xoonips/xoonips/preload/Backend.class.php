@@ -55,6 +55,10 @@ class Xoonips_Backend extends XCube_ActionFilter
         $ib_handler->close($res);
     }
 
+    /**
+     * @param integer $item_id
+     * @param string $fmt
+     */
     public function _getItemTitle($item_id, $fmt)
     {
         $it_handler = &xoonips_getormhandler('xoonips', 'title');
@@ -67,6 +71,10 @@ class Xoonips_Backend extends XCube_ActionFilter
         return $title;
     }
 
+    /**
+     * @param integer $item_id
+     * @param string $fmt
+     */
     public function _getItemUrl($item_id, $doi, $fmt)
     {
         $url = XOOPS_URL.'/modules/xoonips/detail.php?';

@@ -74,6 +74,9 @@ function xnpfilesGetDetailInformation($item_id)
     return $detail;
 }
 
+/**
+ * @param string $columns
+ */
 function xnpfilesGetDetailDistinctInfo($columns)
 {
     global $xoopsDB;
@@ -639,6 +642,9 @@ function xnpfilesGetAdvancedSearchBlock(&$search_var)
     return $tpl->fetch('db:xnpfiles_search_block.html');
 }
 
+/**
+ * @param string $name
+ */
 function xnpfilesGetAttachmentFilenameAdvancedSearchBlock($name)
 {
     // create html
@@ -647,6 +653,9 @@ function xnpfilesGetAttachmentFilenameAdvancedSearchBlock($name)
     return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html);
 }
 
+/**
+ * @param string $name
+ */
 function xnpfilesGetAttachmentMimetypeAdvancedSearchBlock($name)
 {
     // get attachment file
@@ -670,6 +679,9 @@ function xnpfilesGetAttachmentMimetypeAdvancedSearchBlock($name)
     return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html);
 }
 
+/**
+ * @param string $name
+ */
 function xnpfilesGetAttachmentFiletypeAdvancedSearchBlock($name)
 {
     // get attachment file
@@ -720,7 +732,7 @@ function xnpfilesGetDetailInformationTotalSize($iids)
  * @param int      $item_id     target item id
  * @param bool     $attachment  true if export attachment or image file
  *
- * @return bool false if failure
+ * @return null|boolean false if failure
  */
 function xnpfilesExportItem($export_path, $fhdl, $item_id, $attachment)
 {

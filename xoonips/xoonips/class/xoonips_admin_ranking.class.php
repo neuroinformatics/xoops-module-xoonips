@@ -69,7 +69,7 @@ class XooNIpsAdminRankingHandler extends XooNIpsRankingHandler
     /**
      * rebuild ranking data.
      *
-     * @return bool false if failure
+     * @return boolean|null false if failure
      */
     public function rebuild()
     {
@@ -230,7 +230,7 @@ class XooNIpsAdminRankingHandler extends XooNIpsRankingHandler
      *
      * @param string $file_path uploaded sum file path
      *
-     * @return bool false if failure
+     * @return null|boolean false if failure
      */
     public function load_sum_file($file_path)
     {
@@ -302,7 +302,7 @@ class XooNIpsAdminRankingHandler extends XooNIpsRankingHandler
     /**
      * clear sum data.
      *
-     * @return bool false if failure
+     * @return boolean|null false if failure
      */
     public function clear_sum_data()
     {

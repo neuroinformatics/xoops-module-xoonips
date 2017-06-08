@@ -44,6 +44,9 @@ class ListRecordsHandler extends HarvesterHandler
     public $_cdata_buf;
     public $_datestamp;
 
+    /**
+     * @param string $_metadataPrefix
+     */
     public function __construct($_parser, $_baseURL, $_metadataPrefix)
     {
         parent::__construct($_parser);
@@ -217,6 +220,9 @@ class ListRecordsHandler extends HarvesterHandler
         return $this->identifier;
     }
 
+    /**
+     * @param string $dateString
+     */
     public function dateForSort($dateString)
     {
         $textutil = &xoonips_getutility('text');
@@ -308,6 +314,9 @@ class ListRecordsHandler extends HarvesterHandler
         );
     }
 
+    /**
+     * @param string $namespacePrefix
+     */
     public function getNamespaceUri($namespacePrefix)
     {
         if (array_key_exists($namespacePrefix, $this->_namespaces)) {

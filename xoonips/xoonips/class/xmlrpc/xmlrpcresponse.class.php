@@ -106,11 +106,17 @@ class XooNIpsXmlRpcResponse
         return $this->get('success');
     }
 
+    /**
+     * @param string $key
+     */
     public function &get($key)
     {
         return $this->vars[$key];
     }
 
+    /**
+     * @param string $key
+     */
     public function set($key, $value)
     {
         if (empty($key)) {

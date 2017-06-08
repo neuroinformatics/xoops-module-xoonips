@@ -392,6 +392,9 @@ class XooNIpsLogicSearchItem extends XooNIpsLogic
         }
     }
 
+    /**
+     * @param string $query
+     */
     public function keywordSearch(&$error, $search_cache_id, $uid, $query)
     {
         $search_cache_item_handler = &xoonips_getormhandler('xoonips', 'search_cache_item');

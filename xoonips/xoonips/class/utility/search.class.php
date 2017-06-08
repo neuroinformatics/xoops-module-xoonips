@@ -352,6 +352,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
      * make force unmatch criteria for fatal error.
      *
      * @param string $field
+     * @param string $prefix
      */
     public function &_make_force_unmatch_criteria($field, $prefix)
     {
@@ -429,9 +430,8 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
      * normalize keyword search string.
      *
      * @param string $text     'UTF-8' encoded input text
-     * @param string $encoding input text encoding
      *
-     * @return bool false if empty query
+     * @return string false if empty query
      */
     public function _normalize_keyword_search_string($text)
     {
@@ -715,7 +715,6 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
      * strip double quote from token.
      *
      * @param string &$token   'UTF-8' encoded input text
-     * @param string $encoding text encoding of $token
      *
      * @return bool true if unquoted
      */
@@ -785,7 +784,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
     /**
      * load stop words.
      *
-     * @return bool false if faiure
+     * @return boolean|null false if faiure
      */
     public function _load_stopwords()
     {

@@ -214,7 +214,7 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
      * @param path would be deleted. if path omitted,
      *  zip extracted dir is removed
      *
-     * @return true if succeed. false if failed removing files or directories.
+     * @return boolean if succeed. false if failed removing files or directories.
      */
     public function _clean_files($path = null)
     {

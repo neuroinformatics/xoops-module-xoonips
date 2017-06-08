@@ -254,7 +254,7 @@ class XooNIpsIndexHandler
      * @param string $perm            permission: 'read', 'write', 'delete' or 'export'
      * @param array  &$iid_perm_cache item ids access permission cache
      *
-     * @return array multiple count items
+     * @return string multiple count items
      *               array(
      *               $xid1 => array( $iid1_1, $iid1_2,... ),
      *               $xid2 => array( $iid2_1,... ),

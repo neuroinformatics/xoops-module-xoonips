@@ -635,7 +635,6 @@ function xnpbinderGetMetadata($prefix, $item_id)
 /**
  * return url of child items of a binder.
  *
- * @param int $item_id item id of binder
  * @reutrn array string of URL of child items
  */
 function xnpbidner_get_child_item_urls($binder_item_id)
@@ -688,11 +687,11 @@ function xnpbinder_get_xoonips_item_id()
  * @param cri
  * @param iids array of item ids that is in a binder
  *
- * @return RES_OK
- * @return RES_DB_NOT_INITIALIZED
- * @return RES_NO_SUCH_SESSION
- * @return RES_DB_QUERY_ERROR
- * @return RES_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnp_get_item_id_by_binder_id($sess_id, $binder_id, $cri, &$iids)
 {
@@ -723,7 +722,7 @@ function xnp_get_item_id_by_binder_id($sess_id, $binder_id, $cri, &$iids)
 /**
  * select items from given items by specified open_level.
  *
- * @param $open_level integer OL_PUBLIC|OL_GROUP_ONLY|OL_PRIVATE
+ * @param integer $open_level integer OL_PUBLIC|OL_GROUP_ONLY|OL_PRIVATE
  *
  * @return array of item id
  */
@@ -926,7 +925,7 @@ function xnpbinder_extract_public_item_id($item_ids)
  * return id of items that is registerd to  specified open_level index.
  *
  * @param $item_ids array integer item id
- * @param $open_level integer OL_PUBLIC, OL_GROUP_ONLY, OL_PRIVATE
+ * @param integer $open_level integer OL_PUBLIC, OL_GROUP_ONLY, OL_PRIVATE
  *
  * @return array integer
  */
@@ -948,7 +947,7 @@ function xnpbinder_extract_item_id($item_ids, $open_level)
 /**
  * create 'WHERE IN' Criteria from INTEGER ARRAY.
  *
- * @param $column see Criteria
+ * @param string $column see Criteria
  * @param $vars array of integer
  * @param $operator see Criteria
  * @param $prefix see Criteria

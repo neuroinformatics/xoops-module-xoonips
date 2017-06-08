@@ -145,7 +145,7 @@ function available_space_of_group_item($gid)
  *
  * @param gid id of group to be checked
  *
- * @return true if available space is enough
+ * @return boolean if available space is enough
  */
 function check_group_item_storage_limit($gid)
 {

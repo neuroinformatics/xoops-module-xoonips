@@ -90,6 +90,7 @@ class XooNIpsImportItemCollection
 
     /**
      * set logging option.
+     * @param boolean $option
      */
     public function setLoggingOption($option)
     {
@@ -155,7 +156,7 @@ class XooNIpsImportItemCollection
     /**
      * * add error message.
      *
-     * @param $msg string error message
+     * @param string $msg string error message
      */
     public function addError($msg)
     {
@@ -278,6 +279,11 @@ class XooNIpsImportItem extends XoopsObject
         return $this->_error_codes;
     }
 
+    /**
+     * @param integer $line
+     * @param string $file
+     * @param string $func
+     */
     public function getErrorAt($line, $file, $func)
     {
         return '';
@@ -461,7 +467,7 @@ class XooNIpsImportItem extends XoopsObject
     /**
      * get item id of update import.
      *
-     * @return int item id to update
+     * @return boolean item id to update
      */
     public function getUpdateItemId()
     {
@@ -491,7 +497,7 @@ class XooNIpsImportItem extends XoopsObject
     /**
      * set pseudo item id.
      *
-     * @param $id integer
+     * @param integer $id integer
      */
     public function setPseudoId($id)
     {
@@ -571,6 +577,9 @@ class XooNIpsImportItem extends XoopsObject
         $this->_item->initVar($key, $val, $required);
     }
 
+    /**
+     * @param string $key
+     */
     public function setVar($key, $val)
     {
         $this->_item->setVar($key, $val);
@@ -581,6 +590,9 @@ class XooNIpsImportItem extends XoopsObject
         return $this->_item->getVars();
     }
 
+    /**
+     * @param string $key
+     */
     public function &getVar($key)
     {
         return $this->_item->getVar($key);
@@ -727,7 +739,7 @@ class XooNIpsImportItemHandler
     /**
      * get directory path which attachment file is in.
      *
-     * @return bool directory path which attachment file is in
+     * @return string directory path which attachment file is in
      */
     public function getAttachmentDirectoryPath()
     {
@@ -835,7 +847,7 @@ class XooNIpsImportItemHandler
     /**
      * @param $import_item reference of XooNIpsImportItem object
      *
-     * @return array integer of item ids
+     * @return boolean integer of item ids
      */
     public function _equals_array($a1, $a2)
     {
@@ -1450,6 +1462,7 @@ class XooNIpsImportItemHandler
      * change expression of ISO8601 to UTC. return false when we can't change.
      * Usage: _iso8601_to_utc( "2005-08-01T12:00:00Z" );
      * Usage: _iso8601_to_utc( "2005-08-01" );.
+     * @param string $str
      */
     public function _iso8601_to_utc($str)
     {
@@ -1722,7 +1735,7 @@ class XooNIpsImportItemHandler
      *
      * @param $str index path like '/Public/Parent/Child' (must be UTF-8)
      *
-     * @return array of indexes;
+     * @return string[] of indexes;
      */
     public function _decomposite_index_path($str)
     {
@@ -1755,7 +1768,7 @@ class XooNIpsImportItemHandler
      *  (that is placed relatively from $base_index_id).
      *
      * @param $base_index_id integer index_id of base index
-     * @param $indexstr string index path string like 'foo/bar/xxx'
+     * @param string $indexstr string index path string like 'foo/bar/xxx'
      *
      * @return int index id or false
      */
@@ -1799,7 +1812,7 @@ class XooNIpsImportItemHandler
      * if $str is relative path, $base_index_path must be given.
      * regards as private if $open_level is null.
      *
-     * @param $str index path like
+     * @param string $str index path like
      * '/Public/Parent/Child'(absolute)
      * @param $user XoopsUser of import user(need to convert
      * /Private to user's private index)
@@ -1859,7 +1872,7 @@ class XooNIpsImportItemHandler
      * (ex: index_array2index_id <id of root index>, array( 'foo', 'bar' ),
      *  'group' ); you can get group index id of /foo/bar ).
      *
-     * @param index_id parent index id
+     * @param index_id integer index id
      * @param indexes array of index hierarchy
      * @param open_level open_level of index of target index
      *  (public|group|private)
@@ -2001,9 +2014,9 @@ class XooNIpsImportItemHandler
      * Get max length of the field.
      * It returns max length in bytes defined in XooNIpsObject.
      *
-     * @param $item
-     * @param $ormname string orm name
-     * @param $field_name string field name
+     * @param XooNIpsImportItem $item
+     * @param string $ormname string orm name
+     * @param string $field_name string field name
      *
      * @return int max length of the field in bytes
      */

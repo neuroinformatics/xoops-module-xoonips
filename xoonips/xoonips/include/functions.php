@@ -53,6 +53,7 @@ function xoonips_get_version()
  *
  * @param[in] $module string module name
  * @param[in] $name string handler name
+ * @param string $name
  *
  * @return reference of handler or false
  */
@@ -271,6 +272,9 @@ function &xoonips_get_xoops_configs($category)
     return $cache_configs[$category];
 }
 
+/**
+ * @param string $str
+ */
 function ISO8601toUnixTimestamp($str)
 {
     if (preg_match('/^([0-9]{4})(-?([0-9]{2})(-?([0-9]{2})(T([0-9]{2}):([0-9]{2})(:([0-9]{2}))?(Z|([-+])([0-9]{2})([0-9]{2}))?)?)?)?$/', $str, $match) == 1) {
@@ -347,6 +351,11 @@ function ISO8601toUnixTimestamp($str)
 
     return $tm;
 }
+/**
+ * @param string $year
+ * @param integer $month
+ * @param integer $day
+ */
 function getDayOfWeek($year, $month, $day)
 {
     return gmdate('w', gmmktime(0, 0, 0, $month, $day, $year));
@@ -370,7 +379,7 @@ function xoonips_get_server_charset()
 /**
  * get unicode character conversion map.
  *
- * @return conversion map for mb_decode_numericentity
+ * @return integer[] map for mb_decode_numericentity
  */
 function xoonips_get_conversion_map()
 {
@@ -381,7 +390,7 @@ function xoonips_get_conversion_map()
  * get unicode character conversion map to ascii.
  * useful to convert UTF-8 to ASCII + numeric character entity.
  *
- * @return conversion map
+ * @return integer[] map
  */
 function xoonips_get_conversion_map_to_ascii()
 {
@@ -624,6 +633,7 @@ function xoonips_is_multiple_field_too_long($ormObjects, $module, $name)
  *
  * @param XooNIpsTableObject[] $ormObjects orm to get template vars
  * @param string               $module     module name
+ * @param string $name
  * @pamra string               $name       field name that is used as value to show
  */
 function xoonips_get_multiple_field_template_vars($ormObjects, $module, $name)
@@ -662,6 +672,12 @@ function xoonips_get_multiple_field_template_vars($ormObjects, $module, $name)
     return $vars;
 }
 
+/**
+ * @param string $module
+ * @param string $name
+ *
+ * @return XooNIpsTableObject[]
+ */
 function xoonips_get_orm_from_post($module, $name)
 {
     $formdata = &xoonips_getutility('formdata');

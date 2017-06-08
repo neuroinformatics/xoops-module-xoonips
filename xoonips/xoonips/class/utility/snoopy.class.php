@@ -804,6 +804,9 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
     Output:
     \*======================================================================*/
 
+    /**
+     * @param string $http_method
+     */
     public function _httprequest($url, $fp, $URI, $http_method, $content_type = '', $body = '')
     {
         $cookie_headers = '';
@@ -978,6 +981,9 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
     Output:
     \*======================================================================*/
 
+    /**
+     * @param string $http_method
+     */
     public function _httpsrequest($url, $URI, $http_method, $content_type = '', $body = '')
     {
         if ($this->passcookies && $this->_redirectaddr) {
@@ -1236,6 +1242,10 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
     Output:		post body
     \*======================================================================*/
 
+    /**
+     * @param string $formvars
+     * @param string $formfiles
+     */
     public function _prepare_post_body($formvars, $formfiles)
     {
         settype($formvars, 'array');

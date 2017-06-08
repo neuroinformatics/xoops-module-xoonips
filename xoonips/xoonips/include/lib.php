@@ -87,6 +87,9 @@ function xnpGetBasicInformationConfirmBlock($item_id)
     return $itemlib_obj->getBasicInformationConfirmBlock($is_register);
 }
 
+/**
+ * @param integer $item_id
+ */
 function xnpInsertBasicInformation(&$item_id)
 {
     $itemlib_handler = &XooNIpsItemLibraryHandler::getInstance();
@@ -161,7 +164,7 @@ function indexcmp($a, $b)
  * return array of ListBlock's HTML from array of item_id.
  * result doesn't contain array data on item_id not existing or item_id not accessible.
  *
- * @param $itemid ID of item or array of item id
+ * @param integer $itemid ID of item or array of item id
  *
  * @return array( itemid => array of HTML made by "name of itemtype>GetListBlock", ...Repeat... )
  */
@@ -257,6 +260,7 @@ function xnpIsCommaSeparatedNumber($str)
 /**
  * get directory name stored attachment files that related to items.
  *  not contain '/' in end of character strings.
+ * @return string
  */
 function xnpGetUploadDir()
 {
@@ -289,7 +293,7 @@ function xnpGetUploadFilePath($file_id)
 /**
  * get corresponding culumns to condition from 'prefix("xoonips_file")' table.
  *
- * @param columns acquired culumns
+ * @param columns string culumns
  * @param condition query of SQL. t_file and t_file_type are possible to use for tablename.
  * ex.  $files = xnpGetFileInfo( "t_file.file_id, t_file.", "t_file_type.name='preview' and is_deleted=0 and ( item_id=$item_id or sid = $sid )" );
  *
@@ -330,8 +334,8 @@ function xnpGetFileInfo($columns, $condition, $item_id)
  * @param item_id item id of examined object
  * @param indexes return details of each index
  *
- * @return RES_OK
- * @return RES_ERROR
+ * @return integer
+ * @return integer
  */
 function xnpGetIndexes($xnpsid, $item_id, &$indexes)
 {
@@ -386,6 +390,9 @@ function xnpGetIndexPathServerString($xnpsid, $xid)
     return '/ '.implode(' / ', $dirArrayR);
 }
 
+/**
+ * @param string $key
+ */
 function xnpCreateHidden($key, $val, $do_escape = true)
 {
     if ($do_escape) {
@@ -411,6 +418,9 @@ function xnpCreateHidden($key, $val, $do_escape = true)
     ...
 */
 
+/**
+ * @param integer $col
+ */
 function xnpMakeTable($in, $col)
 {
     $inLen = count($in);
@@ -596,7 +606,7 @@ function xnpGetAttachmentDetailBlock($item_id, $name)
  * @param download_file_id if non-false value, automatically push download button of this file_id
  * @param name file type name
  * @param attachment_dl_notify 0:don't notify  1:notify(need download-notification agreeemnt)
- * @param use_license use license(need license agreement)
+ * @param use_license boolean license(need license agreement)
  * @param use_cc use creative commons license
  * @param rights license text(use_cc=0) or license html(use_cc=1)
  */
@@ -769,7 +779,7 @@ function xnpGetAttachmentFiletypeBlock($item_id, $name)
  * get TextFileBlock for detail page.
  *
  * @param item_id item_id
- * @param name name of file type
+ * @param name string of file type
  */
 function xnpGetTextFileDetailBlock($item_id, $name, $text)
 {
@@ -1137,7 +1147,7 @@ function xnpGetAttachmentEditBlock($item_id, $name)
 }
 
 /**
- * @param dirname module dirname
+ * @param dirname string dirname
  * @param option download limit option(0:everyone, 1:login user only)
  */
 function xnpGetDownloadLimitationOptionEditBlock($dirname, $option)
@@ -1184,6 +1194,9 @@ function xnpGetDownloadLimitationOptionRegisterBlock($dirname, $option = 0)
     return array('name' => _MD_XOONIPS_DOWNLOAD_LIMITATION_OPTION_LABEL, 'value' => $html);
 }
 
+/**
+ * @param string $dirname
+ */
 function xnpGetDownloadLimitationOptionConfirmBlock($dirname)
 {
     global $xoopsDB;
@@ -1215,7 +1228,7 @@ function xnpGetDownloadLimitationOptionConfirmBlock($dirname)
 }
 
 /**
- * @param dirname module dirname
+ * @param dirname string dirname
  * @param option download limit option(0:everyone, 1:login user only)
  */
 function xnpGetDownloadNotificationOptionEditBlock($dirname, $option)
@@ -1256,6 +1269,9 @@ function xnpGetDownloadNotificationOptionRegisterBlock($dirname, $option = 0)
 
     return array('name' => _MD_XOONIPS_DOWNLOAD_NOTIFICATION_OPTION_LABEL, 'value' => $html);
 }
+/**
+ * @param string $dirname
+ */
 function xnpGetDownloadNotificationOptionConfirmBlock($dirname)
 {
     global $xoopsDB;
@@ -1348,11 +1364,17 @@ function xnpGetPreviewPrinterFriendlyBlock($item_id)
     return xnpGetPreviewDetailBlock($item_id);
 }
 
+/**
+ * @param string $name
+ */
 function xnpGetAttachmentPrinterFriendlyBlock($item_id, $name)
 {
     return xnpGetAttachmentDetailBlock($item_id, $name);
 }
 
+/**
+ * @param string $name
+ */
 function xnpGetTextFilePrinterFriendlyBlock($item_id, $name, $text)
 {
     (method_exists('MyTextSanitizer', 'sGetInstance') and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
@@ -1366,6 +1388,9 @@ function xnpGetIndexPrinterFriendlyBlock($item_id)
     return xnpGetIndexDetailBlock($item_id, false);
 }
 
+/**
+ * @return string
+ */
 function xnpWithinWithoutHtml($within, $without)
 {
     $textutil = &xoonips_getutility('text');
@@ -1411,6 +1436,9 @@ function xnpGetPreviewConfirmBlock($item_id)
     return array('name' => _MD_XOONIPS_ITEM_PREVIEW_LABEL, 'value' => $html);
 }
 
+/**
+ * @param string $name
+ */
 function xnpGetAttachmentConfirmBlock($item_id, $name)
 {
     $textutil = &xoonips_getutility('text');
@@ -1465,6 +1493,9 @@ function xnpGetAttachmentConfirmBlock($item_id, $name)
     return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html);
 }
 
+/**
+ * @param string $name
+ */
 function xnpGetTextFileConfirmBlock($item_id, $name, $maxlen = 65535)
 {
     $textutil = &xoonips_getutility('text');
@@ -1508,11 +1539,17 @@ function xnpGetPreviewRegisterBlock()
     return xnpGetPreviewEditBlock(false);
 }
 
+/**
+ * @param string $name
+ */
 function xnpGetAttachmentRegisterBlock($name)
 {
     return xnpGetAttachmentEditBlock(false, $name);
 }
 
+/**
+ * @param string $name
+ */
 function xnpGetTextFileRegisterBlock($name)
 {
     return xnpGetTextFileEditBlock(false, $name, '');
@@ -1659,6 +1696,9 @@ function xnpUpdatePreview($item_id)
     return true;
 }
 
+/**
+ * @param string $name
+ */
 function xnpUpdateAttachment($item_id, $name)
 {
     global $xoopsDB;
@@ -1711,7 +1751,7 @@ function xnpUpdateAttachment($item_id, $name)
 /**
  * function of getting readme/rights contents on the following page of confirm.
  *
- * @param name  readme/rights
+ * @param name  string
  *
  * @return contents empty character strings in error
  */
@@ -1722,6 +1762,9 @@ function xnpGetTextFile($name)
     return $formdata->getValue('post', $name.'EncText', 's', false);
 }
 
+/**
+ * @param string $moduleName
+ */
 function xnpGetBasicInformationAdvancedSearchBlock($moduleName, &$search_var)
 {
     global $xoopsTpl;
@@ -1922,8 +1965,8 @@ function xnpUnsplitKeywords2($elements, $wheres)
 /**
  * return query of SQL generated from input keywords. If there is no condition, return "".
  *
- * @param dbVarName    table name, and column name in database
- * @param postVarName  Name of variables posted
+ * @param dbVarName    string name, and column name in database
+ * @param postVarName  string of variables posted
  */
 function xnpGetKeywordQuery($dbVarName, $postVarName)
 {
@@ -1973,6 +2016,9 @@ function xnpGetKeywordsQueries($dbVarNames, $keywords)
 /*
     avoid a number to hit numeric character reference(e.g. keyword '123' hits '&#11234;' ).
 */
+/**
+ * @param string $escKeyword
+ */
 function xnpGetKeywordQueryEntity($dbVarName, $escKeyword)
 {
     if (preg_match("/\d{1,8}/", $escKeyword)) {
@@ -2006,6 +2052,8 @@ function xnpGetKeywordQueryEntity($dbVarName, $escKeyword)
 /**
  * generate query of SQL
  "ifnull(y,0)*10000+ifnull(m,0)*100+ifnull(d,0)" is compared.
+ * @param string $dbVarName
+ * @param string $postVarName
  */
 function xnpGetFromQuery($dbVarName, $postVarName)
 {
@@ -2023,6 +2071,10 @@ function xnpGetFromQuery($dbVarName, $postVarName)
     return " ( ($yyyymmdd <= IFNULL(${dbVarName}_year,0)*10000 + IFNULL(${dbVarName}_month,0)*100 + IFNULL(${dbVarName}_mday,0)) OR (${dbVarName}_mday = 0 AND $yyyymm <= IFNULL(${dbVarName}_year,0)*10000 + IFNULL(${dbVarName}_month,0)*100) OR (${dbVarName}_month = 0 AND ${dbVarName}_mday = 0 AND $yyyy <= IFNULL(${dbVarName}_year,0)*10000) )";
 }
 
+/**
+ * @param string $dbVarName
+ * @param string $postVarName
+ */
 function xnpGetToQuery($dbVarName, $postVarName)
 {
     $formdata = &xoonips_getutility('formdata');
@@ -2049,9 +2101,9 @@ function xnpGetToQuery($dbVarName, $postVarName)
 /**
  * return query of SQL for retrieve Basic Information in Advanced Search. If there is no condition in input, return empty character strings.
  *
- * @param moduleName name of module
+ * @param moduleName string of module
  *
- * @return query of SQL
+ * @return string of SQL
  */
 function xnpGetBasicInformationAdvancedSearchQuery($moduleName)
 {
@@ -2100,7 +2152,7 @@ function xnpGetBasicInformationAdvancedSearchQuery($moduleName)
  *
  * @param iids  array of item_id
  *
- * @return sum of file size
+ * @return double of file size
  */
 function xnpGetTotalFileSize($iids)
 {
@@ -2126,8 +2178,8 @@ function xnpGetTotalFileSize($iids)
  *
  * @param item_id ID of retrieval item
  *
- * @return true  item has index waiting for certified(Pending)
- * @return false item has no index waiting for certified
+ * @return boolean  item has index waiting for certified(Pending)
+ * @return boolean item has no index waiting for certified
  */
 function xnpIsPending($item_id)
 {
@@ -2142,7 +2194,7 @@ function xnpIsPending($item_id)
 }
 
 /**
- * @param op 'quicksearch' 'advancedsearch' 'itemsubtypesearch' 'itemtypesearch'
+ * @param op string 'advancedsearch' 'itemsubtypesearch' 'itemtypesearch'
  * @param keyword search keyword
  * @param search_itemtype how to search ('all', 'basic' or name of itemtype (ex.xnppaper) )
  * @param private_flag true if search private indexes
@@ -2672,6 +2724,11 @@ function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = fa
     return true;
 }
 
+/**
+ * @param string $iconPath
+ * @param string $explanation
+ * @param false|string $subtypeVarName
+ */
 function xnpGetTopBlock($moduleName, $displayName, $iconPath, $explanation, $subtypeVarName, $subtypes)
 {
     // variables are set to template
@@ -2812,6 +2869,9 @@ function xnpGetModifiedFields($item_id)
     return $ret;
 }
 
+/**
+ * @param string $file_type
+ */
 function xnpIsAttachmentModified($file_type, $item_id)
 {
     //return true if uploaded successfully
@@ -3272,6 +3332,9 @@ function xnpGetMacSafariAcceptCharset()
 
 /**
  * eucのmultibyte文字列にwindowをかけてbin2hex()する。
+ * @param string $str
+ * @param boolean $output_leading
+ * @param boolean $output_trailing
  */
 function xnpWindowString($str, $output_leading, $output_trailing)
 {
@@ -3477,6 +3540,8 @@ function xnpGetColumnLengths($table_wo_prefix)
  * @param $enc: valueのエンコード(省略可)
  * $assoc に 切り詰めた後の値を書く。
  *          array( column_name1 => within1, column_name2 => within2, ... )
+ * @param string $table_wo_prefix
+ * @param string[] $names
  */
 function xnpTrimColumn(&$assoc, $table_wo_prefix, $names = null, $enc = null)
 {
@@ -3502,6 +3567,7 @@ function xnpTrimColumn(&$assoc, $table_wo_prefix, $names = null, $enc = null)
  * @param $names: チェックするカラム名.  array( 'readme', 'rights' ) など
  * $assoc に value, within, without, html_string を書く。
  *          array( column_name => array( 'value'=>value, 'within'=>within, 'without'=>without, 'html_string'=>html_string ), ... )
+ * @param string $table_wo_prefix
  */
 function xnpConfirmHtml(&$assoc, $table_wo_prefix, $names = null, $enc = null)
 {
@@ -3569,11 +3635,11 @@ function xnpISO8601($year, $month, $day)
  * @param doi       DOI of examined object
  * @param iids      return item id of each doi(array)
  *
- * @return RES_OK
- * @return RES_DB_NOT_INITIALIZED
- * @return RES_NO_SUCH_SESSION
- * @return RES_DB_QUERY_ERROR
- * @return RES_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnpGetItemIdByDoi($doi, &$iids)
 {
@@ -3600,11 +3666,11 @@ function xnpGetItemIdByDoi($doi, &$iids)
  * @param item_id   item id of examined object
  * @param doi       return doi, according in id. return "" if item id not found.
  *
- * @return RES_OK
- * @return RES_DB_NOT_INITIALIZED
- * @return RES_NO_SUCH_SESSION
- * @return RES_DB_QUERY_ERROR
- * @return RES_ERROR
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
+ * @return integer
  */
 function xnpGetDoiByItemId($item_id, &$doi)
 {
@@ -3630,7 +3696,7 @@ function xnpGetDoiByItemId($item_id, &$doi)
  *  @param item_id item id
  *  @param dois    doi array( use index 0 item only ) or doi value. if doi is NULL, search from item_id
  *
- *  @return return item detail url
+ *  @return string item detail url
  */
 function xnpGetItemDetailURL($item_id, $dois = null)
 {
@@ -3692,7 +3758,7 @@ function xnpGetItemBasicInfo($item_id)
 /**
  * list index tree.
  *
- *  @param mode XOONIPS_LISTINDEX_MODE_PUBLICONLY<br />
+ *  @param mode integer />
  *                  return public tree only.<br />
  *                XOONIPS_LISTINDEX_MODE_PRIVATEONLY<br />
  *                  return private tree only.<br />
@@ -4399,7 +4465,6 @@ class XooNIpsItemLibraryObject
     /**
      * set change log.
      *
-     * @param int $mday
      */
     public function setChangeLog($change_log)
     {
@@ -4466,7 +4531,6 @@ class XooNIpsItemLibraryObject
     /**
      * set related to.
      *
-     * @param string $lang
      */
     public function setRelatedTo($related_to)
     {
@@ -4786,7 +4850,7 @@ class XooNIpsItemLibraryHandler
     /**
      * get handler instance.
      *
-     * @return object instance of class XooNIpsItemLibraryHandler
+     * @return XooNIpsItemLibraryHandler instance of class XooNIpsItemLibraryHandler
      */
     public static function &getInstance()
     {
@@ -4801,7 +4865,7 @@ class XooNIpsItemLibraryHandler
     /**
      * create object instance.
      *
-     * @return object instance of class XooNIpsItemLibraryObject
+     * @return XooNIpsItemLibraryObject instance of class XooNIpsItemLibraryObject
      */
     public function &create()
     {

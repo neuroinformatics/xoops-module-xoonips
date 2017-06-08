@@ -110,6 +110,9 @@ function php_compat_sha1_add32_helper($x, $y)
     return ($msw << 16) | ($lsw & 0xffff);
 }
 
+/**
+ * @param integer $n
+ */
 function php_compat_sha1_rotl_helper($x, $n)
 {
     return ($x << $n) | ($x >> (32 - $n)) & (0x7fffffff >> (31 - $n));

@@ -27,6 +27,9 @@
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
 // display ranking block / new arrival block
+/**
+ * @param boolean $is_arrival
+ */
 function xoonips_ranking_show($is_arrival)
 {
     global $xoopsUser;

@@ -131,7 +131,7 @@ class OAIPMH
      *
      * @param attrs: hash parameters about demand of list <br /> ex:arary( 'verb' => 'GetRecord', 'identifier' => 'xxxx' )
      *
-     * @return tag of <request>
+     * @return string of <request>
      */
     public function request($attrs)
     {
@@ -220,7 +220,7 @@ class OAIPMH
     }
 
     /**
-     * @return header of xml, <OAI-PMH>, <responseDate>
+     * @return string of xml, <OAI-PMH>, <responseDate>
      */
     public function header()
     {
@@ -491,6 +491,10 @@ class OAIPMH
         }
     }
 
+    /**
+     * @param string $errorcode
+     * @param string $text
+     */
     public function error($errorcode, $text)
     {
         return "<error code='${errorcode}'>${text}</error>\n";
@@ -647,8 +651,8 @@ class OAIPMHHandler
     /**
      * @param identifier
      *
-     * @return xml   <metadataFormat> ... </metadataFormat>
-     * @return false not support this format
+     * @return boolean   <metadataFormat> ... </metadataFormat>
+     * @return boolean not support this format
      */
     public function metadataFormat($identifier)
     {
@@ -671,6 +675,9 @@ class OAIPMHHandler
     {
     }
 
+    /**
+     * @param string $errorcode
+     */
     public function error($errorcode, $text)
     {
         return "<error code='${errorcode}'>${text}</error>\n";
@@ -720,6 +727,10 @@ class HarvesterHandler
  * @param limit_row: number of results applied this resumptionToken
  * @param expire_date: Expiration date of this resumptionToken
  * @param publish_date: Of the date of this resumptionToken's issue
+ * @param string $resumption_token
+ * @param string $metadata_prefix
+ * @param string $verb
+ * @param integer $expire_date
  *
  * @return nothing
  */

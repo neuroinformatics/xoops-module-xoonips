@@ -77,11 +77,17 @@ class XooNIpsOrmFile extends XooNIpsTableObject
         $this->initVar('download_count', XOBJ_DTYPE_INT, 0, false);
     }
 
+    /**
+     * @param string $path
+     */
     public function setFilepath($path)
     {
         $this->filepath = $path;
     }
 
+    /**
+     * @return string
+     */
     public function getFilepath()
     {
         return $this->filepath;
@@ -178,7 +184,6 @@ class XooNIpsOrmFileHandler extends XooNIpsTableObjectHandler
     /**
      * get a metadata of file. returned object has a file path of this file.
      *
-     * @param XooNIpsOrmFile $file file to be inserted
      *
      * @return bool false if failure
      */
@@ -298,7 +303,7 @@ class XooNIpsOrmFileHandler extends XooNIpsTableObjectHandler
      * get total download count of specified file type of item.
      *
      * @param int $item_id          item id to get total download count
-     * @param int $file_type_nameid file id to get total download count
+     * @param int $file_type_name file id to get total download count
      * @param int total donwload count
      */
     public function getTotalDownloadCount($item_id, $file_type_name)

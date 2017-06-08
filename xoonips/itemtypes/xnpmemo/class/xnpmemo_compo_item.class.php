@@ -54,7 +54,7 @@ class XNPMemoCompoHandler extends XooNIpsItemInfoCompoHandler
      *                     XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_DETAIL
      *                     or XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LISTL
      *
-     * @return template filename
+     * @return string filename
      */
     public function getTemplateFileName($type)
     {
