@@ -1,5 +1,4 @@
 #
-# $Revision: 1.2.8.1 $
 #
 # Table structure for table `xnpmemo_item_detail`
 #

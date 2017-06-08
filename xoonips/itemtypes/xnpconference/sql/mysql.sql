@@ -1,5 +1,4 @@
 #
-# $Revision: 1.4.6.2 $
 #
 # Table structure for table `xnpconference_item_detail`
 #

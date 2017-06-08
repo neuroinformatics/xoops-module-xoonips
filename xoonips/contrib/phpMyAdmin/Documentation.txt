@@ -20,7 +20,7 @@ phpMyAdmin 2.11.6 Documentation
       + Version history: ChangeLog
       + General notes: README
       + License: LICENSE
-  * Documentation version: $Id: Documentation.html 11218 2008-04-29 11:44:42Z
+  * Documentation version: Id: Documentation.html 11218 2008-04-29 11:44:42Z
     lem9 $
 
 Requirements

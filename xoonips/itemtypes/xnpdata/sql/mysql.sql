@@ -1,5 +1,4 @@
 #
-# $Revision: 1.8.6.2 $
 #
 # Table structure for table `xnpdata_item_detail`
 #

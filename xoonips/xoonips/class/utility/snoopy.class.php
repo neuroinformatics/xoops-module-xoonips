@@ -2,7 +2,6 @@
 
 //
 // customized Snoopy class for the XooNIps
-// $Revision:$
 //
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 

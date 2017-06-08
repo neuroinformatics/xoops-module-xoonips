@@ -6,7 +6,6 @@
  *  - original file can be found in phpMyAdmin 2.11.6 (zip.lib.php).
  *  - modified for runtime memory saving.
  *
- * $Revision:$
  */
 
 /**

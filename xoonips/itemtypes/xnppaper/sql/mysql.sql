@@ -1,5 +1,4 @@
 #
-# $Revision: 1.4.10.2 $
 #
 # Table structure for table `xnppaper_item_detail`
 #

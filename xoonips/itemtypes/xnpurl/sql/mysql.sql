@@ -1,5 +1,4 @@
 #
-# $Revision: 1.2.8.2 $
 #
 # Table structure for table `xnpurl_item_detail`
 #
