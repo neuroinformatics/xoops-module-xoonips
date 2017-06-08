@@ -228,7 +228,7 @@ $check_categories = array(
 $check_results_obj = new XooNIpsAdminSystemCheck();
 foreach ($check_categories as $category => $label) {
     $category_obj = new XooNIpsAdminSystemCheckCategory($label);
-    include 'actions/system_check_test_'.$category.'.php';
+    require 'actions/system_check_test_'.$category.'.php';
     $funcname = 'xoonips_admin_system_check_'.$category;
     $funcname($category_obj);
     $check_results_obj->registerCategory($category_obj);

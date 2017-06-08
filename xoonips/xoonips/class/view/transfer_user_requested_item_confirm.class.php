@@ -61,7 +61,7 @@ class XooNIpsViewTransferUserRequestedItemConfirm extends XooNIpsViewTransfer
         global $xoopsOption, $xoopsConfig, $xoopsUser, $xoopsConfig, $xoopsUserIsAdmin, $xoopsLogger, $xoopsTpl;
 
         $xoopsOption['template_main'] = 'xoonips_transfer_user_requested_item_confirm.html';
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
         $this->setXooNIpsStyleSheet($xoopsTpl);
 
         $xoopsTpl->assign('token_hidden', $GLOBALS['xoopsGTicket']->getTicketHtml(__LINE__, 600, 'xoonips_transfer_user_requested_item_confirm'));
@@ -69,7 +69,7 @@ class XooNIpsViewTransferUserRequestedItemConfirm extends XooNIpsViewTransfer
         foreach ($this->_params as $key => $val) {
             $xoopsTpl->assign($key, $val);
         }
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
     }
 
     public function get_transfer_item_template_vars()

@@ -415,7 +415,7 @@ if ($search_tab == 'metadata' || $search_itemtype == 'metadata') {
             if (array_key_exists($i['item_type_id'], $itemtypes)) {
                 $itemtype = $itemtypes[$i['item_type_id']];
                 $modname = $itemtype['name'];
-                include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+                require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
                 if ($print && function_exists($modname.'GetPrinterFriendlyListBlock')) {
                     eval('$html = '.$modname.'GetPrinterFriendlyListBlock( $i );');
                 } elseif (function_exists($modname.'GetListBlock')) {

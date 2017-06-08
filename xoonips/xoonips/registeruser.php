@@ -204,7 +204,7 @@ case 'newuser':
     if (!$xoopsGTicket->check(true, 'register_newuser', false)) {
         redirect_header(XOOPS_URL.'/', 3, $xoopsGTicket->getErrors());
     }
-    include XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/header.php';
     $stop = '';
     if ($myxoopsConfigUser['reg_dispdsclmr'] != 0 && $myxoopsConfigUser['reg_disclaimer'] != '') {
         if (empty($agree_disc)) {
@@ -258,17 +258,17 @@ case 'newuser':
     } else {
         echo '<span style="color:#ff0000;">'.$stop.'</span>';
         echo '<br />'._MD_XOONIPS_ACCOUNT_EXPLAIN_REQUIRED_MARK.'<br />'."\n";
-        include 'include/registerform.php';
+        require 'include/registerform.php';
         $reg_form->display();
     }
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
     break;
 case 'finish':
     if (!$xoopsGTicket->check(true, 'register_finish', false)) {
         redirect_header(XOOPS_URL.'/', 3, $xoopsGTicket->getErrors());
         exit();
     }
-    include XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/header.php';
     $stop = userCheck($uname, $email, $pass, $vpass);
     $stop .= userCheckXooNIps($realname, $address, $company_name, $division, $tel, $country, $zipcode, $fax, $notice_mail);
     if (empty($stop)) {
@@ -295,13 +295,13 @@ case 'finish':
         }
         if (!$member_handler->insertUser($newuser)) {
             echo _US_REGISTERNG;
-            include XOOPS_ROOT_PATH.'/footer.php';
+            require XOOPS_ROOT_PATH.'/footer.php';
             exit();
         }
         $newid = $newuser->getVar('uid');
         if (!$member_handler->addUserToGroup(XOOPS_GROUP_USERS, $newid)) {
             echo _US_REGISTERNG;
-            include XOOPS_ROOT_PATH.'/footer.php';
+            require XOOPS_ROOT_PATH.'/footer.php';
             exit();
         }
         // create XooNIps user information
@@ -309,7 +309,7 @@ case 'finish':
         $xm_handler = &xoonips_gethandler('xoonips', 'member');
         if (!$xm_handler->pickupXoopsUser($newid, $is_certify_auto)) {
             echo _US_REGISTERNG;
-            include XOOPS_ROOT_PATH.'/footer.php';
+            require XOOPS_ROOT_PATH.'/footer.php';
             exit();
         }
         // - update XooNIps user informations
@@ -411,16 +411,16 @@ case 'finish':
         }
     } else {
         echo '<span style="color:#ff0000; font-weight:bold;">'.$stop.'</span>';
-        include 'include/registerform.php';
+        require 'include/registerform.php';
         $reg_form->display();
     }
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
     break;
 case 'register':
-    include XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/header.php';
     echo '<br />'._MD_XOONIPS_ACCOUNT_EXPLAIN_REQUIRED_MARK.'<br />'."\n";
-    include 'include/registerform.php';
+    require 'include/registerform.php';
     $reg_form->display();
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
     break;
 }

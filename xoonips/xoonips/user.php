@@ -47,7 +47,7 @@ $textutil = &xoonips_getutility('text');
 if ($op == 'main') {
     if (!$xoopsUser) {
         $xoopsOption['template_main'] = 'xoonips_userform.html';
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
         if (isset($_COOKIE[$myxoopsConfig['usercookie']])) {
             $xoopsTpl->assign('usercookie', $_COOKIE[$myxoopsConfig['usercookie']]);
         }
@@ -55,7 +55,7 @@ if ($op == 'main') {
         if (!is_null($xoops_redirect)) {
             $xoopsTpl->assign('redirect_page', $textutil->html_special_chars($xoops_redirect));
         }
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
     } elseif ($xoopsUser) {
         header('Location: '.XOOPS_URL.'/modules/xoonips/showusers.php?uid='.$xoopsUser->getVar('uid'));
     }
@@ -63,7 +63,7 @@ if ($op == 'main') {
 }
 
 if ($op == 'login') {
-    include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/checklogin.php';
+    require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/checklogin.php';
     exit();
 }
 
@@ -112,8 +112,8 @@ if ($op == 'logout') {
 if ($op == 'lostpass') {
     // page for password lost
     $xoopsOption['template_main'] = 'xoonips_userform.html';
-    include XOOPS_ROOT_PATH.'/header.php';
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
     exit();
 }
 
@@ -123,7 +123,7 @@ if ($op == 'actv') {
         $id = $formdata->getValue('get', 'id', 'i', true);
         $actkey = $formdata->getValue('get', 'actkey', 's', true);
         $xoopsOption['template_main'] = 'xoonips_activate_user.html';
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
 
         // token ticket
         $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, 'xoonips_activate_user');
@@ -132,7 +132,7 @@ if ($op == 'actv') {
         $xoopsTpl->assign('op', $op);
         $xoopsTpl->assign('id', $id);
         $xoopsTpl->assign('actkey', $actkey);
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
         exit();
     }
     if (!$xoopsGTicket->check(true, 'xoonips_activate_user', false)) {
@@ -157,7 +157,7 @@ if ($op == 'actv') {
                 $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
                 $certify_user = $xconfig_handler->getValue('certify_user');
                 $moderator_gid = $xconfig_handler->getValue('moderator_gid');
-                include XOOPS_ROOT_PATH.'/header.php';
+                require XOOPS_ROOT_PATH.'/header.php';
                 // To send e-mail to activated user.
                 if ($certify_user == 'on') {
                     // To send a e-mail to users who are belong to the group
@@ -195,7 +195,7 @@ if ($op == 'actv') {
                         redirect_header('user.php', 5, _MD_XOONIPS_ACTIVATED_BY_USER_CERTIFIED_AUTO, false);
                     }
                 }
-                include XOOPS_ROOT_PATH.'/footer.php';
+                require XOOPS_ROOT_PATH.'/footer.php';
             } else {
                 redirect_header(XOOPS_URL.'/', 3, 'Activation failed!');
             }
@@ -220,13 +220,13 @@ if ($op == 'delete_confirm') {
         exit();
     }
 
-    include '../../header.php';
+    require '../../header.php';
     $xoopsOption['template_main'] = 'xoonips_user_delete.html';
 
     $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, 'xoonips_certify_user_uncertfy');
     $xoopsTpl->assign('token_ticket', $token_ticket);
     $xoopsTpl->assign('delete_uid', $_SESSION['xoopsUserId']);
-    include '../../footer.php';
+    require '../../footer.php';
     exit();
 }
 

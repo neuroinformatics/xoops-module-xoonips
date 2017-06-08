@@ -17,7 +17,7 @@ if (!class_exists('XoopsGTicket')) {
             // language file
             if (defined('XOOPS_ROOT_PATH') && !empty($myxoopsConfig['language']) && !strstr($myxoopsConfig['language'], '/')) {
                 if (file_exists(dirname(__DIR__).'/language/'.$myxoopsConfig['language'].'/gticket_messages.phtml')) {
-                    include dirname(__DIR__).'/language/'.$myxoopsConfig['language'].'/gticket_messages.phtml';
+                    require dirname(__DIR__).'/language/'.$myxoopsConfig['language'].'/gticket_messages.phtml';
                 }
             }
 

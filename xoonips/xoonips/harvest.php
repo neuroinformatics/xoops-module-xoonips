@@ -79,7 +79,7 @@ if (!$is_admin && !$is_moderator) {
 global $xoopsDB;
 
 if ($mode == 'html') {
-    include XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/header.php';
     echo "<p>\n";
     echo '<h3>'._MD_XOONIPS_OAIPMH_HARVEST_RESULT."</h3>\n";
     echo "</p>\n";
@@ -114,5 +114,5 @@ while (list($url) = $xoopsDB->fetchRow($result)) {
 if ($mode == 'html') {
     echo "</p>\n";
     echo "<a href='admin/maintenance.php?page=oaipmh'>"._MD_XOONIPS_BACK_TO_OAIPMH_CONFIGURATION.'</a><br />';
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
 }

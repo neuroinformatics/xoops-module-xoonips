@@ -108,7 +108,7 @@ class XooNIpsViewTransferAdminItemList extends XooNIpsViewTransfer
         );
 
         // templates
-        include_once '../class/base/pattemplate.class.php';
+        require_once '../class/base/pattemplate.class.php';
         $tmpl = new PatTemplate();
         $tmpl->setBaseDir('templates');
         $tmpl->readTemplatesFromFile('maintenance_item_transfer.tmpl.html');

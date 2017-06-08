@@ -243,7 +243,7 @@ if ($op == 'export') {
             ._MD_XOONIPS_EXPORT_PANKUZU_EXPORT_INDEX;
         $message = _MD_XOONIPS_EXPORT_EXPORT_INDEX;
 
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
         echo <<<EOT
             <p>
             $pankuzu
@@ -263,11 +263,11 @@ if ($op == 'export') {
             <input type='hidden' name='recursive_index' value='$recursive_index' />
             </form>
 EOT;
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
     } elseif ($export_type == 'item') {
         $xoopsOption['template_main'] = 'xoonips_export_license.html';
 
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
 
         if ($index_id != '') {
             $ids = xoonips_get_all_item_ids_to_export($index_id, $xoopsUser->getVar('uid'), $recursive_item);
@@ -295,7 +295,7 @@ EOT;
                 $func_license = $itemtypes[$item_basic['item_type_id']]['name'].'GetLicenseStatement';
                 $func_html = $itemtypes[$item_basic['item_type_id']]['name'].'GetListBlock';
                 $func_export = $itemtypes[$item_basic['item_type_id']]['name'].'ExportItem';
-                include_once XOOPS_ROOT_PATH.'/modules/'.$itemtypes[$item_basic['item_type_id']]['viewphp'];
+                require_once XOOPS_ROOT_PATH.'/modules/'.$itemtypes[$item_basic['item_type_id']]['viewphp'];
                 $license_required = function_exists($func_license_required) ? $func_license_required($i) : false;
                 list($license, $use_cc) = function_exists($func_license) ? $func_license($i) : array('', false);
                 $html = function_exists($func_html) ? $func_html($item_basic) : '';
@@ -333,12 +333,12 @@ EOT;
         } elseif ($export_type == 'index') {
             $xoopsTpl->assign('recursive_index', $recursive_index);
         }
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
     } else {
         die('unknown export_type');
     }
 } elseif ($op == 'config') {
-    include XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/header.php';
 
     echo _MD_XOONIPS_EXPORT_PANKUZU_EXPORT;
     echo _MI_XOONIPS_ACCOUNT_PANKUZU_SEPARATOR;
@@ -357,7 +357,7 @@ EOT;
         $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
         $basic = &$basic_handler->get($id);
         $itemtype = &$item_type_handler->get($basic->get('item_type_id'));
-        include_once '../'.$itemtype->get('name').'/include/view.php';
+        require_once '../'.$itemtype->get('name').'/include/view.php';
         $func = $itemtype->get('name').'GetExportItemId';
         if (!function_exists($func)) {
             continue;
@@ -465,7 +465,7 @@ EOT;
         <input type="hidden" name="op" value="list" />
         </form>
 EOT;
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
 } else {
     die('unknown op');
 }

@@ -118,7 +118,7 @@ if (available_space_of_private_item() == 0) {
     $xoopsTpl->assign('system_message', $system_message);
     $xoopsTpl->assign('scrollX', 0);
     $xoopsTpl->assign('scrollY', 0);
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
     exit();
 }
 

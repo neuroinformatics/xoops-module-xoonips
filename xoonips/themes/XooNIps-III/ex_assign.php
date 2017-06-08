@@ -20,7 +20,7 @@ if (is_object($xoopsModule)) {
 }
 
 if (file_exists(XOOPS_ROOT_PATH.'/modules/xoonips/blocks/xoonips_blocks.php')) {
-    include_once XOOPS_ROOT_PATH.'/modules/xoonips/blocks/xoonips_blocks.php';
+    require_once XOOPS_ROOT_PATH.'/modules/xoonips/blocks/xoonips_blocks.php';
     $search_block = b_xoonips_quick_search_show();
     if ($search_block) {
         $this->assign('search_block', $search_block);

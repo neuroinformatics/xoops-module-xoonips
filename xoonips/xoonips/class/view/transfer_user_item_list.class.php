@@ -71,14 +71,14 @@ class XooNIpsViewTransferUserItemList extends XooNIpsViewTransfer
         $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
 
         $xoopsOption['template_main'] = 'xoonips_transfer_user_item_list.html';
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
         $this->setXooNIpsStyleSheet($xoopsTpl);
 
         $xoopsTpl->assign('transfer_items', $this->get_transfer_item_template_vars());
         foreach ($this->_params as $key => $val) {
             $xoopsTpl->assign($key, $val);
         }
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
     }
 
     public function get_transfer_item_template_vars()

@@ -72,9 +72,9 @@ if (!is_null($code) && $areyou == $code) {
     // Next step: add the new password to the database
     $sql = sprintf('UPDATE `%s` SET `pass`=%s WHERE `uid`=%u', $xoopsDB->prefix('users'), $xoopsDB->quoteString(md5($newpass)), $getuser[0]->getVar('uid', 's'));
     if (!$xoopsDB->queryF($sql)) {
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
         echo _US_MAILPWDNG;
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
         exit();
     }
     redirect_header('user.php', 3, sprintf(_US_PWDMAILED, $getuser[0]->getVar('uname')), false);
@@ -98,12 +98,12 @@ if (!is_null($code) && $areyou == $code) {
     $xoopsMailer->setFromEmail($myxoopsConfig['adminmail']);
     $xoopsMailer->setFromName($myxoopsConfig['sitename']);
     $xoopsMailer->setSubject(sprintf(_US_NEWPWDREQ, $myxoopsConfig['sitename']));
-    include XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/header.php';
     if (!$xoopsMailer->send()) {
         echo $xoopsMailer->getErrors();
     }
     echo '<h4>';
     printf(_US_CONFMAIL, $getuser[0]->getVar('uname'));
     echo '</h4>';
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
 }

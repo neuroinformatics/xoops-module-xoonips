@@ -65,7 +65,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
     {
         global $xoopsUser;
 
-        include_once dirname(dirname(__DIR__)).'/include/imexport.php';
+        require_once dirname(dirname(__DIR__)).'/include/imexport.php';
 
         $filetype = $this->_formdata->getValue('post', 'filetype', 's', false);
         $remotefile = $this->_formdata->getValue('post', 'remotefile', 's', false);
@@ -380,7 +380,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
 
             $unzip->close();
 
-            include XOOPS_ROOT_PATH.'/header.php';
+            require XOOPS_ROOT_PATH.'/header.php';
             if ($error) {
                 $submit = _MD_XOONIPS_ITEM_BACK_BUTTON_LABEL;
                 $message = _MD_XOONIPS_IMPORT_CIRCULAR_INDEX;
@@ -435,7 +435,7 @@ EOT;
                     </form>
 EOT;
             }
-            include XOOPS_ROOT_PATH.'/footer.php';
+            require XOOPS_ROOT_PATH.'/footer.php';
 
             exit();
         }

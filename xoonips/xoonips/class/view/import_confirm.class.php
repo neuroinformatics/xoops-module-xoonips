@@ -40,8 +40,8 @@ class XooNIpsViewImportConfirm extends XooNIpsView
         global $xoopsOption, $xoopsConfig, $xoopsUser, $xoopsUserIsAdmin, $xoopsLogger, $xoopsTpl;
 
         $xoopsOption['template_main'] = 'xoonips_import_confirm.html';
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
         $xoopsTpl->assign('token_hidden', $this->_params['ticket_html']);
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
     }
 }

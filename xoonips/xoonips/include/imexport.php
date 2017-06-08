@@ -89,7 +89,7 @@ function xnpExportItem($export_path, $item_id, $attachment = false, $is_absolute
         return false;
     }
 
-    include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+    require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
 
     if (!fwrite($fhdl, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<item version=\"1.00\">\n")) {
         return false;

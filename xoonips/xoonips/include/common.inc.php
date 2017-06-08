@@ -34,7 +34,7 @@ require dirname(dirname(dirname(__DIR__))).'/mainfile.php';
 $mod_path = XOOPS_ROOT_PATH.'/modules/'.$mydirname;
 $mod_url = XOOPS_URL.'/modules/'.$mydirname;
 if (file_exists($mod_path.'/mytrustdirname.php')) {
-    include $mod_path.'/mytrustdirname.php';
+    require $mod_path.'/mytrustdirname.php';
 } else {
     $mytrustdirname = '';
 }

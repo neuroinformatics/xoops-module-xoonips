@@ -65,7 +65,7 @@ class XooNIpsViewTransferUserItemConfirm extends XooNIpsViewTransfer
         $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
 
         $xoopsOption['template_main'] = 'xoonips_transfer_user_item_confirm.html';
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
         $this->setXooNIpsStyleSheet($xoopsTpl);
 
         $xoopsTpl->assign('token_hidden', $GLOBALS['xoopsGTicket']->getTicketHtml(__LINE__, 600, 'xoonips_transfer_user_item_confirm'));
@@ -77,7 +77,7 @@ class XooNIpsViewTransferUserItemConfirm extends XooNIpsViewTransfer
         foreach ($this->_params as $key => $val) {
             $xoopsTpl->assign($key, $val);
         }
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
     }
 
     public function get_child_item_ids_to_transfer()

@@ -279,7 +279,7 @@ if ($op == 'update') {
 
     //prepare template
     $xoopsOption['template_main'] = 'xoonips_confirm_edit.html';
-    include XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/header.php';
     $xoopsTpl->assign('item_id', $item_id);
 
     // select /Private and notice that /Private is selected automatically
@@ -352,7 +352,7 @@ if ($op == 'update') {
         $xoopsTpl->assign('update_button_visible', false);
     }
 
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
 }
 /**
  * find whether that user have permission to read private index of the item.

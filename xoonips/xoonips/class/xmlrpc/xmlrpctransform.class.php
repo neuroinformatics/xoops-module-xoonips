@@ -83,7 +83,7 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
         //        $this->module = $module;
         //        $this->name = $name;
         if (is_null($this->iteminfo)) {
-            include XOOPS_ROOT_PATH.'/modules/'.$module.'/iteminfo.php';
+            require XOOPS_ROOT_PATH.'/modules/'.$module.'/iteminfo.php';
             $this->iteminfo = &$iteminfo;
         }
         //
@@ -480,7 +480,7 @@ class XooNIpsXmlRpcTransformFactory
         }
         $include_file = XOOPS_ROOT_PATH."/modules/{$module}/class/xmlrpc/xmlrpctransform".strtolower($name).'.class.php';
         if (file_exists($include_file)) {
-            include_once $include_file;
+            require_once $include_file;
         } else {
             return $falseVar;
         }
@@ -547,7 +547,7 @@ class XooNIpsXmlRpcTransformCompoFactory
         $module = trim($module);
         $include_file = XOOPS_ROOT_PATH."/modules/{$module}/class/xmlrpc/xmlrpctransformcompo.class.php";
         if (file_exists($include_file)) {
-            include_once $include_file;
+            require_once $include_file;
         }
 
         if (strncmp('xnp', $module, 3) == 0) {

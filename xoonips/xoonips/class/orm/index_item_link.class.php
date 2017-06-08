@@ -111,7 +111,7 @@ class XooNIpsOrmIndexItemLinkHandler extends XooNIpsTableObjectHandler
     public function getAllPrivateOnlyItemId($uid)
     {
         // for xnp_get_private_item_id
-        include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/AL.php';
+        require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/AL.php';
         $iids = array();
         if (RES_OK == xnp_get_private_item_id($_SESSION['XNPSID'], $uid, $iids)) {
             return $iids;

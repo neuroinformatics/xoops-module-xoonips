@@ -48,7 +48,7 @@ class XooNIpsViewTransferUserRequestedItemDetail extends XooNIpsViewTransfer
     public function render()
     {
         global $xoopsConfig;
-        include_once XOOPS_ROOT_PATH.'/class/template.php';
+        require_once XOOPS_ROOT_PATH.'/class/template.php';
 
         $xoopsTpl = new XoopsTpl();
         xoops_header(false);

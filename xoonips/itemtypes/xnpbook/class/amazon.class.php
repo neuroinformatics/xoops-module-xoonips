@@ -180,7 +180,7 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
     {
         // load 'hash_hmac()' compatibility function for PHP 4
         if (!function_exists('hash_hmac')) {
-            include_once dirname(__DIR__).'/include/compat/hash_hmac.php';
+            require_once dirname(__DIR__).'/include/compat/hash_hmac.php';
         }
         // create sigunature
         sort($arguments);

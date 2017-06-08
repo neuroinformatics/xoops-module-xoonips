@@ -86,12 +86,12 @@ if (xnp_get_item_types($tmp) != RES_OK) {
 
 $xoopsOption['template_main'] = 'xoonips_itemlist.html';
 if ($print) {
-    include_once XOOPS_ROOT_PATH.'/class/template.php';
+    require_once XOOPS_ROOT_PATH.'/class/template.php';
     $xoopsTpl = new XoopsTpl();
     xoops_header(false);
     echo "</head><body onload='window.print();'>\n";
 } else {
-    include XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/header.php';
 }
 
 $index_handler = &xoonips_getormhandler('xoonips', 'index');
@@ -269,7 +269,7 @@ foreach ($items as $i) {
     if (array_key_exists($i['item_type_id'], $itemtypes)) {
         $itemtype = $itemtypes[$i['item_type_id']];
         $modname = $itemtype['name'];
-        include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+        require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
         if ($print && function_exists($modname.'GetPrinterFriendlyListBlock')) {
             eval('$html = '.$modname.'GetPrinterFriendlyListBlock( $i );');
         } elseif (function_exists($modname.'GetListBlock')) {
@@ -322,7 +322,7 @@ if ($print) {
     xoops_footer();
     exit();
 } else {
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
 }
 
 /**

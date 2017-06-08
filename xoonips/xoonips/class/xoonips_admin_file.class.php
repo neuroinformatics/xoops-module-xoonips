@@ -265,7 +265,7 @@ class XooNIpsAdminFileHandler extends XooNIpsFileHandler
     public function _load_file_search_plugins()
     {
         $this->fsearch_plugins = array();
-        include_once __DIR__.'/base/filesearchplugin.class.php';
+        require_once __DIR__.'/base/filesearchplugin.class.php';
         $fs_path = dirname(__DIR__).'/filesearch';
         $plugins = array();
         if ($dir = opendir($fs_path)) {
@@ -275,11 +275,11 @@ class XooNIpsAdminFileHandler extends XooNIpsFileHandler
                 }
                 // load module definition
                 $module = array();
-                include $fs_path.'/'.$file;
+                require $fs_path.'/'.$file;
                 $fs_name = $module['name'];
                 $plugins[$fs_name] = $module;
                 // load indexer class
-                include_once $fs_path.'/'.$module['php_file_name'];
+                require_once $fs_path.'/'.$module['php_file_name'];
             }
             closedir($dir);
         }

@@ -298,15 +298,15 @@ class OAIPMHHarvester
         $result = false;
         switch ($metadataPrefix) {
         case 'oai_dc':
-            include_once __DIR__.'/oaipmh_oaidc_list_records_handler.class.php';
+            require_once __DIR__.'/oaipmh_oaidc_list_records_handler.class.php';
             $result = new OaidcListRecordsHandler($parser, $baseUrl);
             break;
         case 'junii':
-            include_once __DIR__.'/oaipmh_junii_list_records_handler.class.php';
+            require_once __DIR__.'/oaipmh_junii_list_records_handler.class.php';
             $result = new JuniiListRecordsHandler($parser, $baseUrl);
             break;
         case 'junii2':
-            include_once __DIR__.'/oaipmh_junii2_list_records_handler.class.php';
+            require_once __DIR__.'/oaipmh_junii2_list_records_handler.class.php';
             $result = new Junii2ListRecordsHandler($parser, $baseUrl);
             break;
         }

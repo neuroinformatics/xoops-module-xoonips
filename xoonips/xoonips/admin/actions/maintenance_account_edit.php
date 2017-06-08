@@ -249,7 +249,7 @@ if ($user === false) {
 }
 if ($uid != 0 && $user['xoops']['level'] == 0) {
     // needs activate
-    include 'actions/maintenance_account_aconfirm.php';
+    require 'actions/maintenance_account_aconfirm.php';
     exit();
 }
 

@@ -123,7 +123,7 @@ if ($op == 'certify') {
     $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, 'xoonips_certify_user_uncertfy');
     $xoopsTpl->assign('token_ticket', $token_ticket);
 
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
     exit(); //terminate rendering
 } elseif ($op == 'uncertify') {
     if (!isset($_POST['is_exec'])) {

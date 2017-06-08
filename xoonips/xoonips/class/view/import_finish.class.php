@@ -40,7 +40,7 @@ class XooNIpsViewImportFinish extends XooNIpsView
         global $xoopsOption, $xoopsConfig, $xoopsUser, $xoopsUserIsAdmin, $xoopsLogger, $xoopsTpl;
         $textutil = &xoonips_getutility('text');
         $xoopsOption['template_main'] = 'xoonips_import_finish.html';
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
         $xoopsTpl->assign('result', $this->_params['result']);
         $xoopsTpl->assign('begin_time', $this->_params['begin_time']);
         $xoopsTpl->assign('finish_time', $this->_params['finish_time']);
@@ -50,7 +50,7 @@ class XooNIpsViewImportFinish extends XooNIpsView
         $xoopsTpl->assign('log', $textutil->html_special_chars($this->_get_item_log()));
         $xoopsTpl->assign('item_urls', $this->_get_item_urls());
         $xoopsTpl->assign('errors', $this->_params['errors']);
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
     }
 
     public function _get_item_log()

@@ -40,7 +40,7 @@ if (is_null($uid)) {
     // user select
     $title = _AM_XOONIPS_MAINTENANCE_ITEM_DELETE_TITLE;
     $nextaction = 'delete';
-    include 'actions/maintenance_item_uselect.php';
+    require 'actions/maintenance_item_uselect.php';
     exit();
 }
 

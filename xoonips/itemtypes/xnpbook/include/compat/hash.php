@@ -25,14 +25,14 @@ function php_compat_hash($algo, $data, $raw_output = false)
 
     case 'sha1':
         if (!function_exists('sha1')) {
-            include __DIR__.'/sha1.php';
+            require __DIR__.'/sha1.php';
         }
         $hash = sha1($data);
         break;
 
     case 'sha256':
         if (!function_exists('php_compat_sha256')) {
-            include __DIR__.'/sha256.php';
+            require __DIR__.'/sha256.php';
         }
         $hash = php_compat_sha256($data);
         break;

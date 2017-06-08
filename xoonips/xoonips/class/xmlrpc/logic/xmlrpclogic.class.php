@@ -158,7 +158,7 @@ class XooNIpsXmlRpcLogicFactory
         }
         $include_file = XOOPS_ROOT_PATH.'/modules/xoonips/class/xmlrpc/logic/'.strtolower($name).'.class.php';
         if (file_exists($include_file)) {
-            include_once $include_file;
+            require_once $include_file;
         } else {
             // return generic logic if logic corresponding to $name is not found
             $logic = new XooNIpsXmlRpcLogic();

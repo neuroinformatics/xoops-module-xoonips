@@ -194,7 +194,7 @@ function itemid2ListBlock($itemid)
         if (array_key_exists($item['item_type_id'], $itemtypes)) {
             $itemtype = $itemtypes[$item['item_type_id']];
             $modname = $itemtype['name'];
-            include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+            require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
             if (function_exists($modname.'GetListBlock')) {
                 $html = '';
                 eval('$html = '.$modname.'GetListBlock( $item );');
@@ -527,7 +527,7 @@ function xnpGetAttachmentDetailBlock($item_id, $name)
                     continue;
                 }
                 $module_name = $itemtype['name'];
-                include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+                require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
             }
         }
 
@@ -608,7 +608,7 @@ function xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $attachmen
         return '';
     }
 
-    include_once dirname(__DIR__).'/class/base/gtickets.php';
+    require_once dirname(__DIR__).'/class/base/gtickets.php';
     $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name, t_file.file_size, t_file.mime_type, unix_timestamp(t_file.timestamp) ', 'sess_id is NULL and is_deleted=0', $item_id);
 
     if ($files == false || count($files) == 0) {
@@ -2302,7 +2302,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
             $wheres = array(' 0 ');
             $module_name = $itemtype['name'];
             if ($formdata->getValue('post', $module_name, 'n', false)) {
-                include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+                require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
                 $f = $module_name.'GetAdvancedSearchQuery';
                 $table = $xoopsDB->prefix("${module_name}_item_detail");
                 $key_name = "${table}.".substr($module_name, 3).'_id'; // xnppaper -> paper_id
@@ -2439,7 +2439,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
                 if ($search_itemtype == $module_name || $search_itemtype == 'all') {
                     $itemtype_id = $itemtype['item_type_id'];
                     if ($file_or_item_metadata == 'all' || $file_or_item_metadata == 'item_metadata') {
-                        include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+                        require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
                         $f = $module_name.'GetDetailInformationQuickSearchQuery';
                         if (!function_exists($f)) {
                             continue;
@@ -3852,7 +3852,7 @@ class XooNIpsItemLibraryObject
     {
         $modname = $this->_item_type_obj->get('name');
         $viewphp = $this->_item_type_obj->get('viewphp');
-        include_once XOOPS_ROOT_PATH.'/modules/'.$viewphp;
+        require_once XOOPS_ROOT_PATH.'/modules/'.$viewphp;
         $ret = '';
         $func = $modname.'GetListBlock';
         if (function_exists($func)) {
@@ -4554,7 +4554,7 @@ class XooNIpsItemLibraryObject
         // check modified fields
         $modname = $this->_item_type_obj->get('name');
         $viewphp = $this->_item_type_obj->get('viewphp');
-        include_once XOOPS_ROOT_PATH.'/modules/'.$viewphp;
+        require_once XOOPS_ROOT_PATH.'/modules/'.$viewphp;
         $func = $modname.'GetModifiedFields';
         $modified = xnpGetModifiedFields($item_id) + (function_exists($func) ? $func($item_id) : array());
         if (count($modified) == 0) {

@@ -73,7 +73,7 @@ class XooNIpsUtilityLanguagemanager extends XooNIpsUtility
         if (defined('XOOPS_TRUST_PATH') && XOOPS_TRUST_PATH != '') {
             $langmanpath = XOOPS_TRUST_PATH.'/libs/altsys/class/D3LanguageManager.class.php';
             if (file_exists($langmanpath)) {
-                include_once $langmanpath;
+                require_once $langmanpath;
                 $this->d3langman_instance = &D3LanguageManager::getInstance();
             }
         }
@@ -97,9 +97,9 @@ class XooNIpsUtilityLanguagemanager extends XooNIpsUtility
         } else {
             $langfile = $this->_get_path($resource, $mydirname, $mytrustdirname);
             if ($read_once) {
-                include_once $langfile;
+                require_once $langfile;
             } else {
-                include $langfile;
+                require $langfile;
             }
         }
     }
@@ -147,9 +147,9 @@ class XooNIpsUtilityLanguagemanager extends XooNIpsUtility
             $langfile = XOOPS_ROOT_PATH.'/language/'.$this->default_language.'/'.$pagetype;
         }
         if ($read_once) {
-            include_once $langfile;
+            require_once $langfile;
         } else {
-            include $langfile;
+            require $langfile;
         }
     }
 
@@ -201,7 +201,7 @@ class XooNIpsUtilityLanguagemanager extends XooNIpsUtility
         $is_directory = (substr($resource, -1, 1) == '/') ? true : false;
         $d3file = XOOPS_ROOT_PATH.'/modules/'.$mydirname.'/mytrustdirname.php';
         if (empty($mytrustdirname) && file_exists($d3file)) {
-            include $d3file;
+            require $d3file;
         }
         $_basepath = empty($mytrustdirname) ? XOOPS_ROOT_PATH : XOOPS_TRUST_PATH;
         $_dirname = empty($mytrustdirname) ? $mydirname : $mytrustdirname;

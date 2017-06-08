@@ -87,12 +87,12 @@ if (in_array($op, $onclickidx_ops)) {
 }
 
 if ($print) {
-    include_once XOOPS_ROOT_PATH.'/class/template.php';
+    require_once XOOPS_ROOT_PATH.'/class/template.php';
     $xoopsTpl = new XoopsTpl();
     xoops_header(false);
     echo "</head><body onload='window.print();'>\n";
 } else {
-    include XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/header.php';
 }
 
 require 'include/itemselect.inc.php';
@@ -145,5 +145,5 @@ if ($print) {
     xoops_footer();
     exit();
 } else {
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
 }

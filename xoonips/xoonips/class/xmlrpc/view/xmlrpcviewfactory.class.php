@@ -72,7 +72,7 @@ class XooNIpsXmlRpcItemViewFactory
 
         $include_file = XOOPS_ROOT_PATH."/modules/${name}/class/xmlrpc/view/".strtolower($logic).'.class.php';
         if (file_exists($include_file)) {
-            include_once $include_file;
+            require_once $include_file;
         } else {
             return $falseVar;
         }
@@ -126,7 +126,7 @@ class XooNIpsXmlRpcViewFactory
         $lc_logic = strtolower(trim($logic));
         $include_file = XOOPS_ROOT_PATH."/modules/xoonips/class/xmlrpc/view/{$lc_logic}.class.php";
         if (file_exists($include_file)) {
-            include_once $include_file;
+            require_once $include_file;
         }
         $class = 'XooNIpsXmlRpcView'.ucfirst(trim($logic));
         $view = new $class($response);

@@ -194,7 +194,7 @@ class XooNIpsLogicImportCheckImport extends XooNIpsLogic
                 while (list($id) = $xoopsDB->fetchRow($result)) {
                     $mod_iids[] = $id;
                 }
-                include_once "../$modname/include/view.php";
+                require_once "../$modname/include/view.php";
                 $fname = "${modname}GetDetailInformationTotalSize";
                 if (function_exists($fname)) {
                     $ret += $fname($mod_iids);

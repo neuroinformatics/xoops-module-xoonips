@@ -59,7 +59,7 @@ class XooNIpsActionImportImportIndexTree extends XooNIpsAction
 
     public function doAction()
     {
-        include_once dirname(dirname(__DIR__)).'/include/imexport.php';
+        require_once dirname(dirname(__DIR__)).'/include/imexport.php';
         global $xoopsDB, $xoopsConfig, $xoopsUser,$xoopsLogger, $xoopsUserIsAdmin;
 
         if (!isset($_SESSION['xoonips_import_file_path']) || !isset($_SESSION['xoonips_import_index_ids'])) {
@@ -78,7 +78,7 @@ class XooNIpsActionImportImportIndexTree extends XooNIpsAction
             exit();
         }
 
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
 
         //
         // start transaction
@@ -130,7 +130,7 @@ class XooNIpsActionImportImportIndexTree extends XooNIpsAction
             }
             echo "</p>\n";
         }
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
     }
 
     public function _get_index_path_str($index_id, $uid = false)

@@ -65,7 +65,7 @@ function &xoonips_gethandler($module, $name)
     if (!isset($handlers["${module}_${name}"])) {
         $include_file = XOOPS_ROOT_PATH."/modules/${module}/class/${module}_{$name}.class.php";
         if (file_exists($include_file)) {
-            include_once $include_file;
+            require_once $include_file;
         } else {
             trigger_error('file not found: '.$include_file, E_USER_ERROR);
 
@@ -108,7 +108,7 @@ function &xoonips_getormhandler($module, $name)
     if (!isset($handlers[$module.$name])) {
         $include_file = XOOPS_ROOT_PATH."/modules/${module}/class/orm/${name}.class.php";
         if (file_exists($include_file)) {
-            include_once $include_file;
+            require_once $include_file;
         } else {
             return $falseVar;
         }
@@ -150,7 +150,7 @@ function &xoonips_getormcompohandler($module, $name)
     if (!isset($handlers[$module.$name])) {
         $include_file = XOOPS_ROOT_PATH."/modules/${module}/class/${module}_compo_${name}.class.php";
         if (file_exists($include_file)) {
-            include_once $include_file;
+            require_once $include_file;
         } else {
             return $falseVar;
         }
@@ -193,10 +193,10 @@ function &xoonips_getutility($name)
     if (!class_exists($cname)) {
         $cpath = dirname(__DIR__).'/class';
         if (!class_exists('XooNIpsUtility')) {
-            include_once $cpath.'/base/utility.class.php';
+            require_once $cpath.'/base/utility.class.php';
         }
         $path = $cpath.'/utility/'.$name.'.class.php';
-        include_once $path;
+        require_once $path;
     }
     $instance = new $cname();
     if ($instance->isSingleton()) {

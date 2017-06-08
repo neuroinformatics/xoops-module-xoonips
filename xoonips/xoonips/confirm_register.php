@@ -255,7 +255,7 @@ if (isset($op) && $op == 'register') {
     //prepare template
     $xoopsOption['template_main'] = 'xoonips_confirm_register.html';
 
-    include XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/header.php';
 
     if ($param_check_result) {
         // select /Private and notice
@@ -300,7 +300,7 @@ if (isset($op) && $op == 'register') {
         }
     }
 
-    include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+    require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
     eval('$body = '.$modname.'GetConfirmBlock(false);');
     $xoopsTpl->assign('body', $body);
     ////send basic information using hidden to next(before)page.
@@ -334,5 +334,5 @@ if (isset($op) && $op == 'register') {
         $xoopsTpl->assign('register_button_visible', false);
     }
 
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
 }

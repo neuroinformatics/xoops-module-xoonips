@@ -118,7 +118,7 @@ class XooNIpsViewImportConflict extends XooNIpsView
 
         $handler = &xoonips_gethandler('xoonips', 'import_item');
         $xoopsOption['template_main'] = 'xoonips_import_conflict.html';
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
         $xoopsTpl->assign('import_as_new_flag', isset($this->_params['import_as_new_flag']) ? $this->_params['import_as_new_flag'] : '0');
         $xoopsTpl->assign('number_of_conflict_items', $handler->numberOfConflictItem($this->_params['import_items']));
         $xoopsTpl->assign('conflict_items', $conflict_items);
@@ -127,7 +127,7 @@ class XooNIpsViewImportConflict extends XooNIpsView
         $xoopsTpl->assign('page', $this->getPageNo());
         $xoopsTpl->assign('page_max', ceil($this->getConflictItemCount() / $this->_item_per_page));
 
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
     }
 
     /**

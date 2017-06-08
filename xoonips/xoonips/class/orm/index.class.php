@@ -350,7 +350,7 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
     public function _createRootIndex($title, $is_user, $ugid)
     {
         // transaction
-        include_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
+        require_once XOOPS_ROOT_PATH.'/modules/xoonips/class/base/transaction.class.php';
         $transaction = &XooNIpsTransaction::getInstance();
         $transaction->start();
 

@@ -50,7 +50,7 @@ function b_xoonips_itemtypes_show()
         return false;
     }
 
-    include_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
+    require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/lib.php';
 
     // get installed itemtypes
     $block = array();
@@ -61,7 +61,7 @@ function b_xoonips_itemtypes_show()
         $name = $item_type_obj->get('name');
         $file = XOOPS_ROOT_PATH.'/modules/'.$item_type_obj->get('viewphp');
         if (file_exists($file)) {
-            include_once $file;
+            require_once $file;
         }
         $fname = $name.'GetTopBlock';
         if (function_exists($fname)) {

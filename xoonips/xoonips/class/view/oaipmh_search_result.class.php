@@ -39,7 +39,7 @@ class XooNIpsViewOaipmhSearchResult extends XooNIpsView
     {
         global $xoopsOption, $xoopsConfig, $xoopsUser, $xoopsUserIsAdmin, $xoopsLogger, $xoopsTpl;
         $xoopsOption['template_main'] = 'xoonips_oaipmh_search_result.html';
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
         foreach ($this->_params as $key => $val) {
             $xoopsTpl->assign($key, $val);
         }
@@ -49,6 +49,6 @@ class XooNIpsViewOaipmhSearchResult extends XooNIpsView
             .$xoopsTpl->get_template_vars('xoops_module_header');
         $xoopsTpl->assign('xoops_module_header', $xoonips_module_header);
 
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
     }
 }

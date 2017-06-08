@@ -86,7 +86,7 @@ $d3forums[] = array(
 foreach ($mod_dirnames as $mod_dirname) {
     $trustdir_php = XOOPS_ROOT_PATH.'/modules/'.$mod_dirname.'/mytrustdirname.php';
     if (file_exists($trustdir_php)) {
-        include $trustdir_php;
+        require $trustdir_php;
         if ($mytrustdirname == 'd3forum') {
             $module = &$module_handler->getByDirname($mod_dirname);
             if (is_object($module) && $module->getVar('isactive', 'n') == 1) {

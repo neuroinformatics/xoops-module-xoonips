@@ -87,7 +87,7 @@ class XooNIps_UserPreloadFunctions
     public static function checkLogin(&$xoopsUser)
     {
         // call original function 'User_LegacypageFunctions::checkLogin'
-        include_once XOOPS_ROOT_PATH.'/modules/user/kernel/LegacypageFunctions.class.php';
+        require_once XOOPS_ROOT_PATH.'/modules/user/kernel/LegacypageFunctions.class.php';
         User_LegacypageFunctions::checkLogin($xoopsUser);
         if (is_object($xoopsUser)) {
             // check XooNIps session
@@ -117,7 +117,7 @@ class XooNIps_UserPreloadFunctions
     public static function checkLoginSuccess(&$xoopsUser)
     {
         // call original function 'User_LegacypageFunctions::checkLoginSuccess'
-        include_once XOOPS_ROOT_PATH.'/modules/user/kernel/LegacypageFunctions.class.php';
+        require_once XOOPS_ROOT_PATH.'/modules/user/kernel/LegacypageFunctions.class.php';
         User_LegacypageFunctions::checkLoginSuccess($xoopsUser);
         if (is_object($xoopsUser)) {
             self::_loadXooNIps();
@@ -158,7 +158,7 @@ class XooNIps_UserPreloadFunctions
             self::_doRedirect($script);
         }
         // call original function 'User_LegacypageFunctions::logout'
-        include_once XOOPS_ROOT_PATH.'/modules/user/kernel/LegacypageFunctions.class.php';
+        require_once XOOPS_ROOT_PATH.'/modules/user/kernel/LegacypageFunctions.class.php';
         User_LegacypageFunctions::logout($successFlag, $xoopsUser);
     }
 
@@ -201,7 +201,7 @@ class XooNIps_UserPreloadFunctions
     private static function _loadXooNIps()
     {
         $mydirname = basename(dirname(__DIR__));
-        include_once XOOPS_ROOT_PATH.'/modules/'.$mydirname.'/condefs.php';
-        include_once XOOPS_ROOT_PATH.'/modules/'.$mydirname.'/include/functions.php';
+        require_once XOOPS_ROOT_PATH.'/modules/'.$mydirname.'/condefs.php';
+        require_once XOOPS_ROOT_PATH.'/modules/'.$mydirname.'/include/functions.php';
     }
 }

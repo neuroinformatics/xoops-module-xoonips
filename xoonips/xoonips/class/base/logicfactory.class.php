@@ -68,7 +68,7 @@ class XooNIpsLogicFactory
         }
         $include_file = XOOPS_ROOT_PATH.'/modules/xoonips/class/logic/'.strtolower($name).'.class.php';
         if (file_exists($include_file)) {
-            include_once $include_file;
+            require_once $include_file;
         } else {
             return $falseVar;
         }

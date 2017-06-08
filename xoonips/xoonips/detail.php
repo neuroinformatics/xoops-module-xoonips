@@ -174,7 +174,7 @@ if ($op == 'delete') {
     xoonips_delete_item($item_id);
 }
 if ($op == 'print') {
-    include_once XOOPS_ROOT_PATH.'/class/template.php';
+    require_once XOOPS_ROOT_PATH.'/class/template.php';
     $xoopsTpl = new XoopsTpl();
     xoops_header(false);
 
@@ -182,7 +182,7 @@ if ($op == 'print') {
     $xoopsTpl->assign('meta_author', $myxoopsConfigMetaFooter['meta_author']);
     $xoopsTpl->assign('sitename', $myxoopsConfig['sitename']);
 
-    include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+    require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
     eval('$body = '.$modname.'GetPrinterFriendlyDetailBlock( $item_id );');
     echo "</head><body onload='window.print();'>\n";
     $val = '';
@@ -253,7 +253,7 @@ function genSelectLabels(&$index)
 // display of 'add to public'
 if ($op == '' || $op == 'download') {
     // Display only 'Binder -> Binders'. Display 'Not Binder -> Public not Binders'.
-    include_once 'include/gentree.php';
+    require_once 'include/gentree.php';
     $index = array('open_level' => OL_PUBLIC);
     $indexTree = genSameAreaIndexTree($xnpsid, $uid, $index);
     array_walk($indexTree, 'genSelectLabels');

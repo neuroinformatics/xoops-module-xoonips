@@ -288,7 +288,7 @@ class XooNIpsLogicRemoveItem extends XooNIpsLogic
             if (!is_file($path)) {
                 continue;
             }
-            include_once XOOPS_ROOT_PATH.'/modules/'.$item_type->get('viewphp');
+            require_once XOOPS_ROOT_PATH.'/modules/'.$item_type->get('viewphp');
         }
     }
 }

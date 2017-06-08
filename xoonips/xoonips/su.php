@@ -82,11 +82,11 @@ if ($op == '') {
     array_multisort($unameValues, SORT_ASC, $users_sort);
 
     $xoopsOption['template_main'] = 'xoonips_su.html';
-    include XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/header.php';
     // Send variables to templete
     $xoopsTpl->assign('users', $users_sort);
     $xoopsTpl->assign('su_uid', $uids[0]);
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
 } elseif ($op == 'su') {
     $su_uid = $formdata->getValue('post', 'su_uid', 'i', true);
     $password = $formdata->getValue('post', 'password', 'n', true);

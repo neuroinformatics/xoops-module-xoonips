@@ -44,7 +44,7 @@ $search_blocks = array();
 $search_var = array();
 foreach ($itemtypes as $itemtype) {
     $modname = $itemtype->get('name');
-    include_once XOOPS_ROOT_PATH.'/modules/'.$itemtype->get('viewphp');
+    require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype->get('viewphp');
     $fname = $modname.'GetAdvancedSearchBlock';
     if (function_exists($fname)) {
         $search_blocks[] = $fname($search_var);

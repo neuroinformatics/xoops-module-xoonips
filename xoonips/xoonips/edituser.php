@@ -238,22 +238,22 @@ if ($op == 'saveuser') {
         if (empty($error)) {
             redirect_header('showusers.php?uid='.$uid, 0, _US_PROFUPDATED);
         } else {
-            include XOOPS_ROOT_PATH.'/header.php';
+            require XOOPS_ROOT_PATH.'/header.php';
             echo $error;
-            include XOOPS_ROOT_PATH.'/footer.php';
+            require XOOPS_ROOT_PATH.'/footer.php';
         }
         exit();
     }
 }
 
 if ($op == 'editprofile') {
-    include_once XOOPS_ROOT_PATH.'/header.php';
-    include_once XOOPS_ROOT_PATH.'/include/xoopscodes.php';
-    include_once XOOPS_ROOT_PATH.'/include/comment_constants.php';
+    require_once XOOPS_ROOT_PATH.'/header.php';
+    require_once XOOPS_ROOT_PATH.'/include/xoopscodes.php';
+    require_once XOOPS_ROOT_PATH.'/include/comment_constants.php';
     // RMV-NOTIFY
     $langman = &xoonips_getutility('languagemanager');
     $langman->read_pagetype('notification.php');
-    include_once XOOPS_ROOT_PATH.'/include/notification_constants.php';
+    require_once XOOPS_ROOT_PATH.'/include/notification_constants.php';
 
     // required mark, and required flag
     $required = array();
@@ -436,12 +436,12 @@ if ($op == 'editprofile') {
     // show form
     $form->display();
 
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
     exit();
 }
 
 if ($op == 'avatarform') {
-    include XOOPS_ROOT_PATH.'/header.php';
+    require XOOPS_ROOT_PATH.'/header.php';
     echo '<a href="showusers.php?uid='.$uid.'">'._MD_XOONIPS_SHOW_USER_TITLE.'</a>&nbsp;<span style="font-weight:bold;">&raquo;&raquo;</span>&nbsp;'._US_UPLOADMYAVATAR.'<br /><br />';
     $oldavatar = $u_obj->getVar('user_avatar', 's');
     if (!empty($oldavatar) && $oldavatar != 'blank.gif') {
@@ -475,7 +475,7 @@ if ($op == 'avatarform') {
     $xoopsGTicket->addTicketXoopsFormElement($form2, __LINE__, 1800, 'avatarchoose');
     $form2->addElement(new XoopsFormButton('', 'submit2', _SUBMIT, 'submit'));
     $form2->display();
-    include XOOPS_ROOT_PATH.'/footer.php';
+    require XOOPS_ROOT_PATH.'/footer.php';
     exit();
 }
 
@@ -485,7 +485,7 @@ if ($op == 'avatarupload') {
         exit();
     }
     if ($myxoopsConfigUser['avatar_allow_upload'] == 1 && $u_obj->getVar('posts', 's') >= $myxoopsConfigUser['avatar_minposts']) {
-        include_once XOOPS_ROOT_PATH.'/class/uploader.php';
+        require_once XOOPS_ROOT_PATH.'/class/uploader.php';
         $uploader = new XoopsMediaUploader(XOOPS_UPLOAD_PATH, array('image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png', 'image/png'), $myxoopsConfigUser['avatar_maxsize'], $myxoopsConfigUser['avatar_width'], $myxoopsConfigUser['avatar_height']);
         $uploader->setAllowedExtensions(array('gif', 'jpeg', 'jpg', 'png'));
         $xoops_upload_file = $formdata->getValueArray('post', 'xoops_upload_file', 's', true);
@@ -519,9 +519,9 @@ if ($op == 'avatarupload') {
                 }
             }
         }
-        include XOOPS_ROOT_PATH.'/header.php';
+        require XOOPS_ROOT_PATH.'/header.php';
         echo $uploader->getErrors();
-        include XOOPS_ROOT_PATH.'/footer.php';
+        require XOOPS_ROOT_PATH.'/footer.php';
         exit();
     }
 }
@@ -537,9 +537,9 @@ if ($op == 'avatarchoose') {
         $oldavatar = $u_obj->getVar('user_avatar', 's');
         $u_obj->setVar('user_avatar', $user_avatar, true);
         if (!$u_handler->insert($u_obj)) {
-            include XOOPS_ROOT_PATH.'/header.php';
+            require XOOPS_ROOT_PATH.'/header.php';
             echo $u_obj->getHtmlErrors();
-            include XOOPS_ROOT_PATH.'/footer.php';
+            require XOOPS_ROOT_PATH.'/footer.php';
             exit();
         }
         $avt_handler = &xoops_gethandler('avatar');
