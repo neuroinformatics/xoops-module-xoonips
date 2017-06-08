@@ -26,9 +26,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
-if (!defined('XOOPS_ROOT_PATH')) {
-    exit();
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
 $formdata = &xoonips_getutility('formdata');
 $uname = $formdata->getValue('post', 'uname', 's', false, '');

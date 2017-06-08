@@ -25,9 +25,7 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-if (!defined('XOOPS_ROOT_PATH')) {
-    exit();
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
 define('XOONIPS_FEED_DATE_RDF', 'Y-m-d\\TH:i:s+00:00');
 define('XOONIPS_FEED_DATE_RSS', 'D, d M Y H:i:s T');

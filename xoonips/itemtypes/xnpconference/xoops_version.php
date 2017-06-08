@@ -28,9 +28,7 @@
 
 //  XooNIps Conference item type module
 
-if (!defined('XOOPS_ROOT_PATH')) {
-    exit();
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
 $modversion['name'] = _MI_XNPCONFERENCE_NAME;
 $modversion['version'] = 3.48;

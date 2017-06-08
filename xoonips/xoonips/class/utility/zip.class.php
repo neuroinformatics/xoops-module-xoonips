@@ -12,9 +12,7 @@
 /**
  * @version $phpMyAdmin-2.11.6-Id: zip.lib.php 10240 2007-04-01 11:02:46Z cybot_tm $
  */
-if (!defined('XOOPS_ROOT_PATH')) {
-    exit();
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
 /**
  * Zip file creation class.
