@@ -63,7 +63,7 @@ function b_xoonips_moderator_show()
     $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id', 'INNER', 'x');
     $criteria = new CriteriaCompo(new Criteria('certify_state', CERTIFY_REQUIRED));
     $criteria->add(new Criteria('open_level', OL_PUBLIC, '=', 'x'));
-    $ci_count = $xil_handler->getCount($criteria, $join);
+    $ci_count = count($xil_handler->getObjects($criteria, false, 'item_id', true, $join));
 
     // count group items open to public certification requested indexes
     if (xoonips_get_version() >= 340) {
