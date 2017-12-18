@@ -1,5 +1,4 @@
 <?php
-
 // ------------------------------------------------------------------------- //
 //  XooNIps - Neuroinformatics Base Platform System                          //
 //  Copyright (C) 2005-2011 RIKEN, Japan All rights reserved.                //
@@ -40,7 +39,7 @@ $xgroup_handler = &xoonips_gethandler('xoonips', 'group');
 
 $is_moderator = xnp_is_moderator($xnpsid, $uid);
 $admin_gids = $xgroup_handler->getGroupIds($uid, true);
-$is_groupadmin = (count($admin_gids) != 0);
+$is_groupadmin = (0 != count($admin_gids));
 
 // Only Moderator and Group administrator can access this page.
 if (!$is_moderator) {
@@ -61,23 +60,24 @@ $op = $formdata->getValue('post', 'op', 's', false, '');
 $menu_id = $formdata->getValue('get', 'menu_id', 'i', false);
 $index_ids = $formdata->getValueArray('post', 'index_ids', 'i', false);
 $item_id = $formdata->getValue('post', 'item_id', 'i', false);
+$bulk = $formdata->getValue('post', 'bulk', 'i', false);
 // check request variables
-if ($op == 'certify' || $op == 'uncertify') {
-    if (is_null($item_id)) {
+if ('certify' == $op || 'uncertify' == $op) {
+    if (0 == $bulk && is_null($item_id)) {
         die('illegal request');
     }
-} elseif ($op != '') {
+} elseif ('' != $op) {
     die('illegal request');
 }
 
-if ($menu_id == 1) {
+if (1 == $menu_id) {
     // pankuzu for administrator
     $pankuzu = _MI_XOONIPS_ACCOUNT_PANKUZU_MODERATOR._MI_XOONIPS_ACCOUNT_PANKUZU_SEPARATOR._MI_XOONIPS_ITEM_PANKUZU_CERTIFY_PUBLIC_ITEMS;
     if (!$is_moderator) {
         redirect_header(XOOPS_URL.'/', 3, _NOPERM);
         exit();
     }
-} elseif ($menu_id == 2) {
+} elseif (2 == $menu_id) {
     // pankuzu for group administrator
     $pankuzu = _MI_XOONIPS_ACCOUNT_PANKUZU_GROUP_ADMINISTRATOR._MI_XOONIPS_ACCOUNT_PANKUZU_SEPARATOR._MI_XOONIPS_ITEM_PANKUZU_CERTIFY_GROUP_ITEMS;
     if (!$is_groupadmin) {
@@ -89,73 +89,59 @@ if ($menu_id == 1) {
 }
 
 // accept or reject certify,  send email
-if ($op == 'certify' || $op == 'uncertify') {
+if ('certify' == $op || 'uncertify' == $op) {
     // check token ticket
     if (!$xoopsGTicket->check(true, 'xoonips_certify_item')) {
         exit();
     }
     $succeeded_index_ids = array();
-    if ($op == 'uncertify') {
-        foreach ($index_ids as $index_id) {
-            if (xoonips_reject_item($uid, $item_id, $index_id)) {
-                $succeeded_index_ids[] = $index_id;
+    if (1 == $bulk) {
+        $item_ids = $formdata->getValueArray('post', 'item_ids', 'i', false);
+        $xil_objs = getIndexItemLinks($is_moderator, $admin_gids, $menu_id, $item_ids);
+        foreach ($xil_objs as $xil_obj) {
+            $item_id = $xil_obj->get('item_id');
+            $index_id = $xil_obj->get('index_id');
+            if ('uncertify' == $op) {
+                if (xoonips_reject_item($uid, $item_id, $index_id)) {
+                    $succeeded_index_ids[$item_id][] = $index_id;
+                }
+            } elseif ('certify' == $op) {
+                if (xoonips_certify_item($uid, $item_id, $index_id)) {
+                    $succeeded_index_ids[$item_id][] = $index_id;
+                }
             }
         }
-    } elseif ($op == 'certify') {
-        foreach ($index_ids as $index_id) {
-            if (xoonips_certify_item($uid, $item_id, $index_id)) {
-                $succeeded_index_ids[] = $index_id;
+    } else {
+        if ('uncertify' == $op) {
+            foreach ($index_ids as $index_id) {
+                if (xoonips_reject_item($uid, $item_id, $index_id)) {
+                    $succeeded_index_ids[$item_id][] = $index_id;
+                }
+            }
+        } elseif ('certify' == $op) {
+            foreach ($index_ids as $index_id) {
+                if (xoonips_certify_item($uid, $item_id, $index_id)) {
+                    $succeeded_index_ids[$item_id][] = $index_id;
+                }
             }
         }
     }
     if (!empty($succeeded_index_ids)) {
-        if ($op == 'uncertify') {
-            xoonips_notification_item_rejected($item_id, $succeeded_index_ids);
-            xoonips_notification_user_item_rejected($item_id, $succeeded_index_ids);
-        } elseif ($op == 'certify') {
-            xoonips_notification_item_certified($item_id, $succeeded_index_ids);
-            xoonips_notification_user_item_certified($item_id, $succeeded_index_ids);
+        foreach ($succeeded_index_ids as $item_id => $index_ids) {
+            if ('uncertify' == $op) {
+                xoonips_notification_item_rejected($item_id, $index_ids);
+                xoonips_notification_user_item_rejected($item_id, $index_ids);
+            } elseif ('certify' == $op) {
+                xoonips_notification_item_certified($item_id, $index_ids);
+                xoonips_notification_user_item_certified($item_id, $index_ids);
+            }
         }
     }
 }
 
-$xil_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
-$join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id', 'INNER', 'x');
-$criteria = new CriteriaCompo(new Criteria('certify_state', CERTIFY_REQUIRED));
-switch ($menu_id) {
-case 1:
-    // public
-    $criteria->add(new Criteria('open_level', OL_PUBLIC, '=', 'x'));
-    break;
-case 2:
-    // group only
-    $criteria->add(new Criteria('gid', '('.implode(',', $admin_gids).')', 'IN', 'x'));
-    $criteria->add(new Criteria('open_level', OL_GROUP_ONLY, '=', 'x'));
-    break;
-default:
-    // public / group only
-    if ($is_moderator) {
-        $criteria_public = new CriteriaCompo(new Criteria('open_level', OL_PUBLIC, '=', 'x'));
-    } else {
-        $criteria_public = false;
-    }
-    if ($is_groupadmin) {
-        $criteria_group = new CriteriaCompo(new Criteria('gid', '('.implode(',', $admin_gids).')', 'IN', 'x'));
-        $criteria_group->add(new Criteria('open_level', OL_GROUP_ONLY, '=', 'x'));
-    } else {
-        $criteria_group = false;
-    }
-    if ($criteria_public) {
-        if ($criteria_group) {
-            $criteria_public->add($criteria_group, 'OR');
-        }
-        $criteria->add($criteria_public);
-    } else {
-        $criteria->add($criteria_group);
-    }
-}
-$xil_objs = &$xil_handler->getObjects($criteria, false, '', false, $join);
+$xil_objs = getIndexItemLinks($is_moderator, $admin_gids, $menu_id, array());
 $items = array();
+$indexes = array();
 require XOOPS_ROOT_PATH.'/header.php';
 foreach ($xil_objs as $xil_obj) {
     $iid = $xil_obj->get('item_id');
@@ -172,10 +158,13 @@ foreach ($xil_objs as $xil_obj) {
           'item_body' => $itemlib_obj->getItemListBlock(),
         );
     }
-    $items[$iid]['indexes'][] = array(
-    'id' => $xid,
-    'path' => xnpGetIndexPathString($xnpsid, $xid),
-    );
+    if (!isset($indexes[$xid])) {
+        $indexes[$xid] = array(
+          'id' => $xid,
+          'path' => xnpGetIndexPathString($xnpsid, $xid),
+       );
+    }
+    $items[$iid]['indexes'][] = $indexes[$xid];
 }
 
 $xoopsOption['template_main'] = 'xoonips_certify.html';
@@ -197,3 +186,48 @@ $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, 'xoonips_certify_it
 $xoopsTpl->assign('token_ticket', $token_ticket);
 
 require XOOPS_ROOT_PATH.'/footer.php';
+
+function getIndexItemLinks($is_moderator, $admin_gids, $menu_id, $item_ids = array())
+{
+    $xil_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
+    $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id', 'INNER', 'x');
+    $criteria = new CriteriaCompo(new Criteria('certify_state', CERTIFY_REQUIRED));
+    switch ($menu_id) {
+    case 1:
+        // public
+        $criteria->add(new Criteria('open_level', OL_PUBLIC, '=', 'x'));
+        break;
+    case 2:
+        // group only
+        $criteria->add(new Criteria('gid', '('.implode(',', $admin_gids).')', 'IN', 'x'));
+        $criteria->add(new Criteria('open_level', OL_GROUP_ONLY, '=', 'x'));
+        break;
+    default:
+        // public / group only
+        if ($is_moderator) {
+            $criteria_public = new CriteriaCompo(new Criteria('open_level', OL_PUBLIC, '=', 'x'));
+        } else {
+            $criteria_public = false;
+        }
+        if ($is_groupadmin) {
+            $criteria_group = new CriteriaCompo(new Criteria('gid', '('.implode(',', $admin_gids).')', 'IN', 'x'));
+            $criteria_group->add(new Criteria('open_level', OL_GROUP_ONLY, '=', 'x'));
+        } else {
+            $criteria_group = false;
+        }
+        if ($criteria_public) {
+            if ($criteria_group) {
+                $criteria_public->add($criteria_group, 'OR');
+            }
+            $criteria->add($criteria_public);
+        } else {
+            $criteria->add($criteria_group);
+        }
+    }
+    if (!empty($item_ids)) {
+        $criteria->add(new Criteria('item_id', '('.implode(',', $item_ids).')', 'IN'));
+    }
+    $xil_objs = $xil_handler->getObjects($criteria, false, '', false, $join);
+
+    return $xil_objs;
+}

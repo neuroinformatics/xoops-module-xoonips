@@ -16,11 +16,17 @@ $items[] array of item information to be certified
 
 <table >
  <tr class="head">
+  <th>
+    <input type="checkbox" id="xoonips_certify_bulk_check" />
+  </th>
   <th><{$smarty.const._MD_XOONIPS_HEADER_CERTIFY_ITEMS}></th>
  </tr>
 <{if !empty( $items ) }>
  <{foreach item=i from=$items}>
  <tr>
+  <td class="head" style="vertical-align:middle;">
+    <input type="checkbox" form="xoonips_certify_bulk" name="item_ids[]" value="<{$i.item_id}>" />
+  </td>
   <td class="<{cycle values="odd,even"}>">
    <table>
     <tr>
@@ -30,16 +36,16 @@ $items[] array of item information to be certified
     <tr>
      <td class="head" width="80"><{$smarty.const._MD_XOONIPS_ITEM_INDEX_LABEL}></td>
      <td>
-      <form name='xoonips_certify<{$i.item_id}>' action="certify.php<{if !empty($menu_id)}>?menu_id=<{$menu_id}><{/if}>" method="post">
+      <form name="xoonips_certify<{$i.item_id}>" action="certify.php<{if !empty($menu_id)}>?menu_id=<{$menu_id}><{/if}>" method="post">
       <{foreach item=j from=$i.indexes}>
-        <input type='hidden' name='index_ids[]' value='<{$j.id}>' />
+        <input type="hidden" name="index_ids[]" value="<{$j.id}>" />
         <a href="listitem.php?index_id=<{$j.id}>"><{$j.path}></a><br />
       <{/foreach}>
        <img src="images/arrow_ltr.png" alt="arrow" />
        <input class="formButton" type="button" value="<{$smarty.const._MD_XOONIPS_ITEM_CERTIFY_BUTTON_LABEL}>" onclick="this.form.op.value='certify'; submit();" />
        <input class="formButton" type="button" value="<{$smarty.const._MD_XOONIPS_ITEM_UNCERTIFY_BUTTON_LABEL}>" onclick="this.form.op.value='uncertify'; submit();" />
-       <input type='hidden' name='op' value='' />
-       <input type='hidden' name='item_id' value='<{$i.item_id}>' />
+       <input type="hidden" name="op" value="" />
+       <input type="hidden" name="item_id" value="<{$i.item_id}>" />
        <{$token_ticket}>
       </form>
      </td>
@@ -48,9 +54,38 @@ $items[] array of item information to be certified
   </td>
  </tr>
  <{/foreach}>
+ <tr class="head">
+  <th colspan="2">
+   <form id="xoonips_certify_bulk" action="certify.php<{if !empty($menu_id)}>?menu_id=<{$menu_id}><{/if}>" method="post">
+    <img src="images/arrow_ltr.png" alt="arrow" />
+    <input type="hidden" name="op" value="" />
+    <input type="hidden" name="bulk" value="1" />
+    <input class="formButton" type="button" value="Bulk Accept" onclick="this.form.op.value='certify'; submit();" />
+    <input class="formButton" type="button" value="Bulk Reject" onclick="this.form.op.value='uncertify'; submit();" />
+    <{$token_ticket}>
+   </form>
+  </th>
+ </tr>
 <{else}>
  <tr>
   <td class="even" style="text-align: center;"><span style="font-weight: bold; color: red;"><{$smarty.const._MD_XOONIPS_ITEM_NO_CERTIFY_ITEMS}></span></td>
  </tr>
 <{/if}>
 </table>
+
+<script type="application/javascript">
+(function($) {
+$(function(){
+
+$('#xoonips_certify_bulk_check').change(function () {
+  $('input[name="item_ids[]"]').prop("checked", this.checked);
+});
+$('input[name="item_ids[]"]').change(function () {
+  if (!this.checked) {
+    $('#xoonips_certify_bulk_check').prop("checked", this.checked);
+  }
+});
+
+});
+})(jQuery);
+</script>
