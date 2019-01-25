@@ -3500,36 +3500,24 @@ function xnpHasWithout($ar)
 function xnpGetColumnLengths($table_wo_prefix)
 {
     global $xoopsDB;
-    $mysqlinfo = &xoonips_getutility('mysqlinfo');
-    $mysql_names = '';
-    if ($mysqlinfo->isVersion41orHigher()) {
-        $mysql_names = $mysqlinfo->getVariable('character_set_client');
-        $xoopsDB->queryF('/*!40101 SET NAMES latin1 */');
-    }
     $table = $xoopsDB->prefix($table_wo_prefix);
-    $result = $xoopsDB->query("select * from $table limit 1");
-    if ($result == false) {
-        if ($mysqlinfo->isVersion41orHigher()) {
-            $xoopsDB->queryF('/*!40101 SET NAMES '.$mysql_names.' */');
-        }
-
-        return false;
-    }
-
-    $ar = array();
-    for ($i = 0; $i < mysql_num_fields($result); ++$i) {
-        $name = mysql_field_name($result, $i);
-        $len = mysql_field_len($result, $i);
-        $type = mysql_field_type($result, $i);
-        if ($type == 'blob' || $type == 'string') {
-            $ar[$name] = $len;
+    $result = $xoopsDB->queryF('SHOW COLUMNS FROM `'.$table.'`');
+    $ret = array();
+    while ($row = $xoopsDB->fetchArray($result)){
+        $name = $row['Field'];
+        if (preg_match('/(?:varchar|char)\((\d+)\)/', $row['Type'], $matches)) {
+            $ret[$name] = $matches[1];
+        } else if (preg_match('/(tiny|medium|long)?(?:text|blob)/', $row['Type'], $matches)) {
+            $sizes = array(
+                'tiny' => 255,
+                'medium' => 16777215,
+                'long' => 4294967295,
+            );
+            $ret[$name] = isset($sizes[$matches[1]]) ? $sizes[$matches[1]] : 65535;
         }
     }
-    if ($mysqlinfo->isVersion41orHigher()) {
-        $xoopsDB->queryF('/*!40101 SET NAMES '.$mysql_names.' */');
-    }
 
-    return $ar;
+    return $ret;
 }
 
 /**
