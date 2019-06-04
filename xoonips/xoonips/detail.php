@@ -112,7 +112,7 @@ $tmp = array();
 $itemtypes = array();
 if (xnp_get_item_types($tmp) != RES_OK) {
     redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item_types');
-    break;
+    exit();
 } else {
     foreach ($tmp as $i) {
         $itemtypes[$i['item_type_id']] = $i;
