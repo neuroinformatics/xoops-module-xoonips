@@ -76,7 +76,7 @@ $itemtypes = array();
 $tmp = array();
 if (xnp_get_item_types($tmp) != RES_OK) {
     redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item_types '.xnp_get_last_error_string());
-    break;
+    exit();
 } else {
     foreach ($tmp as $i) {
         $itemtypes[$i['item_type_id']] = $i;
@@ -164,7 +164,7 @@ if (isset($index_id)) {
     $num_of_items = count($iids);
     if ($ret != RES_OK) {
         redirect_header(XOOPS_URL.'/', 3, 'ERROR '.xnp_get_last_error_string());
-        break;
+        exit();
     }
 }
 
@@ -260,7 +260,7 @@ $xoopsTpl->assign('page_no_label', $textutil->html_special_chars($page_no_label)
 //if( xnp_get_items( $xnpsid, $iids, array( 'orders' => $cri['orders'] ), $items ) != RES_OK ){
 if (xnp_get_items($xnpsid, $iids, $cri, $items) != RES_OK) {
     redirect_header(XOOPS_URL.'/', 3, 'ERROR '.xnp_get_last_error_string());
-    break;
+    exit();
 }
 
 $item_htmls = array();
