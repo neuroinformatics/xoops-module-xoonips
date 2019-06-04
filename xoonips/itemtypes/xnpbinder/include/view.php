@@ -820,7 +820,7 @@ function xnpbinder_get_to_be_registered_items()
     $tmp = array();
     if (xnp_get_item_types($tmp) != RES_OK) {
         redirect_header(XOOPS_URL.'/modules/xoonips/index.php', 3, 'ERROR xnp_get_item_types ');
-        break;
+        exit();
     } else {
         foreach ($tmp as $i) {
             $itemtypes[$i['item_type_id']] = $i;
@@ -874,7 +874,7 @@ function xnpbinder_get_registered_items($binder_id)
     $tmp = array();
     if (xnp_get_item_types($tmp) != RES_OK) {
         redirect_header(XOOPS_URL.'/modules/xoonips/index.php', 3, 'ERROR xnp_get_item_types ');
-        break;
+        exit();
     } else {
         foreach ($tmp as $i) {
             $itemtypes[$i['item_type_id']] = $i;

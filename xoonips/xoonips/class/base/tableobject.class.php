@@ -475,18 +475,18 @@ class XooNIpsTableObject extends XoopsObject
                 case XOBJ_DTYPE_TXTBOX:
                     if ($v['required'] && $cleanv != '0' && $cleanv == '') {
                         $this->setErrors("$k is required.");
-                        continue;
+                        continue 2;
                     }
                         $cleanv = $ts->censorString($cleanv);
                     if (isset($v['maxlength']) && mb_strlen($cleanv, _CHARSET) > intval($v['maxlength'])) {
                         $this->setErrors("$k must be shorter than ".intval($v['maxlength']).' characters.');
-                        continue;
+                        continue 2;
                     }
                     break;
                 case XOBJ_DTYPE_TXTAREA:
                     if ($v['required'] && $cleanv != '0' && $cleanv == '') {
                         $this->setErrors("$k is required.");
-                        continue;
+                        continue 2;
                     }
                         $cleanv = $ts->censorString($cleanv);
                     break;
@@ -501,17 +501,17 @@ class XooNIpsTableObject extends XoopsObject
                 case XOBJ_DTYPE_EMAIL:
                     if ($v['required'] && $cleanv == '') {
                         $this->setErrors("$k is required.");
-                        continue;
+                        continue 2;
                     }
                     if ($cleanv != '' && !preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+([\.][a-z0-9-]+)+$/i", $cleanv)) {
                         $this->setErrors('Invalid Email');
-                        continue;
+                        continue 2;
                     }
                     break;
                 case XOBJ_DTYPE_URL:
                     if ($v['required'] && $cleanv == '') {
                         $this->setErrors("$k is required.");
-                        continue;
+                        continue 2;
                     }
                     if ($cleanv != '' && !preg_match("/^http[s]*:\/\//i", $cleanv)) {
                         $cleanv = 'http://'.$cleanv;
@@ -529,11 +529,11 @@ class XooNIpsTableObject extends XoopsObject
                         $cleanv = $v['value'];
                     if ($v['required'] && (is_null($cleanv) || $cleanv === '')) {
                         $this->setErrors($k.' is required.');
-                        continue;
+                        continue 2;
                     }
                     if (isset($v['maxlength']) && strlen($cleanv) > intval($v['maxlength'])) {
                         $this->setErrors("$k must be shorter than ".intval($v['maxlength']).' characters.');
-                        continue;
+                        continue 2;
                     }
                     break;
                 default:

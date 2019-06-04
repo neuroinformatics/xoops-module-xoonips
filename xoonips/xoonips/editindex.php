@@ -641,7 +641,7 @@ function xoonipsGetIndexCountInfo($xnpsid, $xid)
     $result = xnp_get_index($xnpsid, $xid, $index);
     if ($result != RES_OK) {
         redirect_header(XOOPS_URL.'/index.php', 3, 'ERROR');
-        break;
+        exit();
     }
     $openLevel = $index['open_level'];
 
@@ -649,7 +649,7 @@ function xoonipsGetIndexCountInfo($xnpsid, $xid)
     $result = xnp_get_all_indexes($xnpsid, array(), $indexes);
     if ($result != RES_OK) {
         redirect_header(XOOPS_URL.'/index.php', 3, 'ERROR');
-        break;
+        exit();
     }
     $indexesLen = count($indexes);
 

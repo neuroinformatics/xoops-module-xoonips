@@ -71,7 +71,7 @@ if ($item_lock_handler->isLocked($item_id)) {
 $item = array();
 if (xnp_get_item($xnpsid, $item_id, $item) != RES_OK) {
     redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item');
-    break;
+    exit();
 } else {
     $item_type_id = $item['item_type_id'];
 }
@@ -80,7 +80,7 @@ if (xnp_get_item($xnpsid, $item_id, $item) != RES_OK) {
 $itemtypes = array();
 if (xnp_get_item_types($itemtypes) != RES_OK) {
     redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item_types');
-    break;
+    exit();
 } else {
     foreach ($itemtypes as $i) {
         if ($i['item_type_id'] == $item_type_id) {

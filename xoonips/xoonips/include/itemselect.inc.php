@@ -91,7 +91,7 @@ $itemtype_names = array();
 $tmp = array();
 if (xnp_get_item_types($tmp) != RES_OK) {
     redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item_types ');
-    break;
+    exit();
 } else {
     foreach ($tmp as $i) {
         $itemtypes[$i['item_type_id']] = $i;
@@ -278,7 +278,7 @@ case 'add_selected_item':
 
     xoonips_add_selected_item($add_to_index_id, $xoopsUser->getVar('uid'), $initially_selected, $selected);
     header('Location: '.XOOPS_URL."/modules/xoonips/listitem.php?index_id=$add_to_index_id");
-    break;
+    exit();
 case 'add_to_index':
     $errorMessage = '';
     $iids = xoonips_advanced_search($keyword, $search_itemtype, false, $errorMessage, $search_cache_id);
@@ -349,7 +349,7 @@ case 'select_item_useritem_pagenavi':
     $iids = array();
     if (xnp_dump_item_id($xnpsid, $cri, $iids) != RES_OK) {
         redirect_header(XOOPS_URL.'/', 3, 'ERROR in get item');
-        break;
+        exit();
     }
 
     $xoopsTpl->assign('op', 'select_item_useritem');
@@ -398,7 +398,7 @@ if ($search_tab == 'metadata' || $search_itemtype == 'metadata') {
     }
     if (xnp_get_items($xnpsid, $iids, $cri, $items) != RES_OK) {
         redirect_header(XOOPS_URL.'/', 3, 'ERROR ');
-        break;
+        exit();
     }
     $xoopsTpl->assign('ids', $iids);
 
@@ -716,6 +716,7 @@ function xoonips_add_selected_item($index_id, $uid, $old_selected_item_ids, $new
 
         if (!$item_handler->insert($item)) {
             redirect_header(XOOPS_URL.'/', 3, 'ERROR in updating item');
+            exit();
         }
         trigger_error('TODO lock item and indexes');
 
