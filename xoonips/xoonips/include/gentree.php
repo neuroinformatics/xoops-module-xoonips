@@ -99,7 +99,7 @@ function genIndexTree1(&$indexes)
     // divide into every parents
     $indexFinder = array(); // index_id -> index
     $childFinder = array(); // index_id -> child_index_id
-    while (list($dummy, $index) = each($indexes)) {
+    foreach ($indexes as $index) {
         if ($index === false) {
             continue;
         }

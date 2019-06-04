@@ -364,13 +364,11 @@ if ($op == 'add_to_public' && isset($check)) {
     $lengths = xnpGetColumnLengths('xoonips_item_title');
 
     // error if checked index is locked.
-    reset($check);
-    while (list($key, $index_id) = each($check)) {
+    foreach  ($check as $index_id) {
         xoonips_show_error_if_index_locked($index_id, $xid);
     }
 
-    reset($check);
-    while (list($key, $index_id) = each($check)) {
+    foreach  ($check as $index_id) {
         $index_id = (int) $index_id;
         $index = array();
         $result = xnp_get_index($xnpsid, $index_id, $index);
