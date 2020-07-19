@@ -1,14 +1,16 @@
 ---------------------------------------------------------------------------
                       List of XooNIps Change Logs
 ---------------------------------------------------------------------------
-3.49 released (XX/Sep/2016)
+3.49 released (19/Jul/2020)
 + maintenance release from ver.3.48
 
 Change Logs:
 * Bug fixes
+  - Fixed SQLi and XSS security issue on item listing page.
   - Fixed bug for downloading file on IE11.
   - Fixed cumulative minor bugs.
 * Compatibility enhancements
+  - Support PHP 7.3
   - Update creative commons version to 4.0.
 * Other enhancements
   - Add Xoops Cube Legacy Delegate 'Module.Xoonips.FileDownload.Prepare' to

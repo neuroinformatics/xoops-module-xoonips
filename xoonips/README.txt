@@ -1,8 +1,8 @@
 xoonips 3.49 : Neuroinformatics Base Platform System 
 
-Copyright (C) 2005-2016 RIKEN, Japan All rights reserved.
+Copyright (C) 2005-2020 RIKEN, Japan All rights reserved.
 
-Managed by Neuroinformatics Japan Center, RIKEN Brain Science Institute.
+Managed by Neuroinformatics Unit, RIKEN Center for Brain Science
 
 DESCRIPTION:
   XooNIps is Neuroinformatics Base Platform System based on the XOOPS.
@@ -38,7 +38,7 @@ Directories Layout:
   |   -- xoonips         Simple xoonips theme
   |- contrib             Information of the third vendor provided modules and 
   |                      libraries (see contrib/LIST.txt for more detail)
-  -- preload             Sample preloads
+  -- preload             Sample preloads for XOOPS Cube Legacy
 
 Install:
  1) put 'xoonips' directory to the XOOPS modules directory.

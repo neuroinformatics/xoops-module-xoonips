@@ -30,7 +30,7 @@
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
 $modversion['name'] = _MI_XNPFILES_NAME;
-$modversion['version'] = 3.48;
+$modversion['version'] = 3.49;
 $modversion['description'] = _MI_XNPFILES_DESC;
 $modversion['credits'] = 'RIKEN, Japan (http://www.riken.jp/)';
 $modversion['author'] = 'The XooNIps Project (http://sourceforge.jp/projects/xoonips/)';

@@ -3,3 +3,4 @@
 \#*
 *.bak
 .idea/
+.php_cs.cache
