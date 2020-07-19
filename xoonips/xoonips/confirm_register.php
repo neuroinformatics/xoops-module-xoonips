@@ -59,8 +59,7 @@ $uid = $_SESSION['xoopsUserId'];
 //retrive module name to $modname
 $itemtypes = array();
 if (xnp_get_item_types($itemtypes) != RES_OK) {
-    redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item_types');
-    exit();
+    xoonips_error_exit(500);
 } else {
     foreach ($itemtypes as $i) {
         if ($i['item_type_id'] == $item_type_id) {
@@ -262,8 +261,7 @@ if (isset($op) && $op == 'register') {
         // if any private indexes are not selected.
         $account = array();
         if (RES_OK != xnp_get_account($xnpsid, $uid, $account)) {
-            redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_account. '.xnp_get_last_error_string());
-            exit();
+            xoonips_error_exit(500);
         }
         if (!$private_index_flag) {
             //select /Private
