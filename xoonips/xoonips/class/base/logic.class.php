@@ -65,42 +65,45 @@ class XooNIpsLogic
     public function restoreSession($sessionid)
     {
         global $_SESSION;
-        session_id($sessionid);
-        // restore $_SESSION
+        // check whether session is exists
         $xoops_sess_handler = &xoops_gethandler('session');
         $sess_data = $xoops_sess_handler->read($sessionid);
-        if ($sess_data == '') {
-            return array(
-                false,
-                false,
-                false,
-            );
-        } else {
-            session_decode($sess_data);
+        if ('' == $sess_data) {
+            return array(false, false, false);
+        }
+        $prev_sessid = session_id();
+        if ($sessionid != $prev_sessid) {
+            session_write_close();
+            session_id($sessionid);
+            session_start();
         }
         $uid = $_SESSION['xoopsUserId'];
-        if ($uid == UID_GUEST) {
+        if (UID_GUEST == $uid) {
             // reject guest if guest is forbidden
             $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
             $target_user = $xconfig_handler->getValue(XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_KEY);
-            if ($target_user != XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_ALL) {
-                return array(
-                    false,
-                    false,
-                    false,
-                );
+            if (XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_ALL != $target_user) {
+                if ($sessionid != $prev_sessid) {
+                    session_write_close();
+                    session_id($prev_sessid);
+                    session_start();
+                }
+
+                return array(false, false, false);
             }
             $session = false;
         } else {
             // validate session
             $sess_handler = &xoonips_getormhandler('xoonips', 'session');
             $sessions = &$sess_handler->getObjects(new Criteria('sess_id', $sessionid));
-            if (!$sessions || count($sessions) != 1) {
-                return array(
-                    false,
-                    false,
-                    false,
-                );
+            if (!$sessions || 1 != count($sessions)) {
+                if ($sessionid != $prev_sessid) {
+                    session_write_close();
+                    session_id($prev_sessid);
+                    session_start();
+                }
+
+                return array(false, false, false);
             }
 
             $member_handler = &xoops_gethandler('member');
@@ -114,11 +117,7 @@ class XooNIpsLogic
             $sess_handler->insert($session);
         }
 
-        return array(
-            true,
-            $uid,
-            $session,
-        );
+        return array(true, $uid, $session);
     }
 
     /**
@@ -128,14 +127,14 @@ class XooNIpsLogic
      * @param response XooNIpsResponse object
      * @param item XooNIpsItem object
      *
-     * @return boolean true if succeeded
+     * @return bool true if succeeded
      */
     public function touchItem1(&$error, &$item, $uid)
     {
         // get indexes
         $index_ids = array();
         $index_item_links = $item->getVar('indexes');
-        if (!$index_item_links || count($index_item_links) == 0) {
+        if (!$index_item_links || 0 == count($index_item_links)) {
             $error->add(XNPERR_SERVER_ERROR, 'no indexes');
 
             return false;
@@ -148,7 +147,7 @@ class XooNIpsLogic
 
             return false;
         }
-        $auto_certify = ($certify_item == 'auto');
+        $auto_certify = ('auto' == $certify_item);
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
         $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
@@ -169,10 +168,10 @@ class XooNIpsLogic
                 return false;
             }
             $open_level = $index->get('open_level');
-            if ($open_level == OL_GROUP_ONLY || $open_level == OL_PUBLIC) {
+            if (OL_GROUP_ONLY == $open_level || OL_PUBLIC == $open_level) {
                 // get moderator/groupadmin uid list
                 $open_level = $index->get('open_level');
-                if ($open_level == OL_PUBLIC && $auto_certify) {
+                if (OL_PUBLIC == $open_level && $auto_certify) {
                     $is_public = true;
                 }
                 $indexes[] = $index;
@@ -221,7 +220,7 @@ class XooNIpsLogic
                 return false;
             }
         } else {
-            if ($old_item_status && $old_item_status->get('is_deleted') == 0) {
+            if ($old_item_status && 0 == $old_item_status->get('is_deleted')) {
                 // public -> non-public
                 $item_status->setVar('deleted_timestamp', time(), true); // not gpc
                 $item_status->setVar('is_deleted', 1, true); // not gpc
@@ -245,7 +244,7 @@ class XooNIpsLogic
      * @param response XooNIpsResponse object
      * @param item XooNIpsItem object
      *
-     * @return boolean true if succeeded
+     * @return bool true if succeeded
      */
     public function touchItem2(&$error, &$item, $uid)
     {
@@ -261,9 +260,9 @@ class XooNIpsLogic
         );
         foreach ($index_item_links as $link) {
             $indexId = $link->get('index_id');
-            if ($link->get('certify_state') == CERTIFY_REQUIRED) {
+            if (CERTIFY_REQUIRED == $link->get('certify_state')) {
                 $indexIds[CERTIFY_REQUIRED][] = $indexId;
-            } elseif ($link->get('certify_state') == CERTIFIED) {
+            } elseif (CERTIFIED == $link->get('certify_state')) {
                 $indexIds[CERTIFIED][] = $indexId;
             }
         }
@@ -396,7 +395,7 @@ class XooNIpsLogic
                 $error->add(XNPERR_SERVER_ERROR, "cannot get index(index_id=$index_id)");
 
                 return false;
-            } elseif ($index->get('open_level') == OL_GROUP_ONLY) {
+            } elseif (OL_GROUP_ONLY == $index->get('open_level')) {
                 $new_gids[$index->get('gid')] = true;
             }
         }
@@ -408,7 +407,7 @@ class XooNIpsLogic
                 $error->add(XNPERR_SERVER_ERROR, "cannot get index(index_id=$index_id)");
 
                 return false;
-            } elseif ($index->get('open_level') == OL_GROUP_ONLY) {
+            } elseif (OL_GROUP_ONLY == $index->get('open_level')) {
                 $old_gids[$index->get('gid')] = true;
             }
         }
@@ -419,7 +418,7 @@ class XooNIpsLogic
             $error->add(XNPERR_SERVER_ERROR, 'cannot get certify_item config');
 
             return false;
-        } elseif ($certify_item == 'auto' && count($new_gids)) {
+        } elseif ('auto' == $certify_item && count($new_gids)) {
             $groups_handler = &xoonips_getormhandler('xoonips', 'groups');
             foreach ($new_gids as $gid => $dummy) {
                 $group = $groups_handler->get($gid);
@@ -478,11 +477,12 @@ class XooNIpsLogic
 
     /**
      * convert prefixed number to a number(e.g. '4k' to 4096).
+     *
      * @param string $val
      */
     public function returnBytes($val)
     {
-        if ($val == '' || $val == -1) {
+        if ('' == $val || -1 == $val) {
             // '' : disable memory limit.
             // -1 : unlimit size
             $val = '1G';
@@ -496,8 +496,10 @@ class XooNIpsLogic
                 // The 'G' modifier is available since PHP 5.1.0
             case 'g':
                 $val *= 1024;
+                // no break
             case 'm':
                 $val *= 1024;
+                // no break
             case 'k':
                 $val *= 1024;
             }
@@ -565,8 +567,8 @@ class XooNIpsLogic
         if (!$year_valid
             || !$month_valid
             || !$mday_valid
-            || $int_year == 0 && ($int_month != 0 || $int_mday != 0)
-            || $int_month == 0 && $int_mday != 0
+            || 0 == $int_year && (0 != $int_month || 0 != $int_mday)
+            || 0 == $int_month && 0 != $int_mday
         ) {
             $error->add(XNPERR_INVALID_PARAM, 'invalid creation date');
 
@@ -574,15 +576,15 @@ class XooNIpsLogic
         }
 
         $is_complete = true;
-        if ($year_required && $int_year == 0) {
+        if ($year_required && 0 == $int_year) {
             $error->add(XNPERR_INCOMPLETE_PARAM, 'creation_year');
             $is_complete = false;
         }
-        if ($month_required && $int_month == 0) {
+        if ($month_required && 0 == $int_month) {
             $error->add(XNPERR_INCOMPLETE_PARAM, 'creation_month');
             $is_complete = false;
         }
-        if ($mday_required && $int_mday == 0) {
+        if ($mday_required && 0 == $int_mday) {
             $error->add(XNPERR_INCOMPLETE_PARAM, 'creation_mday');
             $is_complete = false;
         }
