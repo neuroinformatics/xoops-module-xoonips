@@ -223,31 +223,37 @@ function xnpCleanup()
     $cacheFileTable = $xoopsDB->prefix('xoonips_search_cache_file');
 
     // remove file if no-related sessions and files
-    $sql = "select file_id from $fileTable as tf left join $sessionTable as ts on tf.sess_id=ts.sess_id where tf.item_id is NULL and ts.sess_id is NULL";
+    $sql = 'SELECT `file_id` FROM '.$fileTable.' AS `tf` LEFT JOIN '.$sessionTable.' AS `ts` ON `tf`.`sess_id`=`ts`.`sess_id` WHERE `tf`.`item_id` IS NULL AND `ts`.`sess_id` IS NULL';
     $result = $xoopsDB->query($sql);
+    if (false === $result) {
+        xoonips_error_exit(500);
+    }
     while (list($file_id) = $xoopsDB->fetchRow($result)) {
         $path = xnpGetUploadFilePath($file_id);
 
         if (is_file($path)) {
             unlink($path);
         }
-        $xoopsDB->queryF("delete from $searchTextTable where file_id=$file_id");
-        $xoopsDB->queryF("delete from $fileTable where file_id=$file_id");
+        $xoopsDB->queryF("DELETE FROM $searchTextTable WHERE `file_id`=$file_id");
+        $xoopsDB->queryF("DELETE FROM $fileTable WHERE `file_id`=$file_id");
     }
 
     // get search_cache_id from timeouted session_id
     $scids = array();
-    $sql = "select search_cache_id from $cacheTable as tc left join $sessionTable as ts on ts.sess_id=tc.sess_id where ts.sess_id is NULL";
+    $sql = 'SELECT `search_cache_id` FROM '.$cacheTable.' AS `tc` LEFT JOIN '.$sessionTable.' AS `ts` ON `ts`.`sess_id`=`tc`.`sess_id` WHERE `ts`.`sess_id` IS NULL';
     $result = $xoopsDB->query($sql);
+    if (false === $result) {
+        xoonips_error_exit(500);
+    }
     while (list($scid) = $xoopsDB->fetchRow($result)) {
         $scids[] = $scid;
     }
 
     $tmp = implode(',', $scids);
-    $xoopsDB->queryF("delete low_priority from $cacheTable         where search_cache_id in (".$tmp.')');
-    $xoopsDB->queryF("delete low_priority from $cacheItemTable     where search_cache_id in (".$tmp.')');
-    $xoopsDB->queryF("delete low_priority from $cacheMetadataTable where search_cache_id in (".$tmp.')');
-    $xoopsDB->queryF("delete low_priority from $cacheFileTable     where search_cache_id in (".$tmp.')');
+    $xoopsDB->queryF("DELETE LOW_PRIORITY FROM $cacheTable         WHERE `search_cache_id` IN (".$tmp.')');
+    $xoopsDB->queryF("DELETE LOW_PRIORITY FROM $cacheItemTable     WHERE `search_cache_id` IN (".$tmp.')');
+    $xoopsDB->queryF("DELETE LOW_PRIORITY FROM $cacheMetadataTable WHERE `search_cache_id` IN (".$tmp.')');
+    $xoopsDB->queryF("DELETE LOW_PRIORITY FROM $cacheFileTable     WHERE `search_cache_id` IN (".$tmp.')');
 }
 
 function xnpIsCommaSeparatedNumber($str)
@@ -269,8 +275,7 @@ function xnpGetUploadDir()
     $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $uploadDir = $xconfig_handler->getValue('upload_dir');
     if (empty($uploadDir)) {
-        echo 'error: upload_dir is not configured.';
-
+        // upload_dir is not configured.
         return false;
     }
 
@@ -296,7 +301,7 @@ function xnpGetUploadFilePath($file_id)
  *
  * @param columns string culumns
  * @param condition query of SQL. t_file and t_file_type are possible to use for tablename.
- * ex.  $files = xnpGetFileInfo( "t_file.file_id, t_file.", "t_file_type.name='preview' and is_deleted=0 and ( item_id=$item_id or sid = $sid )" );
+ * ex.  $files = xnpGetFileInfo('`t_file`.`file_id`, `t_file`.', '`t_file_type`.`name`=\'preview\' AND `is_deleted`=0 AND (`item_id`='.$item_id.' OR sid='.$sid.')');
  *
  * @return array( array( colum1, column2, ... ), ...);
  */
@@ -304,20 +309,16 @@ function xnpGetFileInfo($columns, $condition, $item_id)
 {
     global $xoopsDB;
 
-    $xnpsid = $_SESSION['XNPSID'];
-    $esc_sess_id = addslashes(session_id());
     $item_id = (int) $item_id;
-    $condition2 = " ( item_id is NULL and sess_id = '$esc_sess_id' or item_id = $item_id )";
+    $condition2 = '(`item_id` IS NULL AND `sess_id`='.$xoopsDB->quoteString(session_id()).' OR `item_id`='.$item_id.')';
 
-    $sql = "select $columns from ".
-    $xoopsDB->prefix('xoonips_file').' as t_file, '.
-    $xoopsDB->prefix('xoonips_file_type').' as t_file_type '.
-    " where t_file.file_type_id = t_file_type.file_type_id and $condition and $condition2 ";
+    $sql = 'SELECT '.$columns.' FROM '.
+        $xoopsDB->prefix('xoonips_file').' AS `t_file`, '.
+        $xoopsDB->prefix('xoonips_file_type').' AS `t_file_type` '.
+        ' WHERE `t_file`.`file_type_id` = `t_file_type`.`file_type_id` AND '.$condition.' AND '.$condition2;
     $result = $xoopsDB->query($sql);
-    if (false == $result) {
-        echo "xnpGetFileInfo: $sql ".mysql_error();
-
-        return false;
+    if (false === $result) {
+        xoonips_error_exit(500);
     }
 
     $files = array();
@@ -462,13 +463,14 @@ function xnpGetPreviewDetailBlock($item_id)
 {
     $textutil = &xoonips_getutility('text');
     // get file's information specified by item_id
-    $files = xnpGetFileInfo('t_file.file_id, t_file.caption', "t_file_type.name='preview' and is_deleted=0 and sess_id is NULL ", $item_id);
+    $files = xnpGetFileInfo('`t_file`.`file_id`, `t_file`.`caption`', '`t_file_type`.`name`=\'preview\' AND `is_deleted`=0 AND `sess_id` IS NULL', $item_id);
     // generate HTML
     reset($files);
     $imageHtml1 = array();
     $imageHtml2 = array();
     $fileIDs = array();
-    while (list($dummy, list($fileID, $caption)) = each($files)) {
+    foreach ($files as $files_) {
+        list($dummy, list($fileID, $caption)) = $files_;
         $thumbnailFileName = XOOPS_URL."/modules/xoonips/image.php?file_id=$fileID&amp;thumbnail=1";
         $imageFileName = XOOPS_URL."/modules/xoonips/image.php?file_id=$fileID";
         $htmlCaption = $textutil->html_special_chars($caption);
@@ -496,6 +498,7 @@ function xnpGetPreviewDetailBlock($item_id)
  */
 function xnpGetAttachmentDetailBlock($item_id, $name)
 {
+    global $xoopsDB;
     $textutil = &xoonips_getutility('text');
     // get attachment file
     // generate html
@@ -506,16 +509,16 @@ function xnpGetAttachmentDetailBlock($item_id, $name)
 
     $item = array();
     $res = xnp_get_item($_SESSION['XNPSID'], $item_id, $item);
-    $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name, t_file.file_size, t_file.mime_type, unix_timestamp(t_file.timestamp), download_count', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
+    $files = xnpGetFileInfo('`t_file`.`file_id`, `t_file`.original_file_name, `t_file`.`file_size`, `t_file`.`mime_type`, unix_timestamp(`t_file`.timestamp), download_count', '`t_file_type`.`name`='.$xoopsDB->quoteString($name).' AND `sess_id` IS NULL AND `is_deleted`=0', $item_id);
     if (false == $files || 0 == count($files) || RES_OK != $res) {
         $html = '';
         $hidden = '';
     } else {
         list(list($fileID, $fileName, $fileSize, $mimeType, $timestamp, $download_count)) = $files;
         $htmlFileName = $textutil->html_special_chars($fileName);
-        $url = XOOPS_URL."/modules/xoonips/download.php?file_id=$fileID";
+        $url = XOOPS_URL.'/modules/xoonips/download.php?file_id='.$fileID;
 
-        list($tmp) = xnpGetFileInfo('sum(t_file.download_count)', "t_file_type.name='$name' and sess_id is NULL ", $item_id);
+        list($tmp) = xnpGetFileInfo('SUM(`t_file`.`download_count`)', '`t_file_type`.`name`='.$xoopsDB->quoteString($name).' AND `sess_id` IS NULL ', $item_id);
         $totalDownloads = $tmp[0];
 
         if ($fileSize >= 1024 * 1024) {
@@ -531,14 +534,15 @@ function xnpGetAttachmentDetailBlock($item_id, $name)
         // item_id -> modname
         $itemtypes = array();
         $module_name = 'xoonips';
-        if (RES_OK == ($res = xnp_get_item_types($itemtypes))) {
-            foreach ($itemtypes as $itemtype) {
-                if ($itemtype['item_type_id'] != $item['item_type_id']) {
-                    continue;
-                }
-                $module_name = $itemtype['name'];
-                require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+        if (RES_OK != ($res = xnp_get_item_types($itemtypes))) {
+            xoonips_error_exit(500);
+        }
+        foreach ($itemtypes as $itemtype) {
+            if ($itemtype['item_type_id'] != $item['item_type_id']) {
+                continue;
             }
+            $module_name = $itemtype['name'];
+            require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
         }
 
         $func = $module_name.'GetDownloadConfirmationRequired';
@@ -584,8 +588,7 @@ function xnpGetAttachmentDetailBlock($item_id, $name)
           </tr>
         </table>
         <br />
-        "._MD_XOONIPS_ITEM_TOTAL_DOWNLOAD_COUNT_SINCE_LABEL.date(DATE_FORMAT, $item['creation_date'])." : $totalDownloads<br />
-        ";
+        "._MD_XOONIPS_ITEM_TOTAL_DOWNLOAD_COUNT_SINCE_LABEL.date(DATE_FORMAT, $item['creation_date']).' : '.$totalDownloads.'<br />';
 
         $fname_dllimit = "${module_name}GetAttachmentDownloadLimitOption";
         if (function_exists($fname_dllimit) && 1 == $fname_dllimit($item_id)) {
@@ -619,7 +622,7 @@ function xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $attachmen
     }
 
     require_once dirname(__DIR__).'/class/base/gtickets.php';
-    $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name, t_file.file_size, t_file.mime_type, unix_timestamp(t_file.timestamp) ', 'sess_id is NULL and is_deleted=0', $item_id);
+    $files = xnpGetFileInfo('`t_file`.`file_id`, `t_file`.original_file_name, `t_file`.`file_size`, `t_file`.`mime_type`, UNIX_TIMESTAMP(`t_file`.`timestamp`) ', '`sess_id` IS NULL AND `is_deleted`=0', $item_id);
 
     if (false == $files || 0 == count($files)) {
         return '';
@@ -710,10 +713,11 @@ function xoonips_get_download_filename($file_id)
  */
 function xnpGetAttachmentFilenameBlock($item_id, $name)
 {
+    global $xoopsDB;
     $textutil = &xoonips_getutility('text');
     // get attachment file
     // generate html
-    $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
+    $files = xnpGetFileInfo('`t_file`.`file_id`, `t_file`.original_file_name', '`t_file_type`.`name`='.$xoopsDB->quoteString($name).' AND `sess_id` IS NULL AND `is_deleted`=0', $item_id);
     if (0 == count($files)) {
         $html = '';
     } else {
@@ -738,7 +742,7 @@ function xnpGetAttachmentMimetypeBlock($item_id, $name)
     $textutil = &xoonips_getutility('text');
     // get attachment file
     // generate html
-    $files = xnpGetFileInfo('t_file.file_id, t_file.mime_type', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
+    $files = xnpGetFileInfo('`t_file`.`file_id`, `t_file`.`mime_type`', '`t_file_type`.`name`='.$xoopsDB->quoteString($name).' AND `sess_id` IS NULL AND `is_deleted`=0', $item_id);
     if (0 == count($files)) {
         $html = '';
     } else {
@@ -756,10 +760,11 @@ function xnpGetAttachmentMimetypeBlock($item_id, $name)
  */
 function xnpGetAttachmentFiletypeBlock($item_id, $name)
 {
+    global $xoopsDB;
     $textutil = &xoonips_getutility('text');
     // get attachment file
     // generate html
-    $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
+    $files = xnpGetFileInfo('`t_file`.`file_id`, `t_file`.original_file_name', '`t_file_type`.`name`='.$xoopsDB->quoteString($name).' AND `sess_id` IS NULL AND `is_deleted`=0', $item_id);
     if (0 == count($files)) {
         $html = '';
     } else {
@@ -902,17 +907,17 @@ function xnpUploadFile($name, $keyval)
     global $xoopsDB;
     $textutil = &xoonips_getutility('text');
 
-    $esc_sess_id = addslashes($_SESSION['XNPSID']);
+    $esc_sess_id = $xoopsDB->quoteString($_SESSION['XNPSID']);
 
     // get file_type_id
-    $sql = 'select file_type_id from '.$xoopsDB->prefix('xoonips_file_type')." where name='$name' ";
+    $sql = 'SELECT `file_type_id` FROM '.$xoopsDB->prefix('xoonips_file_type').' WHERE `name`='.$xoopsDB->quoteString($name);
     $result = $xoopsDB->query($sql);
-    if (false == $result) {
-        return array(false, "xnpUploadFile: bad sql $sql ".mysql_error());
+    if (false === $result) {
+        xoonips_error_exit(500);
     }
     list($fileTypeID) = $xoopsDB->fetchRow($result);
     if (empty($fileTypeID)) {
-        return array(false, "xnpUploadFile: no filetype '$name' ");
+        return array(false, 'xnpUploadFile: no filetype '.$name);
     }
 
     // register file table
@@ -925,16 +930,16 @@ function xnpUploadFile($name, $keyval)
     xnpTrimColumn($ar, 'xoonips_file', array_keys($ar), _CHARSET);
 
     // record in file table
-    $escOriginalFileName = addslashes($ar['original_file_name']);
-    $escMimeType = addslashes($ar['mime_type']);
+    $escOriginalFileName = $xoopsDB->quoteString($ar['original_file_name']);
+    $escMimeType = $xoopsDB->quoteString($ar['mime_type']);
     $fileSize = (int) $file['size'];
-    $escKeys = '';
-    $escVals = '';
+    $escKeys = array();
+    $escVals = array();
     if (is_array($keyval) && 0 != count($keyval)) {
-        reset($keyval);
-        while (list($key, $val) = each($keyval)) {
-            $escKeys .= ','.addslashes($key);
-            $escVals .= ",'".addslashes($val)."'";
+        foreach ($keyval as $keyval_) {
+            list($key, $val) = $keyval_;
+            $escKeys[] = '`'.str_replace('`', '``', $key).'`';
+            $escVals[] = $xoopsDB->quoteString($val);
         }
     }
     $error = (int) $file['error'];
@@ -947,18 +952,17 @@ function xnpUploadFile($name, $keyval)
 
         return array(false, $errorMessage);
     }
-    $sql = 'insert into '.$xoopsDB->prefix('xoonips_file').
-        " ( original_file_name, mime_type, file_size, sess_id, item_id, file_type_id  $escKeys ) ".
-        " values ( '$escOriginalFileName', '$escMimeType', $fileSize, '$esc_sess_id', NULL, $fileTypeID  $escVals) ";
+    $sql = 'INSERT INTO '.$xoopsDB->prefix('xoonips_file').
+        ' (`original_file_name`, `mime_type`, `file_size`, `sess_id`, `item_id`, `file_type_id`, '.implode(', ', $escKeys).')'.
+        ' VALUES ('.$escOriginalFileName.', '.$escMimeType.', '.$fileSize.', '.$esc_sess_id.', NULL, '.$fileTypeID.', '.implode(', ', $escVals).')';
     $result = $xoopsDB->queryF($sql);
-    if (false == $result) {
-        return array(false, "xnpUploadFile: bad sql $sql ".mysql_error());
+    if (false === $result) {
+        xoonips_error_exit(500);
     }
 
     // file is moved at hand.
     $fileID = $xoopsDB->getInsertId();
     $filePath = xnpGetUploadFilePath($fileID);
-    $escFilePath = addslashes($filePath);
     $uploadTmpDirPath = ini_get('upload_tmp_dir');
     if (!empty($uploadTmpDirPath)) {
         if (!is_writable($uploadTmpDirPath)) {
@@ -970,7 +974,7 @@ function xnpUploadFile($name, $keyval)
     } else {
         $result = move_uploaded_file($file['tmp_name'], $filePath);
         if (false == $result) {
-            return array(false, "xnpUploadFile: cannot move_uploaded_file. \n $name ".$file['tmp_name'].' to '.$filePath);
+            return array(false, 'xnpUploadFile: failed to move uploaded file.');
         }
     }
 
@@ -1001,9 +1005,7 @@ function xnpGetPreviewEditBlock($item_id)
         } else {
             // illegal inputs are removed.
             if (!xnpIsCommaSeparatedNumber($previewFileID)) {
-                echo 'Error: bad previewFileID';
-
-                return false;
+                xoonips_error_exit(400);
             }
             $previewFileIDs = explode(',', $previewFileID);
         }
@@ -1055,9 +1057,10 @@ function xnpGetPreviewEditBlock($item_id)
         }
 
         // previewFileID -> files
+        $previewFileIDs = array_map('intval', $previewFileIDs);
         if (count($previewFileIDs)) {
-            $sql = 't_file.file_id in ('.implode(',', $previewFileIDs).')';
-            $files = xnpGetFileInfo('t_file.file_id, t_file.caption', "t_file_type.name='preview' and $sql ", $item_id);
+            $sql = '`t_file`.`file_id` IN ('.implode(',', $previewFileIDs).')';
+            $files = xnpGetFileInfo('`t_file`.`file_id`, `t_file`.`caption`', '`t_file_type`.`name`=\'preview\' AND '.$sql, $item_id);
         }
         // Value of previewFileID are returned to $_POST ( Value of $_POST is saved and restored on register.php ).
         $formdata->set('post', 'previewFileID', implode(',', $previewFileIDs));
@@ -1065,14 +1068,15 @@ function xnpGetPreviewEditBlock($item_id)
         // user comes from non-editing pages.
         // get default value from database.
         if (!empty($item_id)) {
-            $files = xnpGetFileInfo('t_file.file_id, t_file.caption', "t_file_type.name='preview' and is_deleted=0 and item_id=$item_id ", $item_id);
+            $files = xnpGetFileInfo('`t_file`.`file_id`, `t_file`.`caption`', '`t_file_type`.`name`=\'preview\' AND `is_deleted`=0 AND `item_id`='.$item_id, $item_id);
         }
     }
 
     // display files in HTML format.
     $ar = array();
     reset($files);
-    while (list($key, list($fileID, $caption)) = each($files)) {
+    foreach ($files as $files_) {
+        list($key, list($fileID, $caption)) = $files_;
         $ar[] = $fileID;
     }
     $previewFileID = implode(',', $ar);
@@ -1096,7 +1100,8 @@ function xnpGetPreviewEditBlock($item_id)
     $imageHtml2 = array();
     $imageHtml3 = array();
     reset($files);
-    while (list($dummy, list($fileID, $caption)) = each($files)) {
+    foreach ($files as $files_) {
+        list($dummy, list($fileID, $caption)) = $files_;
         $thumbnailFileName = XOOPS_URL."/modules/xoonips/image.php?file_id=$fileID&amp;thumbnail=1";
         $imageFileName = XOOPS_URL."/modules/xoonips/image.php?file_id=$fileID";
         $htmlCaption = $textutil->html_special_chars($caption);
@@ -1111,23 +1116,25 @@ function xnpGetPreviewEditBlock($item_id)
 
 function xnpGetAttachmentEditBlock($item_id, $name)
 {
+    global $xoopsDB;
     $textutil = &xoonips_getutility('text');
     $formdata = &xoonips_getutility('formdata');
-    $sql = 't_file.file_id, t_file.original_file_name, t_file.file_size';
+    $sql = '`t_file`.`file_id`, `t_file`.`original_file_name`, `t_file`.`file_size`';
     // get file information.
     $fileID = $formdata->getValue('post', $name.'FileID', 'i', false);
     if (isset($fileID)) {
         // user comes from Confirm/Edit/Register page.
         if ($fileID) {
-            $fileInfo = xnpGetFileInfo($sql, "t_file.file_id = $fileID", $item_id);
+            $fileInfo = xnpGetFileInfo($sql, '`t_file`.`file_id`='.$fileID, $item_id);
         }
         // there is a deletion demand of a file
         $deleteFileID = $formdata->getValue('post', 'fileID', 'i', false);
         if ('Delete' == $formdata->getValue('post', 'mode', 's', false, '') && $fileID == $deleteFileID) {
             $fileInfo = false;
         }
-    } elseif (!empty($item_id)) { // get default value from database.
-        $fileInfo = xnpGetFileInfo($sql, "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
+    } elseif (!empty($item_id)) {
+        // get default value from database.
+        $fileInfo = xnpGetFileInfo($sql, '`t_file_type`.`name`='.$xoopsDB->quoteString($name).' AND `sess_id` IS NULL AND `is_deleted`=0', $item_id);
     }
 
     // generate html
@@ -1137,12 +1144,12 @@ function xnpGetAttachmentEditBlock($item_id, $name)
     } else {
         list(list($fileID, $fileName, $fileSize)) = $fileInfo;
         $fileName = $textutil->html_special_chars($fileName);
-        $fileInfoLine = "$fileName  ($fileSize Bytes) <input class='formButton' type='button' name='file_delete_button_".$fileID."' value='"._MD_XOONIPS_ITEM_DELETE_BUTTON_LABEL."' onclick=\"xnpSubmitFileDelete( this.form, '$name', $fileID )\" />";
+        $fileInfoLine = $fileName.' ('.$fileSize.' Bytes)'.
+           ' <input class="formButton" type="button" name="file_delete_button_'.$fileID.'" value="'._MD_XOONIPS_ITEM_DELETE_BUTTON_LABEL.'" onclick="xnpSubmitFileDelete(this.form, \''.$name.'\', '.$fileID.')" />';
     }
-    $html = "
-    <input type='hidden' name='${name}FileID' value='$fileID' />
-    <input type='file' name='$name' size='50' /><br />
-    $fileInfoLine";
+    $html = '<input type="hidden" name="'.$name.'FileID" value="'.$fileID.'" />'.
+        '<input type="file" name="'.$name.' size="50" /><br />'.
+        $fileInfoLine;
 
     return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html);
 }
@@ -1174,22 +1181,20 @@ function xnpGetDownloadLimitationOptionRegisterBlock($dirname, $option = 0)
         if (isset($attachment_dl_limit)) {
             $option = $attachment_dl_limit;
         }
-        $html = "<input type='radio' name='attachment_dl_limit' value='1'";
+        $html = '<input type="radio" name="attachment_dl_limit" value="1"';
         if (1 == $option) {
             $html .= ' checked="checked"';
         }
 
-        // $html .= ">"._MD_XOONIPS_ITEM_ATTACHMENT_DL_LIMIT_LOGINUSER_LABEL."</input>"
-        $html .= ' />'._MD_XOONIPS_ITEM_ATTACHMENT_DL_LIMIT_LOGINUSER_LABEL
-            ."<input type='radio' name='attachment_dl_limit' value='0'";
+        $html .= ' />'._MD_XOONIPS_ITEM_ATTACHMENT_DL_LIMIT_LOGINUSER_LABEL.
+            '<input type="radio" name="attachment_dl_limit" value="0"';
         if (1 != $option) {
             $html .= ' checked="checked"';
         }
-        // $html .= ">"._MD_XOONIPS_ITEM_ATTACHMENT_DL_LIMIT_EVERYONE_LABEL."</input>";
         $html .= ' />'._MD_XOONIPS_ITEM_ATTACHMENT_DL_LIMIT_EVERYONE_LABEL;
     } else {
-        $html = _MD_XOONIPS_ITEM_ATTACHMENT_DL_LIMIT_EVERYONE_LABEL
-            ."<input type='hidden' name='attachment_dl_limit' value='0'/>";
+        $html = _MD_XOONIPS_ITEM_ATTACHMENT_DL_LIMIT_EVERYONE_LABEL.
+            '<input type="hidden" name="attachment_dl_limit" value="0" />';
     }
 
     return array('name' => _MD_XOONIPS_DOWNLOAD_LIMITATION_OPTION_LABEL, 'value' => $html);
@@ -1412,19 +1417,18 @@ function xnpGetPreviewConfirmBlock($item_id)
     } else {
         // illegal inputs are removed.
         if (!xnpIsCommaSeparatedNumber($previewFileID)) {
-            echo 'Error: bad previewFileID';
-
-            return false;
+            xoonips_error_exit(400);
         }
 
         // get preview file
-        $files = xnpGetFileInfo('t_file.file_id, t_file.caption', "t_file_type.name='preview' and t_file.file_id in ($previewFileID)", $item_id);
+        $files = xnpGetFileInfo('`t_file`.`file_id`, `t_file`.`caption`', '`t_file_type`.`name`=\'preview\' AND `t_file`.`file_id` IN ('.$previewFileID.')', $item_id);
 
         // generate html
         reset($files);
         $imageHtml1 = array();
         $imageHtml2 = array();
-        while (list($dummy, list($fileID, $caption)) = each($files)) {
+        foreach ($files as $files_) {
+            list($dummy, list($fileID, $caption)) = $files_;
             $thumbnailFileName = XOOPS_URL."/modules/xoonips/image.php?file_id=$fileID&amp;thumbnail=1";
             $imageFileName = XOOPS_URL."/modules/xoonips/image.php?file_id=$fileID";
             $htmlCaption = $textutil->html_special_chars($caption);
@@ -1442,6 +1446,7 @@ function xnpGetPreviewConfirmBlock($item_id)
  */
 function xnpGetAttachmentConfirmBlock($item_id, $name)
 {
+    global $xoopsDB;
     $textutil = &xoonips_getutility('text');
     $formdata = &xoonips_getutility('formdata');
     if (!empty($_FILES[$name]['name'])) {
@@ -1453,18 +1458,19 @@ function xnpGetAttachmentConfirmBlock($item_id, $name)
 
             return false;
         } else {
-            $sql = "t_file.file_id = $fileID";
+            $sql = '`t_file`.`file_id`='.$fileID;
         }
     } else {
         $attachmentFileID = $formdata->getValue('post', $name.'FileID', 'i', false, 0);
-        if (0 == $attachmentFileID) { // no attachment file.
+        if (0 == $attachmentFileID) {
+            // no attachment file.
             $sql = ' 0 ';
         } else {
-            $sql = "t_file.file_id = $attachmentFileID";
+            $sql = '`t_file`.`file_id`='.$attachmentFileID;
         }
     }
 
-    $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name, t_file.file_size, t_file.mime_type, unix_timestamp(t_file.timestamp)', "t_file_type.name='$name' and is_deleted = 0 and $sql ", $item_id);
+    $files = xnpGetFileInfo('`t_file`.`file_id`, `t_file`.`original_file_name`, `t_file`.`file_size`, `t_file`.`mime_type`, UNIX_TIMESTAMP(`t_file`.`timestamp`)', '`t_file_type`.`name`='.$xoopsDB->quoteString($name).' AND `is_deleted`=0 AND '.$sql, $item_id);
 
     if (0 == count($files)) {
         $html = "<input type='hidden' name='${name}FileID' value='' />";
@@ -1667,33 +1673,29 @@ function xnpUpdatePreview($item_id)
     // File under registration relates to this item.
     $previewFileID = $formdata->getValue('post', 'previewFileID', 's', false, '');
     $table = $xoopsDB->prefix('xoonips_file');
-    $xnpsid = $_SESSION['XNPSID'];
-    $esc_sess_id = addslashes($xnpsid);
+    $esc_sess_id = $xoopsDB->quoteString(session_id());
     $file_type_id = 1;
 
     if (empty($previewFileID)) {
-        $sql = "update $table set sess_id='$esc_sess_id', item_id=NULL where item_id=$item_id and file_type_id=$file_type_id";
+        $sql = 'UPDATE '.$table.' SET `sess_id`='.$esc_sess_id.', `item_id`=NULL WHERE `item_id`='.$item_id.' AND `file_type_id`='.$file_type_id;
         $result = $xoopsDB->queryF($sql);
     } else {
         if (!xnpIsCommaSeparatedNumber($previewFileID)) {
-            echo 'Error: bad previewFileID';
-
-            return false;
+            xoonips_error_exit(400);
         }
-        $sql = "update $table set sess_id='$esc_sess_id', item_id=NULL where item_id=$item_id and file_id not in ($previewFileID) and file_type_id=$file_type_id";
+        $sql = 'UPDATE '.$table.' SET `sess_id`='.$esc_sess_id.', `item_id`=NULL WHERE `item_id`='.$item_id.' AND `file_id` NOT IN ('.$previewFileID.') AND `file_type_id`='.$file_type_id;
         $result = $xoopsDB->queryF($sql);
-        if (false != $result) {
-            $sql = "update $table set sess_id=NULL, item_id=$item_id where sess_id='$esc_sess_id' and file_id in ($previewFileID) and file_type_id=$file_type_id";
-            $result &= $xoopsDB->queryF($sql);
+        if (false == $result) {
+            xoonips_error_exit(500);
         }
+        $sql = 'UPDATE '.$table.' SET `sess_id`=NULL, `item_id`='.$item_id.' WHERE `sess_id`='.$esc_sess_id.' AND `file_id` IN ('.$previewFileID.') AND `file_type_id`='.$file_type_id;
+        $result = $xoopsDB->queryF($sql);
     }
-    if (false == $result) {
-        echo "Error: cannot update xoonips_file $sql ".mysql_error();
-
-        return false;
+    if (false === $result) {
+        xoonips_error_exit(500);
     }
 
-    return true;
+    return $result;
 }
 
 /**
@@ -1706,42 +1708,38 @@ function xnpUpdateAttachment($item_id, $name)
     // File under registration relates to this item.
     $fileID = $formdata->getValue('post', $name.'FileID', 'i', false, 0);
     $table = $xoopsDB->prefix('xoonips_file');
-    $xnpsid = $_SESSION['XNPSID'];
-    $esc_sess_id = addslashes($xnpsid);
+    $esc_sess_id = $xoopsDB->quoteString(session_id());
 
     // name -> file_type_id
-    $sql = 'select file_type_id from '.$xoopsDB->prefix('xoonips_file_type')." where name='$name'";
+    $sql = 'SELECT `file_type_id` FROM '.$xoopsDB->prefix('xoonips_file_type').' WHERE `name`='.$xoopsDB->quoteString($name);
     $result = $xoopsDB->query($sql);
-    if (false == $result) {
-        echo "xnpUpdateAttachment: bad file_type_name $name ";
-
-        return false;
+    if (false === $result) {
+        xoonips_error_exit(500);
     }
     list($file_type_id) = $xoopsDB->fetchRow($result);
 
     // delete old file
-    $sql = "select file_id, is_deleted from $table where item_id=$item_id and file_type_id=$file_type_id and is_deleted=0 and file_id <> $fileID";
-    $result = $xoopsDB->queryF($sql);
-    if (false == $result) {
-        echo "Error: cannot update xoonips_file $sql ".mysql_error();
-
-        return false;
+    $sql = 'SELECT `file_id`, `is_deleted` FROM '.$table.' WHERE `item_id`='.$item_id.' AND `file_type_id`='.$file_type_id.' AND `is_deleted`=0 AND `file_id`<>'.$fileID;
+    $result = $xoopsDB->query($sql);
+    if (false === $result) {
+        xoonips_error_exit(500);
     }
     while (list($file_id, $is_deleted) = $xoopsDB->fetchRow($result)) {
         $path = xnpGetUploadFilePath($file_id);
         if (is_file($path)) {
             unlink($path);
         }
-        $result = $xoopsDB->queryF("update $table set is_deleted=1 where file_id=$file_id");
+        $result = $xoopsDB->queryF('UPDATE '.$table.' SET `is_deleted`=1 WHERE `file_id`='.$file_id);
+        if (false === $result) {
+            xoonips_error_exit(500);
+        }
     }
 
     if (!empty($fileID)) {
-        $sql = "update $table set sess_id=NULL, item_id=$item_id where sess_id='$esc_sess_id' and file_id=$fileID and file_type_id=$file_type_id";
+        $sql = 'UPDATE $table SET `sess_id`=NULL, `item_id`='.$item_id.' WHERE `sess_id`='.$esc_sess_id.' AND `file_id`='.$fileID.' AND `file_type_id`='.$file_type_id;
         $result = $xoopsDB->queryF($sql);
-        if (false == $result) {
-            echo "Error: cannot update xoonips_file $sql ".mysql_error();
-
-            return false;
+        if (false === $result) {
+            xoonips_error_exit(500);
         }
     }
 
@@ -1789,14 +1787,14 @@ function xnpGetBasicInformationAdvancedSearchBlock($moduleName, &$search_var)
     $search_var[] = $moduleName.'_publication_date_toDay';
 
     return array(
-    'title' => array('name' => _MD_XOONIPS_ITEM_TITLE_LABEL,        'value' => '<input type="text" name="'.$moduleName.'_title" value="" size="50"/>'),
-    'keywords' => array('name' => _MD_XOONIPS_ITEM_KEYWORDS_LABEL,     'value' => '<input type="text" name="'.$moduleName.'_keywords" value="" size="50"/>'),
-    'description' => array('name' => _MD_XOONIPS_ITEM_DESCRIPTION_LABEL,  'value' => '<input type="text" name="'.$moduleName.'_description" value="" size="50"/>'),
-    'doi' => array('name' => _MD_XOONIPS_ITEM_DOI_LABEL,          'value' => '<input type="text" name="'.$moduleName.'_doi" value="" size="50"/>'),
-    'publication_date' => array('name' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,  'value' => $tpl->fetch('db:xoonips_search_date.html')),
-    'publication_year' => array('name' => _MD_XOONIPS_ITEM_PUBLICATION_YEAR_LABEL,  'value' => $tpl->fetch('db:xoonips_search_year.html')),
-    'publication_month' => array('name' => _MD_XOONIPS_ITEM_PUBLICATION_MONTH_LABEL, 'value' => $tpl->fetch('db:xoonips_search_month.html')),
-    'publication_mday' => array('name' => _MD_XOONIPS_ITEM_PUBLICATION_MDAY_LABEL,  'value' => $tpl->fetch('db:xoonips_search_mday.html')),
+        'title' => array('name' => _MD_XOONIPS_ITEM_TITLE_LABEL, 'value' => '<input type="text" name="'.$moduleName.'_title" value="" size="50"/>'),
+        'keywords' => array('name' => _MD_XOONIPS_ITEM_KEYWORDS_LABEL, 'value' => '<input type="text" name="'.$moduleName.'_keywords" value="" size="50"/>'),
+        'description' => array('name' => _MD_XOONIPS_ITEM_DESCRIPTION_LABEL, 'value' => '<input type="text" name="'.$moduleName.'_description" value="" size="50"/>'),
+        'doi' => array('name' => _MD_XOONIPS_ITEM_DOI_LABEL, 'value' => '<input type="text" name="'.$moduleName.'_doi" value="" size="50"/>'),
+        'publication_date' => array('name' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL, 'value' => $tpl->fetch('db:xoonips_search_date.html')),
+        'publication_year' => array('name' => _MD_XOONIPS_ITEM_PUBLICATION_YEAR_LABEL, 'value' => $tpl->fetch('db:xoonips_search_year.html')),
+        'publication_month' => array('name' => _MD_XOONIPS_ITEM_PUBLICATION_MONTH_LABEL, 'value' => $tpl->fetch('db:xoonips_search_month.html')),
+        'publication_mday' => array('name' => _MD_XOONIPS_ITEM_PUBLICATION_MDAY_LABEL, 'value' => $tpl->fetch('db:xoonips_search_mday.html')),
     );
 }
 
@@ -1947,13 +1945,11 @@ function xnpUnsplitKeywords2($elements, $wheres)
     if (0 == $len) {
         return ' 1 ';
     }
-
-    reset($wheres);
+    $j = 0;
     for ($i = 0; $i < $len; ++$i) {
         $op = $elements[$i];
         if ('string' == $op) {
-            list($key, $val) = each($wheres);
-            $ar[] = "( $val )";
+            $ar[] = '( '.$wheres[$j++].' )';
         } else {
             $ar[] = $op;
         }
@@ -1970,6 +1966,7 @@ function xnpUnsplitKeywords2($elements, $wheres)
  */
 function xnpGetKeywordQuery($dbVarName, $postVarName)
 {
+    global $xoopsDB;
     $formdata = &xoonips_getutility('formdata');
     $postvar = $formdata->getValue('post', $postVarName, 'n', false);
     if (empty($postvar)) {
@@ -1982,11 +1979,11 @@ function xnpGetKeywordQuery($dbVarName, $postVarName)
 
     $ar = array();
     foreach ($keywords as $keyword) {
-        $escKeyword = addslashes(str_replace(array('_', '%', '\\'), array('\\_', '\\%', '\\\\'), $keyword));
+        $escKeyword = str_replace(array('_', '%'), array('\\_', '\\%'), substr($xoopsDB->quoteString($keyword), 1, -1));
         $ar[] = xnpGetKeywordQueryEntity($dbVarName, $escKeyword);
     }
 
-    return implode(' and ', $ar);
+    return implode(' AND ', $ar);
 }
 
 /**
@@ -1999,15 +1996,15 @@ function xnpGetKeywordQuery($dbVarName, $postVarName)
  */
 function xnpGetKeywordsQueries($dbVarNames, $keywords)
 {
+    global $xoopsDB;
     $wheres = array();
     foreach ($keywords as $keyword) {
-        $keyword = str_replace('\\', '\\\\', $keyword);
-        $escKeyword = addslashes(str_replace(array('_', '%'), array('\\_', '\\%'), $keyword));
+        $escKeyword = str_replace(array('_', '%'), array('\\_', '\\%'), substr($xoopsDB->quoteString($keyword), 1, -1));
         $ar = array(' 0 ');
         foreach ($dbVarNames as $dbVarName) {
             $ar[] = xnpGetKeywordQueryEntity($dbVarName, $escKeyword);
         }
-        $wheres[] = implode(' or ', $ar);
+        $wheres[] = implode(' OR ', $ar);
     }
 
     return $wheres;
@@ -2021,32 +2018,36 @@ function xnpGetKeywordsQueries($dbVarNames, $keywords)
  */
 function xnpGetKeywordQueryEntity($dbVarName, $escKeyword)
 {
+    return $dbVarName.' LIKE \'%'.$escKeyword.'%\'';
+    /*
+    // doesn't work
     if (preg_match("/\d{1,8}/", $escKeyword)) {
         if (preg_match("/&#\d{1,8};/", $escKeyword)) {
-            $wk = "$dbVarName like '%$escKeyword%'";
+            $wk = "$dbVarName LIKE '%$escKeyword%'";
         } else {
             $num = sprintf('%d', $escKeyword);
             if ($num <= 0x10FFFF) {
                 $digit = 7 - strlen($num);
                 $wk = '(';
                 $wk .= "$dbVarName = '$escKeyword'";
-                $wk .= " or $dbVarName like '$escKeyword%'";
-                $wk .= " or $dbVarName rlike '$escKeyword"."[0-9]{0,$digit}[ -/:<-~]'";
-                $wk .= " or $dbVarName rlike '$escKeyword"."[0-9]{1,$digit}$'";
-                $wk .= " or $dbVarName like '%$escKeyword'";
-                $wk .= " or $dbVarName rlike '[ -".'"'."$-/:-~][0-9]{0,$digit}$escKeyword'";
-                $wk .= " or $dbVarName rlike ".'"'."[ -%'-/:-~]#[0-9]{0,$digit}$escKeyword".'"';
-                $wk .= " or $dbVarName rlike '^[0-9]{1,$digit}$escKeyword'";
+                $wk .= " OR $dbVarName LIKE '$escKeyword%'";
+                $wk .= " OR $dbVarName RLIKE '$escKeyword"."[0-9]{0,$digit}[ -/:<-~]'";
+                $wk .= " OR $dbVarName RLIKE '$escKeyword"."[0-9]{1,$digit}$'";
+                $wk .= " OR $dbVarName LIKE '%$escKeyword'";
+                $wk .= " OR $dbVarName RLIKE '[ -".'"'."$-/:-~][0-9]{0,$digit}$escKeyword'";
+                $wk .= " OR $dbVarName RLIKE ".'"'."[ -%'-/:-~]#[0-9]{0,$digit}$escKeyword".'"';
+                $wk .= " OR $dbVarName RLIKE '^[0-9]{1,$digit}$escKeyword'";
                 $wk .= ')';
             } else {
-                $wk = "$dbVarName like '%$escKeyword%'";
+                $wk = "$dbVarName LIKE '%$escKeyword%'";
             }
         }
     } else {
-        $wk = "$dbVarName like '%$escKeyword%'";
+        $wk = "$dbVarName LIKE '%$escKeyword%'";
     }
 
     return $wk;
+    */
 }
 
 /**
@@ -2156,17 +2157,20 @@ function xnpGetBasicInformationAdvancedSearchQuery($moduleName)
  */
 function xnpGetTotalFileSize($iids)
 {
+    global $xoopsDB;
     if (0 == count($iids)) {
         return 0.0;
     }
 
-    global $xoopsDB;
     $file_table = $xoopsDB->prefix('xoonips_file');
     $iids_str = implode(',', $iids);
 
     // calculate amount of use file_table and file
-    $sql = "select sum(file_size) from $file_table where item_id in ($iids_str) and is_deleted=0";
+    $sql = 'SELECT SUM(`file_size`) FROM '.$file_table.' WHERE `item_id` IN ('.$iids_str.') AND `is_deleted`=0';
     $result = $xoopsDB->query($sql);
+    if (false === $result) {
+        xoonips_error_exit(500);
+    }
     list($file_size) = $xoopsDB->fetchRow($result);
 
     return  (float) $file_size;
@@ -2241,20 +2245,23 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
     $user_table = $xoopsDB->prefix('users');
     $event_log_table = $xoopsDB->prefix('xoonips_event_log');
 
-    // search_cache_idがあるなら、search_cacheから取得.
+    // if search_cache_id exists then get results from search_cache
     if ($search_cache_id) {
         $search_cache_id = (int) $search_cache_id;
-        $sql = "select unix_timestamp(timestamp) from $cache_table where search_cache_id=$search_cache_id and sess_id='".session_id()."'";
+        $sql = 'SELECT UNIX_TIMESTAMP(`timestamp`) FROM '.$cache_table.' WHERE `search_cache_id`='.$search_cache_id.' AND `sess_id`='.$xoopsDB->quoteString(session_id());
         $result = $xoopsDB->query($sql);
+        if (false === $result) {
+            xoonips_error_exit(500);
+        }
         if (0 == $xoopsDB->getRowsNum($result)) {
-            //todo: session timeoutのためにsearch_cacheから消されたのかもしれない(普通は起こらないのだが)。どのようなメッセージを出すべきか?
             $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
 
             return false; // bad search_cache_id
         }
         list($timestamp) = $xoopsDB->fetchRow($result);
 
-        $event_type_ids = array( // this events modify search result. if one of this event is newer than search cache, don't use search cache.
+        // this events modify search result. if one of this event is newer than search cache, don't use search cache.
+        $event_type_ids = array(
             ETID_INSERT_ITEM,
             ETID_UPDATE_ITEM,
             ETID_DELETE_ITEM,
@@ -2266,31 +2273,32 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
             ETID_REJECT_ITEM,
             ETID_TRANSFER_ITEM,
         );
-        $sql = "select count(*) from $event_log_table where event_type_id in (".implode(',', $event_type_ids).") and timestamp >= $timestamp";
+        $sql = 'SELECT COUNT(*) FROM '.$event_log_table.' WHERE `event_type_id` IN ('.implode(',', $event_type_ids).') AND `timestamp`>='.$timestamp;
         $result = $xoopsDB->query($sql);
-        if (false == $result) {
-            $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
-
-            return false;
+        if (false === $result) {
+            xoonips_error_exit(500);
         }
         list($count) = $xoopsDB->fetchRow($result);
         if (0 == $count) {
             if ('metadata' == $search_tab) {
-                $sql = "select identifier from $cache_meta_table where search_cache_id=$search_cache_id";
+                $sql = 'SELECT `identifier` FROM '.$cache_meta_table.' WHERE `search_cache_id`='.$search_cache_id;
             } elseif ('file' == $search_tab) {
-                $sql = "select tf.item_id    from $cache_file_table as tcf
-                  left join $file_table as tf on tcf.file_id = tf.file_id
-                  left join $basic_table as tb on tb.item_id = tf.item_id
-                  left join $search_text_table as tst on tf.file_id=tst.file_id
-                  where search_cache_id=$search_cache_id and tb.item_id is not null and tf.file_id is not null and tf.is_deleted=0";
+                $sql = 'SELECT `tf`.`item_id` FROM '.$cache_file_table.' AS `tcf`'.
+                    ' LEFT JOIN '.$file_table.' AS `tf` ON `tcf`.`file_id`=`tf`.`file_id`'.
+                    ' LEFT JOIN '.$basic_table.' AS `tb` ON `tb`.`item_id`=`tf`.`item_id`'.
+                    ' LEFT JOIN '.$search_text_table.' AS `tst` ON `tf`.`file_id`=`tst`.`file_id`'.
+                    ' WHERE `search_cache_id`='.$search_cache_id.' AND `tb`.`item_id` IS NOT NULL AND `tf`.`file_id` IS NOT NULL AND `tf`.`is_deleted`=0';
             } else {
-                $sql = "select tci.item_id    from $cache_item_table as tci
-                  left join $basic_table as tb on tb.item_id = tci.item_id
-                  where search_cache_id=$search_cache_id and tb.item_id is not null";
+                $sql = 'SELECT `tci`.`item_id` FROM '.$cache_item_table.' AS `tci`'.
+                    ' LEFT JOIN '.$basic_table.' AS `tb` ON `tb`.`item_id`=`tci`.`item_id`'.
+                    ' WHERE `search_cache_id`='.$search_cache_id.' AND `tb`.`item_id` IS NOT NULL';
             }
             $result = $xoopsDB->query($sql);
+            if (false === $result) {
+                xoonips_error_exit(500);
+            }
             while (list($iid) = $xoopsDB->fetchRow($result)) {
-                $iids[] = $iid;
+                $iids[] = (int) $iid;
             }
 
             return true;
@@ -2300,13 +2308,11 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
     $cachable = ('quicksearch' == $op || 'advancedsearch' == $op || 'itemtypesearch' == $op || 'itemsubtypesearch' == $op);
     $search_cache_id = 0;
     if ($cachable) {
-        // search_cache_idを発行する
-        $sql = "insert into $cache_table ( sess_id ) values ( '".session_id()."' )";
+        // create new search cache
+        $sql = 'INSERT INTO '.$cache_table.' (`sess_id`) VALUES ('.$xoopsDB->quoteString(session_id()).')';
         $result = $xoopsDB->queryF($sql);
-        if (false == $result) {
-            $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
-
-            return false;
+        if (false === $result) {
+            xoonips_error_exit(500);
         }
         $search_cache_id = $xoopsDB->getInsertId();
     }
@@ -2315,39 +2321,36 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
     $itemtype_names = array();
     $tmp = array();
     if (RES_OK != ($res = xnp_get_item_types($tmp))) {
-        $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
-
-        return false;
+        xoonips_error_exit(500);
     } else {
         foreach ($tmp as $i) {
             $itemtypes[$i['item_type_id']] = $i;
             $itemtype_names[$i['name']] = $i;
         }
     }
-    $join1 =
-        " left join $xlink_table on $xlink_table.item_id  = $basic_table.item_id ".
-        " left join $index_table on $index_table.index_id = $xlink_table.index_id ".
-        " left join $glink_table on $glink_table.gid      = $index_table.gid ".
-        " left join $user_table  on $user_table.uid       = $basic_table.uid ";
+    $join1 = 'LEFT JOIN '.$xlink_table.' ON '.$xlink_table.'.`item_id`='.$basic_table.'.`item_id`'.
+        ' LEFT JOIN '.$index_table.' ON '.$index_table.'.`index_id`='.$xlink_table.'.`index_id`'.
+        ' LEFT JOIN '.$glink_table.' ON '.$glink_table.'.`gid`='.$index_table.'.`gid`'.
+        ' LEFT JOIN '.$user_table.' ON '.$user_table.'.`uid`='.$basic_table.'.`uid`';
     $iids = array();
 
-    if ($private_flag) { // operation to add item into index. search for only the user's item.
-        $privilege = "( $index_table.open_level = ".OL_PRIVATE." and $index_table.uid=$uid )";
+    if ($private_flag) {
+        // operation to add item into index. search for only the user's item.
+        $privilege = '('.$index_table.'.`open_level`='.OL_PRIVATE.' AND '.$index_table.'.`uid`='.$uid.')';
     } else { // search for readable items.
         $xmember_handler = &xoonips_gethandler('xoonips', 'member');
         if ($xmember_handler->isAdmin($uid) || xnp_is_moderator($xnpsid, $uid)) {
             $privilege = ' 1 ';
         } else {
-            $privilege =
-                " ($index_table.open_level = ".OL_PUBLIC." or \n".
-                "  $index_table.open_level = ".OL_PRIVATE." and $index_table.uid=$uid or \n".
-                "  $index_table.open_level = ".OL_GROUP_ONLY." and $glink_table.uid=$uid ) \n";
+            $privilege = '('.$index_table.'.`open_level`='.OL_PUBLIC.' OR'.
+                ' '.$index_table.'.`open_level`='.OL_PRIVATE.' AND '.$index_table.'.`uid`='.$uid.' OR'.
+                ' '.$index_table.'.`open_level`='.OL_GROUP_ONLY.' AND '.$glink_table.'.`uid`='.$uid.')';
         }
     }
 
     if ('advancedsearch' == $op || 'itemsubtypesearch' == $op) {
-        // advanced では、結果をタブ表示しない。$search_tab を無視する。
-        // advanced では、fileがヒットした場合でも search_cache_fileではなくsearch_cache_itemのほうに書く
+        // ignore $search_tab and hide tab panel.
+        // results of `file` search will store to search_cache_items table.
         $formdata = &xoonips_getutility('formdata');
         foreach ($itemtypes as $itemtype_id => $itemtype) {
             $wheres = array(' 0 ');
@@ -2355,34 +2358,36 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
             if ($formdata->getValue('post', $module_name, 'n', false)) {
                 require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
                 $f = $module_name.'GetAdvancedSearchQuery';
-                $table = $xoopsDB->prefix("${module_name}_item_detail");
-                $key_name = "${table}.".substr($module_name, 3).'_id'; // xnppaper -> paper_id
+                $table = $xoopsDB->prefix($module_name.'_item_detail');
+                $key_name = $table.'.`'.substr($module_name, 3).'_id`'; // xnppaper -> paper_id
 
                 $where = '';
                 $join = '';
-                $f($where, $join); // require retrieve additional query string to item type module
+                // require retrieve additional query string to item type module
+                $f($where, $join);
                 if ('' != $where) {
-                    $sql = "select $basic_table.item_id, $search_cache_id from $basic_table ".
-                       $join1.
-                       " left join $file_table    on $file_table.item_id    = $basic_table.item_id ".
-                       " left join $title_table   on $title_table.item_id   = $basic_table.item_id ".
-                       " left join $keyword_table on $keyword_table.item_id = $basic_table.item_id ".
-                       " left join $table on $key_name = $basic_table.item_id ".
-                       " left join $search_text_table on $search_text_table.file_id    = $file_table.file_id ".
-                       $join.
-                       " where  $key_name is not NULL and ( $where ) and $privilege \n".
-                       " group by $basic_table.item_id  \n";
-                    if ($cachable) { // write to cache at once
-                        $result = $xoopsDB->queryF("insert ignore into $cache_item_table ( item_id, search_cache_id ) ".$sql);
-                        $sql = "select item_id from $cache_item_table where search_cache_id = $search_cache_id";
+                    $sql = 'SELECT '.$basic_table.'.`item_id`, '.$search_cache_id.' FROM '.$basic_table.
+                       ' '.$join1.
+                       ' LEFT JOIN '.$file_table.' ON '.$file_table.'.`item_id`='.$basic_table.'.`item_id`'.
+                       ' LEFT JOIN '.$title_table.' ON '.$title_table.'.`item_id`='.$basic_table.'.`item_id`'.
+                       ' LEFT JOIN '.$keyword_table.' ON '.$keyword_table.'.`item_id`='.$basic_table.'.`item_id`'.
+                       ' LEFT JOIN '.$table.' ON '.$key_name.'='.$basic_table.'.`item_id`'.
+                       ' LEFT JOIN '.$search_text_table.' ON '.$search_text_table.'.`file_id`='.$file_table.'.`file_id`'.
+                       ' '.$join.
+                       ' WHERE '.$key_name.' IS NOT NULL AND ('.$where.') AND '.$privilege.
+                       ' GROUP BY '.$basic_table.'.`item_id`';
+                    if ($cachable) {
+                        // write to cache at once
+                        $result = $xoopsDB->queryF('INSERT IGNORE INTO '.$cache_item_table.' (`item_id`, `search_cache_id`) '.$sql);
+                        if (false === $result) {
+                            xoonips_error_exit(500);
+                        }
+                        $sql = 'SELECT `item_id` FROM '.$cache_item_table.' WHERE `search_cache_id`='.$search_cache_id;
                     }
 
                     $result = $xoopsDB->query($sql);
-                    if (false == $result) {
-                        $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
-                        xoonips_error($xoopsDB->error().' at '.__LINE__.' in '.__FILE__);
-
-                        return false;
+                    if (false === $result) {
+                        xoonips_error_exit(500);
                     }
                     while (list($iid) = $xoopsDB->fetchRow($result)) {
                         $iids[] = $iid;
@@ -2390,21 +2395,22 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
                 }
             }
         }
-    } elseif ('itemtypesearch' == $op) { // top画面から。$search_itemtypeに一致するアイテムを列挙
+    } elseif ('itemtypesearch' == $op) {
         $itemtype_id = $itemtype_names[$search_itemtype]['item_type_id'];
-        $sql = "select $basic_table.item_id, $search_cache_id from $basic_table \n".
-            $join1.
-            " where $privilege and $basic_table.item_type_id=$itemtype_id \n".
-            " group by $basic_table.item_id  ";
+        $sql = 'SELECT '.$basic_table.'.`item_id`, '.$search_cache_id.' FROM '.$basic_table.
+            ' '.$join1.
+            ' WHERE '.$privilege.' AND '.$basic_table.'.`item_type_id`='.$itemtype_id.
+            ' GROUP BY '.$basic_table.'.`item_id`';
         // inserting results to cache
-        $result = $xoopsDB->queryF("insert ignore into $cache_item_table ( item_id, search_cache_id ) ".$sql);
-        $sql = "select item_id from $cache_item_table where search_cache_id = $search_cache_id";
+        $result = $xoopsDB->queryF('INSERT IGNORE INTO '.$cache_item_table.' (`item_id`, `search_cache_id`) '.$sql);
+        if (false === $result) {
+            xoonips_error_exit(500);
+        }
 
+        $sql = 'SELECT `item_id` FROM '.$cache_item_table.' WHERE `search_cache_id`='.$search_cache_id;
         $result = $xoopsDB->query($sql);
-        if (false == $result) {
-            $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
-
-            return false;
+        if (false === $result) {
+            xoonips_error_exit(500);
         }
         while (list($iid) = $xoopsDB->fetchRow($result)) {
             $iids[] = $iid;
@@ -2422,23 +2428,24 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
 
         if ('basic' == $search_itemtype) { // search titles and keywords
             $wheres_title_keyword = xnpGetKeywordsQueries(array($title_table.'.title', $keyword_table.'.keyword'), $keywords);
-            $where = " $basic_table.item_type_id != ".ITID_INDEX.' and  '.xnpUnsplitKeywords2($elements, $wheres_title_keyword);
-            $sql = "select $basic_table.item_id, $search_cache_id from $basic_table \n".
-                $join1.
-                " left join $title_table   on $basic_table.item_id = $title_table.item_id ".
-                " left join $keyword_table on $basic_table.item_id = $keyword_table.item_id ".
-                " where $where and $privilege \n".
-                " group by $basic_table.item_id  \n";
+            $where = $basic_table.'.`item_type_id`!='.ITID_INDEX.' AND '.xnpUnsplitKeywords2($elements, $wheres_title_keyword);
+            $sql = 'SELECT '.$basic_table.'.`item_id`, '.$search_cache_id.' FROM '.$basic_table.
+                ' '.$join1.
+                ' LEFT JOIN '.$title_table.' ON '.$basic_table.'.`item_id`='.$title_table.'.`item_id`'.
+                ' LEFT JOIN '.$keyword_table.' ON '.$basic_table.'.`item_id`='.$keyword_table.'.`item_id`'.
+                ' WHERE '.$where.' AND '.$privilege.
+                ' GROUP BY '.$basic_table.'.`item_id`';
 
             // inserting results to cache
-            $result = $xoopsDB->queryF("insert ignore into $cache_item_table ( item_id, search_cache_id ) ".$sql);
-            $sql = "select item_id from $cache_item_table where search_cache_id = $search_cache_id";
+            $result = $xoopsDB->queryF('INSERT IGNORE INTO '.$cache_item_table.' (`item_id`, `search_cache_id`) '.$sql);
+            if (false === $result) {
+                xoonips_error_exit(500);
+            }
 
+            $sql = 'SELECT `item_id` FROM '.$cache_item_table.' WHERE `search_cache_id`='.$search_cache_id;
             $result = $xoopsDB->query($sql);
-            if (false == $result) {
-                $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
-
-                return false;
+            if (false === $result) {
+                xoonips_error_exit(500);
             }
             while (list($iid) = $xoopsDB->fetchRow($result)) {
                 $iids[] = $iid;
@@ -2453,20 +2460,21 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
             $encoding = mb_detect_encoding($keyword);
             $fulltext_criteria = &$searchutil->getFulltextSearchCriteria('search_text', $keyword, $encoding);
 
-            $sql = "select identifier, $search_cache_id
-             from ${meta_table} as data, ${repo_table} as repo
-             where repo.enabled=1 AND repo.deleted!=1 AND repo.repository_id=data.repository_id
-                AND ".$fulltext_criteria->render().' order by identifier, data.repository_id';
+            $sql = 'SELECT `identifier`, '.$search_cache_id.
+                ' FROM '.$meta_table.' AS `data`, '.$repo_table.' AS `repo`'.
+                ' WHERE `repo`.`enabled`=1 AND `repo`.`deleted`!=1 AND `repo`.`repository_id`=`data`.`repository_id`'.
+                ' AND '.$fulltext_criteria->render().' ORDER BY `identifier`, `data`.`repository_id`';
 
             // inserting results to cache
-            $result = $xoopsDB->queryF("insert into $cache_meta_table ( identifier, search_cache_id ) ".$sql);
-            $sql = "select item_id from $cache_item_table where search_cache_id = $search_cache_id";
+            $result = $xoopsDB->queryF('INSERT INTO '.$cache_meta_table.' (`identifier`, `search_cache_id`) '.$sql);
+            if (false === $result) {
+                xoonips_error_exit(500);
+            }
 
+            $sql = 'SELECT `item_id` FROM '.$cache_item_table.' WHERE `search_cache_id`='.$search_cache_id;
             $result = $xoopsDB->query($sql);
-            if (false == $result) {
-                $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
-
-                return false;
+            if (false === $result) {
+                xoonips_error_exit(500);
             }
             while (list($iid) = $xoopsDB->fetchRow($result)) {
                 $iids[] = $iid;
@@ -2474,19 +2482,17 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
         }
 
         if (isset($itemtype_names[$search_itemtype]) || 'all' == $search_itemtype) {
-            /* where_condition[item_type] = "item_type_id=$itemtype_id and " ( query that combines 'wheres2' and 'and or ( )' ).
+            /* where_condition[item_type] = "item_type_id=$itemtype_id AND " ( query that combines 'wheres2' AND 'and or ( )' ).
                wheres2[keyword] = ( where_basic[keyword] or where_detail[keyword] )
             */
-            // search_itemtype == (itemtype)の場合もファイル内部を検索する必要がある．
-            // ここでファイル検索を行って、結果を xoonips_search_cache_file に書く
-
+            // require file search when search_itemtype == (itemtype)
+            // do file search and store results to search_cache_file
             $wheres_basic = xnpGetKeywordsQueries(array($title_table.'.title', $keyword_table.'.keyword', $basic_table.'.description', $basic_table.'.doi', $user_table.'.uname', $user_table.'.name'), $keywords);
             foreach ($itemtypes as $itemtype_id => $itemtype) {
                 if (ITID_INDEX == $itemtype['item_type_id']) {
                     continue;
                 }
                 $module_name = $itemtype['name'];
-                //echo "$search_itemtype / $module_name <br />\n";
                 if ($search_itemtype == $module_name || 'all' == $search_itemtype) {
                     $itemtype_id = $itemtype['item_type_id'];
                     if ('all' == $file_or_item_metadata || 'item_metadata' == $file_or_item_metadata) {
@@ -2496,7 +2502,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
                             continue;
                         }
 
-                        $table = $xoopsDB->prefix("${module_name}_item_detail");
+                        $table = $xoopsDB->prefix($module_name.'_item_detail');
                         $wheres_detail = array();
                         $f($wheres_detail, $join, $keywords);
 
@@ -2507,26 +2513,24 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
                             if (empty($wheres_detail[$i])) {
                                 $wheres_detail[$i] = '0';
                             }
-                            $wheres2[] = $wheres_basic[$i].' or '.$wheres_detail[$i].$where3;
+                            $wheres2[] = $wheres_basic[$i].' OR '.$wheres_detail[$i].$where3;
                         }
 
-                        $where = " $basic_table.item_type_id=$itemtype_id and ".xnpUnsplitKeywords2($elements, $wheres2);
+                        $where = " $basic_table.item_type_id=$itemtype_id AND ".xnpUnsplitKeywords2($elements, $wheres2);
                         $key_name = "${table}.".substr($module_name, 3).'_id'; // xnppaper -> paper_id
-                        $sql = "select $basic_table.item_id, $search_cache_id from $basic_table ".
-                            $join1.
-                            " left join $file_table  on $file_table.item_id   = $basic_table.item_id ".
-                            " left join $title_table   on $basic_table.item_id = $title_table.item_id ".
-                            " left join $keyword_table on $basic_table.item_id = $keyword_table.item_id ".
-                            " left join $table on $key_name = $basic_table.item_id ".
-                            $join.
-                            " where $where and $privilege \n".
-                            " group by $basic_table.item_id  \n";
+                        $sql = 'SELECT '.$basic_table.'.`item_id`, '.$search_cache_id.' FROM '.$basic_table.
+                            ' '.$join1.
+                            ' LEFT JOIN '.$file_table.' ON '.$file_table.'.`item_id`='.$basic_table.'.`item_id`'.
+                            ' LEFT JOIN '.$title_table.' ON '.$basic_table.'.`item_id`='.$title_table.'.`item_id`'.
+                            ' LEFT JOIN '.$keyword_table.' ON '.$basic_table.'.`item_id`='.$keyword_table.'.`item_id`'.
+                            ' LEFT JOIN '.$table.' ON '.$key_name.'='.$basic_table.'.`item_id`'.
+                            ' '.$join.
+                            ' WHERE '.$where.' AND '.$privilege.
+                            ' GROUP BY '.$basic_table.'.`item_id`';
 
-                        $result = $xoopsDB->queryF("insert ignore into $cache_item_table ( item_id, search_cache_id ) ".$sql);
-                        if (false == $result) {
-                            $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
-
-                            return false;
+                        $result = $xoopsDB->queryF('INSERT IGNORE INTO '.$cache_item_table.' (`item_id`, `search_cache_id`) '.$sql);
+                        if (false === $result) {
+                            xoonips_error_exit(500);
                         }
                     }
 
@@ -2535,33 +2539,34 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
                         $encoding = mb_detect_encoding($keyword);
                         $fulltext_criteria = &$searchutil->getFulltextSearchCriteria('search_text', $keyword, $encoding);
                         // search inside files
-                        $sql = "insert ignore into $cache_file_table ( file_id, search_cache_id )
-                          select $file_table.file_id, $search_cache_id from $file_table
-                          left join $basic_table on $file_table.item_id=$basic_table.item_id
-                          left join $search_text_table on $file_table.file_id = $search_text_table.file_id
-                          where item_type_id=$itemtype_id and ".$fulltext_criteria->render()." and $file_table.is_deleted=0";
+                        $sql = 'INSERT IGNORE INTO '.$cache_file_table.' (`file_id`, `search_cache_id`)'.
+                            ' SELECT '.$file_table.'.`file_id`, '.$search_cache_id.' FROM '.$file_table.
+                            ' LEFT JOIN '.$basic_table.' ON '.$file_table.'.`item_id`='.$basic_table.'.`item_id`'.
+                            ' LEFT JOIN '.$search_text_table.' ON '.$file_table.'.`file_id`='.$search_text_table.'.`file_id`'.
+                            ' WHERE `item_type_id`='.$itemtype_id.' AND '.$fulltext_criteria->render().' AND '.$file_table.'.`is_deleted`=0';
 
                         // write to cache at once
                         $result = $xoopsDB->queryF($sql);
-                        if (false == $result) {
-                            $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
-
-                            return false;
+                        if (false === $result) {
+                            xoonips_error_exit(500);
                         }
                     }
                 }
             }
             switch ($search_tab) {
             case 'metadata':
-                $result = $xoopsDB->query("select item_id from $cache_meta_table where search_cache_id=$search_cache_id");
+                $result = $xoopsDB->query('SELECT `item_id` FROM '.$cache_meta_table.' WHERE `search_cache_id`='.$search_cache_id);
                 break;
             case 'file':
-                $result = $xoopsDB->query("select item_id from $cache_file_table where search_cache_id=$search_cache_id");
+                $result = $xoopsDB->query('SELECT `item_id` FROM '.$cache_file_table.' WHERE `search_cache_id`='.$search_cache_id);
                 break;
             case 'item':
             default:
-                $result = $xoopsDB->query("select item_id from $cache_item_table where search_cache_id=$search_cache_id");
+                $result = $xoopsDB->query('SELECT `item_id` FROM '.$cache_item_table.' WHERE `search_cache_id`='.$search_cache_id);
                 break;
+            }
+            if (false === $result) {
+                xoonips_error_exit(500);
             }
             while (list($iid) = $xoopsDB->fetchRow($result)) {
                 $iids[] = $iid;
@@ -2615,7 +2620,7 @@ function xnpGetExportPathString($xid, $base_index_id)
  */
 function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = false)
 {
-    (method_exists('MyTextSanitizer', 'sGetInstance') and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
+    $textutil = &xoonips_getutility('text');
     if (!$fhdl) {
         return false;
     }
@@ -2658,21 +2663,21 @@ function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = fa
     //generate <title>xxx</title> for each title
     $titles = '';
     foreach ($item['titles'] as $title) {
-        $titles .= '<title>'.$myts->htmlSpecialChars($title).'</title>'."\n";
+        $titles .= '<title>'.$textutil->html_special_chars($title).'</title>'."\n";
     }
     $keywords = '';
     foreach ($item['keywords'] as $keyword) {
-        $keywords .= '<keyword>'.$myts->htmlSpecialChars($keyword).'</keyword>'."\n";
+        $keywords .= '<keyword>'.$textutil->html_special_chars($keyword).'</keyword>'."\n";
     }
 
     if (!fwrite(
         $fhdl, "<basic id=\"${item['item_id']}\">\n"
                 ."<itemtype>${itemtype}</itemtype>\n"
                 .'<titles>'.$titles."</titles>\n"
-                ."<contributor uname='".$myts->htmlSpecialChars($account['uname'])."'>".$myts->htmlSpecialChars($contributor)."</contributor>\n"
+                ."<contributor uname='".$textutil->html_special_chars($account['uname'])."'>".$textutil->html_special_chars($contributor)."</contributor>\n"
                 .'<keywords>'.$keywords."</keywords>\n"
-                .'<description>'.$myts->htmlSpecialChars($item['description'])."</description>\n"
-                .'<doi>'.$myts->htmlSpecialChars($item['doi'])."</doi>\n"
+                .'<description>'.$textutil->html_special_chars($item['description'])."</description>\n"
+                .'<doi>'.$textutil->html_special_chars($item['doi'])."</doi>\n"
                 ."<last_update_date>$last_update_date</last_update_date>\n"
                 ."<creation_date>$creation_date</creation_date>\n"
                 ."<publication_year>${item['publication_year']}</publication_year>\n"
@@ -2708,7 +2713,7 @@ function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = fa
             if (RES_OK != xnp_get_index($xnpsid, $i, $index)) {
                 continue;
             }
-            if (!fwrite($fhdl, "<index open_level='".$open_level_str[$index['open_level']]."'>".$myts->htmlSpecialChars($head.$str)."</index>\n")) {
+            if (!fwrite($fhdl, "<index open_level='".$open_level_str[$index['open_level']]."'>".$textutil->html_special_chars($head.$str)."</index>\n")) {
                 return false;
             }
         }
@@ -2849,7 +2854,7 @@ function xnpGetModifiedFields($item_id)
     }
 
     // get file_id of preview file before change
-    $tmp = xnpGetFileInfo('t_file.file_id', "t_file_type.name='preview' and is_deleted=0 and sess_id is NULL ", $item_id);
+    $tmp = xnpGetFileInfo('`t_file`.`file_id`', '`t_file_type`.`name`=\'preview\' AND `is_deleted`=0 AND `sess_id` IS NULL', $item_id);
     $old_files = array();
     foreach ($tmp as $i) {
         $old_files[] = $i[0];
@@ -2874,6 +2879,7 @@ function xnpGetModifiedFields($item_id)
  */
 function xnpIsAttachmentModified($file_type, $item_id)
 {
+    global $xoopsDB;
     //return true if uploaded successfully
     $formdata = &xoonips_getutility('formdata');
     $file = $formdata->getFile($file_type, false);
@@ -2882,7 +2888,7 @@ function xnpIsAttachmentModified($file_type, $item_id)
     }
 
     // get file_id of preview file before change
-    $tmp = xnpGetFileInfo('t_file.file_id', "t_file_type.name='${file_type}' and sess_id is NULL and is_deleted=0", $item_id);
+    $tmp = xnpGetFileInfo('`t_file`.`file_id`', '`t_file_type`.`name`='.$xoopsDB->quoteString($file_type).' AND `sess_id` IS NULL AND `is_deleted`=0', $item_id);
     $old_files = array();
     $new_files = array();
     foreach ($tmp as $i) {
@@ -3247,7 +3253,7 @@ function xnpGetAccessRights($item_id)
     return false;
 }
 
-function xoonips_error($message)
+function xoonips_error_log($message)
 {
     error_log($message, 0);
 }
@@ -3425,6 +3431,9 @@ function xnpGetColumnLengths($table_wo_prefix)
     global $xoopsDB;
     $table = $xoopsDB->prefix($table_wo_prefix);
     $result = $xoopsDB->queryF('SHOW COLUMNS FROM `'.$table.'`');
+    if (false === $result) {
+        xoonips_error_exit(500);
+    }
     $ret = array();
     while ($row = $xoopsDB->fetchArray($result)) {
         $name = $row['Field'];
@@ -3462,10 +3471,8 @@ function xnpTrimColumn(&$assoc, $table_wo_prefix, $names = null, $enc = null)
     }
 
     foreach ($lengths as $name => $len) {
-        //echo "xnpTrimColumn: name=$name len=$len type=$type <br />\n";
         if (isset($assoc[$name]) && (is_null($names) || in_array($name, $names))) {
             list($within, $without) = xnpTrimString($assoc[$name], $len, $enc);
-            //echo $assoc[$name] . " within=$within, without=$without <br />\n";
             $assoc[$name] = $within;
         }
     }
@@ -3489,7 +3496,6 @@ function xnpConfirmHtml(&$assoc, $table_wo_prefix, $names = null, $enc = null)
     }
 
     foreach ($lengths as $name => $len) {
-        //echo "xnpTrimColumn: name=$name len=$len type=$type <br />\n";
         if (isset($assoc[$name]) && (is_null($names) || in_array($name, $names))) {
             $assoc[$name]['html_string'] = $textutil->html_special_chars($assoc[$name]['value']);
             list($assoc[$name]['within'], $assoc[$name]['without']) = xnpTrimString($assoc[$name]['value'], $len, $enc);
@@ -3558,11 +3564,11 @@ function xnpGetItemIdByDoi($doi, &$iids)
 
     global $xoopsDB;
 
-    $sql = 'SELECT t1.item_id FROM '.$xoopsDB->prefix('xoonips_item_basic').' as t1 ';
-    $sql .= ' WHERE t1.doi = '.$xoopsDB->quoteString($doi);
+    $sql = 'SELECT `t1`.`item_id` FROM '.$xoopsDB->prefix('xoonips_item_basic').' AS t1 '.
+        ' WHERE `t1`.`doi`='.$xoopsDB->quoteString($doi);
     $result = $xoopsDB->query($sql);
-    if (!$result) {
-        return RES_DB_QUERY_ERROR;
+    if (false === $result) {
+        xoonips_error_exit(500);
     }
     while (list($iid) = $xoopsDB->fetchRow($result)) {
         $iids[] = $iid;
@@ -3590,8 +3596,8 @@ function xnpGetDoiByItemId($item_id, &$doi)
     $sql = 'SELECT doi FROM '.$xoopsDB->prefix('xoonips_item_basic');
     $sql .= ' WHERE item_id = '.intval($item_id);
     $result = $xoopsDB->query($sql);
-    if (!$result) {
-        return RES_DB_QUERY_ERROR;
+    if (false === $result) {
+        xoonips_error_exit(500);
     }
     $result = $xoopsDB->fetchRow($result);
     if ($result) {
@@ -3651,12 +3657,10 @@ function xnpGetItemBasicInfo($item_id)
 {
     global $xoopsDB;
     $basic = $xoopsDB->prefix('xoonips_item_basic');
-    $sql = "select * from $basic where item_id=$item_id";
+    $sql = 'SELECT * FROM '.$basic.' WHERE `item_id`='.$item_id;
     $db_result = $xoopsDB->query($sql);
-    if (!$db_result) {
-        echo 'error in '.__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
-
-        return false;
+    if (false === $db_result) {
+        xoonips_error_exit(500);
     }
     $result = $xoopsDB->fetchArray($db_result);
     if (!$result) {
@@ -3704,26 +3708,22 @@ function xnpListIndexTree($mode = XOONIPS_LISTINDEX_MODE_ALL, $assoc_array_mode 
         $where_level = '1';
         break;
     case XOONIPS_LISTINDEX_PUBLICONLY:
-        $where_level .= 'tx.open_level='.OL_PUBLIC;
+        $where_level .= '`tx`.`open_level`='.OL_PUBLIC;
         break;
     case XOONIPS_LISTINDEX_PUBLICONLY:
-        $where_level .= 'tx.open_level='.OL_PRIVATE.' OR ti.item_id='.IID_ROOT.' ';
+        $where_level .= '`tx`.`open_level`='.OL_PRIVATE.' OR `ti`.`item_id`='.IID_ROOT.' ';
         break;
     }
 
-    $sql = 'SELECT tx.index_id, tx.parent_index_id, tx.uid, tx.gid, tx.open_level, tx.sort_number '.
-    ' , ti.item_type_id, tt.title '.
-    " FROM    $item_title as tt, ".
-    " $index  AS tx ".
-    " LEFT JOIN $item_basic AS ti on tx.index_id = ti.item_id ".
-    " WHERE ($where_level) ".
-    ' AND tt.title_id='.DEFAULT_ORDER_TITLE_OFFSET.' AND tt.item_id=ti.item_id'.
-    ' ORDER by tx.uid, tx.parent_index_id, tx.sort_number';
+    $sql = 'SELECT tx.`index_id`, tx.parent_index_id, tx.uid, tx.gid, tx.open_level, tx.sort_number, ti.item_type_id, tt.title'.
+        ' FROM $item_title AS tt, '.$index.' AS `tx`'.
+        ' LEFT JOIN '.$item_basic.' AS `ti` ON `tx`.`index_id`=`ti`.`item_id`'.
+        ' WHERE ('.$where_level.')'.
+        ' AND `tt`.`title_id`='.DEFAULT_ORDER_TITLE_OFFSET.' AND `tt`.`item_id`=`ti`.`item_id`'.
+        ' ORDER BY `tx`.`uid`, `tx`.`parent_index_id`, `tx`.`sort_number`';
     $db_result = $xoopsDB->query($sql);
-    if (!$db_result) {
-        echo 'error in '.__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
-
-        return false;
+    if (false === $db_result) {
+        xoonips_error_exit(500);
     }
     $tree_items = array();
     $parent_full_path = array();

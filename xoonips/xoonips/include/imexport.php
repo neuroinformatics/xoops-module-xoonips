@@ -59,7 +59,7 @@ function xnpExportItem($export_path, $item_id, $attachment = false, $is_absolute
 
     $fhdl = fopen($tmpfile, 'w');
     if (!$fhdl) {
-        xoonips_error("can't open file '${tmpfile}' for write.");
+        xoonips_error_log("can't open file '${tmpfile}' for write.");
 
         return false;
     }
@@ -69,12 +69,12 @@ function xnpExportItem($export_path, $item_id, $attachment = false, $is_absolute
     $itemtypes = array();
 
     $res = xnp_get_item($xnpsid, $item_id, $item);
-    if ($res != RES_OK) {
+    if (RES_OK != $res) {
         return false;
     }
 
     $res = xnp_get_item_types($itemtypes);
-    if ($res != RES_OK) {
+    if (RES_OK != $res) {
         return false;
     } else {
         foreach ($itemtypes as $i) {
@@ -120,10 +120,10 @@ function xnpExportItem($export_path, $item_id, $attachment = false, $is_absolute
     $fp_w = fopen($filename, 'w');
     if (!$fp_r || !$fp_w) {
         if (!$fp_r) {
-            xoonips_error("can't open file '${tmpfile}' for read.");
+            xoonips_error_log("can't open file '${tmpfile}' for read.");
         }
         if (!$fp_w) {
-            xoonips_error("can't open file '${filename}' for write.");
+            xoonips_error_log("can't open file '${filename}' for write.");
         }
         unlink($tmpfile);
         unlink($filename);
@@ -168,12 +168,12 @@ function xnpExportIndex($fhdl, $index_id, $recurse)
     $child = array();
 
     $res = xnp_get_index($xnpsid, $index_id, $index);
-    if ($res != RES_OK) {
+    if (RES_OK != $res) {
         return false;
     }
 
     $res = xnp_get_indexes($xnpsid, $index_id, array(), $child);
-    if ($res != RES_OK) {
+    if (RES_OK != $res) {
         return false;
     }
 
@@ -184,7 +184,7 @@ function xnpExportIndex($fhdl, $index_id, $recurse)
     $xml = array();
     if ($recurse) {
         $res = xnp_get_indexes($xnpsid, $index_id, array('orders' => array(array('sort_number', 0))), $child);
-        if ($res == RES_OK) {
+        if (RES_OK == $res) {
             foreach ($child as $i) {
                 if (!xnpExportIndex($fhdl, $i['item_id'], $recurse)) {
                     return false;
@@ -220,7 +220,7 @@ function xnpExportFile($export_path, $fhdl, $item_id)
     $dir = $export_path.'/files';
     if (!file_exists($dir)) {
         if (!mkdir($dir)) {
-            xoonips_error("can't make directory '${dir}'");
+            xoonips_error_log("can't make directory '${dir}'");
 
             return false;
         }
@@ -237,13 +237,13 @@ function xnpExportFile($export_path, $fhdl, $item_id)
         $hdl = fopen(xnpGetUploadFilePath($file['file_id']), 'rb');
         if (file_exists(xnpGetUploadFilePath($file['file_id']))) {
             if (!copy(xnpGetUploadFilePath($file['file_id']), $dir.'/'.$file['file_id'])) {
-                xoonips_error('can\'t write a file \''.$dir.'/'.$file['file_id']."' of the item(ID=${item_id})");
+                xoonips_error_log('can\'t write a file \''.$dir.'/'.$file['file_id']."' of the item(ID=${item_id})");
 
                 return false;
             }
             if (!fwrite($fhdl, '<file'." item_id=\"${item_id}\""." file_type_name=\"${file['file_type_name']}\""." original_file_name=\"${file['original_file_name']}\""." file_name=\"files/${file['file_id']}\""." file_size=\"${file['file_size']}\""." mime_type=\"${file['mime_type']}\"".">\n".(isset($file['thumbnail_file']) ? '<thumbnail>'.base64_encode($file['thumbnail_file'])."</thumbnail>\n" : '').'<caption>'.$file['caption']."</caption>\n"."</file>\n")) {
                 fclose($hdl);
-                xoonips_error("can't export <file> of the item(ID=${item_id})");
+                xoonips_error_log("can't export <file> of the item(ID=${item_id})");
 
                 return false;
             }
@@ -275,7 +275,7 @@ function xnpExportBasic($fhdl, $item_id, $is_absolute, $base_index_id = false)
     $account = array();
 
     $res = xnp_get_item($xnpsid, $item_id, $item);
-    if ($res != RES_OK) {
+    if (RES_OK != $res) {
         return false;
     }
 
@@ -301,7 +301,7 @@ function xnpExportChangeLog($fhdl, $item_id)
     $xml = array();
     $logs = array();
     $res = xnp_get_change_logs($xnpsid, $item_id, $logs);
-    if ($res != RES_OK) {
+    if (RES_OK != $res) {
         return false;
     }
     if (!fwrite($fhdl, "<changelogs>\n")) {
@@ -325,7 +325,7 @@ function xnpExportChangeLog($fhdl, $item_id)
  *
  * @param $parent_id id of the item to export
  *
- * @return null|string XML or NULL
+ * @return string|null XML or NULL
  */
 function xnpExportRelatedTo($parent_id)
 {
@@ -335,7 +335,7 @@ function xnpExportRelatedTo($parent_id)
     // Export item: only accesible item
     // ->export link information getted xnp_get_related_to.
     $res = xnp_get_related_to($xnpsid, $parent_id, $item_id);
-    if ($res != RES_OK) {
+    if (RES_OK != $res) {
         return null;
     }
     $xml = '';
@@ -346,17 +346,16 @@ function xnpExportRelatedTo($parent_id)
     return $xml;
 }
 
-/******************************************************************/
 // Import
 $parser_hash = array();
 
 /**
- * @param string $str       XML characters (UTF-8)
+ * @param string $str             XML characters (UTF-8)
  * @param int    $parent_index_id index_id of import place
- * @param array  &$id_table array( 'pseudo ID' => 'actual ID', ... ) effected index ids
- * @param string &$errmsg   reference recieve error message
+ * @param array  &$id_table       array( 'pseudo ID' => 'actual ID', ... ) effected index ids
+ * @param string &$errmsg         reference recieve error message
  *
- * @return null|boolean false if falure. refer $errmsg.
+ * @return bool|null false if falure. refer $errmsg.
  */
 function xnpImportIndex($str, $parent_index_id, &$id_table, &$errmsg)
 {
@@ -720,7 +719,7 @@ function _xoonips_import_index($parent_index_id, &$indexes, &$id_table)
         // numbers of same index name
         $cnt = 0;
         $index_id = 0;
-        if (xnp_get_indexes($xnpsid, $parent_index_id, array(), $child) == RES_OK) {
+        if (RES_OK == xnp_get_indexes($xnpsid, $parent_index_id, array(), $child)) {
             foreach ($child as $i) {
                 $diff = array_diff($i['titles'], $index['titles']);
                 if (empty($diff)) {
@@ -730,14 +729,14 @@ function _xoonips_import_index($parent_index_id, &$indexes, &$id_table)
                 }
             }
         }
-        if ($cnt == 1) {
+        if (1 == $cnt) {
             $id_table[$index['index_id']] = $index_id;
         } else {
             $insert_index = array();
             $insert_index['titles'] = $index['titles'];
             $insert_index['parent_index_id'] = $parent_index_id;
             $result = xnp_insert_index($xnpsid, $insert_index, $index_id);
-            if ($result != RES_OK) {
+            if (RES_OK != $result) {
                 break;
             }
             $id_table[$index['index_id']] = $index_id;

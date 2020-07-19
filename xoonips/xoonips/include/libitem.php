@@ -65,7 +65,7 @@ function xnpitmgrListIndexTree($mode = XNPITMGR_LISTMODE_ALL, $uid = 0)
         $where_level .= 'tx.open_level='.OL_PUBLIC;
         break;
     case XNPITMGR_LISTMODE_PRIVATEONLY:
-        if ($uid == 0) {
+        if (0 == $uid) {
             $where_level .= 'tx.open_level='.OL_PRIVATE.' OR ti.item_id='.IID_ROOT.' ';
         } else {
             $where_level .= '( tx.open_level='.OL_PRIVATE.' AND tx.uid='.$uid.' ) OR ti.item_id='.IID_ROOT.' ';
@@ -83,7 +83,7 @@ function xnpitmgrListIndexTree($mode = XNPITMGR_LISTMODE_ALL, $uid = 0)
         ' ORDER by tx.uid, tx.parent_index_id, tx.sort_number';
     $db_result = $xoopsDB->query($sql);
     if (!$db_result) {
-        echo 'error in '.__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
+        // echo 'error in '.__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
 
         return false;
     }
@@ -100,12 +100,12 @@ function xnpitmgrListIndexTree($mode = XNPITMGR_LISTMODE_ALL, $uid = 0)
     }
     // extract to full path
     foreach ($parent_full_path as $k => $v) {
-        if ($k == 0) {
+        if (0 == $k) {
             continue;
         }
         $fullpath = '';
         $idx = $k;
-        while ($idx != 0) {
+        while (0 != $idx) {
             if (!isset($tree_items[$idx])) {
                 break;
             }
@@ -120,7 +120,7 @@ function xnpitmgrListIndexTree($mode = XNPITMGR_LISTMODE_ALL, $uid = 0)
     foreach ($tree_items as $k => $v) {
         $parent_path = $parent_full_path[$v['parent_index_id']];
         // exclude check.
-        if ($v['index_id'] == IID_ROOT) {
+        if (IID_ROOT == $v['index_id']) {
             continue;
         }
         // delete "ROOT" string.
@@ -150,7 +150,7 @@ function xnpitmgrListIndexItems($index_ids)
     $sql = "select distinct item_id  from $index_link where index_id in (".implode(',', $index_ids).')';
     $db_result = $xoopsDB->query($sql);
     if (!$db_result) {
-        echo 'error in '.__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
+        // echo 'error in '.__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
 
         return false;
     }
@@ -181,7 +181,7 @@ function xnpitmgrGetItemBasicInfo($item_id)
     $sql = "select * from $basic where item_id=$item_id";
     $db_result = $xoopsDB->query($sql);
     if (!$db_result) {
-        echo 'error in '.__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
+        // echo 'error in '.__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
 
         return false;
     }
@@ -215,7 +215,7 @@ function xnpitmgrGetItemTypeNameById($item_type_id)
     $sql = "select * from $item_type where item_type_id=$item_type_id";
     $db_result = $xoopsDB->query($sql);
     if (!$db_result) {
-        echo 'error in '.__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
+        // echo 'error in '.__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
 
         return false;
     }
@@ -243,7 +243,7 @@ function xnpitmgrGetCertifyState($xid, $iid)
       " WHERE item_id = $iid AND index_id = $xid ";
     $db_result = $xoopsDB->query($sql);
     if (!$db_result) {
-        echo 'error in '.__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
+        // echo 'error in '.__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
 
         return false;
     }
@@ -277,7 +277,7 @@ function xnpitmgrUnregisterItem($xid, $iid)
         if ($xoopsDB->queryF($sql)) {
             $ret = true;
         } else {
-            echo "error can't update last_updated_date in ".__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
+            // echo "error can't update last_updated_date in ".__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
             $ret = false;
         }
     }
@@ -287,7 +287,7 @@ function xnpitmgrUnregisterItem($xid, $iid)
         if ($xoopsDB->queryF($sql)) {
             $ret = true;
         } else {
-            echo "error can't update last_updated_date in ".__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
+            // echo "error can't update last_updated_date in ".__FUNCTION__.' '.$xoopsDB->error()." sql=$sql".' at '.__LINE__.' in '.__FILE__."\n";
             $ret = false;
         }
     }
@@ -311,14 +311,14 @@ function getRemoteHost()
  *  @param xid     item(item_id param) registered index id
  *  @param item_id item id
  *
- *  @return boolean|null  success
- *  @return boolean|null failed
+ *  @return bool|null  success
+ *  @return bool|null failed
  */
 function xnpitmgrWithDrawItem($xnpsid, $xid, $item_id)
 {
     global $xoopsDB;
     $uid = $_SESSION['xoopsUserId'];
-    if (xnpitmgrGetCertifyState($xid, $item_id) == CERTIFIED) {
+    if (CERTIFIED == xnpitmgrGetCertifyState($xid, $item_id)) {
         $index = array();
         if (xnpitmgrUnregisterItem($xid, $item_id)) {
             $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
