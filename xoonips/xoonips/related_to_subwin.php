@@ -50,17 +50,18 @@ require XOOPS_ROOT_PATH.'/header.php';
 require_once '../../class/template.php';
 require_once 'blocks/xoonips_blocks.php';
 
-$xoopsModule = &XoopsModule::getByDirname('xoonips');
-//print_r($xoopsModule);
+$module_handler = &xoops_gethandler('module');
+$block_handler = &xoops_gethandler('block');
 
-$mod_blocks = &XoopsBlock::getByModule($xoopsModule->getVar('mid'));
-//print_r($blocks);
+$xoopsModule = &$module_handler->getByDirname('xoonips');
+$mod_blocks = &$block_handler->getByModule($xoopsModule->getVar('mid'));
+
 $blocks = array();
 //copy only necessary block from mod_block to blocks.
 foreach ($mod_blocks as $b) {
     if ($b->getVar('mid') == $xoopsModule->getVar('mid')) {
-        if ($b->getVar('show_func') == 'b_xoonips_quick_search_show'
-            || $b->getVar('show_func') == 'b_xoonips_tree_show'
+        if ('b_xoonips_quick_search_show' == $b->getVar('show_func')
+            || 'b_xoonips_tree_show' == $b->getVar('show_func')
         ) {
             $blocks[$b->getVar('show_func')] = $b;
         }
@@ -100,7 +101,7 @@ $bl['search_itemtypes'] = array('all' => _MD_XOONIPS_SEARCH_ALL,
                                  'basic' => _MD_XOONIPS_SEARCH_TITLE_AND_KEYWORD, );
 $itemtype_handler = &xoonips_getormhandler('xoonips', 'item_type');
 foreach ($itemtype_handler->getObjects(new Criteria('item_type_id', ITID_INDEX, '!=')) as $itemtype) {
-    if ($itemtype->getVar('item_type_id', 'n') != ITID_INDEX) {
+    if (ITID_INDEX != $itemtype->getVar('item_type_id', 'n')) {
         $bl['search_itemtypes'][$itemtype->getVar('name', 's')] = $itemtype->getVar('display_name', 's');
     }
 }

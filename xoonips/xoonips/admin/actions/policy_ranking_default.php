@@ -88,7 +88,8 @@ function xoonips_get_module_id()
 
 function get_block_title($mid, $fname, $sfunc)
 {
-    $block_objs = &XoopsBlock::getByModule($mid);
+    $block_handler = &xoops_gethandler('block');
+    $block_objs = &$block_handler->getByModule($mid);
     $block_title = '';
     foreach ($block_objs as $block_obj) {
         $func_file = $block_obj->getVar('func_file', 'n');
@@ -112,7 +113,7 @@ function ranking_create_array($names, $order_conf, $visible_conf)
     for ($i = 0; $i < $cnt; ++$i) {
         $ranking[$orders[$i]] = array(
             'id' => $i,
-            'name' => $names[$i], 'order' => $orders[$i], 'checked' => ($visibles[$i] == 1) ? 'checked="checked"' : '',
+            'name' => $names[$i], 'order' => $orders[$i], 'checked' => (1 == $visibles[$i]) ? 'checked="checked"' : '',
             'up' => _AM_XOONIPS_LABEL_UP, 'down' => _AM_XOONIPS_LABEL_DOWN,
         );
     }
@@ -120,7 +121,7 @@ function ranking_create_array($names, $order_conf, $visible_conf)
     $evenodd = 'odd';
     for ($i = 0; $i < $cnt; ++$i) {
         $ranking[$i]['evenodd'] = $evenodd;
-        $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+        $evenodd = ('even' == $evenodd) ? 'odd' : 'even';
     }
 
     return $ranking;
@@ -128,7 +129,7 @@ function ranking_create_array($names, $order_conf, $visible_conf)
 
 // get module id
 $xoonips_mid = xoonips_get_module_id();
-if ($xoonips_mid === false) {
+if (false === $xoonips_mid) {
     redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_UNEXPECTED_ERROR);
     exit();
 }
@@ -156,7 +157,7 @@ $recent_ranking_numrows = $config_values['ranking_new_num_rows'];
 
 // >> calculation days
 $ranking_days = $config_values['ranking_days'];
-$ranking_days_checked = ($config_values['ranking_days_enabled'] == 'on') ? 'checked="checked"' : '';
+$ranking_days_checked = ('on' == $config_values['ranking_days_enabled']) ? 'checked="checked"' : '';
 
 // templates
 require_once '../class/base/pattemplate.class.php';

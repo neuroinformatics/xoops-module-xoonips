@@ -58,12 +58,13 @@ function update_block_permissions($old_gid, $new_gid)
     // get handlers
     $gperm_handler = &xoops_gethandler('groupperm');
     $module_handler = &xoops_gethandler('module');
+    $block_handler = &xoops_gethandler('block');
     $module = &$module_handler->getByDirname('xoonips');
     $mid = $module->getVar('mid');
-    $block_objs = &XoopsBlock::getByModule($mid);
+    $block_objs = &$block_handler->getByModule($mid);
     foreach ($block_objs as $block_obj) {
         // find moderator menu block
-        if ($block_obj->getVar('show_func') == 'b_xoonips_moderator_show') {
+        if ('b_xoonips_moderator_show' == $block_obj->getVar('show_func')) {
             $bid = $block_obj->getVar('bid');
             // if old_gid don't have module admin right,
             // delete the right to access from old_gid.

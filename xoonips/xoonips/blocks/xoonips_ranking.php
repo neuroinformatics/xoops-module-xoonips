@@ -28,7 +28,7 @@ defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
 // display ranking block / new arrival block
 /**
- * @param boolean $is_arrival
+ * @param bool $is_arrival
  */
 function xoonips_ranking_show($is_arrival)
 {
@@ -40,7 +40,7 @@ function xoonips_ranking_show($is_arrival)
     // hide block if user is guest and public index viewing policy is 'platform'
     if (!is_object($xoopsUser)) {
         $target_user = $xconfig_handler->getValue('public_item_target_user');
-        if ($target_user != 'all') {
+        if ('all' != $target_user) {
             // 'platform'
             return false;
         }
@@ -66,7 +66,8 @@ function xoonips_ranking_show($is_arrival)
         $module = &$module_handler->getByDirname($mydirname);
         $mid = $module->getVar('mid', 's');
         // get block array
-        $block_arr = &XoopsBlock::getByModule($mid);
+        $block_handler = &xoops_gethandler('block');
+        $block_arr = &$block_handler->getByModule($mid);
     } else {
         global $block_arr;
     }
@@ -77,10 +78,10 @@ function xoonips_ranking_show($is_arrival)
         $func = $b->getVar('show_func', 'n');
         if ($func == $myfunc) {
             $side = $b->getVar('side', 'n');
-            if ($side == XOOPS_SIDEBLOCK_LEFT || $side == XOOPS_SIDEBLOCK_RIGHT) {
+            if (XOOPS_SIDEBLOCK_LEFT == $side || XOOPS_SIDEBLOCK_RIGHT == $side) {
                 $maxlen = 16;
                 break;
-            } elseif ($side == XOOPS_CENTERBLOCK_LEFT || $side == XOOPS_CENTERBLOCK_RIGHT) {
+            } elseif (XOOPS_CENTERBLOCK_LEFT == $side || XOOPS_CENTERBLOCK_RIGHT == $side) {
                 $maxlen = 24;
                 break;
             }
@@ -146,7 +147,7 @@ function xoonips_ranking_show($is_arrival)
                 $title = $textutil->truncate($title, $maxlen, $etc);
                 $count = $textutil->html_special_chars($obj->getExtraVar('DATE_FORMAT(timestamp,\'%m/%d\')'));
                 $doi = $textutil->html_special_chars($obj->getExtraVar('doi'));
-                $id = ($doi == '' && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') ? 'item_id='.$item_id : XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($doi);
+                $id = ('' == $doi && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') ? 'item_id='.$item_id : XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($doi);
                 $url = XOOPS_URL.'/modules/xoonips/detail.php?'.$id;
                 $items[] = array(
                     'title' => $title,
@@ -223,7 +224,7 @@ function xoonips_ranking_show($is_arrival)
                 $title = $textutil->truncate($title, $maxlen, $etc);
                 $count = $obj->getVar('count', 'n');
                 $doi = $textutil->html_special_chars($obj->getExtraVar('doi'));
-                $id = ($doi == '' && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') ? 'item_id='.$item_id : XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($doi);
+                $id = ('' == $doi && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') ? 'item_id='.$item_id : XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($doi);
                 $url = XOOPS_URL.'/modules/xoonips/detail.php?'.$id;
                 $items[] = array(
                     'title' => $title,
@@ -262,7 +263,7 @@ function xoonips_ranking_show($is_arrival)
                 $title = $textutil->truncate($title, $maxlen, $etc);
                 $count = $obj->getVar('count', 'n');
                 $doi = $textutil->html_special_chars($obj->getExtraVar('doi'));
-                $id = ($doi == '' && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') ? 'item_id='.$item_id : XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($doi);
+                $id = ('' == $doi && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') ? 'item_id='.$item_id : XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($doi);
                 $url = XOOPS_URL.'/modules/xoonips/detail.php?'.$id;
                 $items[] = array(
                     'title' => $title,
