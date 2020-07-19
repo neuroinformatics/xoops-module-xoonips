@@ -75,7 +75,7 @@ class XooNIpsXmlRpcViewElement
 }
 class XooNIpsXmlRpcItemViewGetSimpleItems extends XooNIpsXmlRpcItemView
 {
-    public function render()
+    public function render($io_xmlrpc = null)
     {
         $iteminfo = $this->item->getIteminfo();
 
@@ -84,7 +84,7 @@ class XooNIpsXmlRpcItemViewGetSimpleItems extends XooNIpsXmlRpcItemView
 }
 class XooNIpsXmlRpcItemViewGetItem extends XooNIpsXmlRpcItemView
 {
-    public function render()
+    public function render($io_xmlrpc = null)
     {
         $iteminfo = $this->item->getIteminfo();
 
