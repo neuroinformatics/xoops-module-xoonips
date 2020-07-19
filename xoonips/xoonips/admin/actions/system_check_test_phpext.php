@@ -97,7 +97,7 @@ function xoonips_admin_system_check_phpext(&$category)
         $name = 'mbstring.http_input';
         $ans[$name] = ini_get($name);
         $res = new XooNIpsAdminSystemCheckResult(' &raquo; '.$name);
-        if ($ans[$name] == 'pass') {
+        if ($ans[$name] == 'pass' || $nas[$name] == '') {
             $res->setResult(_XASC_STATUS_OK, $ans[$name], _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
         } else {
             $res->setResult(_XASC_STATUS_FAIL, $ans[$name], _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL);
@@ -110,7 +110,7 @@ function xoonips_admin_system_check_phpext(&$category)
         $name = 'mbstring.http_output';
         $ans[$name] = ini_get($name);
         $res = new XooNIpsAdminSystemCheckResult(' &raquo; '.$name);
-        if ($ans[$name] == 'pass') {
+        if ($ans[$name] == 'pass' || $nas[$name] == '') {
             $res->setResult(_XASC_STATUS_OK, $ans[$name], _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
         } else {
             $res->setResult(_XASC_STATUS_FAIL, $ans[$name], _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL);
