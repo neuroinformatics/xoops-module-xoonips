@@ -55,7 +55,6 @@ require_once __DIR__.'/include/extra_param.inc.php';
 $requested_vars = array(
     'op' => array('s', ''),
     'print' => array('b', false),
-    'submit_url' => array('s', XOOPS_URL.'/modules/xoonips/itemselect.php'),
 );
 $formdata = &xoonips_getutility('formdata');
 foreach ($requested_vars as $key => $meta) {
@@ -105,7 +104,7 @@ if ($print) {
     $xoopsTpl->assign('meta_author', $myxoopsConfigMetaFooter['meta_author']);
     $xoopsTpl->assign('sitename', $myxoopsConfig['sitename']);
 
-    if ($op == 'quicksearch') {
+    if ('quicksearch' == $op) {
         $search_itemtypes = array(
             'all' => _MD_XOONIPS_SEARCH_ALL,
             'basic' => _MD_XOONIPS_SEARCH_TITLE_AND_KEYWORD,
@@ -113,7 +112,7 @@ if ($print) {
         );
 
         $itemtypes = array();
-        if (xnp_get_item_types($itemtypes) == RES_OK) {
+        if (RES_OK == xnp_get_item_types($itemtypes)) {
             foreach ($itemtypes as $itemtype) {
                 if ($itemtype['item_type_id'] > 2) {
                     $search_itemtypes[$itemtype['name']] = $itemtype['display_name'];

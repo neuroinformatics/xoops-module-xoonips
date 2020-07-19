@@ -73,6 +73,29 @@ $selected = $formdata->getValueArray('both', 'selected', 'i', false, array());
 $selected_hidden = $formdata->getValueArray('both', 'selected_hidden', 's', false, array());
 $selected_original = $formdata->getValueArray('both', 'selected_original', 's', false, array());
 $initially_selected = $formdata->getValueArray('both', 'initially_selected', 's', false, array());
+
+// check form params
+if ('' != $op && !preg_match('/\A[a-z_]+\z/i', $op)) {
+    xoonips_error_exit(400);
+}
+if (!in_array($checkbox, array('on', 'off'))) {
+    xoonips_error_exit(400);
+}
+if (!in_array($submit_url, array('', 'itemselect.php')) && !preg_match('/\A'.preg_quote(XOONIPS_URL.'/', '/').'[0-9a-z_]+\.php\z/', $submit_url)) {
+    xoonips_error_exit(400);
+}
+if (!in_array($order_by, array('title', 'doi', 'last_update_date', 'creation_date', 'publication_date'))) {
+    unset($_SESSION['xoonips_order_by']);
+    unset($_SESSION['xoonips_order_dir']);
+    xoonips_error_exit(400);
+}
+if (!in_array($search_itemtype, array('', 'all', 'basic', 'metadata')) && !preg_match('/\Axnp[a-z0-9_]+\z/i', $search_itemtype)) {
+    xoonips_error_exit(400);
+}
+if (!in_array($search_tab, array('item', 'file', 'metadata'))) {
+    xoonips_error_exit(400);
+}
+
 $_SESSION['xoonips_order_by'] = $order_by;
 $_SESSION['xoonips_order_dir'] = $order_dir;
 
@@ -89,7 +112,7 @@ $initially_selected = array();
 $itemtypes = array();
 $itemtype_names = array();
 $tmp = array();
-if (xnp_get_item_types($tmp) != RES_OK) {
+if (RES_OK != xnp_get_item_types($tmp)) {
     redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item_types ');
     exit();
 } else {
@@ -153,7 +176,7 @@ case 'quicksearch':
             array('search_tab' => 'file', 'label' => _MD_XOONIPS_ITEM_SEARCH_TAB_FILE, 'count' => $file_count),
             )
         );
-    } elseif ($search_itemtype == 'all') {
+    } elseif ('all' == $search_itemtype) {
         $xoopsTpl->assign(
             'search_tabs', array(
             array('search_tab' => 'item', 'label' => _MD_XOONIPS_ITEM_SEARCH_TAB_ITEM, 'count' => $item_count),
@@ -163,15 +186,15 @@ case 'quicksearch':
         );
     }
 
-    if ($search_tab == 'metadata' || $search_itemtype == 'metadata') {
+    if ('metadata' == $search_tab || 'metadata' == $search_itemtype) {
         $start = ($page - 1) * $item_per_page;
 
         // retrieving metadata and constructing associative array of the items
         // that has same structure of a xoonips item.
-        if ($order_by == 'title') {
-            $order_sql = 'order by tmetadata.title '.($order_dir == ASC ? 'ASC' : 'DESC');
+        if ('title' == $order_by) {
+            $order_sql = 'order by tmetadata.title '.(ASC == $order_dir ? 'ASC' : 'DESC');
         } else {
-            $order_sql = 'order by tmetadata.datestamp '.($order_dir == ASC ? 'ASC' : 'DESC');
+            $order_sql = 'order by tmetadata.datestamp '.(ASC == $order_dir ? 'ASC' : 'DESC');
         }
 
         $table_metadata = $xoopsDB->prefix('xoonips_oaipmh_metadata');
@@ -228,7 +251,7 @@ case 'quicksearch':
         $xoopsTpl->assign('pages', xoonips_get_selectable_page_number($page, ceil($total_count / $item_per_page)));
         $xoopsTpl->assign('op', $op);
     }
-    if ($search_itemtype == 'metadata') {
+    if ('metadata' == $search_itemtype) {
         $xoopsOption['template_main'] = 'xoonips_itemselect_metadata.html';
     } else {
         $xoopsOption['template_main'] = 'xoonips_itemselect_tabbed.html';
@@ -293,6 +316,7 @@ case 'add_to_index':
 case 'select_item_advancedsearch':
     $selected = $selected_original; //initialize $selected
     $selected_hidden = array();
+    // no break
 case 'select_item_advancedsearch_pagenavi':
     $errorMessage = '';
     $iids = xoonips_advanced_search($keyword, $search_itemtype, false, $errorMessage, $search_cache_id);
@@ -307,9 +331,10 @@ case 'select_item_index':
     $selected_hidden = array();
     // - reset page number
     $page = 1;
+    // no break
 case 'select_item_index_pagenavi':
     // change page no of select item from indexed item
-    if ($index_id == IID_ROOT) {
+    if (IID_ROOT == $index_id) {
         // access denied to IID_ROOT
         header('Location: '.XOOPS_URL.'/modules/xoonips/itemselect.php');
         exit();
@@ -325,7 +350,7 @@ case 'select_item_index_pagenavi':
         // only if select items from private indexes.
         // this case is used for transferring items in user menu
         $index_obj = &$index_handler->getIndexObject($index_id);
-        if ($index_obj->get('uid') != $myuid || $index_obj->get('open_level') != OL_PRIVATE) {
+        if ($index_obj->get('uid') != $myuid || OL_PRIVATE != $index_obj->get('open_level')) {
             // if target index is not user's own index, override index id to
             // user's private root index
             $index_id = $private_index_id;
@@ -345,9 +370,10 @@ case 'select_item_index_pagenavi':
 case 'select_item_useritem'://select item from user's items
     $selected = $selected_original; //initialize $selected
     $selected_hidden = array();
+    // no break
 case 'select_item_useritem_pagenavi':
     $iids = array();
-    if (xnp_dump_item_id($xnpsid, $cri, $iids) != RES_OK) {
+    if (RES_OK != xnp_dump_item_id($xnpsid, $cri, $iids)) {
         redirect_header(XOOPS_URL.'/', 3, 'ERROR in get item');
         exit();
     }
@@ -383,7 +409,7 @@ if (isset($itemselect_private_only) && $itemselect_private_only
 
 $selected = array_merge($selected, $selected_hidden);
 
-if ($search_tab == 'metadata' || $search_itemtype == 'metadata') {
+if ('metadata' == $search_tab || 'metadata' == $search_itemtype) {
 } else {
     $start = ($page - 1) * $item_per_page;
     if ($start >= count($iids)) {
@@ -391,12 +417,12 @@ if ($search_tab == 'metadata' || $search_itemtype == 'metadata') {
         $start = 0;
     }
 
-    if ($order_by == 'publication_date') {
+    if ('publication_date' == $order_by) {
         $cri = array('orders' => array(array('name' => 'publication_year', 'order' => $order_dir), array('name' => 'publication_month', 'order' => $order_dir), array('name' => 'publication_mday', 'order' => $order_dir)));
     } else {
         $cri = array('orders' => array(array('name' => $order_by, 'order' => $order_dir)));
     }
-    if (xnp_get_items($xnpsid, $iids, $cri, $items) != RES_OK) {
+    if (RES_OK != xnp_get_items($xnpsid, $iids, $cri, $items)) {
         redirect_header(XOOPS_URL.'/', 3, 'ERROR ');
         exit();
     }
@@ -511,7 +537,7 @@ function xoonips_advanced_search($keyword, $search_itemtype, $search_only_privat
             $var = $formdata->getValue('post', $var_name, 's', false);
             if (in_array($ar[0], $search_target) && !is_null($var)) {
                 if (!is_array($var)) {
-                    if (strlen($var) != 0) {
+                    if (0 != strlen($var)) {
                         $search_keywords[] = urlencode($var_name).'='.urlencode($var);
                     }
                 } else {
@@ -583,7 +609,7 @@ function xoonips_itemsubtype_search($keyword, $search_itemtype, $search_only_pri
             $var = $formdata->getValue('post', $var_name, 's', false);
             if (in_array($ar[0], $search_target) && !is_null($var)) {
                 if (!is_array($var)) {
-                    if (strlen($var) != 0) {
+                    if (0 != strlen($var)) {
                         $search_keywords[] = urlencode($var_name).'='.urlencode($var);
                     }
                 } else {
@@ -679,8 +705,8 @@ function xoonips_add_selected_item($index_id, $uid, $old_selected_item_ids, $new
         $criteria = new CriteriaCompo(new Criteria('index_id', $index_id));
         $criteria = $criteria->add(new Criteria('item_id', $item_id));
         $index_item_link = &$index_item_link_handler->getObjects($criteria);
-        if (isset($index_item_link[0]) && $index_item_link[0]->get('certify_state') == CERTIFY_REQUIRED
-            || isset($index_item_link[0]) && $index_item_link[0]->get('certify_state') == CERTIFIED
+        if (isset($index_item_link[0]) && CERTIFY_REQUIRED == $index_item_link[0]->get('certify_state')
+            || isset($index_item_link[0]) && CERTIFIED == $index_item_link[0]->get('certify_state')
         ) {
             continue;
         }
@@ -690,7 +716,7 @@ function xoonips_add_selected_item($index_id, $uid, $old_selected_item_ids, $new
         $index_item_link = $index_item_link_handler->create();
         $index_item_link->set('index_id', $index_id);
         $index_item_link->set('item_id', $item_id);
-        $index_item_link->set('certify_state', $certify_item == 'auto' ? CERTIFIED : CERTIFY_REQUIRED);
+        $index_item_link->set('certify_state', 'auto' == $certify_item ? CERTIFIED : CERTIFY_REQUIRED);
         if (!$index_item_link_handler->insert($index_item_link)) {
             redirect_header(XOOPS_URL.'/', 3, "ERROR can't create index_item_link");
             exit();
@@ -725,10 +751,10 @@ function xoonips_add_selected_item($index_id, $uid, $old_selected_item_ids, $new
         $index_item_links = &$item->getVar('indexes');
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         foreach ($index_item_links as $index_item_link) {
-            if ($index_item_link->get('certify_state') == CERTIFY_REQUIRED) {
+            if (CERTIFY_REQUIRED == $index_item_link->get('certify_state')) {
                 $index = $index_handler->get($index_item_link->get('index_id'));
-                if ($index->get('open_level') == OL_PUBLIC
-                    || $index->get('open_level') == OL_GROUP_ONLY
+                if (OL_PUBLIC == $index->get('open_level')
+                    || OL_GROUP_ONLY == $index->get('open_level')
                 ) {
                     $basic = &$item->getVar('basic');
                     $item_basic_handler->lockItemAndIndexes($basic->get('item_id'), $index_item_link->get('index_id'));
@@ -807,7 +833,7 @@ function xoonips_get_file_count_from_search_cache($search_cache_id)
     $join->cascade(new XooNIpsJoinCriteria('xoonips_item_basic', 'item_id', 'item_id', 'INNER', 'tb'), 'tf', true);
 
     $search_cache_file = &$search_cache_file_handler->getObjects(new Criteria('search_cache_id', $search_cache_id), false, 'tb.item_id', false, $join);
-    if (count($search_cache_file) == 0) {
+    if (0 == count($search_cache_file)) {
         return 0;
     }
 
@@ -837,7 +863,7 @@ function xoonips_get_item_count_from_search_cache($search_cache_id)
     $join = new XooNIpsJoinCriteria('xoonips_item_basic', 'item_id', 'item_id', 'INNER', 'tb');
 
     $search_cache_item = &$search_cache_item_handler->getObjects(new Criteria('search_cache_id', $search_cache_id), false, '', false, $join);
-    if (count($search_cache_item) == 0) {
+    if (0 == count($search_cache_item)) {
         return 0;
     }
 
@@ -887,7 +913,7 @@ function get_only_own_items($item_ids)
 {
     global $xoopsUser;
 
-    if (!is_array($item_ids) || count($item_ids) == 0) {
+    if (!is_array($item_ids) || 0 == count($item_ids)) {
         return array();
     }
 
@@ -929,7 +955,7 @@ function _xoonips_filter_add_items($index_id, $iids)
     // filter other contributer's item if selected index id is private
     if (is_array($iids) && !empty($iids)) {
         $idx_obj = &$idx_handler->get($index_id);
-        if ($idx_obj !== false && $idx_obj->get('open_level') == OL_PRIVATE) {
+        if (false !== $idx_obj && OL_PRIVATE == $idx_obj->get('open_level')) {
             $uid = intval($idx_obj->get('uid'));
             $criteria = new CriteriaCompo(new Criteria('uid', $uid));
             $criteria->add(new Criteria('item_id', '('.implode(',', $iids).')', 'IN'));
