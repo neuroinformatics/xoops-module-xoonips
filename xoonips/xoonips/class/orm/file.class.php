@@ -113,7 +113,7 @@ class XooNIpsOrmFileHandler extends XooNIpsTableObjectHandler
         // copy file to $upload_dir
         $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
         $upload_dir = $xconfig_handler->getValue('upload_dir');
-        if (substr($upload_dir, -1) == '/') {
+        if ('/' == substr($upload_dir, -1)) {
             $dstfilepath = $upload_dir.$file->get('file_id');
         } else {
             $dstfilepath = $upload_dir.'/'.$file->get('file_id');
@@ -168,11 +168,12 @@ class XooNIpsOrmFileHandler extends XooNIpsTableObjectHandler
     /**
      * delete a metadata of file and remove a file.
      *
-     * @param XooNIpsOrmFile $file file to delete
+     * @param XooNIpsOrmFile $file  file to delete
+     * @param bool           $force force operation
      *
      * @return bool false if failure
      */
-    public function delete(&$file)
+    public function delete(&$obj, $force = false)
     {
         if (parent::delete($file)) {
             return true;
@@ -183,7 +184,6 @@ class XooNIpsOrmFileHandler extends XooNIpsTableObjectHandler
 
     /**
      * get a metadata of file. returned object has a file path of this file.
-     *
      *
      * @return bool false if failure
      */
@@ -210,13 +210,13 @@ class XooNIpsOrmFileHandler extends XooNIpsTableObjectHandler
      */
     public function &getObjects($criteria = null, $id_as_key = false, $fieldlist = '', $distinct = false, $joindef = null)
     {
-        if (is_null($joindef) || !(is_subclass_of($joindef, 'xoonipsjoincriteria') || strtolower(get_class($joindef)) == 'xoonipsjoincriteria')) {
+        if (is_null($joindef) || !(is_subclass_of($joindef, 'xoonipsjoincriteria') || 'xoonipsjoincriteria' == strtolower(get_class($joindef)))) {
             $joindef = new XooNIpsJoinCriteria('xoonips_file_type', 'file_type_id', 'file_type_id');
         } else {
             $joindef->cascade(new XooNIpsJoinCriteria('xoonips_file_type', 'file_type_id', 'file_type_id'), 'xoonips_file');
         }
         $table = $this->db->prefix('xoonips_file');
-        if (trim($fieldlist) == '') {
+        if ('' == trim($fieldlist)) {
             $fieldlist = "$table.file_id, $table.item_id, $table.original_file_name, $table.mime_type, $table.file_name, $table.file_size, $table.thumbnail_file, $table.caption, $table.sess_id, $table.file_type_id, $table.search_module_name, $table.search_module_version, $table.header, $table.timestamp, $table.is_deleted, $table.download_count";
         }
         $files = parent::getObjects($criteria, $id_as_key, $fieldlist, $distinct, $joindef);
@@ -302,7 +302,7 @@ class XooNIpsOrmFileHandler extends XooNIpsTableObjectHandler
     /**
      * get total download count of specified file type of item.
      *
-     * @param int $item_id          item id to get total download count
+     * @param int $item_id        item id to get total download count
      * @param int $file_type_name file id to get total download count
      * @param int total donwload count
      */
