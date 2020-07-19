@@ -63,7 +63,7 @@ function xoonips_change_uid($su_uid)
     $_SESSION['xoopsUserGroups'] = $groupids;
 }
 
-if ($op == '') {
+if ('' == $op) {
     if (isset($_SESSION['xoonips_old_uid'])) {
         redirect_header(XOOPS_URL.'/', 0, ''); // already in su-mode
         exit();
@@ -86,31 +86,36 @@ if ($op == '') {
     $xoopsTpl->assign('users', $users_sort);
     $xoopsTpl->assign('su_uid', $uids[0]);
     require XOOPS_ROOT_PATH.'/footer.php';
-} elseif ($op == 'su') {
+} elseif ('su' == $op) {
     $su_uid = $formdata->getValue('post', 'su_uid', 'i', true);
     $password = $formdata->getValue('post', 'password', 'n', true);
     // check admin password
-    $sql = 'select uid from '.$xoopsDB->prefix('users')." where uid=$uid and pass='".md5($password)."'";
-    $result = $xoopsDB->query($sql);
-    if ($result == false || $xoopsDB->getRowsNum($result) == 0) {
-        redirect_header('su.php', 3, _MD_XOONIPS_SU_FAIL);
-        exit();
+    if (is_callable('User_Utils::passwordVerify')) {
+        if (!User_Utils::passwordVerify($password, $xoopsUser->get('pass'))) {
+            redirect_header('su.php', 3, _MD_XOONIPS_SU_FAIL);
+        }
+    } else {
+        $pass = is_callable('User_Utils::encryptPassword') ? User_Utils::encryptPassword($password) : md5($password);
+        $sql = 'SELECT `uid` FROM '.$xoopsDB->prefix('users').' WHERE `uid`='.$uid.' AND `pass`='.$xoopsDB->quoteString($pass);
+        $result = $xoopsDB->query($sql);
+        if (false == $result || 0 == $xoopsDB->getRowsNum($result)) {
+            redirect_header('su.php', 3, _MD_XOONIPS_SU_FAIL);
+        }
     }
 
     // su
     $_SESSION['xoonips_old_uid'] = $uid;
     xoonips_change_uid($su_uid);
 
-    $sql = 'update '.$xoopsDB->prefix('xoonips_session')." set su_uid=$su_uid where sess_id='".addslashes(session_id())."'";
+    $sql = 'UPDATE '.$xoopsDB->prefix('xoonips_session').' SET `su_uid`='.$su_uid.' WHERE `sess_id`='.$xoopsDB->quoteString(session_id());
     $xoopsDB->query($sql);
 
     $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
     $eventlog_handler->recordStartSuEvent($uid, $su_uid);
 
     redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_SU_START);
-    exit();
 }
-if ($op == 'end') {
+if ('end' == $op) {
     if (isset($_SESSION['xoonips_old_uid'])) {
         if (is_object($xoopsUser)) {
             $online_handler = &xoops_gethandler('online');
@@ -120,16 +125,14 @@ if ($op == 'end') {
         $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
         $eventlog_handler->recordEndSuEvent($_SESSION['xoonips_old_uid'], $uid);
 
-        $sql = 'update '.$xoopsDB->prefix('xoonips_session')." set su_uid=null where sess_id='".addslashes(session_id())."'";
+        $sql = 'UPDATE '.$xoopsDB->prefix('xoonips_session').' SET `su_uid`=NULL WHERE `sess_id`='.$xoopsDB->quoteString(session_id());
         $xoopsDB->queryF($sql);
 
         xoonips_change_uid($_SESSION['xoonips_old_uid']);
         $_SESSION['xoonips_old_uid'] = null;
 
         redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_SU_END);
-        exit();
     } else {
         redirect_header(XOOPS_URL.'/', 0, ''); // not in su-mode
-        exit();
     }
 }
