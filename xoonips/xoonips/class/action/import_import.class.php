@@ -81,15 +81,16 @@ class XooNIpsActionImportImport extends XooNIpsAction
     public function postAction()
     {
         global $xoopsUser;
+        $textutil = &xoonips_getutility('text');
         if (!$this->_response->getResult()) {
             foreach ($this->_collection->getItems() as $item) {
                 foreach ($item->getErrorCodes() as $code) {
-                    if ($code != E_XOONIPS_UPDATE_CERTIFY_REQUEST_LOCKED) {
+                    if (E_XOONIPS_UPDATE_CERTIFY_REQUEST_LOCKED != $code) {
                         continue;
                     }
                     $titles = &$item->getVar('titles');
                     $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
-                    redirect_header(XOOPS_URL.'/modules/xoonips/import.php?action=default', 5, sprintf(_MD_XOONIPS_ERROR_CANNOT_OVERWRITE_LOCKED_ITEM, $titles[0]->get('title'), xoonips_get_lock_type_string($item_lock_handler->getLockType($item->getUpdateItemId()))));
+                    redirect_header(XOOPS_URL.'/modules/xoonips/import.php?action=default', 5, sprintf(_MD_XOONIPS_ERROR_CANNOT_OVERWRITE_LOCKED_ITEM, $textutil->html_special_chars($titles[0]->get('title')), xoonips_get_lock_type_string($item_lock_handler->getLockType($item->getUpdateItemId()))));
                 }
             }
         }
@@ -118,13 +119,13 @@ class XooNIpsActionImportImport extends XooNIpsAction
                 continue;
             }
 
-            if (count($items[$key]->getDuplicateUpdatableItemId()) == 1) {
+            if (1 == count($items[$key]->getDuplicateUpdatableItemId())) {
                 $update_item_ids = $items[$key]->getDuplicateUpdatableItemId();
                 $items[$key]->setUpdateItemId($update_item_ids[0]);
             } else {
                 $i = 0;
                 foreach ($items[$key]->getDuplicateUpdatableItemId() as $update_item_id) {
-                    if ($i == 0) {
+                    if (0 == $i) {
                         $items[$key]->setUpdateItemId($update_item_id);
                         $i = 1;
                     } else {

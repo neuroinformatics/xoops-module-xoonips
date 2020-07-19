@@ -113,8 +113,7 @@ $itemtypes = array();
 $itemtype_names = array();
 $tmp = array();
 if (RES_OK != xnp_get_item_types($tmp)) {
-    redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item_types ');
-    exit();
+    xoonips_error_exit(500);
 } else {
     foreach ($tmp as $i) {
         $itemtypes[$i['item_type_id']] = $i;
@@ -374,8 +373,7 @@ case 'select_item_useritem'://select item from user's items
 case 'select_item_useritem_pagenavi':
     $iids = array();
     if (RES_OK != xnp_dump_item_id($xnpsid, $cri, $iids)) {
-        redirect_header(XOOPS_URL.'/', 3, 'ERROR in get item');
-        exit();
+        xoonips_error_exit(500);
     }
 
     $xoopsTpl->assign('op', 'select_item_useritem');
@@ -423,8 +421,7 @@ if ('metadata' == $search_tab || 'metadata' == $search_itemtype) {
         $cri = array('orders' => array(array('name' => $order_by, 'order' => $order_dir)));
     }
     if (RES_OK != xnp_get_items($xnpsid, $iids, $cri, $items)) {
-        redirect_header(XOOPS_URL.'/', 3, 'ERROR ');
-        exit();
+        xoonips_error_exit(500);
     }
     $xoopsTpl->assign('ids', $iids);
 
@@ -718,8 +715,7 @@ function xoonips_add_selected_item($index_id, $uid, $old_selected_item_ids, $new
         $index_item_link->set('item_id', $item_id);
         $index_item_link->set('certify_state', 'auto' == $certify_item ? CERTIFIED : CERTIFY_REQUIRED);
         if (!$index_item_link_handler->insert($index_item_link)) {
-            redirect_header(XOOPS_URL.'/', 3, "ERROR can't create index_item_link");
-            exit();
+            xoonips_error_exit(500);
         }
 
         $changelogs_handler = &xoonips_getormhandler('xoonips', 'changelog');
@@ -741,8 +737,7 @@ function xoonips_add_selected_item($index_id, $uid, $old_selected_item_ids, $new
         $item->setVar('basic', $item_basic);
 
         if (!$item_handler->insert($item)) {
-            redirect_header(XOOPS_URL.'/', 3, 'ERROR in updating item');
-            exit();
+            xoonips_error_exit(500);
         }
         trigger_error('TODO lock item and indexes');
 

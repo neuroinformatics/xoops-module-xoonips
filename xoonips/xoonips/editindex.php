@@ -84,12 +84,12 @@ foreach ($post_akeys as $key => $meta) {
 if (!in_array($op, array('open', 'register', 'up', 'down', 'rename', 'delete', 'moveto', 'add_to_public'))) {
     die('illegal reuest');
 }
-if ($op == 'up' || $op == 'down') {
-    if ($updown_xid == 0 || !isset($steps[$updown_xid])) {
+if ('up' == $op || 'down' == $op) {
+    if (0 == $updown_xid || !isset($steps[$updown_xid])) {
         die('illegal reuest');
     }
 }
-if ($op == 'moveto' && $moveto == 0) {
+if ('moveto' == $op && 0 == $moveto) {
     die('illegal reuest');
 }
 
@@ -105,23 +105,23 @@ if (RES_OK == xnp_get_account($xnpsid, $uid, $account)) {
 }
 
 // check requests
-if ($xid == 0) {
+if (0 == $xid) {
     $xid = $privateXID;
 }
-if ($xid == 1) {
+if (1 == $xid) {
     die('illegal request');
 }
 
 // check the right to access.
 $index = array();
 $result = xnp_get_index($xnpsid, $xid, $index);
-if ($result != RES_OK) {
+if (RES_OK != $result) {
     redirect_header(XOOPS_URL.'/index.php', 3, 'ERROR');
     exit;
 }
-if ($index['open_level'] == OL_PUBLIC && xnp_is_moderator($xnpsid, $uid)
-    || $index['open_level'] == OL_GROUP_ONLY && $xgroup_handler->isGroupAdmin($uid, $index['owner_gid'])
-    || $index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $uid
+if (OL_PUBLIC == $index['open_level'] && xnp_is_moderator($xnpsid, $uid)
+    || OL_GROUP_ONLY == $index['open_level'] && $xgroup_handler->isGroupAdmin($uid, $index['owner_gid'])
+    || OL_PRIVATE == $index['open_level'] && $index['owner_uid'] == $uid
 ) {
     // User has the right to write.
 } else {
@@ -137,22 +137,22 @@ function xoonipsGetTopIndex($xid)
 
     $index = array();
     $result = xnp_get_index($xnpsid, $xid, $index);
-    if ($result != RES_OK) {
+    if (RES_OK != $result) {
         return 0;
     }
 
     $indexes = array();
     $criteria = array();
     $result = xnp_get_indexes($xnpsid, IID_ROOT, $criteria, $indexes);
-    if ($result != RES_OK) {
+    if (RES_OK != $result) {
         return 0;
     }
 
     foreach ($indexes as $key => $val) {
         if ($index['open_level'] == $val['open_level']) {
-            if ($index['open_level'] == OL_PUBLIC
-                || $index['open_level'] == OL_GROUP_ONLY && $index['owner_gid'] == $val['owner_gid']
-                || $index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $val['owner_uid']
+            if (OL_PUBLIC == $index['open_level']
+                || OL_GROUP_ONLY == $index['open_level'] && $index['owner_gid'] == $val['owner_gid']
+                || OL_PRIVATE == $index['open_level'] && $index['owner_uid'] == $val['owner_uid']
             ) {
                 return $val['item_id'];
             }
@@ -176,8 +176,8 @@ unset($indexCount);
 
 // get certyfy_item from configration
 $result = xnp_get_config_value('certify_item', $certify_item);
-if ($result != RES_OK) {
-    redirect_header(XOOPS_URL.'/', 3, "ERROR xnp_get_config_value can't get certify_item(result=$result)");
+if (RES_OK != $result) {
+    xoonips_error_exit(500);
 }
 
 $handler = xoops_gethandler('user');
@@ -186,9 +186,9 @@ $operation_user_name = $user->getVar('name');
 $error = false;
 
 // operate
-if ($op == 'open' || $op == '') {
+if ('open' == $op || '' == $op) {
 }
-if ($op == 'add_to_public' && isset($check)) {
+if ('add_to_public' == $op && isset($check)) {
     // check token ticket
     if (!$xoopsGTicket->check(true, 'xoonips_edit_index')) {
         exit();
@@ -198,7 +198,7 @@ if ($op == 'add_to_public' && isset($check)) {
     foreach ($check as $index_id) {
         //ignore lock because of to make public a group index
         if ($item_lock_handler->isLocked($index_id)
-            && $item_lock_handler->getLockType($index_id) == XOONIPS_LOCK_TYPE_PUBLICATION_GROUP_INDEX
+            && XOONIPS_LOCK_TYPE_PUBLICATION_GROUP_INDEX == $item_lock_handler->getLockType($index_id)
         ) {
             continue;
         }
@@ -209,7 +209,7 @@ if ($op == 'add_to_public' && isset($check)) {
 
     $index_group_index_link_handler = &xoonips_getormhandler('xoonips', 'index_group_index_link');
     $config_handler = &xoonips_getormhandler('xoonips', 'config');
-    if ($config_handler->getValue('certify_item') == 'on') {
+    if ('on' == $config_handler->getValue('certify_item')) {
         if (!$index_group_index_link_handler->requireToMakePublic($add_to_index_id_sel, $check)) {
             $xoopsDB->queryF('ROLLBACK');
             trigger_error('cannot insert to xoonips_index_group_index_link');
@@ -224,7 +224,7 @@ if ($op == 'add_to_public' && isset($check)) {
         $xoopsDB->queryF('COMMIT');
         $index_group_index_link_handler->notifyMakePublicGroupIndex(array($add_to_index_id_sel), $check, 'group_item_certify_request');
         redirect_header(XOOPS_URL.'/modules/'.$xoopsModule->dirname().'/editindex.php?index_id='.$xid, 5, "Succeed\n<br />"._MD_XOONIPS_ITEM_NEED_TO_BE_CERTIFIED);
-    } elseif ($config_handler->getValue('certify_item') == 'auto') {
+    } elseif ('auto' == $config_handler->getValue('certify_item')) {
         if (!$index_group_index_link_handler->makePublic($add_to_index_id_sel, $check)) {
             $xoopsDB->queryF('ROLLBACK');
             redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_GROUP_TREE_TO_PUBLIC_INDEX_TREE_FAILED);
@@ -243,7 +243,7 @@ if ($op == 'add_to_public' && isset($check)) {
         die('unknown certify_item config:'.$config_handler->getValue('certify_item'));
     }
     exit();
-} elseif ($op == 'register') {
+} elseif ('register' == $op) {
     // check token ticket
     if (!$xoopsGTicket->check(true, 'xoonips_edit_index')) {
         exit();
@@ -251,19 +251,18 @@ if ($op == 'add_to_public' && isset($check)) {
 
     $indexes = array();
     $result = xnp_get_indexes($xnpsid, $xid, array(), $indexes);
-    if ($result != RES_OK) {
-        redirect_header(XOOPS_URL.'/index.php', 3, 'ERROR');
-        exit;
+    if (RES_OK != $result) {
+        xoonips_error_exit(400);
     }
     do {
         list($limitLabel, $indexCount, $indexNumberLimit) = xoonipsGetIndexCountInfo($xnpsid, $xid);
-        if ("$indexNumberLimit" != '' && $indexNumberLimit <= $indexCount) {
+        if ('' != "$indexNumberLimit" && $indexNumberLimit <= $indexCount) {
             $error_messages[] = _MD_XOONIPS_INDEX_TOO_MANY_INDEXES;
             break;
         }
 
         // warn if index name is empty
-        if (!isset($new_index_name) || strlen($new_index_name) == 0) {
+        if (!isset($new_index_name) || 0 == strlen($new_index_name)) {
             $error_messages[] = _MD_XOONIPS_INDEX_TITLE_EMPTY;
             break;
         }
@@ -287,7 +286,7 @@ if ($op == 'add_to_public' && isset($check)) {
 
         $index = array();
         $result = xnp_get_index($xnpsid, $xid, $index);
-        if ($result != RES_OK) {
+        if (RES_OK != $result) {
             redirect_header(XOOPS_URL.'/index.php', 3, 'ERROR');
             exit;
         }
@@ -295,7 +294,7 @@ if ($op == 'add_to_public' && isset($check)) {
         // register index
         $index['parent_index_id'] = $xid;
         $index['titles'] = array(encodeMacSafari2Server($new_index_name));
-        if (xnp_insert_index($xnpsid, $index, $new_xid) == RES_OK) {
+        if (RES_OK == xnp_insert_index($xnpsid, $index, $new_xid)) {
             ++$indexCount;
             // Record events(insert index)
             $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
@@ -303,14 +302,14 @@ if ($op == 'add_to_public' && isset($check)) {
             header('Location: '.XOOPS_URL.'/modules/xoonips/editindex.php?index_id='.intval($xid));
         }
     } while (false);
-} elseif ($op == 'up' || $op == 'down') {
+} elseif ('up' == $op || 'down' == $op) {
     // check token ticket
     if (!$xoopsGTicket->check(true, 'xoonips_edit_index')) {
         exit();
     }
     $step = $steps[$updown_xid];
 
-    if ($op == 'up') {
+    if ('up' == $op) {
         $dir = -1;
     } else {
         $dir = 1;
@@ -320,7 +319,7 @@ if ($op == 'add_to_public' && isset($check)) {
     $childIndexes = array();
     $criteria = array('orders' => array(array('name' => 'sort_number', 'order' => 'ASC')));
     $result = xnp_get_indexes($xnpsid, $xid, $criteria, $childIndexes);
-    if ($result == RES_OK) {
+    if (RES_OK == $result) {
         $childIndexesLen = count($childIndexes);
 
         // error if any child index is locked.
@@ -337,7 +336,7 @@ if ($op == 'add_to_public' && isset($check)) {
             }
         }
         //var_dump( $childIndexes );
-        if ($pos != -1) {
+        if (-1 != $pos) {
             // change orders
             for ($j = 0; $j < $step; ++$j) {
                 $pos += $dir;
@@ -347,14 +346,14 @@ if ($op == 'add_to_public' && isset($check)) {
                 $updown_xid2 = $childIndexes[$pos]['item_id'];
                 $result = xnp_swap_index_sort_number($xnpsid, $updown_xid, $updown_xid2);
                 //echo "swap($updown_xid,$updown_xid2) result=$result";
-                if ($result != RES_OK) {
+                if (RES_OK != $result) {
                     break;
                 }
             }
         }
     }
     header('Location: '.XOOPS_URL.'/modules/xoonips/editindex.php?index_id='.intval($xid));
-} elseif (($op == 'rename' || $op == 'delete' || $op == 'moveto') && isset($check)) {
+} elseif (('rename' == $op || 'delete' == $op || 'moveto' == $op) && isset($check)) {
     // check token ticket
     if (!$xoopsGTicket->check(true, 'xoonips_edit_index')) {
         exit();
@@ -364,21 +363,21 @@ if ($op == 'add_to_public' && isset($check)) {
     $lengths = xnpGetColumnLengths('xoonips_item_title');
 
     // error if checked index is locked.
-    foreach  ($check as $index_id) {
+    foreach ($check as $index_id) {
         xoonips_show_error_if_index_locked($index_id, $xid);
     }
 
-    foreach  ($check as $index_id) {
+    foreach ($check as $index_id) {
         $index_id = (int) $index_id;
         $index = array();
         $result = xnp_get_index($xnpsid, $index_id, $index);
-        if ($result != RES_OK) {
+        if (RES_OK != $result) {
             redirect_header(XOOPS_URL.'/index.php', 3, 'ERROR');
             exit;
         }
 
         $oldPathString = xoonipsGetPathString($xnpsid, $index_id);
-        if ($op == 'rename') {
+        if ('rename' == $op) {
             $notification_context = xoonips_notification_before_user_index_renamed($index_id);
             $new_index_name = encodeMacSafari2Server($rename[$index_id]);
             list($within, $without) = xnpTrimString($new_index_name, $lengths['title']);
@@ -390,7 +389,7 @@ if ($op == 'add_to_public' && isset($check)) {
             }
 
             // warning, if title is empty
-            if (strlen($new_index_name) == 0) {
+            if (0 == strlen($new_index_name)) {
                 $error_messages[] = _MD_XOONIPS_INDEX_TITLE_EMPTY;
                 continue;
             }
@@ -398,7 +397,7 @@ if ($op == 'add_to_public' && isset($check)) {
             // Warning, if there is the same name of index.
             $indexes = array();
             $result = xnp_get_indexes($xnpsid, $xid, array(), $indexes);
-            if ($result != RES_OK) {
+            if (RES_OK != $result) {
                 redirect_header(XOOPS_URL.'/index.php', 3, 'ERROR');
                 exit;
             }
@@ -414,12 +413,12 @@ if ($op == 'add_to_public' && isset($check)) {
             $index['titles'] = array($within);
             $index['without'] = $without;
 
-            if (xnp_update_index($xnpsid, $index) == RES_OK) {
+            if (RES_OK == xnp_update_index($xnpsid, $index)) {
                 // record events(update index)
                 $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
                 $eventlog_handler->recordUpdateIndexEvent($index_id);
             }
-        } elseif ($op == 'delete') {
+        } elseif ('delete' == $op) {
             $index_handler = &xoonips_getormhandler('xoonips', 'index');
             if (!$index_handler->getPerm($index_id, $xoopsUser->getVar('uid'), 'delete')) {
                 redirect_header(XOOPS_URL.'/modules/xoonips/editindex.php?index_id='.intval($xid), 3, _MD_XOONIPS_ITEM_FORBIDDEN);
@@ -427,7 +426,7 @@ if ($op == 'add_to_public' && isset($check)) {
             // check publication request of lower group index
             $notification_context = xoonips_notification_before_user_index_deleted($index_id);
 
-            if (xnp_delete_index($xnpsid, $index_id) == RES_OK) {
+            if (RES_OK == xnp_delete_index($xnpsid, $index_id)) {
                 /*
                 //TODO move items from deleted index to parent index only if private item.
                 $index_compo_handler=&xoonips_getormcompohandler('xoonips', 'index');
@@ -438,7 +437,7 @@ if ($op == 'add_to_public' && isset($check)) {
                 $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
                 $eventlog_handler->recordDeleteIndexEvent($index_id);
             }
-        } elseif ($op == 'moveto') {
+        } elseif ('moveto' == $op) {
             $notification_context = xoonips_notification_before_user_index_moved($index_id);
 
             // Can't move to another area(Public/Group/Private)
@@ -457,7 +456,7 @@ if ($op == 'add_to_public' && isset($check)) {
             // move
             $index['parent_index_id'] = $moveto;
             $result = xnp_update_index($xnpsid, $index);
-            if ($result == RES_OK) {
+            if (RES_OK == $result) {
                 // record events(update index)
                 $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
                 $eventlog_handler->recordUpdateIndexEvent($index_id);
@@ -465,17 +464,17 @@ if ($op == 'add_to_public' && isset($check)) {
         } else {
         }
 
-        if ($result != RES_OK) {
+        if (RES_OK != $result) {
             redirect_header(XOOPS_URL.'/index.php', 3, 'ERROR');
             exit;
         }
 
         // notificate rename, delete, and move to item's owner
-        if ($op == 'rename') {
+        if ('rename' == $op) {
             xoonips_notification_after_user_index_renamed($notification_context);
-        } elseif ($op == 'delete') {
+        } elseif ('delete' == $op) {
             xoonips_notification_after_user_index_deleted($notification_context);
-        } elseif ($op == 'moveto') {
+        } elseif ('moveto' == $op) {
             xoonips_notification_after_user_index_moved($notification_context);
         }
     }
@@ -515,11 +514,11 @@ function xoonipsGetPathString($xnpsid, $xid)
 function xoonipsGetPathArray($xnpsid, $xid)
 {
     $dirArrayR = array();
-    for ($p_xid = $xid; $p_xid != IID_ROOT; $p_xid = (int) ($index['parent_index_id'])) {
+    for ($p_xid = $xid; IID_ROOT != $p_xid; $p_xid = (int) ($index['parent_index_id'])) {
         // get $index
         $index = array();
         $result = xnp_get_index($xnpsid, $p_xid, $index);
-        if ($result != RES_OK) {
+        if (RES_OK != $result) {
             redirect_header(XOOPS_URL.'/index.php', 3, 'ERROR');
             break;
         }
@@ -585,7 +584,7 @@ function genSelectLabels(&$index)
     $textutil = &xoonips_getutility('text');
     $title = $index['titles'][DEFAULT_INDEX_TITLE_OFFSET];
     $indent_html = str_repeat('&nbsp;&nbsp;', (int) ($index['depth']));
-    if (isset($index['child_count']) && $index['child_count'] != 0) {
+    if (isset($index['child_count']) && 0 != $index['child_count']) {
         $select_label = sprintf(' %s ( %u )', $title, $index['child_count']);
     } else {
         $select_label = sprintf(' %s ', $title);
@@ -639,7 +638,7 @@ function xoonipsGetIndexCountInfo($xnpsid, $xid)
 {
     $index = array();
     $result = xnp_get_index($xnpsid, $xid, $index);
-    if ($result != RES_OK) {
+    if (RES_OK != $result) {
         redirect_header(XOOPS_URL.'/index.php', 3, 'ERROR');
         exit();
     }
@@ -647,13 +646,13 @@ function xoonipsGetIndexCountInfo($xnpsid, $xid)
 
     $indexes = array();
     $result = xnp_get_all_indexes($xnpsid, array(), $indexes);
-    if ($result != RES_OK) {
+    if (RES_OK != $result) {
         redirect_header(XOOPS_URL.'/index.php', 3, 'ERROR');
         exit();
     }
     $indexesLen = count($indexes);
 
-    if ($openLevel == OL_PRIVATE) {
+    if (OL_PRIVATE == $openLevel) {
         $indexUID = $index['owner_uid'];
         $indexCount = 0;
         for ($i = 0; $i < $indexesLen; ++$i) {
@@ -664,7 +663,7 @@ function xoonipsGetIndexCountInfo($xnpsid, $xid)
         global $account;
         $indexNumberLimit = $account['index_number_limit'];
         $limitLabel = _MD_XOONIPS_INDEX_NUMBER_OF_PRIVATE_INDEX_LABEL;
-    } elseif ($openLevel == OL_GROUP_ONLY) {
+    } elseif (OL_GROUP_ONLY == $openLevel) {
         $xgroup_handler = &xoonips_gethandler('xoonips', 'group');
         $indexGID = $index['owner_gid'];
         $xg_obj = &$xgroup_handler->getGroupObject($indexGID);

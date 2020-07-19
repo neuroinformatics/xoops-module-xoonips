@@ -70,7 +70,7 @@ class XooNIpsOrmSessionHandler extends XooNIpsTableObjectHandler
     public function &get($id)
     {
         $objects = &$this->getObjects(new Criteria('sess_id', $id));
-        if ($objects === false || count($objects) != 1) {
+        if (false === $objects || 1 != count($objects)) {
             $ret = false;
 
             return $ret;
@@ -92,7 +92,7 @@ class XooNIpsOrmSessionHandler extends XooNIpsTableObjectHandler
      */
     public function &getObjects($criteria = null, $id_as_key = false, $fieldlist = '', $distinct = false, $joindef = null)
     {
-        if ($fieldlist == '') {
+        if ('' == $fieldlist) {
             $fieldlist = '*';
         }
         $fieldlist .= ', unix_timestamp('.$this->db->prefix($this->__table_name).'.updated) as updated ';
@@ -126,7 +126,7 @@ class XooNIpsOrmSessionHandler extends XooNIpsTableObjectHandler
         // TODO: remove this. this is backward compatibility for AL.php
         $_SESSION['XNPSID'] = SID_GUEST;
 
-        if ($uid == UID_GUEST) {
+        if (UID_GUEST == $uid) {
             // guest user
             return false;
         }
@@ -160,12 +160,12 @@ class XooNIpsOrmSessionHandler extends XooNIpsTableObjectHandler
      * @param int  $uid       user id
      * @param bool $do_logout logout if invalid xoonips user
      *
-     * @return boolean|null validation result
+     * @return bool|null validation result
      */
     public function validateUser($uid, $do_logout)
     {
         $myxoopsConfig = &xoonips_get_xoops_configs(XOOPS_CONF);
-        if ($uid == UID_GUEST) {
+        if (UID_GUEST == $uid) {
             // guest is ok
             return true;
         }
@@ -179,7 +179,7 @@ class XooNIpsOrmSessionHandler extends XooNIpsTableObjectHandler
             $message = _MD_XOONIPS_ITEM_FORBIDDEN;
         } else {
             $is_certified = $xusers_obj->get('activate');
-            if ($is_certified == 0) {
+            if (0 == $is_certified) {
                 // not certified xoonips user
                 $ret = false;
                 $message = _MD_XOONIPS_ACCOUNT_NOT_ACTIVATED;
@@ -189,7 +189,7 @@ class XooNIpsOrmSessionHandler extends XooNIpsTableObjectHandler
             if ($do_logout) {
                 $_SESSION = array();
                 session_destroy();
-                if ($myxoopsConfig['use_mysession'] && $myxoopsConfig['session_name'] != '') {
+                if ($myxoopsConfig['use_mysession'] && '' != $myxoopsConfig['session_name']) {
                     setcookie($myxoopsConfig['session_name'], '', time() - 3600, '/', '', 0);
                 }
                 // clear entry from online users table
@@ -198,7 +198,6 @@ class XooNIpsOrmSessionHandler extends XooNIpsTableObjectHandler
 
                 // redirect to top page
                 redirect_header(XOOPS_URL.'/', 3, $message);
-                exit();
             }
         }
 

@@ -69,18 +69,15 @@ if ($item_lock_handler->isLocked($item_id)) {
 
 //retrieve item detail and set item type id to $item_type_id;
 $item = array();
-if (xnp_get_item($xnpsid, $item_id, $item) != RES_OK) {
-    redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item');
-    exit();
-} else {
-    $item_type_id = $item['item_type_id'];
+if (RES_OK != xnp_get_item($xnpsid, $item_id, $item)) {
+    xoonips_error_exit(400);
 }
+$item_type_id = $item['item_type_id'];
 
 //retrive module name to $itemtype
 $itemtypes = array();
-if (xnp_get_item_types($itemtypes) != RES_OK) {
-    redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item_types');
-    exit();
+if (RES_OK != xnp_get_item_types($itemtypes)) {
+    xoonips_error_exit(500);
 } else {
     foreach ($itemtypes as $i) {
         if ($i['item_type_id'] == $item_type_id) {
@@ -109,7 +106,7 @@ if (!check_private_item_storage_limit()) {
 
 // check group_item_number_limit
 // check group_item_storage_limit
-if ($xoonipsCheckedXID != '') {
+if ('' != $xoonipsCheckedXID) {
     $checked_xids = explode(',', $xoonipsCheckedXID);
 } else {
     $checked_xids = array();
@@ -119,10 +116,10 @@ $gids = array();
 foreach ($checked_xids as $xid) {
     $index = array();
     $result = xnp_get_index($xnpsid, $xid, $index);
-    if ($result != RES_OK) {
+    if (RES_OK != $result) {
         continue;
     }
-    if ($index['open_level'] == OL_GROUP_ONLY) {
+    if (OL_GROUP_ONLY == $index['open_level']) {
         $gids[] = $index['owner_gid'];
     }
 }
@@ -132,7 +129,7 @@ foreach (array_unique($gids) as $gid) {
     if (is_object($xgroup_obj)) {
         $gname = $xgroup_obj->getVar('gname', 's');
     }
-    if (available_space_of_group_item($gid) == 0) {
+    if (0 == available_space_of_group_item($gid)) {
         // warinig, if not enough space to store items
         $op = '';
         if (is_object($xgroup_obj)) {
@@ -161,38 +158,38 @@ $group_index_flag = false; // true if group index is selected
 foreach ($checked_xids as $xid) {
     $index = array();
     $result = xnp_get_index($xnpsid, $xid, $index);
-    if ($result != RES_OK) {
+    if (RES_OK != $result) {
         continue;
     }
-    if ($index['open_level'] == OL_PRIVATE) {
+    if (OL_PRIVATE == $index['open_level']) {
         $private_index_flag = true;
-    } elseif ($index['open_level'] == OL_GROUP_ONLY) {
+    } elseif (OL_GROUP_ONLY == $index['open_level']) {
         $group_index_flag = true;
-    } elseif ($index['open_level'] == OL_PUBLIC) {
+    } elseif (OL_PUBLIC == $index['open_level']) {
         $public_index_flag = true;
     }
 }
 
 $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
-if ($item_type_id != ITID_INDEX && !$private_index_flag && $index_item_link_handler->privateIndexReadable($item_id, $xoopsUser->getVar('uid'))) {
+if (ITID_INDEX != $item_type_id && !$private_index_flag && $index_item_link_handler->privateIndexReadable($item_id, $xoopsUser->getVar('uid'))) {
     $op = '';
 }
 
 if (XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') {
     //check doi field format and length(basic information)
     $doi = $formdata->getValue('post', 'doi', 's', false);
-    if ($doi != '') {
+    if ('' != $doi) {
         $matches = array();
         $res = preg_match('/'.XNP_CONFIG_DOI_FIELD_PARAM_PATTERN.'/', $doi, $matches);
         if (strlen($doi) > XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN
-            || $res == 0 || $matches[0] != $doi
+            || 0 == $res || $matches[0] != $doi
         ) {
             $op = '';
             $system_message .= "\n".'<br /><span style="color: red;">'.sprintf(_MD_XOONIPS_ITEM_DOI_INVALID_ID, XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN).'</span><br />';
         }
         //check doi duplication when doi is changed.
         $org_doi = '';
-        if (xnpGetDoiByItemId($item_id, $org_doi) == RES_OK) {
+        if (RES_OK == xnpGetDoiByItemId($item_id, $org_doi)) {
             if ($org_doi != $doi && xnpIsDoiExists($doi)) {
                 $op = '';
                 $system_message .= "\n".'<br /><span style="color: red;">'._MD_XOONIPS_ITEM_DOI_DUPLICATE_ID.'</span><br />';
@@ -208,13 +205,13 @@ if (!$param_check_result) {
     $op = '';
 }
 
-if ($op == 'update') {
+if ('update' == $op) {
     //update item
 
     $f = $itemtype['name'].'GetModifiedFields';
     $modified = xnpGetModifiedFields($item_id)
         + (function_exists($f) ? $f($item_id) : array());
-    if (count($modified) == 0) {
+    if (0 == count($modified)) {
         //no modified fields.don't update.
         redirect_header(xnpGetItemDetailURL($item_id, $doi), 3, 'Succeed');
     }
@@ -231,11 +228,11 @@ if ($op == 'update') {
         $index_item_links = &$index_item_link_handler->getObjects(new Criteria('item_id', $item_id));
         $certify_required = false;
         foreach ($index_item_links as $index_item_link) {
-            if ($index_item_link->get('certify_state') == CERTIFY_REQUIRED) {
+            if (CERTIFY_REQUIRED == $index_item_link->get('certify_state')) {
                 $index_id = $index_item_link->get('index_id');
                 $index = $index_handler->get($index_id);
-                if ($index->get('open_level') == OL_PUBLIC
-                    || $index->get('open_level') == OL_GROUP_ONLY
+                if (OL_PUBLIC == $index->get('open_level')
+                    || OL_GROUP_ONLY == $index->get('open_level')
                 ) {
                     $item_basic_handler->lockItemAndIndexes($item_id, $index_id);
                     $certify_required = true;
@@ -310,7 +307,7 @@ if ($op == 'update') {
     $formdata->set('post', 'xoonipsCheckedXID', implode(',', $checkedIndexIds));
 
     $change_log = $formdata->getValue('post', 'change_log', 's', false);
-    if (!isset($change_log) || $change_log == '') {
+    if (!isset($change_log) || '' == $change_log) {
         $item_id = $formdata->getValue('post', 'item_id', 'i', false);
         $fields = xnpGetModifiedFields($item_id);
 

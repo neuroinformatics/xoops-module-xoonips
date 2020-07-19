@@ -88,7 +88,7 @@ function xnpGetBasicInformationConfirmBlock($item_id)
 }
 
 /**
- * @param integer $item_id
+ * @param int $item_id
  */
 function xnpInsertBasicInformation(&$item_id)
 {
@@ -131,7 +131,7 @@ function xnpGetItemTypeDisplayNameByDirname($dirname, $fmt)
     $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
     $criteria = new Criteria('name', $dirname);
     $item_type_objs = &$item_type_handler->getObjects($criteria);
-    if (count($item_type_objs) != 1) {
+    if (1 != count($item_type_objs)) {
         return false;
     }
     $item_type_obj = &$item_type_objs[0];
@@ -164,7 +164,7 @@ function indexcmp($a, $b)
  * return array of ListBlock's HTML from array of item_id.
  * result doesn't contain array data on item_id not existing or item_id not accessible.
  *
- * @param integer $itemid ID of item or array of item id
+ * @param int $itemid ID of item or array of item id
  *
  * @return array( itemid => array of HTML made by "name of itemtype>GetListBlock", ...Repeat... )
  */
@@ -178,8 +178,8 @@ function itemid2ListBlock($itemid)
 
     $itemtypes = array();
     $tmp = array();
-    if (xnp_get_item_types($tmp) != RES_OK) {
-        redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item_types ');
+    if (RES_OK != xnp_get_item_types($tmp)) {
+        xoonips_error_exit(500);
         exit();
     } else {
         foreach ($tmp as $i) {
@@ -190,7 +190,7 @@ function itemid2ListBlock($itemid)
     $item_htmls = array();
     foreach ($itemid as $id) {
         $item = array();
-        if (xnp_get_item($xnpsid, (int) $id, $item) != RES_OK) {
+        if (RES_OK != xnp_get_item($xnpsid, (int) $id, $item)) {
             continue;
         }
         if (array_key_exists($item['item_type_id'], $itemtypes)) {
@@ -260,6 +260,7 @@ function xnpIsCommaSeparatedNumber($str)
 /**
  * get directory name stored attachment files that related to items.
  *  not contain '/' in end of character strings.
+ *
  * @return string
  */
 function xnpGetUploadDir()
@@ -273,7 +274,7 @@ function xnpGetUploadDir()
         return false;
     }
 
-    if (substr($uploadDir, -1) == '/') {
+    if ('/' == substr($uploadDir, -1)) {
         return substr($uploadDir, 0, -1);
     }
 
@@ -313,7 +314,7 @@ function xnpGetFileInfo($columns, $condition, $item_id)
     $xoopsDB->prefix('xoonips_file_type').' as t_file_type '.
     " where t_file.file_type_id = t_file_type.file_type_id and $condition and $condition2 ";
     $result = $xoopsDB->query($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo "xnpGetFileInfo: $sql ".mysql_error();
 
         return false;
@@ -334,21 +335,21 @@ function xnpGetFileInfo($columns, $condition, $item_id)
  * @param item_id item id of examined object
  * @param indexes return details of each index
  *
- * @return integer
- * @return integer
+ * @return int
+ * @return int
  */
 function xnpGetIndexes($xnpsid, $item_id, &$indexes)
 {
     $xids = array();
     $result = xnp_get_index_id_by_item_id($xnpsid, $item_id, $xids);
-    if ($result == 0) {
+    if (0 == $result) {
         $len = count($xids);
         $indexes = array();
         for ($i = 0; $i < $len; ++$i) {
             $xid = $xids[$i];
             $index = array();
             $result = xnp_get_index($xnpsid, $xid, $index);
-            if ($result == 0) {
+            if (0 == $result) {
                 $indexes[] = $index;
             }
         }
@@ -372,11 +373,11 @@ function xnpGetIndexPathServerString($xnpsid, $xid)
     $dirArray = array();
     $dirArrayR = array();
 
-    for ($p_xid = $xid; $p_xid != IID_ROOT; $p_xid = (int) ($index['parent_index_id'])) {
+    for ($p_xid = $xid; IID_ROOT != $p_xid; $p_xid = (int) ($index['parent_index_id'])) {
         // get $index
         $index = array();
         $result = xnp_get_index($xnpsid, $p_xid, $index);
-        if ($result != 0) {
+        if (0 != $result) {
             break;
         }
 
@@ -419,7 +420,7 @@ function xnpCreateHidden($key, $val, $do_escape = true)
 */
 
 /**
- * @param integer $col
+ * @param int $col
  */
 function xnpMakeTable($in, $col)
 {
@@ -430,7 +431,7 @@ function xnpMakeTable($in, $col)
         $maxLens[] = count($in[$i]);
     }
     $maxLen = max($maxLens);
-    if ($maxLen == 0) {
+    if (0 == $maxLen) {
         return '';
     }
 
@@ -506,7 +507,7 @@ function xnpGetAttachmentDetailBlock($item_id, $name)
     $item = array();
     $res = xnp_get_item($_SESSION['XNPSID'], $item_id, $item);
     $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name, t_file.file_size, t_file.mime_type, unix_timestamp(t_file.timestamp), download_count', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
-    if ($files == false || count($files) == 0 || $res != RES_OK) {
+    if (false == $files || 0 == count($files) || RES_OK != $res) {
         $html = '';
         $hidden = '';
     } else {
@@ -530,7 +531,7 @@ function xnpGetAttachmentDetailBlock($item_id, $name)
         // item_id -> modname
         $itemtypes = array();
         $module_name = 'xoonips';
-        if (($res = xnp_get_item_types($itemtypes)) == RES_OK) {
+        if (RES_OK == ($res = xnp_get_item_types($itemtypes))) {
             foreach ($itemtypes as $itemtype) {
                 if ($itemtype['item_type_id'] != $item['item_type_id']) {
                     continue;
@@ -587,8 +588,8 @@ function xnpGetAttachmentDetailBlock($item_id, $name)
         ";
 
         $fname_dllimit = "${module_name}GetAttachmentDownloadLimitOption";
-        if (function_exists($fname_dllimit) && $fname_dllimit($item_id) == 1) {
-            if ($uid == UID_GUEST) {
+        if (function_exists($fname_dllimit) && 1 == $fname_dllimit($item_id)) {
+            if (UID_GUEST == $uid) {
                 $html = '<a href="'.$url.'">'.$htmlFileName.'</a> '.$fileSize.' bytes';
             }
             $html .= ' &nbsp;&nbsp;('._MD_XOONIPS_ITEM_ATTACHMENT_DL_LIMIT_LOGINUSER_ONLY_LABEL.')';
@@ -620,7 +621,7 @@ function xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $attachmen
     require_once dirname(__DIR__).'/class/base/gtickets.php';
     $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name, t_file.file_size, t_file.mime_type, unix_timestamp(t_file.timestamp) ', 'sess_id is NULL and is_deleted=0', $item_id);
 
-    if ($files == false || count($files) == 0) {
+    if (false == $files || 0 == count($files)) {
         return '';
     }
 
@@ -670,19 +671,19 @@ function xoonips_get_download_filename($file_id)
 {
     $file_handler = &xoonips_getormhandler('xoonips', 'file');
     $file = $file_handler->get($file_id);
-    if ($file == null) {
+    if (null == $file) {
         return null;
     }
 
     $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
     $item_basic = $item_basic_handler->get($file->get('item_id'));
-    if ($item_basic == null) {
+    if (null == $item_basic) {
         return null;
     }
 
     $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
     $item_type = $item_type_handler->get($item_basic->get('item_type_id'));
-    if ($item_type == null) {
+    if (null == $item_type) {
         return null;
     }
 
@@ -692,7 +693,7 @@ function xoonips_get_download_filename($file_id)
         return null;
     }
 
-    if ($download_file_compression == 'on') {
+    if ('on' == $download_file_compression) {
         return $item_type->get('display_name').'_'.$file->get('file_id').'.zip';
     } else {
         $unicode = &xoonips_getutility('unicode');
@@ -713,7 +714,7 @@ function xnpGetAttachmentFilenameBlock($item_id, $name)
     // get attachment file
     // generate html
     $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
-    if (count($files) == 0) {
+    if (0 == count($files)) {
         $html = '';
     } else {
         list(list($fileID, $fileName)) = $files;
@@ -738,7 +739,7 @@ function xnpGetAttachmentMimetypeBlock($item_id, $name)
     // get attachment file
     // generate html
     $files = xnpGetFileInfo('t_file.file_id, t_file.mime_type', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
-    if (count($files) == 0) {
+    if (0 == count($files)) {
         $html = '';
     } else {
         list(list($fileID, $mimetype)) = $files;
@@ -759,11 +760,11 @@ function xnpGetAttachmentFiletypeBlock($item_id, $name)
     // get attachment file
     // generate html
     $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name', "t_file_type.name='$name' and sess_id is NULL and is_deleted=0", $item_id);
-    if (count($files) == 0) {
+    if (0 == count($files)) {
         $html = '';
     } else {
         list(list($fileID, $fileType)) = $files;
-        if (mb_substr_count($fileType, '.') == 0) {
+        if (0 == mb_substr_count($fileType, '.')) {
             $fileType = '';
         } else {
             $fileType = mb_substr($fileType, mb_strrpos($fileType, '.') + 1);
@@ -804,7 +805,7 @@ function xnpGetIndexDetailBlock($item_id, $button_flag = true)
 
     $indexes = array();
     $result = xnpGetIndexes($xnpsid, $item_id, $indexes);
-    if ($result == 0) {
+    if (0 == $result) {
         $len = count($indexes);
         $xids = array();
         $ar = array('<table>'."\n");
@@ -812,7 +813,7 @@ function xnpGetIndexDetailBlock($item_id, $button_flag = true)
             $xid = $indexes[$i]['item_id'];
             $str = xnpGetIndexPathString($xnpsid, $xid);
             $state = NOT_CERTIFIED;
-            if (xnp_get_certify_state($xnpsid, $xid, $item_id, $state) == RES_OK) {
+            if (RES_OK == xnp_get_certify_state($xnpsid, $xid, $item_id, $state)) {
                 $indexes[$i]['certified'] = $state;
             }
             $xids[] = $xid;
@@ -864,7 +865,7 @@ function xnpGetIndexDetailBlock($item_id, $button_flag = true)
                             $buttons .= '<input class="formButton" type="button" value="'._MD_XOONIPS_ITEM_UNCERTIFY_BUTTON_LABEL.'" onclick="xoonips_certify_confirm( ['.implode(',', $xid_array).'], '.$item_id.', \'reject_certify\');"/>';
                         }
                     }
-                    if ($buttons === '' && $certified == CERTIFY_REQUIRED && ($open_level == OL_PUBLIC || $open_level == OL_GROUP_ONLY)) {
+                    if ('' === $buttons && CERTIFY_REQUIRED == $certified && (OL_PUBLIC == $open_level || OL_GROUP_ONLY == $open_level)) {
                         $buttons = _MD_XOONIPS_ITEM_PENDING_NOW;
                     }
                     $html .= '<td style="vertical-align: middle; text-align: left;">'.$buttons.'</td>';
@@ -906,7 +907,7 @@ function xnpUploadFile($name, $keyval)
     // get file_type_id
     $sql = 'select file_type_id from '.$xoopsDB->prefix('xoonips_file_type')." where name='$name' ";
     $result = $xoopsDB->query($sql);
-    if ($result == false) {
+    if (false == $result) {
         return array(false, "xnpUploadFile: bad sql $sql ".mysql_error());
     }
     list($fileTypeID) = $xoopsDB->fetchRow($result);
@@ -929,7 +930,7 @@ function xnpUploadFile($name, $keyval)
     $fileSize = (int) $file['size'];
     $escKeys = '';
     $escVals = '';
-    if (is_array($keyval) && count($keyval) != 0) {
+    if (is_array($keyval) && 0 != count($keyval)) {
         reset($keyval);
         while (list($key, $val) = each($keyval)) {
             $escKeys .= ','.addslashes($key);
@@ -937,8 +938,8 @@ function xnpUploadFile($name, $keyval)
         }
     }
     $error = (int) $file['error'];
-    if ($error != 0) {
-        if ($error == UPLOAD_ERR_INI_SIZE) {
+    if (0 != $error) {
+        if (UPLOAD_ERR_INI_SIZE == $error) {
             $errorMessage = _MD_XOONIPS_ITEM_UPLOAD_FILE_TOO_LARGE;
         } else {
             $errorMessage = _MD_XOONIPS_ITEM_UPLOAD_FILE_FAILED;
@@ -950,7 +951,7 @@ function xnpUploadFile($name, $keyval)
         " ( original_file_name, mime_type, file_size, sess_id, item_id, file_type_id  $escKeys ) ".
         " values ( '$escOriginalFileName', '$escMimeType', $fileSize, '$esc_sess_id', NULL, $fileTypeID  $escVals) ";
     $result = $xoopsDB->queryF($sql);
-    if ($result == false) {
+    if (false == $result) {
         return array(false, "xnpUploadFile: bad sql $sql ".mysql_error());
     }
 
@@ -968,7 +969,7 @@ function xnpUploadFile($name, $keyval)
         return array(false, 'xnpUploadFile: cannot write. in '.xnpGetUploadDir());
     } else {
         $result = move_uploaded_file($file['tmp_name'], $filePath);
-        if ($result == false) {
+        if (false == $result) {
             return array(false, "xnpUploadFile: cannot move_uploaded_file. \n $name ".$file['tmp_name'].' to '.$filePath);
         }
     }
@@ -995,7 +996,7 @@ function xnpGetPreviewEditBlock($item_id)
     $formdata = &xoonips_getutility('formdata');
     $previewFileID = $formdata->getValue('post', 'previewFileID', 's', false);
     if (isset($previewFileID)) { // User comes from some edit pages.
-        if ($previewFileID == '') {
+        if ('' == $previewFileID) {
             $previewFileIDs = array();
         } else {
             // illegal inputs are removed.
@@ -1009,7 +1010,7 @@ function xnpGetPreviewEditBlock($item_id)
         // process of upload/delete
         $mode = $formdata->getValue('post', 'mode', 's', false);
         if (empty($mode)) {
-        } elseif ($mode == 'Upload') {
+        } elseif ('Upload' == $mode) {
             // upload something
             $preview = $formdata->getFile('preview', false);
             if (!empty($preview['name'])) {
@@ -1041,7 +1042,7 @@ function xnpGetPreviewEditBlock($item_id)
                 // ( POST is converted into GET at edit.php, and register.php ).
                 $errorMessage = $_SESSION['xoonips_preview_message'];
             }
-        } elseif ($mode == 'Delete') {
+        } elseif ('Delete' == $mode) {
             // $_POST['file_id'] delete from $previewFileID.
             $ar = array();
             $fileID = $formdata->getValue('post', 'fileID', 'i', false);
@@ -1122,7 +1123,7 @@ function xnpGetAttachmentEditBlock($item_id, $name)
         }
         // there is a deletion demand of a file
         $deleteFileID = $formdata->getValue('post', 'fileID', 'i', false);
-        if ($formdata->getValue('post', 'mode', 's', false, '') == 'Delete' && $fileID == $deleteFileID) {
+        if ('Delete' == $formdata->getValue('post', 'mode', 's', false, '') && $fileID == $deleteFileID) {
             $fileInfo = false;
         }
     } elseif (!empty($item_id)) { // get default value from database.
@@ -1163,25 +1164,25 @@ function xnpGetDownloadLimitationOptionRegisterBlock($dirname, $option = 0)
     $chandler = &xoops_gethandler('config');
     $assoc = $chandler->getConfigsByCat(false, $module->mid());
     $enable_dl_limit = 0;
-    if (isset($assoc['enable_dl_limit']) && $assoc['enable_dl_limit'] == '1') {
+    if (isset($assoc['enable_dl_limit']) && '1' == $assoc['enable_dl_limit']) {
         $enable_dl_limit = 1;
     }
 
-    if ($enable_dl_limit == 1) {
+    if (1 == $enable_dl_limit) {
         $formdata = &xoonips_getutility('formdata');
         $attachment_dl_limit = $formdata->getValue('post', 'attachment_dl_limit', 'i', false);
         if (isset($attachment_dl_limit)) {
             $option = $attachment_dl_limit;
         }
         $html = "<input type='radio' name='attachment_dl_limit' value='1'";
-        if ($option == 1) {
+        if (1 == $option) {
             $html .= ' checked="checked"';
         }
 
         // $html .= ">"._MD_XOONIPS_ITEM_ATTACHMENT_DL_LIMIT_LOGINUSER_LABEL."</input>"
         $html .= ' />'._MD_XOONIPS_ITEM_ATTACHMENT_DL_LIMIT_LOGINUSER_LABEL
             ."<input type='radio' name='attachment_dl_limit' value='0'";
-        if ($option != 1) {
+        if (1 != $option) {
             $html .= ' checked="checked"';
         }
         // $html .= ">"._MD_XOONIPS_ITEM_ATTACHMENT_DL_LIMIT_EVERYONE_LABEL."</input>";
@@ -1205,14 +1206,14 @@ function xnpGetDownloadLimitationOptionConfirmBlock($dirname)
     $chandler = &xoops_gethandler('config');
     $assoc = $chandler->getConfigsByCat(false, $module->mid());
     $enable_dl_limit = 0;
-    if (isset($assoc['enable_dl_limit']) && $assoc['enable_dl_limit'] == '1') {
+    if (isset($assoc['enable_dl_limit']) && '1' == $assoc['enable_dl_limit']) {
         $enable_dl_limit = 1;
     }
     $html = '';
-    if ($enable_dl_limit == 1) {
+    if (1 == $enable_dl_limit) {
         $formdata = &xoonips_getutility('formdata');
         $attachment_dl_limit = $formdata->getValue('post', 'attachment_dl_limit', 'i', false);
-        if (isset($attachment_dl_limit) && $attachment_dl_limit == 1) {
+        if (isset($attachment_dl_limit) && 1 == $attachment_dl_limit) {
             $html .= _MD_XOONIPS_ITEM_ATTACHMENT_DL_LIMIT_LOGINUSER_LABEL
                 ."<input type='hidden' name='attachment_dl_limit' value='1'/>";
         } else {
@@ -1244,20 +1245,20 @@ function xnpGetDownloadNotificationOptionRegisterBlock($dirname, $option = 0)
     $chandler = &xoops_gethandler('config');
     $assoc = $chandler->getConfigsByCat(false, $module->mid());
 
-    if (isset($assoc['enable_dl_limit']) && $assoc['enable_dl_limit'] == '1') {
+    if (isset($assoc['enable_dl_limit']) && '1' == $assoc['enable_dl_limit']) {
         $formdata = &xoonips_getutility('formdata');
         $attachment_dl_notify = $formdata->getValue('post', 'attachment_dl_notify', 'i', false);
         if (isset($attachment_dl_notify)) {
             $option = $attachment_dl_notify;
         }
         $html = "<input type='radio' name='attachment_dl_notify' value='1'";
-        if ($option == 1) {
+        if (1 == $option) {
             $html .= ' checked="checked"';
         }
 
         $html .= ' />'._MD_XOONIPS_ITEM_ATTACHMENT_DL_NOTIFY_DO_LABEL
             ."<input type='radio' name='attachment_dl_notify' value='0'";
-        if ($option != 1) {
+        if (1 != $option) {
             $html .= ' checked="checked"';
         }
         $html .= ' />'._MD_XOONIPS_ITEM_ATTACHMENT_DL_NOTIFY_DONT_LABEL
@@ -1279,10 +1280,10 @@ function xnpGetDownloadNotificationOptionConfirmBlock($dirname)
     $module = $mhandler->getByDirname($dirname);
     $chandler = &xoops_gethandler('config');
     $assoc = $chandler->getConfigsByCat(false, $module->mid());
-    if (isset($assoc['enable_dl_limit']) && $assoc['enable_dl_limit'] == '1') {
+    if (isset($assoc['enable_dl_limit']) && '1' == $assoc['enable_dl_limit']) {
         $formdata = &xoonips_getutility('formdata');
         $attachment_dl_notify = $formdata->getValue('post', 'attachment_dl_notify', 'i', false);
-        if (isset($attachment_dl_notify) && $attachment_dl_notify == 1) {
+        if (isset($attachment_dl_notify) && 1 == $attachment_dl_notify) {
             $html = _MD_XOONIPS_ITEM_ATTACHMENT_DL_NOTIFY_DO_LABEL
                 ."<input type='hidden' name='attachment_dl_notify' value='1'/>";
         } else {
@@ -1302,7 +1303,7 @@ function xnpHeadText($text)
     $text = str_replace("\r\n", "\n", $text);
     $text = str_replace("\r", "\n", $text);
     $ar = preg_split("/[\r\n]+/", $text);
-    if (count($ar) > 4 || count($ar) == 4 && $ar[3] != '') {
+    if (count($ar) > 4 || 4 == count($ar) && '' != $ar[3]) {
         $text = $ar[0]."\n".$ar[1]."\n".$ar[2].' ...';
     }
 
@@ -1324,7 +1325,7 @@ function xnpGetTextFileEditBlock($item_id, $name, $defaultText)
     $showText = xnpHeadText($text);
     $encText = $textutil->html_special_chars($text);
     $htmlShowText = nl2br($textutil->html_special_chars($showText));
-    if ($htmlShowText == '') {
+    if ('' == $htmlShowText) {
         $htmlShowText = '&nbsp;'; // div.firstChild is prevented being set to null.
     }
     $html = "
@@ -1344,10 +1345,10 @@ function xnpGetIndexEditBlock($item_id)
     $xnpsid = $_SESSION['XNPSID'];
     $formdata = &xoonips_getutility('formdata');
     $xoonipsCheckedXID = $formdata->getValue('post', 'xoonipsCheckedXID', 's', false);
-    if ($xoonipsCheckedXID == null) {
+    if (null == $xoonipsCheckedXID) {
         $indexes = array();
         $result = xnpGetIndexes($xnpsid, $item_id, $indexes);
-        if ($result == 0) {
+        if (0 == $result) {
             $xids = array();
             foreach ($indexes as $x) {
                 $xids[] = $x['item_id'];
@@ -1447,7 +1448,7 @@ function xnpGetAttachmentConfirmBlock($item_id, $name)
         xnpEncodeMacSafariFiles($name);
         // Upload file
         list($fileID, $errorMessage) = xnpUploadFile($name, false);
-        if ($fileID == false) {
+        if (false == $fileID) {
             global $system_message;
             $system_message = $system_message."\n".'<br /><span style="color: red;">'.$textutil->html_special_chars($errorMessage).'</span><br />';
 
@@ -1457,7 +1458,7 @@ function xnpGetAttachmentConfirmBlock($item_id, $name)
         }
     } else {
         $attachmentFileID = $formdata->getValue('post', $name.'FileID', 'i', false, 0);
-        if ($attachmentFileID == 0) { // no attachment file.
+        if (0 == $attachmentFileID) { // no attachment file.
             $sql = ' 0 ';
         } else {
             $sql = "t_file.file_id = $attachmentFileID";
@@ -1466,7 +1467,7 @@ function xnpGetAttachmentConfirmBlock($item_id, $name)
 
     $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name, t_file.file_size, t_file.mime_type, unix_timestamp(t_file.timestamp)', "t_file_type.name='$name' and is_deleted = 0 and $sql ", $item_id);
 
-    if (count($files) == 0) {
+    if (0 == count($files)) {
         $html = "<input type='hidden' name='${name}FileID' value='' />";
     } else {
         list(list($fileID, $fileName, $fileSize, $mimeType, $timestamp)) = $files;
@@ -1574,7 +1575,7 @@ function xnpGetIndexRegisterBlock()
             }
         }
     }
-    if (count($indexes) == 0) {
+    if (0 == count($indexes)) {
         return array('name' => _MD_XOONIPS_ITEM_INDEX_LABEL._MD_XOONIPS_ITEM_REQUIRED_MARK);
     } else {
         return array('name' => _MD_XOONIPS_ITEM_INDEX_LABEL._MD_XOONIPS_ITEM_REQUIRED_MARK, 'value' => implode('<br />', array_values($indexes)));
@@ -1590,16 +1591,16 @@ function xnpUpdateIndex($item_id)
     $xnpsid = $_SESSION['XNPSID'];
     $formdata = &xoonips_getutility('formdata');
     $xoonipsCheckedXID = $formdata->getValue('post', 'xoonipsCheckedXID', 's', false);
-    if ($xoonipsCheckedXID === null) {
+    if (null === $xoonipsCheckedXID) {
         return true;
     }
     $xids_new = explode(',', $xoonipsCheckedXID);
 
     $item = array();
     $xids_now = array();
-    if (($result = xnp_get_item($xnpsid, $item_id, $item)) == RES_OK) {
+    if (RES_OK == ($result = xnp_get_item($xnpsid, $item_id, $item))) {
         //retrieve index id if item exists
-        if (xnp_get_index_id_by_item_id($xnpsid, $item_id, $xids_now) != RES_OK) {
+        if (RES_OK != xnp_get_index_id_by_item_id($xnpsid, $item_id, $xids_now)) {
             return false;
         }
     }
@@ -1640,22 +1641,22 @@ function xoonips_insert_event_and_send_notification_of_certification($item_id)
     foreach ($index_ids as $i) {
         $index = array();
         $result = xnp_get_index($xnpsid, $i, $index);
-        if ($result == RES_OK) {
-            if ($index['open_level'] == OL_PRIVATE) {
+        if (RES_OK == $result) {
+            if (OL_PRIVATE == $index['open_level']) {
                 continue;
             }
 
             // record events(request certify item)
             $eventlog_handler->recordRequestCertifyItemEvent($item_id, $i);
-            if ($certify_item == 'auto') {
+            if ('auto' == $certify_item) {
                 // record events(certify item)
                 $eventlog_handler->recordCertifyItemEvent($item_id, $i);
             }
         }
     }
-    if ($certify_item == 'auto') {
+    if ('auto' == $certify_item) {
         xoonips_notification_item_certified_auto($item_id, $index_ids);
-    } elseif ($certify_item == 'on') {
+    } elseif ('on' == $certify_item) {
         xoonips_notification_item_certify_request($item_id, $index_ids);
     }
 }
@@ -1682,12 +1683,12 @@ function xnpUpdatePreview($item_id)
         }
         $sql = "update $table set sess_id='$esc_sess_id', item_id=NULL where item_id=$item_id and file_id not in ($previewFileID) and file_type_id=$file_type_id";
         $result = $xoopsDB->queryF($sql);
-        if ($result != false) {
+        if (false != $result) {
             $sql = "update $table set sess_id=NULL, item_id=$item_id where sess_id='$esc_sess_id' and file_id in ($previewFileID) and file_type_id=$file_type_id";
             $result &= $xoopsDB->queryF($sql);
         }
     }
-    if ($result == false) {
+    if (false == $result) {
         echo "Error: cannot update xoonips_file $sql ".mysql_error();
 
         return false;
@@ -1712,7 +1713,7 @@ function xnpUpdateAttachment($item_id, $name)
     // name -> file_type_id
     $sql = 'select file_type_id from '.$xoopsDB->prefix('xoonips_file_type')." where name='$name'";
     $result = $xoopsDB->query($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo "xnpUpdateAttachment: bad file_type_name $name ";
 
         return false;
@@ -1722,7 +1723,7 @@ function xnpUpdateAttachment($item_id, $name)
     // delete old file
     $sql = "select file_id, is_deleted from $table where item_id=$item_id and file_type_id=$file_type_id and is_deleted=0 and file_id <> $fileID";
     $result = $xoopsDB->queryF($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo "Error: cannot update xoonips_file $sql ".mysql_error();
 
         return false;
@@ -1738,7 +1739,7 @@ function xnpUpdateAttachment($item_id, $name)
     if (!empty($fileID)) {
         $sql = "update $table set sess_id=NULL, item_id=$item_id where sess_id='$esc_sess_id' and file_id=$fileID and file_type_id=$file_type_id";
         $result = $xoopsDB->queryF($sql);
-        if ($result == false) {
+        if (false == $result) {
             echo "Error: cannot update xoonips_file $sql ".mysql_error();
 
             return false;
@@ -1828,7 +1829,7 @@ function xnpSplitKeywords($keywords)
         $len = count($match[$j]);
         for ($i = 0; $i < $len; ++$i) {
             $word = $match[$j][$i];
-            if ($word == '') {
+            if ('' == $word) {
                 continue;
             }
             $ar[] = $word;
@@ -1892,28 +1893,28 @@ function xnpSplitKeywords2($keyword)
     foreach ($match as $match1) {
         $str = $match1[0];
         $lowerstr = strtolower($str);
-        if ($str == '(') {
+        if ('(' == $str) {
             ++$nest;
             if (!$expectTerm) {
                 $elements[] = 'and';
             }
             $expectTerm = true;
             $elements[] = $lowerstr;
-        } elseif ($str == ')') {
+        } elseif (')' == $str) {
             --$nest;
             if ($expectTerm || $nest < 0) {
                 return array(array(), array(), _MD_XOONIPS_ITEM_SEARCH_SYNTAX_ERROR);
             }
             $expectTerm = false;
             $elements[] = $lowerstr;
-        } elseif ($lowerstr == 'and' || $lowerstr == 'or') {
+        } elseif ('and' == $lowerstr || 'or' == $lowerstr) {
             if ($expectTerm) {
                 return array(array(), array(), _MD_XOONIPS_ITEM_SEARCH_SYNTAX_ERROR);
             }
             $expectTerm = true;
             $elements[] = $lowerstr;
         } else {
-            if (substr($str, 0, 1) == '"') {
+            if ('"' == substr($str, 0, 1)) {
                 $str = substr($str, 1, -1);
             }  // remove double-quote at both ends
             if (!$expectTerm) {
@@ -1926,7 +1927,7 @@ function xnpSplitKeywords2($keyword)
             $keywords[] = $str;
         }
     }
-    if ($nest != 0 || $expectTerm) {
+    if (0 != $nest || $expectTerm) {
         return array(array(), array(), _MD_XOONIPS_ITEM_SEARCH_SYNTAX_ERROR);
     }
 
@@ -1944,14 +1945,14 @@ function xnpUnsplitKeywords2($elements, $wheres)
     $ar = array();
     $len = count($elements);
 
-    if ($len == 0) {
+    if (0 == $len) {
         return ' 1 ';
     }
 
     reset($wheres);
     for ($i = 0; $i < $len; ++$i) {
         $op = $elements[$i];
-        if ($op == 'string') {
+        if ('string' == $op) {
             list($key, $val) = each($wheres);
             $ar[] = "( $val )";
         } else {
@@ -1976,7 +1977,7 @@ function xnpGetKeywordQuery($dbVarName, $postVarName)
         return '';
     }
     $keywords = xnpSplitKeywords($postvar);
-    if (count($keywords) == 0) {
+    if (0 == count($keywords)) {
         return '';
     }
 
@@ -2061,7 +2062,7 @@ function xnpGetFromQuery($dbVarName, $postVarName)
     $y = $formdata->getValue('post', $postVarName.'Year', 'i', false, 0);
     $m = $formdata->getValue('post', $postVarName.'Month', 'i', false, 0);
     $d = $formdata->getValue('post', $postVarName.'Day', 'i', false, 0);
-    if ($m == 0) {
+    if (0 == $m) {
         $d = 0;
     }
     $yyyymmdd = $y * 10000 + $m * 100 + $d;
@@ -2081,14 +2082,14 @@ function xnpGetToQuery($dbVarName, $postVarName)
     $y = $formdata->getValue('post', $postVarName.'Year', 'i', false, 0);
     $m = $formdata->getValue('post', $postVarName.'Month', 'i', false, 0);
     $d = $formdata->getValue('post', $postVarName.'Day', 'i', false, 0);
-    if ($y == 0) {
+    if (0 == $y) {
         $y = 9999;
     }
-    if ($m == 0) {
+    if (0 == $m) {
         $m = 99;
         $d = 0;
     }
-    if ($d == 0) {
+    if (0 == $d) {
         $d = 99;
     }
     $yyyymmdd = $y * 10000 + $m * 100 + $d;
@@ -2152,11 +2153,11 @@ function xnpGetBasicInformationAdvancedSearchQuery($moduleName)
  *
  * @param iids  array of item_id
  *
- * @return double of file size
+ * @return float of file size
  */
 function xnpGetTotalFileSize($iids)
 {
-    if (count($iids) == 0) {
+    if (0 == count($iids)) {
         return 0.0;
     }
 
@@ -2178,8 +2179,8 @@ function xnpGetTotalFileSize($iids)
  *
  * @param item_id ID of retrieval item
  *
- * @return boolean  item has index waiting for certified(Pending)
- * @return boolean item has no index waiting for certified
+ * @return bool item has index waiting for certified(Pending)
+ * @return bool item has no index waiting for certified
  */
 function xnpIsPending($item_id)
 {
@@ -2190,7 +2191,7 @@ function xnpIsPending($item_id)
     $criteria->add(new Criteria('open_level', OL_PRIVATE, '!=', 'idx'));
     $cnt = $index_link_handler->getCount($criteria, $join);
 
-    return  $cnt != 0;
+    return  0 != $cnt;
 }
 
 /**
@@ -2246,7 +2247,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
         $search_cache_id = (int) $search_cache_id;
         $sql = "select unix_timestamp(timestamp) from $cache_table where search_cache_id=$search_cache_id and sess_id='".session_id()."'";
         $result = $xoopsDB->query($sql);
-        if ($xoopsDB->getRowsNum($result) == 0) {
+        if (0 == $xoopsDB->getRowsNum($result)) {
             //todo: session timeoutのためにsearch_cacheから消されたのかもしれない(普通は起こらないのだが)。どのようなメッセージを出すべきか?
             $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
 
@@ -2268,16 +2269,16 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
         );
         $sql = "select count(*) from $event_log_table where event_type_id in (".implode(',', $event_type_ids).") and timestamp >= $timestamp";
         $result = $xoopsDB->query($sql);
-        if ($result == false) {
+        if (false == $result) {
             $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
 
             return false;
         }
         list($count) = $xoopsDB->fetchRow($result);
-        if ($count == 0) {
-            if ($search_tab == 'metadata') {
+        if (0 == $count) {
+            if ('metadata' == $search_tab) {
                 $sql = "select identifier from $cache_meta_table where search_cache_id=$search_cache_id";
-            } elseif ($search_tab == 'file') {
+            } elseif ('file' == $search_tab) {
                 $sql = "select tf.item_id    from $cache_file_table as tcf
                   left join $file_table as tf on tcf.file_id = tf.file_id
                   left join $basic_table as tb on tb.item_id = tf.item_id
@@ -2297,13 +2298,13 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
         }
     }
 
-    $cachable = ($op == 'quicksearch' || $op == 'advancedsearch' || $op == 'itemtypesearch' || $op == 'itemsubtypesearch');
+    $cachable = ('quicksearch' == $op || 'advancedsearch' == $op || 'itemtypesearch' == $op || 'itemsubtypesearch' == $op);
     $search_cache_id = 0;
     if ($cachable) {
         // search_cache_idを発行する
         $sql = "insert into $cache_table ( sess_id ) values ( '".session_id()."' )";
         $result = $xoopsDB->queryF($sql);
-        if ($result == false) {
+        if (false == $result) {
             $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
 
             return false;
@@ -2314,7 +2315,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
     $itemtypes = array();
     $itemtype_names = array();
     $tmp = array();
-    if (($res = xnp_get_item_types($tmp)) != RES_OK) {
+    if (RES_OK != ($res = xnp_get_item_types($tmp))) {
         $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
 
         return false;
@@ -2345,7 +2346,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
         }
     }
 
-    if ($op == 'advancedsearch' || $op == 'itemsubtypesearch') {
+    if ('advancedsearch' == $op || 'itemsubtypesearch' == $op) {
         // advanced では、結果をタブ表示しない。$search_tab を無視する。
         // advanced では、fileがヒットした場合でも search_cache_fileではなくsearch_cache_itemのほうに書く
         $formdata = &xoonips_getutility('formdata');
@@ -2361,7 +2362,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
                 $where = '';
                 $join = '';
                 $f($where, $join); // require retrieve additional query string to item type module
-                if ($where != '') {
+                if ('' != $where) {
                     $sql = "select $basic_table.item_id, $search_cache_id from $basic_table ".
                        $join1.
                        " left join $file_table    on $file_table.item_id    = $basic_table.item_id ".
@@ -2378,7 +2379,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
                     }
 
                     $result = $xoopsDB->query($sql);
-                    if ($result == false) {
+                    if (false == $result) {
                         $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
                         xoonips_error($xoopsDB->error().' at '.__LINE__.' in '.__FILE__);
 
@@ -2390,7 +2391,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
                 }
             }
         }
-    } elseif ($op == 'itemtypesearch') { // top画面から。$search_itemtypeに一致するアイテムを列挙
+    } elseif ('itemtypesearch' == $op) { // top画面から。$search_itemtypeに一致するアイテムを列挙
         $itemtype_id = $itemtype_names[$search_itemtype]['item_type_id'];
         $sql = "select $basic_table.item_id, $search_cache_id from $basic_table \n".
             $join1.
@@ -2401,7 +2402,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
         $sql = "select item_id from $cache_item_table where search_cache_id = $search_cache_id";
 
         $result = $xoopsDB->query($sql);
-        if ($result == false) {
+        if (false == $result) {
             $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
 
             return false;
@@ -2409,7 +2410,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
         while (list($iid) = $xoopsDB->fetchRow($result)) {
             $iids[] = $iid;
         }
-    } elseif ($op == 'quicksearch' && trim($keyword) != '') {
+    } elseif ('quicksearch' == $op && '' != trim($keyword)) {
         $search_var[] = 'keyword';
         $search_var[] = 'search_itemtype';
         list($elements, $keywords, $errorMessage) = xnpSplitKeywords2($keyword);
@@ -2420,7 +2421,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
             return false;
         }
 
-        if ($search_itemtype == 'basic') { // search titles and keywords
+        if ('basic' == $search_itemtype) { // search titles and keywords
             $wheres_title_keyword = xnpGetKeywordsQueries(array($title_table.'.title', $keyword_table.'.keyword'), $keywords);
             $where = " $basic_table.item_type_id != ".ITID_INDEX.' and  '.xnpUnsplitKeywords2($elements, $wheres_title_keyword);
             $sql = "select $basic_table.item_id, $search_cache_id from $basic_table \n".
@@ -2435,7 +2436,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
             $sql = "select item_id from $cache_item_table where search_cache_id = $search_cache_id";
 
             $result = $xoopsDB->query($sql);
-            if ($result == false) {
+            if (false == $result) {
                 $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
 
                 return false;
@@ -2445,7 +2446,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
             }
         }
 
-        if ($search_itemtype == 'metadata' || $search_itemtype == 'all') {
+        if ('metadata' == $search_itemtype || 'all' == $search_itemtype) {
             // if 'metadata' then set result of search to cache and $iids
             // if 'all' then write to cache
 
@@ -2463,7 +2464,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
             $sql = "select item_id from $cache_item_table where search_cache_id = $search_cache_id";
 
             $result = $xoopsDB->query($sql);
-            if ($result == false) {
+            if (false == $result) {
                 $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
 
                 return false;
@@ -2473,7 +2474,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
             }
         }
 
-        if (isset($itemtype_names[$search_itemtype]) || $search_itemtype == 'all') {
+        if (isset($itemtype_names[$search_itemtype]) || 'all' == $search_itemtype) {
             /* where_condition[item_type] = "item_type_id=$itemtype_id and " ( query that combines 'wheres2' and 'and or ( )' ).
                wheres2[keyword] = ( where_basic[keyword] or where_detail[keyword] )
             */
@@ -2482,14 +2483,14 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
 
             $wheres_basic = xnpGetKeywordsQueries(array($title_table.'.title', $keyword_table.'.keyword', $basic_table.'.description', $basic_table.'.doi', $user_table.'.uname', $user_table.'.name'), $keywords);
             foreach ($itemtypes as $itemtype_id => $itemtype) {
-                if ($itemtype['item_type_id'] == ITID_INDEX) {
+                if (ITID_INDEX == $itemtype['item_type_id']) {
                     continue;
                 }
                 $module_name = $itemtype['name'];
                 //echo "$search_itemtype / $module_name <br />\n";
-                if ($search_itemtype == $module_name || $search_itemtype == 'all') {
+                if ($search_itemtype == $module_name || 'all' == $search_itemtype) {
                     $itemtype_id = $itemtype['item_type_id'];
-                    if ($file_or_item_metadata == 'all' || $file_or_item_metadata == 'item_metadata') {
+                    if ('all' == $file_or_item_metadata || 'item_metadata' == $file_or_item_metadata) {
                         require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
                         $f = $module_name.'GetDetailInformationQuickSearchQuery';
                         if (!function_exists($f)) {
@@ -2523,14 +2524,14 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
                             " group by $basic_table.item_id  \n";
 
                         $result = $xoopsDB->queryF("insert ignore into $cache_item_table ( item_id, search_cache_id ) ".$sql);
-                        if ($result == false) {
+                        if (false == $result) {
                             $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
 
                             return false;
                         }
                     }
 
-                    if ($file_or_item_metadata == 'all' || $file_or_item_metadata == 'file') {
+                    if ('all' == $file_or_item_metadata || 'file' == $file_or_item_metadata) {
                         $searchutil = &xoonips_getutility('search');
                         $encoding = mb_detect_encoding($keyword);
                         $fulltext_criteria = &$searchutil->getFulltextSearchCriteria('search_text', $keyword, $encoding);
@@ -2543,7 +2544,7 @@ function xnpSearchExec($op, $keyword, $search_itemtype, $private_flag, &$msg, &$
 
                         // write to cache at once
                         $result = $xoopsDB->queryF($sql);
-                        if ($result == false) {
+                        if (false == $result) {
                             $msg = _MD_XOONIPS_ITEM_SEARCH_ERROR;
 
                             return false;
@@ -2585,13 +2586,13 @@ function xnpGetExportPathString($xid, $base_index_id)
     while (true) {
         if ($xid == $base_index_id) {
             return implode('/', array_reverse($ar));
-        } elseif ($xid == IID_ROOT) {
+        } elseif (IID_ROOT == $xid) {
             return false;
         }
 
         $index = array();
         $res = xnp_get_index($xnpsid, $xid, $index);
-        if ($res != RES_OK) {
+        if (RES_OK != $res) {
             return false;
         }
         $ar[] = addcslashes($index['titles'][0], '\\/');
@@ -2624,7 +2625,7 @@ function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = fa
     $account = array();
 
     $res = xnp_get_account($xnpsid, $item['uid'], $account);
-    if ($res != RES_OK) {
+    if (RES_OK != $res) {
         return false;
     } else {
         $contributor = $account['name'].'('.$account['uname'].')';
@@ -2632,7 +2633,7 @@ function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = fa
 
     $itemtypes = array();
     $res = xnp_get_item_types($itemtypes);
-    if ($res != RES_OK) {
+    if (RES_OK != $res) {
         return false;
     } else {
         foreach ($itemtypes as $i) {
@@ -2651,7 +2652,7 @@ function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = fa
 
     $index_id = array();
     $res = xnp_get_index_id_by_item_id($xnpsid, $item['item_id'], $index_id);
-    if ($res != RES_OK) {
+    if (RES_OK != $res) {
         return false;
     }
 
@@ -2701,7 +2702,7 @@ function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = fa
     if ($base_index_id) {
         foreach ($index_id as $i) {
             $str = xnpGetExportPathString($i, $base_index_id);
-            if ($str === false) {
+            if (false === $str) {
                 continue;
             }
             $index = array();
@@ -2725,8 +2726,8 @@ function xnpBasicInformation2XML($fhdl, $item, $is_absolute, $base_index_id = fa
 }
 
 /**
- * @param string $iconPath
- * @param string $explanation
+ * @param string       $iconPath
+ * @param string       $explanation
  * @param false|string $subtypeVarName
  */
 function xnpGetTopBlock($moduleName, $displayName, $iconPath, $explanation, $subtypeVarName, $subtypes)
@@ -2766,7 +2767,7 @@ function xnpGetModifiedFields($item_id)
     $ret = array();
     $item = array();
     $formdata = &xoonips_getutility('formdata');
-    if (xnp_get_item($xnpsid, $item_id, $item) == RES_OK) {
+    if (RES_OK == xnp_get_item($xnpsid, $item_id, $item)) {
         foreach (array('contributor' => _MD_XOONIPS_ITEM_CONTRIBUTOR_LABEL,
                         'description' => _MD_XOONIPS_ITEM_DESCRIPTION_LABEL,
                         'doi' => _MD_XOONIPS_ITEM_DOI_LABEL,
@@ -2777,7 +2778,7 @@ function xnpGetModifiedFields($item_id)
                         'lang' => _MD_XOONIPS_ITEM_LANG_LABEL, ) as $k => $v) {
             $tmp = $formdata->getValue('post', $k, 'n', false);
             if (!array_key_exists($k, $item)
-                || $tmp === null
+                || null === $tmp
             ) {
                 continue;
             }
@@ -2790,7 +2791,7 @@ function xnpGetModifiedFields($item_id)
     //has been title modified ?
     $titles = array();
     foreach (preg_split("/[\r\n]+/", $formdata->getValue('post', 'title', 's', false, '')) as $title) {
-        if (trim($title) != '') {
+        if ('' != trim($title)) {
             $titles[] = $title;
         }
     }
@@ -2813,7 +2814,7 @@ function xnpGetModifiedFields($item_id)
         $new_index = explode(',', $xoonipsCheckedXID);
         $old_index = array();
         $res = xnp_get_index_id_by_item_id($xnpsid, $item['item_id'], $old_index);
-        if ($res == RES_OK) {
+        if (RES_OK == $res) {
             if (count(array_diff($old_index, $new_index)) > 0
                 || count(array_diff($new_index, $old_index)) > 0
             ) {
@@ -2825,14 +2826,14 @@ function xnpGetModifiedFields($item_id)
     //is related to modified ?
     $related_to_check = $formdata->getValueArray('post', 'related_to_check', 'i', false, null);
     $new_related_to =
-    (!isset($related_to_check) || $related_to_check === '') ? array() :
+    (!isset($related_to_check) || '' === $related_to_check) ? array() :
     (is_string($related_to_check) ? preg_split("/[\r\n]+/", $related_to_check) :
     $related_to_check);
     $related_to = $formdata->getValue('post', 'related_to', 's', false);
     $related_to = (isset($related_to) ? $related_to : '');
     foreach (preg_split("/[\r\n]+/", $related_to) as $id) {
         $tmp_item = array();
-        if (xnp_get_item($xnpsid, (int) $id, $tmp_item) != RES_OK) {
+        if (RES_OK != xnp_get_item($xnpsid, (int) $id, $tmp_item)) {
             continue;
         }
         $new_related_to[] = $id;
@@ -2840,7 +2841,7 @@ function xnpGetModifiedFields($item_id)
     $old_related_to = array();
     $res = xnp_get_related_to($xnpsid, $item['item_id'], $old_related_to);
 
-    if ($res == RES_OK) {
+    if (RES_OK == $res) {
         if (count(array_diff($old_related_to, $new_related_to)) > 0
             || count(array_diff($new_related_to, $old_related_to)) > 0
         ) {
@@ -2856,7 +2857,7 @@ function xnpGetModifiedFields($item_id)
     }
     $new_files = array();
     $previewFileID = $formdata->getValue('post', 'previewFileID', 's', false);
-    if (isset($previewFileID) && $previewFileID != '') {
+    if (isset($previewFileID) && '' != $previewFileID) {
         $new_files = explode(',', $previewFileID);
     }
     if (count(array_diff($old_files, $new_files)) > 0
@@ -2877,7 +2878,7 @@ function xnpIsAttachmentModified($file_type, $item_id)
     //return true if uploaded successfully
     $formdata = &xoonips_getutility('formdata');
     $file = $formdata->getFile($file_type, false);
-    if (isset($file) && $file['error'] == 0) {
+    if (isset($file) && 0 == $file['error']) {
         return true;
     }
 
@@ -2889,7 +2890,7 @@ function xnpIsAttachmentModified($file_type, $item_id)
         $old_files[] = $i[0];
     }
     $fileID = $formdata->getValue('post', $file_type.'FileID', 's', false);
-    if (isset($fileID) && $fileID != '') {
+    if (isset($fileID) && '' != $fileID) {
         $new_files = explode(',', $fileID);
     }
 
@@ -2906,7 +2907,7 @@ function xnpGetBasicInformationMetadata($metadataPrefix, $item_id)
     xnp_get_item($_SESSION['XNPSID'], $item_id, $basic);
 
     $tmparray = array();
-    if (xnp_get_item_types($tmparray) == RES_OK) {
+    if (RES_OK == xnp_get_item_types($tmparray)) {
         foreach ($tmparray as $i) {
             if ($i['item_type_id'] == $basic['item_type_id']) {
                 $itemtype = $i;
@@ -2915,30 +2916,30 @@ function xnpGetBasicInformationMetadata($metadataPrefix, $item_id)
         }
     }
     $nijc_code = $xconfig_handler->getValue('repository_nijc_code');
-    if ($basic['doi'] == '') {
+    if ('' == $basic['doi']) {
         $identifier = $nijc_code.'/'.$basic['item_type_id'].'.'.$basic['item_id'];
     } else {
         $identifier = $nijc_code.':'.XNP_CONFIG_DOI_FIELD_PARAM_NAME.'/'.$basic['doi'];
     }
-    if ($metadataPrefix == 'junii' || $metadataPrefix == 'junii2') {
+    if ('junii' == $metadataPrefix || 'junii2' == $metadataPrefix) {
         $lines = array();
 
         $publisher = $xconfig_handler->getValue('repository_publisher');
         $institution = $xconfig_handler->getValue('repository_institution');
         $meta_author = $myxoopsConfigMetaFooter['meta_author'];
 
-        if (strcasecmp($publisher, 'meta_author') == 0) {
+        if (0 == strcasecmp($publisher, 'meta_author')) {
             $publisher = $meta_author;
-        } elseif (strcasecmp($publisher, 'creator') == 0) {
+        } elseif (0 == strcasecmp($publisher, 'creator')) {
             $publisher = _MD_XOONIPS_ITEM_CONTRIBUTOR_LABEL;
-        } elseif (strcasecmp($publisher, 'none') == 0) {
+        } elseif (0 == strcasecmp($publisher, 'none')) {
             $publisher = null;
         }
-        if (strcasecmp($institution, 'meta_author') == 0) {
+        if (0 == strcasecmp($institution, 'meta_author')) {
             $institution = $meta_author;
-        } elseif (strcasecmp($institution, 'creator') == 0) {
+        } elseif (0 == strcasecmp($institution, 'creator')) {
             $institution = _MD_XOONIPS_ITEM_CONTRIBUTOR_LABEL;
-        } elseif (strcasecmp($institution, 'none') == 0) {
+        } elseif (0 == strcasecmp($institution, 'none')) {
             $institution = null;
         }
 
@@ -2950,22 +2951,22 @@ function xnpGetBasicInformationMetadata($metadataPrefix, $item_id)
         $lines[] = '<identifier xsi:type="URL">'.$textutil->xml_special_chars(xnpGetItemDetailURL($basic['item_id'], $basic['doi'])).'</identifier>';
         $lines[] = '<type>itemType:'.$textutil->xml_special_chars($itemtype['name']).'</type>';
         $lines[] = '<language xsi:type="ISO639-2">'.$textutil->xml_special_chars($basic['lang']).'</language>';
-        if ($institution != null) {
+        if (null != $institution) {
             $lines[] = '<institution>'.$textutil->xml_special_chars($institution).'</institution>';
         }
-        if ($publisher != null) {
+        if (null != $publisher) {
             $lines[] = '<publisher>'.$textutil->xml_special_chars($publisher).'</publisher>';
         }
 
         $subject = array();
         $index_ids = array();
         $res = xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $index_ids);
-        if ($res == RES_OK) {
+        if (RES_OK == $res) {
             foreach ($index_ids as $xid) {
                 if ($xid > 0) {
                     $index = array();
                     $result = xnp_get_index($_SESSION['XNPSID'], $xid, $index);
-                    if ($result == 0) {
+                    if (0 == $result) {
                         $str = xnpGetIndexPathServerString($_SESSION['XNPSID'], $xid);
                         $subject[] = "$str";
                     }
@@ -2979,18 +2980,18 @@ function xnpGetBasicInformationMetadata($metadataPrefix, $item_id)
         $lines[] = '<description>comment:'.$textutil->xml_special_chars($basic['description']).'</description>';
 
         return implode("\n", $lines);
-    } elseif ($metadataPrefix == 'oai_dc') {
+    } elseif ('oai_dc' == $metadataPrefix) {
         /* title, identifier, type, language, subject, description */
         $lines = array();
 
         $publisher = $xconfig_handler->getValue('repository_publisher');
         $meta_author = $myxoopsConfigMetaFooter['meta_author'];
 
-        if (strcasecmp($publisher, 'meta_author') == 0) {
+        if (0 == strcasecmp($publisher, 'meta_author')) {
             $publisher = $meta_author;
-        } elseif (strcasecmp($publisher, 'creator') == 0) {
+        } elseif (0 == strcasecmp($publisher, 'creator')) {
             $publisher = _MD_XOONIPS_ITEM_CONTRIBUTOR_LABEL;
-        } elseif (strcasecmp($publisher, 'none') == 0) {
+        } elseif (0 == strcasecmp($publisher, 'none')) {
             $publisher = null;
         }
 
@@ -2999,19 +3000,19 @@ function xnpGetBasicInformationMetadata($metadataPrefix, $item_id)
         $lines[] = '<dc:identifier>'.$textutil->xml_special_chars(xnpGetItemDetailURL($basic['item_id'], $basic['doi'])).'</dc:identifier>';
         $lines[] = '<dc:type>itemType:'.$textutil->xml_special_chars($itemtype['name']).'</dc:type>';
         $lines[] = '<dc:language>'.$textutil->xml_special_chars($basic['lang']).'</dc:language>';
-        if ($publisher != null) {
+        if (null != $publisher) {
             $lines[] = '<dc:publisher>'.$textutil->xml_special_chars($publisher).'</dc:publisher>';
         }
 
         $subject = array();
         $index_ids = array();
         $res = xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $index_ids);
-        if ($res == RES_OK) {
+        if (RES_OK == $res) {
             foreach ($index_ids as $xid) {
                 if ($xid > 0) {
                     $index = array();
                     $result = xnp_get_index($_SESSION['XNPSID'], $xid, $index);
-                    if ($result == 0) {
+                    if (0 == $result) {
                         $str = xnpGetIndexPathServerString($_SESSION['XNPSID'], $xid);
                         $subject[] = "$str";
                     }
@@ -3091,7 +3092,7 @@ function xnpGetRightsEditBlock($item_id, $use_cc = 1, $text = '', $cc_commercial
     } else {
         $encText = $textutil->html_special_chars($text);
         $htmlShowText = nl2br($textutil->html_special_chars(xnpHeadText($text)));
-        if ($htmlShowText == '') {
+        if ('' == $htmlShowText) {
             $htmlShowText = '&nbsp;'; // div.firstChild is prevented being set to null.
         }
     }
@@ -3163,7 +3164,7 @@ function xnpGetRightsConfirmBlock($item_id, $maxlen = 65535)
     $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false, 0);
     $rightsCCCommercialUse = $formdata->getValue('post', 'rightsCCCommercialUse', 'i', false, 0);
     $rightsCCModification = $formdata->getValue('post', 'rightsCCModification', 'i', false, 0);
-    if ($rightsUseCC == 1) {
+    if (1 == $rightsUseCC) {
         $htmlText = xoonips_get_cc_license($rightsCCCommercialUse, $rightsCCModification, 4.0, 'INTERNATIONAL');
         $within = $htmlText;
         $without = '';
@@ -3218,7 +3219,7 @@ function xnpGetAccessRights($item_id)
     $xnpsid = $_SESSION['XNPSID'];
     $xids = array();
     $result = xnp_get_index_id_by_item_id($xnpsid, $item_id, $xids);
-    if ($result != RES_OK) {
+    if (RES_OK != $result) {
         return false;
     }
 
@@ -3229,7 +3230,7 @@ function xnpGetAccessRights($item_id)
         $xid = $xids[$i];
         $index = array();
         $result = xnp_get_index($xnpsid, $xid, $index);
-        if ($result == RES_OK) {
+        if (RES_OK == $result) {
             $open_levels[$index['open_level']] = true;
         }
     }
@@ -3254,10 +3255,10 @@ function xoonips_error($message)
 
 function encodeMacSafari2Server($str)
 {
-    if ($str != '') {
+    if ('' != $str) {
         if ((substr_count($_SERVER['HTTP_USER_AGENT'], 'Mac') > 0) && (substr_count($_SERVER['HTTP_USER_AGENT'], 'Safari') > 0)) {
             $str = str_replace('&#', '&amp;#', $str);
-            if (mb_detect_encoding($str) == 'UTF-8') {
+            if ('UTF-8' == mb_detect_encoding($str)) {
                 if (_CHARSET != 'UTF-8') {
                     if (_CHARSET == 'EUC-JP') {
                         $unicode = &xoonips_getutility('unicode');
@@ -3332,9 +3333,10 @@ function xnpGetMacSafariAcceptCharset()
 
 /**
  * eucのmultibyte文字列にwindowをかけてbin2hex()する。
+ *
  * @param string $str
- * @param boolean $output_leading
- * @param boolean $output_trailing
+ * @param bool   $output_leading
+ * @param bool   $output_trailing
  */
 function xnpWindowString($str, $output_leading, $output_trailing)
 {
@@ -3418,7 +3420,7 @@ function xnpWordSeparation($str, $output_leading = true, $output_trailing = true
             }
             $ar = xnpWindowString(
                 mb_substr($str, $w0, $w1 - $w0, $encoding),
-                $w0 != 0 || $output_leading,
+                0 != $w0 || $output_leading,
                 $w1 != $end || $output_trailing
             );
         } else {
@@ -3479,10 +3481,10 @@ function xnpTrimString($src, $len, $enc = null)
 function xnpHasWithout($ar)
 {
     foreach ($ar as $key => $val) {
-        if ($key == 'without' && strlen($val) != 0) {
+        if ('without' == $key && 0 != strlen($val)) {
             return true;
         }
-        if (is_array($val) && isset($val['without']) && strlen($val['without']) != 0) {
+        if (is_array($val) && isset($val['without']) && 0 != strlen($val['without'])) {
             return true;
         }
     }
@@ -3503,11 +3505,11 @@ function xnpGetColumnLengths($table_wo_prefix)
     $table = $xoopsDB->prefix($table_wo_prefix);
     $result = $xoopsDB->queryF('SHOW COLUMNS FROM `'.$table.'`');
     $ret = array();
-    while ($row = $xoopsDB->fetchArray($result)){
+    while ($row = $xoopsDB->fetchArray($result)) {
         $name = $row['Field'];
         if (preg_match('/(?:varchar|char)\((\d+)\)/', $row['Type'], $matches)) {
             $ret[$name] = $matches[1];
-        } else if (preg_match('/(tiny|medium|long)?(?:text|blob)/', $row['Type'], $matches)) {
+        } elseif (preg_match('/(tiny|medium|long)?(?:text|blob)/', $row['Type'], $matches)) {
             $sizes = array(
                 'tiny' => 255,
                 'medium' => 16777215,
@@ -3528,13 +3530,13 @@ function xnpGetColumnLengths($table_wo_prefix)
  * @param $enc: valueのエンコード(省略可)
  * $assoc に 切り詰めた後の値を書く。
  *          array( column_name1 => within1, column_name2 => within2, ... )
- * @param string $table_wo_prefix
+ * @param string   $table_wo_prefix
  * @param string[] $names
  */
 function xnpTrimColumn(&$assoc, $table_wo_prefix, $names = null, $enc = null)
 {
     $lengths = xnpGetColumnLengths($table_wo_prefix);
-    if ($lengths == false) {
+    if (false == $lengths) {
         return false;
     }
 
@@ -3561,7 +3563,7 @@ function xnpConfirmHtml(&$assoc, $table_wo_prefix, $names = null, $enc = null)
 {
     $textutil = &xoonips_getutility('text');
     $lengths = xnpGetColumnLengths($table_wo_prefix);
-    if ($lengths == false) {
+    if (false == $lengths) {
         return false;
     }
 
@@ -3580,10 +3582,10 @@ function xnpDate($year, $month, $day)
     $int_year = intval($year);
     $int_month = intval($month);
     $int_day = intval($day);
-    if ($int_month == 0) {
+    if (0 == $int_month) {
         $date = date(YEAR_FORMAT, mktime(0, 0, 0, 1, 1, $int_year));
     } else {
-        if ($int_day == 0) {
+        if (0 == $int_day) {
             $date = date(YEAR_MONTH_FORMAT, mktime(0, 0, 0, $int_month, 1, $int_year));
         } else {
             $date = date(DATE_FORMAT, mktime(0, 0, 0, $int_month, $int_day, $int_year));
@@ -3606,9 +3608,9 @@ function xnpISO8601($year, $month, $day)
     $int_year = intval($year);
     $int_month = intval($month);
     $int_day = intval($day);
-    if ($int_month == 0) {
+    if (0 == $int_month) {
         $date = sprintf('%04s', $int_year);
-    } elseif ($int_day == 0) {
+    } elseif (0 == $int_day) {
         $date = sprintf('%04s-%02s', $int_year, $int_month);
     } else {
         $date = sprintf('%04s-%02s-%02s', $int_year, $int_month, $int_day);
@@ -3623,11 +3625,11 @@ function xnpISO8601($year, $month, $day)
  * @param doi       DOI of examined object
  * @param iids      return item id of each doi(array)
  *
- * @return integer
- * @return integer
- * @return integer
- * @return integer
- * @return integer
+ * @return int
+ * @return int
+ * @return int
+ * @return int
+ * @return int
  */
 function xnpGetItemIdByDoi($doi, &$iids)
 {
@@ -3654,11 +3656,11 @@ function xnpGetItemIdByDoi($doi, &$iids)
  * @param item_id   item id of examined object
  * @param doi       return doi, according in id. return "" if item id not found.
  *
- * @return integer
- * @return integer
- * @return integer
- * @return integer
- * @return integer
+ * @return int
+ * @return int
+ * @return int
+ * @return int
+ * @return int
  */
 function xnpGetDoiByItemId($item_id, &$doi)
 {
@@ -3703,7 +3705,7 @@ function xnpGetItemDetailURL($item_id, $dois = null)
 function xnpIsDoiExists($doi)
 {
     $iids = array();
-    if (xnpGetItemIdByDoi($doi, $iids) == RES_OK) {
+    if (RES_OK == xnpGetItemIdByDoi($doi, $iids)) {
         if (count($iids) > 0) {
             return true;
         }
@@ -3819,13 +3821,13 @@ function xnpListIndexTree($mode = XOONIPS_LISTINDEX_MODE_ALL, $assoc_array_mode 
     }
     // extract to full path
     foreach ($parent_full_path as $k => $v) {
-        if ($k == 0) {
+        if (0 == $k) {
             continue;
         }
         $idx = $k;
         $fullpath = '';
         $id_fullpath = '';
-        while ($idx != 0) {
+        while (0 != $idx) {
             if (!isset($tree_items[$idx])) {
                 break;
             }
@@ -3842,7 +3844,7 @@ function xnpListIndexTree($mode = XOONIPS_LISTINDEX_MODE_ALL, $assoc_array_mode 
         $parent_path = $parent_full_path[$v['parent_index_id']];
         $parent_id_path = $parent_id_full_path[$v['parent_index_id']];
         // exclude check.
-        if ($v['index_id'] == IID_ROOT) {
+        if (IID_ROOT == $v['index_id']) {
             continue;
         }
         // delete "ROOT" string.
@@ -3865,7 +3867,6 @@ function xnpListIndexTree($mode = XOONIPS_LISTINDEX_MODE_ALL, $assoc_array_mode 
 
     return $result;
 }
-/***********************************************************************/
 
 /**
  * wrapper API for item type programming library.
@@ -3948,7 +3949,7 @@ class XooNIpsItemLibraryObject
         if (is_object($this->_xoops_users_obj)) {
             $user_name = $this->_xoops_users_obj->getVar('name', $fmt);
             $user_uname = $this->_xoops_users_obj->getVar('uname', $fmt);
-            if ($user_name == '') {
+            if ('' == $user_name) {
                 $contributor = $user_uname;
             } else {
                 $contributor = $user_name.' ('.$user_uname.')';
@@ -3985,7 +3986,7 @@ class XooNIpsItemLibraryObject
         $lang = $this->_item_basic_obj->get('lang');
         $language = isset($lang_map[$lang]) ? $lang_map[$lang] : '';
         // change log
-        if ($fmt == 'e' || $fmt == 's') {
+        if ('e' == $fmt || 's' == $fmt) {
             $change_log = $textutil->html_special_chars($this->_changelog);
         } else {
             $change_log = $this->_changelog;
@@ -4125,7 +4126,7 @@ class XooNIpsItemLibraryObject
         $pubyear = isset($basic['publication_year']) ? intval($basic['publication_year']) : 0;
         $pubmonth = isset($basic['publication_month']) ? intval($basic['publication_month']) : 0;
         $pubmday = isset($basic['publication_mday']) ? intval($basic['publication_mday']) : 0;
-        $gmtime = $pubyear == 0 ? '' : sprintf('%04d-%02d-%02d', $pubyear, $pubmonth, $pubmday);
+        $gmtime = 0 == $pubyear ? '' : sprintf('%04d-%02d-%02d', $pubyear, $pubmonth, $pubmday);
         $tpl->assign('gmtime', $gmtime);
         $publcation_date = $tpl->fetch('db:xoonips_publication_date.html');
         $publication_year = $tpl->fetch('db:xoonips_publication_year.html');
@@ -4246,7 +4247,7 @@ class XooNIpsItemLibraryObject
         foreach ($this->_item_title_objs as $obj) {
             $t = $this->_getConfirmTemplateVars('', $obj->get('title'), $obj->getMaxLength('title'));
             foreach ($t as $k => $v) {
-                if ($k == 'name' || ($k == 'without' && $v == '')) {
+                if ('name' == $k || ('without' == $k && '' == $v)) {
                     continue;
                 }
                 if (!isset($title[$k])) {
@@ -4262,7 +4263,7 @@ class XooNIpsItemLibraryObject
         foreach ($this->_item_keyword_objs as $obj) {
             $t = $this->_getConfirmTemplateVars('', $obj->get('keyword'), $obj->getMaxLength('keyword'));
             foreach ($t as $k => $v) {
-                if ($k == 'name' || ($k == 'without' && $v == '')) {
+                if ('name' == $k || ('without' == $k && '' == $v)) {
                     continue;
                 }
                 if (!isset($keywords[$k])) {
@@ -4359,7 +4360,7 @@ class XooNIpsItemLibraryObject
     {
         $doi = $this->_item_basic_obj->get('doi');
         $mydirname = basename(dirname(__DIR__));
-        if ($doi != '' && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') {
+        if ('' != $doi && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') {
             $opt = XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($doi);
         } else {
             $opt = 'item_id='.$this->_item_basic_obj->get('item_id');
@@ -4452,7 +4453,6 @@ class XooNIpsItemLibraryObject
 
     /**
      * set change log.
-     *
      */
     public function setChangeLog($change_log)
     {
@@ -4518,7 +4518,6 @@ class XooNIpsItemLibraryObject
 
     /**
      * set related to.
-     *
      */
     public function setRelatedTo($related_to)
     {
@@ -4527,7 +4526,7 @@ class XooNIpsItemLibraryObject
         $related_to_ids = array();
         foreach ($ids as $id) {
             $id = intval($id);
-            if ($id != 0) {
+            if (0 != $id) {
                 $related_to_ids[] = $id;
             }
         }
@@ -4608,14 +4607,14 @@ class XooNIpsItemLibraryObject
         require_once XOOPS_ROOT_PATH.'/modules/'.$viewphp;
         $func = $modname.'GetModifiedFields';
         $modified = xnpGetModifiedFields($item_id) + (function_exists($func) ? $func($item_id) : array());
-        if (count($modified) == 0) {
+        if (0 == count($modified)) {
             // modified field not found, no need to certify
             return false;
         }
         // fetch new index ids
         $formdata = &xoonips_getutility('formdata');
         $xids_new = array_map('intval', explode(',', $formdata->getValue('post', 'xoonipsCheckedXID', 's', false, '')));
-        if (count($modified) == 1 && $modified[0] == _MD_XOONIPS_ITEM_INDEX_LABEL) {
+        if (1 == count($modified) && _MD_XOONIPS_ITEM_INDEX_LABEL == $modified[0]) {
             // only indexes are modified
             // get old index ids
             $xids_old = array();
@@ -4632,7 +4631,7 @@ class XooNIpsItemLibraryObject
             // set all new index ids
             $xids = $xids_new;
         }
-        if (count($xids) == 0) {
+        if (0 == count($xids)) {
             // indexes are not changed
             return false;
         }
@@ -4758,7 +4757,7 @@ class XooNIpsItemLibraryObject
         $without = $textutil->html_special_chars($without_raw);
         $html_string = $textutil->html_special_chars($text);
         // create value
-        $value = $within.($without != '' ? sprintf('<span style="color: red;">%s</span>', $without) : '');
+        $value = $within.('' != $without ? sprintf('<span style="color: red;">%s</span>', $without) : '');
 
         return array(
             'name' => $name,
@@ -4800,7 +4799,7 @@ class XooNIpsItemLibraryObject
         $keys = $obj->getKeysArray();
         foreach ($keys as $key) {
             $len = $obj->getMaxLength($key);
-            if ($len !== false) {
+            if (false !== $len) {
                 $value = $this->_truncateSimpleText($obj->get($key), $len);
                 $obj->set($key, $value);
             }
@@ -4892,7 +4891,7 @@ class XooNIpsItemLibraryHandler
         $meta['xoops_user'] = &$this->_xoops_users_handler->get($uid);
         $meta['xoonips_user'] = &$this->_xoonips_users_handler->get($uid);
         $item_type_id = $meta['item_basic']->get('item_type_id');
-        if ($item_type_id == ITID_INDEX) {
+        if (ITID_INDEX == $item_type_id) {
             return $ret;
         } // ignore if item_id is index_id
         $meta['item_type'] = &$this->_item_type_handler->get($item_type_id);
@@ -4929,7 +4928,7 @@ class XooNIpsItemLibraryHandler
             $objs_new = array();
             foreach ($values as $num => $val) {
                 $val = trim($val);
-                if ($val == '') {
+                if ('' == $val) {
                     continue;
                 }
                 if (isset($objs_old[$num])) {
@@ -4954,7 +4953,7 @@ class XooNIpsItemLibraryHandler
             $objs_new = array();
             foreach ($values as $num => $val) {
                 $val = trim($val);
-                if ($val == '') {
+                if ('' == $val) {
                     continue;
                 }
                 if (isset($objs_old[$num])) {
@@ -5032,7 +5031,7 @@ class XooNIpsItemLibraryHandler
     public function insertBasicInformation($itemlib_obj)
     {
         $item_basic_obj = &$itemlib_obj->getItemBasicObject();
-        $is_new = ($item_basic_obj->get('item_id') == 0);
+        $is_new = (0 == $item_basic_obj->get('item_id'));
         $certify_required_onupdate = $is_new ? false : $itemlib_obj->isCertifyRequired();
         $itemlib_obj->truncateObject();
         // transaction
@@ -5072,7 +5071,7 @@ class XooNIpsItemLibraryHandler
         if ($certify_required_onupdate) {
             $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
             $certify_item = $xconfig_handler->getValue('certify_item');
-            $certify_state = $certify_item == 'auto' ? CERTIFIED : CERTIFY_REQUIRED;
+            $certify_state = 'auto' == $certify_item ? CERTIFIED : CERTIFY_REQUIRED;
             $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
             $index_item_link_objs = &$index_item_link_handler->getByItemId($item_id, array(OL_PUBLIC, OL_GROUP_ONLY));
             foreach ($index_item_link_objs as $index_item_link_obj) {

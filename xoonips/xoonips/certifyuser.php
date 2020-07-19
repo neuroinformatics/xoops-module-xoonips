@@ -51,9 +51,9 @@ $op_list = array('certify', 'uncertify_confirm', 'uncertify');
 $op = $formdata->getValue('post', 'op', 's', false, '');
 $certify_uid = $formdata->getValue('post', 'certify_uid', 'i', false, 0);
 
-if ($op == '') {
+if ('' == $op) {
 } elseif (in_array($op, $op_list)) {
-    if ($certify_uid == 0) {
+    if (0 == $certify_uid) {
         die('illegal request');
     }
 } else {
@@ -64,7 +64,7 @@ $myxoopsConfig = &xoonips_get_xoops_configs(XOOPS_CONF);
 
 require XOOPS_ROOT_PATH.'/header.php';
 
-if ($op == 'certify') {
+if ('certify' == $op) {
     // check token ticket
     if (!$xoopsGTicket->check(true, 'xoonips_certify_user')) {
         exit();
@@ -72,21 +72,18 @@ if ($op == 'certify') {
     //certify user
     $user = array();
     $result = xnp_get_account($xnpsid, $certify_uid, $user);
-    if ($result != RES_OK) {
-        redirect_header('certifyuser.php', 3, _MD_XOONIPS_ACCOUNT_CANNOT_ACQUIRE_USER_INFO."(in xnp_get_account result=$result)");
-        exit;
+    if (RES_OK != $result) {
+        xoonips_error_exit(500);
     } elseif (empty($user)) {
-        redirect_header('certifyuser.php', 3, _MD_XOONIPS_ACCOUNT_CANNOT_ACQUIRE_USER_INFO.'(user information is empty)');
-        exit;
+        redirect_header('certifyuser.php', 3, _MD_XOONIPS_ACCOUNT_CANNOT_ACQUIRE_USER_INFO);
     }
-    if ($user['activate'] == 1) {
-        redirect_header('certifyuser.php', 3, _MD_XOONIPS_ACCOUNT_ALREADY_CERTIFIED.'('.$user['uname'].')');
+    if (1 == $user['activate']) {
+        redirect_header('certifyuser.php', 3, _MD_XOONIPS_ACCOUNT_ALREADY_CERTIFIED);
     }
     $user['activate'] = 1;
     $result = xnp_update_account($xnpsid, $user);
-    if ($result != 0) {
+    if (0 != $result) {
         redirect_header('certifyuser.php', 3, _MD_XOONIPS_ACCOUNT_CANNOT_UPDATE_USER_INFO);
-        exit();
     }
     // record events(certify account)
     $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
@@ -112,9 +109,9 @@ if ($op == 'certify') {
     $xoopsMailer->setFromName($myxoopsConfig['sitename']);
     $xoopsMailer->setSubject(_MD_XOONIPS_ACCOUNT_CERTIFIED);
     if (!$xoopsMailer->send()) {
-        redirect_header('certifyuser.php', 3, sprintf(_US_ACTVMAILNG, $user['uname']));
+        redirect_header('certifyuser.php', 3, sprintf(_US_ACTVMAILNG, $textutil->html_special_chars($user['uname'])));
     }
-} elseif ($op == 'uncertify_confirm') {
+} elseif ('uncertify_confirm' == $op) {
     $xoopsTpl->assign('op', $op);
     $xoopsTpl->assign('certify_uid', $certify_uid);
     $xoopsOption['template_main'] = 'xoonips_certifyuser_uncertify_confirm.html';
@@ -124,10 +121,9 @@ if ($op == 'certify') {
 
     require XOOPS_ROOT_PATH.'/footer.php';
     exit(); //terminate rendering
-} elseif ($op == 'uncertify') {
+} elseif ('uncertify' == $op) {
     if (!isset($_POST['is_exec'])) {
-        redirect_header(XOOPS_URL.'/modules/xoonips/certifyuser.php', 3, _TAKINGBACK);
-        exit();
+        redirect_header('certifyuser.php', 3, _TAKINGBACK);
     }
 
     // check token ticket
@@ -139,9 +135,8 @@ if ($op == 'certify') {
 
     $user = array();
     $result_get_account = xnp_get_account($xnpsid, $certify_uid, $user);
-    if ($result_get_account != RES_OK) {
-        redirect_header('certifyuser.php', 3, _MD_XOONIPS_ACCOUNT_CANNOT_ACQUIRE_USER_INFO."(in xnp_get_account result={$result_get_account})");
-        exit;
+    if (RES_OK != $result_get_account) {
+        redirect_header('certifyuser.php', 3, _MD_XOONIPS_ACCOUNT_CANNOT_ACQUIRE_USER_INFO);
     }
 
     xoonips_notification_account_rejected($certify_uid, $comment);
@@ -172,11 +167,10 @@ if ($op == 'certify') {
     $xoopsMailer->setSubject(_MD_XOONIPS_ACCOUNT_REJECTED);
 
     if (!$xoopsMailer->send()) {
-        redirect_header('certifyuser.php', 3, sprintf(_US_ACTVMAILNG, $user['uname']));
+        redirect_header('certifyuser.php', 3, sprintf(_US_ACTVMAILNG, $textutil->html_special_chars($user['uname'])));
     }
 
     redirect_header(XOOPS_URL.'/modules/xoonips/certifyuser.php', 3, _MD_XOONIPS_MODERATOR_UNCERTIFY_SUCCESS);
-    exit();
 }
 
 $xoopsTpl->assign('op', $op);
@@ -184,15 +178,15 @@ $xoopsOption['template_main'] = 'xoonips_certifyuser.html';
 
 $users = array();
 $uids = array();
-if (xnp_dump_uids($xnpsid, array(), $uids) != 0) {
+if (0 != xnp_dump_uids($xnpsid, array(), $uids)) {
     redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_MODERATOR_ERROR_SELECT_USER);
     exit();
 }
 if (count($uids) > 0) {
     foreach ($uids as $i) {
         $user = array();
-        if (xnp_get_account($xnpsid, $i, $user) == 0) {
-            if (@$user['activate'] != 1 && @$user['level'] != 0) {
+        if (0 == xnp_get_account($xnpsid, $i, $user)) {
+            if (1 != @$user['activate'] && 0 != @$user['level']) {
                 // list acitvated & uncertified users only
                 $users[] = array(
                     'uid' => $user['uid'],
