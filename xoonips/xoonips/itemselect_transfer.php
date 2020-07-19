@@ -40,9 +40,6 @@ require_once 'include/AL.php';
 
 xoonips_deny_guest_access();
 
-xnpEncodeMacSafariPost();
-xnpEncodeMacSafariGet();
-
 require_once __DIR__.'/include/extra_param.inc.php';
 require_once __DIR__.'/include/item_list_header.inc.php';
 

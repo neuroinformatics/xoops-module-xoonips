@@ -41,7 +41,7 @@ $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
 $formdata = &xoonips_getutility('formdata');
 $uid = $formdata->getValue('both', 'uid', 'i', false, $myuid);
-if ($myuid == UID_GUEST) {
+if (UID_GUEST == $myuid) {
     // user id not selected
     redirect_header(XOOPS_URL.'/', 3, _US_SELECTNG);
     exit();
@@ -114,7 +114,7 @@ if (!is_object($u_obj) || !is_object($xu_obj)) {
 
 $errors = array();
 
-if ($op == 'saveuser') {
+if ('saveuser' == $op) {
     if (!$xoopsGTicket->check(true, 'saveuser', false)) {
         redirect_header(XOOPS_URL.'/', 3, $xoopsGTiket->getErrors());
         exit();
@@ -156,15 +156,15 @@ if ($op == 'saveuser') {
         $$key = $formdata->getValue('post', $key, $type, $is_required);
     }
 
-    if ($myxoopsConfigUser['allow_chgmail'] == 1) {
-        if (is_null($email) || $email == '' || !checkEmail($email)) {
+    if (1 == $myxoopsConfigUser['allow_chgmail']) {
+        if (is_null($email) || '' == $email || !checkEmail($email)) {
             $errors[] = _US_INVALIDMAIL;
         }
     }
-    if ($vpass != '' && $password != $vpass) {
+    if ('' != $vpass && $password != $vpass) {
         $errors[] = _US_PASSNOTSAME;
     }
-    if ($password != '' && strlen($password) < $myxoopsConfigUser['minpass']) {
+    if ('' != $password && strlen($password) < $myxoopsConfigUser['minpass']) {
         $errors[] = sprintf(_US_PWDTOOSHORT, $myxoopsConfigUser['minpass']);
     }
     if ($notice_mail < 0) {
@@ -175,7 +175,7 @@ if ($op == 'saveuser') {
     $val = '';
     $required = array();
     foreach ($xconfig_keys as $key => $label) {
-        if ($xconfig_vars[$key] != 'on' && ${$key} == '') {
+        if ('on' != $xconfig_vars[$key] && '' == ${$key}) {
             $errors[] = sprintf(_MD_XOONIPS_ACCOUNT_MUST_BE_FILLED_IN, $label);
         }
     }
@@ -186,14 +186,14 @@ if ($op == 'saveuser') {
         // set new values
         // - xoops user information
         $u_obj->setVar('name', $realname, true); // not gpc
-        if ($myxoopsConfigUser['allow_chgmail'] == 1) {
+        if (1 == $myxoopsConfigUser['allow_chgmail']) {
             $u_obj->setVar('email', $email, true); // not gpc
         }
         $u_obj->setVar('url', formatURL($url), true); // not gpc
         $u_obj->setVar('user_sig', xoops_substr($user_sig, 0, 255), true); // not gpc
         $user_viewemail = empty($user_viewemail) ? 0 : 1;
         $u_obj->setVar('user_viewemail', $user_viewemail, true); // not gpc
-        if ($vpass != '') {
+        if ('' != $vpass) {
             $u_obj->setVar('pass', md5($password), true); // not gpc
         }
         $attachsig = empty($attachsig) ? 0 : 1;
@@ -245,7 +245,7 @@ if ($op == 'saveuser') {
     }
 }
 
-if ($op == 'editprofile') {
+if ('editprofile' == $op) {
     require_once XOOPS_ROOT_PATH.'/header.php';
     require_once XOOPS_ROOT_PATH.'/include/xoopscodes.php';
     require_once XOOPS_ROOT_PATH.'/include/comment_constants.php';
@@ -257,7 +257,7 @@ if ($op == 'editprofile') {
     // required mark, and required flag
     $required = array();
     foreach ($xconfig_keys as $key => $label) {
-        if ($xconfig_vars[$key] != 'on') {
+        if ('on' != $xconfig_vars[$key]) {
             $required[$key]['mark'] = _MD_XOONIPS_ACCOUNT_REQUIRED_MARK;
             $required[$key]['flag'] = true;
         } else {
@@ -291,7 +291,7 @@ if ($op == 'editprofile') {
 
     // email
     $email_tray = new XoopsFormElementTray(_US_EMAIL._MD_XOONIPS_ACCOUNT_REQUIRED_MARK, '<br />');
-    if ($myxoopsConfigUser['allow_chgmail'] == 1) {
+    if (1 == $myxoopsConfigUser['allow_chgmail']) {
         $email_text = new XoopsFormText('', 'email', 30, 60, $u_obj->getVar('email', 's'));
     } else {
         $email_text = new XoopsFormLabel('', $u_obj->getVar('email', 's'));
@@ -302,7 +302,7 @@ if ($op == 'editprofile') {
     $email_cbox->addOption(1, _US_ALLOWVIEWEMAIL);
     $email_tray->addElement($email_cbox);
     $form->addElement($email_tray);
-    if ($myxoopsConfigUser['allow_chgmail'] == 1) {
+    if (1 == $myxoopsConfigUser['allow_chgmail']) {
         $form->setRequired($email_text);
     }
 
@@ -429,9 +429,6 @@ if ($op == 'editprofile') {
     $submit_button = new XoopsFormButton('', 'submit', _US_SAVECHANGES, 'submit');
     $form->addElement($submit_button);
 
-    //set accept-charset attribute if Safari on Mac OS
-    $form->setExtra(xnpGetMacSafariAcceptCharset());
-
     // show form
     $form->display();
 
@@ -439,15 +436,15 @@ if ($op == 'editprofile') {
     exit();
 }
 
-if ($op == 'avatarform') {
+if ('avatarform' == $op) {
     require XOOPS_ROOT_PATH.'/header.php';
     echo '<a href="showusers.php?uid='.$uid.'">'._MD_XOONIPS_SHOW_USER_TITLE.'</a>&nbsp;<span style="font-weight:bold;">&raquo;&raquo;</span>&nbsp;'._US_UPLOADMYAVATAR.'<br /><br />';
     $oldavatar = $u_obj->getVar('user_avatar', 's');
-    if (!empty($oldavatar) && $oldavatar != 'blank.gif') {
+    if (!empty($oldavatar) && 'blank.gif' != $oldavatar) {
         echo '<div style="text-align:center;"><h4 style="color:#ff0000; font-weight:bold;">'._US_OLDDELETED.'</h4>';
         echo '<img src="'.XOOPS_UPLOAD_URL.'/'.$oldavatar.'" alt="oldavatar" /></div>';
     }
-    if ($myxoopsConfigUser['avatar_allow_upload'] == 1 && $u_obj->getVar('posts', 's') >= $myxoopsConfigUser['avatar_minposts']) {
+    if (1 == $myxoopsConfigUser['avatar_allow_upload'] && $u_obj->getVar('posts', 's') >= $myxoopsConfigUser['avatar_minposts']) {
         $form = new XoopsThemeForm(_US_UPLOADMYAVATAR, 'uploadavatar', 'edituser.php');
         $form->setExtra('enctype="multipart/form-data"');
         $form->addElement(new XoopsFormLabel(_US_MAXPIXEL, $myxoopsConfigUser['avatar_width'].' x '.$myxoopsConfigUser['avatar_height']));
@@ -478,12 +475,12 @@ if ($op == 'avatarform') {
     exit();
 }
 
-if ($op == 'avatarupload') {
+if ('avatarupload' == $op) {
     if (!$xoopsGTicket->check(true, 'avatarupload', false)) {
         redirect_header(XOOPS_URL.'/', 3, $xoopsGTiket->getErrors());
         exit();
     }
-    if ($myxoopsConfigUser['avatar_allow_upload'] == 1 && $u_obj->getVar('posts', 's') >= $myxoopsConfigUser['avatar_minposts']) {
+    if (1 == $myxoopsConfigUser['avatar_allow_upload'] && $u_obj->getVar('posts', 's') >= $myxoopsConfigUser['avatar_minposts']) {
         require_once XOOPS_ROOT_PATH.'/class/uploader.php';
         $uploader = new XoopsMediaUploader(XOOPS_UPLOAD_PATH, array('image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png', 'image/png'), $myxoopsConfigUser['avatar_maxsize'], $myxoopsConfigUser['avatar_width'], $myxoopsConfigUser['avatar_height']);
         $uploader->setAllowedExtensions(array('gif', 'jpeg', 'jpg', 'png'));
@@ -502,7 +499,7 @@ if ($op == 'avatarupload') {
                     @unlink($uploader->getSavedDestination());
                 } else {
                     $oldavatar = $u_obj->getVar('user_avatar', 's');
-                    if (!empty($oldavatar) && $oldavatar != 'blank.gif' && !preg_match('/^savt/', strtolower($oldavatar))) {
+                    if (!empty($oldavatar) && 'blank.gif' != $oldavatar && !preg_match('/^savt/', strtolower($oldavatar))) {
                         $avatars = &$avt_handler->getObjects(new Criteria('avatar_file', $oldavatar));
                         $avt_handler->delete($avatars[0]);
                         $oldavatar_path = str_replace('\\', '/', realpath(XOOPS_UPLOAD_PATH.'/'.$oldavatar));
@@ -525,7 +522,7 @@ if ($op == 'avatarupload') {
     }
 }
 
-if ($op == 'avatarchoose') {
+if ('avatarchoose' == $op) {
     if (!$xoopsGTicket->check(true, 'avatarchoose', false)) {
         redirect_header(XOOPS_URL.'/', 3, $xoopsGTicket->getErrors());
         exit();
@@ -542,7 +539,7 @@ if ($op == 'avatarchoose') {
             exit();
         }
         $avt_handler = &xoops_gethandler('avatar');
-        if ($oldavatar && $oldavatar != 'blank.gif' && !preg_match('/^savt/', strtolower($oldavatar))) {
+        if ($oldavatar && 'blank.gif' != $oldavatar && !preg_match('/^savt/', strtolower($oldavatar))) {
             $avatars = &$avt_handler->getObjects(new Criteria('avatar_file', $oldavatar));
             if (is_object($avatars[0])) {
                 $avt_handler->delete($avatars[0]);
@@ -552,7 +549,7 @@ if ($op == 'avatarchoose') {
                 unlink($oldavatar_path);
             }
         }
-        if ($user_avatar != 'blank.gif') {
+        if ('blank.gif' != $user_avatar) {
             $avatars = &$avt_handler->getObjects(new Criteria('avatar_file', $user_avatar));
             if (is_object($avatars[0])) {
                 $avt_handler->addUser($avatars[0]->getVar('avatar_id'), $uid);

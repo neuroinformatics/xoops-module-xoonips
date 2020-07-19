@@ -47,9 +47,6 @@ if (!is_object($xoopsUser)) {
     }
 }
 
-xnpEncodeMacSafariPost();
-xnpEncodeMacSafariGet();
-
 require_once __DIR__.'/include/extra_param.inc.php';
 
 $requested_vars = array(

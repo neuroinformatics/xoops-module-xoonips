@@ -1136,7 +1136,7 @@ function xnpGetAttachmentEditBlock($item_id, $name)
         $fileInfoLine = '';
     } else {
         list(list($fileID, $fileName, $fileSize)) = $fileInfo;
-        $fileName = $textutil->html_special_chars(encodeMacSafari2Server($fileName));
+        $fileName = $textutil->html_special_chars($fileName);
         $fileInfoLine = "$fileName  ($fileSize Bytes) <input class='formButton' type='button' name='file_delete_button_".$fileID."' value='"._MD_XOONIPS_ITEM_DELETE_BUTTON_LABEL."' onclick=\"xnpSubmitFileDelete( this.form, '$name', $fileID )\" />";
     }
     $html = "
@@ -1445,7 +1445,6 @@ function xnpGetAttachmentConfirmBlock($item_id, $name)
     $textutil = &xoonips_getutility('text');
     $formdata = &xoonips_getutility('formdata');
     if (!empty($_FILES[$name]['name'])) {
-        xnpEncodeMacSafariFiles($name);
         // Upload file
         list($fileID, $errorMessage) = xnpUploadFile($name, false);
         if (false == $fileID) {
@@ -3251,84 +3250,6 @@ function xnpGetAccessRights($item_id)
 function xoonips_error($message)
 {
     error_log($message, 0);
-}
-
-function encodeMacSafari2Server($str)
-{
-    if ('' != $str) {
-        if ((substr_count($_SERVER['HTTP_USER_AGENT'], 'Mac') > 0) && (substr_count($_SERVER['HTTP_USER_AGENT'], 'Safari') > 0)) {
-            $str = str_replace('&#', '&amp;#', $str);
-            if ('UTF-8' == mb_detect_encoding($str)) {
-                if (_CHARSET != 'UTF-8') {
-                    if (_CHARSET == 'EUC-JP') {
-                        $unicode = &xoonips_getutility('unicode');
-                        $str = $unicode->decode_utf8($str, 'EUC-JP', 'h');
-                    } else {
-                        $str = mb_encode_numericentity($str, xoonips_get_conversion_map_to_ascii(), 'UTF-8');
-                    }
-                }
-            }
-            $str = str_replace('&amp;#', '&#', $str);
-        }
-    }
-
-    return $str;
-}
-
-function xnpEncodeMacSafariPost()
-{
-    $target = $_POST;
-    $_POST = xnpEncodeMacSafariPost2($target);
-}
-
-function xnpEncodeMacSafariPost2($target)
-{
-    foreach ($target as $key => $value) {
-        if (is_array($value)) {
-            $value = xnpEncodeMacSafariPost2($value);
-            $target[$key] = $value;
-        } else {
-            $target[$key] = encodeMacSafari2Server($value);
-        }
-    }
-
-    return $target;
-}
-
-function xnpEncodeMacSafariGet()
-{
-    $target = $_GET;
-    $_GET = xnpEncodeMacSafariGet2($target);
-}
-
-function xnpEncodeMacSafariGet2($target)
-{
-    foreach ($target as $key => $value) {
-        if (is_array($value)) {
-            $value = xnpEncodeMacSafariGet2($value);
-            $target[$key] = $value;
-        } else {
-            $target[$key] = encodeMacSafari2Server($value);
-        }
-    }
-
-    return $target;
-}
-
-function xnpEncodeMacSafariFiles($name)
-{
-    $value = $_FILES[$name]['name'];
-    $_FILES[$name]['name'] = encodeMacSafari2Server($value);
-}
-function xnpGetMacSafariAcceptCharset()
-{
-    if ((substr_count($_SERVER['HTTP_USER_AGENT'], 'Mac') > 0) && (substr_count($_SERVER['HTTP_USER_AGENT'], 'Safari') > 0)) {
-        $accept_charset = ' accept-charset="UTF-8"';
-    } else {
-        $accept_charset = '';
-    }
-
-    return $accept_charset;
 }
 
 /**

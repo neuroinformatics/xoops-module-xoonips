@@ -32,7 +32,7 @@
    If cache is valid, the #8043 problem occurs. -> xnpsid is buried in URL.
 */
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && (isset($_GET['item_type_id']) || isset($_GET['post_id']))) {
+if ('GET' == $_SERVER['REQUEST_METHOD'] && (isset($_GET['item_type_id']) || isset($_GET['post_id']))) {
     session_cache_limiter('private');
     session_cache_expire(5);
 }
@@ -45,13 +45,10 @@ require_once 'include/item_limit_check.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 
-xnpEncodeMacSafariPost();
-xnpEncodeMacSafariGet();
-
 // If post_id is specified, $_POST is restored.
 $formdata = &xoonips_getutility('formdata');
 $post_id = $formdata->getValue('get', 'post_id', 'n', false);
-if (!is_null($post_id) && $_SERVER['REQUEST_METHOD'] == 'GET') {
+if (!is_null($post_id) && 'GET' == $_SERVER['REQUEST_METHOD']) {
     if (isset($_SESSION['post_id']) && isset($_SESSION['post_id'][$post_id])) {
         $_POST = unserialize($_SESSION['post_id'][$post_id]);
     }
@@ -94,7 +91,7 @@ if (empty($item_type_id)) {
 }
 $_SESSION['xoonipsITID'] = $item_type_id; // setting of default value in item_type_id to display next time
 
-if (!isset($item_type_id) && !isset($post_id) && $_SERVER['REQUEST_METHOD'] == 'GET') {
+if (!isset($item_type_id) && !isset($post_id) && 'GET' == $_SERVER['REQUEST_METHOD']) {
     header('HTTP/1.0 303 See Other');
     header('Location: '.XOOPS_URL."/modules/xoonips/register.php?item_type_id=$item_type_id&dummy=$xnpsid");
     echo sprintf(_IFNOTRELOAD, XOOPS_URL."/modules/xoonips/register.php?item_type_id=$item_type_id&dummy=$xnpsid");
@@ -109,7 +106,7 @@ $xoopsOption['template_main'] = 'xoonips_register.html';
 require XOOPS_ROOT_PATH.'/header.php';
 
 //check private_item_number_limit
-if (available_space_of_private_item() == 0) {
+if (0 == available_space_of_private_item()) {
     if (!isset($system_message)) {
         $system_message = '';
     }
@@ -134,7 +131,7 @@ $xoopsTpl->assign('xnpsid', $xnpsid);
 $xoopsTpl->assign('next_url', 'confirm_register.php');
 $xoopsTpl->assign('prev_url', 'register.php');
 $xoopsTpl->assign('this_url', XOOPS_URL.'/modules/xoonips/register.php');
-$xoopsTpl->assign('accept_charset', xnpGetMacSafariAcceptCharset());
+$xoopsTpl->assign('accept_charset', '');
 
 require_once XOOPS_ROOT_PATH.'/modules/'.$item_type->get('viewphp');
 $func = $item_type->get('name').'GetRegisterBlock';
@@ -155,9 +152,9 @@ $xoopsTpl->assign('scrollY', $scrollY);
 $xoopsTpl->assign('invalid_doi_message', sprintf(_MD_XOONIPS_ITEM_DOI_INVALID_ID, XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN));
 
 $account = array();
-if (xnp_get_account($xnpsid, $uid, $account) == RES_OK) {
+if (RES_OK == xnp_get_account($xnpsid, $uid, $account)) {
     $iids = array();
-    if (xnp_get_private_item_id($xnpsid, $uid, $iids) == RES_OK) {
+    if (RES_OK == xnp_get_private_item_id($xnpsid, $uid, $iids)) {
         $xoopsTpl->assign('num_of_items_current', count($iids));
     } else {
         $xoopsTpl->assign('num_of_items_current', 0);
@@ -169,7 +166,7 @@ if (xnp_get_account($xnpsid, $uid, $account) == RES_OK) {
 
 // If the page is made by POST, $_POST is made to save somewhere and page redirects.
 // rfc2616 10.3.4 303 See Other
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ('POST' == $_SERVER['REQUEST_METHOD']) {
     $post_id = uniqid('postid');
     $_SESSION['post_id'] = array($post_id => serialize($_POST));
     header('HTTP/1.0 303 See Other');

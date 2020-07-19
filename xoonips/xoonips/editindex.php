@@ -293,7 +293,7 @@ if ('add_to_public' == $op && isset($check)) {
 
         // register index
         $index['parent_index_id'] = $xid;
-        $index['titles'] = array(encodeMacSafari2Server($new_index_name));
+        $index['titles'] = array($new_index_name);
         if (RES_OK == xnp_insert_index($xnpsid, $index, $new_xid)) {
             ++$indexCount;
             // Record events(insert index)
@@ -379,7 +379,7 @@ if ('add_to_public' == $op && isset($check)) {
         $oldPathString = xoonipsGetPathString($xnpsid, $index_id);
         if ('rename' == $op) {
             $notification_context = xoonips_notification_before_user_index_renamed($index_id);
-            $new_index_name = encodeMacSafari2Server($rename[$index_id]);
+            $new_index_name = $rename[$index_id];
             list($within, $without) = xnpTrimString($new_index_name, $lengths['title']);
 
             // warning, if string length is too long
@@ -624,7 +624,7 @@ $xoopsTpl->assign('index_path', $dirArray);
 $xoopsTpl->assign('child_indexes', $childIndexes);
 $xoopsTpl->assign('index_tree', $indexTree);
 $xoopsTpl->assign('public_index_tree', $publicindexTree);
-$xoopsTpl->assign('accept_charset', xnpGetMacSafariAcceptCharset());
+$xoopsTpl->assign('accept_charset', '');
 $xoopsTpl->assign('error_message', $err_mes);
 $xoopsTpl->assign('xoonips_editprofile_url', XOOPS_URL.'/modules/xoonips/edituser.php?uid='.$uid);
 // token ticket

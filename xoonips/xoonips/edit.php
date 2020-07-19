@@ -38,12 +38,10 @@ require_once 'include/extra_param.inc.php';
 
 $xnpsid = $_SESSION['XNPSID'];
 
-xnpEncodeMacSafariPost();
-xnpEncodeMacSafariGet();
 // if there is post_id, it restores $_POST.
 $formdata = &xoonips_getutility('formdata');
 $post_id = $formdata->getValue('get', 'post_id', 's', false);
-if (isset($post_id) && $_SERVER['REQUEST_METHOD'] == 'GET') {
+if (isset($post_id) && 'GET' == $_SERVER['REQUEST_METHOD']) {
     if (isset($_SESSION['post_id']) && isset($_SESSION['post_id'][$post_id])) {
         $_POST = unserialize($_SESSION['post_id'][$post_id]);
     }
@@ -84,7 +82,7 @@ if (!$item_compo_handler->getPerm($item_id, $xoopsUser->getVar('uid'), 'write'))
 }
 
 $item = array();
-if (xnp_get_item($xnpsid, $item_id, $item) != RES_OK) {
+if (RES_OK != xnp_get_item($xnpsid, $item_id, $item)) {
     redirect_header(XOOPS_URL.'/modules/xoonips/index.php', 3, _MD_XOONIPS_ITEM_CANNOT_ACCESS_ITEM);
     exit();
 }
@@ -109,7 +107,7 @@ $xoopsTpl->assign('require_private_index_message', $index_item_link_handler->pri
 $xoopsTpl->assign('next_url', 'confirm_edit.php');
 //retrieve index ids
 $xoonipsCheckedXID = $formdata->getValue('post', 'xoonipsCheckedXID', 's', false);
-if ($xoonipsCheckedXID !== null) {
+if (null !== $xoonipsCheckedXID) {
     $xoopsTpl->assign('xoonipsCheckedXID', $xoonipsCheckedXID);
 } else {
     $index_ids = array();
@@ -135,19 +133,19 @@ $xoopsTpl->assign('scrollY', isset($scrollY) ? (int) $scrollY : 0);
 $xoopsTpl->assign('invalid_doi_message', sprintf(_MD_XOONIPS_ITEM_DOI_INVALID_ID, XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN));
 
 $account = array();
-if (xnp_get_account($xnpsid, $uid, $account) == RES_OK) {
+if (RES_OK == xnp_get_account($xnpsid, $uid, $account)) {
     $iids = array();
-    if (xnp_get_private_item_id($xnpsid, $uid, $iids) == RES_OK) {
+    if (RES_OK == xnp_get_private_item_id($xnpsid, $uid, $iids)) {
         $xoopsTpl->assign('num_of_items_current', count($iids));
     }
     $xoopsTpl->assign('num_of_items_max', $account['item_number_limit']);
     $xoopsTpl->assign('storage_of_items_max', sprintf('%.02lf', $account['item_storage_limit'] / 1000 / 1000));
     $xoopsTpl->assign('storage_of_items_current', sprintf('%.02lf', filesize_private() / 1000 / 1000));
-    $xoopsTpl->assign('accept_charset', xnpGetMacSafariAcceptCharset());
+    $xoopsTpl->assign('accept_charset', '');
 }
 
 // If the page is made by POST, $_POST is made to save somewhere and page redirects.
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ('POST' == $_SERVER['REQUEST_METHOD']) {
     $post_id = uniqid('postid');
     $_SESSION['post_id'] = array($post_id => serialize($_POST));
     header('HTTP/1.0 303 See Other');

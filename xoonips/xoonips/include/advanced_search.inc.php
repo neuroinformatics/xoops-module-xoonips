@@ -68,6 +68,6 @@ foreach ($search_var as $val) {
 $xoopsTpl->assign('search_var', $escaped_search_var);
 $xoopsTpl->assign('search_blocks', $search_blocks);
 $xoopsTpl->assign('add_to_index_id', intval($add_to_index_id));
-$xoopsTpl->assign('accept_charset', xnpGetMacSafariAcceptCharset());
+$xoopsTpl->assign('accept_charset', '');
 
 $xoopsTpl->assign('jumpto_url', $textutil->html_special_chars($jumpto_url));

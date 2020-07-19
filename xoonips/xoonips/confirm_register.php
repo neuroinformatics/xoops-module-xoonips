@@ -58,7 +58,7 @@ $uid = $_SESSION['xoopsUserId'];
 
 //retrive module name to $modname
 $itemtypes = array();
-if (xnp_get_item_types($itemtypes) != RES_OK) {
+if (RES_OK != xnp_get_item_types($itemtypes)) {
     xoonips_error_exit(500);
 } else {
     foreach ($itemtypes as $i) {
@@ -79,14 +79,14 @@ require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
 
 //check required field
 $title = $formdata->getValue('post', 'title', 's', false);
-if ($title == '') {
+if ('' == $title) {
     //title is not filled
     $op = '';
     $system_message = '<span style="color: red;">'._MD_XOONIPS_ITEM_TITLE_REQUIRED.'</span>';
 }
 
 //check private_item_number_limit
-if (available_space_of_private_item() == 0) {
+if (0 == available_space_of_private_item()) {
     // warning, if not enough to store items
     $op = '';
     $system_message .= '<span style="color: red;">'._MD_XOONIPS_ITEM_WARNING_ITEM_NUMBER_LIMIT.'</span><br />';
@@ -104,12 +104,12 @@ $gids = array();
 foreach ($checked_xids as $xid) {
     $index = array();
     $result = xnp_get_index($xnpsid, (int) $xid, $index);
-    if ($result == RES_OK && $index['open_level'] == OL_GROUP_ONLY) {
+    if (RES_OK == $result && OL_GROUP_ONLY == $index['open_level']) {
         $gids[] = $index['owner_gid'];
     }
 }
 foreach (array_unique($gids) as $gid) {
-    if (available_space_of_group_item($gid) == 0) {
+    if (0 == available_space_of_group_item($gid)) {
         // warning, if not enough to store items
         $op = '';
         $xg_obj = &$xgroup_handler->getGroupObject($gid);
@@ -139,28 +139,28 @@ $group_index_flag = false; // true if group index is selected
 foreach ($checked_xids as $xid) {
     $index = array();
     $result = xnp_get_index($xnpsid, (int) $xid, $index);
-    if ($result == RES_OK) {
-        if ($index['open_level'] == OL_PRIVATE) {
+    if (RES_OK == $result) {
+        if (OL_PRIVATE == $index['open_level']) {
             $private_index_flag = true;
-        } elseif ($index['open_level'] == OL_GROUP_ONLY) {
+        } elseif (OL_GROUP_ONLY == $index['open_level']) {
             $group_index_flag = true;
-        } elseif ($index['open_level'] == OL_PUBLIC) {
+        } elseif (OL_PUBLIC == $index['open_level']) {
             $public_index_flag = true;
         }
     }
 }
-if ($item_type_id != ITID_INDEX && !$private_index_flag) {
+if (ITID_INDEX != $item_type_id && !$private_index_flag) {
     $op = '';
 }
 
 if (XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') {
     //check doi field format and length(basic information)
     $doi = $formdata->getValue('post', 'doi', 's', false);
-    if ($doi != '') {
+    if ('' != $doi) {
         $matches = array();
         $res = preg_match('/'.XNP_CONFIG_DOI_FIELD_PARAM_PATTERN.'/', $doi, $matches);
         if (strlen($doi) > XNP_CONFIG_DOI_FIELD_PARAM_MAXLEN
-            || $res == 0 || $matches[0] != $doi
+            || 0 == $res || $matches[0] != $doi
         ) {
             $op = '';
             $system_message .= "\n".'<br /><span style="color: red;">'
@@ -181,13 +181,10 @@ if (!$param_check_result) {
     $op = '';
 }
 
-if (isset($op) && $op == 'register') {
+if (isset($op) && 'register' == $op) {
     if (!$xoopsGTicket->check(true, 'register', false)) {
         die('ticket error');
     }
-
-    xnpEncodeMacSafariPost();
-    xnpEncodeMacSafariGet();
 
     $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
     $item_type = $item_type_handler->get($_POST['item_type_id']);
@@ -216,10 +213,10 @@ if (isset($op) && $op == 'register') {
         $index_item_links = &$index_item_link_handler->getObjects(new Criteria('item_id', $item_id));
         $certify_required = false;
         foreach ($index_item_links as $index_item_link) {
-            if ($index_item_link->get('certify_state') == CERTIFY_REQUIRED) {
+            if (CERTIFY_REQUIRED == $index_item_link->get('certify_state')) {
                 $index_id = $index_item_link->get('index_id');
                 $index = $index_handler->get($index_id);
-                if ($index->get('open_level') == OL_PUBLIC || $index->get('open_level') == OL_GROUP_ONLY) {
+                if (OL_PUBLIC == $index->get('open_level') || OL_GROUP_ONLY == $index->get('open_level')) {
                     $item_basic_handler->lockItemAndIndexes($item_id, $index_id);
                     $certify_required = true;
                 }
@@ -244,11 +241,7 @@ if (isset($op) && $op == 'register') {
     }
 
     //confirm
-    xnpEncodeMacSafariPost();
-    xnpEncodeMacSafariGet();
-
-    $check_xids = empty($xoonipsCheckedXID)
-        ? array() : explode(',', $xoonipsCheckedXID);
+    $check_xids = empty($xoonipsCheckedXID) ? array() : explode(',', $xoonipsCheckedXID);
 
     //prepare template
     $xoopsOption['template_main'] = 'xoonips_confirm_register.html';
@@ -278,7 +271,7 @@ if (isset($op) && $op == 'register') {
 
     $select_item_type = array();
     $itemtypes = array();
-    if (xnp_get_item_types($itemtypes) != RES_OK) {
+    if (RES_OK != xnp_get_item_types($itemtypes)) {
         redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item_types');
         exit();
     } else {

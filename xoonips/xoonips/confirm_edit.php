@@ -259,9 +259,6 @@ if ('update' == $op) {
     }
 
     //confirm
-    xnpEncodeMacSafariPost();
-    xnpEncodeMacSafariGet();
-
     $check_xids = array_unique(
         array_merge(
             array($formdata->getValue('post', 'add_to_index_id', 'i', false)),
