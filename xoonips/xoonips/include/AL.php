@@ -1102,10 +1102,11 @@ function xnp_criteria2str($cri)
     if (isset($cri['orders']) && count($cri['orders']) > 0) {
         $orders = array();
         foreach ($cri['orders'] as $o) {
-            if (isset($o['order']) && isset($o['name']) && $o['order'] == 0) {
-                $orders[] = '`'.addslashes($o['name']).'` ASC';
-            } elseif (isset($o['order']) && isset($o['name']) && $o['order'] == 1) {
-                $orders[] = '`'.addslashes($o['name']).'` DESC';
+            if (isset($o['name']) && isset($o['order']) && in_array($o['order'], array(0, 1))) {
+                if (strlen($o['name']) > 64 || !preg_match('/^[0-9a-z-+_]+$/i', $o['name'])) {
+                    xoonips_error_exit(500);
+                }
+                $orders[] = '`'.str_replace('`', '``', $o['name']).'` '.($o['order'] == 0 ? 'ASC' : 'DESC');
             }
         }
         if (count($orders) > 0) {

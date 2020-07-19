@@ -50,7 +50,6 @@ $textutil = &xoonips_getutility('text');
 $sess_orderby = isset($_SESSION['xoonips_order_by']) ? $_SESSION['xoonips_order_by'] : 'title';
 $sess_orderdir = isset($_SESSION['xoonips_order_dir']) ? $_SESSION['xoonips_order_dir'] : ASC;
 $request_vars = array(
-    'op' => array('s', ''),
     'page' => array('i', 1),
     'orderby' => array('s', $sess_orderby),
     'order_dir' => array('i', $sess_orderdir),
@@ -69,14 +68,20 @@ foreach ($request_vars as $key => $meta) {
     $$key = $formdata->getValue('both', $key, $type, false, $default);
 }
 
+// check 'orderby' value
+if (!in_array($orderby, array('title', 'doi', 'last_update_date', 'creation_date', 'publication_date'))) {
+    unset($_SESSION['xoonips_order_by']);
+    unset($_SESSION['xoonips_order_dir']);
+    xoonips_error_exit(400);
+}
+
 $_SESSION['xoonips_order_by'] = $orderby;
 $_SESSION['xoonips_order_dir'] = $order_dir;
 
 $itemtypes = array();
 $tmp = array();
 if (xnp_get_item_types($tmp) != RES_OK) {
-    redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item_types '.xnp_get_last_error_string());
-    exit();
+    xoonips_error_exit(500);
 } else {
     foreach ($tmp as $i) {
         $itemtypes[$i['item_type_id']] = $i;
@@ -113,19 +118,20 @@ if (isset($index_id)) {
         exit();
     }
 }
-$xoopsTpl->assign('add_button_visible', $index_handler->getPerm($index_id, @$_SESSION['xoopsUserId'], 'register_item'));
 
+$xoopsTpl->assign('add_button_visible', $index_handler->getPerm($index_id, @$_SESSION['xoopsUserId'], 'register_item'));
 $xoopsTpl->assign('title_page', _MD_XOONIPS_ITEM_LISTING_ITEM);
 $xoopsTpl->assign('order_by_label', _MD_XOONIPS_ITEM_ORDER_BY);
 $xoopsTpl->assign('item_count_label', _MD_XOONIPS_ITEM_NUM_OF_ITEM_PER_PAGE);
 //order_by_select: array( "variable name" => "name for view", ... )
 $xoopsTpl->assign(
-    'order_by_select', array(
-    'title' => _MD_XOONIPS_ITEM_TITLE_LABEL,
-    'doi' => _MD_XOONIPS_ITEM_DOI_LABEL,
-    'last_update_date' => _MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL,
-    'creation_date' => _MD_XOONIPS_ITEM_CREATION_DATE_LABEL,
-    'publication_date' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
+    'order_by_select',
+    array(
+        'title' => _MD_XOONIPS_ITEM_TITLE_LABEL,
+        'doi' => _MD_XOONIPS_ITEM_DOI_LABEL,
+        'last_update_date' => _MD_XOONIPS_ITEM_LAST_UPDATE_DATE_LABEL,
+        'creation_date' => _MD_XOONIPS_ITEM_CREATION_DATE_LABEL,
+        'publication_date' => _MD_XOONIPS_ITEM_PUBLICATION_DATE_LABEL,
     )
 );
 $xoopsTpl->assign('order_by', $textutil->html_special_chars($orderby));
@@ -163,8 +169,7 @@ if (isset($index_id)) {
     $ret = xnp_dump_item_id($xnpsid, array(), $iids);
     $num_of_items = count($iids);
     if ($ret != RES_OK) {
-        redirect_header(XOOPS_URL.'/', 3, 'ERROR '.xnp_get_last_error_string());
-        exit();
+        xoonips_error_exit(500);
     }
 }
 
@@ -213,8 +218,7 @@ if (isset($index_id)) {
         $index = array();
         $result = xnp_get_index($xnpsid, $p_xid, $index);
         if ($result != RES_OK) {
-            redirect_header(XOOPS_URL.'/', 3, 'ERROR '.xnp_get_last_error_string());
-            exit();
+            xoonips_error_exit(500);
         }
         $dirArray[] = $index;
     }
@@ -259,8 +263,7 @@ $xoopsTpl->assign('page_no_label', $textutil->html_special_chars($page_no_label)
 // ignore 'start' and 'rows' of criteria because already truncated by dump_item_id
 //if( xnp_get_items( $xnpsid, $iids, array( 'orders' => $cri['orders'] ), $items ) != RES_OK ){
 if (xnp_get_items($xnpsid, $iids, $cri, $items) != RES_OK) {
-    redirect_header(XOOPS_URL.'/', 3, 'ERROR '.xnp_get_last_error_string());
-    exit();
+    xoonips_error_exit(500);
 }
 
 $item_htmls = array();
@@ -296,21 +299,6 @@ if ($print) {
     $xoopsTpl->assign('meta_copyright', $myxoopsConfigMetaFooter['meta_copyright']);
     $xoopsTpl->assign('meta_author', $myxoopsConfigMetaFooter['meta_author']);
     $xoopsTpl->assign('sitename', $myxoopsConfig['sitename']);
-
-    if ($op == 'quicksearch') {
-        $search_itemtypes = array('all' => _MB_XOONIPS_ITEM_ALL_LABEL, 'basic' => _MB_XOONIPS_ITEM_TITLE_AND_KEYWORD_LABEL);
-
-        $itemtypes = array();
-        if (xnp_get_item_types($itemtypes) == RES_OK) {
-            foreach ($itemtypes as $itemtype) {
-                if ($itemtype['item_type_id'] > 2) {
-                    $search_itemtypes[$itemtype['name']] = $itemtype['display_name'];
-                }
-            }
-        }
-        $xoopsTpl->assign('quick_search_keyword', $keyword);
-        $xoopsTpl->assign('quick_search_itemtype', $textutil->html_special_chars($search_itemtypes[$search_itemtype]));
-    }
 
     $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
     $xoopsTpl->assign('printer_friendly_header', $xconfig_handler->getValue('printer_friendly_header'));
