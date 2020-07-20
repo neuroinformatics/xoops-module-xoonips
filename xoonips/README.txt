@@ -37,8 +37,7 @@ Directories Layout:
   |   |- XooNIps-III     Nice xoonips theme
   |   -- xoonips         Simple xoonips theme
   |- contrib             Information of the third vendor provided modules and 
-  |                      libraries (see contrib/LIST.txt for more detail)
-  -- preload             Sample preloads for XOOPS Cube Legacy
+                         libraries (see contrib/LIST.txt for more detail)
 
 Install:
  1) put 'xoonips' directory to the XOOPS modules directory.
