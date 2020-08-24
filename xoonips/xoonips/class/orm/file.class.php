@@ -168,14 +168,14 @@ class XooNIpsOrmFileHandler extends XooNIpsTableObjectHandler
     /**
      * delete a metadata of file and remove a file.
      *
-     * @param XooNIpsOrmFile $file  file to delete
+     * @param XooNIpsOrmFile $obj   file to delete
      * @param bool           $force force operation
      *
      * @return bool false if failure
      */
     public function delete(&$obj, $force = false)
     {
-        if (parent::delete($file)) {
+        if (parent::delete($obj)) {
             return true;
         }
 
