@@ -3714,8 +3714,8 @@ function xnpListIndexTree($mode = XOONIPS_LISTINDEX_MODE_ALL, $assoc_array_mode 
         break;
     }
 
-    $sql = 'SELECT tx.`index_id`, tx.parent_index_id, tx.uid, tx.gid, tx.open_level, tx.sort_number, ti.item_type_id, tt.title'.
-        ' FROM $item_title AS tt, '.$index.' AS `tx`'.
+    $sql = 'SELECT `tx`.`index_id`, `tx`.`parent_index_id`, `tx`.`uid`, `tx`.`gid`, `tx`.`open_level`, `tx`.`sort_number`, `ti`.`item_type_id`, `tt`.`title`'.
+        ' FROM '.$item_title.' AS tt, '.$index.' AS `tx`'.
         ' LEFT JOIN '.$item_basic.' AS `ti` ON `tx`.`index_id`=`ti`.`item_id`'.
         ' WHERE ('.$where_level.')'.
         ' AND `tt`.`title_id`='.DEFAULT_ORDER_TITLE_OFFSET.' AND `tt`.`item_id`=`ti`.`item_id`'.
