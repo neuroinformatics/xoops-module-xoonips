@@ -69,9 +69,9 @@ class XooNIpsOrmCvitaesHandler extends XooNIpsTableObjectHandler
             // set cvitae_order
             $uid = $obj->get('uid');
             $criteria = new Criteria('uid', $uid);
-            $tmp = &$this->getObjects($criteria, false, 'MAX(`cvitae_order`) AS `max`');
-            if (is_object($tmp)) {
-                $max = $tmp->getExtraVar('max');
+            $objs = &$this->getObjects($criteria, false, 'MAX(`cvitae_order`) AS `max`');
+            if (isset($objs[0])) {
+                $max = $objs[0]->getExtraVar('max');
             } else {
                 $max = 0;
             }
