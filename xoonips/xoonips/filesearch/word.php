@@ -72,7 +72,7 @@ class XooNIpsFileSearchPluginWORD extends XooNIpsFileSearchPlugin
         if ($this->use_antiword) {
             // for antiword
             putenv('ANTIWORDHOME='.$this->antiwordhome);
-            $cmd = sprintf('antiword -t -m UTF-8.txt %s', $filename);
+            $cmd = sprintf('antiword -t -m UTF-8.txt %s', escapeshellarg($filename));
             $this->handle = @popen($cmd, 'rb');
         } else {
             // for wv
