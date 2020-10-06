@@ -81,7 +81,7 @@ if ('' != $op && !preg_match('/\A[a-z_]+\z/i', $op)) {
 if (!in_array($checkbox, array('on', 'off'))) {
     xoonips_error_exit(400);
 }
-if (!in_array($submit_url, array('', 'itemselect.php')) && !preg_match('/\A'.preg_quote(XOONIPS_URL.'/', '/').'[0-9a-z_]+\.php\z/', $submit_url)) {
+if (!in_array($submit_url, array('', 'itemselect.php', 'register.php')) && !preg_match('/\A'.preg_quote(XOONIPS_URL.'/', '/').'[0-9a-z_]+\.php\z/', $submit_url)) {
     xoonips_error_exit(400);
 }
 if (!in_array($order_by, array('title', 'doi', 'last_update_date', 'creation_date', 'publication_date'))) {
