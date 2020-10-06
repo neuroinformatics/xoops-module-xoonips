@@ -162,7 +162,7 @@ function xnppresentationGetDownloadConfirmationBlock($item_id, $download_file_id
 {
     $detail = xnppresentationGetDetailInformation($item_id);
 
-    return xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $detail['attachment_dl_notify'], true, $detail['use_cc'], $detail['rights']);
+    return xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $detail['attachment_dl_notify'], true, $detail['use_cc'], $detail['cc_commercial_use'], $detail['cc_modification'], $detail['rights']);
 }
 
 function xnppresentationGetDownloadConfirmationRequired($item_id)
@@ -682,7 +682,7 @@ function xnppresentationGetLicenseRequired($item_id)
     }
     $detail = $xoopsDB->fetchArray($result);
 
-    return isset($detail['rights']) && $detail['rights'] != '';
+    return isset($detail['rights']) ? array($detail['rights'], $detail['use_cc'], $detail['cc_commercial_use'], $detail['cc_modification']) : array('', 0, 0, 0);
 }
 
 function xnppresentationGetLicenseStatement($item_id)
@@ -783,19 +783,23 @@ function xnppresentationGetModifiedFields($item_id)
         $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', true);
         $rightsEncText = $formdata->getValue('post', 'rightsEncText', 's', true);
         if ($rightsUseCC !== null) {
-            if ($rightsUseCC == 0) {
-                if (array_key_exists('rights', $detail) && $rightsEncText != null && $rightsEncText != $detail['rights']) {
-                    array_push($ret, _MD_XOONIPS_ITEM_RIGHTS_LABEL);
-                }
-            } elseif ($rightsUseCC == 1) {
-                foreach (array('rightsCCCommercialUse' => 'cc_commercial_use', 'rightsCCModification' => 'cc_modification') as $k => $v) {
-                    $tmp = $formdata->getValue('post', $k, 'i', true);
-                    if (!array_key_exists($v, $detail) || $tmp === null) {
-                        continue;
-                    }
-                    if ($tmp != $detail[$v]) {
+            if ($rightsUseCC != $detail['use_cc']) {
+                array_push($ret, _MD_XOONIPS_ITEM_RIGHTS_LABEL);
+            } else {
+                if ($rightsUseCC == 0) {
+                    if (array_key_exists('rights', $detail) && $rightsEncText != null && $rightsEncText != $detail['rights']) {
                         array_push($ret, _MD_XOONIPS_ITEM_RIGHTS_LABEL);
-                        break;
+                    }
+                } elseif ($rightsUseCC == 1) {
+                    foreach (array('rightsCCCommercialUse' => 'cc_commercial_use', 'rightsCCModification' => 'cc_modification') as $k => $v) {
+                        $tmp = $formdata->getValue('post', $k, 'i', true);
+                        if (!array_key_exists($v, $detail) || $tmp === null) {
+                            continue;
+                        }
+                        if ($tmp != $detail[$v]) {
+                            array_push($ret, _MD_XOONIPS_ITEM_RIGHTS_LABEL);
+                            break;
+                        }
                     }
                 }
             }
@@ -926,7 +930,7 @@ function xnppresentationGetMetadata($prefix, $item_id)
         } elseif ($detail['cc_modification'] == 1) {
             $cond .= '-sa';
         }
-        $detail['rights_cc_url'] = sprintf('http://creativecommons.org/licenses/%s/2.5/', $cond);
+        $detail['rights_cc_url'] = sprintf('http://creativecommons.org/licenses/%s/4.0/', $cond);
     }
     // related to
     $related_to_handler = &xoonips_getormhandler('xoonips', 'related_to');

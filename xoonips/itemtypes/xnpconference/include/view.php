@@ -165,7 +165,7 @@ function xnpconferenceGetDownloadConfirmationBlock($item_id, $download_file_id)
 {
     $detail = xnpconferenceGetDetailInformation($item_id);
 
-    return xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $detail['attachment_dl_notify'], false, false, false);
+    return xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $detail['attachment_dl_notify'], false, false, false, false, false);
 }
 
 function xnpconferenceGetDownloadConfirmationRequired($item_id)
@@ -788,7 +788,7 @@ function xnpconferenceGetLicenseStatement($item_id)
     }
     $detail = $xoopsDB->fetchArray($result);
 
-    return isset($detail['license']) ? $detail['license'] : '';
+    return array(isset($detail['license']) ? $detail['license'] : '', 0, 0, 0);
 }
 
 /**

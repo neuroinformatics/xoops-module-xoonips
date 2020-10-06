@@ -158,7 +158,7 @@ function xnpbookGetDownloadConfirmationBlock($item_id, $download_file_id)
 {
     $detail = xnpbookGetDetailInformation($item_id);
 
-    return xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $detail['attachment_dl_notify']['value'], false, false, false);
+    return xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $detail['attachment_dl_notify']['value'], false, false, false, false, false);
 }
 
 function xnpbookGetDownloadConfirmationRequired($item_id)

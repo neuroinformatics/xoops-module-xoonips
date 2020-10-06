@@ -296,7 +296,7 @@ EOT;
                 $func_export = $itemtypes[$item_basic['item_type_id']]['name'].'ExportItem';
                 require_once XOOPS_ROOT_PATH.'/modules/'.$itemtypes[$item_basic['item_type_id']]['viewphp'];
                 $license_required = function_exists($func_license_required) ? $func_license_required($i) : false;
-                list($license, $use_cc) = function_exists($func_license) ? $func_license($i) : array('', false);
+                list($rights, $use_cc, $cc_commercial_use, $cc_modification) = function_exists($func_license) ? $func_license($i) : array('', false, false, false);
                 $html = function_exists($func_html) ? $func_html($item_basic) : '';
                 if (!function_exists($func_export) || !export_item_enable($i)) {
                     $key = 'not_export';
@@ -310,7 +310,7 @@ EOT;
                 }
                 $items[$key][] = array('item_id' => $i,
                                         //'license_required' => $license_required,
-                                        'license' => ($use_cc ? $license : $textutil->html_special_chars($license)),
+                                        'license' => ($use_cc ? xoonips_get_cc_license($cc_commercial_use, $cc_modification, 4.0, 'INTERNATIONAL') : $textutil->html_special_chars($rights)),
                                         'use_cc' => $use_cc,
                                         'detail_html' => $html,
                                         //'export_flag' => function_exists( $func_export )

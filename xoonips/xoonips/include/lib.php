@@ -612,9 +612,11 @@ function xnpGetAttachmentDetailBlock($item_id, $name)
  * @param attachment_dl_notify 0:don't notify  1:notify(need download-notification agreeemnt)
  * @param use_license boolean license(need license agreement)
  * @param use_cc use creative commons license
+ * @param cc_commercial_use flag for commercial use of creative commons license
+ * @param cc_modification flag for modificaiton of creative commons license
  * @param rights license text(use_cc=0) or license html(use_cc=1)
  */
-function xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $attachment_dl_notify, $use_license, $use_cc, $rights)
+function xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $attachment_dl_notify, $use_license, $use_cc, $cc_commercial_use, $cc_modification, $rights)
 {
     $textutil = &xoonips_getutility('text');
     if (!$attachment_dl_notify && !$use_license && !$download_file_id) {
@@ -657,7 +659,7 @@ function xnpGetDownloadConfirmationBlock($item_id, $download_file_id, $attachmen
     $tpl->assign('attachment_dl_notify', $attachment_dl_notify);
     $tpl->assign('download_file_id', $download_file_id);
     $tpl->assign('use_cc', $use_cc);
-    $tpl->assign('rights', $use_cc ? $rights : $textutil->html_special_chars($rights));
+    $tpl->assign('rights', $use_cc ? xoonips_get_cc_license($cc_commercial_use, $cc_modification, 4.0, 'INTERNATIONAL') : $textutil->html_special_chars($rights));
 
     $DownloadFileName = xoonips_get_download_filename($fileID);
     $download = &xoonips_getutility('download');
@@ -3056,7 +3058,7 @@ function xnpGetRightsDetailBlock($item_id, $use_cc = 1, $text = '', $cc_commerci
         return
         array(
         'name' => _MD_XOONIPS_ITEM_TEXTFILE_LABEL,
-        'value' => "$text",
+        'value' => xoonips_get_cc_license($cc_commercial_use, $cc_modification, 4.0, 'INTERNATIONAL'),
         'hidden' => $hidden, );
     } else {
         return
@@ -3076,7 +3078,6 @@ function xnpGetRightsEditBlock($item_id, $use_cc = 1, $text = '', $cc_commercial
     $formdata = &xoonips_getutility('formdata');
     $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
     if (isset($rightsUseCC)) { // There is initial value specification by POST.
-        $text = $formdata->getValue('post', 'rightsEncText', 's', false, '');
         $use_cc = $rightsUseCC;
         $cc_commercial_use = $formdata->getValue('post', 'rightsCCCommercialUse', 'i', false, 0);
         $cc_modification = $formdata->getValue('post', 'rightsCCModification', 'i', false, 0);
@@ -3090,16 +3091,12 @@ function xnpGetRightsEditBlock($item_id, $use_cc = 1, $text = '', $cc_commercial
     $check_mod = array('', '', '');
     $check_mod[$cc_modification] = "checked='checked'";
 
-    if ($use_cc) {
-        $encText = '';
+    $encText = $textutil->html_special_chars($text);
+    $htmlShowText = nl2br($textutil->html_special_chars(xnpHeadText($text)));
+    if ('' == $htmlShowText) {
         $htmlShowText = '&nbsp;'; // div.firstChild is prevented being set to null.
-    } else {
-        $encText = $textutil->html_special_chars($text);
-        $htmlShowText = nl2br($textutil->html_special_chars(xnpHeadText($text)));
-        if ('' == $htmlShowText) {
-            $htmlShowText = '&nbsp;'; // div.firstChild is prevented being set to null.
-        }
     }
+
     $html = "
     <table>
      <tr>
@@ -3143,19 +3140,19 @@ function xnpGetRightsEditBlock($item_id, $use_cc = 1, $text = '', $cc_commercial
 
     return array('name' => _MD_XOONIPS_ITEM_ATTACHMENT_LABEL, 'value' => $html);
 }
-function xnpGetRightsPrinterFriendlyBlock($item_id, $use_cc, $text)
+function xnpGetRightsPrinterFriendlyBlock($item_id, $use_cc, $rights, $cc_commercial_use, $cc_modification)
 {
     $textutil = &xoonips_getutility('text');
     if ($use_cc) {
         return
         array(
         'name' => _MD_XOONIPS_ITEM_TEXTFILE_LABEL,
-        'value' => "$text", );
+        'value' => xoonips_get_cc_license($cc_commercial_use, $cc_modification, 4.0, 'INTERNATIONAL'), );
     } else {
         return
         array(
         'name' => _MD_XOONIPS_ITEM_TEXTFILE_LABEL,
-        'value' => nl2br($textutil->html_special_chars($text)), );
+        'value' => nl2br($textutil->html_special_chars($rights)), );
     }
 }
 
@@ -3168,13 +3165,11 @@ function xnpGetRightsConfirmBlock($item_id, $maxlen = 65535)
     $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false, 0);
     $rightsCCCommercialUse = $formdata->getValue('post', 'rightsCCCommercialUse', 'i', false, 0);
     $rightsCCModification = $formdata->getValue('post', 'rightsCCModification', 'i', false, 0);
+    $text = $formdata->getValue('post', 'rightsEncText', 's', false, '');
+    list($within, $without) = xnpTrimString($text, $maxlen, _CHARSET);
     if (1 == $rightsUseCC) {
         $htmlText = xoonips_get_cc_license($rightsCCCommercialUse, $rightsCCModification, 4.0, 'INTERNATIONAL');
-        $within = $htmlText;
-        $without = '';
     } else {
-        $text = $formdata->getValue('post', 'rightsEncText', 's', false, '');
-        list($within, $without) = xnpTrimString($text, $maxlen, _CHARSET);
         $htmlText = nl2br(xnpWithinWithoutHtml($within, $without));
     }
 
