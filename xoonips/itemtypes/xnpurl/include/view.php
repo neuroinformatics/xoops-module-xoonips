@@ -197,6 +197,7 @@ function xnpurlGetRegisterBlock()
 function xnpurlGetEditBlock($item_id)
 {
     global $xoopsDB;
+    $textutil = &xoonips_getutility('text');
     $formdata = &xoonips_getutility('formdata');
 
     // retrieve blocks of BasicInformation / Preview / index block
@@ -209,7 +210,7 @@ function xnpurlGetEditBlock($item_id)
     $url = $formdata->getValue('post', 'url', 's', false);
     if (isset($url)) {
         $detail = array(
-        'url' => $url,
+            'url' => $textutil->html_special_chars($url),
         );
     } elseif (!empty($item_id)) {
         $detail = xnpurlGetDetailInformation($item_id);
