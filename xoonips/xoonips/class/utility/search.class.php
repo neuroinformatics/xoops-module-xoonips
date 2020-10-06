@@ -263,9 +263,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
         $cnt = count($stack);
         if ($cnt == 0) {
             // no search query found
-            $criteria = new CriteriaCompo();
-
-            return $criteria;
+            return $this->_make_force_unmatch_criteria($field, $prefix);
         } elseif ($cnt > 1) {
             // fatal error : invalid RPN data found
             return $this->_make_force_unmatch_criteria($field, $prefix);
@@ -335,9 +333,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
         $cnt = count($stack);
         if ($cnt == 0) {
             // no search query found
-            $criteria = new CriteriaCompo();
-
-            return $criteria;
+            return $this->_make_force_unmatch_criteria($field, $prefix);
         } elseif ($cnt > 1) {
             // fatal error : invalid RPN data found
             return $this->_make_force_unmatch_criteria($field, $prefix);
