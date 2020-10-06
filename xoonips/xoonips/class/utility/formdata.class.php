@@ -116,7 +116,7 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
 
             return null;
         }
-        if (get_magic_quotes_gpc()) {
+        if (version_compare(phpversion(), '5.4.0', '<') && get_magic_quotes_gpc()) {
             $val = array_map('stripslashes', $val);
         }
         if (isset($val['error']) && $val['error'] != 0) {
@@ -209,7 +209,7 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
                 $this->_form_error(__LINE__);
             }
         } else {
-            if (get_magic_quotes_gpc()) {
+            if (version_compare(phpversion(), '5.4.0', '<') && get_magic_quotes_gpc()) {
                 $val = is_array($val) ? array_map('addslashes', $val) : addslashes($val);
             }
             if ($method == 'get') {
@@ -314,7 +314,7 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
         if (is_null($val)) {
             return null;
         }
-        if (get_magic_quotes_gpc()) {
+        if (version_compare(phpversion(), '5.4.0', '<') && get_magic_quotes_gpc()) {
             $val = stripslashes($val);
         }
         switch ($type) {

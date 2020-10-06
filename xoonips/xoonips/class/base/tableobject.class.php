@@ -365,7 +365,7 @@ class XooNIpsTableObject extends XoopsObject
      */
     public function _stripSlashesGPC($value)
     {
-        return get_magic_quotes_gpc() ? stripslashes($value) : $value;
+        return (version_compare(phpversion(), '5.4.0', '<') && get_magic_quotes_gpc()) ? stripslashes($value) : $value;
     }
 
     /**
