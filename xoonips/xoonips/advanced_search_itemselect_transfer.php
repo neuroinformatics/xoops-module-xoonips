@@ -40,7 +40,7 @@ require XOOPS_ROOT_PATH.'/header.php';
 require_once 'include/extra_param.inc.php';
 $formdata = &xoonips_getutility('formdata');
 $textutil = &xoonips_getutility('text');
-$xoopsTpl->assign('extra_param', $textutil->html_special_chars(serialize(xoonips_extra_param_restore())));
+$xoopsTpl->assign('extra_param', $textutil->html_special_chars(json_encode(xoonips_extra_param_restore())));
 $xoopsTpl->assign('submit_url', $formdata->getValue('post', 'submit_url', 's', false));
 $xoopsTpl->assign('selected_original', $formdata->getValueArray('post', 'selected_original', 'i', false));
 require 'include/advanced_search.inc.php';

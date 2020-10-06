@@ -486,7 +486,7 @@ foreach ($search_var as $val) {
 }
 $xoopsTpl->assign('search_var', $escaped_search_var);
 $xoopsTpl->assign('isKHTML', (bool) (stristr($_SERVER['HTTP_USER_AGENT'], 'khtml')));
-$xoopsTpl->assign('extra_param', $textutil->html_special_chars(serialize(xoonips_extra_param_restore())));
+$xoopsTpl->assign('extra_param', $textutil->html_special_chars(json_encode(xoonips_extra_param_restore())));
 
 if (isset($pankuzu)) {
     $xoopsTpl->assign('pankuzu', $pankuzu);
