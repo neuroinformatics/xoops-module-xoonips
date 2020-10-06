@@ -41,18 +41,7 @@ $xnpsid = $_SESSION['XNPSID'];
 
 function image_error($err)
 {
-    switch ($err) {
-    case 403:
-        header('HTTP/1.0 403 Forbidden');
-        break;
-    case 404:
-        header('HTTP/1.0 404 Not Found');
-        break;
-    case 500:
-        header('HTTP/1.0 500 Internal Server Error');
-        break;
-    }
-    exit();
+    xoonips_error_exit($err);
 }
 
 // -> fileID

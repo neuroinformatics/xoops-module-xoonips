@@ -318,6 +318,9 @@ function xoonips_error_exit($code)
     $error = $status[$code];
     header($_SERVER['SERVER_PROTOCOL'].' '.$error);
     echo $error;
+    if (XOONIPS_DEBUG_MODE) {
+        error_log(var_export(debug_backtrace(), true));
+    }
     exit();
 }
 
