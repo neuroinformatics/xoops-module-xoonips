@@ -10,8 +10,9 @@ Change Logs:
   - Fixed bug for item deleting with attachment files.
   - Fixed bug for item registraion with attachment files.
   - Fixed bug for response of OAI-PMH metadata harvest requests.
-  - Fixed bug for Binder item registration.
+  - Fixed bug for Binder item registration and edit.
   - Fixed bug for keyword search with one character.
+  - Fixed bug for transfering user items.
   - Fixed cumulative minor bugs.
 * Compatibility enhancements
   - Support PHP 7.4
