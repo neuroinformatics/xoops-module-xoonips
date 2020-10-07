@@ -1,11 +1,10 @@
-xoonips 3.49 : Neuroinformatics Base Platform System 
+xoonips 3.50 : Base Platform System 
 
-Copyright (C) 2005-2020 RIKEN, Japan All rights reserved.
-
-Managed by Neuroinformatics Unit, RIKEN Center for Brain Science
+Copyright (C) 2005-2020 RIKEN Japan,
+Copyright (C) 2020 XooNIps Project, All rights reserved.
 
 DESCRIPTION:
-  XooNIps is Neuroinformatics Base Platform System based on the XOOPS.
+  XooNIps is Base Platform System based on the XOOPS.
 
 LICENSE:
   This software was provided under GPL (The GNU General Public License)

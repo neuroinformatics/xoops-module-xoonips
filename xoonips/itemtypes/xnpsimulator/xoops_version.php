@@ -30,10 +30,10 @@
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
 $modversion['name'] = _MI_XNPSIMULATOR_NAME;
-$modversion['version'] = 3.49;
+$modversion['version'] = 3.50;
 $modversion['description'] = _MI_XNPSIMULATOR_DESC;
-$modversion['credits'] = 'RIKEN, Japan (http://www.riken.jp/)';
-$modversion['author'] = 'The XooNIps Project (http://sourceforge.jp/projects/xoonips/)';
+$modversion['credits'] = 'The XooNIps Project (https://xoonips.osdn.jp/)';
+$modversion['author'] = 'XooNIps developers';
 $modversion['license'] = 'GPL see LICENSE';
 $modversion['official'] = 0;
 $modversion['image'] = 'images/xnpsimulator_slogo.png';
