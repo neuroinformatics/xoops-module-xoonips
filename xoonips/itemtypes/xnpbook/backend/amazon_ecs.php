@@ -29,7 +29,6 @@ if (!defined('XOONIPS_PATH')) {
 }
 
 // class file
-require_once XOONIPS_PATH.'/class/base/JSON.php';
 require_once dirname(__DIR__).'/class/amazon.class.php';
 
 // change internal encoding to UTF-8
@@ -141,8 +140,7 @@ if (!$is_error) {
 }
 
 // json
-$json = new Services_JSON();
-$encode = $json->encode($data);
+$encode = json_encode($data);
 
 // output
 header('Content-Type: text/javascript+json; charset=utf-8');

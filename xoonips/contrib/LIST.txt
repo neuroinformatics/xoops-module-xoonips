@@ -21,18 +21,7 @@ The List of the third vendor provided modules and libraries.
   h) --
 
 
-2. Service_JSON
- a) Services_JSON - Converts to and from JSON format
- b) 2005 Michal Migurski
- c) http://pear.php.net/pepr/pepr-proposal-show.php?id=198
- d) Revised BSD - JSON/LICENSE
- e) http://pear.php.net/pepr/pepr-proposal-show.php?id=198
- f) JSON.tar.gz - JSON.php
- g) xoonips/class/base/JSON.php
- h) --
- 
-
-3. Graph Drawing Class 2
+2. Graph Drawing Class 2
  a) Graph Class 1.6.4 - PHP Class to draw line, point, bar, and area graphs,
     including numeric x-axis and double y-axis.
  b) Copyright (C) 2000  Herman Veluwenkamp
@@ -47,7 +36,7 @@ The List of the third vendor provided modules and libraries.
     - hack to avoid some weird rounding errors in graph::find_range().
 
 
-4. Free UCS Outline Fonts
+3. Free UCS Outline Fonts
   a) Free UCS Outline Fonts 20060126 - FreeMono, FreeSans, and FreeSerif
   b) -- see freefont-ttf/README
   c) http://savannah.nongnu.org/projects/freefont/
@@ -58,7 +47,7 @@ The List of the third vendor provided modules and libraries.
   h) --
 
 
-5. VL Gothic font family
+4. VL Gothic font family
   a) VL Gothic font family 20070328
   b) Copyright (c) 1990-2003 Wada Laboratory, the University of Tokyo.
      Copyright (c) 2003-2004 Electronic Font Open Laboratory (/efont/).
@@ -73,7 +62,7 @@ The List of the third vendor provided modules and libraries.
   h) --
 
 
-6. patTemplate
+5. patTemplate
   a) patTemplate 2.4 - powerful template engine
   b) Copyright (c) 2001 by Stephan Schmidt
   c) schst AT php-tools.de
@@ -84,7 +73,7 @@ The List of the third vendor provided modules and libraries.
   h) fixed many Notice warnings for the recent PHP versions.
 
 
-7. Snoopy
+6. Snoopy
   a) Snoopy 1.2.4 - the web client class for PHP
   b) Copyright(c) 1999-2008 New Digital Group, all rights reserved
   c) http://sourceforge.net/projects/snoopy/
@@ -97,7 +86,7 @@ The List of the third vendor provided modules and libraries.
      - added automatically proxy configuration.
 
 
-8. GIJOE's Ticket Class
+7. GIJOE's Ticket Class
   a) GIJOE's Ticket Class 2
   b) GIJ=CHECKMATE PEAK Corp. http://www.peak.ne.jp/
   c) gij AT peak.ne.jp
@@ -108,7 +97,7 @@ The List of the third vendor provided modules and libraries.
   h) --
 
 
-9. Zip file creation class
+8. Zip file creation class
   a) phpMyAdmin 2.11.6 (zip.lib.php)
   b) Copyright (C) 1998-2000 Tobias Ratschiller
      Copyright (C) 2001-2008 Marc Delisle, Olivier Muller, Robin Johnson,
@@ -122,14 +111,3 @@ The List of the third vendor provided modules and libraries.
   h) - renamed class name from 'zipfile' to 'XooNIpsZip'.
      - modified for runtime memory saving.
 
-10. PHP backward compatibility functions for hash_hmac().
-  a) PHP Compat Hash (2009/8/13)
-  b) 2004-2007 Aidan Lister, Arpad Ray
-  c) http://www.revulo.com/blog/20090811.html#p01
-     http://pear.php.net/package/PHP_Compat
-  d) PHP License - PHP_Compat/LICENSE
-  e) http://www.revulo.com/blog/20090811.html#p01
-     http://pear.php.net/package/PHP_Compat
-  f) PHP_Compat_Hash.tgz
-  g) xnpbook/include/compat/*.php
-  h) --

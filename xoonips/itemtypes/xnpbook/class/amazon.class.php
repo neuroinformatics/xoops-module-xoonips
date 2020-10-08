@@ -176,10 +176,6 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
      */
     public function create_url($url, $arguments)
     {
-        // load 'hash_hmac()' compatibility function for PHP 4
-        if (!function_exists('hash_hmac')) {
-            require_once dirname(__DIR__).'/include/compat/hash_hmac.php';
-        }
         // create sigunature
         sort($arguments);
         $sign_param = implode('&', $arguments);

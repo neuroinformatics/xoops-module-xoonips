@@ -69,8 +69,7 @@ $data = array(
 );
 
 // json
-$json = new Services_JSON();
-$encode = $json->encode($data);
+$encode = json_encode($data);
 
 // output
 header('Content-Type: text/javascript+json; charset=utf-8');
