@@ -97,6 +97,7 @@ function xoops_module_update_xnpbook($xoopsMod, $oldversion)
                 }
             }
         }
+        // no break
     case 110:
         // 110->111: author varchar -> text
         $result = $xoopsDB->query('ALTER TABLE '.$xoopsDB->prefix('xnpbook_item_detail').' CHANGE COLUMN author author TEXT NOT NULL');
@@ -105,6 +106,7 @@ function xoops_module_update_xnpbook($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 111:
     case 200:
     case 300:
@@ -114,12 +116,14 @@ function xoops_module_update_xnpbook($xoopsMod, $oldversion)
         if (!$result) {
             echo 'ERROR: line='.__LINE__." sql=$sql ".$xoopsDB->error();
         }
+        // no break
     case 311:
         $sql = 'ALTER TABLE '.$xoopsDB->prefix('xnpbook_item_detail').' ADD COLUMN attachment_dl_notify int(1) unsigned default 0 ';
         $result = $xoopsDB->query($sql);
         if (!$result) {
             echo 'ERROR: line='.__LINE__." sql=$sql ".$xoopsDB->error();
         }
+        // no break
     case 330:
     case 331:
     case 332:
@@ -167,7 +171,7 @@ function xoops_module_update_xnpbook($xoopsMod, $oldversion)
                 $sql = 'insert into '.$xoopsDB->prefix($table_author);
                 $sql .= '('.$key_name.',author,author_order) values (';
                 $sql .= $id.','.$xoopsDB->quoteString($author).','.$i.')';
-                if ($xoopsDB->queryF($sql) == false) {
+                if (false == $xoopsDB->queryF($sql)) {
                     echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
                     return false;
@@ -182,6 +186,7 @@ function xoops_module_update_xnpbook($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 340:
     case 341:
     case 342:
@@ -197,6 +202,7 @@ function xoops_module_update_xnpbook($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 347:
     default:
     }

@@ -114,6 +114,7 @@ class XooNIpsGraphData
      * set data color.
      *
      * @parem string $color data color
+     *
      * @param string $color
      */
     public function setColor($color)
@@ -135,6 +136,7 @@ class XooNIpsGraphData
      * set shadow color.
      *
      * @parem string $color shadow color, 'none' means don't draw.
+     *
      * @param string $color
      */
     public function setShadowColor($color)
@@ -173,7 +175,7 @@ class XooNIpsGraphData
     public function _calcRange()
     {
         $cnt = count($this->values);
-        if ($cnt == 0) {
+        if (0 == $cnt) {
             return;
         }
         $this->cache_max = $this->cache_min = $this->values[0];
@@ -440,7 +442,7 @@ class XooNIpsGraphDataBar extends XooNIpsGraphData
      *   <1 bars won't touch.
      *    1 is full width.
      *   >1 means bars will overlap.
-     * @param double $size
+     * @param float $size
      */
     public function setBarSize($size)
     {
@@ -1020,7 +1022,7 @@ class XooNIpsGraph
      */
     public function setPreferedYAxisRange()
     {
-        if (count($this->data) == 0) {
+        if (0 == count($this->data)) {
             return;
         }
         $axis = array('left', 'right');
@@ -1043,7 +1045,7 @@ class XooNIpsGraph
         $gridlines = $this->graph->parameter['y_axis_gridlines'];
         foreach ($axis as $ax) {
             if ($my_min[$ax] == $my_max[$ax]) {
-                if ($my_max[$ax] == 0) {
+                if (0 == $my_max[$ax]) {
                     $factor = 1;
                 } else {
                     $factor = pow(10, log10(abs($my_max[$ax]) - 1));
@@ -1053,8 +1055,8 @@ class XooNIpsGraph
                 $my_diff = $my_max[$ax] - $my_min[$ax];
                 $ten_per = $my_diff / 10;
                 $my_max[$ax] = $ten_per * 11;
-                if ($gridlines != 0) {
-                    if ($this->graph->parameter['y_decimal_'.$ax] == 0) {
+                if (0 != $gridlines) {
+                    if (0 == $this->graph->parameter['y_decimal_'.$ax]) {
                         $fix = ceil($my_diff / ($gridlines - 1));
                         $total = $fix * ($gridlines - 1);
                         $my_min[$ax] = floor($my_min[$ax]);
@@ -1074,7 +1076,7 @@ class XooNIpsGraph
      */
     public function _initLibraryParams()
     {
-        if (count($this->data) == 0) {
+        if (0 == count($this->data)) {
             $this->error(__FILE__, __LINE__);
         }
         if (!isset($this->graph->x_data)) {
@@ -1095,7 +1097,7 @@ class XooNIpsGraph
             }
         }
         if ($is_numeric_x) {
-            if ($this->graph->parameter['x_axis_gridlines'] == 'auto') {
+            if ('auto' == $this->graph->parameter['x_axis_gridlines']) {
                 $x_min = $this->axis['bottom']->min_value;
                 $x_max = $this->axis['bottom']->max_value;
                 $x_range = $this->graph->find_range($this->graph->x_data, $x_min, $x_max, $this->axis['bottom']->resolution);
@@ -1138,6 +1140,7 @@ class XooNIpsGraph
                   $this->graph->y_format[$key]['line'] = 'none';
                   $this->graph->y_format[$key]['point'] = $datum->point;
                   $this->graph->y_format[$key]['point_size'] = $datum->point_size;
+                  // no break
             case 'line':
                   $this->graph->y_format[$key]['line'] = 'line';
                   $this->graph->y_format[$key]['point'] = $datum->point;

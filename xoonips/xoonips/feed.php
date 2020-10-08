@@ -61,10 +61,10 @@ function _create_item_description($item_id)
     foreach ($link_objs as $link_obj) {
         $xid = $link_obj->getVar('index_id', 'n');
         $titles = array();
-        while ($xid != IID_ROOT) {
+        while (IID_ROOT != $xid) {
             $idx_obj = &$index_handler->get($xid);
             $idx = $idx_obj->getVarArray('n');
-            if ($idx['open_level'] != OL_PUBLIC) {
+            if (OL_PUBLIC != $idx['open_level']) {
                 break;
             }
             $titles[] = _create_item_title($xid);
@@ -75,7 +75,7 @@ function _create_item_description($item_id)
             $indexes[] = '/'.implode('/', $titles);
         }
     }
-    if (count($indexes) == 0) {
+    if (0 == count($indexes)) {
         // this item has been rejected
         return false;
     }
@@ -86,7 +86,7 @@ function _create_item_description($item_id)
 function _create_item_link($item_id, $doi)
 {
     $url = XOOPS_URL.'/modules/xoonips/detail.php?';
-    if ($doi != '') {
+    if ('' != $doi) {
         $url .= XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($doi);
     } else {
         $url .= 'item_id='.$item_id;
@@ -142,7 +142,7 @@ function _set_feed_items(&$feed, $output, $limit, $start)
                 $title = _create_item_title($item['item_id']);
                 $description = _create_item_description($item['item_id']);
                 $link = _create_item_link($item['item_id'], $item['doi']);
-                if ($description === false) {
+                if (false === $description) {
                     $is_error = true;
                 }
             } else {
@@ -157,9 +157,9 @@ function _set_feed_items(&$feed, $output, $limit, $start)
                 $group = $xgroup_obj->getVarArray('n');
                 $category = 'Incoming Group';
                 $title = _MD_XOONIPS_EVENT_NEW_GROUP.' : '.$group['gname'];
-                $description = ($group['gdesc'] === '') ? '(empty)' : $group['gdesc'];
+                $description = ('' === $group['gdesc']) ? '(empty)' : $group['gdesc'];
                 $link = XOOPS_URL.'/modules/xoonips/groups.php';
-                // TODO: detail page
+            // TODO: detail page
             } else {
                 $is_error = true;
                 // group was already deleted
@@ -169,7 +169,7 @@ function _set_feed_items(&$feed, $output, $limit, $start)
             $is_error = true;
             break;
         }
-        if ($is_error == false) {
+        if (false == $is_error) {
             $feed->addItem($category, $title, $description, $link, $timestamp);
             ++$num;
         }

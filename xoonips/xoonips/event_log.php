@@ -49,7 +49,7 @@ if (!$mhandler->isModerator($uid)) {
 
 // request variables
 $formdata = &xoonips_getutility('formdata');
-$is_post = $_SERVER['REQUEST_METHOD'] == 'POST' ? true : false;
+$is_post = 'POST' == $_SERVER['REQUEST_METHOD'] ? true : false;
 $method = $is_post ? 'post' : 'get';
 $log_type_id = $formdata->getValue($method, 'log_type_id', 'i', false, 0);
 $mode = $formdata->getValue($method, 'mode', 's', false, '');
@@ -66,7 +66,7 @@ case 'download':
     if ($log_type_id >= 0 && $log_type_id <= 19) {
         // download event logs
         xoonips_eventlog_download($is_post, $log_type_id);
-    } elseif ($log_type_id == 20 || $log_type_id == 21) {
+    } elseif (20 == $log_type_id || 21 == $log_type_id) {
         // download registered data
         xoonips_eventlog_download_registered_list($is_post, $log_type_id);
     } else {
@@ -95,10 +95,10 @@ case 'graph':
     xoonips_eventlog_graph($log_type_id);
     break;
 case 'list':
-    if ($limit < 1 || $page < 1 || ($log_type_id != 20 && $log_type_id != 21)) {
+    if ($limit < 1 || $page < 1 || (20 != $log_type_id && 21 != $log_type_id)) {
         die('Illegal request');
     }
-    $is_users = ($log_type_id == 20) ? true : false;
+    $is_users = (20 == $log_type_id) ? true : false;
     $users = array();
     $items = array();
     if ($is_users) {

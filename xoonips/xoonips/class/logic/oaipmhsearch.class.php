@@ -62,7 +62,7 @@ class XooNIpsLogicOaipmhSearch extends XooNIpsLogic
         if (isset($vars[1]) && !is_int($vars[1]) && !ctype_digit($vars[1])) {
             $error->add(XNPERR_INVALID_PARAM, 'not integer parameter 2');
         }
-        if (isset($vars[1]) && isset($vars[2]) && intval($vars[1]) == 0 && empty($vars[2])) {
+        if (isset($vars[1]) && isset($vars[2]) && 0 == intval($vars[1]) && empty($vars[2])) {
             $error->add(XNPERR_INVALID_PARAM, 'parameter 2(repository_id) or parameter 3(keyword)'.'is required.');
         }
         if (isset($vars[3]) && !in_array($vars[3], array('title', 'identifier', 'last_update_date', 'creation_date', 'date'))
@@ -150,12 +150,12 @@ class XooNIpsLogicOaipmhSearch extends XooNIpsLogic
         $cache_handler = &xoonips_getormhandler('xoonips', 'search_cache');
         $cache_metadata_handler = &xoonips_getormhandler('xoonips', 'search_cache_metadata');
 
-        if ($repository_id == 0 && strval($keyword) == '') {
+        if (0 == $repository_id && '' == strval($keyword)) {
             return $search_cache_id;
         }
 
         $result = array();
-        if (strval($keyword) == '') {
+        if ('' == strval($keyword)) {
             $metadata = &$metadata_handler->getObjects(new Criteria('repository_id', $repository_id));
             foreach ($metadata as $data) {
                 $result[] = $data->get('identifier');
@@ -165,7 +165,7 @@ class XooNIpsLogicOaipmhSearch extends XooNIpsLogic
             ) {
                 return false;
             }
-            if ($repository_id == 0) {
+            if (0 == $repository_id) {
                 return $search_cache_id;
             }
 

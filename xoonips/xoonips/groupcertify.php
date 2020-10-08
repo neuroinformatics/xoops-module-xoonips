@@ -53,25 +53,25 @@ $op = $formdata->getValue('post', 'op', 's', false, '');
 $index_ids = $formdata->getValueArray('post', 'index_ids', 'i', false);
 $group_index_id = $formdata->getValue('post', 'group_index_id', 'i', false);
 // check request variables
-if ($op == 'certify' || $op == 'uncertify') {
-    if ($group_index_id == 0) {
+if ('certify' == $op || 'uncertify' == $op) {
+    if (0 == $group_index_id) {
         die('illegal request');
     }
-} elseif ($op != '') {
+} elseif ('' != $op) {
     die('illegal request');
 }
 
 // pankuzu for administrator
 $pankuzu = _MI_XOONIPS_ACCOUNT_PANKUZU_MODERATOR._MI_XOONIPS_ACCOUNT_PANKUZU_SEPARATOR._MI_XOONIPS_ITEM_PANKUZU_CERTIFY_GROUP_PUBLIC_ITEMS;
 
-if ($op == 'certify') {
+if ('certify' == $op) {
     if (!$xoopsGTicket->check(true, 'xoonips_group_certify_index')) {
         exit();
     }
 
     certify($index_ids, $group_index_id);
     exit();
-} elseif ($op == 'uncertify') {
+} elseif ('uncertify' == $op) {
     if (!$xoopsGTicket->check(true, 'xoonips_group_certify_index')) {
         exit();
     }

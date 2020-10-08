@@ -39,8 +39,8 @@ class XooNIpsLogicLogout extends XooNIpsLogic
      * @param[out] $response->result true:success, false:failed
      * @param[out] $response->error error information
      *
-     * @return null|boolean  logged out
-     * @return null|boolean if error
+     * @return bool|null logged out
+     * @return bool|null if error
      */
     public function execute(&$vars, &$response)
     {
@@ -72,7 +72,7 @@ class XooNIpsLogicLogout extends XooNIpsLogic
 
             return false;
         }
-        if ($uid != UID_GUEST) {
+        if (UID_GUEST != $uid) {
             // insert logout event
             $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
             $eventlog_handler->recordLogoutEvent($uid);

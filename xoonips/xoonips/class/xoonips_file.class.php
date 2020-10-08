@@ -61,7 +61,7 @@ class XooNIpsFileHandler
         $this->xst_handler = &xoonips_getormhandler('xoonips', 'search_text');
         $xc_handler = &xoonips_getormhandler('xoonips', 'config');
         $this->upload_dir = $xc_handler->getValue('upload_dir');
-        if (strlen($this->upload_dir) > 1 && substr($this->upload_dir, -1) == '/') {
+        if (strlen($this->upload_dir) > 1 && '/' == substr($this->upload_dir, -1)) {
             $this->upload_dir = substr($this->upload_dir, 0, strlen($this->upload_dir) - 1);
         }
     }
@@ -93,7 +93,7 @@ class XooNIpsFileHandler
         $join = new XooNIpsJoinCriteria('xoonips_file_type', 'file_type_id', 'file_type_id', 'INNER', 'ft');
         $criteria = new CriteriaCompo(new Criteria('item_id', $item_id));
         $criteria->add(new Criteria('is_deleted', 0));
-        if ($file_type_name !== false) {
+        if (false !== $file_type_name) {
             $criteria->add(new Criteria('name', $file_type_name, '=', 'ft'));
         }
         $files_info = array();
@@ -140,7 +140,7 @@ class XooNIpsFileHandler
         $criteria->add(new Criteria('mime_type', '('.implode(',', $mimetypes).')', 'IN'));
         $criteria->add(new Criteria('doi', $doi, '=', 'ib'));
         $xf_objs = &$this->xf_handler->getObjects($criteria, false, 'file_id', false, $join);
-        if (count($xf_objs) == 0) {
+        if (0 == count($xf_objs)) {
             return false;
         }
         $file_id = $xf_objs[0]->get('file_id');

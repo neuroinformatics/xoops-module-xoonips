@@ -80,7 +80,7 @@ $config_keys = array(
 $config_values = xoonips_admin_get_configs($config_keys, 'n');
 $current_orders = array_map('intval', explode(',', $config_values[$order_key]));
 // adjust sort_step
-if ($sort_updown == 'up') {
+if ('up' == $sort_updown) {
     if (($current_orders[$sort_id] - $sort_step) < 0) {
         $sort_step = $current_orders[$sort_id];
     }
@@ -92,7 +92,7 @@ if ($sort_updown == 'up') {
     $sort_diff = $sort_step;
 }
 $new_orders = array();
-if ($sort_updown == 'up') {
+if ('up' == $sort_updown) {
     $area_min = $current_orders[$sort_id] + $sort_diff;
     $area_max = $current_orders[$sort_id];
 } else {
@@ -104,7 +104,7 @@ for ($i = 0; $i < $max_num; ++$i) {
         $new_orders[$sort_id] = $current_orders[$sort_id] + $sort_diff;
     } else {
         if ($current_orders[$i] >= $area_min && $current_orders[$i] <= $area_max) {
-            if ($sort_updown == 'up') {
+            if ('up' == $sort_updown) {
                 $new_orders[$i] = $current_orders[$i] + 1;
             } else {
                 $new_orders[$i] = $current_orders[$i] - 1;

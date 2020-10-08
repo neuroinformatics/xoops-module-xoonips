@@ -150,7 +150,7 @@ class XNPBookImportItemHandler extends XooNIpsImportItemHandler
             $file_handler = &xoonips_getormhandler('xoonips', 'file');
             $criteria = new Criteria('name', addslashes($attribs['FILE_TYPE_NAME']));
             $file_type = &$file_type_handler->getObjects($criteria);
-            if (count($file_type) == 0) {
+            if (0 == count($file_type)) {
                 $this->_import_item->setErrors(E_XOONIPS_ATTR_NOT_FOUND, 'file_type_id is not found:'.$attribs['FILE_TYPE_NAME'].$this->_get_parser_error_at());
                 break;
             }
@@ -185,7 +185,7 @@ class XNPBookImportItemHandler extends XooNIpsImportItemHandler
                 }
             }
             if (is_null($detail->get('attachment_dl_limit'))) {
-                if ($this->_detail_version == '1.00') {
+                if ('1.00' == $this->_detail_version) {
                     //
                     // set zero to attachment_dl_limit
                     // if it is not declared in xml
@@ -196,8 +196,8 @@ class XNPBookImportItemHandler extends XooNIpsImportItemHandler
                 }
             }
             if (is_null($detail->get('attachment_dl_notify'))) {
-                if ($this->_detail_version == '1.00'
-                    || $this->_detail_version == '1.01'
+                if ('1.00' == $this->_detail_version
+                    || '1.01' == $this->_detail_version
                 ) {
                     $detail->set('attachment_dl_notify', 0);
                 } else {
@@ -206,16 +206,16 @@ class XNPBookImportItemHandler extends XooNIpsImportItemHandler
             }
             break;
         case 'ITEM/DETAIL/AUTHOR':
-            if ($this->_detail_version != '1.00'
-                && $this->_detail_version != '1.01'
-                && $this->_detail_version != '1.02'
+            if ('1.00' != $this->_detail_version
+                && '1.01' != $this->_detail_version
+                && '1.02' != $this->_detail_version
             ) {
                 //<author> is only for 1.00, 1.01 and 1.02
                 break;
             }
 
             $cdata = $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h');
-            if (trim($cdata) == '') {
+            if ('' == trim($cdata)) {
                 break;
             }
             $author_handler = &xoonips_getormhandler('xnpbook', 'author');
@@ -228,11 +228,11 @@ class XNPBookImportItemHandler extends XooNIpsImportItemHandler
             $authors[0] = $author;
             break;
         case 'ITEM/DETAIL/AUTHORS/AUTHOR':
-            if ($this->_detail_version != '1.03') {
+            if ('1.03' != $this->_detail_version) {
                 break;
             }
             $cdata = $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h');
-            if (trim($cdata) == '') {
+            if ('' == trim($cdata)) {
                 break;
             }
             $authors = &$this->_import_item->getVar('author');

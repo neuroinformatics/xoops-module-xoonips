@@ -61,7 +61,7 @@ function xoops_module_uninstall_xnpbinder($xoopsMod)
     if (count($ids) > 0) {
         $table = $xoopsDB->prefix('xoonips_item_status');
         $sql = "UPDATE ${table} SET deleted_timestamp=UNIX_TIMESTAMP(NOW()), is_deleted=1 WHERE item_id in ( ".implode(',', $ids).')';
-        if ($xoopsDB->query($sql) == false) {
+        if (false == $xoopsDB->query($sql)) {
             echo mysql_error();
             echo $sql;
 
@@ -72,7 +72,7 @@ function xoops_module_uninstall_xnpbinder($xoopsMod)
     // remove basic information
     $table = $xoopsDB->prefix('xoonips_item_basic');
     $sql = "DELETE FROM $table where item_type_id = $item_type_id";
-    if ($xoopsDB->query($sql) == false) {
+    if (false == $xoopsDB->query($sql)) {
         echo mysql_error();
         echo $sql;
 
@@ -83,7 +83,7 @@ function xoops_module_uninstall_xnpbinder($xoopsMod)
     $table = $xoopsDB->prefix('xoonips_item_type');
     $mid = $xoopsMod->getVar('mid');
     $sql = "DELETE FROM $table where mid = $mid";
-    if ($xoopsDB->query($sql) == false) {
+    if (false == $xoopsDB->query($sql)) {
         echo mysql_error();
         echo $sql;
 

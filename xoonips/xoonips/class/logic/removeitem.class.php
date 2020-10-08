@@ -73,13 +73,13 @@ class XooNIpsLogicRemoveItem extends XooNIpsLogic
             if (isset($vars[0]) && strlen($vars[0]) > 32) {
                 $error->add(XNPERR_INVALID_PARAM, 'too long parameter 1');
             }
-            if ($vars[2] != 'item_id' && $vars[2] != 'ext_id') {
+            if ('item_id' != $vars[2] && 'ext_id' != $vars[2]) {
                 $error->add(XNPERR_INVALID_PARAM, 'invalid parameter 3');
             }
-            if ($vars[2] == 'item_id' && !is_int($vars[1]) && !ctype_digit($vars[1])) {
+            if ('item_id' == $vars[2] && !is_int($vars[1]) && !ctype_digit($vars[1])) {
                 $error->add(XNPERR_INVALID_PARAM, 'not integer parameter 2');
             }
-            if ($vars[2] == 'item_id' && strlen($vars[1]) > 10) {
+            if ('item_id' == $vars[2] && strlen($vars[1]) > 10) {
                 $error->add(XNPERR_INVALID_PARAM, 'too long parameter 2');
             }
         }
@@ -103,10 +103,10 @@ class XooNIpsLogicRemoveItem extends XooNIpsLogic
         // get item and item_id
         $item_handler = &xoonips_getormcompohandler('xoonips', 'item');
         $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
-        if ($id_type == 'item_id') {
+        if ('item_id' == $id_type) {
             $item = $item_handler->get($id);
-        } elseif ($id_type == 'ext_id') {
-            if (strlen($id) == 0) {
+        } elseif ('ext_id' == $id_type) {
+            if (0 == strlen($id)) {
                 $response->setResult(false);
                 $error->add(XNPERR_INVALID_PARAM, 'ext_id is empty');
 
@@ -123,7 +123,7 @@ class XooNIpsLogicRemoveItem extends XooNIpsLogic
                     $error->add(XNPERR_SERVER_ERROR, 'ext_id is duplicated');
 
                     return false;
-                } elseif (count($basics) == 1) {
+                } elseif (1 == count($basics)) {
                     $item = $item_handler->get($basics[0]->get('item_id'));
                 } else {
                     $item = false;
@@ -221,7 +221,7 @@ class XooNIpsLogicRemoveItem extends XooNIpsLogic
         // update item_status
         $item_status_handler = &xoonips_getormhandler('xoonips', 'item_status');
         $item_status = $item_status_handler->get($item_id);
-        if ($item_status && $item_status->get('is_deleted') == 0) {
+        if ($item_status && 0 == $item_status->get('is_deleted')) {
             $item_status->setVar('is_deleted', 1, true);
             $item_status->setVar('deleted_timestamp', time(), true);
             if (!$item_status_handler->insert($item_status)) {

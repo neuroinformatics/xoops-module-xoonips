@@ -60,14 +60,14 @@ function xoops_module_uninstall_xoonips($xoopsMod)
         foreach ($sys_type_blocks as $sys_block) {
             list($dirname, $show_func) = $sys_block;
             $sysmid = $admin_xoops_handler->getModuleId($dirname);
-            if ($sysmid === false) {
+            if (false === $sysmid) {
                 continue; // module not found
             }
             $bids = $admin_xoops_handler->getBlockIds($sysmid, $show_func);
             foreach ($bids as $bid) {
                 $admin_xoops_handler->setBlockPosition($bid, true, 0, 0);
             }
-            if (count($bids) != 0) {
+            if (0 != count($bids)) {
                 break; // found this type's block
             }
         }

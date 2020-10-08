@@ -76,10 +76,10 @@ class XooNIpsLogicGetRootIndex extends XooNIpsLogic
             return false;
         }
         // get index_id from name
-        if ($name == 'Public') { // todo: define constant string
+        if ('Public' == $name) { // todo: define constant string
             $index_id = IID_PUBLIC;
-        } elseif ($name == 'Private') { // todo: define constant string
-            if ($uid == UID_GUEST) {
+        } elseif ('Private' == $name) { // todo: define constant string
+            if (UID_GUEST == $uid) {
                 $response->setResult(false);
                 $error->add(XNPERR_ACCESS_FORBIDDEN, 'guest doesn\'t have private index');
 
@@ -91,7 +91,7 @@ class XooNIpsLogicGetRootIndex extends XooNIpsLogic
         } else {
             $groups_handler = &xoonips_getormhandler('xoonips', 'groups');
             $groups = &$groups_handler->getObjects(new Criteria('gname', addslashes($name)));
-            if (!$groups || count($groups) != 1) {
+            if (!$groups || 1 != count($groups)) {
                 $response->setResult(false);
                 $error->add(XNPERR_NOT_FOUND, 'group not found');
 
@@ -110,7 +110,7 @@ class XooNIpsLogicGetRootIndex extends XooNIpsLogic
         // get index from index_id
         $index_compo_handler = &xoonips_getormcompohandler('xoonips', 'index');
         $index = $index_compo_handler->get($index_id);
-        if ($index == false) {
+        if (false == $index) {
             $response->setResult(false);
             $error->add(XNPERR_NOT_FOUND, 'cannot get index');
 

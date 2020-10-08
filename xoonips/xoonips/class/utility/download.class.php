@@ -281,7 +281,7 @@ class XooNIpsUtilityDownload extends XooNIpsUtility
             $internal_encoding_orig = mb_internal_encoding();
             // change internal encoding for mb_encode_mimeheader()
             if (!@mb_internal_encoding($this->browser_encoding)) {
-                if ($this->browser_encoding == 'SJIS-win') {
+                if ('SJIS-win' == $this->browser_encoding) {
                     // use fallback encoding 'Shift_JIS'
                     mb_internal_encoding('Shift_JIS');
                 } else {

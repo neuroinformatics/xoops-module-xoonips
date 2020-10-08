@@ -29,7 +29,7 @@ require 'include/group.inc.php';
 
 // privileges check : user
 $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
-if ($uid == UID_GUEST) {
+if (UID_GUEST == $uid) {
     redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_MODERATOR_SHULD_BE_MODERATOR);
     exit();
 }

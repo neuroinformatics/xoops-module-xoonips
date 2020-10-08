@@ -84,15 +84,15 @@ foreach ($request_vars as $key => $meta) {
 }
 $ids = $formdata->getValueArray('both', 'ids', 'i', false);
 
-if ($op == 'export') {
-    if ($export_type == '') {
+if ('export' == $op) {
+    if ('' == $export_type) {
         die('export_type is not defined');
     }
 
-    if (xnp_get_config_value('export_attachment', $value) != RES_OK) {
+    if (RES_OK != xnp_get_config_value('export_attachment', $value)) {
         $value = 'off';
     }
-    if ($value == 'off' && $attachment != 0) {
+    if ('off' == $value && 0 != $attachment) {
         die('illegal request');
     }
 
@@ -105,13 +105,13 @@ if ($op == 'export') {
         }
 
         //chdir($export_dir);
-        if ($export_type == 'index') {
+        if ('index' == $export_type) {
             //
             // exprot index tree structure only
             //
             $index = array();
             $res = xnp_get_index($_SESSION['XNPSID'], intval($index_id), $index);
-            if ($res != RES_OK) {
+            if (RES_OK != $res) {
                 $system_message = "can't get indexes";
                 $op = 'list';
                 break;
@@ -127,7 +127,7 @@ if ($op == 'export') {
                 break;
             }
 
-            if (xoonips_export_index_xml($fp, $index_id, $recursive_index == 1)) {
+            if (xoonips_export_index_xml($fp, $index_id, 1 == $recursive_index)) {
                 fclose($fp);
                 if (!xoonips_convert_file_encoding_to_utf8($tmpfile, $filename)) {
                     $op = 'list';
@@ -142,12 +142,12 @@ if ($op == 'export') {
                 $op = 'list'; //return to previous page(list of export item)
                 break;
             }
-        } elseif ($export_type == 'item') {
+        } elseif ('item' == $export_type) {
             //
             // export items
             //
             foreach ($ids as $item_id) {
-                $result = xnpExportItem($export_dir, $item_id, $attachment == 1, false, $recursive_item ? $index_id : false);
+                $result = xnpExportItem($export_dir, $item_id, 1 == $attachment, false, $recursive_item ? $index_id : false);
                 if (!$result) {
                     //error: can't export.
                     $system_message = 'error in exporting items';
@@ -171,7 +171,7 @@ if ($op == 'export') {
         $removeFiles = array();
         if ($dh = opendir($export_dir)) {
             while (false !== ($f = readdir($dh))) {
-                if ($f == '.' || $f == '..' || $f == 'files') {
+                if ('.' == $f || '..' == $f || 'files' == $f) {
                     continue;
                 }
                 $zippedFiles[] = "$f";
@@ -181,7 +181,7 @@ if ($op == 'export') {
         }
         if ($dh = @opendir($export_dir.'/files')) {
             while (false !== ($f = readdir($dh))) {
-                if ($f == '.' || $f == '..' || $f == 'files') {
+                if ('.' == $f || '..' == $f || 'files' == $f) {
                     continue;
                 }
                 $zippedFiles[] = "files/${f}";
@@ -189,7 +189,7 @@ if ($op == 'export') {
             }
             closedir($dh);
         }
-        if (count($zippedFiles) == 0) {
+        if (0 == count($zippedFiles)) {
             $system_message = _MD_XOONIPS_EXPORT_EXPORT_ITEMS_EMPTY;
             $op = 'list'; //return to previous page(list of export item)
             break;
@@ -217,7 +217,7 @@ if ($op == 'export') {
 
         header('Content-Disposition: attachment; filename="export.zip"');
         header('Content-Type: application/zip');
-        if ($size != false) {
+        if (false != $size) {
             header("Content-Length: $size");
         }
 
@@ -230,11 +230,11 @@ if ($op == 'export') {
         rmdir($export_dir);
         exit();
     } while (false);
-} elseif ($op == 'list') {
-    if ($export_type == 'index') {
+} elseif ('list' == $op) {
+    if ('index' == $export_type) {
         $indexpath = xnpGetIndexPathString($_SESSION['XNPSID'], $index_id);
         $export_index = _MD_XOONIPS_ITEM_INDEX_LABEL;
-        $yesno = ($recursive_index == 1) ? _YES : _NO;
+        $yesno = (1 == $recursive_index) ? _YES : _NO;
         $export_recursive = _MD_XOONIPS_EXPORT_RECURSIVE;
         $submit = _MD_XOONIPS_EXPORT_LICENSE_AGREEMENT_SUBMIT;
         $pankuzu = _MD_XOONIPS_EXPORT_PANKUZU_EXPORT
@@ -263,12 +263,12 @@ if ($op == 'export') {
             </form>
 EOT;
         require XOOPS_ROOT_PATH.'/footer.php';
-    } elseif ($export_type == 'item') {
+    } elseif ('item' == $export_type) {
         $xoopsOption['template_main'] = 'xoonips_export_license.html';
 
         require XOOPS_ROOT_PATH.'/header.php';
 
-        if ($index_id != '') {
+        if ('' != $index_id) {
             $ids = xoonips_get_all_item_ids_to_export($index_id, $xoopsUser->getVar('uid'), $recursive_item);
         }
 
@@ -287,7 +287,7 @@ EOT;
         foreach ($ids as $i) {
             $item_basic = array();
             $res = xnp_get_item($_SESSION['XNPSID'], $i, $item_basic); //TODO TO FIX THAT XNP_GET_ITEM CAN'T GET ITEM
-            if ($res == RES_OK
+            if (RES_OK == $res
                 && array_key_exists($item_basic['item_type_id'], $itemtypes)
             ) {
                 $func_license_required = $itemtypes[$item_basic['item_type_id']]['name'].'GetLicenseRequired';
@@ -317,7 +317,7 @@ EOT;
                 );
             }
         }
-        if ($index_id != '') {
+        if ('' != $index_id) {
             $xoopsTpl->assign('index_id', $index_id);
         }
         if (isset($system_message)) {
@@ -327,16 +327,16 @@ EOT;
         $xoopsTpl->assign('export_type', $export_type);
         $xoopsTpl->assign('item', $items);
         $xoopsTpl->assign('attachment', $attachment);
-        if ($export_type == 'item') {
+        if ('item' == $export_type) {
             $xoopsTpl->assign('recursive_item', $recursive_item);
-        } elseif ($export_type == 'index') {
+        } elseif ('index' == $export_type) {
             $xoopsTpl->assign('recursive_index', $recursive_index);
         }
         require XOOPS_ROOT_PATH.'/footer.php';
     } else {
         die('unknown export_type');
     }
-} elseif ($op == 'config') {
+} elseif ('config' == $op) {
     require XOOPS_ROOT_PATH.'/header.php';
 
     echo _MD_XOONIPS_EXPORT_PANKUZU_EXPORT;
@@ -367,7 +367,7 @@ EOT;
 
     $yes = _YES;
     $no = _NO;
-    $export_type_item_type = $index_id != '' ? 'radio' : 'hidden';
+    $export_type_item_type = '' != $index_id ? 'radio' : 'hidden';
     $export_type_item = _MD_XOONIPS_EXPORT_TYPE_ITEM;
     $export_type_index = _MD_XOONIPS_EXPORT_TYPE_INDEX;
     $export_recursive = _MD_XOONIPS_EXPORT_RECURSIVE;
@@ -383,7 +383,7 @@ EOT;
           </th>
          </tr>
 EOT;
-    if ($index_id != '') {
+    if ('' != $index_id) {
         echo <<<EOT
          <tr class="odd">
           <td>
@@ -398,10 +398,10 @@ EOT;
     }
 
     $value = '';
-    if (xnp_get_config_value('export_attachment', $value) != RES_OK) {
+    if (RES_OK != xnp_get_config_value('export_attachment', $value)) {
         $value = 'off';
     }
-    if ($value == 'on') {
+    if ('on' == $value) {
         echo <<<EOT
         <tr class="even">
          <td>
@@ -426,7 +426,7 @@ EOT;
 EOT;
     }
 
-    if ($index_id != '') {
+    if ('' != $index_id) {
         echo <<<EOT
         <tr>
          <th style="text-align:left;" colspan="2">
@@ -452,7 +452,7 @@ EOT;
         </p>        
 EOT;
 
-    if ($index_id != '') {
+    if ('' != $index_id) {
         echo '<input type="hidden" name="index_id" value="'.$index_id.'"/>'."\n";
     }
 
@@ -578,7 +578,7 @@ function xoonips_get_all_item_ids_to_export($index_id, $uid, $recursive_item = f
 
         $child = array();
         $res = xnp_get_indexes($_SESSION['XNPSID'], $i, array(), $child);
-        if ($res == RES_OK) {
+        if (RES_OK == $res) {
             foreach ($child as $c) {
                 array_push($tmp_idx, $c['item_id']);
             }

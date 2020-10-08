@@ -61,13 +61,13 @@ function xoonips_transfer_is_transferrable($from_uid, $to_uid, $item_ids)
         return false;
     }
 
-    if (count($item_ids) == 0) {
+    if (0 == count($item_ids)) {
         return false;
     }
 
     $user_handler = &xoonips_getormhandler('xoonips', 'users');
     $user = $user_handler->get($to_uid);
-    if ($user == false || $user->get('activate') == 0) {
+    if (false == $user || 0 == $user->get('activate')) {
         return false; // invalid user or not certified
     }
 
@@ -78,7 +78,7 @@ function xoonips_transfer_is_transferrable($from_uid, $to_uid, $item_ids)
         }
         $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $item_basic = $item_basic_handler->get($item_id);
-        if ($item_basic == false || $item_basic->get('item_type_id') == ITID_INDEX
+        if (false == $item_basic || ITID_INDEX == $item_basic->get('item_type_id')
         ) {
             return false; // invalid id or index id
         }
@@ -120,7 +120,7 @@ function xoonips_transfer_get_private_item_ids($uid)
     foreach ($index_item_links as $index_item_link) {
         $item_id = $index_item_link->get('item_id');
         $iids[$item_id] = $item_id;
-        if ($index_item_link->get('certify_state') == CERTIFIED) {
+        if (CERTIFIED == $index_item_link->get('certify_state')) {
             $certified_iids[$item_id] = $item_id;
         }
     }
@@ -138,7 +138,7 @@ function xoonips_transfer_get_total_size_of_items($item_ids)
     $file_handler = &xoonips_getormhandler('xoonips', 'file');
     $files = &$file_handler->getObjects(new Criteria('item_id', '('.implode(',', $item_ids).')', 'in'));
     foreach ($files as $file) {
-        if ($file->get('is_deleted') == 0) {
+        if (0 == $file->get('is_deleted')) {
             $total_size += $file->get('file_size');
         }
     }
@@ -162,7 +162,7 @@ function xoonips_transfer_extract_private_item_ids($item_ids)
         $criteria->add(new Criteria('certify_state', CERTIFIED));
         $objs = &$index_item_link_handler->getObjects($criteria, false, '', false, $join);
 
-        if (count($objs) == 0) {
+        if (0 == count($objs)) {
             $private_item_ids[] = $item_id;
         }
     }
@@ -183,7 +183,7 @@ function xoonips_transfer_is_private_item_number_exceeds_if_transfer($to_uid, $i
 {
     $user_handler = &xoonips_getormhandler('xoonips', 'users');
     $user = $user_handler->get($to_uid);
-    if ($user == false) {
+    if (false == $user) {
         return false;
     }
     $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
@@ -209,7 +209,7 @@ function xoonips_transfer_is_private_item_storage_exceeds_if_transfer($to_uid, $
 {
     $user_handler = &xoonips_getormhandler('xoonips', 'users');
     $user = $user_handler->get($to_uid);
-    if ($user == false) {
+    if (false == $user) {
         return false;
     }
     $file_handler = &xoonips_getormhandler('xoonips', 'file');
@@ -231,7 +231,7 @@ function xoonips_transfer_is_private_item_storage_exceeds_if_transfer($to_uid, $
  */
 function xoonips_transfer_get_group_ids_of_items($item_ids)
 {
-    if (!is_array($item_ids) || count($item_ids) == 0) {
+    if (!is_array($item_ids) || 0 == count($item_ids)) {
         return array();
     }
 
@@ -299,8 +299,8 @@ function xoonips_transfer_get_transferrable_item_information($from_uid, $item_id
 
         $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $item_basic = $item_basic_handler->get($item_id);
-        if ($item_basic == false
-            || $item_basic->get('item_type_id') == ITID_INDEX
+        if (false == $item_basic
+            || ITID_INDEX == $item_basic->get('item_type_id')
         ) {
             continue; // no such item.
         }
@@ -379,13 +379,13 @@ function xoonips_transfer_get_private_indexes_for_dropdown($user_id)
 }
 
 /**
- * @param integer $depth
+ * @param int $depth
  */
 function xoonips_transfer_get_index_tree_for_dropdown($index_id, &$result, $depth)
 {
     $index_compo_handler = &xoonips_getormcompohandler('xoonips', 'index');
     $index_compo = $index_compo_handler->get($index_id);
-    if ($index_compo === false) {
+    if (false === $index_compo) {
         return; // bad index_id
     }
     $titles = $index_compo->getVar('titles');
@@ -404,7 +404,7 @@ function xoonips_transfer_get_index_tree_for_dropdown($index_id, &$result, $dept
     $criteria->setOrder('asc');
     $criteria->setSort('sort_number');
     $indexes = &$index_handler->getObjects($criteria);
-    if ($indexes !== false) {
+    if (false !== $indexes) {
         foreach ($indexes as $index) {
             xoonips_transfer_get_index_tree_for_dropdown($index->get('index_id'), $result, $depth + 1);
         }

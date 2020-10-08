@@ -50,20 +50,20 @@ function _xnpbook_get_detail_request($do_escape = false)
         if (is_null($tmp)) {
             $detail[$key] = null;
         } else {
-            if ($key == 'url') {
+            if ('url' == $key) {
                 $detail[$key] = preg_replace(array('/javascript:/i', '/[\\x00-\\x20\\x22\\x27]/'), array('', ''), $tmp);
-            } elseif ($key == 'isbn') {
+            } elseif ('isbn' == $key) {
                 $detail[$key] = preg_replace('/[\\- ]/', '', $tmp);
             } else {
                 $detail[$key] = $tmp;
             }
-            if ($do_escape && $type == 's') {
+            if ($do_escape && 's' == $type) {
                 $detail[$key] = $textutil->html_special_chars($detail[$key]);
             }
         }
     }
     if (isset($detail['attachment_dl_limit'])) {
-        if ($detail['attachment_dl_limit'] == 0) {
+        if (0 == $detail['attachment_dl_limit']) {
             $detail['attachment_dl_notify'] = 0;
         }
     }
@@ -76,7 +76,7 @@ function _xnpbook_get_detail_request($do_escape = false)
  */
 function _xnpbook_append_message($html, $msg)
 {
-    if ($html != '') {
+    if ('' != $html) {
         $html .= '<br />';
     }
 
@@ -208,7 +208,7 @@ function xnpbookGetRegisterBlock()
     $req = _xnpbook_get_detail_request(true);
     $detail = array();
     foreach ($req as $key => $val) {
-        if ($val !== null) {
+        if (null !== $val) {
             $detail[$key]['value'] = $val;
         }
     }
@@ -258,7 +258,7 @@ function xnpbookGetEditBlock($item_id)
     $detail = xnpbookGetDetailInformation($item_id);
     // override values if post form request
     foreach (_xnpbook_get_detail_request(true) as $key => $val) {
-        if ($val !== null) {
+        if (null !== $val) {
             $detail[$key]['value'] = $val;
         }
     }
@@ -467,13 +467,13 @@ function xnpbookCheckRegisterParameters(&$msg)
     $result = true;
     $formdata = &xoonips_getutility('formdata');
     $publisher = $formdata->getValue('post', 'publisher', 's', false);
-    if ($publisher == '') {
+    if ('' == $publisher) {
         // publisher is not filled
         $msg = _xnpbook_append_message($msg, _MD_XNPBOOK_PUBLISHER_REQUIRED);
         $result = false;
     }
     $publicationDateYear = $formdata->getValue('post', 'publicationDateYear', 'i', false);
-    if ($publicationDateYear == 0) {
+    if (0 == $publicationDateYear) {
         // year is not filled
         $msg = _xnpbook_append_message($msg, _MD_XNPBOOK_YEAR_REQUIRED);
         $result = false;
@@ -675,7 +675,7 @@ function xnpbookGetModifiedFields($item_id)
     if ($detail) {
         foreach (array('editor' => _MD_XNPBOOK_EDITOR_LABEL, 'publisher' => _MD_XNPBOOK_PUBLISHER_LABEL, 'isbn' => _MD_XNPBOOK_ISBN_LABEL, 'url' => _MD_XNPBOOK_URL_LABEL) as $k => $v) {
             $tmp = $formdata->getValue('post', $k, 's', false);
-            if (!array_key_exists($k, $detail) || $tmp === null) {
+            if (!array_key_exists($k, $detail) || null === $tmp) {
                 continue;
             }
             if ($detail[$k]['value'] != $tmp) {
@@ -735,7 +735,7 @@ function xnpbookGetAttachmentDownloadNotifyOption($item_id)
 
 function xnpbookSupportMetadataFormat($metadataPrefix, $item_id)
 {
-    if ($metadataPrefix == 'oai_dc' || $metadataPrefix == 'junii2') {
+    if ('oai_dc' == $metadataPrefix || 'junii2' == $metadataPrefix) {
         return true;
     }
 
@@ -770,9 +770,9 @@ function xnpbookGetMetadata($prefix, $item_id)
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
     // indexes
     $indexes = array();
-    if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
+    if (RES_OK == xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids)) {
         foreach ($xids as $xid) {
-            if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($_SESSION['XNPSID'], $xid, $index)) {
                 $indexes[] = xnpGetIndexPathServerString($_SESSION['XNPSID'], $xid);
             }
         }
@@ -780,7 +780,7 @@ function xnpbookGetMetadata($prefix, $item_id)
     // files
     $files = array();
     $mimetypes = array();
-    if ($detail['attachment_dl_limit'] == 0) {
+    if (0 == $detail['attachment_dl_limit']) {
         $file_handler = &xoonips_gethandler('xoonips', 'file');
         $files = $file_handler->getFilesInfo($item_id, 'book_pdf');
         foreach ($files as $file) {

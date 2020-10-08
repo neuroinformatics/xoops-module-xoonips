@@ -102,7 +102,7 @@ class XooNIpsUtilityUnicode extends XooNIpsUtility
         case 'eucJP-win':
             $tmp = $this->_utf8_to_charset($str, 'CP932', $fallback);
             $ret = @mb_convert_encoding($tmp, 'eucJP-win', 'SJIS-win');
-            if ($ret === false) {
+            if (false === $ret) {
                 // 'eucJP-win' and 'SJIS-win' are unsupported
                 $ret = mb_convert_encoding($tmp, 'EUC-JP', 'Shift_JIS');
             }
@@ -130,7 +130,7 @@ class XooNIpsUtilityUnicode extends XooNIpsUtility
         if (empty($from_encoding)) {
             $from_encoding = mb_detect_encoding($str);
         }
-        if ($from_encoding == 'UTF-8') {
+        if ('UTF-8' == $from_encoding) {
             return $str;
             // nothing to do
         }
@@ -248,9 +248,9 @@ class XooNIpsUtilityUnicode extends XooNIpsUtility
             return $this->_my_chr($this->unicode_map[$charset][$unicode]);
         }
         // unmapped character encoding
-        if ($fallback == 'h') {
+        if ('h' == $fallback) {
             return '&#'.$unicode.';';
-        } elseif ($fallback == 'u') {
+        } elseif ('u' == $fallback) {
             $utf8 = '';
             for ($i = $idx_orig; $i <= $idx; ++$i) {
                 $utf8 .= chr($chars[$i]);

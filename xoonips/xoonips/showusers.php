@@ -38,7 +38,7 @@ $uid = $formdata->getValue('get', 'uid', 'i', false, $myuid);
 $item_type_id = $formdata->getValue('post', 'page', 'i', false, 0);
 $myxoopsConfigUser = &xoonips_get_xoops_configs(XOOPS_CONF_USER);
 
-if ($uid == UID_GUEST) {
+if (UID_GUEST == $uid) {
     redirect_header(XOOPS_URL.'/', 3, _US_SORRYNOTFOUND);
     exit();
 }
@@ -57,7 +57,7 @@ if (!is_object($u_obj) || !is_object($xu_obj)) {
 
 // part of self introduction
 $is_activated = ($u_obj->get('level') > 0);
-$is_certified = ($xu_obj->get('activate') == 1);
+$is_certified = (1 == $xu_obj->get('activate'));
 if (!$is_activated || !$is_certified) {
     // profile of 'not activated / certified user' is not displayed.
     redirect_header(XOOPS_URL.'/', 3, _US_SELECTNG);
@@ -66,7 +66,7 @@ if (!$is_activated || !$is_certified) {
 $is_admin = $xmember_handler->isAdmin($myuid);
 $is_owner = ($uid == $myuid);
 $is_editable = ($is_admin || $is_owner);
-$is_deletable = ($is_editable && $myxoopsConfigUser['self_delete'] == 1);
+$is_deletable = ($is_editable && 1 == $myxoopsConfigUser['self_delete']);
 $avatar = '../../uploads/'.$u_obj->getVar('user_avatar', 'e');
 
 (method_exists('MyTextSanitizer', 'sGetInstance') and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
@@ -88,7 +88,7 @@ $breadcrumbs = array(
 $item_counts = _xoonips_showusers_get_count_items($uid);
 $item_type_id = $formdata->getValue('post', 'item_type_id', 'i', false);
 $page = $formdata->getValue('post', 'page', 'i', false, 1);
-if (count($item_counts) != 0) {
+if (0 != count($item_counts)) {
     // validate item type id
     $item_type_order = array_keys($item_counts);
     if (!in_array($item_type_id, $item_type_order)) {
@@ -166,10 +166,10 @@ function _xoonips_showusers_get_cvitaes($uid)
         $to_month = (empty($to_year) ? 0 : $cvitaes_obj->get('to_month'));
         $cv = array();
         $cv['title'] = $cvitaes_obj->getVar('cvitae_title', 's');
-        $cv['from_year'] = (($from_year == 0) ? '' : date('Y', mktime(0, 0, 0, 1, 1, $from_year)));
-        $cv['from_month'] = (($from_month == 0) ? '' : date('M.', mktime(0, 0, 0, $from_month, 1, 0)));
-        $cv['to_year'] = (($to_year == 0) ? '' : date('Y', mktime(0, 0, 0, 1, 1, $to_year)));
-        $cv['to_month'] = (($to_month == 0) ? '' : date('M.', mktime(0, 0, 0, $to_month, 1, 0)));
+        $cv['from_year'] = ((0 == $from_year) ? '' : date('Y', mktime(0, 0, 0, 1, 1, $from_year)));
+        $cv['from_month'] = ((0 == $from_month) ? '' : date('M.', mktime(0, 0, 0, $from_month, 1, 0)));
+        $cv['to_year'] = ((0 == $to_year) ? '' : date('Y', mktime(0, 0, 0, 1, 1, $to_year)));
+        $cv['to_month'] = ((0 == $to_month) ? '' : date('M.', mktime(0, 0, 0, $to_month, 1, 0)));
         $cvitaes[] = $cv;
     }
 
@@ -253,7 +253,7 @@ function _xoonips_showusers_get_item_ids($item_type_id, $uid, &$navi)
 function page_optimize($page, $last)
 {
     // empty string is page 1
-    if (strlen($page) == 0) {
+    if (0 == strlen($page)) {
         return 1;
     }
     // not numerical string is page 1
@@ -282,7 +282,7 @@ $tab = $xoopsDB->prefix('xoonips_config');
 $sql = 'SELECT value FROM '.$tab." WHERE name='item_show_optional'";
 $res = $xoopsDB->query($sql);
 while ($itop = $xoopsDB->fetchArray($res)) {
-    if ($itop['value'] === 'on') {
+    if ('on' === $itop['value']) {
         $val = 1;
     } else {
         $val = 0;
@@ -302,8 +302,8 @@ while ($row = $xoopsDB->fetchArray($res)) {
     $res2 = $xoopsDB->query($sql2);
     while ($row2 = $xoopsDB->fetchArray($res2)) {
         $itid = intval($row2['item_id']);
-            // var_dump($itid);
-            switch ($val) {
+        // var_dump($itid);
+        switch ($val) {
         case 0:
             $sql3 = 'SELECT i2.item_id FROM '.$xoopsDB->prefix('xoonips_item_basic').' as i1, '.$xoopsDB->prefix('xoonips_item_show').' as i2 WHERE i1.item_id='.$itid.' AND i1.uid='.$uid.' AND i1.item_id=i2.item_id AND i1.uid=i2.uid';
             $res3 = $xoopsDB->query($sql3);
@@ -366,7 +366,7 @@ for ($i = 0; $i < $times; ++$i) {
     $pag = intval($pages[$i]) + 1;
     switch ($pag) {
     case $w_page:
-        if ($w_last != 1) {
+        if (1 != $w_last) {
             $link = '&nbsp;'.$pages[$i].'&nbsp;';
         } else {
             $link = '';
@@ -392,7 +392,7 @@ $tab = $xoopsDB->prefix('xoonips_config');
 $sql = 'SELECT value FROM '.$tab." WHERE name='item_show_optional'";
 $res = $xoopsDB->query($sql);
 while ($itop = $xoopsDB->fetchArray($res)) {
-    if ($itop['value'] === 'on') {
+    if ('on' === $itop['value']) {
         $val = 1;
     } else {
         $val = 0;
@@ -400,7 +400,7 @@ while ($itop = $xoopsDB->fetchArray($res)) {
 }
 
 $item_htmls = array();
-if ($sum_of_data !== 0) {
+if (0 !== $sum_of_data) {
     $tab_name1 = $xoopsDB->prefix('xoonips_item_show');
     $tab_name2 = $xoopsDB->prefix('xoonips_item_basic');
     $tab_name3 = $xoopsDB->prefix('xoonips_index_item_link');

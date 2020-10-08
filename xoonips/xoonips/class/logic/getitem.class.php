@@ -42,8 +42,8 @@ class XooNIpsLogicGetItem extends XooNIpsLogic
      * @param[out] $response->error  error information
      * @param[out] $response->success array of child indexes
      *
-     * @return boolean retrieved item object
-     * @return boolean       if fault
+     * @return bool retrieved item object
+     * @return bool if fault
      */
     public function execute(&$vars, &$response)
     {
@@ -57,10 +57,10 @@ class XooNIpsLogicGetItem extends XooNIpsLogic
             if (isset($vars[0]) && strlen($vars[0]) > 32) {
                 $error->add(XNPERR_INVALID_PARAM, 'too long parameter 1');
             }
-            if ($vars[2] != 'item_id' && $vars[2] != 'ext_id') {
+            if ('item_id' != $vars[2] && 'ext_id' != $vars[2]) {
                 $error->add(XNPERR_INVALID_PARAM, 'invalid parameter 3');
             }
-            if ($vars[2] == 'item_id') {
+            if ('item_id' == $vars[2]) {
                 if (!is_int($vars[1]) && !ctype_digit($vars[1])) {
                     $error->add(XNPERR_INVALID_PARAM, 'not integer parameter 2');
                 }
@@ -78,7 +78,7 @@ class XooNIpsLogicGetItem extends XooNIpsLogic
             $sessionid = $vars[0];
             $id = $vars[1];
             $id_type = $vars[2];
-            if ($id_type == 'item_id') {
+            if ('item_id' == $id_type) {
                 $id = intval($id);
             }
         }
@@ -94,9 +94,9 @@ class XooNIpsLogicGetItem extends XooNIpsLogic
         // retrieve item
         //
         $itemtype_handler = &xoonips_getormhandler('xoonips', 'item_type');
-        if ($id_type == 'item_id') {
+        if ('item_id' == $id_type) {
             $itemtype = &$itemtype_handler->getObjects(new Criteria('item_id', $id), false, '', false, new XooNIpsJoinCriteria('xoonips_item_basic', 'item_type_id', 'item_type_id'));
-        } elseif ($id_type == 'ext_id') {
+        } elseif ('ext_id' == $id_type) {
             //$itemtype =& $itemtype_handler->getByExtId($id);
             $itemtype = &$itemtype_handler->getObjects(new Criteria('doi', addslashes($id)), false, '', false, new XooNIpsJoinCriteria('xoonips_item_basic', 'item_type_id', 'item_type_id'));
         } else {
@@ -106,7 +106,7 @@ class XooNIpsLogicGetItem extends XooNIpsLogic
             return false;
         }
 
-        if ($itemtype === false) {
+        if (false === $itemtype) {
             $error->add(XNPERR_SERVER_ERROR, 'cannot get itemtype');
             $response->setResult(false);
 
@@ -128,10 +128,10 @@ class XooNIpsLogicGetItem extends XooNIpsLogic
         }
 
         $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
-        if ($id_type == 'item_id') {
+        if ('item_id' == $id_type) {
             $item = &$item_handler->get($id);
-        } elseif ($id_type == 'ext_id') {
-            if (strlen($id) == 0) {
+        } elseif ('ext_id' == $id_type) {
+            if (0 == strlen($id)) {
                 $response->setResult(false);
                 $error->add(XNPERR_INVALID_PARAM, 'ext_id is empty');
 
@@ -148,7 +148,7 @@ class XooNIpsLogicGetItem extends XooNIpsLogic
                     $error->add(XNPERR_SERVER_ERROR, 'ext_id is duplicated');
 
                     return false;
-                } elseif (count($basics) == 1) {
+                } elseif (1 == count($basics)) {
                     $item = $item_handler->get($basics[0]->get('item_id'));
                 } else {
                     $item = false;
@@ -170,7 +170,7 @@ class XooNIpsLogicGetItem extends XooNIpsLogic
         $basic = $item->getVar('basic');
 
         // check itemtype( return error if index or binder )
-        if ($basic->get('item_type_id') == ITID_INDEX) {
+        if (ITID_INDEX == $basic->get('item_type_id')) {
             $error->add(XNPERR_NOT_FOUND, "({$id})");
             $response->setResult(false);
 

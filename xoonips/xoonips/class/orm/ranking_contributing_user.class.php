@@ -70,7 +70,7 @@ class XooNIpsOrmRankingContributingUserHandler extends XooNIpsOrmAbstractRanking
     {
         $item_id = $obj->get('item_id');
         $uid = $obj->get('uid');
-        if ($item_id == 0 || $uid == 0) {
+        if (0 == $item_id || 0 == $uid) {
             // ignore if item id or user id is zero
             return true;
         }

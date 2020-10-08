@@ -38,7 +38,7 @@ if (is_null($op)) {
 xoonips_validate_request(in_array($op, array('default', 'detail', 'search', 'metadata_detail')));
 
 $factory = &XooNIpsActionFactory::getInstance();
-if ($op == 'metadata_detail') {
+if ('metadata_detail' == $op) {
     $action = &$factory->create('xoonips_search_metadata_detail');
 } else {
     $action = &$factory->create('oaipmh_search_'.$op);

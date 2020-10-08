@@ -137,7 +137,7 @@ class XooNIpsGraphLib
     // XooNIps - renamed class name
     public function __construct()
     {
-        if (func_num_args() == 2) {
+        if (2 == func_num_args()) {
             $this->parameter['width'] = func_get_arg(0);
             $this->parameter['height'] = func_get_arg(1);
         }
@@ -169,14 +169,14 @@ class XooNIpsGraphLib
 
         //  take into account tick lengths
         $this->calculated['bottom_inner_padding'] = $this->parameter['inner_padding'];
-        if (($this->parameter['x_ticks_colour'] != 'none') && ($this->parameter['tick_length'] < 0)) {
+        if (('none' != $this->parameter['x_ticks_colour']) && ($this->parameter['tick_length'] < 0)) {
             $this->calculated['bottom_inner_padding'] -= $this->parameter['tick_length'];
         }
         $this->calculated['boundary_box']['bottom'] -= $this->calculated['bottom_inner_padding'];
 
         $this->calculated['left_inner_padding'] = $this->parameter['inner_padding'];
         if ($this->parameter['y_axis_text_left']) {
-            if (($this->parameter['y_ticks_colour'] != 'none') && ($this->parameter['tick_length'] < 0)) {
+            if (('none' != $this->parameter['y_ticks_colour']) && ($this->parameter['tick_length'] < 0)) {
                 $this->calculated['left_inner_padding'] -= $this->parameter['tick_length'];
             }
         }
@@ -184,7 +184,7 @@ class XooNIpsGraphLib
 
         $this->calculated['right_inner_padding'] = $this->parameter['inner_padding'];
         if ($this->parameter['y_axis_text_right']) {
-            if (($this->parameter['y_ticks_colour'] != 'none') && ($this->parameter['tick_length'] < 0)) {
+            if (('none' != $this->parameter['y_ticks_colour']) && ($this->parameter['tick_length'] < 0)) {
                 $this->calculated['right_inner_padding'] -= $this->parameter['tick_length'];
             }
         }
@@ -201,19 +201,19 @@ class XooNIpsGraphLib
     public function draw_text()
     {
         $colour = $this->parameter['outer_background'];
-        if ($colour != 'none') {
+        if ('none' != $colour) {
             $this->draw_rectangle($this->calculated['outer_border'], $colour, 'fill');
         } // graph background
 
         // draw border around image
         $colour = $this->parameter['outer_border'];
-        if ($colour != 'none') {
+        if ('none' != $colour) {
             $this->draw_rectangle($this->calculated['outer_border'], $colour, 'box');
         } // graph border
 
         // draw background around plot area
         $colour = $this->parameter['inner_background'];
-        if ($colour != 'none') {
+        if ('none' != $colour) {
             $this->draw_rectangle($this->calculated['inner_border'], $colour, 'fill');
         } // graph background
 
@@ -234,7 +234,7 @@ class XooNIpsGraphLib
 
         // draw border around plot area
         $colour = $this->parameter['inner_border'];
-        if ($colour != 'none') {
+        if ('none' != $colour) {
             $this->draw_rectangle($this->calculated['inner_border'], $colour, $this->parameter['inner_border_type']);
         } // graph border
 
@@ -306,20 +306,20 @@ class XooNIpsGraphLib
             //print "$thisX, $thisY <BR>";
             //_p("thisX=$thisX, thisY=$thisY, bar=$bar, barSize=$barSize, colour=$colour, offset=$offset, set=$set");
 
-            if (($bar != 'none') && (string) $thisY != 'none') {
+            if (('none' != $bar) && 'none' != (string) $thisY) {
                 $this->bar($thisX, $thisY, $bar, $barSize, $colour, $offset, $set);
             }
 
-            if (($area != 'none') && (((string) $lastY != 'none') && ((string) $thisY != 'none'))) {
+            if (('none' != $area) && (('none' != (string) $lastY) && ('none' != (string) $thisY))) {
                 $this->area($lastX, $lastY, $thisX, $thisY, $area, $colour, $offset);
             }
 
-            if (($point != 'none') && (string) $thisY != 'none') {
+            if (('none' != $point) && 'none' != (string) $thisY) {
                 $this->plot($thisX, $thisY, $point, $pointSize, $colour, $offset);
             }
 
-            if (($line != 'none') && ((string) $thisY != 'none')) {
-                if ((string) $fromY != 'none') {
+            if (('none' != $line) && ('none' != (string) $thisY)) {
+                if ('none' != (string) $fromY) {
                     $this->line($fromX, $fromY, $thisX, $thisY, $line, $brushType, $brushSize, $colour, $offset);
                 }
 
@@ -351,7 +351,7 @@ class XooNIpsGraphLib
             }
 
             if (isset($colour)) {
-                if ($colour != 'none') {
+                if ('none' != $colour) {
                     $this->draw_set($order, $set, $offset);
                 }
             }
@@ -366,7 +366,7 @@ class XooNIpsGraphLib
     public function draw_legend()
     {
         $position = $this->parameter['legend'];
-        if ($position == 'none') {
+        if ('none' == $position) {
             return;
         } // abort if no border
 
@@ -444,7 +444,7 @@ class XooNIpsGraphLib
             $right = $this->calculated['boundary_box']['right'] + $this->calculated['legend']['boundary_box_all']['width'];
         }
         // legend border
-        if ($borderColour != 'none') {
+        if ('none' != $borderColour) {
             $this->draw_rectangle(
                 array(
                 'top' => $top,
@@ -469,7 +469,7 @@ class XooNIpsGraphLib
 
         foreach ($this->y_order as $set) {
             $legendText['text'] = $this->calculated['legend']['text'][$set];
-            if ($legendText['text'] != 'none') {
+            if ('none' != $legendText['text']) {
                 // if text exists then draw box and text
                 $boxColour = $this->colour[$this->y_format[$set]['colour']];
 
@@ -556,7 +556,7 @@ class XooNIpsGraphLib
     public function draw_zero_axis_left()
     {
         $colour = $this->parameter['zero_axis'];
-        if ($colour == 'none') {
+        if ('none' == $colour) {
             return;
         }
         // draw zero axis on left hand side
@@ -567,7 +567,7 @@ class XooNIpsGraphLib
     public function draw_zero_axis_right()
     {
         $colour = $this->parameter['zero_axis'];
-        if ($colour == 'none') {
+        if ('none' == $colour) {
             return;
         }
         // draw zero axis on right hand side
@@ -598,7 +598,7 @@ class XooNIpsGraphLib
         $axis_size = $this->parameter['axis_size'];
         $axis_angle = $this->parameter['x_axis_angle'];
 
-        if ($axis_angle == 0) {
+        if (0 == $axis_angle) {
             $reference = 'top-center';
         }
         if ($axis_angle > 0) {
@@ -607,7 +607,7 @@ class XooNIpsGraphLib
         if ($axis_angle < 0) {
             $reference = 'top-left';
         }
-        if ($axis_angle == 90) {
+        if (90 == $axis_angle) {
             $reference = 'top-center';
         }
 
@@ -616,7 +616,7 @@ class XooNIpsGraphLib
 
         foreach ($this->calculated['x_axis']['tick_x'] as $set => $tickX) {
             // draw x grid if colour specified
-            if ($xGrid != 'none') {
+            if ('none' != $xGrid) {
                 switch ($xGrid) {
                 case 'line':
                     imageline($this->image, round($tickX), round($gridTop), round($tickX), round($gridBottom), $gridColour);
@@ -629,7 +629,7 @@ class XooNIpsGraphLib
 
             if ($this->parameter['x_axis_text'] && !($set % $this->parameter['x_axis_text'])) { // test if tick should be displayed
                 // draw tick
-                if ($tickColour != 'none') {
+                if ('none' != $tickColour) {
                     imageline($this->image, round($tickX), round($tickTop), round($tickX), round($tickBottom), $tickColour);
                 }
 
@@ -670,7 +670,7 @@ class XooNIpsGraphLib
             }
             $textRight = $tickLeft - $this->calculated['left_inner_padding'];
 
-            if ($axis_angle == 0) {
+            if (0 == $axis_angle) {
                 $reference = 'right-center';
             }
             if ($axis_angle > 0) {
@@ -679,13 +679,13 @@ class XooNIpsGraphLib
             if ($axis_angle < 0) {
                 $reference = 'right-bottom';
             }
-            if ($axis_angle == 90) {
+            if (90 == $axis_angle) {
                 $reference = 'right-center';
             }
 
             foreach ($this->calculated['y_axis']['tick_y'] as $set => $tickY) {
                 // draw y grid if colour specified
-                if ($yGrid != 'none') {
+                if ('none' != $yGrid) {
                     switch ($yGrid) {
                     case 'line':
                         imageline($this->image, round($gridLeft), round($tickY), round($gridRight), round($tickY), $gridColour);
@@ -699,7 +699,7 @@ class XooNIpsGraphLib
                 // y axis text
                 if ($this->parameter['y_axis_text_left'] && !($set % $this->parameter['y_axis_text_left'])) { // test if tick should be displayed
                     // draw tick
-                    if ($tickColour != 'none') {
+                    if ('none' != $tickColour) {
                         imageline($this->image, round($tickLeft), round($tickY), round($tickRight), round($tickY), $tickColour);
                     }
 
@@ -725,7 +725,7 @@ class XooNIpsGraphLib
             }
             $textLeft = $tickRight + $this->calculated['left_inner_padding'];
 
-            if ($axis_angle == 0) {
+            if (0 == $axis_angle) {
                 $reference = 'left-center';
             }
             if ($axis_angle > 0) {
@@ -734,12 +734,12 @@ class XooNIpsGraphLib
             if ($axis_angle < 0) {
                 $reference = 'left-top';
             }
-            if ($axis_angle == 90) {
+            if (90 == $axis_angle) {
                 $reference = 'left-center';
             }
 
             foreach ($this->calculated['y_axis']['tick_y'] as $set => $tickY) {
-                if (!$this->calculated['y_axis_left']['has_data'] && $yGrid != 'none') { // draw grid if not drawn already (above)
+                if (!$this->calculated['y_axis_left']['has_data'] && 'none' != $yGrid) { // draw grid if not drawn already (above)
                     switch ($yGrid) {
                     case 'line':
                         imageline($this->image, round($gridLeft), round($tickY), round($gridRight), round($tickY), $gridColour);
@@ -752,7 +752,7 @@ class XooNIpsGraphLib
 
                 if ($this->parameter['y_axis_text_right'] && !($set % $this->parameter['y_axis_text_right'])) { // test if tick should be displayed
                     // draw tick
-                    if ($tickColour != 'none') {
+                    if ('none' != $tickColour) {
                         imageline($this->image, round($tickLeft), round($tickY), round($tickRight), round($tickY), $tickColour);
                     }
 
@@ -781,7 +781,7 @@ class XooNIpsGraphLib
         $numTicks = $this->calculated['x_axis']['num_ticks'] - 1;    // number of x ticks
 
         // XooNIps - hack to avoid division by zero
-        if ($numTicks == 0) {
+        if (0 == $numTicks) {
             $numTicks = 1;
         }
 
@@ -798,7 +798,7 @@ class XooNIpsGraphLib
         $yRange = $this->calculated['y_axis_left']['max'] - $this->calculated['y_axis_left']['min'];
         $yRange = ($yRange ? $yRange : 1);
         $this->calculated['y_axis_left']['factor'] = $height / $yRange;
-        if ($this->parameter['x_axis_gridlines'] != 'auto') {
+        if ('auto' != $this->parameter['x_axis_gridlines']) {
             $xRange = $this->calculated['x_axis']['max'] - $this->calculated['x_axis']['min'];
             $xRange = ($xRange ? $xRange : 1);
             $this->calculated['x_axis']['factor'] = $widthPlot / $xRange;
@@ -808,17 +808,17 @@ class XooNIpsGraphLib
         $this->calculated['num_bars'] = 0;
         foreach ($this->y_order as $order => $set) {
             // determine how many bars there are
-            if (isset($this->y_format[$set]['bar']) && ($this->y_format[$set]['bar'] != 'none')) {
+            if (isset($this->y_format[$set]['bar']) && ('none' != $this->y_format[$set]['bar'])) {
                 $this->calculated['bar_offset_index'][$set] = $this->calculated['num_bars']; // index to relate bar with data set.
-                      ++$this->calculated['num_bars'];
+                ++$this->calculated['num_bars'];
             }
 
             // calculate y coords for plotting data
             foreach ($this->x_data as $index => $x) {
                 $this->calculated['y_plot'][$set][$index] = $this->y_data[$set][$index];
 
-                if ((string) $this->y_data[$set][$index] != 'none') {
-                    if (isset($this->y_format[$set]['y_axis']) && $this->y_format[$set]['y_axis'] == 'right') {
+                if ('none' != (string) $this->y_data[$set][$index]) {
+                    if (isset($this->y_format[$set]['y_axis']) && 'right' == $this->y_format[$set]['y_axis']) {
                         $this->calculated['y_plot'][$set][$index] =
                         round(($this->y_data[$set][$index] - $this->calculated['y_axis_right']['min']) * $this->calculated['y_axis_right']['factor']);
                     } else {
@@ -855,7 +855,7 @@ class XooNIpsGraphLib
         $tickX = $gridLeft; // tick x coord
 
         // XooNIps - hack for single data point
-        if (count($this->x_data) == 1) {
+        if (1 == count($this->x_data)) {
             $tickX = $gridLeft + round($xStep / 2);
         }
 
@@ -864,7 +864,7 @@ class XooNIpsGraphLib
             // x tick value
             $this->calculated['x_axis']['tick_x'][$set] = $tickX;
             // if num ticks is auto then x plot value is same as x  tick
-            if ($this->parameter['x_axis_gridlines'] == 'auto') {
+            if ('auto' == $this->parameter['x_axis_gridlines']) {
                 $this->calculated['x_plot'][$set] = round($tickX);
             }
             //print $this->calculated['x_plot'][$set].'<BR>';
@@ -873,7 +873,7 @@ class XooNIpsGraphLib
 
         //print "xStep: $xStep <BR>";
         // if numeric x axis then calculate x coords for each data point. this is seperate from x ticks.
-        if ($this->parameter['x_axis_gridlines'] != 'auto') {
+        if ('auto' != $this->parameter['x_axis_gridlines']) {
             $gridX = $gridLeft;
             $factor = $this->calculated['x_axis']['factor'];
             $min = $this->calculated['x_axis']['min'];
@@ -928,7 +928,7 @@ class XooNIpsGraphLib
             $this->calculated['title']['angle'] = 0;
 
             $this->calculated['boundary_box']['top'] += $size['height'] + $this->parameter['outer_padding'];
-            //$this->calculated['boundary_box']['top'] += $size['height'];
+        //$this->calculated['boundary_box']['top'] += $size['height'];
         } else {
             $this->calculated['title']['boundary_box'] = $this->get_null_size();
         }
@@ -984,7 +984,7 @@ class XooNIpsGraphLib
         $this->calculated['legend'] = array(); // array to hold calculated values for legend.
         //$this->calculated['legend']['boundary_box_max'] = array('height' => 0, 'width' => 0);
         $this->calculated['legend']['boundary_box_max'] = $this->get_null_size();
-        if ($this->parameter['legend'] == 'none') {
+        if ('none' == $this->parameter['legend']) {
             return;
         }
 
@@ -1010,7 +1010,7 @@ class XooNIpsGraphLib
             //$this->calculated['legend']['points'][$set]      = $this->parameter['legend_size'];
             //$this->calculated['legend']['angle'][$set]       = 0;
 
-            if ($text && $text != 'none') {
+            if ($text && 'none' != $text) {
                 ++$numSets;
                 $sumTextHeight += $size['height'];
             }
@@ -1074,7 +1074,7 @@ class XooNIpsGraphLib
         $dataLeft = array();
         $dataRight = array();
         foreach ($this->y_order as $order => $set) {
-            if (isset($this->y_format[$set]['y_axis']) && $this->y_format[$set]['y_axis'] == 'right') {
+            if (isset($this->y_format[$set]['y_axis']) && 'right' == $this->y_format[$set]['y_axis']) {
                 $this->calculated['y_axis_right']['has_data'] = true;
                 $dataRight = array_merge($dataRight, $this->y_data[$set]);
             } else {
@@ -1170,7 +1170,7 @@ class XooNIpsGraphLib
         $axis_angle = $this->parameter['x_axis_angle'];
 
         // check whether to treat x axis as numeric
-        if ($this->parameter['x_axis_gridlines'] == 'auto') { // auto means text based x_axis, not numeric...
+        if ('auto' == $this->parameter['x_axis_gridlines']) { // auto means text based x_axis, not numeric...
                 $this->calculated['x_axis']['num_ticks'] = sizeof($this->x_data);
             $data = $this->x_data;
             for ($i = 0; $i < $this->calculated['x_axis']['num_ticks']; ++$i) {
@@ -1191,7 +1191,7 @@ class XooNIpsGraphLib
                 }
             }
         } else { // x axis is numeric so find max min values...
-                $this->calculated['x_axis']['num_ticks'] = $this->parameter['x_axis_gridlines'];
+            $this->calculated['x_axis']['num_ticks'] = $this->parameter['x_axis_gridlines'];
 
             $min = $this->parameter['x_min'];
             $max = $this->parameter['x_max'];
@@ -1235,11 +1235,11 @@ class XooNIpsGraphLib
     // find max and min values for a data array given the resolution.
     public function find_range($data, $min, $max, $resolution)
     {
-        if (sizeof($data) == 0) {
+        if (0 == sizeof($data)) {
             return array('min' => 0, 'max' => 0);
         }
         foreach ($data as $key => $value) {
-            if ($value == 'none') {
+            if ('none' == $value) {
                 continue;
             }
             if ($value > $max) {
@@ -1250,7 +1250,7 @@ class XooNIpsGraphLib
             }
         }
 
-        if ($max == 0) {
+        if (0 == $max) {
             $factor = 1;
         } else {
             if ($max < 0) {
@@ -1260,15 +1260,15 @@ class XooNIpsGraphLib
             }
         }
 
-          // XooNIps - to avoid some wierd rounding errors
-          $factor = round($factor * 1000.0) / 1000.0;
+        // XooNIps - to avoid some wierd rounding errors
+        $factor = round($factor * 1000.0) / 1000.0;
 
         $max = $factor * @ceil($max / $factor);
         $min = $factor * @floor($min / $factor);
 
-          //print "max=$max, min=$min<BR>";
+        //print "max=$max, min=$min<BR>";
 
-          return array('min' => $min, 'max' => $max);
+        return array('min' => $min, 'max' => $max);
     }
 
     public function print_TTF($message)
@@ -1554,7 +1554,7 @@ class XooNIpsGraphLib
                 header('Expires: '.$expiresGMT);
             }
 
-            if ($this->parameter['file_name'] == 'none' || empty($this->parameter['file_name'])) {
+            if ('none' == $this->parameter['file_name'] || empty($this->parameter['file_name'])) {
                 switch ($this->parameter['output_format']) {
                 case 'GIF':
                           header('Content-type: image/gif');  // GIF??. switch to PNG guys!!
@@ -1602,7 +1602,7 @@ class XooNIpsGraphLib
     public function plot($x, $y, $type, $size, $colour, $offset)
     {
         //print("drawing point of type: $type, at offset: $offset");
-          $u = $x + $offset;
+        $u = $x + $offset;
         $v = $this->calculated['inner_border']['bottom'] - $y + $offset;
         $half = $size / 2;
 
@@ -1650,7 +1650,7 @@ class XooNIpsGraphLib
         $x_left = $x + $bar_offset - $span;
         $x_right = $x + $bar_offset + $span;
 
-        if ($this->parameter['zero_axis'] != 'none') {
+        if ('none' != $this->parameter['zero_axis']) {
             $zero = $this->calculated['zero_axis'];
             if ($this->parameter['shadow_below_axis']) {
                 $zero += $offset;
@@ -1687,8 +1687,8 @@ class XooNIpsGraphLib
             if ($this->parameter['shadow_below_axis']) {
                 $bottom += $offset;
             }
-            if ($this->parameter['inner_border'] != 'none') {
-                $bottom -= 1;
+            if ('none' != $this->parameter['inner_border']) {
+                --$bottom;
             } // 1 pixel above bottom if border is to be drawn.
             $u_left = $x_left + $offset;
             $u_right = $x_right + $offset - 1;
@@ -1708,7 +1708,7 @@ class XooNIpsGraphLib
     public function area($x_start, $y_start, $x_end, $y_end, $type, $colour, $offset)
     {
         //dbug("drawing area type: $type, at offset: $offset");
-        if ($this->parameter['zero_axis'] != 'none') {
+        if ('none' != $this->parameter['zero_axis']) {
             $bottom = $this->calculated['boundary_box']['bottom'];
             $zero = $this->calculated['zero_axis'];
             if ($this->parameter['shadow_below_axis']) {
@@ -1741,10 +1741,10 @@ class XooNIpsGraphLib
             if ($this->parameter['shadow_below_axis']) {
                 $bottom += $offset;
             }
-            if ($this->parameter['inner_border'] != 'none') {
-                $bottom -= 1;
+            if ('none' != $this->parameter['inner_border']) {
+                --$bottom;
             } // 1 pixel above bottom if border is to be drawn.
-                switch ($type) {
+            switch ($type) {
             case 'fill':
                 imagefilledpolygon($this->image, array($u_start, $v_start, $u_end, $v_end, $u_end, $bottom, $u_start, $bottom), 4, $this->colour[$colour]);
                 break;
@@ -1779,18 +1779,18 @@ class XooNIpsGraphLib
     // function to draw line. would prefer to use gdBrush but this is not supported yet.
 
     /**
-     * @param double $y0
-     * @param double $y1
+     * @param float $y0
+     * @param float $y1
      */
     public function draw_brush_line($x0, $y0, $x1, $y1, $size, $type, $colour)
     {
         //$this->dbug("line: $x0, $y0, $x1, $y1");
-          $dy = $y1 - $y0;
+        $dy = $y1 - $y0;
         $dx = $x1 - $x0;
         $t = 0;
         $watchdog = 1024; // precaution to prevent infinite loops.
 
-          $this->draw_brush($x0, $y0, $size, $type, $colour);
+        $this->draw_brush($x0, $y0, $size, $type, $colour);
         if (abs($dx) > abs($dy)) { // slope < 1
             //$this->dbug("slope < 1");
             $m = $dy / $dx; // compute slope

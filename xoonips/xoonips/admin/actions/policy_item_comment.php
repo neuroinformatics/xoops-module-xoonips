@@ -73,7 +73,7 @@ $mod_dirnames = &XoopsLists::getModulesList();
 $d3forum_not_found = true;
 $d3forums = array();
 // set empty d3forum module name
-$selected = ($config_values['item_comment_dirname'] == '');
+$selected = ('' == $config_values['item_comment_dirname']);
 if ($selected) {
     $d3forum_not_found = false;
 }
@@ -86,9 +86,9 @@ foreach ($mod_dirnames as $mod_dirname) {
     $trustdir_php = XOOPS_ROOT_PATH.'/modules/'.$mod_dirname.'/mytrustdirname.php';
     if (file_exists($trustdir_php)) {
         require $trustdir_php;
-        if ($mytrustdirname == 'd3forum') {
+        if ('d3forum' == $mytrustdirname) {
             $module = &$module_handler->getByDirname($mod_dirname);
-            if (is_object($module) && $module->getVar('isactive', 'n') == 1) {
+            if (is_object($module) && 1 == $module->getVar('isactive', 'n')) {
                 // set found d3forum module name
                 $selected = ($config_values['item_comment_dirname'] == $mod_dirname);
                 if ($selected) {
@@ -113,14 +113,14 @@ if ($d3forum_not_found) {
     // selected d3forum dirname found or empty dirname
     $d3forum_forumid = $config_values['item_comment_forum_id'];
     $d3forum_dirname_notfound = '';
-    if ($config_values['item_comment_dirname'] == '') {
+    if ('' == $config_values['item_comment_dirname']) {
         // empty dirname
         $d3forum_forumid_notfound = '';
     } else {
         // selected d3forum dirname found
         $sql = sprintf('SELECT forum_id FROM %s WHERE forum_id=%u', $xoopsDB->prefix($config_values['item_comment_dirname'].'_forums'), $config_values['item_comment_forum_id']);
         $res = $xoopsDB->query($sql);
-        if ($res === false) {
+        if (false === $res) {
             die('unexpected error');
         }
         list($forum_id) = $xoopsDB->fetchRow($res);

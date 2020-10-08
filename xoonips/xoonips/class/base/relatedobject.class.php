@@ -81,7 +81,7 @@ class XooNIpsRelatedObjectHandler
         $falseVar = false;
         foreach (array_keys($this->handlers) as $key) {
             $foreign_key = $this->handlers[$key]['foreign_key'];
-            if ($this->handlers[$key]['criteria'] && (is_subclass_of($criteria, 'CriteriaElement') || strtolower(get_class($criteria)) == 'CriteriaElement')) {
+            if ($this->handlers[$key]['criteria'] && (is_subclass_of($criteria, 'CriteriaElement') || 'CriteriaElement' == strtolower(get_class($criteria)))) {
                 $criteria = new CriteriaCompo();
                 $criteria->add(new Criteria($foreign_key, $id));
                 $criteria->add($this->handlers[$key]['criteria']);
@@ -106,7 +106,7 @@ class XooNIpsRelatedObjectHandler
                     $obj->setVar($key, $objs);
                 }
             } else {
-                if (false !== $objs && count($objs) == 1) {
+                if (false !== $objs && 1 == count($objs)) {
                     $obj->setVar($key, $objs[0]);
                 }
             }
@@ -263,10 +263,10 @@ class XooNIpsRelatedObjectHandler
     /**
      * gets objects.
      *
-     * @param object $criteria
-     * @param bool   $id_as_key
-     * @param string $fieldlist fieldlist for distinct select
-     * @param bool   $distinct
+     * @param object              $criteria
+     * @param bool                $id_as_key
+     * @param string              $fieldlist fieldlist for distinct select
+     * @param bool                $distinct
      * @param XooNIpsJoinCriteria $joindef
      *
      * @return array objects
@@ -308,7 +308,7 @@ class XooNIpsRelatedObjectHandler
                         $obj->setVar($key, $objs);
                     } else {
                         // skip this object if incomplete(related row is not found)
-                        if (count($objs) != 1) {
+                        if (1 != count($objs)) {
                             continue;
                         }
                         $obj->setVar($key, $objs[0]);
@@ -443,7 +443,7 @@ class XooNIpsRelatedObject
     /**
      * assign a value to a variable.
      *
-     * @param string $key   name of the variable to assign
+     * @param string $key name of the variable to assign
      * @param mixed  $val value to assign
      */
     public function setVar($key, $val)

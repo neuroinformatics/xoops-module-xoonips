@@ -89,7 +89,7 @@ foreach ($get_keys as $key => $meta) {
 }
 
 // get variable check
-if (strpos($get_vals['url'], '?') !== false) {
+if (false !== strpos($get_vals['url'], '?')) {
     die('illegal request');
 }
 
@@ -115,7 +115,7 @@ if (file_exists($tree_image_path.'/tree_root_normal.gif')) {
 
 $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-if ($uid == UID_GUEST && !public_item_target_user_all()) {
+if (UID_GUEST == $uid && !public_item_target_user_all()) {
     //
     // for guest access, show message that access to index tree is forbidden.
     //
@@ -174,7 +174,7 @@ foreach ($indexes as $i => $index) {
     if ($itemCount) {
         $node['title'] .= sprintf('(%d)', $itemCount);
     }
-    if ($index['child_count'] == 0) {
+    if (0 == $index['child_count']) {
         $node['child'] = 'null';
     } else {
         $node['child'] = sprintf('[%s]', implode(',', $index['child']));
@@ -182,7 +182,7 @@ foreach ($indexes as $i => $index) {
     $xoonips_tree_nodes_array[] = $node;
 
     // tree roots
-    if ($index['depth'] == 1) {
+    if (1 == $index['depth']) {
         $xoonips_tree_roots_array[] = $xid;
     }
 }

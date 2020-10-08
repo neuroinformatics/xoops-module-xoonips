@@ -67,7 +67,7 @@ foreach ($item_type_objs as $item_type_obj) {
     }
 }
 
-if (count($blocks) != 0) {
+if (0 != count($blocks)) {
     $xoopsTpl->assign('blocks', $blocks);
 }
 

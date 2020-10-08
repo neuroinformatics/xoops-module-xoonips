@@ -85,9 +85,10 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
 
             return false;
         }
-        if ($uid == UID_GUEST) {
+        if (UID_GUEST == $uid) {
             $response->setResult(false);
             $error->add(XNPERR_ACCESS_FORBIDDEN, 'guest user cannot putItem'); // test E4
+
             return false;
         }
         // start transaction
@@ -149,11 +150,11 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
                     $error->add(XNPERR_ACCESS_FORBIDDEN, "cannot access index(index_id=$index_id)"); // test e5
                 } else {
                     $open_level = $index->get('open_level');
-                    if ($open_level == OL_PRIVATE) {
+                    if (OL_PRIVATE == $open_level) {
                         $add_to_private = true;
-                    } elseif ($open_level == OL_GROUP_ONLY) {
+                    } elseif (OL_GROUP_ONLY == $open_level) {
                         $add_to_gids[$index->get('gid')] = true;
-                    } elseif ($open_level == OL_PUBLIC) {
+                    } elseif (OL_PUBLIC == $open_level) {
                         $add_to_public = true;
                     }
                 }
@@ -173,6 +174,7 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
             $response->setResult(false);
             $transaction->rollback();
             $error->add(XNPERR_INVALID_PARAM, "bad itemtype(item_type_id=$item_type_id)"); // test E6*
+
             return false;
         }
         $item_type_name = $item_type->get('name');
@@ -181,6 +183,7 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
             $response->setResult(false);
             $transaction->rollback();
             $error->add(XNPERR_SERVER_ERROR, "cannot get item type handler(item_type_id=$item_type_id)"); // test E7*
+
             return false;
         }
         $detail_item_type = $detail_item_type_handler->get($item_type_id);
@@ -188,6 +191,7 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
             $response->setResult(false);
             $transaction->rollback();
             $error->add(XNPERR_SERVER_ERROR, "cannot get item type(item_type_id=$item_type_id)"); // test E8*
+
             return false;
         }
         $detail_item_handler = &xoonips_getormcompohandler($item_type_name, 'item');
@@ -241,6 +245,7 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
         if (!$this->isEnoughSpace($error, $uid, $size, $item->getVar('indexes'))) {
             $transaction->rollback();
             $response->setResult(false); // test E11
+
             return false;
         }
         // get filetypes
@@ -260,7 +265,7 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
             $detail_files = $item->getVar($field_name);
             if (!$detail_item_type->getMultiple($field_name)) {
                 $detail_file = $detail_files;
-                if ($detail_file->get('file_id') == 0) {
+                if (0 == $detail_file->get('file_id')) {
                     $item->setVar($field_name, false);
                     continue; // this filetype maybe optional and omitted.
                 }
@@ -269,7 +274,7 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
             }
             for ($i = 0; $i < count($detail_files); ++$i) {
                 $pseudo_id = $detail_files[$i]->get('file_id');
-                if ($pseudo_id == 0) {
+                if (0 == $pseudo_id) {
                     unset($detail_files[$i]);
                     continue;
                 }
@@ -302,9 +307,9 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
                 $item->setVar($field_name, $detail_files[0]);
             }
         }
-        if (count($pseudo2files) != 0) {
+        if (0 != count($pseudo2files)) {
             foreach ($pseudo2files as $pseudo_id => $info) {
-                if ($info['used'] == false) {
+                if (false == $info['used']) {
                     $error->add(XNPERR_INVALID_PARAM, "redundant file(pseudo file_id=$pseudo_id)"); // test e12
                 }
             }
@@ -334,12 +339,14 @@ class XooNIpsLogicPutItem extends XooNIpsLogic
         if (!$eventlog_handler->recordInsertItemEvent($item_id)) {
             $transaction->rollback();
             $error->add(XNPERR_SERVER_ERROR, 'cannot insert event'); // test E14
+
             return false;
         }
         // item insert/update/certify_required/certified event, change certify_state, update item_status.
         if (!$this->touchItem1($error, $item, $uid)) {
             $transaction->rollback();
             $response->setResult(false); // test E16
+
             return false;
         }
         // commit

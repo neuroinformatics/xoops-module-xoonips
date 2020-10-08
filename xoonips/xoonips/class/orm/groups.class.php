@@ -59,7 +59,7 @@ class XooNIpsOrmGroups extends XooNIpsTableObject
         // is group_item_storage_limit double?
         if (!is_numeric($this->getVar('group_item_storage_limit', 'n'))) {
             // todo: define constant string
-              $this->setErrors('group_item_storage_limit must be numeric.');
+            $this->setErrors('group_item_storage_limit must be numeric.');
             $retval = false;
         }
 

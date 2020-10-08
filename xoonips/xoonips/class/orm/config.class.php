@@ -102,7 +102,7 @@ class XooNIpsOrmConfigHandler extends XooNIpsTableObjectHandler
     public function &getConfig($key)
     {
         $config_objs = &$this->getObjects(new Criteria('name', addslashes($key)));
-        if (!$config_objs || count($config_objs) != 1) {
+        if (!$config_objs || 1 != count($config_objs)) {
             $result = false;
 
             return $result;

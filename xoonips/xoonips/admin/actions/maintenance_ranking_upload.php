@@ -40,7 +40,7 @@ $keys = array(
 $vals = xoonips_admin_get_requests('files', $keys);
 // uploaded file check
 $uploaded_file = $vals['ranking_upload_file'];
-if ($uploaded_file['name'] == '' || $uploaded_file['size'] == 0) {
+if ('' == $uploaded_file['name'] || 0 == $uploaded_file['size']) {
     redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_ILLACCESS);
     exit();
 }

@@ -86,20 +86,20 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
     public $status = 0;                    // http request status
 
     public $temp_dir = '/tmp';                // temporary directory that the webserver
-                                                // has permission to write to.
-                                                // under Windows, this should be C:\temp
+    // has permission to write to.
+    // under Windows, this should be C:\temp
 
     public $curl_path = '/usr/bin/curl';
-                                                // Snoopy will use cURL for fetching
-                                                // SSL content if a full system path to
-                                                // the cURL binary is supplied here.
-                                                // set to false if you do not have
-                                                // cURL installed. See http://curl.haxx.se
-                                                // for details on installing cURL.
-                                                // Snoopy does *not* use the cURL
-                                                // library functions built into php,
-                                                // as these functions are not stable
-                                                // as of this Snoopy release.
+    // Snoopy will use cURL for fetching
+    // SSL content if a full system path to
+    // the cURL binary is supplied here.
+    // set to false if you do not have
+    // cURL installed. See http://curl.haxx.se
+    // for details on installing cURL.
+    // Snoopy does *not* use the cURL
+    // library functions built into php,
+    // as these functions are not stable
+    // as of this Snoopy release.
 
     /**** Private variables ****/
 
@@ -859,7 +859,7 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         }
         if (!empty($content_type)) {
             $headers .= "Content-type: $content_type";
-            if ($content_type == 'multipart/form-data') {
+            if ('multipart/form-data' == $content_type) {
                 $headers .= '; boundary='.$this->_mime_boundary;
             }
             $headers .= "\r\n";
@@ -896,7 +896,7 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
                 return false;
             }
 
-            if ($currentHeader == "\r\n") {
+            if ("\r\n" == $currentHeader) {
                 break;
             }
 
@@ -935,7 +935,7 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         $results = '';
         do {
             $_data = fread($fp, $this->maxlength);
-            if (strlen($_data) == 0) {
+            if (0 == strlen($_data)) {
                 break;
             }
             $results .= $_data;
@@ -1037,7 +1037,7 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
             }
         }
         if (!empty($content_type)) {
-            if ($content_type == 'multipart/form-data') {
+            if ('multipart/form-data' == $content_type) {
                 $headers[] = "Content-type: $content_type; boundary=".$this->_mime_boundary;
             } else {
                 $headers[] = "Content-type: $content_type";
@@ -1211,10 +1211,13 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
             switch ($errno) {
             case -3:
                 $this->error = 'socket creation failed (-3)';
+                // no break
             case -4:
                 $this->error = 'dns lookup failure (-4)';
+                // no break
             case -5:
                 $this->error = 'connection refused or timed out (-5)';
+                // no break
             default:
                 $this->error = 'connection failed ('.$errno.')';
             }
@@ -1252,7 +1255,7 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         settype($formfiles, 'array');
         $postdata = '';
 
-        if (count($formvars) == 0 && count($formfiles) == 0) {
+        if (0 == count($formvars) && 0 == count($formfiles)) {
             return;
         }
 

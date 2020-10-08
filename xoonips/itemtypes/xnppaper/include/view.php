@@ -113,7 +113,7 @@ function xnppaperGetDetailInformation($item_id)
 
     $sql = 'select * from '.$xoopsDB->prefix('xnppaper_item_detail')." where paper_id=$item_id";
     $result = $xoopsDB->query($sql);
-    if ($result == false) {
+    if (false == $result) {
         return false;
     }
 
@@ -353,7 +353,7 @@ function xnppaperGetConfirmBlock($item_id)
     $paper_pdf_reprint = xnpGetAttachmentConfirmBlock($item_id, 'paper_pdf_reprint');
 
     // retrieve DetailInformation
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ('POST' == $_SERVER['REQUEST_METHOD']) {
         $detail = array(
             'journal' => array(
                 'value' => $textutil->html_special_chars($formdata->getValue('post', 'journal', 's', false)),
@@ -384,10 +384,10 @@ function xnppaperGetConfirmBlock($item_id)
         $system_message = $system_message."\n<br /><font color='#ff0000'>"._MD_XOONIPS_ITEM_WARNING_FIELD_TRIM.'</font><br />';
     }
     // TODO: formdata integration
-    if ($detail['volume']['value'] == 0) {
+    if (0 == $detail['volume']['value']) {
         $detail['volume']['value'] = '';
     }
-    if ($detail['number']['value'] == 0) {
+    if (0 == $detail['number']['value']) {
         $detail['number']['value'] = '';
     }
 
@@ -428,7 +428,7 @@ function xnppaperCheckRegisterParameters(&$message)
     if (empty($publicationDateYear)) {
         $messages[] = _MD_XNPPAPER_YEAR_OF_PUBLICATION_REQUIRED;
     }
-    if (count($messages) == 0) {
+    if (0 == count($messages)) {
         return true;
     }
     $message = implode('', $messages);
@@ -485,12 +485,12 @@ function xnppaperInsertItem(&$item_id)
     xnpTrimColumn($ar, 'xnppaper_item_detail', array_keys($ar), _CHARSET);
 
     $keys = implode(',', array('journal', 'volume', 'number', 'page', 'abstract', 'pubmed_id'));
-    $vals = implode(',', array('\''.addslashes($ar['journal']).'\'', strlen($volume) == 0 ? 'null' : (int) $volume, strlen($number) == 0 ? 'null' : (int) $number, strlen($page) == 0 ? 'null' : '\''.addslashes($ar['page']).'\'', strlen($abstract) == 0 ? 'null' : '\''.addslashes($ar['abstract']).'\'', strlen($pubmed_id) == 0 ? 'null' : '\''.addslashes($ar['pubmed_id']).'\''));
+    $vals = implode(',', array('\''.addslashes($ar['journal']).'\'', 0 == strlen($volume) ? 'null' : (int) $volume, 0 == strlen($number) ? 'null' : (int) $number, 0 == strlen($page) ? 'null' : '\''.addslashes($ar['page']).'\'', 0 == strlen($abstract) ? 'null' : '\''.addslashes($ar['abstract']).'\'', 0 == strlen($pubmed_id) ? 'null' : '\''.addslashes($ar['pubmed_id']).'\''));
 
     // register detail information
     $sql = 'insert into '.$xoopsDB->prefix('xnppaper_item_detail')." ( paper_id, $keys ) values ( $item_id, $vals ) ";
     $result = $xoopsDB->queryF($sql);
-    if ($result == false) {
+    if (false == $result) {
         return false;
     }
     // insert author
@@ -551,9 +551,9 @@ function xnppaperUpdateItem($item_id)
     xnpTrimColumn($ar, 'xnppaper_item_detail', array_keys($ar), _CHARSET);
 
     // register detail information
-    $sql = implode(',', array('journal'.'=\''.addslashes($ar['journal']).'\'', 'volume'.'='.(strlen($volume) == 0 ? 'null' : (int) $volume), 'number'.'='.(strlen($number) == 0 ? 'null' : (int) $number), 'page'.'='.(strlen($page) == 0 ? 'null' : '\''.addslashes($ar['page']).'\''), 'abstract'.'='.(strlen($abstract) == 0 ? 'null' : '\''.addslashes($ar['abstract']).'\''), 'pubmed_id'.'='.(strlen($pubmed_id) == 0 ? 'null' : '\''.addslashes($ar['pubmed_id']).'\'')));
+    $sql = implode(',', array('journal'.'=\''.addslashes($ar['journal']).'\'', 'volume'.'='.(0 == strlen($volume) ? 'null' : (int) $volume), 'number'.'='.(0 == strlen($number) ? 'null' : (int) $number), 'page'.'='.(0 == strlen($page) ? 'null' : '\''.addslashes($ar['page']).'\''), 'abstract'.'='.(0 == strlen($abstract) ? 'null' : '\''.addslashes($ar['abstract']).'\''), 'pubmed_id'.'='.(0 == strlen($pubmed_id) ? 'null' : '\''.addslashes($ar['pubmed_id']).'\'')));
     $result = $xoopsDB->queryF('update '.$xoopsDB->prefix('xnppaper_item_detail')." set $sql where paper_id = $item_id ");
-    if ($result == false) {
+    if (false == $result) {
         return false;
     }
 
@@ -728,7 +728,7 @@ function xnppaperGetModifiedFields($item_id)
     if ($detail) {
         foreach (array('journal' => _MD_XNPPAPER_JOURNAL_LABEL, 'volume' => _MD_XNPPAPER_VOLUME_LABEL, 'number' => _MD_XNPPAPER_NUMBER_LABEL, 'page' => _MD_XNPPAPER_PAGE_LABEL, 'abstract' => _MD_XNPPAPER_ABSTRACT_LABEL, 'pubmed_id' => _MD_XNPPAPER_PUBMED_ID_LABEL) as $k => $v) {
             $tmp = $formdata->getValue('post', $k, 's', false);
-            if (!array_key_exists($k, $detail) || $tmp === null) {
+            if (!array_key_exists($k, $detail) || null === $tmp) {
                 continue;
             }
             if ($detail[$k] != $tmp) {
@@ -761,7 +761,7 @@ function xnppaperGetTopBlock($itemtype)
 
 function xnppaperSupportMetadataFormat($metadataPrefix, $item_id)
 {
-    if ($metadataPrefix == 'oai_dc' || $metadataPrefix == 'junii2') {
+    if ('oai_dc' == $metadataPrefix || 'junii2' == $metadataPrefix) {
         return true;
     }
 
@@ -811,7 +811,7 @@ function xnppaperGetMetadata($prefix, $item_id)
             $detail['start_page'] = $detail['end_page'] = intval($detail['page']);
         }
     }
-    if ($mconfig['abstract_access_rights'] != 1) {
+    if (1 != $mconfig['abstract_access_rights']) {
         // abstract has no rights to the public
         $detail['abstract'] = '';
     }
@@ -820,9 +820,9 @@ function xnppaperGetMetadata($prefix, $item_id)
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
     // indexes
     $indexes = array();
-    if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
+    if (RES_OK == xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids)) {
         foreach ($xids as $xid) {
-            if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($_SESSION['XNPSID'], $xid, $index)) {
                 $indexes[] = xnpGetIndexPathServerString($_SESSION['XNPSID'], $xid);
             }
         }
@@ -831,7 +831,7 @@ function xnppaperGetMetadata($prefix, $item_id)
     $files = array();
     $mimetypes = array();
     $file_handler = &xoonips_gethandler('xoonips', 'file');
-    if ($mconfig['pdf_access_rights'] == 1) {
+    if (1 == $mconfig['pdf_access_rights']) {
         $files = $file_handler->getFilesInfo($item_id, 'paper_pdf_reprint');
         foreach ($files as $file) {
             if (!in_array($file['mime_type'], $mimetypes)) {

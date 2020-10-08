@@ -81,7 +81,7 @@ $background_image_path = __DIR__.'/'.$background_image_file;
 function fatal_error($message)
 {
     global $error_mode;
-    if ($error_mode == 'log') {
+    if ('log' == $error_mode) {
         error_log($message);
         die();
     } else {

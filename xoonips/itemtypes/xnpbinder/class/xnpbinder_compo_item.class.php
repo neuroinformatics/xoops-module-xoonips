@@ -74,7 +74,7 @@ class XNPBinderCompoHandler extends XooNIpsItemInfoCompoHandler
         if (!is_array($index_ids)) {
             return false;
         }
-        if (count($child_items) == 0) {
+        if (0 == count($child_items)) {
             return false;
         }
 
@@ -122,7 +122,7 @@ class XNPBinderCompoHandler extends XooNIpsItemInfoCompoHandler
         if (!is_array($index_ids)) {
             return false;
         }
-        if (count($child_items) == 0) {
+        if (0 == count($child_items)) {
             return false;
         }
 
@@ -200,7 +200,7 @@ class XNPBinderCompoHandler extends XooNIpsItemInfoCompoHandler
         $result = $this->getBasicTemplateVar($type, $binder, $uid);
 
         $links = &$binder->getVar('binder_item_links');
-        if (false === $links || count($links) == 0) {
+        if (false === $links || 0 == count($links)) {
             return $result;
         }
 

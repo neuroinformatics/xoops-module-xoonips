@@ -40,6 +40,7 @@ function xoops_module_update_xnpurl($xoopsMod, $oldversion)
         if (!$result) {
             echo 'ERROR: line='.__LINE__.' sql='.$sql.' '.$xoopsDB->error();
         }
+        // no break
     case 311:
     case 330:
     case 331:
@@ -60,6 +61,7 @@ function xoops_module_update_xnpurl($xoopsMod, $oldversion)
         if (!$result) {
             echo 'ERROR: line='.__LINE__.' sql='.$sql.' '.$xoopsDB->error();
         }
+        // no break
     case 340:
     default:
     }

@@ -90,7 +90,7 @@ function xoonips_notification_get_item_tags($item_id)
         'ITEM_KEYWORDS' => implode(',', $keyword_strings),
         'ITEM_DESCRIPTION' => strval($item_basic->get('description')),
     );
-    if ($item_basic->get('doi') == '') {
+    if ('' == $item_basic->get('doi')) {
         $tags['ITEM_DETAIL_URL'] = XOOPS_URL.
             '/modules/xoonips/detail.php?item_id='.$item_id;
     } else {
@@ -240,7 +240,7 @@ function xoonips_notification_get_index_path_string($index_id)
     //    return xnpGetIndexPathServerString( session_id(), $index_id );
     $compo_handler = &xoonips_getormcompohandler('xoonips', 'index');
     $index_names = array();
-    for ($xid = $index_id; $xid != IID_ROOT;) {
+    for ($xid = $index_id; IID_ROOT != $xid;) {
         $compo = $compo_handler->get($xid);
         if (!$compo) {
             break;
@@ -262,6 +262,7 @@ function xoonips_notification_get_index_path_string($index_id)
  * @param[in] $index_id index id
  * @param[in] $subject  subject of notification
  * @param[in] $template_name  template file name of notification
+ *
  * @param string $subject
  * @param string $template_name
  */
@@ -277,13 +278,13 @@ function _xoonips_notification_item_certify($item_id, $index_ids, $subject, $tem
     foreach ($index_ids as $index_id) {
         $index = $index_handler->get($index_id);
         $gid = 0;
-        if ($index->get('open_level') == OL_PUBLIC) {
+        if (OL_PUBLIC == $index->get('open_level')) {
             // public index
             if (!isset($targetUids[$gid])) {
                 $targetUids[$gid] = xoonips_notification_get_moderator_uids();
                 $targetPaths[$gid] = array();
             }
-        } elseif ($index->get('open_level') == OL_GROUP_ONLY) {
+        } elseif (OL_GROUP_ONLY == $index->get('open_level')) {
             // group index
             $gid = $index->get('gid');
             if (!isset($targetUids[$gid])) {
@@ -580,7 +581,7 @@ function xoonips_notification_user_item_rejected($item_id, $index_ids)
 }
 
 /**
- * @param integer $file_id
+ * @param int $file_id
  */
 function xoonips_notification_user_file_downloaded($file_id, $downloader_uid)
 {

@@ -77,14 +77,14 @@ if (!$is_admin && !$is_moderator) {
 
 global $xoopsDB;
 
-if ($mode == 'html') {
+if ('html' == $mode) {
     require XOOPS_ROOT_PATH.'/header.php';
     echo "<p>\n";
     echo '<h3>'._MD_XOONIPS_OAIPMH_HARVEST_RESULT."</h3>\n";
     echo "</p>\n";
     echo "<a href='admin/maintenance.php?page=oaipmh'>"._MD_XOONIPS_BACK_TO_OAIPMH_CONFIGURATION.'</a><br />';
     echo "<p>\n";
-} elseif ($mode == 'text') {
+} elseif ('text' == $mode) {
     header('Content-type: text/plain');
 }
 
@@ -92,9 +92,9 @@ $result = $xoopsDB->query('SELECT URL FROM '.$xoopsDB->prefix('xoonips_oaipmh_re
 set_time_limit(0);
 while (list($url) = $xoopsDB->fetchRow($result)) {
     echo "Trying\t$url";
-    if ($mode == 'html') {
+    if ('html' == $mode) {
         echo "<br />\n";
-    } elseif ($mode == 'text') {
+    } elseif ('text' == $mode) {
         echo "\n";
     }
     $h = new OAIPMHHarvester($url);
@@ -103,14 +103,14 @@ while (list($url) = $xoopsDB->fetchRow($result)) {
     } else {
         echo "Succeed\t${url}";
     }
-    if ($mode == 'html') {
+    if ('html' == $mode) {
         echo "<br />\n";
-    } elseif ($mode == 'text') {
+    } elseif ('text' == $mode) {
         echo "\n";
     }
 }
 
-if ($mode == 'html') {
+if ('html' == $mode) {
     echo "</p>\n";
     echo "<a href='admin/maintenance.php?page=oaipmh'>"._MD_XOONIPS_BACK_TO_OAIPMH_CONFIGURATION.'</a><br />';
     require XOOPS_ROOT_PATH.'/footer.php';

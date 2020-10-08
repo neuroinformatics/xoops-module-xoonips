@@ -72,7 +72,7 @@ class XooNIpsLogicGetPreference extends XooNIpsLogic
 
             return false;
         }
-        if ($uid == UID_GUEST) {
+        if (UID_GUEST == $uid) {
             $preference['private_index_number'] = 0;
             $preference['private_item_number'] = 0;
             $preference['private_item_storage'] = 0;

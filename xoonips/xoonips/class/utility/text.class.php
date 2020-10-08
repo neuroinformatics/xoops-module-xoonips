@@ -426,10 +426,10 @@ class XooNIpsUtilityText extends XooNIpsUtility
             // decode xcode
             if ($image) {
                 // image allowed
-                  $text = $myts->xoopsCodeDecode($text, 1);
+                $text = $myts->xoopsCodeDecode($text, 1);
             } else {
                 // image not allowed
-                  $text = $myts->xoopsCodeDecode($text, 0);
+                $text = $myts->xoopsCodeDecode($text, 0);
             }
         }
         $text = $myts->codeConv($text, $xcode, $image);
@@ -491,12 +491,12 @@ class XooNIpsUtilityText extends XooNIpsUtility
             $tz_hour = intval(isset($matches[11]) ? $matches[11] : 0);
             $tz_min = intval(isset($matches[12]) ? $matches[12] : 0);
             $tz_offset = $pm * ($tz_hour * 3600 + $tz_min * 60);
-            if ($week == 0 && $wday == 0 && $oday == 0) {
+            if (0 == $week && 0 == $wday && 0 == $oday) {
                 // calendar dates
                 $tm = intval(gmmktime($hour, $min, $sec, $month, $mday, $year));
             } else {
                 $tsm = intval(gmmktime(0, 0, 0, 1, 1, $year));
-                if ($week != 0 && $wday != 0) {
+                if (0 != $week && 0 != $wday) {
                     // week dates
                     $days = ($week - 1) * 7 - intval(gmdate('w', $tsm)) + $wday;
                 } else {

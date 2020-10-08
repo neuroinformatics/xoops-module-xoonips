@@ -147,7 +147,7 @@ class XooNIpsActionTransferUserAccept extends XooNIpsActionTransfer
         if (false === $request) {
             return false;
         }
-        if (count($request) == 0) {
+        if (0 == count($request)) {
             return false;
         }
 
@@ -162,7 +162,7 @@ class XooNIpsActionTransferUserAccept extends XooNIpsActionTransfer
         if (!$basic) {
             return false;
         }
-        if (count($basic) == 0) {
+        if (0 == count($basic)) {
             return false;
         }
 
@@ -182,7 +182,7 @@ class XooNIpsActionTransferUserAccept extends XooNIpsActionTransfer
         }
 
         $links = $index_item_link_handler->getByItemid($item_id, array(OL_GROUP_ONLY));
-        if (!is_array($links) && count($links) == 0) {
+        if (!is_array($links) && 0 == count($links)) {
             return $result;
         }
 

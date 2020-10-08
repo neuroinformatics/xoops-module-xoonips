@@ -47,7 +47,7 @@ class XooNIpsUserCompoHandler extends XooNIpsRelatedObjectHandler
     /**
      * @param int $uid uid of transferee
      *
-     * @return boolean if uid is activated and certified user
+     * @return bool if uid is activated and certified user
      */
     public function isCertifiedUser($uid)
     {
@@ -55,10 +55,10 @@ class XooNIpsUserCompoHandler extends XooNIpsRelatedObjectHandler
         $c->add(new Criteria('uid', intval($uid)));
         $c->add(new Criteria('level', 1, '>='));
         $rows = &$this->getObjects($c);
-        if ($rows && count($rows) == 1) {
+        if ($rows && 1 == count($rows)) {
             $user = $rows[0]->getVar('xoonips_user');
 
-            return $user->get('activate') == 1;
+            return 1 == $user->get('activate');
         }
 
         return false;
@@ -82,7 +82,7 @@ class XooNIpsUserCompoHandler extends XooNIpsRelatedObjectHandler
         //delete user's item
         $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
         foreach ($item_type_handler->getObjects() as $itemtype) {
-            if ($itemtype->get('item_type_id') == ITID_INDEX) {
+            if (ITID_INDEX == $itemtype->get('item_type_id')) {
                 continue;
             }
             $item_handler = &xoonips_getormcompohandler($itemtype->get('name'), 'item');

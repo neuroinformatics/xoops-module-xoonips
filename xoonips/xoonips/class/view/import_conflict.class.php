@@ -100,7 +100,7 @@ class XooNIpsViewImportConflict extends XooNIpsView
             $vars['conflict_certify_request_locked_items'] = array();
             foreach ($item->getDuplicateLockedItemId() as $id) {
                 if ($lock_handler->isLocked($id)) {
-                    if ($lock_handler->getLockType($id) == XOONIPS_LOCK_TYPE_CERTIFY_REQUEST
+                    if (XOONIPS_LOCK_TYPE_CERTIFY_REQUEST == $lock_handler->getLockType($id)
                     ) {
                         $vars['conflict_certify_request_locked_items'][] = array(
                             'item_id' => $id,

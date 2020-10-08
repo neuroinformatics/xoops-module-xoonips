@@ -97,7 +97,7 @@ class XooNIpsXmlRpcViewGetItemtype extends XooNIpsXmlRpcViewElement
         }
         $resp->add('fields', $fields);
 
-        if (strlen($itemtype->getMainFileName()) == 0) {
+        if (0 == strlen($itemtype->getMainFileName())) {
             $resp->add('mainfile', new XoopsXmlRpcString(''));
         } else {
             $iteminfo = $itemtype->getIteminfo();
@@ -109,7 +109,7 @@ class XooNIpsXmlRpcViewGetItemtype extends XooNIpsXmlRpcViewElement
             }
         }
 
-        if (strlen($itemtype->getPreviewFileName()) == 0) {
+        if (0 == strlen($itemtype->getPreviewFileName())) {
             $resp->add('previewfile', new XoopsXmlRpcString(''));
         } else {
             $iteminfo = $itemtype->getIteminfo();

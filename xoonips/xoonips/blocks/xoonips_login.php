@@ -45,7 +45,7 @@ function b_xoonips_login_show()
     // set variables
     $block = array();
     $block['lang_username'] = _MB_XOONIPS_LOGIN_USERNAME;
-    if ($usercookie != '' && isset($_COOKIE[$usercookie])) {
+    if ('' != $usercookie && isset($_COOKIE[$usercookie])) {
         $block['unamevalue'] = $_COOKIE[$usercookie];
     } else {
         $block['unamevalue'] = '';
@@ -54,7 +54,7 @@ function b_xoonips_login_show()
     $block['lang_login'] = _MB_XOONIPS_LOGIN_LOGIN;
     $block['lang_lostpass'] = _MB_XOONIPS_LOGIN_LOSTPASS;
     $block['lang_registernow'] = _MB_XOONIPS_LOGIN_USERREG;
-    if ($use_ssl == 1 && $sslloginlink != '') {
+    if (1 == $use_ssl && '' != $sslloginlink) {
         $block['use_ssl'] = $use_ssl;
         $block['sslloginlink'] = $sslloginlink;
     }

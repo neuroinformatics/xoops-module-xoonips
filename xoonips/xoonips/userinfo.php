@@ -30,7 +30,7 @@ require 'include/common.inc.php';
 
 $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-if ($myuid == UID_GUEST) {
+if (UID_GUEST == $myuid) {
     // deny to access from guest user
     redirect_header('user.php', 3, _NOPERM);
     exit();
@@ -72,7 +72,7 @@ if ($uid == $myuid || $is_admin) {
     $xoopsTpl->assign('lang_inbox', _US_INBOX);
     $xoopsTpl->assign('lang_logout', _US_LOGOUT);
     $myxoopsConfigUser = &xoonips_get_xoops_configs(XOOPS_CONF_USER);
-    if (($myxoopsConfigUser['self_delete'] == 1) && ($uid == $_SESSION['xoopsUserId'])) {
+    if ((1 == $myxoopsConfigUser['self_delete']) && ($uid == $_SESSION['xoopsUserId'])) {
         $xoopsTpl->assign('user_candelete', true);
     } else {
         $xoopsTpl->assign('user_candelete', false);
@@ -96,7 +96,7 @@ $xoopsTpl->assign('user_realname', $thisUser->getVar('name', 's'));
 $xoopsTpl->assign('lang_website', _US_WEBSITE);
 $xoopsTpl->assign('user_websiteurl', $textutil->convert_link($thisUser->getVar('url', 's')));
 $xoopsTpl->assign('lang_email', _US_EMAIL);
-if ($thisUser->getVar('user_viewemail') == 1 || $uid == $myuid || $is_admin || $is_moderator) {
+if (1 == $thisUser->getVar('user_viewemail') || $uid == $myuid || $is_admin || $is_moderator) {
     $xoopsTpl->assign('user_email', $textutil->convert_link($thisUser->getVar('email', 's')));
 } else {
     $xoopsTpl->assign('user_email', '&nbsp;');
@@ -118,7 +118,7 @@ $xoopsTpl->assign('lang_interest', _US_INTEREST);
 $xoopsTpl->assign('user_interest', $thisUser->getVar('user_intrest', 's'));
 $xoopsTpl->assign('lang_extrainfo', _US_EXTRAINFO);
 $xoopsTpl->assign('user_extrainfo', $myts->makeTareaData4Show($thisUser->getVar('bio', 'n'), 0, 1, 1));
-if ($myuid != UID_GUEST) {
+if (UID_GUEST != $myuid) {
     $xoopsTpl->assign('user_pmlink', '<a href="javascript:openWithSelfMain(\''.XOOPS_URL.'/pmlite.php?send2=1&amp;to_userid='.$thisUser->getVar('uid').'\', \'pmlite\', 450, 380);"><img src="'.XOOPS_URL.'/images/icons/pm.gif" alt="'.sprintf(_SENDPMTO, $thisUser->getVar('uname', 'e')).'"/></a>');
 } else {
     $xoopsTpl->assign('user_pmlink', '');
@@ -159,8 +159,8 @@ if (is_object($xu_obj)) {
     $xu_vars = $xu_obj->getVarArray('s');
     $posi_handler = &xoonips_getormhandler('xoonips', 'positions');
     foreach ($xu_vars as $key => $val) {
-        if ($key == 'posi') {
-            if ($val == 0) {
+        if ('posi' == $key) {
+            if (0 == $val) {
                 $posi_obj = &$posi_handler->get($val);
                 if (is_object($posi_obj)) {
                     $posi_title = $posi_obj->getVar('posi_title', 's');
@@ -185,9 +185,9 @@ foreach ($cv_objs as $cv_obj) {
         foreach (array('month', 'year') as $key_post) {
             $key = $key_pre.'_'.$key_post;
             $val = $cv_obj->get($key);
-            if ($val == 0) {
+            if (0 == $val) {
                 $str = '';
-            } elseif ($key_post == 'month') {
+            } elseif ('month' == $key_post) {
                 $str = date('M.', mktime(0, 0, 0, $val, 1, 0));
             } else {
                 $str = date('Y', mktime(0, 0, 0, 1, 1, $val));
@@ -203,7 +203,7 @@ foreach ($cv_objs as $cv_obj) {
 
 // posted message list
 $gperm_handler = &xoops_gethandler('groupperm');
-$groups = ($uid != UID_GUEST) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+$groups = (UID_GUEST != $uid) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
 $module_handler = &xoops_gethandler('module');
 $criteria = new CriteriaCompo(new Criteria('hassearch', 1));
 $criteria->add(new Criteria('isactive', 1));
@@ -218,7 +218,7 @@ foreach ($mids as $mid) {
             $dirname = $module->getVar('dirname', 's');
             $modname = $module->getVar('name', 's');
             for ($i = 0; $i < $count; ++$i) {
-                if (isset($results[$i]['image']) && $results[$i]['image'] != '') {
+                if (isset($results[$i]['image']) && '' != $results[$i]['image']) {
                     $results[$i]['image'] = '../'.$dirname.'/'.$results[$i]['image'];
                 } else {
                     $results[$i]['image'] = '../../images/icons/posticon2.gif';
@@ -227,7 +227,7 @@ foreach ($mids as $mid) {
                 $results[$i]['title'] = $myts->makeTboxData4Show($results[$i]['title']);
                 $results[$i]['time'] = $results[$i]['time'] ? formatTimestamp($results[$i]['time']) : '';
             }
-            if ($count == 5) {
+            if (5 == $count) {
                 $showall_link = '<a href="../../search.php?action=showallbyuser&amp;mid='.$mid.'&amp;uid='.$thisUser->getVar('uid').'">'._US_SHOWALL.'</a>';
             } else {
                 $showall_link = '';

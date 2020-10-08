@@ -301,7 +301,7 @@ class XooNIpsUtilityFeed extends XooNIpsUtility
             echo '<title>'.$item['title'].'</title>'."\n";
             echo '<link rel="alternate" type="text/html" href="'.$item['link'].'"/>'."\n";
             echo '<updated>'.$date.'</updated>'."\n";
-            if ($item['description'] == '') {
+            if ('' == $item['description']) {
                 $item['description'] = '(empty)';
             }
             echo '<summary>'.$item['description'].'</summary>'."\n";

@@ -59,7 +59,7 @@ class XNPBinderImportItemHandler extends XooNIpsImportItemHandler
 
         switch (implode('/', $this->_tag_stack)) {
         case 'ITEM/DETAIL':
-            if (count($binder_item_links) == 0) {
+            if (0 == count($binder_item_links)) {
                 $this->_import_item->setErrors(E_XOONIPS_TAG_NOT_FOUND, ' no binder_item_link'.$this->_get_parser_error_at());
             }
             break;
@@ -80,7 +80,7 @@ class XNPBinderImportItemHandler extends XooNIpsImportItemHandler
             return;
         }
 
-        if (count($item->getImportIndexId()) == 0) {
+        if (0 == count($item->getImportIndexId())) {
             return;
         }
         //if( count( $item -> getVar( 'indexes' ) ) == 0 ) return;
@@ -243,7 +243,7 @@ class XNPBinderImportItemHandler extends XooNIpsImportItemHandler
         if (!is_array($index_ids)) {
             return false;
         }
-        if (count($child_items) == 0) {
+        if (0 == count($child_items)) {
             return false;
         }
 
@@ -291,7 +291,7 @@ class XNPBinderImportItemHandler extends XooNIpsImportItemHandler
         if (!is_array($index_ids)) {
             return false;
         }
-        if (count($child_items) == 0) {
+        if (0 == count($child_items)) {
             return false;
         }
 

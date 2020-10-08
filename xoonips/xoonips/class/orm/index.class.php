@@ -53,7 +53,7 @@ class XooNIpsOrmIndex extends XooNIpsTableObject
     {
         $result = true;
         $open_level = $this->get('open_level');
-        if ($open_level == OL_PUBLIC) {
+        if (OL_PUBLIC == $open_level) {
             if (isset($this->vars['uid']['value'])) {
                 trigger_error('cannot specify uid if open_level is OL_PUBLIC');
                 $result = false;
@@ -62,13 +62,13 @@ class XooNIpsOrmIndex extends XooNIpsTableObject
                 trigger_error('cannot specify gid if open_level is OL_PUBLIC');
                 $result = false;
             }
-        } elseif ($open_level == OL_GROUP_ONLY) {
+        } elseif (OL_GROUP_ONLY == $open_level) {
             if (isset($this->vars['uid']['value'])) {
                 trigger_error('cannot specify uid if open_level is OL_GROUP_ONLY');
                 $result = false;
             }
             $this->vars['gid']['required'] = true;
-        } elseif ($open_level == OL_PRIVATE) {
+        } elseif (OL_PRIVATE == $open_level) {
             $this->vars['uid']['required'] = true;
             if (isset($this->vars['gid']['value'])) {
                 trigger_error('cannot specify gid if open_level is OL_PRIVATE');
@@ -107,7 +107,7 @@ class XooNIpsOrmIndex extends XooNIpsTableObject
         $criteria = new CriteriaCompo(new Criteria('item_id', $this->get('index_id')));
         $criteria->add(new Criteria('title_id', DEFAULT_INDEX_TITLE_OFFSET));
         $title_objs = &$handler->getObjects($criteria);
-        if (count($title_objs) != 1) {
+        if (1 != count($title_objs)) {
             return false;
         }
 
@@ -184,12 +184,12 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
             // no such index
             return false;
         }
-        if ($id == IID_ROOT) {
+        if (IID_ROOT == $id) {
             // IID_ROOT is hidden index
             return false;
         }
 
-        if ($operation == 'write' || $operation == 'delete') {
+        if ('write' == $operation || 'delete' == $operation) {
             $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
             if ($item_lock_handler->isLocked($id)) {
                 // cannot write/delete locked index
@@ -198,17 +198,17 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
         }
 
         $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
-        if (($operation == 'create' || $operation == 'register_item') && $item_lock_handler->isLocked($id) && $item_lock_handler->getLockType($id) == XOONIPS_LOCK_TYPE_PUBLICATION_GROUP_INDEX) {
+        if (('create' == $operation || 'register_item' == $operation) && $item_lock_handler->isLocked($id) && XOONIPS_LOCK_TYPE_PUBLICATION_GROUP_INDEX == $item_lock_handler->getLockType($id)) {
             // cannot create new child of locked index
             return false;
         }
 
         switch ($index->get('open_level')) {
         case OL_PUBLIC:
-            if ($operation == 'read') {
-                if ($uid == UID_GUEST) {
+            if ('read' == $operation) {
+                if (UID_GUEST == $uid) {
                     $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
-                    if ($xconfig_handler->getValue(XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_KEY) != XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_ALL) {
+                    if (XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_ALL != $xconfig_handler->getValue(XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_KEY)) {
                         // guest not allowed
                         return false;
                     }
@@ -216,8 +216,8 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
 
                 return true;
             }
-            if ($operation == 'register_item') {
-                if ($uid == UID_GUEST) {
+            if ('register_item' == $operation) {
+                if (UID_GUEST == $uid) {
                     return false;
                 }
 
@@ -226,9 +226,9 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
             break;
         case OL_GROUP_ONLY:
             $xgroup_handler = &xoonips_gethandler('xoonips', 'group');
-            if ($operation == 'read' || $operation == 'register_item') {
+            if ('read' == $operation || 'register_item' == $operation) {
                 return $xgroup_handler->isGroupMember($uid, $index->get('gid'));
-            } elseif ($operation == 'write' || $operation == 'delete' || $operation == 'create' || $operation == 'export') {
+            } elseif ('write' == $operation || 'delete' == $operation || 'create' == $operation || 'export' == $operation) {
                 return $xgroup_handler->isGroupAdmin($uid, $index->get('gid'));
             }
             break;
@@ -265,7 +265,7 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
         $criteria = new CriteriaCompo(new Criteria('item_id', $xid));
         $criteria->add(new Criteria('title_id', DEFAULT_INDEX_TITLE_OFFSET));
         $it_objs = &$it_handler->getObjects($criteria);
-        if (count($it_objs) != 1) {
+        if (1 != count($it_objs)) {
             return false;
         }
         $it_obj = &$it_objs[0];
@@ -289,7 +289,7 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
         // check existing user index
         $criteria = new CriteriaCompo(new Criteria('uid', $uid));
         $criteria->add(new Criteria('parent_index_id', IID_ROOT));
-        if ($this->getCount($criteria) != 0) {
+        if (0 != $this->getCount($criteria)) {
             // already exists
             return false;
         }
@@ -298,7 +298,7 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
         $user_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
         $criteria = new Criteria('uid', $uid);
         $user_objs = &$user_handler->getObjects($criteria);
-        if (count($user_objs) != 1) {
+        if (1 != count($user_objs)) {
             // xoops user not found
             return false;
         }
@@ -320,7 +320,7 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
         // check existing group index
         $criteria = new CriteriaCompo(new Criteria('gid', $gid));
         $criteria->add(new Criteria('parent_index_id', IID_ROOT));
-        if ($this->getCount($criteria) != 0) {
+        if (0 != $this->getCount($criteria)) {
             // already exists
             return false;
         }
@@ -392,7 +392,7 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
             // for user index
             $criteria = new CriteriaCompo(new Criteria('parent_index_id', IID_ROOT));
             $criteria->add(new Criteria('open_level', OL_PRIVATE));
-            if ($this->getCount($criteria) == 0) {
+            if (0 == $this->getCount($criteria)) {
                 // first creation
                 // this value will be used for admin on install xoonips module
                 $sort_number = 2147483647;
@@ -410,7 +410,7 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
             $criteria2->add(new Criteria('open_level', OL_PUBLIC));
             $criteria2->add(new Criteria('open_level', OL_GROUP_ONLY), 'OR');
             $criteria->add($criteria2);
-            if ($this->getCount($criteria) == 0) {
+            if (0 == $this->getCount($criteria)) {
                 // not reaeched
                 $transaction->rollback();
 
@@ -454,7 +454,7 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
     public function lockAllDescendents($id)
     {
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
-        if ($id == IID_ROOT) {
+        if (IID_ROOT == $id) {
             return true;
         }
         foreach ($this->getAllDescendents($id) as $index) {
@@ -476,7 +476,7 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
     public function unlockAllDescendents($id)
     {
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
-        if ($id == IID_ROOT) {
+        if (IID_ROOT == $id) {
             return true;
         }
         foreach ($this->getAllDescendents($id) as $index) {
@@ -493,13 +493,12 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
     /**
      * get all parent indexes.
      *
-     *
      * @return XooNIpsOrmIndex[]
      */
     public function getAllParents($index_id)
     {
         $current = $this->get($index_id);
-        if (!$current || $current->get('index_id') == IID_ROOT) {
+        if (!$current || IID_ROOT == $current->get('index_id')) {
             return array();
         }
         $parent = $current->getParentIndex();
@@ -513,8 +512,8 @@ class XooNIpsOrmIndexHandler extends XooNIpsTableObjectHandler
     /**
      * get all descendents parent indexes path string.
      *
+     * @param int $index_id
      *
-     * @param integer $index_id
      * @return XooNIpsOrmIndex[]
      */
     public function getAllDescendents($index_id)

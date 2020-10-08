@@ -65,16 +65,16 @@ $doi_column_name = XNP_CONFIG_DOI_FIELD_PARAM_NAME;
 $item_id = $formdata->getValue('both', 'item_id', 'i', false, 0);
 $op = $formdata->getValue('both', 'op', 's', false, '');
 $doi = '';
-if ($doi_column_name != '') {
+if ('' != $doi_column_name) {
     $doi = $formdata->getValue('both', $doi_column_name, 's', false, '');
 }
 
 // update $item_id by the ID specified by given doi if exists $$doi_column_name param.
-if ($doi != '') {
+if ('' != $doi) {
     $new_item_ids = array();
     $result = xnpGetItemIdByDoi($doi, $new_item_ids);
     // error check. $new_item_ids must be one.
-    if (count($new_item_ids) == 0) {
+    if (0 == count($new_item_ids)) {
         redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_ITEM_DOI_NOT_FOUND);
         exit();
     } elseif (count($new_item_ids) > 1) {
@@ -90,7 +90,7 @@ if ($doi != '') {
 
 // set download file id if op == 'download'
 $download_file_id = false;
-if ($op == 'download') {
+if ('download' == $op) {
     $download_file_id = $formdata->getValue('both', 'download_file_id', 'i', false, false);
 }
 
@@ -110,7 +110,7 @@ $item_type_id = $basic->get('item_type_id');
 //retrieve module name to $modname
 $tmp = array();
 $itemtypes = array();
-if (xnp_get_item_types($tmp) != RES_OK) {
+if (RES_OK != xnp_get_item_types($tmp)) {
     redirect_header(XOOPS_URL.'/', 3, 'ERROR xnp_get_item_types');
     exit();
 } else {
@@ -122,33 +122,33 @@ if (xnp_get_item_types($tmp) != RES_OK) {
     $modname = $itemtype['name'];
 }
 
-if ($op == 'reject_certify' || $op == 'accept_certify' || $op == 'withdraw') {
+if ('reject_certify' == $op || 'accept_certify' == $op || 'withdraw' == $op) {
     $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
     $succeeded_index_ids = array();
     foreach ($formdata->getValueArray('post', 'index_ids', 'i', true) as $index_id) {
-        if ($op == 'withdraw' && $item_lock_handler->isLocked($item_id)) {
+        if ('withdraw' == $op && $item_lock_handler->isLocked($item_id)) {
             redirect_header(XOOPS_URL.'/modules/xoonips/detail.php?item_id='.$item_id, 5, sprintf(_MD_XOONIPS_ERROR_CANNOT_WITHDRAW_LOCKED_ITEM, xoonips_get_lock_type_string($item_lock_handler->getLockType($item_id))));
             exit();
         }
-        if ($op == 'reject_certify') {
+        if ('reject_certify' == $op) {
             if (xoonips_reject_item($uid, $item_id, $index_id)) {
                 $succeeded_index_ids[] = $index_id;
             }
-        } elseif ($op == 'withdraw') {
+        } elseif ('withdraw' == $op) {
             if (xoonips_withdraw_item($uid, $item_id, $index_id)) {
                 $succeeded_index_ids[] = $index_id;
             }
-        } elseif ($op == 'accept_certify') {
+        } elseif ('accept_certify' == $op) {
             if (xoonips_certify_item($uid, $item_id, $index_id)) {
                 $succeeded_index_ids[] = $index_id;
             }
         }
     }
     if (!empty($succeeded_index_ids)) {
-        if ($op == 'reject_certify' || $op == 'withdraw') {
+        if ('reject_certify' == $op || 'withdraw' == $op) {
             xoonips_notification_item_rejected($item_id, $succeeded_index_ids);
             xoonips_notification_user_item_rejected($item_id, $succeeded_index_ids);
-        } elseif ($op == 'accept_certify') {
+        } elseif ('accept_certify' == $op) {
             xoonips_notification_item_certified($item_id, $succeeded_index_ids);
             xoonips_notification_user_item_certified($item_id, $succeeded_index_ids);
         }
@@ -158,7 +158,7 @@ if ($op == 'reject_certify' || $op == 'accept_certify' || $op == 'withdraw') {
 
 $item_compo_handler = &xoonips_getormcompohandler('xoonips', 'item');
 
-if ($op == 'delete') {
+if ('delete' == $op) {
     //show error if locked
     $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
     if ($item_lock_handler->isLocked($item_id)) {
@@ -172,7 +172,7 @@ if ($op == 'delete') {
 
     xoonips_delete_item($item_id);
 }
-if ($op == 'print') {
+if ('print' == $op) {
     require_once XOOPS_ROOT_PATH.'/class/template.php';
     $xoopsTpl = new XoopsTpl();
     xoops_header(false);
@@ -204,7 +204,7 @@ if ($item_lock_handler->isLocked($item_id)) {
     $xoopsTpl->assign('locked_message', false);
 }
 
-if ($item_compo_handler->getPerm($item_id, $uid, 'delete') && $op != 'print') {
+if ($item_compo_handler->getPerm($item_id, $uid, 'delete') && 'print' != $op) {
     $xoopsTpl->assign('delete_button_visible', '1');
 } else {
     $xoopsTpl->assign('delete_button_visible', '0');
@@ -212,20 +212,20 @@ if ($item_compo_handler->getPerm($item_id, $uid, 'delete') && $op != 'print') {
 
 // makes Modify button visible if following case
 // user have write permission and this page is not for printer friendly.
-if ($item_compo_handler->getPerm($item_id, $uid, 'write') && $op != 'print') {
+if ($item_compo_handler->getPerm($item_id, $uid, 'write') && 'print' != $op) {
     $xoopsTpl->assign('modify_button_visible', '1');
 } else {
     $xoopsTpl->assign('modify_button_visible', '0');
 }
 
-if ($op != 'print') {
+if ('print' != $op) {
     $xoopsTpl->assign('print_button_visible', '1');
 } else {
     $xoopsTpl->assign('print_button_visible', '0');
 }
 
 $xoopsTpl->assign('item_id', $item_id);
-if ($doi != '') {
+if ('' != $doi) {
     $xoopsTpl->assign('doi', $textutil->html_special_chars($doi));
     $xoopsTpl->assign('doi_column_name', $textutil->html_special_chars($doi_column_name));
 }
@@ -240,7 +240,7 @@ function genSelectLabels(&$index)
     $textutil = &xoonips_getutility('text');
     $title = $index['titles'][DEFAULT_INDEX_TITLE_OFFSET];
     $indent_html = str_repeat('&nbsp;&nbsp;', (int) ($index['depth']));
-    if (isset($index['child_count']) && $index['child_count'] != 0) {
+    if (isset($index['child_count']) && 0 != $index['child_count']) {
         $select_label = sprintf(' %s ( %u )', $title, $index['child_count']);
     } else {
         $select_label = sprintf(' %s ', $title);
@@ -250,7 +250,7 @@ function genSelectLabels(&$index)
 }
 
 // display of 'add to public'
-if ($op == '' || $op == 'download') {
+if ('' == $op || 'download' == $op) {
     // Display only 'Binder -> Binders'. Display 'Not Binder -> Public not Binders'.
     require_once 'include/gentree.php';
     $index = array('open_level' => OL_PUBLIC);

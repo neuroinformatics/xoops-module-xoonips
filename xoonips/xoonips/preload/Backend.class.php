@@ -56,7 +56,7 @@ class Xoonips_Backend extends XCube_ActionFilter
     }
 
     /**
-     * @param integer $item_id
+     * @param int    $item_id
      * @param string $fmt
      */
     public function _getItemTitle($item_id, $fmt)
@@ -72,13 +72,13 @@ class Xoonips_Backend extends XCube_ActionFilter
     }
 
     /**
-     * @param integer $item_id
+     * @param int    $item_id
      * @param string $fmt
      */
     public function _getItemUrl($item_id, $doi, $fmt)
     {
         $url = XOOPS_URL.'/modules/xoonips/detail.php?';
-        $url .= ($doi != '' && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') ? XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($doi) : 'item_id='.$item_id;
+        $url .= ('' != $doi && XNP_CONFIG_DOI_FIELD_PARAM_NAME != '') ? XNP_CONFIG_DOI_FIELD_PARAM_NAME.'='.urlencode($doi) : 'item_id='.$item_id;
         if (isset($GLOBALS['cubeUtilMlang'])) {
             if (!empty($GLOBALS['cubeUtilMlang']->mLanguage)) {
                 $url .= '&amp;'.CUBE_UTILS_ML_PARAM_NAME.'='.$GLOBALS['cubeUtilMlang']->mLanguage;

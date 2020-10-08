@@ -81,7 +81,7 @@ class XooNIpsUtilityLanguagemanager extends XooNIpsUtility
     /**
      * read language resouce on current language.
      *
-     * @param string $resource        resource file name
+     * @param string $resource       resource file name
      * @param string $mydirname      module directory name
      * @param string $mytrustdirname module trust directory name
      * @param bool   $read_once      true if read by require_once
@@ -106,7 +106,7 @@ class XooNIpsUtilityLanguagemanager extends XooNIpsUtility
     /**
      * read language resouce file on current language.
      *
-     * @param string $resource        resource file name
+     * @param string $resource       resource file name
      * @param string $mydirname      module directory name
      * @param string $mytrustdirname module trust directory name
      *
@@ -197,7 +197,7 @@ class XooNIpsUtilityLanguagemanager extends XooNIpsUtility
      */
     public function _get_path($resource, $mydirname, $mytrustdirname, $alternative = null)
     {
-        $is_directory = (substr($resource, -1, 1) == '/') ? true : false;
+        $is_directory = ('/' == substr($resource, -1, 1)) ? true : false;
         $d3file = XOOPS_ROOT_PATH.'/modules/'.$mydirname.'/mytrustdirname.php';
         if (empty($mytrustdirname) && file_exists($d3file)) {
             require $d3file;

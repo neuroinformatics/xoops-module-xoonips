@@ -80,7 +80,7 @@ if (count($tree_ids) > 0) {
         $uncertified = 0;
 
         $index_item_links = &$index_item_link_handler->getObjects(new Criteria('index_id', $xid));
-        if ($index_item_links === false) {
+        if (false === $index_item_links) {
             // no item in tree
             continue;
         }
@@ -114,7 +114,7 @@ if (count($tree_ids) > 0) {
             'uncertified' => $uncertified,
             'failed' => $failed,
         );
-        $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+        $evenodd = ('even' == $evenodd) ? 'odd' : 'even';
     }
     foreach ($targetIndexIds as $item_id => $indexIds) {
         xoonips_notification_item_rejected($item_id, $indexIds);
@@ -133,10 +133,10 @@ if (count($tree_ids) > 0) {
         $criteria->add(new Criteria('certify_state', CERTIFIED));
         $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id');
         $index_item_links = &$index_item_link_handler->getObjects($criteria, false, '', false, $join);
-        if (count($index_item_links) === 0) {
+        if (0 === count($index_item_links)) {
             // update item_status
             $item_status = $item_status_handler->get($item_id);
-            if ($item_status !== false) {
+            if (false !== $item_status) {
                 $item_status->set('is_deleted', 1);
                 $item_status->set('deleted_timestamp', time());
                 $item_status_handler->insert($item_status);

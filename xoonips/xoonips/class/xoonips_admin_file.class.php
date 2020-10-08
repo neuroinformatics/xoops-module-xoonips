@@ -56,7 +56,7 @@ class XooNIpsAdminFileHandler extends XooNIpsFileHandler
         // get preview file type id
         $criteria = new Criteria('name', 'preview');
         $xft_objs = &$xft_handler->getObjects($criteria);
-        if (count($xft_objs) != 1) {
+        if (1 != count($xft_objs)) {
             die('Fatal Error : Preview File Type not found');
         }
         $this->preview_ftid = $xft_objs[0]->get('file_type_id');
@@ -92,7 +92,7 @@ class XooNIpsAdminFileHandler extends XooNIpsFileHandler
         $criteria->setLimit(1);
         $criteria->setStart($num - 1);
         $xf_objs = &$this->xf_handler->getObjects($criteria);
-        if (count($xf_objs) != 1) {
+        if (1 != count($xf_objs)) {
             return false;
         }
 
@@ -174,7 +174,7 @@ class XooNIpsAdminFileHandler extends XooNIpsFileHandler
         $dirutil = &xoonips_getutility('directory');
         $tmpfile = $dirutil->get_template('XooNIpsSearch');
         $fp = $dirutil->mkstemp($tmpfile);
-        if ($fp === false) {
+        if (false === $fp) {
             return false;
         }
         // register callback function to remove temporary file
@@ -193,7 +193,7 @@ class XooNIpsAdminFileHandler extends XooNIpsFileHandler
         // - try to load data from directory of mysql server
         $sql = sprintf('LOAD DATA INFILE \'%s\' INTO TABLE %s ( file_id, search_text )', $esc_tmpfile, $xst_table);
         $result = $xoopsDB->queryF($sql);
-        if ($result === false) {
+        if (false === $result) {
             // - try to load data from direcotry of mysql client
             $sql = sprintf('LOAD DATA LOCAL INFILE \'%s\' INTO TABLE %s ( file_id, search_text )', $esc_tmpfile, $xst_table);
             $result = $xoopsDB->queryF($sql);

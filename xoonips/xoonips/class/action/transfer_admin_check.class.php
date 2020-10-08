@@ -151,7 +151,7 @@ class XooNIpsActionTransferAdminCheck extends XooNIpsActionTransfer
     {
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $index = $index_handler->get($index_id);
-        if ($index == false || $index->get('open_level') != OL_PRIVATE || $index->get('uid') != $uid) {
+        if (false == $index || OL_PRIVATE != $index->get('open_level') || $index->get('uid') != $uid) {
             return false;
         }
 

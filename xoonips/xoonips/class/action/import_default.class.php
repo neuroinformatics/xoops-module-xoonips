@@ -60,7 +60,7 @@ class XooNIpsActionImportDefault extends XooNIpsAction
             'max_file_size_bytes' => $this->_get_upload_max_filesize(),
             'max_file_size' => ini_get('upload_max_filesize'),
             'xoonips_checked_xid' => $this->_formdata->getValue('post', 'xoonipsCheckedXID', 's', false),
-            'zipfile_is_given' => ($zipfile !== null || is_array($zipfile) && !array_key_exists('name', $zipfile) || $zipfile['tmp_name'] == '' || $zipfile['size'] == 0),
+            'zipfile_is_given' => (null !== $zipfile || is_array($zipfile) && !array_key_exists('name', $zipfile) || '' == $zipfile['tmp_name'] || 0 == $zipfile['size']),
             'admin' => isset($_SESSION['xoonips_old_uid']) || $xoopsUser->isAdmin(),
         );
         //$this -> _response -> setResult( true );
@@ -68,7 +68,7 @@ class XooNIpsActionImportDefault extends XooNIpsAction
         $this->_view_params['max_file_size_bytes'] = $this->_get_upload_max_filesize();
         $this->_view_params['max_file_size'] = ini_get('upload_max_filesize');
         $this->_view_params['xoonips_checked_xid'] = $this->_formdata->getValue('post', 'xoonipsCheckedXID', 's', false);
-        $this->_view_params['zipfile_is_given'] = ($zipfile !== null || is_array($zipfile) && !array_key_exists('name', $zipfile) || $zipfile['tmp_name'] == '' || $zipfile['size'] == 0);
+        $this->_view_params['zipfile_is_given'] = (null !== $zipfile || is_array($zipfile) && !array_key_exists('name', $zipfile) || '' == $zipfile['tmp_name'] || 0 == $zipfile['size']);
         $this->_view_params['admin'] = isset($_SESSION['xoonips_old_uid']) || $xoopsUser->isAdmin();
 
         global $xoonipsTreeCheckBox, $xoonipsEditIndex, $xoonipsEditPublic;
@@ -85,7 +85,7 @@ class XooNIpsActionImportDefault extends XooNIpsAction
     public function _get_upload_max_filesize()
     {
         $val = ini_get('upload_max_filesize');
-        if ($val === '' || $val == -1) {
+        if ('' === $val || -1 == $val) {
             // unlimit
             $val = '2G';
         }
@@ -94,8 +94,10 @@ class XooNIpsActionImportDefault extends XooNIpsAction
             switch ($matches[2]) {
             case 'G':
                 $val *= 1024;
+                // no break
             case 'M':
                 $val *= 1024;
+                // no break
             case 'K':
                 $val *= 1024;
             }

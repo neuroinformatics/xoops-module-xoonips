@@ -216,7 +216,7 @@ class XooNIpsOrmItemTypeHandler extends XooNIpsTableObjectHandler
         $join = new XooNIpsJoinCriteria('modules', 'mid', 'mid', 'INNER');
         $fields = sprintf('item_type_id, %s.name, %s.mid, display_name, viewphp, weight', $table, $table);
         $objs = &$this->getObjects($criteria, false, $fields, false, $join);
-        if (count($objs) != 0) {
+        if (0 != count($objs)) {
             usort($objs, array($this, '_order_weight_cmp'));
         }
 
@@ -229,7 +229,7 @@ class XooNIpsOrmItemTypeHandler extends XooNIpsTableObjectHandler
      * @param object &$a
      * @param object &$b
      *
-     * @return integer
+     * @return int
      */
     public function _order_weight_cmp(&$a, &$b)
     {

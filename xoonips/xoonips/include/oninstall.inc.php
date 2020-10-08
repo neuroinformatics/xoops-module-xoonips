@@ -53,7 +53,7 @@ function xoops_module_install_xoonips($xoopsMod)
 
     // create and join moderator group
     $mgid = $admin_xoops_handler->createGroup('moderator', 'platform moderator');
-    if ($mgid === false) {
+    if (false === $mgid) {
         return false;
     }
     if (!$admin_xoops_handler->addUserToXoopsGroup($mgid, $uid)) {
@@ -153,7 +153,7 @@ function xoops_module_install_xoonips($xoopsMod)
     foreach ($sys_blocks as $sys_block) {
         list($dirname, $show_func) = $sys_block;
         $sysmid = $admin_xoops_handler->getModuleId($dirname);
-        if ($sysmid === false) {
+        if (false === $sysmid) {
             // this case will occur when system module does not installed on
             // XOOPS Cube Legacy 2.1
             continue;

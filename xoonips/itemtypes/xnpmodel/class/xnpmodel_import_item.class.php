@@ -180,13 +180,13 @@ class XNPModelImportItemHandler extends XooNIpsImportItemHandler
             $file_handler = &xoonips_getormhandler('xoonips', 'file');
             $criteria = new Criteria('name', addslashes($attribs['FILE_TYPE_NAME']));
             $file_type = &$file_type_handler->getObjects($criteria);
-            if (count($file_type) == 0) {
+            if (0 == count($file_type)) {
                 $this->_import_item->setErrors(E_XOONIPS_ATTR_NOT_FOUND, 'file_type_id is not found:'.$attribs['FILE_TYPE_NAME'].$this->_get_parser_error_at());
                 break;
             }
 
             $unicode = &xoonips_getutility('unicode');
-            if ($this->_file_type_attribute == 'model_data') {
+            if ('model_data' == $this->_file_type_attribute) {
                 if ($this->_model_data_flag) {
                     $this->_import_item->setErrors(E_XOONIPS_ATTACHMENT_HAS_REDUNDANT, "multiple $name attachments is not allowed".$this->_get_parser_error_at());
                     break;
@@ -198,7 +198,7 @@ class XNPModelImportItemHandler extends XooNIpsImportItemHandler
                 $this->_model_data->set('file_size', $attribs['FILE_SIZE']);
                 $this->_model_data->set('sess_id', session_id());
                 $this->_model_data->set('file_type_id', $file_type[0]->get('file_type_id'));
-            } elseif ($this->_file_type_attribute == 'preview') {
+            } elseif ('preview' == $this->_file_type_attribute) {
                 $this->_preview = &$file_handler->create();
                 $this->_preview->setFilepath($this->_attachment_dir.'/'.$attribs['FILE_NAME']);
                 $this->_preview->set('original_file_name', $unicode->decode_utf8($attribs['ORIGINAL_FILE_NAME'], xoonips_get_server_charset(), 'h'));
@@ -241,7 +241,7 @@ class XNPModelImportItemHandler extends XooNIpsImportItemHandler
                 }
             }
             //error if no creators
-            if (count($this->_import_item->getVar('creator')) == 0) {
+            if (0 == count($this->_import_item->getVar('creator'))) {
                 $this->_import_item->setErrors(E_XOONIPS_TAG_NOT_FOUND, ' no creator'.$this->_get_parser_error_at());
             }
             break;
@@ -255,7 +255,7 @@ class XNPModelImportItemHandler extends XooNIpsImportItemHandler
             break;
 
         case 'ITEM/DETAIL/CREATORS/CREATOR':
-            if ($this->_detail_version != '1.03') {
+            if ('1.03' != $this->_detail_version) {
                 break;
             }
             $creators = &$this->_import_item->getVar('creator');
@@ -269,9 +269,9 @@ class XNPModelImportItemHandler extends XooNIpsImportItemHandler
             $creators[] = $creator;
             break;
         case 'ITEM/DETAIL/CREATOR':
-            if ($this->_detail_version != '1.00'
-                && $this->_detail_version != '1.01'
-                && $this->_detail_version != '1.02'
+            if ('1.00' != $this->_detail_version
+                && '1.01' != $this->_detail_version
+                && '1.02' != $this->_detail_version
             ) {
                 //<creator> is only for 1.00, 1.01 and 1.02
                 break;
@@ -305,7 +305,7 @@ class XNPModelImportItemHandler extends XooNIpsImportItemHandler
             break;
         case 'ITEM/DETAIL/FILE':
             $file_handler = &xoonips_getormhandler('xoonips', 'file');
-            if ($this->_file_type_attribute == 'model_data') {
+            if ('model_data' == $this->_file_type_attribute) {
                 $this->_model_data_flag = true;
                 if (!$file_handler->insert($this->_model_data)) {
                     global $xoopsDB;
@@ -316,7 +316,7 @@ class XNPModelImportItemHandler extends XooNIpsImportItemHandler
                 $this->_import_item->setVar('model_data', $this->_model_data);
                 $this->_import_item->setHasModelData();
                 $this->_file_type_attribute = null;
-            } elseif ($this->_file_type_attribute == 'preview') {
+            } elseif ('preview' == $this->_file_type_attribute) {
                 $this->_preview_flag = true;
                 if (!$file_handler->insert($this->_preview)) {
                     $this->_import_item->setErrors(E_XOONIPS_DB_QUERY, "can't insert attachment file:".$this->_preview->get('original_file_name').$this->_get_parser_error_at());
@@ -331,17 +331,17 @@ class XNPModelImportItemHandler extends XooNIpsImportItemHandler
             }
             break;
         case 'ITEM/DETAIL/FILE/CAPTION':
-            if ($this->_file_type_attribute == 'model_data') {
+            if ('model_data' == $this->_file_type_attribute) {
                 $this->_model_data->set('caption', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'));
-            } elseif ($this->_file_type_attribute == 'preview') {
+            } elseif ('preview' == $this->_file_type_attribute) {
                 $this->_preview->set('caption', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'));
             }
             break;
             break;
         case 'ITEM/DETAIL/FILE/THUMBNAIL':
-            if ($this->_file_type_attribute == 'model_data') {
+            if ('model_data' == $this->_file_type_attribute) {
                 $this->_model_data->set('thumbnail_file', base64_decode($this->_cdata));
-            } elseif ($this->_file_type_attribute == 'preview') {
+            } elseif ('preview' == $this->_file_type_attribute) {
                 $this->_preview->set('thumbnail_file', base64_decode($this->_cdata));
             }
             break;

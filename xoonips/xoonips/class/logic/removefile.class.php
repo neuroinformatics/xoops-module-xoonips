@@ -82,12 +82,14 @@ class XooNIpsLogicRemoveFile extends XooNIpsLogic
         if (!$file) {
             $response->setResult(false);
             $error->add(XNPERR_NOT_FOUND); // not found
+
             return false;
         }
         $item_id = $file->getVar('item_id');
         if (empty($item_id)) {
             $response->setResult(false);
             $error->add(XNPERR_ACCESS_FORBIDDEN); // maybe belong to other session
+
             return false;
         }
         // item_id -> basic -> item_type_id -> item_type_name -> item_handler
@@ -162,12 +164,12 @@ class XooNIpsLogicRemoveFile extends XooNIpsLogic
             $criteria->add(new Criteria('file_type_id', $file->getVar('file_type_id')));
             $criteria->add(new Criteria('is_deleted', 0));
             $count = $file_handler->getCount($criteria);
-            if ($count == 0) {
+            if (0 == $count) {
                 $response->setResult(false);
                 $error->add(XNPERR_SERVER_ERROR, 'cannot count files');
 
                 return false;
-            } elseif ($count == 1) {
+            } elseif (1 == $count) {
                 $response->setResult(false);
                 $error->add(XNPERR_ERROR, 'that file is not optional and the last one');
 

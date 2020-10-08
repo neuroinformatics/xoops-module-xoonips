@@ -37,7 +37,7 @@ class XooNIpsXmlRpcTransformFile extends XooNIpsXmlRpcTransformElement
         // filetype to file_type_id
         $file_type_handler = &xoonips_getormhandler('xoonips', 'file_type');
         $filetypes = &$file_type_handler->getObjects(new Criteria('name', $array['filetype']));
-        if (!$filetypes || count($filetypes) != 1) {
+        if (!$filetypes || 1 != count($filetypes)) {
             return false;
         }
 

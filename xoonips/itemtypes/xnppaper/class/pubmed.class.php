@@ -104,7 +104,6 @@ class XooNIps_PubMed_ArticleSet extends XooNIpsXMLParser
 
     /**
      * override function of start element handler.
-     *
      */
     public function parser_start_element($attribs)
     {
@@ -153,7 +152,6 @@ class XooNIps_PubMed_ArticleSet extends XooNIpsXMLParser
 
     /**
      * override function of end element handler.
-     *
      */
     public function parser_end_element()
     {
@@ -177,7 +175,7 @@ class XooNIps_PubMed_ArticleSet extends XooNIpsXMLParser
     /**
      * override function of character data handler.
      *
-     * @param string   $cdata  character data
+     * @param string $cdata character data
      */
     public function parser_character_data($cdata)
     {
@@ -338,7 +336,6 @@ class XooNIps_PubMed_JournalEsearch extends XooNIpsXMLParser
 
     /**
      * override function of start element handler.
-     *
      */
     public function parser_start_element($attribs)
     {
@@ -352,7 +349,7 @@ class XooNIps_PubMed_JournalEsearch extends XooNIpsXMLParser
     /**
      * override function of character data handler.
      *
-     * @param string   $cdata  character data
+     * @param string $cdata character data
      */
     public function parser_character_data($cdata)
     {
@@ -366,7 +363,6 @@ class XooNIps_PubMed_JournalEsearch extends XooNIpsXMLParser
 
     /**
      * override function of end element handler.
-     *
      */
     public function parser_end_element()
     {
@@ -450,7 +446,6 @@ class XooNIps_PubMed_JournalEsummary extends XooNIpsXMLParser
 
     /**
      * override function of start element handler.
-     *
      */
     public function parser_start_element($attribs)
     {
@@ -470,7 +465,6 @@ class XooNIps_PubMed_JournalEsummary extends XooNIpsXMLParser
 
     /**
      * override function of end element handler.
-     *
      */
     public function parser_end_element()
     {
@@ -485,7 +479,7 @@ class XooNIps_PubMed_JournalEsummary extends XooNIpsXMLParser
     /**
      * override function of character data handler.
      *
-     * @param string   $cdata  character data
+     * @param string $cdata character data
      */
     public function parser_character_data($cdata)
     {

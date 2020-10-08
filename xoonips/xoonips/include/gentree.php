@@ -35,13 +35,13 @@
 /**
  * A child is added recursively. (Caution) not add parentXID.
  *
- * @param integer $parentXID parentXID
+ * @param int $parentXID parentXID
  * @param $in  XID->index Conversion table
  * @param $childFinder  XID->array(childXID) Conversion table
  * @param $out Output place. Priority is given to the depth when searching.
  *             Brothers output in result sorted by sort_number.  $out[] = index
  *             ROOT's depth = 0 ($out don't contain ROOT.)
- * @param integer $depth
+ * @param int $depth
  *
  * @return nothing
  */
@@ -100,7 +100,7 @@ function genIndexTree1(&$indexes)
     $indexFinder = array(); // index_id -> index
     $childFinder = array(); // index_id -> child_index_id
     foreach ($indexes as $index) {
-        if ($index === false) {
+        if (false === $index) {
             continue;
         }
         $parent_xid = $index['parent_index_id'];
@@ -152,10 +152,10 @@ function filterPublicIndex(&$indexes)
 {
     $len = count($indexes);
     for ($i = 0; $i < $len; ++$i) {
-        if ($indexes[$i] === false) {
+        if (false === $indexes[$i]) {
             continue;
         }
-        if ($indexes[$i]['open_level'] != OL_PUBLIC) {
+        if (OL_PUBLIC != $indexes[$i]['open_level']) {
             $indexes[$i] = false;
         }
     }
@@ -184,15 +184,15 @@ function filterMyIndex(&$indexes, $xnpsid, $uid)
     $len = count($indexes);
     for ($i = 0; $i < $len; ++$i) {
         $index = &$indexes[$i];
-        if ($index === false) {
+        if (false === $index) {
             continue;
         }
-        if ($index['open_level'] == OL_GROUP_ONLY) {
+        if (OL_GROUP_ONLY == $index['open_level']) {
             if (!in_array($index['owner_gid'], $gids)) {
                 // group which he does not belong.
                 $indexes[$i] = false;
             }
-        } elseif ($index['open_level'] == OL_PRIVATE) {
+        } elseif (OL_PRIVATE == $index['open_level']) {
             if ($index['owner_uid'] != $uid) {
                 // index is not this user's one.
                 $indexes[$i] = false;
@@ -206,10 +206,10 @@ function filterPrivateIndex(&$indexes, $uid)
     $len = count($indexes);
     for ($i = 0; $i < $len; ++$i) {
         $index = &$indexes[$i];
-        if ($index === false) {
+        if (false === $index) {
             continue;
         }
-        if ($index['open_level'] != OL_PRIVATE) {
+        if (OL_PRIVATE != $index['open_level']) {
             $indexes[$i] = false;
         }
     }
@@ -235,12 +235,12 @@ function filterSameAreaIndex(&$indexes, &$refIndex)
     $len = count($indexes);
     for ($i = 0; $i < $len; ++$i) {
         $index = &$indexes[$i];
-        if ($index === false) {
+        if (false === $index) {
             continue;
         }
-        if (!($index['open_level'] == OL_PUBLIC && $refIndex['open_level'] == OL_PUBLIC
-            || $index['open_level'] == OL_GROUP_ONLY && $refIndex['open_level'] == OL_GROUP_ONLY && $index['owner_gid'] == $refIndex['owner_gid']
-            || $index['open_level'] == OL_PRIVATE && $refIndex['open_level'] == OL_PRIVATE && $index['owner_uid'] == $refIndex['owner_uid'])
+        if (!(OL_PUBLIC == $index['open_level'] && OL_PUBLIC == $refIndex['open_level']
+            || OL_GROUP_ONLY == $index['open_level'] && OL_GROUP_ONLY == $refIndex['open_level'] && $index['owner_gid'] == $refIndex['owner_gid']
+            || OL_PRIVATE == $index['open_level'] && OL_PRIVATE == $refIndex['open_level'] && $index['owner_uid'] == $refIndex['owner_uid'])
         ) {
             $indexes[$i] = false;
         }
@@ -267,10 +267,10 @@ function filterPublicPrivateIndex(&$indexes, $uid)
     $len = count($indexes);
     for ($i = 0; $i < $len; ++$i) {
         $index = &$indexes[$i];
-        if ($index === false) {
+        if (false === $index) {
             continue;
         }
-        if ($index['open_level'] != OL_PUBLIC && !($index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $uid)) {
+        if (OL_PUBLIC != $index['open_level'] && !(OL_PRIVATE == $index['open_level'] && $index['owner_uid'] == $uid)) {
             $indexes[$i] = false;
         }
     }
@@ -287,11 +287,11 @@ function filterWritableIndex(&$indexes, $xnpsid, $uid)
     $len = count($indexes);
     for ($i = 0; $i < $len; ++$i) {
         $index = &$indexes[$i];
-        if ($index === false) {
+        if (false === $index) {
             continue;
         }
-        if (!($index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $uid
-            || $index['open_level'] == OL_GROUP_ONLY && in_array($index['owner_gid'], $admin_gids))
+        if (!(OL_PRIVATE == $index['open_level'] && $index['owner_uid'] == $uid
+            || OL_GROUP_ONLY == $index['open_level'] && in_array($index['owner_gid'], $admin_gids))
         ) {
             $indexes[$i] = false;
         }
@@ -308,12 +308,12 @@ function filterEditableIndex(&$indexes, $xnpsid, $uid, $puid, $isPublicEditable)
     $len = count($indexes);
     for ($i = 0; $i < $len; ++$i) {
         $index = &$indexes[$i];
-        if ($index === false) {
+        if (false === $index) {
             continue;
         }
-        if (!($index['open_level'] == OL_PRIVATE && $index['owner_uid'] == $puid
-            || $index['open_level'] == OL_GROUP_ONLY && in_array($index['owner_gid'], $admin_gids)
-            || $index['open_level'] == OL_PUBLIC && $isPublicEditable)
+        if (!(OL_PRIVATE == $index['open_level'] && $index['owner_uid'] == $puid
+            || OL_GROUP_ONLY == $index['open_level'] && in_array($index['owner_gid'], $admin_gids)
+            || OL_PUBLIC == $index['open_level'] && $isPublicEditable)
         ) {
             $indexes[$i] = false;
         }

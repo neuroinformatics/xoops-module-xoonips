@@ -41,6 +41,7 @@ function xoops_module_update_xnpmemo($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 311:
     case 330:
     case 331:

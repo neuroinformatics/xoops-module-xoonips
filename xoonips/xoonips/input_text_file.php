@@ -28,7 +28,7 @@ require 'include/common.inc.php';
 
 // If not a user, redirect
 $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
-if ($uid == UID_GUEST) {
+if (UID_GUEST == $uid) {
     redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_ITEM_FORBIDDEN);
     exit();
 }
@@ -42,7 +42,7 @@ $name = $formdata->getValue('get', 'name', 's', true);
 $ft_handler = &xoonips_getormhandler('xoonips', 'file_type');
 $criteria = new Criteria('name', addslashes($name));
 $ft_objs = &$ft_handler->getObjects($criteria);
-if (count($ft_objs) != 1) {
+if (1 != count($ft_objs)) {
     die('invalid name');
 }
 $displayName = $ft_objs[0]->getVar('display_name', 's');
@@ -59,8 +59,8 @@ if (!is_null($file)) {
     $mimeType = $file['type'];
     $fileName = $file['tmp_name'];
     $error = (int) $file['error'];
-    if ($error != 0) {
-        if ($error == UPLOAD_ERR_INI_SIZE) {
+    if (0 != $error) {
+        if (UPLOAD_ERR_INI_SIZE == $error) {
             $errorMessage = _MD_XOONIPS_ITEM_UPLOAD_FILE_TOO_LARGE;
         } else {
             $errorMessage = _MD_XOONIPS_ITEM_UPLOAD_FILE_FAILED;
@@ -68,7 +68,7 @@ if (!is_null($file)) {
         $getTextFromOpener = true;
     } else {
         // check mime type
-        if (strstr($mimeType, 'text/plain') === false) {
+        if (false === strstr($mimeType, 'text/plain')) {
             $errorMessage = 'unsupported file type : '.$mimeType;
             $getTextFromOpener = true;
         } else {
@@ -233,7 +233,7 @@ function getTextFromOpener(){
     tarea.value = encText;
     resizer();
 }
-<?php 
+<?php
 }
 ?>
 

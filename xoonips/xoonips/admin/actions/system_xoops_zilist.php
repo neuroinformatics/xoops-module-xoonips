@@ -74,7 +74,7 @@ $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
 $item_ids = $index_item_link_handler->getNonPrivateItemIds($uid);
 // merge group and public item ids
 $item_ids = array_unique($item_ids);
-if (count($item_ids) == 0) {
+if (0 == count($item_ids)) {
     die('illegal request');
 }
 
@@ -92,7 +92,7 @@ foreach ($item_ids as $item_id) {
     $title_objs = &$title_handler->getObjects($criteria);
     $item_title = '';
     foreach ($title_objs as $title_obj) {
-        if ($item_title != '') {
+        if ('' != $item_title) {
             $item_title .= ' ';
         }
         $item_title .= $title_obj->getVar('title', 's');
@@ -101,7 +101,7 @@ foreach ($item_ids as $item_id) {
     $item_type_obj = &$item_type_handler->get($item_type_id);
     $item_type = $item_type_obj->getVar('display_name', 's');
     $item_url = sprintf('%s/transfer_item.php?action=detail_item&item_id=%u', XOONIPS_URL, $item_id);
-    $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+    $evenodd = ('even' == $evenodd) ? 'odd' : 'even';
     $items[] = array(
         'EVENODD' => $evenodd,
         'ITEM_ID' => $item_id,
@@ -115,12 +115,12 @@ foreach ($item_ids as $item_id) {
 $to_uid = $formdata->getValue('get', 'tuid', 'i', false, 0);
 $to_users = get_user_list('s');
 foreach ($to_users as $key => $to_user) {
-    if ($to_uid == 0) {
+    if (0 == $to_uid) {
         $to_uid = $to_user['uid'];
     }
     $to_users[$key]['selected'] = ($to_uid == $to_user['uid']);
 }
-if ($to_uid == 0 || count($to_users) == 0) {
+if (0 == $to_uid || 0 == count($to_users)) {
     // to user not exists
     die('illegal request');
 }
@@ -187,7 +187,7 @@ function get_uname_by_index_title($uid, $fmt)
     $criteria->add(new Criteria('parent_index_id', IID_ROOT));
     $criteria->add(new Criteria('open_level', OL_PRIVATE));
     $index_objs = &$index_handler->getObjects($criteria);
-    if (count($index_objs) != 1) {
+    if (1 != count($index_objs)) {
         return '';
     }
     $index_obj = &$index_objs[0];
@@ -196,7 +196,7 @@ function get_uname_by_index_title($uid, $fmt)
     $criteria = new CriteriaCompo(new Criteria('item_id', $index_id));
     $criteria->add(new Criteria('title_id', DEFAULT_INDEX_TITLE_OFFSET));
     $title_objs = &$title_handler->getObjects($criteria);
-    if (count($title_objs) != 1) {
+    if (1 != count($title_objs)) {
         return '';
     }
     $title_obj = &$title_objs[0];
@@ -244,7 +244,7 @@ function get_user_root_index_id($uid)
     $criteria = new CriteriaCompo(new Criteria('parent_index_id', IID_ROOT));
     $criteria->add(new Criteria('uid', $uid));
     $index_objs = &$index_handler->getObjects($criteria);
-    if (count($index_objs) != 1) {
+    if (1 != count($index_objs)) {
         die('unexpected error');
     }
     $index_obj = &$index_objs[0];

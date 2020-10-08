@@ -133,7 +133,7 @@ function b_xoonips_tree_show()
 
     // get user informations
     $pxid = 0;
-    if ($puid != UID_GUEST) {
+    if (UID_GUEST != $puid) {
         $xuser_obj = &$xuser_handler->get($puid);
         if (is_object($xuser_obj)) {
             $pxid = $xuser_obj->getVar('private_index_id', 'n');
@@ -143,8 +143,8 @@ function b_xoonips_tree_show()
 
     // get indexes
     $xids = array();
-    if ($uid == UID_GUEST) {
-        if ($public_item_target_user == 'all') {
+    if (UID_GUEST == $uid) {
+        if ('all' == $public_item_target_user) {
             // guest user can view public index
             $xids[] = IID_PUBLIC;
         } else {
@@ -161,13 +161,13 @@ function b_xoonips_tree_show()
             $xids[] = $pxid;
         } elseif (isset($xoonipsTree['private_only']) && $xoonipsTree['private_only']) {
             // only private index only mode
-            if ($pxid != 0) {
+            if (0 != $pxid) {
                 $xids[] = $pxid;
             }
         } else {
             $xids[] = IID_PUBLIC;
             $xids = array_merge($xids, $xgroup_handler->getGroupRootIndexIds($puid, false));
-            if ($pxid != 0) {
+            if (0 != $pxid) {
                 $xids[] = $pxid;
             }
         }
@@ -193,7 +193,7 @@ function b_xoonips_tree_show()
     $block['tree_frame_width'] = $tree_frame_width;
     $block['tree_frame_height'] = $tree_frame_height;
     $block['query'] = implode('&amp;', $query);
-    $block['isKHTML'] = (strstr($_SERVER['HTTP_USER_AGENT'], 'KHTML') !== false);
+    $block['isKHTML'] = (false !== strstr($_SERVER['HTTP_USER_AGENT'], 'KHTML'));
     $block['checkbox'] = !empty($xoonipsTreeCheckBox);
     $block['indexes'] = $indexes;
 

@@ -97,13 +97,13 @@ class XooNIpsOrmUsers extends XooNIpsTableObject
         $zipcode_optional = $xconfig_handler->getValue('account_zipcode_optional');
         $fax_optional = $xconfig_handler->getValue('account_fax_optional');
         // $this->vars['name']['required'] = ($realname_optional && $realname_optional == 'off');
-        $this->vars['address']['required'] = ($address_optional == 'off');
-        $this->vars['division']['required'] = ($division_optional == 'off');
-        $this->vars['tel']['required'] = ($tel_optional == 'off');
-        $this->vars['company_name']['required'] = ($company_name_optional == 'off');
-        $this->vars['country']['required'] = ($country_optional == 'off');
-        $this->vars['zipcode']['required'] = ($zipcode_optional == 'off');
-        $this->vars['fax']['required'] = ($fax_optional == 'off');
+        $this->vars['address']['required'] = ('off' == $address_optional);
+        $this->vars['division']['required'] = ('off' == $division_optional);
+        $this->vars['tel']['required'] = ('off' == $tel_optional);
+        $this->vars['company_name']['required'] = ('off' == $company_name_optional);
+        $this->vars['country']['required'] = ('off' == $country_optional);
+        $this->vars['zipcode']['required'] = ('off' == $zipcode_optional);
+        $this->vars['fax']['required'] = ('off' == $fax_optional);
         // is private_item_storage_limit double?
         if (!is_numeric($this->get('private_item_storage_limit'))) {
             // todo: define constant string
@@ -136,7 +136,7 @@ class XooNIpsOrmUsersHandler extends XooNIpsTableObjectHandler
     public function &create($isNew = true)
     {
         $obj = parent::create($isNew);
-        if ($obj === false) {
+        if (false === $obj) {
             return $obj;
         }
         if ($isNew) {

@@ -119,7 +119,7 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
         if (version_compare(phpversion(), '5.4.0', '<') && get_magic_quotes_gpc()) {
             $val = array_map('stripslashes', $val);
         }
-        if (isset($val['error']) && $val['error'] != 0) {
+        if (isset($val['error']) && 0 != $val['error']) {
             // error occured
             return null;
         }
@@ -129,7 +129,7 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
         $val['name'] = $this->_convert_to_numeric_entities($val['name']);
         $fileutil = &xoonips_getutility('file');
         $val['type'] = $fileutil->get_mimetype($val['tmp_name'], $val['name']);
-        if ($val['type'] === false) {
+        if (false === $val['type']) {
             return null;
         }
 
@@ -198,11 +198,11 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
     public function set($method, $name, $val)
     {
         if (is_null($val)) {
-            if ($method == 'get') {
+            if ('get' == $method) {
                 unset($_GET[$name]);
-            } elseif ($method == 'post') {
+            } elseif ('post' == $method) {
                 unset($_POST[$name]);
-            } elseif ($method == 'both') {
+            } elseif ('both' == $method) {
                 unset($_GET[$name]);
                 unset($_POST[$name]);
             } else {
@@ -212,11 +212,11 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
             if (version_compare(phpversion(), '5.4.0', '<') && get_magic_quotes_gpc()) {
                 $val = is_array($val) ? array_map('addslashes', $val) : addslashes($val);
             }
-            if ($method == 'get') {
+            if ('get' == $method) {
                 $_GET[$name] = $val;
-            } elseif ($method == 'post') {
+            } elseif ('post' == $method) {
                 $_POST[$name] = $val;
-            } elseif ($method == 'both') {
+            } elseif ('both' == $method) {
                 $_GET[$name] = $val;
                 $_POST[$name] = $val;
             } else {
@@ -240,7 +240,7 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
         if (!in_array($src_method, $accept) || !in_array($dst_method, $accept) || $src_method == $dst_method) {
             $this->_form_error(__LINE__);
         }
-        if ($src_method == 'get') {
+        if ('get' == $src_method) {
             // copy variables $_GET to $_POST
             foreach ($_GET as $key => $val) {
                 $_POST[$key] = $val;
@@ -281,10 +281,11 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
             break;
         case 'post':
             $val = isset($_POST[$name]) ? $_POST[$name] : null;
+            // no break
         case 'both':
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ('POST' == $_SERVER['REQUEST_METHOD']) {
                 $val = isset($_POST[$name]) ? $_POST[$name] : (isset($_GET[$name]) ? $_GET[$name] : null);
-            } elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            } elseif ('GET' == $_SERVER['REQUEST_METHOD']) {
                 $val = isset($_GET[$name]) ? $_GET[$name] : (isset($_POST[$name]) ? $_POST[$name] : null);
             } else {
                 $this->_form_error(__LINE__);
@@ -324,12 +325,12 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
             break;
         case 'b':
             // boolean
-            $val = (intval($val) != 0);
+            $val = (0 != intval($val));
             break;
         case 'i':
             // integer
             if (XOONIPS_DEBUG_MODE) {
-                if ($val != '' && !preg_match('/^-?[0-9]+$/', $val)) {
+                if ('' != $val && !preg_match('/^-?[0-9]+$/', $val)) {
                     $this->_form_error(__LINE__);
                 }
             }
@@ -338,7 +339,7 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
         case 'f':
             // float
             if (XOONIPS_DEBUG_MODE) {
-                if ($val != '' && !is_numeric($val)) {
+                if ('' != $val && !is_numeric($val)) {
                     $this->_form_error(__LINE__);
                 }
             }
@@ -371,7 +372,7 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
         } else {
             $pkey_val = $is_str_pkey ? '' : 0;
         }
-        if ($is_str_pkey && $pkey_val == '' || (!$is_str_pkey) && $pkey_val == 0) {
+        if ($is_str_pkey && '' == $pkey_val || (!$is_str_pkey) && 0 == $pkey_val) {
             // new object
             $obj = &$handler->create();
         } else {
@@ -397,6 +398,7 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
                 case XOBJ_DTYPE_ARRAY:
                 case XOBJ_DTYPE_OTHER:
                       $this->_form_error(__LINE__);
+                      // no break
                 case XOBJ_DTYPE_BINARY:
                       $type = 'n';
                     break;
@@ -443,7 +445,7 @@ class XooNIpsUtilityFormdata extends XooNIpsUtility
             for ($i = 0; $i < $len; ++$i) {
                 if (ord($val[$i]) <= 127) {
                     $chars[] = $val[$i];
-                } elseif (ord($val[$i]) != 0x8f) {
+                } elseif (0x8f != ord($val[$i])) {
                     $chars[] = substr($val, $i, 2);
                     ++$i;
                 } else {

@@ -86,7 +86,7 @@ class XooNIpsLogicGetChildIndexes extends XooNIpsLogic
         // not found?
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $index = $index_handler->get($index_id);
-        if ($index == false) {
+        if (false == $index) {
             $response->setResult(false);
             $response->error->add(XNPERR_NOT_FOUND);
 

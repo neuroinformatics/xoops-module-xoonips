@@ -61,7 +61,7 @@ class XooNIpsLogicGetFile extends XooNIpsLogic
         if (!is_int($vars[1]) && !ctype_digit($vars[1])) {
             $error->add(XNPERR_INVALID_PARAM, 'not integer parameter 2');
         }
-        if ($vars[2] != '1' && $vars[2] != '0') {
+        if ('1' != $vars[2] && '0' != $vars[2]) {
             $error->add(XNPERR_INVALID_PARAM, 'parameter 3 must be 0 or 1');
         }
 
@@ -95,6 +95,7 @@ class XooNIpsLogicGetFile extends XooNIpsLogic
         if (empty($item_id)) {
             $response->setResult(false);
             $error->add(XNPERR_ACCESS_FORBIDDEN); // maybe belong to other session
+
             return false;
         }
         // can user access that item?
@@ -181,7 +182,7 @@ class XooNIpsLogicGetFile extends XooNIpsLogic
         $module = $mhandler->getByDirname($iteminfo['ormcompo']['module']);
         $chandler = &xoops_gethandler('config');
         $assoc = $chandler->getConfigsByCat(false, $module->mid());
-        if (isset($assoc['enable_dl_limit']) && $assoc['enable_dl_limit'] == '1') {
+        if (isset($assoc['enable_dl_limit']) && '1' == $assoc['enable_dl_limit']) {
             // send download-notification
             if ($detail->get('attachment_dl_limit') && $detail->get('attachment_dl_notify')) {
                 xoonips_notification_user_file_downloaded($file_id, $uid);

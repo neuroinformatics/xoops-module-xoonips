@@ -34,7 +34,7 @@ class OaidcListRecordsHandler extends ListRecordsHandler
 
     public function startElementHandler($parser, $name, $attrs)
     {
-        if ($this->getElementName($name) == 'DC') {
+        if ('DC' == $this->getElementName($name)) {
             $this->_namespaces = $this->getNamespaceArray($attrs);
             array_push($this->tagstack, $name);
         } else {
@@ -59,15 +59,15 @@ class OaidcListRecordsHandler extends ListRecordsHandler
             'COVERAGE',
             'RIGHTS',
         );
-        if (isset($this->tagstack[3]) && $this->getElementName($this->tagstack[3]) == 'HEADER' || !in_array($this->getElementName(end($this->tagstack)), $support_tags)
+        if (isset($this->tagstack[3]) && 'HEADER' == $this->getElementName($this->tagstack[3]) || !in_array($this->getElementName(end($this->tagstack)), $support_tags)
         ) {
             parent::endElementHandler($parser, $name);
-        } elseif ($this->getElementName(end($this->tagstack)) == 'DATE') {
+        } elseif ('DATE' == $this->getElementName(end($this->tagstack))) {
             $this->_creation_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
             $this->addMetadataField(end($this->tagstack), $this->_cdata_buf, XOONIPS_METADATA_CATEGORY_CREATION_DATE);
             array_pop($this->tagstack);
-        } elseif ($this->getElementName(end($this->tagstack)) == 'IDENTIFIER') {
+        } elseif ('IDENTIFIER' == $this->getElementName(end($this->tagstack))) {
             $result = preg_match('/^(s?https?:\\/\\/'."[-_.!~*'\\(\\)a-zA-Z0-9;\\/?:\\@&=+\$,%#]+)/", $this->_cdata_buf);
             if (1 == $result) {
                 $this->_resource_url[] = $this->_cdata_buf;

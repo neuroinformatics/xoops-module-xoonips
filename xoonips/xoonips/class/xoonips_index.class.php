@@ -142,7 +142,7 @@ class XooNIpsIndexHandler
      */
     public function getIndexPathArray($index_id, $fmt)
     {
-        if ($index_id == IID_ROOT) {
+        if (IID_ROOT == $index_id) {
             return array();
         }
         $pxid = $this->getParentIndexId($index_id);
@@ -255,11 +255,11 @@ class XooNIpsIndexHandler
      * @param array  &$iid_perm_cache item ids access permission cache
      *
      * @return string multiple count items
-     *               array(
-     *               $xid1 => array( $iid1_1, $iid1_2,... ),
-     *               $xid2 => array( $iid2_1,... ),
-     *               ...
-     *               );
+     *                array(
+     *                $xid1 => array( $iid1_1, $iid1_2,... ),
+     *                $xid2 => array( $iid2_1,... ),
+     *                ...
+     *                );
      */
     public function _get_item_ids_by_index_ids($xids, $uid, $perm, &$iid_perm_cache)
     {

@@ -227,7 +227,7 @@ function xnpsimulatorGetRegisterBlock()
     } else {
         $simulator_type = $formdata->getValue('post', 'simulator_type', 's', false);
     }
-    if ($simulator_type == false) {
+    if (false == $simulator_type) {
         list($simulator_type) = each($simulator_types);
     }
     $detail['simulator_type'] = array(
@@ -281,7 +281,7 @@ function xnpsimulatorGetEditBlock($item_id)
     $post_id = $formdata->getValue('get', 'post_id', 's', false);
     if (!is_null($post_id)) {
         $simulator_type = $formdata->getValue('post', 'simulator_type', 's', false);
-        if ($simulator_type == false) {
+        if (false == $simulator_type) {
             list($simulator_type) = each($simulator_types);
         }
         $detail['simulator_type'] = array(
@@ -340,7 +340,7 @@ function xnpsimulatorGetConfirmBlock($item_id)
     // retrive detail information
     $detail = array();
     $simulator_type = $formdata->getValue('post', 'simulator_type', 's', false);
-    if ($simulator_type !== false) {
+    if (false !== $simulator_type) {
         $simulator_types = xnpsimulator_get_type_array();
         $detail['simulator_type'] = array(
         'value' => $textutil->html_special_chars($simulator_type),
@@ -437,7 +437,7 @@ function xnpsimulatorInsertItem(&$item_id)
 
     $sql = 'insert into '.$xoopsDB->prefix('xnpsimulator_item_detail')." ( simulator_id, $keys ) values ( $item_id, '$vals' ) ";
     $result = $xoopsDB->queryF($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo 'cannot insert item_detail: '.$xoopsDB->error();
 
         return false;
@@ -516,7 +516,7 @@ function xnpsimulatorUpdateItem($simulator_id)
     // modify detail information
     $sql = 'update '.$xoopsDB->prefix('xnpsimulator_item_detail').' set '.implode(', ', $keyval)." where simulator_id=$simulator_id";
     $result = $xoopsDB->queryF($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo 'cannot update item_detail';
 
         return false;
@@ -552,7 +552,7 @@ function xnpsimulatorCheckRegisterParameters(&$msg)
         $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPSIMULATOR_DEVELOPER_REQUIRED.'</font>';
         $result = false;
     }
-    if ((empty($simulator_data) || $simulator_data['name'] == '') && $simulator_dataFileID == '') {
+    if ((empty($simulator_data) || '' == $simulator_data['name']) && '' == $simulator_dataFileID) {
         // simulator_data is not filled
         $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPSIMULATOR_SIMULATOR_FILE_REQUIRED.'</font>';
         $result = false;
@@ -563,7 +563,7 @@ function xnpsimulatorCheckRegisterParameters(&$msg)
     if ($xids[0] != $xoonipsCheckedXID) {
         foreach ($xids as $i) {
             $index = array();
-            if (xnp_get_index($xnpsid, $i, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($xnpsid, $i, $index)) {
                 $indexes[] = $index;
             } else {
                 $msg = $msg.'<br/><font color=\'#ff0000\'>'.xnp_get_last_error_string().'</font>';
@@ -578,12 +578,12 @@ function xnpsimulatorCheckRegisterParameters(&$msg)
                 $readmeEncText = $formdata->getValue('post', 'readmeEncText', 's', false);
                 $rightsEncText = $formdata->getValue('post', 'rightsEncText', 's', false);
                 $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
-                if ($readmeEncText == '') {
+                if ('' == $readmeEncText) {
                     // readme is not filled
                     $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPSIMULATOR_README_REQUIRED.'</font>';
                     $result = false;
                 }
-                if ($rightsEncText == '' && $rightsUseCC == '0') {
+                if ('' == $rightsEncText && '0' == $rightsUseCC) {
                     // license is not filled
                     $msg = $msg.'<br/><font color=\'#ff0000\'>'._MD_XNPSIMULATOR_RIGHTS_REQUIRED.'</font>';
                     $result = false;
@@ -722,7 +722,7 @@ function xnpsimulatorGetLicenseRequired($item_id)
     }
     $detail = $xoopsDB->fetchArray($result);
 
-    return isset($detail['rights']) && ($detail['use_cc'] == 1 || $detail['rights'] != '');
+    return isset($detail['rights']) && (1 == $detail['use_cc'] || '' != $detail['rights']);
 }
 
 function xnpsimulatorGetLicenseStatement($item_id)
@@ -799,7 +799,7 @@ function xnpsimulatorGetModifiedFields($item_id)
     if ($detail) {
         foreach (array('simulator_type' => _MD_XNPSIMULATOR_SIMULATOR_TYPE) as $k => $v) {
             $tmp = $formdata->getValue('post', $k, 's', false);
-            if (!array_key_exists($k, $detail) || $tmp === null) {
+            if (!array_key_exists($k, $detail) || null === $tmp) {
                 continue;
             }
             if ($detail[$k]['value'] != $tmp) {
@@ -809,7 +809,7 @@ function xnpsimulatorGetModifiedFields($item_id)
         // is readme modified ?
         foreach (array('readme' => _MD_XOONIPS_ITEM_README_LABEL) as $k => $v) {
             $tmp = $formdata->getValue('post', "${k}EncText", 's', false);
-            if (!array_key_exists($k, $detail) || $tmp === null) {
+            if (!array_key_exists($k, $detail) || null === $tmp) {
                 continue;
             }
             if ($detail[$k]['value'] != $tmp) {
@@ -820,18 +820,18 @@ function xnpsimulatorGetModifiedFields($item_id)
         // is rights modified ?
         $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
         $rightsEncText = $formdata->getValue('post', 'rightsEncText', 's', false);
-        if ($rightsUseCC !== null) {
+        if (null !== $rightsUseCC) {
             if ($rightsUseCC != $detail['use_cc']['value']) {
                 array_push($ret, _MD_XOONIPS_ITEM_RIGHTS_LABEL);
             } else {
-                if ($rightsUseCC == 0) {
-                    if (array_key_exists('rights', $detail) && $rightsEncText != null && $rightsEncText != $detail['rights']['value']) {
+                if (0 == $rightsUseCC) {
+                    if (array_key_exists('rights', $detail) && null != $rightsEncText && $rightsEncText != $detail['rights']['value']) {
                         array_push($ret, _MD_XOONIPS_ITEM_RIGHTS_LABEL);
                     }
-                } elseif ($rightsUseCC == 1) {
+                } elseif (1 == $rightsUseCC) {
                     foreach (array('rightsCCCommercialUse' => 'cc_commercial_use', 'rightsCCModification' => 'cc_modification') as $k => $v) {
                         $tmp = $formdata->getValue('post', $k, 'i', false);
-                        if (!array_key_exists($v, $detail) || $tmp === null) {
+                        if (!array_key_exists($v, $detail) || null === $tmp) {
                             continue;
                         }
                         if ($tmp != $detail[$v]['value']) {
@@ -900,7 +900,7 @@ function xnpsimulatorGetAttachmentDownloadNotifyOption($item_id)
 
 function xnpsimulatorSupportMetadataFormat($metadataPrefix, $item_id)
 {
-    if ($metadataPrefix == 'oai_dc' || $metadataPrefix == 'junii2') {
+    if ('oai_dc' == $metadataPrefix || 'junii2' == $metadataPrefix) {
         return true;
     }
 
@@ -936,9 +936,9 @@ function xnpsimulatorGetMetadata($prefix, $item_id)
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
     // indexes
     $indexes = array();
-    if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
+    if (RES_OK == xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids)) {
         foreach ($xids as $xid) {
-            if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($_SESSION['XNPSID'], $xid, $index)) {
                 $indexes[] = xnpGetIndexPathServerString($_SESSION['XNPSID'], $xid);
             }
         }
@@ -947,7 +947,7 @@ function xnpsimulatorGetMetadata($prefix, $item_id)
     $files = array();
     $mimetypes = array();
     $file_handler = &xoonips_gethandler('xoonips', 'file');
-    if ($detail['attachment_dl_limit'] == 0) {
+    if (0 == $detail['attachment_dl_limit']) {
         $files = $file_handler->getFilesInfo($item_id, 'simulator_data');
         foreach ($files as $file) {
             if (!in_array($file['mime_type'], $mimetypes)) {
@@ -958,14 +958,14 @@ function xnpsimulatorGetMetadata($prefix, $item_id)
     $previews = $file_handler->getFilesInfo($item_id, 'preview');
     // rights
     $detail['rights_cc_url'] = '';
-    if ($detail['use_cc'] == 1) {
+    if (1 == $detail['use_cc']) {
         $cond = 'by';
-        if ($detail['cc_commercial_use'] == 0) {
+        if (0 == $detail['cc_commercial_use']) {
             $cond .= '-nc';
         }
-        if ($detail['cc_modification'] == 0) {
+        if (0 == $detail['cc_modification']) {
             $cond .= '-nd';
-        } elseif ($detail['cc_modification'] == 1) {
+        } elseif (1 == $detail['cc_modification']) {
             $cond .= '-sa';
         }
         $detail['rights_cc_url'] = sprintf('http://creativecommons.org/licenses/%s/4.0/', $cond);

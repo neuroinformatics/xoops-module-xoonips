@@ -112,12 +112,12 @@ class XooNIpsActionXoonipsSearchMetadataDetail extends XooNIpsAction
         $repository_handler = &xoonips_getormhandler('xoonips', 'oaipmh_repositories');
 
         $metadata = &$metadata_handler->getObjects(new Criteria('identifier', $identifier));
-        if (!$metadata || count($metadata) == 0) {
+        if (!$metadata || 0 == count($metadata)) {
             return '';
         }
 
         $repository = &$repository_handler->get($metadata[0]->get('repository_id'));
-        if (!$repository || count($repository) == 0) {
+        if (!$repository || 0 == count($repository)) {
             return '';
         }
 

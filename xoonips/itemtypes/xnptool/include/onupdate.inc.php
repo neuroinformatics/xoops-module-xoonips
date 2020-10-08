@@ -43,6 +43,7 @@ function xoops_module_update_xnptool($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 311:
         $sql = 'ALTER TABLE '.$xoopsDB->prefix('xnptool_item_detail').' ADD COLUMN attachment_dl_notify int(1) unsigned default 0 ';
         $result = $xoopsDB->query($sql);
@@ -51,6 +52,7 @@ function xoops_module_update_xnptool($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 312:
     case 330:
     case 331:
@@ -92,7 +94,7 @@ function xoops_module_update_xnptool($xoopsMod, $oldversion)
                 $sql = 'INSERT INTO '.$xoopsDB->prefix($table_developer);
                 $sql .= '('.$key_name.',developer,developer_order) VALUES (';
                 $sql .= $id.','.$xoopsDB->quoteString($developer).','.$i.')';
-                if ($xoopsDB->query($sql) == false) {
+                if (false == $xoopsDB->query($sql)) {
                     echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
                     return false;
@@ -108,6 +110,7 @@ function xoops_module_update_xnptool($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 340:
     default:
     }

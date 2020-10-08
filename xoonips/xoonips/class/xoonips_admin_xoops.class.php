@@ -166,7 +166,7 @@ class XooNIpsAdminXoopsHandler
         }
         $count = $xoopsDB->getRowsNum($result);
         $xoopsDB->freeRecordSet($result);
-        if ($count == 0) {
+        if (0 == $count) {
             // not exists
             if ($is_show) {
                 $sql = sprintf('INSERT INTO `%s` (`block_id`,`module_id`) VALUES ( %u, %d )', $table, $bid, $mid);
@@ -205,7 +205,7 @@ class XooNIpsAdminXoopsHandler
         $criteria->add(new Criteria('conf_modid', $mid));
         $criteria->add(new Criteria('conf_catid', 0));
         $config_items = $config_handler->getConfigs($criteria);
-        if (count($config_items) != 1) {
+        if (1 != count($config_items)) {
             return false;
         } else {
             $config_item = $config_items[0];
@@ -254,7 +254,7 @@ class XooNIpsAdminXoopsHandler
     {
         $notification_handler = &xoops_gethandler('notification');
         $criteria = new CriteriaCompo(new Criteria('not_modid', $mid));
-        if ($uid != 0) {
+        if (0 != $uid) {
             $criteria->add(new Criteria('not_uid', $uid));
         }
         $criteria->add(new Criteria('not_category', $category));
@@ -277,7 +277,7 @@ class XooNIpsAdminXoopsHandler
         $criteria->add(new Criteria('conf_catid', XOOPS_CONF));
         $criteria->add(new Criteria('conf_name', 'startpage'));
         $configs = &$config_handler->getConfigs($criteria);
-        if (count($configs) != 1) {
+        if (1 != count($configs)) {
             return false;
         }
         list($config) = $configs;
@@ -301,7 +301,7 @@ class XooNIpsAdminXoopsHandler
         $group->setVar('name', $name, true); // not gpc
         $group->setVar('description', $description, true); // not gpc
         $ret = $member_handler->insertGroup($group);
-        if ($ret == false) {
+        if (false == $ret) {
             return false;
         }
         $gid = $group->getVar('groupid', 'n');
@@ -359,7 +359,7 @@ class XooNIpsAdminXoopsHandler
         }
         $xoopsDB->freeRecordSet($result);
         // remove all invalid group id entries
-        if (count($gids) != 0) {
+        if (0 != count($gids)) {
             $sql = sprintf('DELETE FROM `%s` WHERE `gperm_groupid` IN (%s) AND `gperm_modid`=1', $table, implode(',', $gids));
             $result = $xoopsDB->query($sql);
             if (!$result) {

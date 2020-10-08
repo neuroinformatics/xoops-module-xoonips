@@ -164,7 +164,7 @@ class OAIPMH
             $fmt = false;
             if (isset($attrs['identifier'])) {
                 $conv_str = $hdl->convertIdentifierFormat($attrs['identifier']);
-                if ($conv_str != '') {
+                if ('' != $conv_str) {
                     $fmt = $hdl->metadataFormat($conv_str);
                 }
             } else {
@@ -176,7 +176,7 @@ class OAIPMH
             $lines[] = $fmt;
         }
 
-        if (count($lines) == 0) {
+        if (0 == count($lines)) {
             return $this->header()
                 .$this->request($attrs)
                 .$this->error('noMetadataFormats', '')
@@ -252,7 +252,7 @@ class OAIPMH
     public function GetRecord($args)
     {
         $attrs = array_merge($args, array('verb' => 'GetRecord'));
-        if (count($args) == 3 && isset($args['verb']) && isset($args['metadataPrefix']) && isset($args['identifier'])) {
+        if (3 == count($args) && isset($args['verb']) && isset($args['metadataPrefix']) && isset($args['identifier'])) {
             // keio igarashi add 2007.10.01 from
             // ["] is error in identifier. and fix badArguments -> badArgument
             if (strpos($args['identifier'], '"')) {
@@ -536,7 +536,7 @@ class OAIPMHHandler
     public function parseIdentifier($identifier)
     {
         $match = array();
-        if (preg_match("/([^\/]+)\/([0-9]+)\.([0-9]+)/", $identifier, $match) == 0) {
+        if (0 == preg_match("/([^\/]+)\/([0-9]+)\.([0-9]+)/", $identifier, $match)) {
             return false;
         }
 
@@ -555,7 +555,7 @@ class OAIPMHHandler
     public function parseIdentifier2($identifier)
     {
         $match = array();
-        if (preg_match("/([^\/]+):".XNP_CONFIG_DOI_FIELD_PARAM_NAME.'\\/([^<>]+)/', $identifier, $match) == 0) {
+        if (0 == preg_match("/([^\/]+):".XNP_CONFIG_DOI_FIELD_PARAM_NAME.'\\/([^<>]+)/', $identifier, $match)) {
             return false;
         }
 
@@ -587,8 +587,8 @@ class OAIPMHHandler
             $iids = array();
             $item_info = '';
             $res = xnpGetItemIdByDoi($parsed['doi'], $iids);
-            if ($res == RES_OK && isset($iids[0])
-                && xnp_get_item($_SESSION['XNPSID'], $iids[0], $item_info) == RES_OK
+            if (RES_OK == $res && isset($iids[0])
+                && RES_OK == xnp_get_item($_SESSION['XNPSID'], $iids[0], $item_info)
             ) {
                 $id_str = $parsed['nijc_code'].'/'.$item_info['item_type_id'].'.'.$iids[0];
             } else {
@@ -606,9 +606,9 @@ class OAIPMHHandler
         $parsed = $identifier;
         $lines = array();
         $status = array();
-        if (xnp_get_item_status($parsed['item_id'], $status) == RES_OK) {
+        if (RES_OK == xnp_get_item_status($parsed['item_id'], $status)) {
             $datestamp = max($status['created_timestamp'], $status['modified_timestamp'], $status['deleted_timestamp']);
-            if ($status['is_deleted'] == 1) {
+            if (1 == $status['is_deleted']) {
                 $lines[] = '<header status="deleted">';
             } else {
                 $lines[] = '<header>';
@@ -617,12 +617,12 @@ class OAIPMHHandler
             $nijc_code = $xconfig_handler->getValue('repository_nijc_code');
             $basic_info = xnpGetItemBasicInfo($parsed['item_id']);
             $id_str = '';
-            if ($basic_info && $basic_info['doi'] != '') {
+            if ($basic_info && '' != $basic_info['doi']) {
                 if (!empty($nijc_code)) {
                     $id_str = "$nijc_code:".XNP_CONFIG_DOI_FIELD_PARAM_NAME.'/'.$basic_info['doi'];
                 }
             }
-            if ($id_str == '') {
+            if ('' == $id_str) {
                 $id_str = $nijc_code.'/'.$parsed['item_type_id'].'.'.$parsed['item_id'];
             }
 
@@ -651,8 +651,8 @@ class OAIPMHHandler
     /**
      * @param identifier
      *
-     * @return boolean   <metadataFormat> ... </metadataFormat>
-     * @return boolean not support this format
+     * @return bool <metadataFormat> ... </metadataFormat>
+     * @return bool not support this format
      */
     public function metadataFormat($identifier)
     {
@@ -730,7 +730,7 @@ class HarvesterHandler
  * @param string $resumption_token
  * @param string $metadata_prefix
  * @param string $verb
- * @param integer $expire_date
+ * @param int    $expire_date
  *
  * @return nothing
  */
@@ -738,7 +738,7 @@ function setResumptionToken($resumption_token, $metadata_prefix, $verb, $args, $
 {
     global $xoopsDB;
 
-    if ($publish_date == null) {
+    if (null == $publish_date) {
         $publish_date = time();
     }
     (method_exists('MyTextSanitizer', 'sGetInstance') and $myts = &MyTextSanitizer::sGetInstance()) || $myts = &MyTextSanitizer::getInstance();
@@ -804,7 +804,7 @@ function expireResumptionToken($resumptionToken)
  */
 function ISO8601toUTC($str)
 {
-    if (preg_match('/([0-9]{4})-([0-9]{2})-([0-9]{2})(T([0-9]{2}):([0-9]{2}):([0-9]{2})Z)?/', $str, $match) == 0) {
+    if (0 == preg_match('/([0-9]{4})-([0-9]{2})-([0-9]{2})(T([0-9]{2}):([0-9]{2}):([0-9]{2})Z)?/', $str, $match)) {
         return 0;
     }
     if (!isset($match[5])) {

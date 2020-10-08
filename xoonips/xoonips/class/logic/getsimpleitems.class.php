@@ -42,7 +42,7 @@ class XooNIpsLogicGetSimpleItems extends XooNIpsLogic
      * @param[out] $response->error  error information
      * @param[out] $response->success XooNIpsItem retrieved item object
      *
-     * @return null|boolean if fault
+     * @return bool|null if fault
      */
     public function execute(&$vars, &$response)
     {
@@ -58,7 +58,7 @@ class XooNIpsLogicGetSimpleItems extends XooNIpsLogic
             if (isset($vars[0]) && strlen($vars[0]) > 32) {
                 $error->add(XNPERR_INVALID_PARAM, 'too long parameter 1');
             }
-            if ($vars[2] != 'item_id' && $vars[2] != 'ext_id') {
+            if ('item_id' != $vars[2] && 'ext_id' != $vars[2]) {
                 $error->add(XNPERR_INVALID_PARAM, 'invalid parameter 3');
             }
         }
@@ -95,16 +95,16 @@ class XooNIpsLogicGetSimpleItems extends XooNIpsLogic
         // escape each id
         $esc_ids = array();
         foreach ($ids as $id) {
-            if ($id_type == 'item_id') {
+            if ('item_id' == $id_type) {
                 $esc_ids[] = intval($id);
-            } elseif ($id_type == 'ext_id') {
+            } elseif ('ext_id' == $id_type) {
                 $esc_ids[] = $GLOBALS['xoopsDB']->quoteString($id);
             }
         }
 
-        if ($id_type == 'item_id') {
+        if ('item_id' == $id_type) {
             $criteria = new Criteria('item_id', '('.implode(', ', $esc_ids).')', 'IN');
-        } elseif ($id_type == 'ext_id') {
+        } elseif ('ext_id' == $id_type) {
             $criteria = new Criteria('doi', '('.implode(', ', $esc_ids).')', 'IN');
         }
 
@@ -119,9 +119,9 @@ class XooNIpsLogicGetSimpleItems extends XooNIpsLogic
             $map = array();
             for ($i = 0; $i < count($items); ++$i) {
                 $basic = $items[$i]->getVar('basic');
-                if ($id_type == 'item_id') {
+                if ('item_id' == $id_type) {
                     $map[$basic->get('item_id')] = $items[$i];
-                } elseif ($id_type == 'ext_id') {
+                } elseif ('ext_id' == $id_type) {
                     $map[$basic->get('doi')] = $items[$i];
                 }
             }

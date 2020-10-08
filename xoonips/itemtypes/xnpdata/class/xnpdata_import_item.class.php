@@ -183,7 +183,7 @@ class XNPDataImportItemHandler extends XooNIpsImportItemHandler
             $file_handler = &xoonips_getormhandler('xoonips', 'file');
             $criteria = new Criteria('name', addslashes($attribs['FILE_TYPE_NAME']));
             $file_type = &$file_type_handler->getObjects($criteria);
-        if (count($file_type) == 0) {
+        if (0 == count($file_type)) {
             $this->_import_item->setErrors(E_XOONIPS_ATTR_NOT_FOUND, 'file_type_name is not found:'.$attribs['FILE_TYPE_NAME'].$this->_get_parser_error_at());
             break;
         }
@@ -195,14 +195,14 @@ class XNPDataImportItemHandler extends XooNIpsImportItemHandler
             $file_handler = &xoonips_getormhandler('xoonips', 'file');
             $criteria = new Criteria('name', addslashes($attribs['FILE_TYPE_NAME']));
             $file_type = &$file_type_handler->getObjects($criteria);
-            if (count($file_type) == 0) {
+            if (0 == count($file_type)) {
                 $this->_import_item->setErrors(E_XOONIPS_ATTR_NOT_FOUND, 'file_type_name is not found:'.$attribs['FILE_TYPE_NAME'].$this->_get_parser_error_at());
             }
             if (strstr($attribs['FILE_NAME'], '..')) {
                 $this->_import_item->setErrors(E_XOONIPS_ATTR_INVALID_VALUE, 'invalid file_name attribute:'.$attribs['FILE_NAME'].$this->_get_parser_error_at());
             }
             $unicode = &xoonips_getutility('unicode');
-            if ($this->_file_type_attribute == 'data_file') {
+            if ('data_file' == $this->_file_type_attribute) {
                 if ($this->_data_file_flag) {
                     $this->_import_item->setErrors(E_XOONIPS_ATTACHMENT_HAS_REDUNDANT, "multiple $name attachments is not allowed".$this->_get_parser_error_at());
                     break;
@@ -214,7 +214,7 @@ class XNPDataImportItemHandler extends XooNIpsImportItemHandler
                 $this->_data_file->set('file_size', $attribs['FILE_SIZE']);
                 $this->_data_file->set('sess_id', session_id());
                 $this->_data_file->set('file_type_id', $file_type[0]->get('file_type_id'));
-            } elseif ($this->_file_type_attribute == 'preview') {
+            } elseif ('preview' == $this->_file_type_attribute) {
                 $this->_preview = &$file_handler->create();
                 $this->_preview->setFilepath($this->_attachment_dir.'/'.$attribs['FILE_NAME']);
                 $this->_preview->set('original_file_name', $unicode->decode_utf8($attribs['ORIGINAL_FILE_NAME'], xoonips_get_server_charset(), 'h'));
@@ -247,12 +247,12 @@ class XNPDataImportItemHandler extends XooNIpsImportItemHandler
                 }
             }
             //error if no experimenters
-            if (count($this->_import_item->getVar('experimenter')) == 0) {
+            if (0 == count($this->_import_item->getVar('experimenter'))) {
                 $this->_import_item->setErrors(E_XOONIPS_TAG_NOT_FOUND, ' no experimenter'.$this->_get_parser_error_at());
             }
             break;
         case 'ITEM/DETAIL/EXPERIMENTERS/EXPERIMENTER':
-            if ($this->_detail_version != '1.03') {
+            if ('1.03' != $this->_detail_version) {
                 break;
             }
             $experimenters = &$this->_import_item->getVar('experimenter');
@@ -266,9 +266,9 @@ class XNPDataImportItemHandler extends XooNIpsImportItemHandler
             $experimenters[] = $experimenter;
             break;
         case 'ITEM/DETAIL/EXPERIMENTER':
-            if ($this->_detail_version != '1.00'
-                && $this->_detail_version != '1.01'
-                && $this->_detail_version != '1.02'
+            if ('1.00' != $this->_detail_version
+                && '1.01' != $this->_detail_version
+                && '1.02' != $this->_detail_version
             ) {
                 //<experimenter> is only for 1.00, 1.01 and 1.02
                 break;
@@ -311,7 +311,7 @@ class XNPDataImportItemHandler extends XooNIpsImportItemHandler
             break;
         case 'ITEM/DETAIL/FILE':
             $file_handler = &xoonips_getormhandler('xoonips', 'file');
-            if ($this->_file_type_attribute == 'data_file') {
+            if ('data_file' == $this->_file_type_attribute) {
                 $this->_data_file_flag = true;
                 if (!$file_handler->insert($this->_data_file)) {
                     $this->_import_item->setErrors(E_XOONIPS_DB_QUERY, "can't insert attachment file:".$this->_data_file->get('original_file_name').$this->_get_parser_error_at());
@@ -320,7 +320,7 @@ class XNPDataImportItemHandler extends XooNIpsImportItemHandler
                 $this->_import_item->setVar('data_file', $this->_data_file);
                 $this->_import_item->setHasDataFile();
                 $this->_file_type_attribute = null;
-            } elseif ($this->_file_type_attribute == 'preview') {
+            } elseif ('preview' == $this->_file_type_attribute) {
                 $this->_preview_flag = true;
                 if (!$file_handler->insert($this->_preview)) {
                     $this->_import_item->setErrors(E_XOONIPS_DB_QUERY, "can't insert attachment file:".$this->_preview->get('original_file_name').$this->_get_parser_error_at());
@@ -337,16 +337,16 @@ class XNPDataImportItemHandler extends XooNIpsImportItemHandler
 
         case 'ITEM/DETAIL/FILE/CAPTION':
             $unicode = &xoonips_getutility('unicode');
-            if ($this->_file_type_attribute == 'data_file') {
+            if ('data_file' == $this->_file_type_attribute) {
                 $this->_data_file->set('caption', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'));
-            } elseif ($this->_file_type_attribute == 'preview') {
+            } elseif ('preview' == $this->_file_type_attribute) {
                 $this->_preview->set('caption', $unicode->decode_utf8($this->_cdata, xoonips_get_server_charset(), 'h'));
             }
             break;
         case 'ITEM/DETAIL/FILE/THUMBNAIL':
-            if ($this->_file_type_attribute == 'data_file') {
+            if ('data_file' == $this->_file_type_attribute) {
                 $this->_data_file->set('thumbnail_file', base64_decode($this->_cdata));
-            } elseif ($this->_file_type_attribute == 'preview') {
+            } elseif ('preview' == $this->_file_type_attribute) {
                 $this->_preview->set('thumbnail_file', base64_decode($this->_cdata));
             }
             break;

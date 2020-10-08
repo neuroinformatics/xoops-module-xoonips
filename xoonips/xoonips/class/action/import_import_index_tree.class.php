@@ -176,7 +176,7 @@ class XooNIpsActionImportImportIndexTree extends XooNIpsAction
         $join = new XooNIpsJoinCriteria('xoonips_item_title', 'index_id', 'item_id');
         $indexes = &$index_handler->getObjects($criteria, false, '', false, $join);
 
-        if (count($indexes) == 0) {
+        if (0 == count($indexes)) {
             return $falseVar;
         }
 

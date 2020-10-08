@@ -73,7 +73,7 @@ class XooNIpsLogicTransfer extends XooNIpsLogic
     {
         $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
         $item_show_optional = $xconfig_handler->getValue('item_show_optional');
-        if ($item_show_optional == 'on') {
+        if ('on' == $item_show_optional) {
             return true; // can use someone's item as my achievements.
         }
 
@@ -140,7 +140,7 @@ class XooNIpsLogicTransfer extends XooNIpsLogic
         $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
         $index_item_links = $index_item_link_handler->getByItemId($item_id, array(OL_PUBLIC));
         foreach ($index_item_links as $index_item_link) {
-            if ($index_item_link->get('certify_state') == CERTIFIED) {
+            if (CERTIFIED == $index_item_link->get('certify_state')) {
                 return true;
             }
         }
@@ -187,7 +187,7 @@ class XooNIpsLogicTransfer extends XooNIpsLogic
     {
         $transfer_request_handler = &xoonips_getormhandler('xoonips', 'transfer_request');
         $transfer_request = $transfer_request_handler->get($item_id);
-        if ($transfer_request == false) {
+        if (false == $transfer_request) {
             $error->add(XNPERR_SERVER_ERROR, 'cannot get transfer_request');
 
             return false;
@@ -255,7 +255,7 @@ class XooNIpsLogicTransfer extends XooNIpsLogic
     {
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $index = $index_handler->get($index_id);
-        if ($index == false || $index->get('open_level') != OL_PRIVATE || $index->get('uid') != $uid) {
+        if (false == $index || OL_PRIVATE != $index->get('open_level') || $index->get('uid') != $uid) {
             return false;
         }
 

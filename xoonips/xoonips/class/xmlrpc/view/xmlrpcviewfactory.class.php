@@ -76,7 +76,7 @@ class XooNIpsXmlRpcItemViewFactory
             return $falseVar;
         }
 
-        if (strncmp('xnp', $name, 3) == 0) {
+        if (0 == strncmp('xnp', $name, 3)) {
             $tok = substr($name, 3);
             $class = 'XNP'.ucfirst($tok).'XmlRpcItemView'.ucfirst($logic);
             $ret = new $class($item);

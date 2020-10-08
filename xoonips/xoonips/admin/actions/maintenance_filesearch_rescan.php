@@ -36,7 +36,7 @@ if (extension_loaded('mbstring')) {
     mb_http_output('pass');
 }
 
-if (!isset($_SERVER['HTTP_REFERER']) || preg_match('/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER']) == 0) {
+if (!isset($_SERVER['HTTP_REFERER']) || 0 == preg_match('/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER'])) {
     die('Turn REFERER on');
 }
 
@@ -51,13 +51,13 @@ if ($num < 0 || $num > $total) {
     die('fatal error : invalid \'num\' parameter');
 }
 $file_id = $admin_file_handler->getFileIdByCount($num);
-if ($file_id === false) {
+if (false === $file_id) {
     die('fatal error : file id not found');
 }
 
-if ($mode == 'info') {
+if ('info' == $mode) {
     $admin_file_handler->updateFileInfo($file_id);
-} elseif ($mode == 'index') {
+} elseif ('index' == $mode) {
     $admin_file_handler->updateFileSearchText($file_id, false);
 } else {
     die('fatal error : invalid \'mode\' parameter');

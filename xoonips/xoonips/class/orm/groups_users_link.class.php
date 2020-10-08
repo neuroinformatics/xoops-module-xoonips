@@ -73,11 +73,11 @@ class XooNIpsOrmGroupsUsersLinkHandler extends XooNIpsTableObjectHandler
         $criteria->add(new Criteria('gid', $gid));
         $criteria->add(new Criteria('uid', $uid));
         $groups_users_links = &$this->getObjects($criteria);
-        if ($groups_users_links === false) {
+        if (false === $groups_users_links) {
             // error
             return false;
         }
-        if (count($groups_users_links) != 1) {
+        if (1 != count($groups_users_links)) {
             // not a member
             return false;
         }
@@ -95,11 +95,11 @@ class XooNIpsOrmGroupsUsersLinkHandler extends XooNIpsTableObjectHandler
         $join->cascade($join2);
         $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $item_basics = &$item_basic_handler->getObjects($criteria, false, '', false, $join);
-        if ($item_basics === false) {
+        if (false === $item_basics) {
             // error
             return false;
         }
-        if (count($item_basics) != 0) {
+        if (0 != count($item_basics)) {
             // cannot remove because user shares items to this group.
             return false;
         }

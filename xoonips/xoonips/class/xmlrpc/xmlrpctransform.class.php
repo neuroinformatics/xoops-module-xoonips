@@ -42,7 +42,7 @@ class XooNIpsXmlRpcTransformElement
      */
     public function add($field, &$child)
     {
-        if (isset($field) && !empty($field) && isset($child) && (is_subclass_of($child, 'XooNIpsXmlRpcTransformElement') || get_class($child) == 'XooNIpsXmlRpcTransformElement')) {
+        if (isset($field) && !empty($field) && isset($child) && (is_subclass_of($child, 'XooNIpsXmlRpcTransformElement') || 'XooNIpsXmlRpcTransformElement' == get_class($child))) {
             $this->childs[$field] = $child;
         }
     }
@@ -113,7 +113,7 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
             $value = null; //target value
             $name = null; //name of variable
             $is_multiple = isset($input['xmlrpc']['multiple']) ? $input['xmlrpc']['multiple'] : false;
-            if ($input['xmlrpc']['field'][0] == 'detail_field') { // case of detail_field
+            if ('detail_field' == $input['xmlrpc']['field'][0]) { // case of detail_field
                 $name = implode('.', $input['xmlrpc']['field']);
                 if (!empty($in_array['detail_field'])) {
                     foreach ($in_array['detail_field'] as $field) {
@@ -131,7 +131,7 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
             }
             //if( is_null( $value ) || is_null( $name ) ) continue;
             if ($is_multiple) {
-                if (count($value) == 0) {
+                if (0 == count($value)) {
                     // missing if multiple variable has no values
                     $missing[] = $name;
                 } else {
@@ -149,7 +149,7 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
             }
         }
 
-        return count($missing) == 0;
+        return 0 == count($missing);
     }
 
     /**
@@ -170,7 +170,7 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
             $value = null; //target value
             $name = null; //name of variable
             $is_multiple = isset($input['xmlrpc']['multiple']) ? $input['xmlrpc']['multiple'] : false;
-            if ($input['xmlrpc']['field'][0] == 'detail_field') { // case of detail_field
+            if ('detail_field' == $input['xmlrpc']['field'][0]) { // case of detail_field
                 if ($is_multiple) {
                     $value = array();
                 }
@@ -209,7 +209,7 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
             }
         }
 
-        return count($fields) == 0;
+        return 0 == count($fields);
     }
 
     /**
@@ -230,7 +230,7 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
             $value = null; //target value
             $name = null; //name of variable
             $is_multiple = isset($input['xmlrpc']['multiple']) ? $input['xmlrpc']['multiple'] : false;
-            if ($input['xmlrpc']['field'][0] == 'detail_field') { // case of detail_field
+            if ('detail_field' == $input['xmlrpc']['field'][0]) { // case of detail_field
                 if ($is_multiple) {
                     $value = array();
                 }
@@ -328,7 +328,7 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
             //
             // get variable in $in_var according to $this -> iteminfo['input'] rule
             $is_multiple = isset($input['xmlrpc']['multiple']) ? $input['xmlrpc']['multiple'] : false;
-            if ($input['xmlrpc']['field'][0] == 'detail_field') {
+            if ('detail_field' == $input['xmlrpc']['field'][0]) {
                 if ($is_multiple) {
                     $in_field = array();
                 }
@@ -421,7 +421,7 @@ class XooNIpsXmlRpcTransformCompo extends XooNIpsXmlRpcTransformElement
                     if (!isset($out_var[$i])) {
                         //this field musn't be transformed XML to ORM
                         continue;
-                    } elseif (strlen($out_var[$i]) == 0) {
+                    } elseif (0 == strlen($out_var[$i])) {
                         $orm->setDefault($field['field']);
                     } else {
                         $orm->setVar($field['field'], $out_var[$i], true);
@@ -484,7 +484,7 @@ class XooNIpsXmlRpcTransformFactory
             return $falseVar;
         }
 
-        if (strncmp('xnp', $module, 3) == 0) {
+        if (0 == strncmp('xnp', $module, 3)) {
             $tok = substr($module, 3);
             $class = 'XNP'.ucfirst($tok).'XmlRpcTransform'.str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
         } else {
@@ -548,7 +548,7 @@ class XooNIpsXmlRpcTransformCompoFactory
             require_once $include_file;
         }
 
-        if (strncmp('xnp', $module, 3) == 0) {
+        if (0 == strncmp('xnp', $module, 3)) {
             $tok = substr($module, 3);
             $class = 'XNP'.ucfirst($tok).'XmlRpcTransformCompo';
         } else {

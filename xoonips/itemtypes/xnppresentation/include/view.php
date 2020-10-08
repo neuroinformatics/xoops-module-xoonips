@@ -50,7 +50,7 @@ function xnppresentationGetDetailInformation($item_id)
 
     $sql = 'select * from '.$xoopsDB->prefix('xnppresentation_item_detail')." where presentation_id=$item_id";
     $result = $xoopsDB->query($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo " $sql ".mysql_error();
 
         return false;
@@ -342,7 +342,7 @@ function xnppresentationGetConfirmBlock($item_id)
     $readme = xnpGetTextFileConfirmBlock($item_id, 'readme', $lengths['readme']);
     $rights = xnpGetRightsConfirmBlock($item_id, $lengths['rights']);
     // retrieve detail information
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ('POST' == $_SERVER['REQUEST_METHOD']) {
         $detail = array(
         'presentation_type' => array(
         'value' => $formdata->getValue('post', 'presentation_type', 's', false),
@@ -410,7 +410,7 @@ function xnppresentationCheckRegisterParameters(&$message)
     if ($xids[0] != $xoonipsCheckedXID) {
         foreach ($xids as $i) {
             $index = array();
-            if (xnp_get_index($xnpsid, $i, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($xnpsid, $i, $index)) {
                 $indexes[] = $index;
             } else {
                 $messages[] = '<font color=\'#ff0000\'>'.xnp_get_last_error_string().'</font>';
@@ -425,11 +425,11 @@ function xnppresentationCheckRegisterParameters(&$message)
                 $readmeEncText = $formdata->getValue('post', 'readmeEncText', 's', true);
                 $rightsEncText = $formdata->getValue('post', 'rightsEncText', 's', true);
                 $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', true);
-                if ($readmeEncText == '') {
+                if ('' == $readmeEncText) {
                     // readme is not filled
                     $messages[] = '<font color=\'#ff0000\'>'._MD_XNPPRESENTATION_README_REQUIRED.'</font>';
                 }
-                if ($rightsEncText == '' && $rightsUseCC == '0') {
+                if ('' == $rightsEncText && '0' == $rightsUseCC) {
                     // license is not filled
                     $messages[] = '<font color=\'#ff0000\'>'._MD_XNPPRESENTATION_RIGHTS_REQUIRED.'</font>';
                 }
@@ -438,7 +438,7 @@ function xnppresentationCheckRegisterParameters(&$message)
         }
     }
 
-    if (count($messages) == 0) {
+    if (0 == count($messages)) {
         return true;
     }
     $message = "<br />\n".implode("<br />\n", $messages);
@@ -501,7 +501,7 @@ function xnppresentationInsertItem(&$item_id)
 
     $sql = 'insert into '.$xoopsDB->prefix('xnppresentation_item_detail')." ( presentation_id, $keys ) values ( $item_id, '$vals' ) ";
     $result = $xoopsDB->queryF($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo 'cannot insert item_detail';
 
         return false;
@@ -568,7 +568,7 @@ function xnppresentationUpdateItem($item_id)
     $attachment_dl_notify = $formdata->getValue('post', 'attachment_dl_notify', 'i', true);
     $sql = implode(',', array('attachment_dl_limit'.'=\''.$attachment_dl_limit.'\'', 'attachment_dl_notify'.'=\''.($attachment_dl_limit ? $attachment_dl_notify : 0).'\'', 'presentation_type'.'=\''.addslashes($ar['presentation_type']).'\'', 'readme'.'=\''.addslashes($ar['readme']).'\'', 'rights'.'=\''.addslashes($ar['rights']).'\'', 'use_cc'.'=\''.$use_cc.'\'', 'cc_commercial_use'.'=\''.$cc_commercial_use.'\'', 'cc_modification'.'=\''.$cc_modification.'\''));
     $result = $xoopsDB->queryF('update '.$xoopsDB->prefix('xnppresentation_item_detail')." set $sql where presentation_id = $item_id ");
-    if ($result == false) {
+    if (false == $result) {
         return false;
     }
 
@@ -761,7 +761,7 @@ function xnppresentationGetModifiedFields($item_id)
     if ($detail) {
         foreach (array('presentation_type' => _MD_XNPPRESENTATION_PRESENTATION_TYPE_LABEL) as $k => $v) {
             $tmp = $formdata->getValue('post', $k, 's', false);
-            if (!array_key_exists($k, $detail) || $tmp === null) {
+            if (!array_key_exists($k, $detail) || null === $tmp) {
                 continue;
             }
             if ($detail[$k] != $tmp) {
@@ -771,7 +771,7 @@ function xnppresentationGetModifiedFields($item_id)
         // is readme modified ?
         foreach (array('readme' => _MD_XOONIPS_ITEM_README_LABEL) as $k => $v) {
             $tmp = $formdata->getValue('post', "${k}EncText", 's', true);
-            if (!array_key_exists($k, $detail) || $tmp === null) {
+            if (!array_key_exists($k, $detail) || null === $tmp) {
                 continue;
             }
             if ($detail[$k] != $tmp) {
@@ -782,18 +782,18 @@ function xnppresentationGetModifiedFields($item_id)
         // is rights modified ?
         $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', true);
         $rightsEncText = $formdata->getValue('post', 'rightsEncText', 's', true);
-        if ($rightsUseCC !== null) {
+        if (null !== $rightsUseCC) {
             if ($rightsUseCC != $detail['use_cc']) {
                 array_push($ret, _MD_XOONIPS_ITEM_RIGHTS_LABEL);
             } else {
-                if ($rightsUseCC == 0) {
-                    if (array_key_exists('rights', $detail) && $rightsEncText != null && $rightsEncText != $detail['rights']) {
+                if (0 == $rightsUseCC) {
+                    if (array_key_exists('rights', $detail) && null != $rightsEncText && $rightsEncText != $detail['rights']) {
                         array_push($ret, _MD_XOONIPS_ITEM_RIGHTS_LABEL);
                     }
-                } elseif ($rightsUseCC == 1) {
+                } elseif (1 == $rightsUseCC) {
                     foreach (array('rightsCCCommercialUse' => 'cc_commercial_use', 'rightsCCModification' => 'cc_modification') as $k => $v) {
                         $tmp = $formdata->getValue('post', $k, 'i', true);
-                        if (!array_key_exists($v, $detail) || $tmp === null) {
+                        if (!array_key_exists($v, $detail) || null === $tmp) {
                             continue;
                         }
                         if ($tmp != $detail[$v]) {
@@ -862,7 +862,7 @@ function xnppresentationGetAttachmentDownloadNotifyOption($item_id)
 
 function xnppresentationSupportMetadataFormat($metadataPrefix, $item_id)
 {
-    if ($metadataPrefix == 'oai_dc' || $metadataPrefix == 'junii2') {
+    if ('oai_dc' == $metadataPrefix || 'junii2' == $metadataPrefix) {
         return true;
     }
 
@@ -898,9 +898,9 @@ function xnppresentationGetMetadata($prefix, $item_id)
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
     // indexes
     $indexes = array();
-    if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
+    if (RES_OK == xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids)) {
         foreach ($xids as $xid) {
-            if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($_SESSION['XNPSID'], $xid, $index)) {
                 $indexes[] = xnpGetIndexPathServerString($_SESSION['XNPSID'], $xid);
             }
         }
@@ -909,7 +909,7 @@ function xnppresentationGetMetadata($prefix, $item_id)
     $files = array();
     $mimetypes = array();
     $file_handler = &xoonips_gethandler('xoonips', 'file');
-    if ($detail['attachment_dl_limit'] == 0) {
+    if (0 == $detail['attachment_dl_limit']) {
         $files = $file_handler->getFilesInfo($item_id, 'presentation_file');
         foreach ($files as $file) {
             if (!in_array($file['mime_type'], $mimetypes)) {
@@ -920,14 +920,14 @@ function xnppresentationGetMetadata($prefix, $item_id)
     $previews = $file_handler->getFilesInfo($item_id, 'preview');
     // rights
     $detail['rights_cc_url'] = '';
-    if ($detail['use_cc'] == 1) {
+    if (1 == $detail['use_cc']) {
         $cond = 'by';
-        if ($detail['cc_commercial_use'] == 0) {
+        if (0 == $detail['cc_commercial_use']) {
             $cond .= '-nc';
         }
-        if ($detail['cc_modification'] == 0) {
+        if (0 == $detail['cc_modification']) {
             $cond .= '-nd';
-        } elseif ($detail['cc_modification'] == 1) {
+        } elseif (1 == $detail['cc_modification']) {
             $cond .= '-sa';
         }
         $detail['rights_cc_url'] = sprintf('http://creativecommons.org/licenses/%s/4.0/', $cond);

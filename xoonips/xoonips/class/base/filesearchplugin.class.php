@@ -76,13 +76,13 @@ class XooNIpsFileSearchPlugin
     public function open($filename)
     {
         $this->lastlog = '';
-        if ($this->handle !== false) {
+        if (false !== $this->handle) {
             $this->lastlog = 'FILE ALREADY OPENED';
 
             return false;
         }
         $this->_open_file($filename);
-        if ($this->handle === false) {
+        if (false === $this->handle) {
             $this->lastlog = 'FAILED TO OPEN FILE';
 
             return false;
@@ -99,7 +99,7 @@ class XooNIpsFileSearchPlugin
     public function close()
     {
         $this->lastlog = '';
-        if ($this->handle == false) {
+        if (false == $this->handle) {
             $this->lastlog = 'FILE NOT OPENED';
 
             return false;
@@ -117,7 +117,7 @@ class XooNIpsFileSearchPlugin
     public function fetch()
     {
         $this->lastlog = '';
-        if ($this->handle == false) {
+        if (false == $this->handle) {
             $this->lastlog = 'FILE NOT OPENED';
 
             return false;
@@ -125,7 +125,7 @@ class XooNIpsFileSearchPlugin
         $text = '';
         while (!$this->_is_eof()) {
             $tmp = $this->_fetch_data();
-            if ($tmp != false) {
+            if (false != $tmp) {
                 $text .= $tmp;
             }
         }

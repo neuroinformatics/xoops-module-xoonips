@@ -57,7 +57,7 @@ class XooNIpsMemberHandler
         $criteria = new CriteriaCompo(new Criteria('uname', $uname));
         $criteria->add(new Criteria('pass', md5($pass)));
         $user = &$this->_aHandler->getObjects($criteria);
-        if (!$user || count($user) != 1) {
+        if (!$user || 1 != count($user)) {
             $ret = false;
 
             return $ret;
@@ -71,11 +71,11 @@ class XooNIpsMemberHandler
      *
      * @param uid user ID
      *
-     * @return boolean if $uid is moderator. false otherwise.
+     * @return bool if $uid is moderator. false otherwise.
      */
     public function isModerator($uid)
     {
-        if ($uid == UID_GUEST) {
+        if (UID_GUEST == $uid) {
             return false;
         }
         // get moderator group id
@@ -96,7 +96,7 @@ class XooNIpsMemberHandler
      *
      * @param uid user ID
      *
-     * @return boolean if $uid is xoonips admin. false otherwise.
+     * @return bool if $uid is xoonips admin. false otherwise.
      */
     public function isAdmin($uid)
     {
@@ -129,7 +129,7 @@ class XooNIpsMemberHandler
         // create user root index
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $index_id = $index_handler->createUserRootIndex($uid);
-        if ($index_id === false) {
+        if (false === $index_id) {
             return false;
         }
 
@@ -154,7 +154,7 @@ class XooNIpsMemberHandler
         );
         foreach ($keys as $key => $field) {
             $val = $xconfig_handler->getValue($key);
-            if ($val == 'off') {
+            if ('off' == $val) {
                 // 'optional off' means 'required'
                 $xu_obj->setVar($field, $dummy_field, true); // not gpc
             }

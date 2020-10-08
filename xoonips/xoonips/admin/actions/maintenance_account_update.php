@@ -86,7 +86,7 @@ $vals['xoonips'] = xoonips_admin_get_requests('post', $keys['xoonips']);
 $vals['groups'] = xoonips_admin_get_requests('post', $keys['groups']);
 
 $uid = $vals['extra']['uid'];
-$is_newuser = ($uid == 0) ? true : false;
+$is_newuser = (0 == $uid) ? true : false;
 
 // check requirement variables
 function check_variables(&$vals)
@@ -129,7 +129,7 @@ function check_variables(&$vals)
         }
         $config_vals = xoonips_admin_get_configs($config_keys, 'n');
         foreach ($keys as $key => $name) {
-            if ($config_vals[$key] == 'off') {
+            if ('off' == $config_vals[$key]) {
                 // 'optional off' means required
                 $requirements[$type][] = $name;
             }
@@ -141,7 +141,7 @@ function check_variables(&$vals)
     foreach ($requirements as $type => $reqs) {
         foreach ($reqs as $name) {
             $value = trim(strval($vals[$type][$name]));
-            if ($value === '') {
+            if ('' === $value) {
                 $missing_fields = $name;
             }
         }
@@ -154,7 +154,7 @@ function check_variables(&$vals)
     }
 
     // check password
-    if ($vals['extra']['pass2'] != '') {
+    if ('' != $vals['extra']['pass2']) {
         if ($vals['extra']['pass'] != $vals['extra']['pass2']) {
             xoops_cp_header();
             echo _AM_XOONIPS_MSG_PASSWORD_MISMATCH;
@@ -203,7 +203,7 @@ function pickup_user($uid)
         'certify_user' => 's',
     );
     $config_values = xoonips_admin_get_configs($config_keys, 'n');
-    $is_certified = ($config_values['certify_user'] == 'on') ? false : true;
+    $is_certified = ('on' == $config_values['certify_user']) ? false : true;
     // pickup
     $xm_handler = &xoonips_gethandler('xoonips', 'member');
 
@@ -215,7 +215,7 @@ function check_user_exists($uname)
     $u_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
     $criteria = new Criteria('uname', addslashes($uname));
     $u_count = $u_handler->getCount($criteria);
-    if ($u_count != 0) {
+    if (0 != $u_count) {
         xoops_cp_header();
         echo 'User name '.$uname.' already exists';
         xoops_cp_footer();
@@ -227,14 +227,14 @@ function check_user_exists($uname)
 check_variables($vals);
 
 // check user exists
-if ($uid == 0) {
+if (0 == $uid) {
     check_user_exists($vals['xoops']['uname']);
 }
 
 // update db values
 // >> xoops user information
 $u_handler = &xoonips_getormhandler('xoonips', 'xoops_users');
-if ($uid == 0) {
+if (0 == $uid) {
     $u_obj = &$u_handler->create();
 } else {
     $u_obj = &$u_handler->get($uid);

@@ -67,10 +67,10 @@ foreach ($modules as $module) {
     $plugin['suffixes'] = $textutil->html_special_chars(implode(', ', $extensions));
     $plugin['version'] = $textutil->html_special_chars($module['version']);
     $plugin['evenodd'] = $evenodd;
-    $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+    $evenodd = ('even' == $evenodd) ? 'odd' : 'even';
     $plugins[] = $plugin;
 }
-$has_plugins = (count($plugins) == 0) ? false : true;
+$has_plugins = (0 == count($plugins)) ? false : true;
 
 $file_count = $admin_file_handler->getCountFiles();
 

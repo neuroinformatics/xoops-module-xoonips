@@ -149,7 +149,7 @@ class XooNIpsOrmIndexGroupIndexLinkHandler extends XooNIpsTableObjectHandler
         foreach ($index_group_index_links as $index_group_index_link) {
             $item_id = $index_group_index_link->get('item_id');
             $iids[$item_id] = $item_id;
-            if ($index_group_index_link->get('certify_state') == CERTIFIED) {
+            if (CERTIFIED == $index_group_index_link->get('certify_state')) {
                 $certified_iids[$item_id] = $item_id;
             }
         }
@@ -478,11 +478,11 @@ class XooNIpsOrmIndexGroupIndexLinkHandler extends XooNIpsTableObjectHandler
             $moderator_uids = array();
         }
 
-        if ($notification_name == 'group_item_certify_request') {
+        if ('group_item_certify_request' == $notification_name) {
             // when admin certify required
             // to all moderator
             $result = $notification_handler->triggerEvent('administrator', 0, $notification_name, $tags, $moderator_uids);
-        } elseif ($notification_name == 'group_item_certified' || $notification_name == 'group_item_rejected') {
+        } elseif ('group_item_certified' == $notification_name || 'group_item_rejected' == $notification_name) {
             // when auto certify
             // to all moderators and target group administrators
             $target_users = array_unique(array_merge($moderator_uids, $xgroup_handler->getUserIds($group->get('gid'), true)));

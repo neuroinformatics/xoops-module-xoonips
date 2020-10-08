@@ -55,10 +55,10 @@ $results = &$repo_handler->getLastResults('s');
 $evenodd = 'odd';
 foreach (array_keys($results) as $id) {
     $results[$id]['evenodd'] = $evenodd;
-    $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+    $evenodd = ('even' == $evenodd) ? 'odd' : 'even';
 }
 $has_results = true;
-if (count($results) == 0) {
+if (0 == count($results)) {
     $has_results = false;
 }
 

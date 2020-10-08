@@ -56,10 +56,10 @@ class XooNIpsLogicGetItemPermission extends XooNIpsLogic
             if (isset($vars[0]) && strlen($vars[0]) > 32) {
                 $error->add(XNPERR_INVALID_PARAM, 'too long parameter 1');
             }
-            if ($vars[2] != 'item_id' && $vars[2] != 'ext_id') {
+            if ('item_id' != $vars[2] && 'ext_id' != $vars[2]) {
                 $error->add(XNPERR_INVALID_PARAM, 'invalid parameter 3');
             }
-            if ($vars[2] == 'item_id') {
+            if ('item_id' == $vars[2]) {
                 if (!is_int($vars[1]) && !ctype_digit($vars[1])) {
                     $error->add(XNPERR_INVALID_PARAM, 'not integer parameter 2');
                 }
@@ -77,7 +77,7 @@ class XooNIpsLogicGetItemPermission extends XooNIpsLogic
             $sessionid = $vars[0];
             $id = $vars[1];
             $id_type = $vars[2];
-            if ($id_type == 'item_id') {
+            if ('item_id' == $id_type) {
                 $id = intval($id);
             }
         }
@@ -93,9 +93,9 @@ class XooNIpsLogicGetItemPermission extends XooNIpsLogic
 
         // ext_id to item_id
         $item_compo_handler = &xoonips_getormcompohandler('xoonips', 'item');
-        if ($id_type == 'ext_id') {
+        if ('ext_id' == $id_type) {
             $item_compo = $item_compo_handler->getByExtId($id);
-        } elseif ($id_type == 'item_id') {
+        } elseif ('item_id' == $id_type) {
             $item_compo = $item_compo_handler->get($id);
         } else {
             $error->add(XNPERR_INVALID_PARAM, "invalid id_type({$id_type})");
@@ -103,7 +103,7 @@ class XooNIpsLogicGetItemPermission extends XooNIpsLogic
 
             return false;
         }
-        if ($item_compo == false) {
+        if (false == $item_compo) {
             $error->add(XNPERR_NOT_FOUND);
             $response->setResult(false);
 

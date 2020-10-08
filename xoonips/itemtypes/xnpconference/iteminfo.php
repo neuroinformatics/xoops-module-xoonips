@@ -73,7 +73,7 @@ $iteminfo['ormfield']['author'] = array(array('name' => 'author', 'type' => 'str
 //
 // publication_year(creation_date in XML-RPC) is required
 foreach ($iteminfo['io']['xmlrpc']['item'] as $key => $val) {
-    if ($val['xmlrpc']['field'][0] == 'titles') {
+    if ('titles' == $val['xmlrpc']['field'][0]) {
         $iteminfo['io']['xmlrpc']['item'][$key]['xmlrpc']['display_name'] = '_MD_XNPCONFERENCE_XMLRPC_DISPLAY_NAME_TITLES';
     }
 }

@@ -2,7 +2,7 @@
 
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
-/**
+/*
  * Converts to and from JSON format.
  *
  * JSON (JavaScript Object Notation) is a lightweight data-interchange
@@ -58,7 +58,7 @@
  * @see http://pear.php.net/pepr/pepr-proposal-show.php?id=198
  */
 
-/**
+/*
  * Marker constant for Services_JSON::decode(), used to flag stack state.
  */
 define('SERVICES_JSON_SLICE', 1);
@@ -261,25 +261,25 @@ class Services_JSON
                 $ord_var_c = ord($var[$c]);
 
                 switch (true) {
-                case $ord_var_c == 0x08:
+                case 0x08 == $ord_var_c:
                     $ascii .= '\b';
                     break;
-                case $ord_var_c == 0x09:
+                case 0x09 == $ord_var_c:
                     $ascii .= '\t';
                     break;
-                case $ord_var_c == 0x0A:
+                case 0x0A == $ord_var_c:
                     $ascii .= '\n';
                     break;
-                case $ord_var_c == 0x0C:
+                case 0x0C == $ord_var_c:
                     $ascii .= '\f';
                     break;
-                case $ord_var_c == 0x0D:
+                case 0x0D == $ord_var_c:
                     $ascii .= '\r';
                     break;
 
-                case $ord_var_c == 0x22:
-                case $ord_var_c == 0x2F:
-                case $ord_var_c == 0x5C:
+                case 0x22 == $ord_var_c:
+                case 0x2F == $ord_var_c:
+                case 0x5C == $ord_var_c:
                     // double quote, slash, slosh
                     $ascii .= '\\'.$var[$c];
                     break;
@@ -289,16 +289,16 @@ class Services_JSON
                     $ascii .= $var[$c];
                     break;
 
-                case ($ord_var_c & 0xE0) == 0xC0:
+                case 0xC0 == ($ord_var_c & 0xE0):
                     // characters U-00000080 - U-000007FF, mask 110XXXXX
                     // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                     $char = pack('C*', $ord_var_c, ord($var[$c + 1]));
-                    $c += 1;
+                    ++$c;
                     $utf16 = $this->utf82utf16($char);
                     $ascii .= sprintf('\u%04s', bin2hex($utf16));
                     break;
 
-                case ($ord_var_c & 0xF0) == 0xE0:
+                case 0xE0 == ($ord_var_c & 0xF0):
                     // characters U-00000800 - U-0000FFFF, mask 1110XXXX
                     // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                     $char = pack(
@@ -311,7 +311,7 @@ class Services_JSON
                     $ascii .= sprintf('\u%04s', bin2hex($utf16));
                     break;
 
-                case ($ord_var_c & 0xF8) == 0xF0:
+                case 0xF0 == ($ord_var_c & 0xF8):
                     // characters U-00010000 - U-001FFFFF, mask 11110XXX
                     // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                     $char = pack(
@@ -325,7 +325,7 @@ class Services_JSON
                     $ascii .= sprintf('\u%04s', bin2hex($utf16));
                     break;
 
-                case ($ord_var_c & 0xFC) == 0xF8:
+                case 0xF8 == ($ord_var_c & 0xFC):
                     // characters U-00200000 - U-03FFFFFF, mask 111110XX
                     // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                     $char = pack(
@@ -340,7 +340,7 @@ class Services_JSON
                     $ascii .= sprintf('\u%04s', bin2hex($utf16));
                     break;
 
-                case ($ord_var_c & 0xFE) == 0xFC:
+                case 0xFC == ($ord_var_c & 0xFE):
                     // characters U-04000000 - U-7FFFFFFF, mask 1111110X
                     // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                     $char = pack(
@@ -527,33 +527,33 @@ class Services_JSON
                     $ord_chrs_c = ord($chrs[$c]);
 
                     switch (true) {
-                    case $substr_chrs_c_2 == '\b':
+                    case '\b' == $substr_chrs_c_2:
                         $utf8 .= chr(0x08);
                         ++$c;
                         break;
-                    case $substr_chrs_c_2 == '\t':
+                    case '\t' == $substr_chrs_c_2:
                         $utf8 .= chr(0x09);
                         ++$c;
                         break;
-                    case $substr_chrs_c_2 == '\n':
+                    case '\n' == $substr_chrs_c_2:
                         $utf8 .= chr(0x0A);
                         ++$c;
                         break;
-                    case $substr_chrs_c_2 == '\f':
+                    case '\f' == $substr_chrs_c_2:
                         $utf8 .= chr(0x0C);
                         ++$c;
                         break;
-                    case $substr_chrs_c_2 == '\r':
+                    case '\r' == $substr_chrs_c_2:
                         $utf8 .= chr(0x0D);
                         ++$c;
                         break;
 
-                    case $substr_chrs_c_2 == '\\"':
-                    case $substr_chrs_c_2 == '\\\'':
-                    case $substr_chrs_c_2 == '\\\\':
-                    case $substr_chrs_c_2 == '\\/':
-                        if (($delim == '"' && $substr_chrs_c_2 != '\\\'')
-                            || ($delim == "'" && $substr_chrs_c_2 != '\\"')
+                    case '\\"' == $substr_chrs_c_2:
+                    case '\\\'' == $substr_chrs_c_2:
+                    case '\\\\' == $substr_chrs_c_2:
+                    case '\\/' == $substr_chrs_c_2:
+                        if (('"' == $delim && '\\\'' != $substr_chrs_c_2)
+                            || ("'" == $delim && '\\"' != $substr_chrs_c_2)
                         ) {
                             $utf8 .= $chrs[++$c];
                         }
@@ -571,35 +571,35 @@ class Services_JSON
                         $utf8 .= $chrs[$c];
                         break;
 
-                    case ($ord_chrs_c & 0xE0) == 0xC0:
+                    case 0xC0 == ($ord_chrs_c & 0xE0):
                         // characters U-00000080 - U-000007FF, mask 110XXXXX
                         //see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                         $utf8 .= substr($chrs, $c, 2);
                         ++$c;
                         break;
 
-                    case ($ord_chrs_c & 0xF0) == 0xE0:
+                    case 0xE0 == ($ord_chrs_c & 0xF0):
                         // characters U-00000800 - U-0000FFFF, mask 1110XXXX
                         // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                         $utf8 .= substr($chrs, $c, 3);
                         $c += 2;
                         break;
 
-                    case ($ord_chrs_c & 0xF8) == 0xF0:
+                    case 0xF0 == ($ord_chrs_c & 0xF8):
                         // characters U-00010000 - U-001FFFFF, mask 11110XXX
                         // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                         $utf8 .= substr($chrs, $c, 4);
                         $c += 3;
                         break;
 
-                    case ($ord_chrs_c & 0xFC) == 0xF8:
+                    case 0xF8 == ($ord_chrs_c & 0xFC):
                         // characters U-00200000 - U-03FFFFFF, mask 111110XX
                         // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                         $utf8 .= substr($chrs, $c, 5);
                         $c += 4;
                         break;
 
-                    case ($ord_chrs_c & 0xFE) == 0xFC:
+                    case 0xFC == ($ord_chrs_c & 0xFE):
                         // characters U-04000000 - U-7FFFFFFF, mask 1111110X
                         // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                         $utf8 .= substr($chrs, $c, 6);
@@ -612,7 +612,7 @@ class Services_JSON
             } elseif (preg_match('/^\[.*\]$/s', $str) || preg_match('/^\{.*\}$/s', $str)) {
                 // array, or object notation
 
-                if ($str[0] == '[') {
+                if ('[' == $str[0]) {
                     $stk = array(SERVICES_JSON_IN_ARR);
                     $arr = array();
                 } else {
@@ -634,8 +634,8 @@ class Services_JSON
                 $chrs = substr($str, 1, -1);
                 $chrs = $this->reduce_string($chrs);
 
-                if ($chrs == '') {
-                    if (reset($stk) == SERVICES_JSON_IN_ARR) {
+                if ('' == $chrs) {
+                    if (SERVICES_JSON_IN_ARR == reset($stk)) {
                         return $arr;
                     } else {
                         return $obj;
@@ -650,17 +650,17 @@ class Services_JSON
                     $top = end($stk);
                     $substr_chrs_c_2 = substr($chrs, $c, 2);
 
-                    if (($c == $strlen_chrs) || (($chrs[$c] == ',') && ($top['what'] == SERVICES_JSON_SLICE))) {
+                    if (($c == $strlen_chrs) || ((',' == $chrs[$c]) && (SERVICES_JSON_SLICE == $top['what']))) {
                         // found a comma that is not inside a string, array, etc.,
                         // OR we've reached the end of the character list
                         $slice = substr($chrs, $top['where'], ($c - $top['where']));
                         array_push($stk, array('what' => SERVICES_JSON_SLICE, 'where' => ($c + 1), 'delim' => false));
                         //print("Found split at {$c}: ".substr($chrs, $top['where'], (1 + $c - $top['where']))."\n");
 
-                        if (reset($stk) == SERVICES_JSON_IN_ARR) {
+                        if (SERVICES_JSON_IN_ARR == reset($stk)) {
                             // we are in an array, so just push an element onto the stack
                             array_push($arr, $this->decode($slice));
-                        } elseif (reset($stk) == SERVICES_JSON_IN_OBJ) {
+                        } elseif (SERVICES_JSON_IN_OBJ == reset($stk)) {
                             // we are in an object, so figure
                             // out the property name and set an
                             // element in an associative array,
@@ -689,47 +689,47 @@ class Services_JSON
                                 }
                             }
                         }
-                    } elseif ((($chrs[$c] == '"') || ($chrs[$c] == "'")) && ($top['what'] != SERVICES_JSON_IN_STR)) {
+                    } elseif ((('"' == $chrs[$c]) || ("'" == $chrs[$c])) && (SERVICES_JSON_IN_STR != $top['what'])) {
                         // found a quote, and we are not inside a string
                         array_push($stk, array('what' => SERVICES_JSON_IN_STR, 'where' => $c, 'delim' => $chrs[$c]));
-                        //print("Found start of string at {$c}\n");
+                    //print("Found start of string at {$c}\n");
                     } elseif (($chrs[$c] == $top['delim'])
-                        && ($top['what'] == SERVICES_JSON_IN_STR)
-                        && ((strlen(substr($chrs, 0, $c)) - strlen(rtrim(substr($chrs, 0, $c), '\\'))) % 2 != 1)
+                        && (SERVICES_JSON_IN_STR == $top['what'])
+                        && (1 != (strlen(substr($chrs, 0, $c)) - strlen(rtrim(substr($chrs, 0, $c), '\\'))) % 2)
                     ) {
                         // found a quote, we're in a string, and it's not escaped
                         // we know that it's not escaped becase there is _not_ an
                         // odd number of backslashes at the end of the string so far
                         array_pop($stk);
-                        //print("Found end of string at {$c}: ".substr($chrs, $top['where'], (1 + 1 + $c - $top['where']))."\n");
-                    } elseif (($chrs[$c] == '[')
+                    //print("Found end of string at {$c}: ".substr($chrs, $top['where'], (1 + 1 + $c - $top['where']))."\n");
+                    } elseif (('[' == $chrs[$c])
                         && in_array($top['what'], array(SERVICES_JSON_SLICE, SERVICES_JSON_IN_ARR, SERVICES_JSON_IN_OBJ))
                     ) {
                         // found a left-bracket, and we are in an array, object, or slice
                         array_push($stk, array('what' => SERVICES_JSON_IN_ARR, 'where' => $c, 'delim' => false));
-                        //print("Found start of array at {$c}\n");
-                    } elseif (($chrs[$c] == ']') && ($top['what'] == SERVICES_JSON_IN_ARR)) {
+                    //print("Found start of array at {$c}\n");
+                    } elseif ((']' == $chrs[$c]) && (SERVICES_JSON_IN_ARR == $top['what'])) {
                         // found a right-bracket, and we're in an array
                         array_pop($stk);
-                        //print("Found end of array at {$c}: ".substr($chrs, $top['where'], (1 + $c - $top['where']))."\n");
-                    } elseif (($chrs[$c] == '{')
+                    //print("Found end of array at {$c}: ".substr($chrs, $top['where'], (1 + $c - $top['where']))."\n");
+                    } elseif (('{' == $chrs[$c])
                         && in_array($top['what'], array(SERVICES_JSON_SLICE, SERVICES_JSON_IN_ARR, SERVICES_JSON_IN_OBJ))
                     ) {
                         // found a left-brace, and we are in an array, object, or slice
                         array_push($stk, array('what' => SERVICES_JSON_IN_OBJ, 'where' => $c, 'delim' => false));
-                        //print("Found start of object at {$c}\n");
-                    } elseif (($chrs[$c] == '}') && ($top['what'] == SERVICES_JSON_IN_OBJ)) {
+                    //print("Found start of object at {$c}\n");
+                    } elseif (('}' == $chrs[$c]) && (SERVICES_JSON_IN_OBJ == $top['what'])) {
                         // found a right-brace, and we're in an object
                         array_pop($stk);
-                        //print("Found end of object at {$c}: ".substr($chrs, $top['where'], (1 + $c - $top['where']))."\n");
-                    } elseif (($substr_chrs_c_2 == '/*')
+                    //print("Found end of object at {$c}: ".substr($chrs, $top['where'], (1 + $c - $top['where']))."\n");
+                    } elseif (('/*' == $substr_chrs_c_2)
                         && in_array($top['what'], array(SERVICES_JSON_SLICE, SERVICES_JSON_IN_ARR, SERVICES_JSON_IN_OBJ))
                     ) {
                         // found a comment start, and we are in an array, object, or slice
                         array_push($stk, array('what' => SERVICES_JSON_IN_CMT, 'where' => $c, 'delim' => false));
                         ++$c;
-                        //print("Found start of comment at {$c}\n");
-                    } elseif (($substr_chrs_c_2 == '*/') && ($top['what'] == SERVICES_JSON_IN_CMT)) {
+                    //print("Found start of comment at {$c}\n");
+                    } elseif (('*/' == $substr_chrs_c_2) && (SERVICES_JSON_IN_CMT == $top['what'])) {
                         // found a comment end, and we're in one now
                         array_pop($stk);
                         ++$c;
@@ -742,9 +742,9 @@ class Services_JSON
                     }
                 }
 
-                if (reset($stk) == SERVICES_JSON_IN_ARR) {
+                if (SERVICES_JSON_IN_ARR == reset($stk)) {
                     return $arr;
-                } elseif (reset($stk) == SERVICES_JSON_IN_OBJ) {
+                } elseif (SERVICES_JSON_IN_OBJ == reset($stk)) {
                     return $obj;
                 }
             }
@@ -758,7 +758,7 @@ class Services_JSON
     {
         if (class_exists('pear')) {
             return PEAR::isError($data, $code);
-        } elseif (is_object($data) && (get_class($data) == 'services_json_error'
+        } elseif (is_object($data) && ('services_json_error' == get_class($data)
             || is_subclass_of($data, 'services_json_error'))
         ) {
             return true;

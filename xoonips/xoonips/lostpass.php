@@ -30,7 +30,7 @@ require 'include/common.inc.php';
 
 $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
 
-if ($uid != UID_GUEST) {
+if (UID_GUEST != $uid) {
     // deny to access from registered user
     redirect_header(XOOPS_URL.'/', 3, _NOPERM);
     exit();
@@ -44,7 +44,7 @@ $myxoopsConfig = &xoonips_get_xoops_configs(XOOPS_CONF);
 $member_handler = &xoops_gethandler('member');
 $getuser = &$member_handler->getUsers(new Criteria('email', addslashes($email)));
 
-if (count($getuser) != 1) {
+if (1 != count($getuser)) {
     redirect_header('user.php', 2, _US_SORRYNOTFOUND);
     exit();
 }

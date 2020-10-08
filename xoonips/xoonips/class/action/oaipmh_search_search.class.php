@@ -140,7 +140,7 @@ class XooNIpsActionOaipmhSearchSearch extends XooNIpsAction
 
     public function getStartMetadataCount()
     {
-        if ($this->getEndMetadataCount() == 0) {
+        if (0 == $this->getEndMetadataCount()) {
             return 0;
         }
 
@@ -222,7 +222,7 @@ class XooNIpsActionOaipmhSearchSearch extends XooNIpsAction
         $cache_handler = &xoonips_getormhandler('xoonips', 'search_cache');
         $cache = &$cache_handler->get(intval($cache_id));
 
-        return $cache !== false;
+        return false !== $cache;
     }
 
     /**
@@ -270,7 +270,7 @@ class XooNIpsActionOaipmhSearchSearch extends XooNIpsAction
         $criteria->add(new Criteria('event_type_id', '('.implode(',', $event_type_ids).')', 'IN'));
         $criteria->add(new Criteria('timestamp', $timestamp, '>='));
         $result = &$event_handler->getObjects($criteria);
-        if (!$result || count($result) == 0) {
+        if (!$result || 0 == count($result)) {
             return false;
         }
 
@@ -325,7 +325,7 @@ class XooNIpsActionOaipmhSearchSearch extends XooNIpsAction
 
     /**
      * @param $page integer current page number
-     * @param double $maxpage integer max page number
+     * @param float $maxpage integer max page number
      *
      * @return array of integer page numbers
      */
@@ -363,7 +363,7 @@ class XooNIpsActionOaipmhSearchSearch extends XooNIpsAction
      */
     public function isValidRepositoryId($id)
     {
-        if ($id == 0) {
+        if (0 == $id) {
             return true;
         }
         $handler = &xoonips_getormhandler('xoonips', 'oaipmh_repositories');

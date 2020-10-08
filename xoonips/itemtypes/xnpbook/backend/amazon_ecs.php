@@ -41,7 +41,7 @@ if (extension_loaded('mbstring')) {
 
 $is_error = false;
 $error_message = '';
-if (!isset($_SERVER['HTTP_REFERER']) || preg_match('/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER']) == 0) {
+if (!isset($_SERVER['HTTP_REFERER']) || 0 == preg_match('/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER'])) {
     $is_error = true;
     $error_message = 'Turn REFERER on';
 }
@@ -59,11 +59,11 @@ function get_simplified_url($url)
 {
     $durl = urldecode($url);
     $ret = parse_url($durl);
-    if ($ret === false) {
+    if (false === $ret) {
         return $url;
     }
     $host = $ret['host'];
-    if ($host == 'www.amazon.co.jp') {
+    if ('www.amazon.co.jp' == $host) {
         $host = 'amazon.jp';
     }
     $asin = false;
@@ -74,13 +74,13 @@ function get_simplified_url($url)
         $queries = explode('&', $ret['query']);
         foreach ($queries as $query) {
             list($key, $value) = explode('=', $query);
-            if ($key == 'ASIN') {
+            if ('ASIN' == $key) {
                 $asin = $value;
                 break;
             }
         }
     }
-    if ($asin !== false) {
+    if (false !== $asin) {
         return sprintf('%s://%s/dp/%s', $ret['scheme'], $host, $asin);
     }
 
@@ -119,7 +119,7 @@ function &get_amazon_data($asin)
     // - PublicationDate is yyyy-mm-dd or yyyy-mm form
     $pdate = explode('-', $item['PublicationDate']);
     $pdate_count = count($pdate);
-    if ($pdate_count == 2 || $pdate_count == 3) {
+    if (2 == $pdate_count || 3 == $pdate_count) {
         $ret['year'] = sscanf($pdate[0], '%d');
     }
     // publisher

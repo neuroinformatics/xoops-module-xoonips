@@ -91,13 +91,13 @@ foreach ($xusers_objs as $xusers_obj) {
     $positions[] = array(
         'uid' => $uid,
         'position' => $posi,
-        'name' => ($name == '') ? $uname : $name,
+        'name' => ('' == $name) ? $uname : $name,
         'order' => $order,
         'evenodd' => $evenodd,
     );
-    $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+    $evenodd = ('even' == $evenodd) ? 'odd' : 'even';
 }
-$is_user_empty = (count($positions) == 0);
+$is_user_empty = (0 == count($positions));
 
 // templates
 require_once '../class/base/pattemplate.class.php';

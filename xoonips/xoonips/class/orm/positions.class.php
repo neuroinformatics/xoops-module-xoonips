@@ -72,7 +72,7 @@ class XooNIpsOrmPositionsHandler extends XooNIpsTableObjectHandler
     {
         // check existing id
         $posi_criteria = new Criteria('posi_id', $id);
-        if ($this->getCount($posi_criteria) == 0) {
+        if (0 == $this->getCount($posi_criteria)) {
             return false;
         }
 

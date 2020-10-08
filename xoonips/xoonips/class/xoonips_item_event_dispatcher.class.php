@@ -32,7 +32,7 @@ class XooNIpsItemEventDispatcher
     public static function &getInstance()
     {
         static $singleton_;
-        if ($singleton_ == null) {
+        if (null == $singleton_) {
             $singleton_ = new self();
         }
 

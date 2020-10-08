@@ -78,14 +78,14 @@ function xoonips_admin_maintenance_item_unlock_item($item_id)
     $event_log_handler = &xoonips_getormhandler('xoonips', 'event_log');
     if ($item_lock_handler->isLocked($item_id)) {
         $lock_type = $item_lock_handler->getLockType($item_id);
-        if ($lock_type == XOONIPS_LOCK_TYPE_CERTIFY_REQUEST) {
+        if (XOONIPS_LOCK_TYPE_CERTIFY_REQUEST == $lock_type) {
             $indexIds = array();
             $index_item_links = &$index_item_link_handler->getObjects(new Criteria('item_id', $item_id));
             foreach ($index_item_links as $index_item_link) {
-                if ($index_item_link->get('certify_state') == CERTIFY_REQUIRED) {
+                if (CERTIFY_REQUIRED == $index_item_link->get('certify_state')) {
                     $index_id = $index_item_link->get('index_id');
                     $index = $index_handler->get($index_id);
-                    if ($index->getVar('open_level', 'n') == OL_PUBLIC || $index->getVar('open_level', 'n') == OL_GROUP_ONLY) {
+                    if (OL_PUBLIC == $index->getVar('open_level', 'n') || OL_GROUP_ONLY == $index->getVar('open_level', 'n')) {
                         $item_basic_handler->unlockItemAndIndexes($item_id, $index_id);
                         $event_log_handler->recordRejectItemEvent($item_id, $index_id);
                         $index_item_link_handler->delete($index_item_link);
@@ -122,7 +122,7 @@ if (count($tree_ids) > 0) {
         $succeed = 0;
         $failed = 0;
         $iids = xnpitmgrListIndexItems(array($xid));
-        if ($iids === false) {
+        if (false === $iids) {
             // no item in tree
             continue;
         }
@@ -144,7 +144,7 @@ if (count($tree_ids) > 0) {
             'succeed' => $succeed,
             'failed' => $failed,
             );
-        $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+        $evenodd = ('even' == $evenodd) ? 'odd' : 'even';
     }
 }
 

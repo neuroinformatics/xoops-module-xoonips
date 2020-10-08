@@ -37,7 +37,7 @@ function xoops_module_update_xnpconference($xoopsMod, $oldversion)
     // remember that version is multiplied with 100 to get an integer
     case 201:
         $result = $xoopsDB->query("alter table $table add column attachment_dl_limit int(1) unsigned default '1'");
-        if ($result == false) {
+        if (false == $result) {
             echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
             return false;
@@ -54,18 +54,18 @@ function xoops_module_update_xnpconference($xoopsMod, $oldversion)
         $module_handler = &xoops_gethandler('module');
         $module = &$module_handler->getByDirname('xnpconference');
         $result = $xoopsDB->query('update '.$xoopsDB->prefix('xoonips_file_type').' set name=\'conference_file\', display_name=\'Presentation file of Conference\' where name=\'presentation_file\' and mid='.$module->mid());
-        if ($result == false) {
+        if (false == $result) {
             echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
             return false;
         }
 
         $result = $xoopsDB->query('select file_type_id from '.$xoopsDB->prefix('xoonips_file_type').' where mid='.$module->mid());
-        if ($result == false) {
+        if (false == $result) {
             echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
             return false;
-        } elseif ($xoopsDB->getRowsNum($result) == 0) {
+        } elseif (0 == $xoopsDB->getRowsNum($result)) {
             echo '&nbsp;&nbsp;can\'t find row of file_type_id<br />';
 
             return false;
@@ -73,11 +73,11 @@ function xoops_module_update_xnpconference($xoopsMod, $oldversion)
         list($file_type_id) = $xoopsDB->fetchRow($result);
 
         $result = $xoopsDB->query('select item_type_id from '.$xoopsDB->prefix('xoonips_item_type').' where mid='.$module->mid());
-        if ($result == false) {
+        if (false == $result) {
             echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
             return false;
-        } elseif ($xoopsDB->getRowsNum($result) == 0) {
+        } elseif (0 == $xoopsDB->getRowsNum($result)) {
             echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
             return false;
@@ -94,7 +94,7 @@ function xoops_module_update_xnpconference($xoopsMod, $oldversion)
         }
         if (count($update_ids) > 0) {
             $result = $xoopsDB->query('update '.$xoopsDB->prefix('xoonips_file')." set file_type_id=${file_type_id} where item_id in (".implode(', ', $update_ids).')');
-            if ($result == false) {
+            if (false == $result) {
                 echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
                 return false;
@@ -108,6 +108,7 @@ function xoops_module_update_xnpconference($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 313:
         $sql = 'ALTER TABLE '.$xoopsDB->prefix('xnpconference_item_detail').' ADD COLUMN attachment_dl_notify int(1) unsigned default 0 ';
         $result = $xoopsDB->query($sql);
@@ -116,6 +117,7 @@ function xoops_module_update_xnpconference($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 330:
     case 331:
     case 332:
@@ -156,7 +158,7 @@ function xoops_module_update_xnpconference($xoopsMod, $oldversion)
                 $sql = 'insert into '.$xoopsDB->prefix($table_author);
                 $sql .= '('.$key_name.',author,author_order) values (';
                 $sql .= $id.','.$xoopsDB->quoteString($val).','.$i.')';
-                if ($xoopsDB->queryF($sql) == false) {
+                if (false == $xoopsDB->queryF($sql)) {
                     echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
                     return false;
@@ -172,6 +174,7 @@ function xoops_module_update_xnpconference($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 340:
     default:
     }

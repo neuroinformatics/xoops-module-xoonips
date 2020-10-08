@@ -85,25 +85,25 @@ $module_handler = &xoops_gethandler('module');
 $module = &$module_handler->get($module_id);
 
 // if has comments feature, need comment lang file
-if ($module->getVar('hascomments') == 1) {
+if (1 == $module->getVar('hascomments')) {
     $langman->read_pagetype('comment.php');
 }
 // RMV-NOTIFY
 // if has notification feature, need notification lang file
-if ($module->getVar('hasnotification') == 1) {
+if (1 == $module->getVar('hasnotification')) {
     $langman->read_pagetype('notification.php');
 }
 
 $button_tray = new XoopsFormElementTray('');
 for ($i = 0; $i < $count; ++$i) {
-    $title4tray = (!defined($config[$i]->getVar('conf_desc')) || constant($config[$i]->getVar('conf_desc')) == '') ? constant($config[$i]->getVar('conf_title')) : constant($config[$i]->getVar('conf_title')).'<br /><br /><span style="font-weight:normal;">'.constant($config[$i]->getVar('conf_desc')).'</span>';
+    $title4tray = (!defined($config[$i]->getVar('conf_desc')) || '' == constant($config[$i]->getVar('conf_desc'))) ? constant($config[$i]->getVar('conf_title')) : constant($config[$i]->getVar('conf_title')).'<br /><br /><span style="font-weight:normal;">'.constant($config[$i]->getVar('conf_desc')).'</span>';
     $eletitle = '';
     switch ($config[$i]->getVar('conf_formtype')) {
     case 'textarea':
-        if ($config[$i]->getVar('conf_valuetype') == 'array') {
+        if ('array' == $config[$i]->getVar('conf_valuetype')) {
             // this is exceptional.. only when value type is arrayneed a
             // smarter way for this
-            $ele = ($config[$i]->getVar('conf_value') != '') ? new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), $textutil->html_special_chars(implode('|', $config[$i]->getConfValueForOutput())), 5, 50) : new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), '', 5, 50);
+            $ele = ('' != $config[$i]->getVar('conf_value')) ? new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), $textutil->html_special_chars(implode('|', $config[$i]->getConfValueForOutput())), 5, 50) : new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), '', 5, 50);
         } else {
             $ele = new XoopsFormTextArea($eletitle, $config[$i]->getVar('conf_name'), $textutil->html_special_chars($config[$i]->getConfValueForOutput()), 5, 50);
         }

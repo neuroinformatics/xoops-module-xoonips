@@ -98,7 +98,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
     public function &getKeywordSearchCriteria($field, $query, $encoding, $prefix = '')
     {
         // convert query encoding to 'UTF-8'
-        if ($encoding != 'UTF-8') {
+        if ('UTF-8' != $encoding) {
             $query = mb_convert_encoding($query, 'UTF-8', $encoding);
         }
 
@@ -141,7 +141,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
     public function &getFulltextSearchCriteria($field, $query, $encoding, $prefix = '')
     {
         // convert query encoding to 'UTF-8'
-        if ($encoding != 'UTF-8') {
+        if ('UTF-8' != $encoding) {
             $query = mb_convert_encoding($query, 'UTF-8', $encoding);
         }
 
@@ -212,11 +212,11 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
      */
     public function &_make_keyword_search_criteria($field, $tokens, $encoding, $prefix)
     {
-        if ($tokens === false) {
+        if (false === $tokens) {
             // fatal error : normalizer returned false
             return $this->_make_force_unmatch_criteria($field, $prefix);
         }
-        $is_utf8 = ($encoding == 'UTF-8');
+        $is_utf8 = ('UTF-8' == $encoding);
         $stack = array();
         foreach ($tokens as $token) {
             if ($this->_is_operator($token)) {
@@ -233,10 +233,10 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
                 }
                 list($op1, $val1) = array_pop($stack);
                 list($op2, $val2) = array_pop($stack);
-                if ($op1 === false && $op2 === false) {
+                if (false === $op1 && false === $op2) {
                     $val = new CriteriaCompo($val2);
                     $val->add($val1);
-                } elseif ($op1 == false) {
+                } elseif (false == $op1) {
                     $val = &$val2;
                     $val->add($val1, $op);
                 } else {
@@ -261,7 +261,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
             unset($op, $val);
         }
         $cnt = count($stack);
-        if ($cnt == 0) {
+        if (0 == $cnt) {
             // no search query found
             return $this->_make_force_unmatch_criteria($field, $prefix);
         } elseif ($cnt > 1) {
@@ -284,11 +284,11 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
      */
     public function &_make_fulltext_search_criteria($field, $tokens, $prefix)
     {
-        if ($tokens === false) {
+        if (false === $tokens) {
             // fatal error : normalizer returned false
             return $this->_make_force_unmatch_criteria($field, $prefix);
         }
-        $is_utf8 = ($this->ENCODING == 'UTF-8');
+        $is_utf8 = ('UTF-8' == $this->ENCODING);
         $stack = array();
         foreach ($tokens as $token) {
             if ($this->_is_operator($token)) {
@@ -301,8 +301,8 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
                 if ($this->_is_and_op($token)) {
                     // 'AND' operator
                     $op = $this->OP_AND;
-                    $fmt1 = ($op1 === false ? '+%s' : ($this->_is_or_op($op1) ? '+( %s )' : '%s'));
-                    $fmt2 = ($op2 === false ? '+%s' : ($this->_is_or_op($op2) ? '+( %s )' : '%s'));
+                    $fmt1 = (false === $op1 ? '+%s' : ($this->_is_or_op($op1) ? '+( %s )' : '%s'));
+                    $fmt2 = (false === $op2 ? '+%s' : ($this->_is_or_op($op2) ? '+( %s )' : '%s'));
                 } else {
                     // 'OR' operator
                     $fmt1 = ($this->_is_and_op($op1) ? '( %s )' : '%s');
@@ -331,7 +331,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
             $stack[] = array($op, $val);
         }
         $cnt = count($stack);
-        if ($cnt == 0) {
+        if (0 == $cnt) {
             // no search query found
             return $this->_make_force_unmatch_criteria($field, $prefix);
         } elseif ($cnt > 1) {
@@ -368,7 +368,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
      */
     public function _make_fulltext_search_data($tokens)
     {
-        $is_utf8 = ($this->ENCODING == 'UTF-8');
+        $is_utf8 = ('UTF-8' == $this->ENCODING);
         $trailing = ($this->WINDOW_SIZE > 2);
         $windowed = array();
         foreach ($tokens as $token) {
@@ -412,7 +412,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
         for ($i = 0; $i < $len; $i = mb_ereg_search_getpos()) {
             mb_ereg_search_setpos($i);
             $regs = mb_ereg_search_regs();
-            if ($regs === false) {
+            if (false === $regs) {
                 break;
             }
             // put back token encoding if changed to 'UTF-8'
@@ -425,7 +425,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
     /**
      * normalize keyword search string.
      *
-     * @param string $text     'UTF-8' encoded input text
+     * @param string $text 'UTF-8' encoded input text
      *
      * @return string false if empty query
      */
@@ -505,54 +505,54 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
             if ($this->_is_operator($token)) {
                 // operator token
                 $token = mb_strtoupper($token, 'UTF-8');
-                if ($ptoken === false) {
+                if (false === $ptoken) {
                     // remove operator at begin of $tokens
                     continue;
-                } elseif ($ptoken == '(') {
+                } elseif ('(' == $ptoken) {
                     // remove operator at next left parenthesis '('
                     continue;
                 } elseif ($this->_is_operator($ptoken)) {
                     // remove redundant operator
                     array_pop($tmp);
                 }
-            } elseif ($token == ')') {
+            } elseif (')' == $token) {
                 // right parenthesis token
-                if ($pdepth == 0) {
+                if (0 == $pdepth) {
                     // remove right parenthesis ')' at begin of $tokens
-                        continue;
+                    continue;
                 } elseif ($this->_is_operator($ptoken)) {
                     // remove previous operator
-                        array_pop($tmp);
-                } elseif ($ptoken == '(') {
+                    array_pop($tmp);
+                } elseif ('(' == $ptoken) {
                     // remove empty parenthesis
-                        array_pop($tmp);
+                    array_pop($tmp);
                     $ptoken = empty($tmp) ? false : $tmp[count($tmp) - 1];
                     --$pdepth;
                     continue;
                 }
                 --$pdepth;
-            } elseif ($token == '(') {
+            } elseif ('(' == $token) {
                 // left parenthesis token
-                if ($ptoken !== false && !$this->_is_operator($ptoken) && $ptoken != '(') {
+                if (false !== $ptoken && !$this->_is_operator($ptoken) && '(' != $ptoken) {
                     // insert AND operator between operands and left parenthesis '('
-                        $tmp[] = $this->OP_AND;
+                    $tmp[] = $this->OP_AND;
                 }
                 ++$pdepth;
             } else {
                 // normal token
-                if ($ptoken !== false && !$this->_is_operator($ptoken) && $ptoken != '(') {
+                if (false !== $ptoken && !$this->_is_operator($ptoken) && '(' != $ptoken) {
                     // insert AND operator between operands or right parenthesis ')'
-                        $tmp[] = $this->OP_AND;
+                    $tmp[] = $this->OP_AND;
                 }
             }
             $tmp[] = $token;
             $ptoken = $token;
         }
-        if ($ptoken !== false && $this->_is_operator($ptoken)) {
+        if (false !== $ptoken && $this->_is_operator($ptoken)) {
             // remove last operator
             array_pop($tmp);
         }
-        if ($pdepth != 0) {
+        if (0 != $pdepth) {
             // fatal error : mismatched parenthesis found
             return false;
         }
@@ -570,7 +570,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
      */
     public function _reverse_polish_notation($tokens)
     {
-        if ($tokens === false) {
+        if (false === $tokens) {
             // fatal error : normalizer returned false
             return false;
         }
@@ -578,14 +578,14 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
         $operands = array();
         $operators = array();
         foreach ($tokens as $token) {
-            if ($token == '(') {
+            if ('(' == $token) {
                 $operators[] = $token;
-            } elseif ($token == ')') {
+            } elseif (')' == $token) {
                 if (empty($operators)) {
                     // fatal error : mismatched parenthesis found
                     return false;
                 }
-                for ($tmp = array_pop($operators); $tmp != '('; $tmp = array_pop($operators)) {
+                for ($tmp = array_pop($operators); '(' != $tmp; $tmp = array_pop($operators)) {
                     $operands[] = $tmp;
                     if (empty($operators)) {
                         // fatal error : mismatched parenthesis found
@@ -704,13 +704,13 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
     {
         $result = mb_ereg($this->_regex_patterns['mbword'], $token);
 
-        return $result !== false;
+        return false !== $result;
     }
 
     /**
      * strip double quote from token.
      *
-     * @param string &$token   'UTF-8' encoded input text
+     * @param string &$token 'UTF-8' encoded input text
      *
      * @return bool true if unquoted
      */
@@ -780,7 +780,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
     /**
      * load stop words.
      *
-     * @return boolean|null false if faiure
+     * @return bool|null false if faiure
      */
     public function _load_stopwords()
     {
@@ -788,7 +788,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
         if (defined('XOONIPS_STOPWORD_FILE_PATH')) {
             $words = array_map('trim', file(XOONIPS_STOPWORD_FILE_PATH));
             foreach ($words as $word) {
-                if (preg_match('/^\\s*#.*$/', $word) || $word == '') {
+                if (preg_match('/^\\s*#.*$/', $word) || '' == $word) {
                     // skip comment out line or empty line
                     continue;
                 }

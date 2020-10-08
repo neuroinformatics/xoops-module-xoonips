@@ -28,7 +28,7 @@
 function filesize_private()
 {
     $iids = array();
-    if (xnp_get_private_item_id($_SESSION['XNPSID'], $_SESSION['xoopsUserId'], $iids) != RES_OK) {
+    if (RES_OK != xnp_get_private_item_id($_SESSION['XNPSID'], $_SESSION['xoopsUserId'], $iids)) {
         return 0;
     }
 
@@ -45,17 +45,17 @@ function filesize_group($gid)
 
 function filesize_by_item_id($iids)
 {
-    if (count($iids) == 0) {
+    if (0 == count($iids)) {
         return 0;
     }
     $itemtypes = array();
-    if (xnp_get_item_types($itemtypes) != RES_OK) {
+    if (RES_OK != xnp_get_item_types($itemtypes)) {
         return 0;
     }
 
     $ret = 0.0;
     foreach ($itemtypes as $i) {
-        if ($i['item_type_id'] == ITID_INDEX) {
+        if (ITID_INDEX == $i['item_type_id']) {
             continue;
         }
         $modname = $i['name'];
@@ -91,9 +91,9 @@ function available_space_of_private_item()
     $xnpsid = $_SESSION['XNPSID'];
     $uid = $_SESSION['xoopsUserId'];
     $account = array();
-    if (xnp_get_account($xnpsid, $uid, $account) == RES_OK) {
+    if (RES_OK == xnp_get_account($xnpsid, $uid, $account)) {
         $iids = array();
-        if (xnp_get_private_item_id($xnpsid, $uid, $iids) == RES_OK) {
+        if (RES_OK == xnp_get_private_item_id($xnpsid, $uid, $iids)) {
             return max(0, $account['item_number_limit'] - count($iids));
         }
     }
@@ -110,7 +110,7 @@ function check_private_item_storage_limit()
     $xnpsid = $_SESSION['XNPSID'];
     $uid = $_SESSION['xoopsUserId'];
     $account = array();
-    if (xnp_get_account($xnpsid, $uid, $account) == RES_OK) {
+    if (RES_OK == xnp_get_account($xnpsid, $uid, $account)) {
         if (filesize_private() >= $account['item_storage_limit']) {
             return false;
         }
@@ -145,7 +145,7 @@ function available_space_of_group_item($gid)
  *
  * @param gid id of group to be checked
  *
- * @return boolean if available space is enough
+ * @return bool if available space is enough
  */
 function check_group_item_storage_limit($gid)
 {

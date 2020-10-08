@@ -56,7 +56,7 @@ class XooNIpsPageNavi
         $this->_count = $count;
         $this->_limit = $limit;
         $this->_maxpage = intval(ceil($count / $limit));
-        if ($this->_maxpage == 0) {
+        if (0 == $this->_maxpage) {
             $page = 1;
         } elseif ($this->_maxpage < $page) {
             $page = $this->_maxpage;
@@ -102,7 +102,7 @@ class XooNIpsPageNavi
 
     public function setOrder($order)
     {
-        if ($order != 'DESC') {
+        if ('DESC' != $order) {
             $order = 'ASC';
         }
         $this->_order = $order;

@@ -50,10 +50,10 @@ class ListMetadataFormatsHandler extends HarvesterHandler
 
     public function characterDataHandler($parser, $data)
     {
-        if (end($this->tagstack) == 'METADATAPREFIX') {
-            if ($data == 'junii' && $this->metadataPrefix == 'oai_dc') {
+        if ('METADATAPREFIX' == end($this->tagstack)) {
+            if ('junii' == $data && 'oai_dc' == $this->metadataPrefix) {
                 $this->metadataPrefix = $data;
-            } elseif ($data == 'junii2') {
+            } elseif ('junii2' == $data) {
                 $this->metadataPrefix = $data;
             }
         }

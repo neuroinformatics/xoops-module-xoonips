@@ -52,14 +52,14 @@ class OAI_DCHandler extends OAIPMHHandler
 
     public function metadataFormat($identifier = null)
     {
-        if ($identifier != null) {
+        if (null != $identifier) {
             $parsed = parent::parseIdentifier($identifier);
             if (!$parsed) {
                 return false;
             } //$identifier is wrong
 
             $tmparray = array();
-            if (xnp_get_item_types($tmparray) == RES_OK) {
+            if (RES_OK == xnp_get_item_types($tmparray)) {
                 foreach ($tmparray as $i) {
                     if ($i['item_type_id'] == $parsed['item_type_id']) {
                         $itemtype = $i;
@@ -106,7 +106,7 @@ class OAI_DCHandler extends OAIPMHHandler
         $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
         $parsed = $identifier;
 
-        if ($parsed['is_deleted'] == 1) {
+        if (1 == $parsed['is_deleted']) {
             //return only header if item is deleted
             return array("<record>\n".$this->oaipmh_header($identifier, $index_tree_list)
                           ."</record>\n", true, );
@@ -121,12 +121,12 @@ class OAI_DCHandler extends OAIPMHHandler
         //return error if item_id mismatched
         $item = array();
         $result = xnp_get_item($_SESSION['XNPSID'], $parsed['item_id'], $item);
-        if ($result != RES_OK) {
+        if (RES_OK != $result) {
             return array(parent::error('idDoesNotExist', 'item_id not found'), false);
         }
 
         //return error if item_type_id mismatched
-        if ($result == RES_OK && $item['item_type_id'] != $parsed['item_type_id']) {
+        if (RES_OK == $result && $item['item_type_id'] != $parsed['item_type_id']) {
             return array(parent::error('idDoesNotExist', 'item_type_id not found'), false);
         }
 
@@ -202,10 +202,10 @@ class OAI_DCHandler extends OAIPMHHandler
             }
         }
 
-        if ($from != 0) {
+        if (0 != $from) {
             $from = ISO8601toUTC($from);
         }
-        if ($until != 0) {
+        if (0 != $until) {
             $until = ISO8601toUTC($until);
         }
 
@@ -246,7 +246,7 @@ class OAI_DCHandler extends OAIPMHHandler
         }
 
         $identifiers = array();
-        if (RES_OK != xnp_selective_harvesting((int) $from, (int) $until, $set, (int) $start_iid, (int) $limit_row, $identifiers) || count($identifiers) == 0) {
+        if (RES_OK != xnp_selective_harvesting((int) $from, (int) $until, $set, (int) $start_iid, (int) $limit_row, $identifiers) || 0 == count($identifiers)) {
             return parent::error('noRecordsMatch', '');
         }
         $iids = array();
@@ -304,10 +304,10 @@ class OAI_DCHandler extends OAIPMHHandler
             }
         }
 
-        if ($from != 0) {
+        if (0 != $from) {
             $from = ISO8601toUTC($from);
         }
-        if ($until != 0) {
+        if (0 != $until) {
             $until = ISO8601toUTC($until);
         }
 
@@ -345,7 +345,7 @@ class OAI_DCHandler extends OAIPMHHandler
         }
 
         $identifiers = array();
-        if (RES_OK != xnp_selective_harvesting((int) $from, (int) $until, $set, (int) $start_iid, (int) $limit_row, $identifiers) || count($identifiers) == 0) {
+        if (RES_OK != xnp_selective_harvesting((int) $from, (int) $until, $set, (int) $start_iid, (int) $limit_row, $identifiers) || 0 == count($identifiers)) {
             return parent::error('noRecordsMatch', '');
         }
         $iids = array();
@@ -355,7 +355,7 @@ class OAI_DCHandler extends OAIPMHHandler
 
         if (isset($resumptionToken) && count($iids) < $limit_row) {
             expireResumptionToken($resumptionToken);
-        } elseif (count($iids) == 0) {
+        } elseif (0 == count($iids)) {
             return parent::error('noRecordsMatch', '');
         }
 
@@ -380,7 +380,7 @@ class OAI_DCHandler extends OAIPMHHandler
                     $errors[] = $xml;
                 }
             }
-            if (count($identifiers) == 0) {
+            if (0 == count($identifiers)) {
                 return parent::error('noRecordsMatch', '');
             } else {
                 return "<ListRecords>\n".implode("\n", $records)

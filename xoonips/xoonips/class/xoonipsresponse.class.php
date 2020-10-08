@@ -74,7 +74,7 @@ class XooNIpsResponse
     /**
      * @brief get response of logic if succeed.
      *
-     * @return boolean response of logic
+     * @return bool response of logic
      */
     public function &getSuccess()
     {
@@ -84,7 +84,7 @@ class XooNIpsResponse
     /**
      * @brief get error informatino of logic if failed.
      *
-     * @return boolean error
+     * @return bool error
      */
     public function &getError()
     {

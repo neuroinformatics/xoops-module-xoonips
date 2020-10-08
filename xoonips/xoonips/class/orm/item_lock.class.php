@@ -92,7 +92,7 @@ class XooNIpsOrmItemLockHandler extends XooNIpsTableObjectHandler
         if (!is_object($lock)) {
             return true;
         }
-        if ($lock->get('lock_count') == 1) {
+        if (1 == $lock->get('lock_count')) {
             return $this->delete($lock);
         } else {
             $lock->set('lock_count', $lock->get('lock_count') - 1);
@@ -149,13 +149,13 @@ class XooNIpsOrmItemLockHandler extends XooNIpsTableObjectHandler
 
         $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $item_basic = &$item_basic_handler->get($id);
-        if ($item_basic === false) {
+        if (false === $item_basic) {
             return XOONIPS_LOCK_TYPE_NOT_LOCKED;
             // no such content
         }
 
         $item_type_id = $item_basic->get('item_type_id');
-        if ($item_type_id == ITID_INDEX) {
+        if (ITID_INDEX == $item_type_id) {
             return XOONIPS_LOCK_TYPE_CERTIFY_REQUEST;
         } else {
             // is item in certify_request state ?
@@ -168,13 +168,13 @@ class XooNIpsOrmItemLockHandler extends XooNIpsTableObjectHandler
             $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id');
             $index_item_links = &$index_item_link_handler->getObjects($criteria, false, '', false, $join);
 
-            if ($index_item_links !== false && count($index_item_links) != 0) {
+            if (false !== $index_item_links && 0 != count($index_item_links)) {
                 return XOONIPS_LOCK_TYPE_CERTIFY_REQUEST;
             }
 
             // is item in transfer_request table?
             $transfer_request_handler = &xoonips_getormhandler('xoonips', 'transfer_request');
-            if ($transfer_request_handler->getCount(new Criteria('item_id', $id)) != 0) {
+            if (0 != $transfer_request_handler->getCount(new Criteria('item_id', $id))) {
                 return XOONIPS_LOCK_TYPE_TRANSFER_REQUEST;
             }
         }
@@ -190,7 +190,7 @@ class XooNIpsOrmItemLockHandler extends XooNIpsTableObjectHandler
     public function lockIndexes($id)
     {
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
-        while ($id != IID_ROOT) {
+        while (IID_ROOT != $id) {
             $index = &$index_handler->get($id);
             if (!is_object($index)) {
                 // no such index
@@ -209,7 +209,7 @@ class XooNIpsOrmItemLockHandler extends XooNIpsTableObjectHandler
     public function unlockIndexes($id)
     {
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
-        while ($id != IID_ROOT) {
+        while (IID_ROOT != $id) {
             $index = &$index_handler->get($id);
             if (!is_object($index)) {
                 // no such index

@@ -130,5 +130,5 @@ function xoonips_group_check_perm($gid)
     $criteria = new Criteria('gid', $gid);
     $join = new XooNIpsJoinCriteria('xoonips_item_lock', 'index_id', 'item_id', 'INNER');
 
-    return  $index_handler->getCount($criteria, $join) == 0;
+    return  0 == $index_handler->getCount($criteria, $join);
 }

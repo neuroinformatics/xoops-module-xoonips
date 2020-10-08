@@ -56,10 +56,10 @@ class XooNIpsLogicUpdateItem extends XooNIpsLogic
                 $error->add(XNPERR_INVALID_PARAM, 'parameter2 must be subclass of XooNIpsItemCompo');
             }
             $basic = $vars[1]->getVar('basic');
-            if ($basic->get('item_id') == false) {
+            if (false == $basic->get('item_id')) {
                 $error->add(XNPERR_MISSING_PARAM, 'parameter 2 missing basic.item_id');
             }
-            if ($basic->get('item_type_id') == false) {
+            if (false == $basic->get('item_type_id')) {
                 $error->add(XNPERR_MISSING_PARAM, 'parameter 2 missing basic.item_type_id');
             }
         }
@@ -218,11 +218,11 @@ class XooNIpsLogicUpdateItem extends XooNIpsLogic
                     $error->add(XNPERR_ACCESS_FORBIDDEN, "cannot access index($index_id)");
                 }
                 $open_level = $index->get('open_level');
-                if ($open_level == OL_PRIVATE) {
+                if (OL_PRIVATE == $open_level) {
                     $add_to_private = true;
-                } elseif ($open_level == OL_GROUP_ONLY) {
+                } elseif (OL_GROUP_ONLY == $open_level) {
                     $add_to_group = true;
-                } elseif ($open_level == OL_PUBLIC) {
+                } elseif (OL_PUBLIC == $open_level) {
                     $add_to_public = true;
                 }
             }
@@ -257,7 +257,7 @@ class XooNIpsLogicUpdateItem extends XooNIpsLogic
                 } else {
                     $use_cc = 0;
                 }
-                if ($detail->get('rights') == '' && $use_cc == 0) {
+                if ('' == $detail->get('rights') && 0 == $use_cc) {
                     $response->setResult(false);
                     $error->add(XNPERR_INCOMPLETE_PARAM, 'rights is required');
 
@@ -266,7 +266,7 @@ class XooNIpsLogicUpdateItem extends XooNIpsLogic
             }
             // error if add to public/group and no readme input
             if ($detail_item_type->getFieldByName('detail', 'readme')) {
-                if ($detail->get('readme') == '') {
+                if ('' == $detail->get('readme')) {
                     $response->setResult(false);
                     $error->add(XNPERR_INCOMPLETE_PARAM, 'readme is required');
 
@@ -330,7 +330,7 @@ class XooNIpsLogicUpdateItem extends XooNIpsLogic
     {
         foreach ($iteminfo['orm'] as $orminfo) {
             $key = $orminfo['field'];
-            if ($key != 'indexes') {
+            if ('indexes' != $key) {
                 $new_orm = $new_item->getVar($key);
                 $old_orm = $old_item->getVar($key);
                 if ($orminfo['multiple']) {
@@ -343,7 +343,7 @@ class XooNIpsLogicUpdateItem extends XooNIpsLogic
                         }
                     }
                 } else {
-                    if ($new_orm == false && $old_orm != false || !$new_orm->equals($old_orm)) {
+                    if (false == $new_orm && false != $old_orm || !$new_orm->equals($old_orm)) {
                         return false;
                     }
                 }
@@ -366,7 +366,7 @@ class XooNIpsLogicUpdateItem extends XooNIpsLogic
         $criteria = new CriteriaCompo(new Criteria('open_level', OL_PRIVATE, '<>'));
         $criteria->add(new Criteria('index_id', '('.implode(',', $changed_index_ids).')', 'in'));
         $indexes = &$index_handler->getObjects($criteria);
-        if ($indexes === false) {
+        if (false === $indexes) {
             $error->add(XNPERR_SERVER_ERROR, 'cannot get changed nonprivate index');
 
             return false;

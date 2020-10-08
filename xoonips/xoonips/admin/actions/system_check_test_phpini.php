@@ -32,9 +32,9 @@ defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 function inival2num($ini)
 {
     $len = strlen($ini);
-    if ($len == 0) {
+    if (0 == $len) {
         return 0.0;
-    } elseif ($len == 1) {
+    } elseif (1 == $len) {
         return floatval($ini);
     }
     $num = substr($ini, 0, $len - 1);
@@ -44,8 +44,10 @@ function inival2num($ini)
         switch (strtoupper($str)) {
         case 'G':
             $ratio *= 1024.0;
+            // no break
         case 'M':
             $ratio *= 1024.0;
+            // no break
         case 'K':
             $ratio *= 1024.0;
             break;
@@ -69,7 +71,7 @@ function inival2bool($ini)
     if (is_numeric($ini)) {
         return  intval($ini) > 0;
     }
-    if (strtolower($ini) == 'on') {
+    if ('on' == strtolower($ini)) {
         return true;
     }
 
@@ -84,7 +86,7 @@ function xoonips_admin_system_check_phpini(&$category)
     $res = new XooNIpsAdminSystemCheckResult($name);
     $key = $name;
     $ini = ini_get($key);
-    if ($ini == 'text/html') {
+    if ('text/html' == $ini) {
         $res->setResult(_XASC_STATUS_OK, $ini, _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
     } else {
         $res->setResult(_XASC_STATUS_FAIL, $ini, _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL);
@@ -166,7 +168,7 @@ function xoonips_admin_system_check_phpini(&$category)
     $ini = ini_get($key);
     $memory_limit = inival2num($ini);
     $unlimit['memory_limit'] = false;
-    if ($ini == '') {
+    if ('' == $ini) {
         // disable to limit memory
         $res->setResult(_XASC_STATUS_OK, '(disable memory limit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
         $unlimit['memory_limit'] = true;
@@ -194,7 +196,7 @@ function xoonips_admin_system_check_phpini(&$category)
     $post_max_size = inival2num($ini);
     $unlimit['post_max_size'] = false;
     if ($unlimit['memory_limit'] || $memory_limit >= $post_max_size) {
-        if ($ini == '') {
+        if ('' == $ini) {
             // disable to limit memory
             $res->setResult(_XASC_STATUS_OK, '(disable memory limit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
             $unlimit['post_max_size'] = true;
@@ -242,7 +244,7 @@ function xoonips_admin_system_check_phpini(&$category)
     $upload_max_filesize = inival2num($ini);
     $unlimit['upload_max_filesize'] = false;
     if ($unlimit['post_max_size'] || $post_max_size >= $upload_max_filesize) {
-        if ($ini == '' || $upload_max_filesize <= -1) {
+        if ('' == $ini || $upload_max_filesize <= -1) {
             // unlimit memory size
             $res->setResult(_XASC_STATUS_OK, '(unlimit)', _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK);
         } elseif ($upload_max_filesize >= inival2num('128M')) {

@@ -105,8 +105,8 @@ class XooNIpsOrmOaipmhRepositoriesHandler extends XooNIpsTableObjectHandler
             // check 'enable' or 'disable'
             if (preg_match('/^(;|#)(.*)$/', $url, $matches)) {
                 $enabled = 0;
-                    // remove empty comment line
-                if (trim($matches[2]) == '') {
+                // remove empty comment line
+                if ('' == trim($matches[2])) {
                     continue;
                 }
             } else {
@@ -127,7 +127,7 @@ class XooNIpsOrmOaipmhRepositoriesHandler extends XooNIpsTableObjectHandler
             $found_repo = null;
             foreach ($new_repos_url as $sort => $new_url) {
                 // use first match entry
-                if ($new_repos_exist[$sort] == false) {
+                if (false == $new_repos_exist[$sort]) {
                     if ($rec_url == $new_url) {
                         $found = true;
                         $new_repos_exist[$sort] = true;

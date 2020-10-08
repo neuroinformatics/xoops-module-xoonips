@@ -81,7 +81,7 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
         $items = array();
         foreach ($fnames as $fname) {
             // read from extract_dir(not sub directories)
-            if (dirname($fname) == '.' && ctype_digit(basename($fname, '.xml'))) {
+            if ('.' == dirname($fname) && ctype_digit(basename($fname, '.xml'))) {
                 $handler = &xoonips_gethandler('xoonips', 'import_item');
                 $item = &$handler->parseXml(file_get_contents($this->_extract_dir.'/'.$fname));
                 $basic = &$item->getVar('basic');
@@ -141,7 +141,7 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
             $valid_pseudo_ids[$item->getPseudoId()] = true;
         }
         foreach ($this->_items as $key => $item) {
-            if (count($item->getVar('related_tos')) == 0) {
+            if (0 == count($item->getVar('related_tos'))) {
                 continue;
             }
             foreach ($item->getVar('related_tos') as $related_to) {
@@ -214,7 +214,7 @@ class XooNIpsLogicImportReadFile extends XooNIpsLogic
      * @param path would be deleted. if path omitted,
      *  zip extracted dir is removed
      *
-     * @return boolean if succeed. false if failed removing files or directories.
+     * @return bool if succeed. false if failed removing files or directories.
      */
     public function _clean_files($path = null)
     {

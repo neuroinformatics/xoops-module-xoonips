@@ -41,7 +41,7 @@ if (extension_loaded('mbstring')) {
 
 $is_error = false;
 $error_message = '';
-if (!isset($_SERVER['HTTP_REFERER']) || preg_match('/'.preg_quote(XOOPS_URL, '/').'/', $_SERVER['HTTP_REFERER']) == 0) {
+if (!isset($_SERVER['HTTP_REFERER']) || 0 == preg_match('/'.preg_quote(XOOPS_URL, '/').'/', $_SERVER['HTTP_REFERER'])) {
     $is_error = true;
     $error_message = 'Turn REFERER on';
 }
@@ -85,11 +85,11 @@ function &get_pubmed_data($pmid)
         $ret['title'] = $matches[1];
     }
     // volume
-    $ret['volume'] = ($article['Journal_Volume'] != '') ? $article['Journal_Volume'] : '';
+    $ret['volume'] = ('' != $article['Journal_Volume']) ? $article['Journal_Volume'] : '';
     // issue
-    $ret['issue'] = ($article['Journal_Issue'] != '') ? $article['Journal_Issue'] : '';
+    $ret['issue'] = ('' != $article['Journal_Issue']) ? $article['Journal_Issue'] : '';
     // publication_year
-    if ($article['Journal_PubDate_Year'] != '') {
+    if ('' != $article['Journal_PubDate_Year']) {
         $ret['year'] = $article['Journal_PubDate_Year'];
     } else {
         if (preg_match('/(\\d\\d\\d\\d)\\s.*/', $article['Journal_MedlineDate'], $matches)) {
@@ -99,9 +99,9 @@ function &get_pubmed_data($pmid)
         }
     }
     // journal
-    if ($article['Journal_Title'] != '') {
+    if ('' != $article['Journal_Title']) {
         $ret['journal'] = $article['Journal_Title'];
-    } elseif ($article['MedlineTA'] != '') {
+    } elseif ('' != $article['MedlineTA']) {
         $journal_esearch = new XooNIps_PubMed_JournalEsearch();
         if ($journal_esearch->set_journal_ta($article['MedlineTA'])) {
             if ($journal_esearch->fetch()) {
@@ -132,11 +132,11 @@ function &get_pubmed_data($pmid)
         $ret['journal'] = '';
     }
     // page
-    $ret['page'] = ($article['MedlinePgn'] != '') ? $article['MedlinePgn'] : '';
+    $ret['page'] = ('' != $article['MedlinePgn']) ? $article['MedlinePgn'] : '';
     // abstract
-    $ret['abst'] = ($article['AbstractText'] != '') ? $article['AbstractText'] : '';
+    $ret['abst'] = ('' != $article['AbstractText']) ? $article['AbstractText'] : '';
     if (empty($ret['abst'])) {
-        if ($article['OtherAbstractText'] != '') {
+        if ('' != $article['OtherAbstractText']) {
             $ret['abst'] = $article['OtherAbstractText'];
         }
     }
@@ -145,12 +145,12 @@ function &get_pubmed_data($pmid)
     if (!empty($article['AuthorList'])) {
         foreach ($article['AuthorList'] as $author) {
             $str = $author['LastName'].' ';
-            if ($author['Initials'] != '') {
+            if ('' != $author['Initials']) {
                 $str .= $author['Initials'];
-            } elseif ($author['ForeName'] != '') {
+            } elseif ('' != $author['ForeName']) {
                 $str .= $author['ForeName'];
             } else {
-                if ($author['MiddleName'] != '') {
+                if ('' != $author['MiddleName']) {
                     $str .= $author['MiddleName'].' ';
                 }
                 $str .= $author['FirstName'];

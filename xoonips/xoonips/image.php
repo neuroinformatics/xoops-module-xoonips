@@ -24,7 +24,7 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
-/**
+/*
  * display thumbnail
  * input:
  *    $_GET['file_id']
@@ -125,7 +125,7 @@ if (!empty($thumbnail)) {
     } else {
         // thumbnail doesn't available.
         if (extension_loaded('fileinfo')) {
-            if ($magic_file_path == '') {
+            if ('' == $magic_file_path) {
                 $finfo = finfo_open(FILEINFO_NONE);
             } else {
                 $finfo = finfo_open(FILEINFO_NONE, $magic_file_path);
@@ -134,18 +134,18 @@ if (!empty($thumbnail)) {
             finfo_close($finfo);
         } else {
             // try to use mime_content_type();
-              $label = mime_content_type($file_path);
+            $label = mime_content_type($file_path);
         }
         if (preg_match('/^([^\\/]*)\\/(.*)$/', $mime_type, $matches)) {
-            if ($matches[1] == 'audio') {
+            if ('audio' == $matches[1]) {
                 $img_type = 'audio';
-            } elseif ($matches[1] == 'image') {
+            } elseif ('image' == $matches[1]) {
                 $img_type = 'image';
-            } elseif ($matches[1] == 'video') {
+            } elseif ('video' == $matches[1]) {
                 $img_type = 'video';
-            } elseif ($matches[1] == 'text') {
+            } elseif ('text' == $matches[1]) {
                 $img_type = 'text';
-            } elseif ($matches[1] == 'application') {
+            } elseif ('application' == $matches[1]) {
                 $text_types = array('pdf', 'xml', 'msword', 'vnd.ms-excel');
                 $image_types = array('vnd.ms-powerpoint', 'postscript');
                 $audio_types = array('vnd.rn-realmedia');
@@ -204,7 +204,7 @@ if (!empty($thumbnail)) {
         $imicon = imagecreatefrompng($img_file);
         imagecopy($im, $imicon, $w / 2 - 48 / 2, $h / 2 - 48 / 2, 0, 0, 48, 48);
         imagepolygon($im, array(0, 0, $w - 1, 0, $w - 1, $h - 1, 0, $h - 1), 4, $col_gray);
-        if (strlen($label) != 0) {
+        if (0 != strlen($label)) {
             imagestring($im, $f, $lx, $ly, $label, $black);
         }
         header('Content-Type: image/png');
@@ -214,7 +214,7 @@ if (!empty($thumbnail)) {
         exit();
     }
 } else {
-    if ($file_type_name != 'preview') {
+    if ('preview' != $file_type_name) {
         /* check the download limitation */
         $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $criteria = new Criteria('item_id', $item_id);
@@ -235,7 +235,7 @@ if (!empty($thumbnail)) {
         }
         require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
         $fname_dllimit = "${name}GetAttachmentDownloadLimitOption";
-        if (function_exists($fname_dllimit) && $fname_dllimit($item_id) == 1) {
+        if (function_exists($fname_dllimit) && 1 == $fname_dllimit($item_id)) {
             /* require to confirm file download */
             image_error(403);
         }

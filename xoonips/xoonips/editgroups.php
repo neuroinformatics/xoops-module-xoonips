@@ -178,7 +178,7 @@ case 'delete':
     break;
 }
 
-if ($op == '') {
+if ('' == $op) {
     $gid = 0;
     $gname = '';
     $gdesc = '';

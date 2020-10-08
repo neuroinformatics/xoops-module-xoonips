@@ -44,7 +44,7 @@ function xnpmemoGetDetailInformation($item_id)
     }
     $sql = 'select * from '.$xoopsDB->prefix('xnpmemo_item_detail')." where memo_id=$item_id";
     $result = $xoopsDB->query($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo $xoopsDB->error();
 
         return false;
@@ -265,7 +265,7 @@ function xnpmemoGetConfirmBlock($item_id)
 function xnpmemoCheckRegisterParameters(&$message)
 {
     $messages = array();
-    if (count($messages) == 0) {
+    if (0 == count($messages)) {
         return true;
     }
     $message = "<br />\n".implode("<br />\n", $messages);
@@ -315,7 +315,7 @@ function xnpmemoInsertItem(&$item_id)
     // register DetailInformation
     $sql = 'insert into '.$xoopsDB->prefix('xnpmemo_item_detail')." ( memo_id, item_link ) values ( $item_id, '$escval' ) ";
     $result = $xoopsDB->queryF($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo 'cannot insert item_detail';
 
         return false;
@@ -363,7 +363,7 @@ function xnpmemoUpdateItem($item_id)
     // register DetailInformation
     $sql = implode(',', array('item_link'.'=\''.addslashes($ar['item_link']).'\''));
     $result = $xoopsDB->queryF('update '.$xoopsDB->prefix('xnpmemo_item_detail')." set $sql where memo_id = $item_id ");
-    if ($result == false) {
+    if (false == $result) {
         return false;
     }
 
@@ -471,7 +471,7 @@ function xnpmemoGetModifiedFields($item_id)
     if ($detail) {
         foreach (array('item_link' => _MD_XNPMEMO_ITEM_LINK_LABEL) as $k => $v) {
             $tmp = $formdata->getValue('post', $k, 's', false);
-            if (!array_key_exists($k, $detail) || $tmp === null) {
+            if (!array_key_exists($k, $detail) || null === $tmp) {
                 continue;
             }
             if ($detail[$k] != $tmp) {
@@ -494,7 +494,7 @@ function xnpmemoGetTopBlock($itemtype)
 
 function xnpmemoSupportMetadataFormat($metadataPrefix, $item_id)
 {
-    if ($metadataPrefix == 'oai_dc' || $metadataPrefix == 'junii2') {
+    if ('oai_dc' == $metadataPrefix || 'junii2' == $metadataPrefix) {
         return true;
     }
 
@@ -521,9 +521,9 @@ function xnpmemoGetMetadata($prefix, $item_id)
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
     // indexes
     $indexes = array();
-    if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
+    if (RES_OK == xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids)) {
         foreach ($xids as $xid) {
-            if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($_SESSION['XNPSID'], $xid, $index)) {
                 $indexes[] = xnpGetIndexPathServerString($_SESSION['XNPSID'], $xid);
             }
         }

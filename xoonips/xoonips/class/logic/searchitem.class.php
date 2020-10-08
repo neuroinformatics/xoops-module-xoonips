@@ -183,11 +183,11 @@ class XooNIpsLogicSearchItem extends XooNIpsLogic
         $logic = &$factory->create('getItemTypes');
         $vars = array($sessionid);
         $logic->execute($vars, $response);
-        if ($response->getResult() == false) {
+        if (false == $response->getResult()) {
             return false;
         }
         $itemtypes = $response->getSuccess();
-        if (count($itemtypes) == 0) {
+        if (0 == count($itemtypes)) {
             // no itemtype found. return empty array.
             $ar = array();
             $response->setSuccess($ar);
@@ -201,7 +201,7 @@ class XooNIpsLogicSearchItem extends XooNIpsLogic
         }
         $criteria->add(new Criteria('item_type_id', '('.implode(',', $itemtype_ids).')', 'IN'));
 
-        if (substr($query, 0, 6) == 'index:') {
+        if ('index:' == substr($query, 0, 6)) {
             // index id -> search_cache_items
             $index_id = substr($query, 6);
             if (!ctype_digit($index_id)) {
@@ -252,13 +252,13 @@ class XooNIpsLogicSearchItem extends XooNIpsLogic
             $response->setResult(true);
 
             return true;
-        } elseif (substr($query, 0, 8) == 'keyword:') {
+        } elseif ('keyword:' == substr($query, 0, 8)) {
             $search_cache_id = $this->getSearchCacheIdByQuery($query);
             $search_cache_handler = &xoonips_getormhandler('xoonips', 'search_cache');
             $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
             if ($search_cache_id) {
                 $search_cache = $search_cache_handler->get($search_cache_id);
-                if ($search_cache === false) {
+                if (false === $search_cache) {
                     // maybe invalidated.
                     $search_cache_id = false;
                 } else {
@@ -369,7 +369,7 @@ class XooNIpsLogicSearchItem extends XooNIpsLogic
             }
             $search_cache_item_handler = &xoonips_getormhandler('xoonips', 'search_cache_item');
             $search_cache_items = &$search_cache_item_handler->getObjects($criteria, false, '', false, $join);
-            if ($search_cache_items === false) {
+            if (false === $search_cache_items) {
                 $error->add(XNPERR_INVALID_PARAM, 'cannot get searched item');
                 $response->setResult(false);
 
@@ -407,9 +407,9 @@ class XooNIpsLogicSearchItem extends XooNIpsLogic
                 continue;
             }
             $step = 1000;
-            for ($offset = 0; ; $offset += $step) {
+            for ($offset = 0;; $offset += $step) {
                 $item_ids = $detail_item_handler->search($query, $step, $offset, $uid);
-                if ($item_ids === false) {
+                if (false === $item_ids) {
                     $error->add(XNPERR_SERVER_ERROR, 'cannot search item');
 
                     return;
@@ -436,9 +436,9 @@ class XooNIpsLogicSearchItem extends XooNIpsLogic
         $step = 1000;
         $search_text_handler = &xoonips_getormhandler('xoonips', 'search_text');
         $file_handler = &xoonips_getormhandler('xoonips', 'file');
-        for ($offset = 0; ; $offset += $step) {
+        for ($offset = 0;; $offset += $step) {
             $item_ids = $search_text_handler->search($query, $step, $offset, $uid);
-            if ($item_ids === false) {
+            if (false === $item_ids) {
                 $error->add(XNPERR_SERVER_ERROR, 'cannot search file');
 
                 return;
@@ -449,7 +449,7 @@ class XooNIpsLogicSearchItem extends XooNIpsLogic
                 $criteria->add(new Criteria('item_id', '('.implode(',', $item_ids).')', 'in'));
                 $criteria->add(new Criteria('search_cache_id', $search_cache_id));
                 $search_cache_items = &$search_cache_item_handler->getObjects($criteria);
-                if ($search_cache_items === false) {
+                if (false === $search_cache_items) {
                     $error->add(XNPERR_SERVER_ERROR, 'cannot get search_cache_item');
 
                     return;

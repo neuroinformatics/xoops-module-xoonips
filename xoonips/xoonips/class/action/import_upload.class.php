@@ -69,13 +69,13 @@ class XooNIpsActionImportUpload extends XooNIpsAction
         $filetype = $this->_formdata->getValue('post', 'filetype', 's', false);
         $remotefile = $this->_formdata->getValue('post', 'remotefile', 's', false);
         $zipfile = $this->_formdata->getFile('zipfile', false);
-        if ($filetype == 'localfile' && (empty($zipfile['name']) || $zipfile['size'] == 0) || $filetype == 'remotefile' && empty($remotefile)) {
+        if ('localfile' == $filetype && (empty($zipfile['name']) || 0 == $zipfile['size']) || 'remotefile' == $filetype && empty($remotefile)) {
             redirect_header('import.php?action=default', 3, _MD_XOONIPS_IMPORT_FILE_NOT_SPECIFIED);
             exit();
         }
 
         //set path of import file
-        if ($filetype == 'localfile') {
+        if ('localfile' == $filetype) {
             $uploadfile = $this->_move_upload_file($zipfile['tmp_name']);
         } else {
             $uploadfile = $remotefile;
@@ -106,7 +106,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
             $success = $this->_response->getSuccess();
             $this->_view_params['import_items'] = $success['import_items'];
             $this->_view_params['uname'] = $xoopsUser->getVar('uname');
-            $this->_view_params['filename'] = $filetype == 'localfile' ? $zipfile['name'] : $remotefile;
+            $this->_view_params['filename'] = 'localfile' == $filetype ? $zipfile['name'] : $remotefile;
             $this->_view_params['errors'] = array();
             foreach ($success['import_items'] as $item) {
                 foreach (array_unique($item->getErrorCodes()) as $code) {
@@ -138,7 +138,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
         ) {
             $this->_view_params['result'] = $this->_response->getResult() && !$this->_import_item_have_errors($success['import_items']);
             $this->_view_params['uname'] = $xoopsUser->getVar('uname');
-            $this->_view_params['filename'] = $filetype == 'localfile' ? $zipfile['name'] : $remotefile;
+            $this->_view_params['filename'] = 'localfile' == $filetype ? $zipfile['name'] : $remotefile;
             $this->_view_params['import_items'] = $success['import_items'];
             $this->_view_params['errors'] = array();
             foreach ($success['import_items'] as $item) {
@@ -171,7 +171,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
                 }
                 $this->_view_params['result'] = false;
                 $this->_view_params['uname'] = $xoopsUser->getVar('uname');
-                $this->_view_params['filename'] = $filetype == 'localfile' ? $zipfile['name'] : $remotefile;
+                $this->_view_params['filename'] = 'localfile' == $filetype ? $zipfile['name'] : $remotefile;
                 $this->_view_params['errors'] = array();
                 $this->_view_params['import_items'] = $success['import_items'];
                 foreach ($success['import_items'] as $item) {
@@ -194,7 +194,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
             $collection->addItem($i);
         }
         $collection->setLoggingOption(!is_null($this->_formdata->getValue('post', 'logging', 's', false)));
-        if ($filetype == 'localfile') {
+        if ('localfile' == $filetype) {
             $collection->setImportFileName($zipfile['name']);
         } else {
             $collection->setImportFileName($remotefile);
@@ -306,7 +306,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
         }
         $fnames = $unzip->get_file_list();
         foreach ($fnames as $fname) {
-            if (strtolower($fname) != 'index.xml') {
+            if ('index.xml' != strtolower($fname)) {
                 continue;
             }
 
@@ -394,7 +394,7 @@ class XooNIpsActionImportUpload extends XooNIpsAction
                     </form>
 EOT;
                 unlink($uploadfile);
-            } elseif ($error_check_only == 'on') {
+            } elseif ('on' == $error_check_only) {
                 $submit = _MD_XOONIPS_ITEM_BACK_BUTTON_LABEL;
                 $message = _MD_XOONIPS_IMPORT_ERROR_CKECK_DONE."<br />\n"
                     ._MD_XOONIPS_IMPORT_FOLLOWING_INDEX_TEST;

@@ -80,7 +80,7 @@ $_SESSION['xoonips_order_dir'] = $order_dir;
 
 $itemtypes = array();
 $tmp = array();
-if (xnp_get_item_types($tmp) != RES_OK) {
+if (RES_OK != xnp_get_item_types($tmp)) {
     xoonips_error_exit(500);
 } else {
     foreach ($tmp as $i) {
@@ -102,13 +102,13 @@ $index_handler = &xoonips_getormhandler('xoonips', 'index');
 if (isset($index_id)) {
     // check permission
     $idx_obj = &$index_handler->get($index_id);
-    if ($idx_obj === false) {
+    if (false === $idx_obj) {
         // index not found
         redirect_header(XOOPS_URL.'/', 3, _NOPERM);
         exit();
     }
     if (!$index_handler->getPerm($index_id, $uid, 'read')) {
-        if ($uid == UID_GUEST) {
+        if (UID_GUEST == $uid) {
             // try login
             redirect_header(XOONIPS_URL.'/user.php', 3, _NOPERM);
             exit();
@@ -141,7 +141,7 @@ $xoopsTpl->assign('item_count_select', array('20', '50', '100'));
 $iids = array();
 $items = array();
 $cri = array();
-if ($orderby == 'publication_date') {
+if ('publication_date' == $orderby) {
     $cri = array(
         'start' => ($page - 1) * $itemcount,
         'rows' => $itemcount,
@@ -168,7 +168,7 @@ if (isset($index_id)) {
 } else {
     $ret = xnp_dump_item_id($xnpsid, array(), $iids);
     $num_of_items = count($iids);
-    if ($ret != RES_OK) {
+    if (RES_OK != $ret) {
         xoonips_error_exit(500);
     }
 }
@@ -195,7 +195,7 @@ if (isset($index_id)) {
         foreach ($cids as $cid) {
             $info = array();
             $cicnt = count(my_xoonips_get_child_index($xoopsDB, $cid));
-            if (xnp_get_index($xnpsid, $cid, $info) == RES_OK) {
+            if (RES_OK == xnp_get_index($xnpsid, $cid, $info)) {
                 $cnt = isset($item_counts[$cid]) ? $item_counts[$cid] : 0;
                 $my_index = array(
                      'index_id' => $cid,
@@ -213,11 +213,11 @@ if (isset($index_id)) {
     // making character strings in display current place (Root/Private/Tools&Techniques etc)
     // -> index_path
     $dirArray = array();
-    for ($p_xid = $index_id; $p_xid != IID_ROOT; $p_xid = (int) ($index['parent_index_id'])) {
+    for ($p_xid = $index_id; IID_ROOT != $p_xid; $p_xid = (int) ($index['parent_index_id'])) {
         // get $index
         $index = array();
         $result = xnp_get_index($xnpsid, $p_xid, $index);
-        if ($result != RES_OK) {
+        if (RES_OK != $result) {
             xoonips_error_exit(500);
         }
         $dirArray[] = $index;
@@ -239,12 +239,12 @@ if (isset($index_id)) {
 //centering current page number(5th of $pages)
 $xoopsTpl->assign('pages', xoonips_get_selectable_page_number($page, ceil($num_of_items / $itemcount)));
 
-if ($num_of_items == 0) {
+if (0 == $num_of_items) {
     $page_no_label = _MD_XOONIPS_ITEM_NO_ITEM_LISTED;
 } else {
     $_pMin = min(($page - 1) * $itemcount + 1, $num_of_items);
     $_pMax = min($page * $itemcount, $num_of_items);
-    if ($_pMin == 1 && $_pMax == $num_of_items && $num_of_items == 1) {
+    if (1 == $_pMin && $_pMax == $num_of_items && 1 == $num_of_items) {
         $page_no_label = '';
     } else {
         $page_no_label = $_pMin.' - '.$_pMax.' of '.$num_of_items.' Items';
@@ -262,7 +262,7 @@ $xoopsTpl->assign('page_no_label', $textutil->html_special_chars($page_no_label)
 // retrieve items
 // ignore 'start' and 'rows' of criteria because already truncated by dump_item_id
 //if( xnp_get_items( $xnpsid, $iids, array( 'orders' => $cri['orders'] ), $items ) != RES_OK ){
-if (xnp_get_items($xnpsid, $iids, $cri, $items) != RES_OK) {
+if (RES_OK != xnp_get_items($xnpsid, $iids, $cri, $items)) {
     xoonips_error_exit(500);
 }
 

@@ -153,7 +153,7 @@ function php_compat_sha256_add32_helper($x, $y)
 }
 
 /**
- * @param integer $n
+ * @param int $n
  */
 function php_compat_sha256_shr_helper($x, $n)
 {
@@ -161,7 +161,7 @@ function php_compat_sha256_shr_helper($x, $n)
 }
 
 /**
- * @param integer $n
+ * @param int $n
  */
 function php_compat_sha256_rotr_helper($x, $n)
 {

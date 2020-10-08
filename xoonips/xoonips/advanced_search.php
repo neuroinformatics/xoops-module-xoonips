@@ -38,7 +38,7 @@ require 'include/AL.php';
 $xnpsid = $_SESSION['XNPSID'];
 
 // If not a user, redirect
-if ($xnpsid != 0) {
+if (0 != $xnpsid) {
     if (!$xoopsUser) {
         redirect_header('user.php', 3, _MD_XOONIPS_ITEM_FORBIDDEN);
         exit();

@@ -118,7 +118,7 @@ class XooNIpsLogicImportCheckImport extends XooNIpsLogic
         $criteria = new CriteriaCompo(new Criteria('tlink.item_id', $item_id));
         $criteria->add(new Criteria('certify_state', CERTIFIED, '!='));
         $files = &$handler->getObjects($criteria, '', false, '', $join);
-        if (!$files || count($files) == 0) {
+        if (!$files || 0 == count($files)) {
             return 0;
         }
         foreach ($files as $f) {
@@ -156,7 +156,7 @@ class XooNIpsLogicImportCheckImport extends XooNIpsLogic
     public function _filesize_private()
     {
         $iids = array();
-        if (xnp_get_private_item_id($_SESSION['XNPSID'], $_SESSION['xoopsUserId'], $iids) != RES_OK) {
+        if (RES_OK != xnp_get_private_item_id($_SESSION['XNPSID'], $_SESSION['xoopsUserId'], $iids)) {
             return 0;
         }
 
@@ -165,17 +165,17 @@ class XooNIpsLogicImportCheckImport extends XooNIpsLogic
 
     public function _filesize_by_item_id($iids)
     {
-        if (count($iids) == 0) {
+        if (0 == count($iids)) {
             return 0;
         }
         $itemtypes = array();
-        if (xnp_get_item_types($itemtypes) != RES_OK) {
+        if (RES_OK != xnp_get_item_types($itemtypes)) {
             return 0;
         }
 
         $ret = 0.0;
         foreach ($itemtypes as $i) {
-            if ($i['item_type_id'] == ITID_INDEX) {
+            if (ITID_INDEX == $i['item_type_id']) {
                 continue;
             }
             $modname = $i['name'];

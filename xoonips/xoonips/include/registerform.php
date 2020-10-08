@@ -85,12 +85,12 @@ $reg_form->addElement(new XoopsFormText(_MD_XOONIPS_ACCOUNT_ADDRESS.$required['a
 $reg_form->addElement(new XoopsFormText(_MD_XOONIPS_ACCOUNT_COUNTRY.$required['country']['mark'], 'country', 25, 255, $textutil->html_special_chars($country)), $required['country']['flag']);
 $reg_form->addElement(new XoopsFormText(_MD_XOONIPS_ACCOUNT_ZIPCODE.$required['zipcode']['mark'], 'zipcode', 20, 32, $textutil->html_special_chars($zipcode)), $required['zipcode']['flag']);
 
-$tzselected = ($timezone_offset != '') ? $timezone_offset : $myxoopsConfig['default_TZ'];
+$tzselected = ('' != $timezone_offset) ? $timezone_offset : $myxoopsConfig['default_TZ'];
 $reg_form->addElement(new XoopsFormSelectTimezone(_US_TIMEZONE, 'timezone_offset', $tzselected));
 $reg_form->addElement(new XoopsFormText(_MD_XOONIPS_ACCOUNT_NOTICE_MAIL, 'notice_mail', 5, 10, $notice_mail));
 //$reg_form->addElement( $avatar_tray );
 $reg_form->addElement(new XoopsFormRadioYN(_US_MAILOK, 'user_mailok', $user_mailok));
-if ($myxoopsConfigUser['reg_dispdsclmr'] != 0 && $myxoopsConfigUser['reg_disclaimer'] != '') {
+if (0 != $myxoopsConfigUser['reg_dispdsclmr'] && '' != $myxoopsConfigUser['reg_disclaimer']) {
     $disc_tray = new XoopsFormElementTray(_US_DISCLAIMER, '<br />');
     $disc_text = new XoopsFormTextarea('', 'disclaimer', $myxoopsConfigUser['reg_disclaimer'], 8);
     $disc_text->setExtra('readonly="readonly"');

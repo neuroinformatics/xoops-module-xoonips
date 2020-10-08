@@ -82,7 +82,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
             $this->close();
         }
         $fh = @fopen($zip_filename, 'rb');
-        if ($fh === false) {
+        if (false === $fh) {
             return false;
         }
         $this->_zfname = $zip_filename;
@@ -104,7 +104,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
      */
     public function close()
     {
-        if ($this->_zfhandle === false) {
+        if (false === $this->_zfhandle) {
             // zip file not opened
             return false;
         }
@@ -198,7 +198,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
             $entry = &$this->_entries[$fname];
         }
         $data_offset = $this->_entries[$fname]['data_offset'];
-        if (substr($entry['filename'], -1) == '/') {
+        if ('/' == substr($entry['filename'], -1)) {
             // this is directory
             return $data;
         }
@@ -253,11 +253,11 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
         // use unix path separator
         $basedir = str_replace('\\', '/', $basedir);
         // remove absolute path separator, this is dangerous.
-        if (substr($fname, 0, 1) == '/') {
+        if ('/' == substr($fname, 0, 1)) {
             $fname = substr($fname, 1);
         }
         $filepath = $basedir.'/'.$fname;
-        if (substr($entry['filename'], -1) == '/') {
+        if ('/' == substr($entry['filename'], -1)) {
             // this is directory
             return $this->_create_directory($filepath);
         }
@@ -281,7 +281,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
 
         // open out put file
         $ofh = @fopen($filepath, 'wb');
-        if ($ofh === false) {
+        if (false === $ofh) {
             return false;
         }
         switch ($entry['compmethod']) {
@@ -290,7 +290,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
             while (!feof($this->_zfhandle) && $size > 0) {
                 $len = $unit < $size ? $unit : $size;
                 $buf = fread($this->_zfhandle, $len);
-                if ($buf === false) {
+                if (false === $buf) {
                     fclose($ofh);
                     unlink($filepath);
 
@@ -310,7 +310,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
             // create temporary file
             $tfn = tempnam('/tmp', 'XooNIpsUnzip');
             $tfh = fopen($tfn, 'wb');
-            if ($tfh === false) {
+            if (false === $tfh) {
                 fclose($ofh);
                 unlink($filepath);
 
@@ -333,7 +333,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
             while (!feof($this->_zfhandle) && $size > 0) {
                 $len = $unit < $size ? $unit : $size;
                 $buf = fread($this->_zfhandle, $len);
-                if ($buf === false) {
+                if (false === $buf) {
                     fclose($tfh);
                     unlink($tfn);
                     fclose($ofh);
@@ -360,7 +360,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
             $size = $entry['uncompsize'];
             $result = true;
             $tfh = gzopen($tfn, 'rb');
-            if ($tfh === false) {
+            if (false === $tfh) {
                 unlink($tfn);
                 fclose($ofh);
                 unlink($filepath);
@@ -370,7 +370,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
             while (!gzeof($tfh) && $size > 0) {
                 $len = $unit < $size ? $unit : $size;
                 $buf = gzread($tfh, $len);
-                if ($buf == '' || false === fwrite($ofh, $buf)) {
+                if ('' == $buf || false === fwrite($ofh, $buf)) {
                     // maybe corrupt zip file
                     fclose($tfh);
                     unlink($tfn);
@@ -519,7 +519,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
         // file comment (variable size)
         $cdir['comment'] = ($cdir['commentlen'] > 0) ? fread($this->_zfhandle, $cdir['commentlen']) : '';
 
-        if ($cdir['filename'] != '') {
+        if ('' != $cdir['filename']) {
             $this->_cdirectories[$cdir['filename']] = $cdir;
         }
 
@@ -529,7 +529,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
     /**
      * read local file header.
      *
-     * @return boolean file entry header information
+     * @return bool file entry header information
      */
     private function _read_local_file_header()
     {
@@ -583,7 +583,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
             $entry['uncompsize'] = $this->_fread_unpack('ul');
         }
 
-        if ($entry['filename'] != '') {
+        if ('' != $entry['filename']) {
             $this->_entries[$entry['filename']] = $entry;
         }
 
@@ -594,6 +594,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
      * read unpacked data from file.
      *
      * @param string $type
+     *
      * @return mixed data
      */
     private function _fread_unpack($type)
@@ -629,7 +630,7 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
     private function _create_directory($filepath)
     {
         $pos = strrpos($filepath, '/');
-        if ($pos === false) {
+        if (false === $pos) {
             // $filepath doesn't contain directory path
             return true;
         }
@@ -637,14 +638,14 @@ class XooNIpsUtilityUnzip extends XooNIpsUtility
         $dirnames = explode('/', $dirpath);
         $path = '';
         foreach ($dirnames as $dirname) {
-            if ($dirname == '') {
-                if ($path == '') {
+            if ('' == $dirname) {
+                if ('' == $path) {
                     $path = '/';
                 } else {
                     // ignore double /
                 }
             } else {
-                if ($path == '') {
+                if ('' == $path) {
                     $path = $dirname;
                 } else {
                     $path .= '/'.$dirname;

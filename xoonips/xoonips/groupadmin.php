@@ -81,7 +81,7 @@ case 'update':
             // ignore if group administrator
             continue;
         }
-        if ($mode == 'add') {
+        if ('add' == $mode) {
             // subscribe to group
             $admin_xgroup_handler->addUserToXooNIpsGroup($gid, $guid, false);
         } else {
@@ -110,7 +110,7 @@ $admin_members = array();
 $locked_members = array();
 $members = array();
 $non_members = array();
-if ($gid != 0) {
+if (0 != $gid) {
     $gadmin_uids = $admin_xgroup_handler->getUserIds($gid, true);
     $member_uids = $admin_xgroup_handler->getUserIds($gid);
     $users = xoonips_group_get_users($gadmin_uids);
@@ -119,7 +119,7 @@ if ($gid != 0) {
             $user['item_num'] = count($admin_xgroup_handler->getGroupItemIds($gid, $user['uid']));
             if ($user['isadmin']) {
                 $admin_members[] = $user;
-            } elseif ($user['item_num'] != 0) {
+            } elseif (0 != $user['item_num']) {
                 $locked_members[] = $user;
             } else {
                 $members[] = $user;

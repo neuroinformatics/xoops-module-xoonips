@@ -8,6 +8,9 @@ return Config::create()
     ->setRiskyAllowed(true)
     ->setRules(array(
         '@Symfony' => true,
+        'array_syntax' => [
+            'syntax' => 'long',
+        ],
     ))
     ->setFinder(
         Finder::create()

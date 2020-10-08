@@ -47,7 +47,6 @@ class XooNIpsOrmAbstractRankingHandler extends XooNIpsTableObjectHandler
 
     /**
      * get object column names.
-     *
      */
     public function get_columns()
     {
@@ -75,7 +74,7 @@ class XooNIpsOrmAbstractRankingHandler extends XooNIpsTableObjectHandler
     /**
      * copy ranking data from ranking_sum_* table for rebuild rankings.
      *
-     * @return null|resource FALSE if failed
+     * @return resource|null FALSE if failed
      */
     public function copy_from_sum_table()
     {

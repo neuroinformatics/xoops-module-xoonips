@@ -109,12 +109,12 @@ class XooNIpsOrmEventLog extends XooNIpsTableObject
             );
             foreach ($fields as $i => $field) {
                 // check unnecessary && specified values
-                if ($eventValidFields[$event_type_id][$i] == 0 && !is_null($this->vars[$field]['value'])) {
+                if (0 == $eventValidFields[$event_type_id][$i] && !is_null($this->vars[$field]['value'])) {
                     $result = false;
                     $this->setErrors("cannot specify $field if event_type_id=$event_type_id");
                 }
-                    // check necessary && unspecified values
-                    $this->vars[$field]['required'] = (bool) ($eventValidFields[$event_type_id][$i]);
+                // check necessary && unspecified values
+                $this->vars[$field]['required'] = (bool) ($eventValidFields[$event_type_id][$i]);
             }
         }
 
@@ -143,7 +143,7 @@ class XooNIpsOrmEventLogHandler extends XooNIpsTableObjectHandler
     public function &create($isNew = true)
     {
         $obj = parent::create($isNew);
-        if ($obj === false) {
+        if (false === $obj) {
             return $obj;
         }
         if ($isNew) {
@@ -579,7 +579,7 @@ class XooNIpsOrmEventLogHandler extends XooNIpsTableObjectHandler
         global $xoopsRequestUri;
         $myxoopsConfig = &xoonips_get_xoops_configs(XOOPS_CONF);
         $startpage_url = XOOPS_URL.'/index.php';
-        if (isset($myxoopsConfig['startpage']) && $myxoopsConfig['startpage'] != '' && $myxoopsConfig['startpage'] != '--') {
+        if (isset($myxoopsConfig['startpage']) && '' != $myxoopsConfig['startpage'] && '--' != $myxoopsConfig['startpage']) {
             $module_handler = &xoops_gethandler('module');
             $startpage_module = &$module_handler->get($myxoopsConfig['startpage']);
             $startpage_dirname = $startpage_module->dirname();

@@ -53,17 +53,17 @@ class IdentifyHandler extends HarvesterHandler
 
     public function characterDataHandler($parser, $data)
     {
-        if (end($this->_tagstack) == 'GRANULARITY') {
-            if ($data == 'YYYY-MM-DDThh:mm:ssZ') {
+        if ('GRANULARITY' == end($this->_tagstack)) {
+            if ('YYYY-MM-DDThh:mm:ssZ' == $data) {
                 $this->_dateFormat = "Y-m-d\TH:i:s\Z";
-            } elseif ($data == 'YYYY-MM-DD') {
+            } elseif ('YYYY-MM-DD' == $data) {
                 $this->_dateFormat = 'Y-m-d';
             } else {
                 $this->_dateFormat = false;
             }
-        } elseif (end($this->_tagstack) == 'EARLIESTDATESTAMP') {
+        } elseif ('EARLIESTDATESTAMP' == end($this->_tagstack)) {
             $this->_earliestDatestamp = ISO8601toUTC($data);
-        } elseif (end($this->_tagstack) == 'REPOSITORYNAME') {
+        } elseif ('REPOSITORYNAME' == end($this->_tagstack)) {
             $this->_repositoryName .= $data;
         }
     }

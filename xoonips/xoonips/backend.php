@@ -35,7 +35,7 @@ function xoonips_get_backend()
     $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
     $criteria = new CriteriaCompo(new Criteria('name', $itemtype));
     $criteria->add(new Criteria('mid', null, '!='));
-    if ($item_type_handler->getCount($criteria) != 1) {
+    if (1 != $item_type_handler->getCount($criteria)) {
         die('illegal request');
     }
     // check action name

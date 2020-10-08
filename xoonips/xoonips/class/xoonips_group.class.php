@@ -57,7 +57,7 @@ class XooNIpsGroupHandler
         $criteria->add(new Criteria('gname', $gname));
         $cnt = $this->_xg_handler->getCount($criteria);
 
-        return  $cnt != 0;
+        return  0 != $cnt;
     }
 
     /**
@@ -75,7 +75,7 @@ class XooNIpsGroupHandler
         $criteria->add(new Criteria('gid', $gid));
         $cnt = $this->_xgl_handler->getCount($criteria);
 
-        return($cnt == 0) ? false : true;
+        return(0 == $cnt) ? false : true;
     }
 
     /**
@@ -98,7 +98,7 @@ class XooNIpsGroupHandler
         }
         $cnt = $this->_xgl_handler->getCount($criteria);
 
-        return($cnt == 0) ? false : true;
+        return(0 == $cnt) ? false : true;
     }
 
     /**

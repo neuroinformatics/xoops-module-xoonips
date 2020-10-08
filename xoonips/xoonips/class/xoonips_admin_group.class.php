@@ -45,7 +45,7 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
      * @param int  $uid      user id
      * @param bool $is_admin true if user will be group admin
      *
-     * @return boolean|null false if failure
+     * @return bool|null false if failure
      */
     public function addUserToXooNIpsGroup($gid, $uid, $is_admin)
     {
@@ -54,12 +54,12 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
         $is_admin_new = ($is_admin) ? 1 : 0;
         // check user and group exists
         $criteria = new Criteria('uid', $uid);
-        if ($xu_handler->getCount($criteria) != 1) {
+        if (1 != $xu_handler->getCount($criteria)) {
             // user not found
             return false;
         }
         $criteria = new Criteria('gid', $gid);
-        if ($this->_xg_handler->getCount($criteria) != 1) {
+        if (1 != $this->_xg_handler->getCount($criteria)) {
             // group not found
             return false;
         }
@@ -68,7 +68,7 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
         $criteria->add(new Criteria('uid', $uid));
         $xgl_objs = &$this->_xgl_handler->getObjects($criteria);
         $xgl_count = count($xgl_objs);
-        if ($xgl_count == 0) {
+        if (0 == $xgl_count) {
             // insert user to group
             $xgl_obj = &$this->_xgl_handler->create();
             $xgl_obj->set('gid', $gid);
@@ -77,7 +77,7 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
             if (!$this->_xgl_handler->insert($xgl_obj)) {
                 return false;
             }
-        } elseif ($xgl_count == 1) {
+        } elseif (1 == $xgl_count) {
             // already exists
             $xgl_obj = &$xgl_objs[0];
             $is_admin_old = $xgl_obj->get('is_admin');
@@ -109,7 +109,7 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
      *
      * @param int $uid user id
      *
-     * @return boolean|null false if failure
+     * @return bool|null false if failure
      */
     public function addUserToDefaultXooNIpsGroup($uid)
     {
@@ -123,19 +123,19 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
      * @param int  $gid   group id
      * @param bool $force force deletion
      *
-     * @return boolean|null false if failure
+     * @return bool|null false if failure
      */
     public function deleteUserFromXooNIpsGroup($gid, $uid, $force = false)
     {
         $xu_handler = &xoonips_getormhandler('xoonips', 'users');
         // check user and group exists
         $criteria = new Criteria('uid', $uid);
-        if ($xu_handler->getCount($criteria) != 1) {
+        if (1 != $xu_handler->getCount($criteria)) {
             // user not found
             return false;
         }
         $criteria = new Criteria('gid', $gid);
-        if ($this->_xg_handler->getCount($criteria) != 1) {
+        if (1 != $this->_xg_handler->getCount($criteria)) {
             // group not found
             return false;
         }
@@ -144,16 +144,16 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
         $criteria->add(new Criteria('uid', $uid));
         $xgl_objs = &$this->_xgl_handler->getObjects($criteria);
         $xgl_count = count($xgl_objs);
-        if ($xgl_count == 0) {
+        if (0 == $xgl_count) {
             return true;
-        } elseif ($xgl_count == 1) {
+        } elseif (1 == $xgl_count) {
             $xgl_obj = &$xgl_objs[0];
-            if (!$force && $xgl_obj->get('is_admin') == 1) {
+            if (!$force && 1 == $xgl_obj->get('is_admin')) {
                 // administrator can not leave from group member
                 return false;
             }
             $iids = $this->getGroupItemIds($gid, $uid);
-            if (!$force && count($iids) != 0) {
+            if (!$force && 0 != count($iids)) {
                 // user has group shared items
                 return false;
             }
@@ -207,7 +207,7 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
         // create group root index
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $gxid = $index_handler->createGroupRootIndex($gid);
-        if ($gxid === false) {
+        if (false === $gxid) {
             $this->_xg_handler->delete($xg_obj);
 
             return false;
@@ -325,7 +325,7 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
         // check group index locking status for group root index deletion
         $gid_criteria = new Criteria('gid', $gid);
         $join = new XooNIpsJoinCriteria('xoonips_item_lock', 'index_id', 'item_id', 'INNER');
-        if ($index_handler->getCount($gid_criteria, $join) != 0) {
+        if (0 != $index_handler->getCount($gid_criteria, $join)) {
             // some indexes is locked
             return false;
         }
@@ -352,7 +352,7 @@ class XooNIpsAdminGroupHandler extends XooNIpsGroupHandler
             $keyword_handler->deleteAll($item_criteria);
             $index_criteria = new Criteria('index_id', $index_id);
             $index_item_link_handler->deleteAll($index_criteria);
-            if ($parent_index_id != IID_ROOT) {
+            if (IID_ROOT != $parent_index_id) {
                 // record event log : delete index
                 $event_handler->recordDeleteIndexEvent($index_id);
             }

@@ -31,7 +31,7 @@ defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
  */
 function system_check_find_path($command)
 {
-    $is_windows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
+    $is_windows = ('WIN' === strtoupper(substr(PHP_OS, 0, 3)));
     if (!defined('PATH_SEPARATOR')) {
         $path_sep = $is_windows ? ':' : ';';
     } else {

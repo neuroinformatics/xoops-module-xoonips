@@ -34,7 +34,7 @@ function xoops_module_install_xnpbinder($xoopsMod)
     $table = $xoopsDB->prefix('xoonips_item_type');
     $mid = $xoopsMod->getVar('mid');
     $sql = "INSERT INTO $table ( name, display_name, mid, viewphp ) ".' VALUES ( \'xnpbinder\', \'Binder\', '." $mid, 'xnpbinder/include/view.php' )";
-    if ($xoopsDB->query($sql) == false) {
+    if (false == $xoopsDB->query($sql)) {
         // cannot register itemtype
         return false;
     }
@@ -42,18 +42,18 @@ function xoops_module_install_xnpbinder($xoopsMod)
 
     // get item_type_id of xoonips_binder
     $result = $xoopsDB->query('SELECT item_type_id FROM '.$xoopsDB->prefix('xoonips_item_type').' WHERE name=\'xoonips_binder\'');
-    if ($result !== false && $xoopsDB->getRowsNum($result) > 0) {
+    if (false !== $result && $xoopsDB->getRowsNum($result) > 0) {
         list($old_item_type_id) = $xoopsDB->fetchRow($result);
 
         // move binder_item_link data from XooNIps to Binder module
         $table_from = $xoopsDB->prefix('xoonips_binder_item_link');
         $table_to = $xoopsDB->prefix('xnpbinder_binder_item_link');
         $sql = "INSERT INTO $table_to SELECT * FROM $table_from";
-        if ($xoopsDB->query($sql) == false) {
+        if (false == $xoopsDB->query($sql)) {
             return false;
         }
         $sql = "DROP TABLE IF EXISTS $table_from";
-        if ($xoopsDB->query($sql) == false) {
+        if (false == $xoopsDB->query($sql)) {
             return false;
         }
 
@@ -61,19 +61,19 @@ function xoops_module_install_xnpbinder($xoopsMod)
         $table_from = $xoopsDB->prefix('xoonips_item_basic');
         $table_to = $xoopsDB->prefix('xnpbinder_item_detail');
         $sql = "INSERT INTO $table_to SELECT item_id,''  "." FROM $table_from  "." WHERE item_type_id=$old_item_type_id";
-        if ($xoopsDB->query($sql) == false) {
+        if (false == $xoopsDB->query($sql)) {
             return false;
         }
 
         $table = $xoopsDB->prefix('xoonips_item_basic');
         $sql = "UPDATE $table SET item_type_id=$item_type_id "." WHERE item_type_id=$old_item_type_id";
-        if ($xoopsDB->query($sql) == false) {
+        if (false == $xoopsDB->query($sql)) {
             return false;
         }
 
         // remove xoonips_binder from xoonips_item_type
         $result = $xoopsDB->query('DELETE FROM '.$xoopsDB->prefix('xoonips_item_type').' WHERE name=\'xoonips_binder\'');
-        if ($result == false) {
+        if (false == $result) {
             // cannot register itemtype
             return false;
         }
@@ -93,7 +93,7 @@ function xoops_module_install_xnpbinder($xoopsMod)
             $criteria->add(new Criteria('gperm_name', 'module_read'));
 
             $objects = &$gperm_handler->getObjects($criteria);
-            if (count($objects) == 1) {
+            if (1 == count($objects)) {
                 $gperm_handler->delete($objects[0]);
             }
         }

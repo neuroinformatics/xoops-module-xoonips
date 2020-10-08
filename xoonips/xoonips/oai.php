@@ -70,17 +70,17 @@ if (!isset($args['verb'])) {
     echo $pmh->header().$pmh->request($args).$pmh->error('badVerb', 'no verb').$pmh->footer();
     exit();
 }
-if ($args['verb'] == 'GetRecord') {
+if ('GetRecord' == $args['verb']) {
     echo $pmh->GetRecord($args);
-} elseif ($args['verb'] == 'Identify') {
+} elseif ('Identify' == $args['verb']) {
     echo $pmh->Identify();
-} elseif ($args['verb'] == 'ListIdentifiers') {
+} elseif ('ListIdentifiers' == $args['verb']) {
     echo $pmh->ListIdentifiers($args);
-} elseif ($args['verb'] == 'ListMetadataFormats') {
+} elseif ('ListMetadataFormats' == $args['verb']) {
     echo $pmh->ListMetadataFormats($args);
-} elseif ($args['verb'] == 'ListRecords') {
+} elseif ('ListRecords' == $args['verb']) {
     echo $pmh->ListRecords($args);
-} elseif ($args['verb'] == 'ListSets') {
+} elseif ('ListSets' == $args['verb']) {
     echo $pmh->ListSets($args);
 } else {
     echo $pmh->header().$pmh->request($args).$pmh->error('badVerb', 'illegal verb').$pmh->footer();

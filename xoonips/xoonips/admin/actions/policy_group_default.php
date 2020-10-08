@@ -85,7 +85,7 @@ foreach ($initvals_config_keys as $name => $value) {
     $iv['title'] = $value['title'];
     $iv['desc'] = $value['desc'];
     $iv['name'] = $name;
-    if ($value['type'] == 'f') {
+    if ('f' == $value['type']) {
         $iv['value'] = $config_values[$name] / 1000000.0;
     } else {
         $iv['value'] = $config_values[$name];

@@ -101,12 +101,12 @@ function userCheck($uname, $email, $pass, $vpass)
             $stop .= _US_EMAILTAKEN.'<br />';
         }
     }
-    if (!isset($pass) || $pass == '' || !isset($vpass) || $vpass == '') {
+    if (!isset($pass) || '' == $pass || !isset($vpass) || '' == $vpass) {
         $stop .= _US_ENTERPWD.'<br />';
     }
     if ((isset($pass)) && ($pass != $vpass)) {
         $stop .= _US_PASSNOTSAME.'<br />';
-    } elseif (($pass != '') && (strlen($pass) < $myxoopsConfigUser['minpass'])) {
+    } elseif (('' != $pass) && (strlen($pass) < $myxoopsConfigUser['minpass'])) {
         $stop .= sprintf(_US_PWDTOOSHORT, $myxoopsConfigUser['minpass']).'<br />';
     }
 
@@ -136,7 +136,7 @@ function userCheckXooNIps($realname, $address, $company_name, $division, $tel, $
     // -- requirements
     foreach ($check_fields as $key => $info) {
         list($label, $maxlength, $errmes) = $info;
-        if ($required[$key]['flag'] && ${$key} == '') {
+        if ($required[$key]['flag'] && '' == ${$key}) {
             $errors[] = sprintf(_MD_XOONIPS_ACCOUNT_MUST_BE_FILLED_IN, $label);
         }
     }
@@ -187,11 +187,11 @@ foreach ($post_keys as $key => $meta) {
 
 // get and check xoonips configuration
 $certify_user = $xconfig_handler->getValue('certify_user');
-$is_certify_auto = ($certify_user == 'auto');
+$is_certify_auto = ('auto' == $certify_user);
 $required = array();
 foreach (array('realname', 'address', 'division', 'tel', 'company_name', 'country', 'zipcode', 'fax') as $key) {
     $optional = $xconfig_handler->getValue('account_'.$key.'_optional');
-    if ($optional == 'on') {
+    if ('on' == $optional) {
         $required[$key] = array('flag' => false, 'mark' => '');
     } else {
         $required[$key] = array('flag' => true, 'mark' => _MD_XOONIPS_ACCOUNT_REQUIRED_MARK);
@@ -205,7 +205,7 @@ case 'newuser':
     }
     require XOOPS_ROOT_PATH.'/header.php';
     $stop = '';
-    if ($myxoopsConfigUser['reg_dispdsclmr'] != 0 && $myxoopsConfigUser['reg_disclaimer'] != '') {
+    if (0 != $myxoopsConfigUser['reg_dispdsclmr'] && '' != $myxoopsConfigUser['reg_disclaimer']) {
         if (empty($agree_disc)) {
             $stop .= _US_UNEEDAGREE.'<br />';
         }
@@ -215,7 +215,7 @@ case 'newuser':
     if (empty($stop)) {
         echo _US_USERNAME.': '.$textutil->html_special_chars($uname).'<br />';
         echo _US_EMAIL.': '.$textutil->html_special_chars($email).'<br />';
-        if ($url != '') {
+        if ('' != $url) {
             $url = formatURL($url);
             echo _US_WEBSITE.': '.$textutil->html_special_chars($url).'<br />';
         }
@@ -276,7 +276,7 @@ case 'finish':
         $newuser->setVar('user_viewemail', $user_viewemail, true); // not gpc
         $newuser->setVar('uname', $uname, true); // not gpc
         $newuser->setVar('email', $email, true); // not gpc
-        if ($url != '') {
+        if ('' != $url) {
             $newuser->setVar('url', formatURL($url), true); // not gpc
         }
         $newuser->setVar('user_avatar', 'blank.gif', true); // not gpc
@@ -289,7 +289,7 @@ case 'finish':
         $newuser->setVar('umode', $myxoopsConfig['com_mode'], true); // not gpc
         $newuser->setVar('user_mailok', $user_mailok, true); // not gpc
         $newuser->setVar('name', $realname, true); // not gpc
-        if ($myxoopsConfigUser['activation_type'] == 1) {
+        if (1 == $myxoopsConfigUser['activation_type']) {
             $newuser->setVar('level', 1, true); // not gpc
         }
         if (!$member_handler->insertUser($newuser)) {
@@ -325,7 +325,7 @@ case 'finish':
         $xu_handler->insert($xu_obj);
 
         // send mail
-        if ($myxoopsConfigUser['activation_type'] == 0) {
+        if (0 == $myxoopsConfigUser['activation_type']) {
             // activate xoops account by user
             $langman = &xoonips_getutility('languagemanager');
             $xoopsMailer = &getMailer();
@@ -355,7 +355,7 @@ case 'finish':
                     echo _MD_XOONIPS_ACTIVATE_BY_USER_CERTIFY_MANUAL;
                 }
             }
-        } elseif ($myxoopsConfigUser['activation_type'] == 1) {
+        } elseif (1 == $myxoopsConfigUser['activation_type']) {
             // activate xoops account automatically
             // - To send a e-mail to users who are belong to the group
             //   specified by moderator_gid if certify_user is 'manual'
@@ -368,7 +368,7 @@ case 'finish':
                 xoonips_notification_account_certified($newid);
                 redirect_header('user.php', 5, _MD_XOONIPS_ACTIVATE_AUTO_CERTIFY_AUTO, false);
             }
-        } elseif ($myxoopsConfigUser['activation_type'] == 2) {
+        } elseif (2 == $myxoopsConfigUser['activation_type']) {
             // activate xoops accunt by xoops administrator
             $xoopsMailer = &getMailer();
             $xoopsMailer->useMail();
@@ -397,7 +397,7 @@ case 'finish':
             }
         }
         // send e-mail to XOOPS Admin
-        if ($myxoopsConfigUser['new_user_notify'] == 1 && !empty($myxoopsConfigUser['new_user_notify_group'])) {
+        if (1 == $myxoopsConfigUser['new_user_notify'] && !empty($myxoopsConfigUser['new_user_notify_group'])) {
             $xoopsMailer = &getMailer();
             $xoopsMailer->useMail();
             $member_handler = &xoops_gethandler('member');

@@ -45,7 +45,7 @@ function xnpurlGetDetailInformation($item_id)
 
     $sql = 'select * from '.$xoopsDB->prefix('xnpurl_item_detail')." where url_id=$item_id";
     $result = $xoopsDB->query($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo " $sql ".mysql_error();
 
         return false;
@@ -57,7 +57,7 @@ function xnpurlGetDetailInformation($item_id)
 function xnpurlGetMetaInformation($item_id)
 {
     $metainfo = xnpurlGetDetailInformation($item_id);
-    if ($metainfo == false) {
+    if (false == $metainfo) {
         return array();
     }
 
@@ -94,7 +94,7 @@ function xnpurlGetUrlBannerFileDetailBlock($item_id, $url)
     // retrieve file information that specified by item_id
     $files = xnpGetFileInfo('t_file.file_id, t_file.caption', 't_file_type.name=\'url_banner_file\' and sess_id is NULL ', $item_id);
     // generate html
-    if (count($files) != 0) {
+    if (0 != count($files)) {
         reset($files);
         list($dummy, list($fileID, $caption)) = each($files);
         $imageFileName = XOOPS_URL."/modules/xoonips/image.php?file_id=$fileID";
@@ -242,7 +242,7 @@ function xnpurlGetUrlBannerFileConfirmBlock($item_id)
     if (!empty($url_banner_file['name'])) {
         // file has been Uploaded
         list($fileID, $errorMessage) = xnpUploadFile($name, false);
-        if ($fileID == false) {
+        if (false == $fileID) {
             $errorHTML = '<font color=\'#ff0000\'>'.htmlspecialchars($errorMessage).'</font><br />';
 
             return array('name' => 'Attachment', 'value' => $errorHTML);
@@ -251,7 +251,7 @@ function xnpurlGetUrlBannerFileConfirmBlock($item_id)
         }
     } else {
         $attachmentFileID = $formdata->getValue('post', $name.'FileID', 'i', false);
-        if ($attachmentFileID == 0) {
+        if (0 == $attachmentFileID) {
             // no files should be attached
             $sql = ' 0 ';
         } else {
@@ -261,7 +261,7 @@ function xnpurlGetUrlBannerFileConfirmBlock($item_id)
 
     $files = xnpGetFileInfo('t_file.file_id, t_file.original_file_name, t_file.file_size', "t_file_type.name='$name' and $sql ", $item_id);
 
-    if (count($files) == 0) {
+    if (0 == count($files)) {
         $html = "<input type='hidden' name='${name}FileID' value=''>";
     } else {
         // todo: to be downloadable
@@ -328,7 +328,7 @@ function xnpurlCheckRegisterParameters(&$message)
     if (empty($url)) {
         $messages[] = 'url required.';
     }
-    if (count($messages) == 0) {
+    if (0 == count($messages)) {
         return true;
     }
     $message = "<br />\n".implode("<br />\n", $messages);
@@ -377,7 +377,7 @@ function xnpurlInsertItem(&$item_id)
     // register detail information
     $sql = 'insert into '.$xoopsDB->prefix('xnpurl_item_detail')." ( url_id, url ) values ( $item_id, '".addslashes($ar['url']).'\' ) ';
     $result = $xoopsDB->queryF($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo 'cannot insert item_detail';
 
         return false;
@@ -426,7 +426,7 @@ function xnpurlUpdateItem($item_id)
     // register detail information
     $sql = implode(',', array('url'.'=\''.addslashes($ar['url']).'\''));
     $result = $xoopsDB->queryF('update '.$xoopsDB->prefix('xnpurl_item_detail')." set $sql where url_id = $item_id ");
-    if ($result == false) {
+    if (false == $result) {
         return false;
     }
 
@@ -534,7 +534,7 @@ function xnpurlGetModifiedFields($item_id)
     if ($detail) {
         foreach (array('url' => _MD_XNPURL_URL_LABEL) as $k => $v) {
             $tmp = $formdata->getValue('post', $k, 's', false);
-            if (!array_key_exists($k, $detail) || $tmp === null) {
+            if (!array_key_exists($k, $detail) || null === $tmp) {
                 continue;
             }
             if ($detail[$k] != $tmp) {
@@ -557,7 +557,7 @@ function xnpurlGetTopBlock($itemtype)
 
 function xnpurlSupportMetadataFormat($metadataPrefix, $item_id)
 {
-    if ($metadataPrefix == 'oai_dc' || $metadataPrefix == 'junii2') {
+    if ('oai_dc' == $metadataPrefix || 'junii2' == $metadataPrefix) {
         return true;
     }
 
@@ -583,9 +583,9 @@ function xnpurlGetMetadata($prefix, $item_id)
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
     // indexes
     $indexes = array();
-    if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
+    if (RES_OK == xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids)) {
         foreach ($xids as $xid) {
-            if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($_SESSION['XNPSID'], $xid, $index)) {
                 $indexes[] = xnpGetIndexPathServerString($_SESSION['XNPSID'], $xid);
             }
         }

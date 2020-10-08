@@ -88,7 +88,7 @@ class XooNIpsActionOaipmhSearchDefault extends XooNIpsAction
         foreach ($rows as $row) {
             $result[] = array(
                 'repository_id' => $row->getVar('repository_id', 's'),
-                'repository_name' => $textutil->truncate((trim($row->getVar('repository_name', 's')) != '' ? $row->getVar('repository_name', 's') : $row->getVar('URL', 's')), 70, '...'),
+                'repository_name' => $textutil->truncate(('' != trim($row->getVar('repository_name', 's')) ? $row->getVar('repository_name', 's') : $row->getVar('URL', 's')), 70, '...'),
                 'metadata_count' => $row->getVar('metadata_count', 's'), );
         }
 
@@ -127,7 +127,7 @@ class XooNIpsActionOaipmhSearchDefault extends XooNIpsAction
      */
     public function isValidRepositoryId($id)
     {
-        if ($id == 0) {
+        if (0 == $id) {
             return true;
         }
         $handler = &xoonips_getormhandler('xoonips', 'oaipmh_repositories');

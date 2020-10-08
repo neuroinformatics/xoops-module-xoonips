@@ -74,7 +74,7 @@ foreach ($posi_objs as $posi_obj) {
 $xoopsOption['template_main'] = 'xoonips_userlist.html';
 require XOOPS_ROOT_PATH.'/header.php';
 
-$xoopsTpl->assign('is_user', ($uid != UID_GUEST));
+$xoopsTpl->assign('is_user', (UID_GUEST != $uid));
 $xoopsTpl->assign('userslist', $userslist);
 
 require XOOPS_ROOT_PATH.'/footer.php';

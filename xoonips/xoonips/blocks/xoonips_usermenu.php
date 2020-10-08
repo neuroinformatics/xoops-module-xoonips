@@ -62,7 +62,7 @@ function b_xoonips_user_show()
         return false;
     }
     $is_certified = $xuser_obj->getVar('activate', 'n');
-    if ($is_certified != 1) {
+    if (1 != $is_certified) {
         // user is not certified
         return false;
     }
@@ -115,7 +115,7 @@ function b_xoonips_user_show()
     $block['lang_oaipmh_search'] = _MB_XOONIPS_USER_OAIPMH_SEARCH;
     $block['xoonips_isadmin'] = $is_admin;
 
-    if ($is_admin || $private_import_enabled == 'on') {
+    if ($is_admin || 'on' == $private_import_enabled) {
         // set to $block['lang_import'] if user is permitted to import.
         // - config of private_import_enabled is true
         // - or user is administrator

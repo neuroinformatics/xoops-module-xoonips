@@ -42,7 +42,7 @@ function get_user_info($uid)
     $xu_handler = &xoonips_getormhandler('xoonips', 'users');
     $m_handler = &xoops_gethandler('member');
     $p_handler = &xoonips_getormhandler('xoonips', 'positions');
-    if ($uid == 0) {
+    if (0 == $uid) {
         $u_obj = &$u_handler->create();
         $xu_obj = &$xu_handler->create();
     } else {
@@ -56,7 +56,7 @@ function get_user_info($uid)
     $user['xoonips'] = $xu_obj->getVarArray('e');
     // groups
     $grouplist = $m_handler->getGroupList(new Criteria('groupid', XOOPS_GROUP_ANONYMOUS, '!='));
-    if ($uid == 0) {
+    if (0 == $uid) {
         $groups = array(XOOPS_GROUP_USERS);
     } else {
         $groups = $m_handler->getGroupsByUser($user['xoops']['uid']);
@@ -127,7 +127,7 @@ function get_user_info($uid)
         $user['rank'][] = array(
             'rank' => 0,
             'name' => '--------------',
-            'selected' => ($user['xoops']['rank'] == 0) ? 'selected="selected"' : '',
+            'selected' => (0 == $user['xoops']['rank']) ? 'selected="selected"' : '',
         );
         foreach ($ranklist as $rank => $name) {
             $user['rank'][] = array(
@@ -203,7 +203,7 @@ function get_requirements($uid)
         'private_index_number_limit',
         'private_item_storage_limit',
     );
-    if ($uid == 0) {
+    if (0 == $uid) {
         array_push($requirements, 'pass');
         array_push($requirements, 'pass2');
     }
@@ -224,7 +224,7 @@ function get_requirements($uid)
     }
     $config_vals = xoonips_admin_get_configs($config_keys, 's');
     foreach ($keys as $key => $name) {
-        if ($config_vals[$key] == 'off') {
+        if ('off' == $config_vals[$key]) {
             $requirements[] = $name;
         }
     }
@@ -242,11 +242,11 @@ function get_title($key)
 
 // get user information
 $user = get_user_info($uid);
-if ($user === false) {
+if (false === $user) {
     redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_ILLACCESS);
     exit();
 }
-if ($uid != 0 && $user['xoops']['level'] == 0) {
+if (0 != $uid && 0 == $user['xoops']['level']) {
     // needs activate
     require 'actions/maintenance_account_aconfirm.php';
     exit();
@@ -351,7 +351,7 @@ $tmpl->addVar('main', 'name_value', $user['xoops']['name']);
 $tmpl->addVar('main', 'email_title', get_title('email'));
 $tmpl->addVar('main', 'email_value', $user['xoops']['email']);
 $tmpl->addVar('main', 'user_viewemail_title', get_title('user_viewmail'));
-$tmpl->addVar('main', 'user_viewemail_checked', ($user['xoops']['user_viewemail'] == 1) ? 'checked="checked"' : '');
+$tmpl->addVar('main', 'user_viewemail_checked', (1 == $user['xoops']['user_viewemail']) ? 'checked="checked"' : '');
 $tmpl->addVar('main', 'url_title', get_title('url'));
 $tmpl->addVar('main', 'url_value', $user['xoops']['url']);
 $tmpl->addVar('main', 'groups_title', get_title('groups'));
@@ -381,7 +381,7 @@ $tmpl->addVar('main', 'appeal_value', $user['xoonips']['appeal']);
 $tmpl->addVar('main', 'user_sig_title', get_title('user_sig'));
 $tmpl->addVar('main', 'user_sig_value', $user['xoops']['user_sig']);
 $tmpl->addVar('main', 'attachsig_title', get_title('attachsig'));
-$tmpl->addVar('main', 'attachsig_checked', ($user['xoops']['attachsig'] == 1 ? 'checked="checked"' : ''));
+$tmpl->addVar('main', 'attachsig_checked', (1 == $user['xoops']['attachsig'] ? 'checked="checked"' : ''));
 $tmpl->addVar('main', 'pass_title', get_title('pass'));
 $tmpl->addVar('main', 'pass2_title', get_title('pass2'));
 $tmpl->addVar('main', 'notice_mail_title', get_title('notice_mail'));
@@ -405,7 +405,7 @@ $tmpl->addRows('notify_mode', $user['notify_mode']);
 $tmpl->addVar('main', 'user_mailok_title', get_title('user_mailok'));
 $tmpl->addRows('user_mailok', $user['user_mailok']);
 $tmpl->addVar('main', 'submit', get_title('submit'));
-if (count($validate) == 0) {
+if (0 == count($validate)) {
     $tmpl->setAttribute('validate', 'visibility', 'hidden');
 } else {
     $tmpl->addRows('validate', $validate);

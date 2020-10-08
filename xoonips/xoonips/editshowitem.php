@@ -32,7 +32,7 @@ require_once 'include/AL.php';
 require_once 'include/lib.php';
 
 $myuid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 'n') : UID_GUEST;
-if ($myuid == UID_GUEST) {
+if (UID_GUEST == $myuid) {
     redirect_header(XOOPS_URL.'/', 3, _NOPERM);
     exit();
 }
@@ -116,7 +116,7 @@ if (is_null($item_type_id)) {
 // -> off : calculate in items user registered (default)
 $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
 $item_show_optional = $xconfig_handler->getValue('item_show_optional');
-$is_owner_only = ($item_show_optional != 'on');
+$is_owner_only = ('on' != $item_show_optional);
 
 // calculate page navigation
 $page_navi = array();

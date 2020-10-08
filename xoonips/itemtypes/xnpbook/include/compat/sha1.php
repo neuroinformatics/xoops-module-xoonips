@@ -111,7 +111,7 @@ function php_compat_sha1_add32_helper($x, $y)
 }
 
 /**
- * @param integer $n
+ * @param int $n
  */
 function php_compat_sha1_rotl_helper($x, $n)
 {

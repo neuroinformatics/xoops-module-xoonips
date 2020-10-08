@@ -43,7 +43,7 @@ class XooNIpsLogicLogin extends XooNIpsLogic
      * @param[out] $response->error error information
      * @param[out] $response->success session id
      *
-     * @return null|boolean if error
+     * @return bool|null if error
      */
     public function execute(&$vars, &$response)
     {
@@ -76,9 +76,9 @@ class XooNIpsLogicLogin extends XooNIpsLogic
         $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
         $transaction = XooNIpsTransaction::getInstance();
         $transaction->start();
-        if ($id == '') {
+        if ('' == $id) {
             $target_user = $xconfig_handler->getValue(XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_KEY);
-            if ($pass != '' || $target_user != XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_ALL) {
+            if ('' != $pass || XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_ALL != $target_user) {
                 $transaction->rollback();
                 $response->error->add(XNPERR_AUTH_FAILURE);
                 $response->setResult(false);
@@ -116,7 +116,7 @@ class XooNIpsLogicLogin extends XooNIpsLogic
             }
             $groups = $xoops_user->getGroups();
         }
-        if ($myxoopsConfig['closesite'] == 1) {
+        if (1 == $myxoopsConfig['closesite']) {
             $allowed = false;
             if ($user) {
                 foreach ($groups as $group) {
@@ -150,7 +150,7 @@ class XooNIpsLogicLogin extends XooNIpsLogic
         $_SESSION['xoopsUserGroups'] = $groups;
 
         // set XNPSID(for old routines)
-        $_SESSION['XNPSID'] = ($uid == UID_GUEST) ? SID_GUEST : session_id();
+        $_SESSION['XNPSID'] = (UID_GUEST == $uid) ? SID_GUEST : session_id();
 
         if ($user) {
             // update last_login

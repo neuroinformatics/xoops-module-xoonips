@@ -54,7 +54,7 @@ class XooNIpsActionTransferAdminInitialize extends XooNIpsActionTransfer
     {
         global $xoopsUser;
 
-        if (count($this->get_from_user_options()) == 1) {
+        if (1 == count($this->get_from_user_options())) {
             redirect_header(XOOPS_URL.'/modules/xoonips/admin/maintenance.php?page=item', 3, _AM_XOONIPS_MAINTENANCE_TRANSFER_ITEM_ERROR_ONLY_1_USER);
         }
 
@@ -175,7 +175,7 @@ class XooNIpsActionTransferAdminInitialize extends XooNIpsActionTransfer
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_private_index_id($uid)
     {

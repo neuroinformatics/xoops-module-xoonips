@@ -171,7 +171,7 @@ class XooNIpsUtilityFile extends XooNIpsUtility
     {
         // get file inforamation
         if (extension_loaded('fileinfo')) {
-            if ($this->magic_file_path == '') {
+            if ('' == $this->magic_file_path) {
                 $finfo = @finfo_open(FILEINFO_MIME);
             } else {
                 $finfo = @finfo_open(FILEINFO_MIME, $this->magic_file_path);
@@ -191,10 +191,10 @@ class XooNIpsUtilityFile extends XooNIpsUtility
         $pathi = pathinfo($file_name);
         $ext = isset($pathi['extension']) ? $pathi['extension'] : '';
         // override mimetype
-        if ($ext != '' && isset($this->mimetype_map[$mimetype][$ext])) {
+        if ('' != $ext && isset($this->mimetype_map[$mimetype][$ext])) {
             $mimetype = $this->mimetype_map[$mimetype][$ext];
         }
-        if ($mimetype == '') {
+        if ('' == $mimetype) {
             // fail safe
             $mimetype = 'application/octet-stream';
         }
@@ -224,7 +224,7 @@ class XooNIpsUtilityFile extends XooNIpsUtility
             $image_id = @imagecreatefromjpeg($file_path);
             break;
         }
-        if ($image_id === '') {
+        if ('' === $image_id) {
             return null;
         }
         $width = imagesx($image_id);
@@ -248,13 +248,13 @@ class XooNIpsUtilityFile extends XooNIpsUtility
             $height = $new_height;
         }
         $tmpfile = tempnam('/tmp', 'XooNIpsThumbnail');
-        if ($tmpfile === false) {
+        if (false === $tmpfile) {
             return null;
         }
         @unlink($tmpfile);
         $result = imagepng($image_id, $tmpfile);
         imagedestroy($image_id);
-        if ($result == false) {
+        if (false == $result) {
             return null;
         }
         $thumbnail = file_get_contents($tmpfile);

@@ -72,31 +72,31 @@ $config_values = xoonips_admin_get_configs($config_keys, 'e');
 $certify_item = array();
 $ci['value'] = 'on';
 $ci['label'] = _AM_XOONIPS_POLICY_ITEM_PUBLIC_CERTIFY_ITEM_MANUAL;
-$ci['selected'] = ($config_values['certify_item'] == 'on') ? 'yes' : 'no';
+$ci['selected'] = ('on' == $config_values['certify_item']) ? 'yes' : 'no';
 $certify_item[] = $ci;
 $ci['value'] = 'auto';
 $ci['label'] = _AM_XOONIPS_POLICY_ITEM_PUBLIC_CERTIFY_ITEM_AUTO;
-$ci['selected'] = ($config_values['certify_item'] == 'auto') ? 'yes' : 'no';
+$ci['selected'] = ('auto' == $config_values['certify_item']) ? 'yes' : 'no';
 $certify_item[] = $ci;
 // >> public item target user
 $target_user = array();
 $tu['value'] = 'platform';
 $tu['label'] = _AM_XOONIPS_POLICY_ITEM_PUBLIC_TARGET_USER_PLATFORM;
-$tu['selected'] = ($config_values['public_item_target_user'] == 'platform') ? 'yes' : 'no';
+$tu['selected'] = ('platform' == $config_values['public_item_target_user']) ? 'yes' : 'no';
 $target_user[] = $tu;
 $tu['value'] = 'all';
 $tu['label'] = _AM_XOONIPS_POLICY_ITEM_PUBLIC_TARGET_USER_ALL;
-$tu['selected'] = ($config_values['public_item_target_user'] == 'all') ? 'yes' : 'no';
+$tu['selected'] = ('all' == $config_values['public_item_target_user']) ? 'yes' : 'no';
 $target_user[] = $tu;
 // >> download file compression
 $download_file = array();
 $df['value'] = 'on';
 $df['label'] = _AM_XOONIPS_POLICY_ITEM_PUBLIC_DOWNLOAD_FILE_ZIP;
-$df['selected'] = ($config_values['download_file_compression'] == 'on') ? 'yes' : 'no';
+$df['selected'] = ('on' == $config_values['download_file_compression']) ? 'yes' : 'no';
 $download_file[] = $df;
 $df['value'] = 'off';
 $df['label'] = _AM_XOONIPS_POLICY_ITEM_PUBLIC_DOWNLOAD_FILE_PLAIN;
-$df['selected'] = ($config_values['download_file_compression'] == 'off') ? 'yes' : 'no';
+$df['selected'] = ('off' == $config_values['download_file_compression']) ? 'yes' : 'no';
 $download_file[] = $df;
 // >>  item show optional
 $item_show = array();

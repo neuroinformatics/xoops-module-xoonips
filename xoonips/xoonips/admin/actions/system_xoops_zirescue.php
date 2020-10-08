@@ -55,7 +55,7 @@ $to_users_obj = &$users_handler->get($to_uid);
 if (!is_object($to_xusers_obj) || !is_object($to_users_obj)) {
     die('illegal request');
 }
-if ($to_xusers_obj->get('activate') != 1 || $to_users_obj->get('level') == 0) {
+if (1 != $to_xusers_obj->get('activate') || 0 == $to_users_obj->get('level')) {
     die('illegal request');
 }
 
@@ -65,7 +65,7 @@ $to_index_obj = &$index_handler->get($to_xid);
 if (!is_object($to_index_obj)) {
     die('illegal request');
 }
-if ($to_index_obj->get('uid') != $to_uid || $to_index_obj->get('open_level') != OL_PRIVATE) {
+if ($to_index_obj->get('uid') != $to_uid || OL_PRIVATE != $to_index_obj->get('open_level')) {
     die('illegal request');
 }
 
@@ -74,7 +74,7 @@ $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
 $item_ids = $index_item_link_handler->getNonPrivateItemIds($uid);
 // merge group and public item ids
 $item_ids = array_unique($item_ids);
-if (count($item_ids) == 0) {
+if (0 == count($item_ids)) {
     die('illegal request');
 }
 

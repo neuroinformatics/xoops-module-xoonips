@@ -104,10 +104,10 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
     public function set_isbn($isbn)
     {
         $tmp = preg_replace('/[\\- ]/', '', $isbn);
-        if (strlen($tmp) == 10) {
+        if (10 == strlen($tmp)) {
             $tmp = $this->_isbn10_to_isbn13($tmp);
         }
-        if (strlen($tmp) != 13) {
+        if (13 != strlen($tmp)) {
             return false;
         }
         $char = substr($tmp, 3, 1);
@@ -170,7 +170,7 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
     /**
      * create url string for Amazon API.
      *
-     * @param string $url    fetch url
+     * @param string $url fetch url
      *
      * @return string created url string
      */
@@ -196,7 +196,6 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
 
     /**
      * override function of start element handler.
-     *
      */
     public function parser_start_element($attribs)
     {
@@ -221,7 +220,6 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
 
     /**
      * override function of end element handler.
-     *
      */
     public function parser_end_element()
     {
@@ -238,7 +236,7 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
     /**
      * override function of character data handler.
      *
-     * @param string   $cdata  character data
+     * @param string $cdata character data
      */
     public function parser_character_data($cdata)
     {
@@ -291,7 +289,7 @@ class XooNIps_Amazon_ECS40 extends XooNIpsXMLParser
         $tmp = substr($isbn10, 0, 9);
         $ar = str_split('978'.$tmp, 1);
         for ($i = 0; $i < 12; ++$i) {
-            $check += $ar[$i] * ($i % 2 == 0 ? 1 : 3);
+            $check += $ar[$i] * (0 == $i % 2 ? 1 : 3);
         }
         $check = (10 - ($check % 10)) % 10;
         $isbn13 = '978'.$tmp.$check;

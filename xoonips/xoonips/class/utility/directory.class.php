@@ -46,7 +46,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
     public function __construct()
     {
         $this->setSingleton();
-        $this->is_windows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
+        $this->is_windows = ('WIN' === strtoupper(substr(PHP_OS, 0, 3)));
     }
 
     /**
@@ -59,7 +59,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
         // try to use sys_get_temp_dir() function ( >= PHP 5.2.1 )
         if (function_exists('sys_get_temp_dir')) {
             $path = $this->realpath(sys_get_temp_dir());
-            if ($path !== false && $this->_check_dir_perm($path)) {
+            if (false !== $path && $this->_check_dir_perm($path)) {
                 return $path;
             }
         }
@@ -72,7 +72,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
         foreach ($envs as $env) {
             if (!empty($_ENV[$env])) {
                 $path = $this->realpath($_ENV[$env]);
-                if ($path !== false && $this->_check_dir_perm($path)) {
+                if (false !== $path && $this->_check_dir_perm($path)) {
                     return $path;
                 }
             }
@@ -82,7 +82,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
         if (file_exists($tempfile)) {
             @unlink($tempfile);
             $path = $this->realpath(dirname($tempfile));
-            if ($path !== false && $this->_check_dir_perm($path)) {
+            if (false !== $path && $this->_check_dir_perm($path)) {
                 return $path;
             }
         }
@@ -119,7 +119,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
         }
         $template = sprintf('%s/%sXXXXXX', $dir, $prefix);
         $fp = $this->_mktemp_body($template, true);
-        if ($fp === false) {
+        if (false === $fp) {
             return false;
         }
         fclose($fp);
@@ -203,8 +203,8 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
             return @unlink($path);
         }
         if ($dh = opendir($path)) {
-            while (($sf = readdir($dh)) !== false) {
-                if ($sf == '.' || $sf == '..') {
+            while (false !== ($sf = readdir($dh))) {
+                if ('.' == $sf || '..' == $sf) {
                     continue;
                 }
                 $subpath = $path.'/'.$sf;
@@ -212,13 +212,13 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
                     // directory
                     if (!$this->rmdir($subpath)) {
                         // failed to delete sub directory
-                              return false;
+                        return false;
                     }
                 } else {
                     // file
-                    if (@unlink($subpath) === false) {
+                    if (false === @unlink($subpath)) {
                         // failed to remove file
-                              return false;
+                        return false;
                     }
                 }
             }
@@ -236,7 +236,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
     public function realpath($path)
     {
         $path = realpath($path);
-        if ($path === false) {
+        if (false === $path) {
             // failed to resolv real path
             return $path;
         }
@@ -260,7 +260,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
             $path = str_replace('\\', '/', $path);
         }
         // remove '/' from tail if given
-        if (substr($path, -1) == '/') {
+        if ('/' == substr($path, -1)) {
             $path = substr($path, 0, strlen($path) - 1);
         }
 
@@ -285,7 +285,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
         //NOTE: use a trailing slash for folders!!!
         //see http://bugs.php.net/bug.php?id=27609
         //see http://bugs.php.net/bug.php?id=30931
-        if ($path[strlen($path) - 1] == '/') {
+        if ('/' == $path[strlen($path) - 1]) {
             // recursively return a temporary file path
             return $this->_is_writable($path.uniqid(mt_rand()).'.tmp');
         } elseif (is_dir($path)) {
@@ -294,7 +294,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
         // check tmp file for read/write capabilities
         $rm = file_exists($path);
         $f = @fopen($path, 'a');
-        if ($f === false) {
+        if (false === $f) {
             return false;
         }
         fclose($f);
@@ -316,7 +316,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
     {
         // use real path
         $path = $this->realpath($path);
-        if ($path === false) {
+        if (false === $path) {
             // path not found
             return false;
         }
@@ -339,9 +339,9 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
      * @param bool   $is_file true if create file, false if create directory
      *
      * @return resource
-     *               - false: failure
-     *               - resource: created file resource
-     *               - true: success to create directory
+     *                  - false: failure
+     *                  - resource: created file resource
+     *                  - true: success to create directory
      */
     public function _mktemp_body(&$path, $is_file)
     {
@@ -349,7 +349,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
         clearstatcache();
         // use absolete path
         $mydirname = $this->realpath(dirname($path));
-        if ($mydirname === false || !$this->_check_dir_perm($mydirname)) {
+        if (false === $mydirname || !$this->_check_dir_perm($mydirname)) {
             // parent directory not found or invalid permission
             return false;
         }
@@ -369,8 +369,8 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
                 // file creation mode
                 if (!file_exists($fpath)) {
                     // open file with O_EXCL|O_CREAT flag
-                      $fp = @fopen($fpath, 'xb');
-                    if ($fp !== false) {
+                    $fp = @fopen($fpath, 'xb');
+                    if (false !== $fp) {
                         @chmod($fpath, 0600);
                         $path = $fpath;
 
@@ -401,7 +401,7 @@ class XooNIpsUtilityDirectory extends XooNIpsUtility
     {
         static $random_state = false;
         // set random state
-        if ($random_state === false) {
+        if (false === $random_state) {
             $random_state = getmypid();
         }
         // generate random chars

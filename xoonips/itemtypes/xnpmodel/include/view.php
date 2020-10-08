@@ -237,7 +237,7 @@ function xnpmodelGetRegisterBlock()
     // retrive creator, model_type from GET/POST array
     foreach (array('model_type', 'readme', 'rights') as $k) {
         $tmp = $formdata->getValue('both', $k, 's', false);
-        if ($tmp !== null) {
+        if (null !== $tmp) {
             $$k = $tmp;
         } else {
             $$k = false;
@@ -247,7 +247,7 @@ function xnpmodelGetRegisterBlock()
     // get BasicInformation / Preview / Readme / License / index block
     $basic = xnpGetBasicInformationRegisterBlock();
     $model_types = xnpmodel_get_type_array();
-    if ($model_type == false) {
+    if (false == $model_type) {
         list($model_type) = each($model_types);
     }
     $detail = array(
@@ -300,7 +300,7 @@ function xnpmodelGetEditBlock($item_id)
     // overwrite DetailInformation with POST/GET variables
     foreach (array('model_type', 'readme', 'rights') as $k) {
         $tmp = $formdata->getValue('both', $k, 's', false);
-        if ($tmp !== null) {
+        if (null !== $tmp) {
             $$k = $tmp;
         }
     }
@@ -359,7 +359,7 @@ function xnpmodelGetConfirmBlock($item_id)
     // retrive creator, model_type from GET/POST array
     foreach (array('model_type', 'creator', 'readme', 'rights') as $k) {
         $tmp = $formdata->getValue('both', $k, 's', false);
-        if ($tmp !== null) {
+        if (null !== $tmp) {
             $$k = $tmp;
         } else {
             $$k = false;
@@ -475,7 +475,7 @@ function xnpmodelInsertItem(&$item_id)
 
     $sql = 'insert into '.$xoopsDB->prefix('xnpmodel_item_detail')." ( model_id, $keys ) values ( $item_id, '$vals' ) ";
     $result = $xoopsDB->queryF($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo 'cannot insert item_detail: '.$xoopsDB->error();
 
         return false;
@@ -555,7 +555,7 @@ function xnpmodelUpdateItem($item_id)
     // edit DetailInformation
     $sql = 'update '.$xoopsDB->prefix('xnpmodel_item_detail').' set '.implode(', ', $keyval)." where model_id=$item_id";
     $result = $xoopsDB->queryF($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo 'cannot update item_detail';
         echo "\n$sql";
 
@@ -587,7 +587,7 @@ function xnpmodelCheckRegisterParameters(&$msg)
         $messages[] = _MD_XNPMODEL_CREATOR_REQUIRED;
     }
 
-    if ((!isset($model_data) || $model_data['name'] == '') && $model_dataFileID == '') {
+    if ((!isset($model_data) || '' == $model_data['name']) && '' == $model_dataFileID) {
         // model_data is not filled
         $msg = $msg.'<br /><font color="#ff0000">'._MD_XNPMODEL_MODEL_FILE_REQUIRED.'</font>';
         $result = false;
@@ -598,7 +598,7 @@ function xnpmodelCheckRegisterParameters(&$msg)
     if ($xids[0] != $xoonipsCheckedXID) {
         foreach ($xids as $i) {
             $index = array();
-            if (xnp_get_index($xnpsid, $i, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($xnpsid, $i, $index)) {
                 $indexes[] = $index;
             } else {
                 $msg = $msg.'<br /><font color="#ff0000">'.xnp_get_last_error_string().'</font>';
@@ -613,12 +613,12 @@ function xnpmodelCheckRegisterParameters(&$msg)
                 $readmeEncText = $formdata->getValue('post', 'readmeEncText', 's', false);
                 $rightsEncText = $formdata->getValue('post', 'rightsEncText', 's', false);
                 $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
-                if ($readmeEncText == '') {
+                if ('' == $readmeEncText) {
                     // readme is not filled
                     $msg = $msg.'<br /><font color="#ff0000">'._MD_XNPMODEL_README_REQUIRED.'</font>';
                     $result = false;
                 }
-                if ($rightsEncText == '' && $rightsUseCC == '0') {
+                if ('' == $rightsEncText && '0' == $rightsUseCC) {
                     // license is not filled
                     $msg = $msg.'<br /><font color="#ff0000">'._MD_XNPMODEL_RIGHTS_REQUIRED.'</font>';
                     $result = false;
@@ -844,7 +844,7 @@ function xnpmodelGetModifiedFields($item_id)
     if ($detail) {
         foreach (array('model_type' => _MD_XNPMODEL_MODEL_TYPE_LABEL) as $k => $v) {
             $tmp = $formdata->getValue('post', $k, 's', false);
-            if (!array_key_exists($k, $detail) || $tmp === null) {
+            if (!array_key_exists($k, $detail) || null === $tmp) {
                 continue;
             }
             if ($detail[$k]['value'] != $tmp) {
@@ -854,7 +854,7 @@ function xnpmodelGetModifiedFields($item_id)
         // is readme modified ?
         foreach (array('readme' => _MD_XOONIPS_ITEM_README_LABEL) as $k => $v) {
             $tmp = $formdata->getValue('post', "${k}EncText", 's', false);
-            if (!array_key_exists($k, $detail) || $tmp === null) {
+            if (!array_key_exists($k, $detail) || null === $tmp) {
                 continue;
             }
             if ($tmp != $detail[$k]['value']) {
@@ -865,18 +865,18 @@ function xnpmodelGetModifiedFields($item_id)
         // is rights modified ?
         $rightsUseCC = $formdata->getValue('post', 'rightsUseCC', 'i', false);
         $rightsEncText = $formdata->getValue('post', 'rightsEncText', 's', false);
-        if ($rightsUseCC !== null) {
+        if (null !== $rightsUseCC) {
             if ($rightsUseCC != $detail['use_cc']['value']) {
                 array_push($ret, _MD_XOONIPS_ITEM_RIGHTS_LABEL);
             } else {
-                if ($rightsUseCC == 0) {
-                    if (array_key_exists('rights', $detail) && $rightsEncText != null && $rightsEncText != $detail['rights']['value']) {
+                if (0 == $rightsUseCC) {
+                    if (array_key_exists('rights', $detail) && null != $rightsEncText && $rightsEncText != $detail['rights']['value']) {
                         array_push($ret, _MD_XOONIPS_ITEM_RIGHTS_LABEL);
                     }
-                } elseif ($rightsUseCC == 1) {
+                } elseif (1 == $rightsUseCC) {
                     foreach (array('rightsCCCommercialUse' => 'cc_commercial_use', 'rightsCCModification' => 'cc_modification') as $k => $v) {
                         $tmp = $formdata->getValue('post', $k, 'i', false);
-                        if (!array_key_exists($v, $detail) || $tmp === null) {
+                        if (!array_key_exists($v, $detail) || null === $tmp) {
                             continue;
                         }
                         if ($tmp != $detail[$v]['value']) {
@@ -945,7 +945,7 @@ function xnpmodelGetAttachmentDownloadNotifyOption($item_id)
 
 function xnpmodelSupportMetadataFormat($metadataPrefix, $item_id)
 {
-    if ($metadataPrefix == 'oai_dc' || $metadataPrefix == 'junii2') {
+    if ('oai_dc' == $metadataPrefix || 'junii2' == $metadataPrefix) {
         return true;
     }
 
@@ -981,9 +981,9 @@ function xnpmodelGetMetadata($prefix, $item_id)
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
     // indexes
     $indexes = array();
-    if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
+    if (RES_OK == xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids)) {
         foreach ($xids as $xid) {
-            if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($_SESSION['XNPSID'], $xid, $index)) {
                 $indexes[] = xnpGetIndexPathServerString($_SESSION['XNPSID'], $xid);
             }
         }
@@ -992,7 +992,7 @@ function xnpmodelGetMetadata($prefix, $item_id)
     $files = array();
     $mimetypes = array();
     $file_handler = &xoonips_gethandler('xoonips', 'file');
-    if ($detail['attachment_dl_limit'] == 0) {
+    if (0 == $detail['attachment_dl_limit']) {
         $files = $file_handler->getFilesInfo($item_id, 'model_data');
         foreach ($files as $file) {
             if (!in_array($file['mime_type'], $mimetypes)) {
@@ -1003,14 +1003,14 @@ function xnpmodelGetMetadata($prefix, $item_id)
     $previews = $file_handler->getFilesInfo($item_id, 'preview');
     // rights
     $detail['rights_cc_url'] = '';
-    if ($detail['use_cc'] == 1) {
+    if (1 == $detail['use_cc']) {
         $cond = 'by';
-        if ($detail['cc_commercial_use'] == 0) {
+        if (0 == $detail['cc_commercial_use']) {
             $cond .= '-nc';
         }
-        if ($detail['cc_modification'] == 0) {
+        if (0 == $detail['cc_modification']) {
             $cond .= '-nd';
-        } elseif ($detail['cc_modification'] == 1) {
+        } elseif (1 == $detail['cc_modification']) {
             $cond .= '-sa';
         }
         $detail['rights_cc_url'] = sprintf('http://creativecommons.org/licenses/%s/4.0/', $cond);

@@ -41,7 +41,7 @@ function xnpconferenceTrimAuthorString($author)
     $ar2 = array();
     foreach ($ar as $val) {
         $val = trim($val);
-        if ($val != '') {
+        if ('' != $val) {
             $ar2[] = $val;
         }
     }
@@ -66,7 +66,7 @@ function xnpconferenceGetDetailInformation($item_id)
 
     $sql = 'select * from '.$xoopsDB->prefix('xnpconference_item_detail')." where conference_id=$item_id";
     $result = $xoopsDB->query($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo mysql_error();
 
         return false;
@@ -494,7 +494,7 @@ function xnpconferenceCheckRegisterParameters(&$message)
     if ($xids[0] != $xoonipsCheckedXID) {
         foreach ($xids as $i) {
             $index = array();
-            if (xnp_get_index($xnpsid, $i, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($xnpsid, $i, $index)) {
                 $indexes[] = $index;
             } else {
                 $messages[] = '<font color=\'#ff0000\'>'.xnp_get_last_error_string().'</font>';
@@ -504,7 +504,7 @@ function xnpconferenceCheckRegisterParameters(&$message)
         }
     }
 
-    if (count($messages) == 0) {
+    if (0 == count($messages)) {
         return true;
     }
     $message = "<br />\n".implode("<br />\n", $messages);
@@ -570,7 +570,7 @@ function xnpconferenceInsertItem(&$item_id)
     // register DetailInformation
     $sql = 'insert into '.$xoopsDB->prefix('xnpconference_item_detail')." ( conference_id, $keys ) values ( $item_id, '$vals' ) ";
     $result = $xoopsDB->queryF($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo 'cannot insert item_detail';
 
         return false;
@@ -642,7 +642,7 @@ function xnpconferenceUpdateItem($item_id)
     $attachment_dl_notify = $formdata->getValue('post', 'attachment_dl_notify', 'i', false);
     $sql = implode(',', array('attachment_dl_limit'.'=\''.$attachment_dl_limit.'\'', 'attachment_dl_notify'.'=\''.($attachment_dl_limit ? $attachment_dl_notify : 0).'\'', 'presentation_type'.'=\''.addslashes($ar['presentation_type']).'\'', 'conference_title'.'=\''.addslashes($ar['conference_title']).'\'', 'place'.'=\''.addslashes($ar['place']).'\'', 'abstract'.'=\''.addslashes($ar['abstract']).'\'', 'conference_from_year'.'=\''.addslashes($formdata->getValue('post', 'conferenceFromYear', 'i', false)).'\'', 'conference_from_month'.'=\''.addslashes($formdata->getValue('post', 'conferenceFromMonth', 'i', false)).'\'', 'conference_from_mday'.'=\''.addslashes($formdata->getValue('post', 'conferenceFromDay', 'i', false)).'\'', 'conference_to_year'.'=\''.addslashes($formdata->getValue('post', 'conferenceToYear', 'i', false)).'\'', 'conference_to_month'.'=\''.addslashes($formdata->getValue('post', 'conferenceToMonth', 'i', false)).'\'', 'conference_to_mday'.'=\''.addslashes($formdata->getValue('post', 'conferenceToDay', 'i', false)).'\''));
     $result = $xoopsDB->queryF('update '.$xoopsDB->prefix('xnpconference_item_detail')." set $sql where conference_id = $item_id ");
-    if ($result == false) {
+    if (false == $result) {
         return false;
     }
 
@@ -714,12 +714,12 @@ function xnpconferenceGetAdvancedSearchQuery(&$where, &$join)
         $w .= xnpGetFromQuery($conference_table.'.'.'conference_from', 'xnpconference_publication_date_from');
     }
     if (!empty($xnpconference_publication_date_to)) {
-        if ($w != '') {
+        if ('' != $w) {
             $w .= ' AND ';
         }
         $w .= xnpGetToQuery($conference_table.'.'.'conference_to', 'xnpconference_publication_date_to');
     }
-    if ($w != '') {
+    if ('' != $w) {
         $wheres[] = $w;
     }
     $w = xnpGetKeywordQuery($file_table.'.caption', 'xnpconference_caption');
@@ -774,7 +774,7 @@ function xnpconferenceGetLicenseRequired($item_id)
     }
     $detail = $xoopsDB->fetchArray($result);
 
-    return isset($detail['license']) && $detail['license'] != '';
+    return isset($detail['license']) && '' != $detail['license'];
 }
 
 function xnpconferenceGetLicenseStatement($item_id)
@@ -844,7 +844,7 @@ function xnpconferenceGetModifiedFields($item_id)
     if ($detail) {
         foreach (array('presentation_type' => _MD_XNPCONFERENCE_PRESENTATION_TYPE_LABEL, 'conference_title' => _MD_XNPCONFERENCE_CONFERENCE_TITLE_LABEL, 'place' => _MD_XNPCONFERENCE_PLACE_LABEL, 'abstract' => _MD_XNPCONFERENCE_ABSTRACT_LABEL) as $k => $v) {
             $tmp = $formdata->getValue('post', $k, 's', false);
-            if (!array_key_exists($k, $detail) || $tmp === null) {
+            if (!array_key_exists($k, $detail) || null === $tmp) {
                 continue;
             }
             if ($detail[$k] != $tmp) {
@@ -928,7 +928,7 @@ function xnpconferenceGetAttachmentDownloadNotifyOption($item_id)
 
 function xnpconferenceSupportMetadataFormat($metadataPrefix, $item_id)
 {
-    if ($metadataPrefix == 'oai_dc' || $metadataPrefix == 'junii2') {
+    if ('oai_dc' == $metadataPrefix || 'junii2' == $metadataPrefix) {
         return true;
     }
 
@@ -967,9 +967,9 @@ function xnpconferenceGetMetadata($prefix, $item_id)
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
     // indexes
     $indexes = array();
-    if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
+    if (RES_OK == xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids)) {
         foreach ($xids as $xid) {
-            if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($_SESSION['XNPSID'], $xid, $index)) {
                 $indexes[] = xnpGetIndexPathServerString($_SESSION['XNPSID'], $xid);
             }
         }
@@ -978,7 +978,7 @@ function xnpconferenceGetMetadata($prefix, $item_id)
     $files = array();
     $mimetypes = array();
     $file_handler = &xoonips_gethandler('xoonips', 'file');
-    if ($detail['attachment_dl_limit'] == 0) {
+    if (0 == $detail['attachment_dl_limit']) {
         $files = $file_handler->getFilesInfo($item_id, 'conference_file');
         foreach ($files as $file) {
             if (!in_array($file['mime_type'], $mimetypes)) {
@@ -1010,27 +1010,27 @@ function xnpconferenceGetMetadata($prefix, $item_id)
     if ($detail['conference_from_year'] == $detail['conference_to_year']) {
         if ($detail['conference_from_month'] == $detail['conference_to_month']) {
             if ($detail['conference_from_mday'] == $detail['conference_to_mday']) {
-                if ($basic['lang'] == 'jpn') {
+                if ('jpn' == $basic['lang']) {
                     $fmt = "%1\$d\xe5\xb9\xb4%2\$d\xe6\x9c\x88%3\$d\xe6\x97\xa5";
                 } else {
                     $fmt = '%7$s %3$d, %1$d';
                 }
             } else {
-                if ($basic['lang'] == 'jpn') {
+                if ('jpn' == $basic['lang']) {
                     $fmt = "%1\$d\xe5\xb9\xb4%2\$d\xe6\x9c\x88%3\$d\xe3\x80\x9c%6\$d\xe6\x97\xa5";
                 } else {
                     $fmt = '%7$s %3$d-%6$d, %1$d';
                 }
             }
         } else {
-            if ($basic['lang'] == 'jpn') {
+            if ('jpn' == $basic['lang']) {
                 $fmt = "%1\$d\xe5\xb9\xb4%2\$d\xe6\x9c\x88%3\$d\xe6\x97\xa5\xe3\x80\x9c%5\$d\xe6\x9c\x88%6\$d\xe6\x97\xa5";
             } else {
                 $fmt = '%7$s %3$d-%8$s %6$d, %1$d';
             }
         }
     } else {
-        if ($basic['lang'] == 'jpn') {
+        if ('jpn' == $basic['lang']) {
             $fmt = "%1\$d\xe5\xb9\xb4%2\$d\xe6\x9c\x88%3\$d\xe6\x97\xa5\xe3\x80\x9c%4\$d\xe5\xb9\xb4%5\$d\xe6\x9c\x88%6\$d\xe6\x97\xa5";
         } else {
             $fmt = '%7$s %3$d %1$d-%8$s %6$d %4$d';

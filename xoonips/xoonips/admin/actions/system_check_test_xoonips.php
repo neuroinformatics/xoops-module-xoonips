@@ -31,7 +31,7 @@ function xoonips_admin_system_check_xoonips(&$category)
     $module_handler = &xoops_gethandler('module');
     $module = &$module_handler->getByDirname('xoonips');
 
-    $is_windows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
+    $is_windows = ('WIN' === strtoupper(substr(PHP_OS, 0, 3)));
 
     // version
     $name = 'XooNIps version';
@@ -53,7 +53,7 @@ function xoonips_admin_system_check_xoonips(&$category)
     $ans['message'] = '';
     $ans['etype'] = _XASC_ERRORTYPE_XOONIPS;
     $ans['error'] = _XASC_STATUS_OK;
-    if (trim($upload_dir) == '') {
+    if ('' == trim($upload_dir)) {
         $ans['status'] = _XASC_STATUS_FAIL;
         $ans['label'] = '(no value)';
         $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
@@ -61,14 +61,14 @@ function xoonips_admin_system_check_xoonips(&$category)
         $ans['error'] = _XASC_STATUS_FAIL;
     }
     // -- check absolute directory
-    if ($ans['error'] == _XASC_STATUS_OK) {
+    if (_XASC_STATUS_OK == $ans['error']) {
         if ($is_windows) {
             // trim drive letter
             $upload_dir = preg_replace('/^[a-zA-Z]:/', '', $upload_dir);
             // use '/' file separator
             $upload_dir = str_replace('\\', '/', $upload_dir);
         }
-        if ($upload_dir[0] != '/') {
+        if ('/' != $upload_dir[0]) {
             $ans['status'] = _XASC_STATUS_FAIL;
             $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
             $ans['message'] = 'File upload directory must be absolute path';
@@ -76,7 +76,7 @@ function xoonips_admin_system_check_xoonips(&$category)
         }
     }
     // -- check temporary directory
-    if ($ans['error'] == _XASC_STATUS_OK) {
+    if (_XASC_STATUS_OK == $ans['error']) {
         if (preg_match('/^(\\/var\\/tmp|\\/tmp)(\\/.*)?$/', $upload_dir)) {
             $ans['status'] = _XASC_STATUS_FAIL;
             $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
@@ -85,9 +85,9 @@ function xoonips_admin_system_check_xoonips(&$category)
         }
     }
     // -- check XOOPS_ROOT_PATH
-    if ($ans['error'] == _XASC_STATUS_OK) {
+    if (_XASC_STATUS_OK == $ans['error']) {
         $pos = strpos($upload_dir, XOOPS_ROOT_PATH);
-        if ($pos === 0) {
+        if (0 === $pos) {
             $ans['status'] = _XASC_STATUS_FAIL;
             $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
             $ans['message'] = 'File upload directory should not locate under XOOPS_ROOT_PATH';
@@ -95,7 +95,7 @@ function xoonips_admin_system_check_xoonips(&$category)
         }
     }
     // -- check directory
-    if ($ans['error'] == _XASC_STATUS_OK) {
+    if (_XASC_STATUS_OK == $ans['error']) {
         if (!is_dir($upload_dir)) {
             $ans['status'] = _XASC_STATUS_FAIL;
             $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
@@ -104,7 +104,7 @@ function xoonips_admin_system_check_xoonips(&$category)
         }
     }
     // -- check permission
-    if ($ans['error'] == _XASC_STATUS_OK) {
+    if (_XASC_STATUS_OK == $ans['error']) {
         if (!is_writable($upload_dir) || !is_readable($upload_dir) || (!$is_windows && !is_executable($upload_dir))) {
             $ans['status'] = _XASC_STATUS_FAIL;
             $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_FAIL;
@@ -116,7 +116,7 @@ function xoonips_admin_system_check_xoonips(&$category)
     if (!empty($ans['message'])) {
         $res->setMessage($ans['message']);
     }
-    if ($ans['error'] != _XASC_STATUS_OK) {
+    if (_XASC_STATUS_OK != $ans['error']) {
         $category->setError($ans['etype'], $ans['error']);
     }
     $category->registerResult($res);
@@ -129,7 +129,7 @@ function xoonips_admin_system_check_xoonips(&$category)
     $name = 'Magic file path';
     $res = new XooNIpsAdminSystemCheckResult($name);
     $ans['status'] = _XASC_STATUS_OK;
-    $ans['label'] = ($magic_file_path == '') ? '(empty)' : $magic_file_path;
+    $ans['label'] = ('' == $magic_file_path) ? '(empty)' : $magic_file_path;
     $ans['result'] = _AM_XOONIPS_SYSTEM_CHECK_LABEL_OK;
     $ans['message'] = '';
     $ans['etype'] = _XASC_ERRORTYPE_XOONIPS;
@@ -141,7 +141,7 @@ function xoonips_admin_system_check_xoonips(&$category)
         $ans['etype'] = _XASC_ERRORTYPE_PHP;
         $ans['error'] = _XASC_STATUS_FAIL;
     } else {
-        if ($magic_file_path == '') {
+        if ('' == $magic_file_path) {
             $finfo = @finfo_open(FILEINFO_MIME);
         } else {
             $finfo = @finfo_open(FILEINFO_MIME, $magic_file_path);
@@ -167,7 +167,7 @@ function xoonips_admin_system_check_xoonips(&$category)
     if (!empty($ans['message'])) {
         $res->setMessage($ans['message']);
     }
-    if ($ans['error'] != _XASC_STATUS_OK) {
+    if (_XASC_STATUS_OK != $ans['error']) {
         $category->setError($ans['etype'], $ans['error']);
     }
     $category->registerResult($res);

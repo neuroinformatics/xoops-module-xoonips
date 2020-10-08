@@ -85,7 +85,7 @@ class XooNIpsFileSearchPluginWORD extends XooNIpsFileSearchPlugin
             // execute wvText command
             @system($cmd);
             // restore original lang
-            putenv('LANG='.(($lang === false) ? '' : $lang));
+            putenv('LANG='.((false === $lang) ? '' : $lang));
             $this->handle = @fopen($this->tmpfile, 'rb');
         }
     }

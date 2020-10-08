@@ -48,18 +48,18 @@ function xoops_module_update_xnpfiles($xoopsMod, $oldversion)
         $module_handler = &xoops_gethandler('module');
         $module = &$module_handler->getByDirname('xnpfiles');
         $result = $xoopsDB->query('update '.$xoopsDB->prefix('xoonips_file_type').' set name=\'files_file\', display_name=\'Data file of Files\' where name=\'data_file\' and mid='.$module->mid());
-        if ($result == false) {
+        if (false == $result) {
             echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
             return false;
         }
 
         $result = $xoopsDB->query('select file_type_id from '.$xoopsDB->prefix('xoonips_file_type').' where mid='.$module->mid());
-        if ($result == false) {
+        if (false == $result) {
             echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
             return false;
-        } elseif ($xoopsDB->getRowsNum($result) == 0) {
+        } elseif (0 == $xoopsDB->getRowsNum($result)) {
             echo '&nbsp;&nbsp;can\'t find row of file_type_id<br />';
 
             return false;
@@ -67,11 +67,11 @@ function xoops_module_update_xnpfiles($xoopsMod, $oldversion)
         list($file_type_id) = $xoopsDB->fetchRow($result);
 
         $result = $xoopsDB->query('select item_type_id from '.$xoopsDB->prefix('xoonips_item_type').' where mid='.$module->mid());
-        if ($result == false) {
+        if (false == $result) {
             echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
             return false;
-        } elseif ($xoopsDB->getRowsNum($result) == 0) {
+        } elseif (0 == $xoopsDB->getRowsNum($result)) {
             echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
             return false;
@@ -88,7 +88,7 @@ function xoops_module_update_xnpfiles($xoopsMod, $oldversion)
         }
         if (count($update_ids) > 0) {
             $result = $xoopsDB->query('update '.$xoopsDB->prefix('xoonips_file')." set file_type_id=${file_type_id} where item_id in (".implode(', ', $update_ids).')');
-            if ($result == false) {
+            if (false == $result) {
                 echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
                 return false;
@@ -102,6 +102,7 @@ function xoops_module_update_xnpfiles($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 330:
     case 331:
     case 332:

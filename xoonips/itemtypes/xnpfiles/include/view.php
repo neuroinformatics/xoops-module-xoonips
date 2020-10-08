@@ -43,7 +43,7 @@ function xnpfilesGetTypes()
     $html = array();
     foreach ($files_objs as $files_obj) {
         $ext = $files_obj->getVar('data_file_filetype', 's');
-        if ($ext != '') {
+        if ('' != $ext) {
             $html[$ext] = $ext;
         }
     }
@@ -63,7 +63,7 @@ function xnpfilesGetDetailInformation($item_id)
 
     $sql = 'select * from '.$xoopsDB->prefix('xnpfiles_item_detail')." where files_id=$item_id";
     $result = $xoopsDB->query($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo $xoopsDB->error();
 
         return false;
@@ -83,7 +83,7 @@ function xnpfilesGetDetailDistinctInfo($columns)
 
     $sql = "select distinct($columns) from ".$xoopsDB->prefix('xnpfiles_item_detail')." order by $columns";
     $result = $xoopsDB->query($sql);
-    if ($result == false) {
+    if (false == $result) {
         echo $xoopsDB->error();
 
         return false;
@@ -195,7 +195,7 @@ function xnpfilesGetRegisterBlock()
 
     // get BasicInformation / Preview / index block
     $basic = xnpGetBasicInformationRegisterBlock();
-    if ($basic['title'] == '') {
+    if ('' == $basic['title']) {
         $basic['title'] = ' ';
     }
     $index = xnpGetIndexRegisterBlock();
@@ -204,7 +204,7 @@ function xnpfilesGetRegisterBlock()
     $post_id = $formdata->getValue('get', 'post_id', 's', false);
     if (!is_null($post_id)) {
         $file_id = $formdata->getValue('post', 'files_fileFileID', 'i', false);
-        if ($file_id == 0) {
+        if (0 == $file_id) {
             $data_file_name = '';
             $data_file_mimetype = '';
             $data_file_filetype = '';
@@ -344,7 +344,7 @@ function xnpfilesGetConfirmBlock($item_id)
     $data_file = xnpGetAttachmentConfirmBlock($item_id, 'files_file');
     $file_id = $formdata->getValue('post', 'files_fileFileID', 'i', false);
     // get detail information
-    if (is_null($file_file) && $file_id == 0) {
+    if (is_null($file_file) && 0 == $file_id) {
         $data_file_name = '';
         $data_file_mimetype = '';
         $data_file_filetype = '';
@@ -398,13 +398,13 @@ function xnpfilesCheckRegisterParameters(&$message)
     $xoonipsCheckedXID = $formdata->getValue('post', 'xoonipsCheckedXID', 's', false);
 
     if (empty($file_id) && empty($files_file['name'])) {
-        if ($title == XNPFILES_ITEM_TITLE_EMPTY_MAGIC) {
+        if (XNPFILES_ITEM_TITLE_EMPTY_MAGIC == $title) {
             $formdata->set('post', 'title', '');
             $messages[] = _MD_XOONIPS_ITEM_TITLE_REQUIRED;
         }
         $messages[] = _MD_XNPFILES_DATA_FILE_REQUIRED;
     } else {
-        if ($title == XNPFILES_ITEM_TITLE_EMPTY_MAGIC) {
+        if (XNPFILES_ITEM_TITLE_EMPTY_MAGIC == $title) {
             if (is_null($files_file)) {
                 $file_handler = &xoonips_getormhandler('xoonips', 'file');
                 $file_obj = &$file_handler->get($file_id);
@@ -425,7 +425,7 @@ function xnpfilesCheckRegisterParameters(&$message)
     if ($xids[0] != $xoonipsCheckedXID) {
         foreach ($xids as $i) {
             $index = array();
-            if (xnp_get_index($xnpsid, $i, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($xnpsid, $i, $index)) {
                 $indexes[] = $index;
             } else {
                 $messages[] = '<font color=\'#ff0000\'>'.xnp_get_last_error_string().'</font>';
@@ -434,7 +434,7 @@ function xnpfilesCheckRegisterParameters(&$message)
             }
         }
     }
-    if (count($messages) == 0) {
+    if (0 == count($messages)) {
         return true;
     }
     $message = "<br />\n".implode("<br />\n", $messages);
@@ -599,8 +599,8 @@ function xnpfilesGetAdvancedSearchQuery(&$where, &$join)
     }
     $w = '';
     foreach ($_POST as $key => $value) {
-        if (substr($key, 0, 19) == 'data_file_filetype_') {
-            if ($w != '') {
+        if ('data_file_filetype_' == substr($key, 0, 19)) {
+            if ('' != $w) {
                 $w .= ' or ';
             }
             $w .= $data_table.'.data_file_filetype = \''.substr($key, 19).'\'';
@@ -661,7 +661,7 @@ function xnpfilesGetAttachmentMimetypeAdvancedSearchBlock($name)
     // get attachment file
     // create html
     $files = xnpfilesGetDetailDistinctInfo('data_file_mimetype');
-    if (count($files) == 0) {
+    if (0 == count($files)) {
         $html = '<select name="data_file_mimetype"><option value="">Any</option>
 				</select>';
     } else {
@@ -687,7 +687,7 @@ function xnpfilesGetAttachmentFiletypeAdvancedSearchBlock($name)
     // get attachment file
     // create html
     $files = xnpfilesGetDetailDistinctInfo('data_file_filetype');
-    if (count($files) == 0) {
+    if (0 == count($files)) {
         $html = '<select name="data_file_filetype_Any">
 				<option value="any">Any</option>
 				</select>';
@@ -698,7 +698,7 @@ function xnpfilesGetAttachmentFiletypeAdvancedSearchBlock($name)
 		';
         $cnt = 1;
         foreach ($mimetypes as $key => $value) {
-            if ($value[0] == '') {
+            if ('' == $value[0]) {
                 $html .= '<td><input type="checkbox" name="data_file_filetype_'.$value[0].'"/>none</td>
 				';
             } else {
@@ -732,7 +732,7 @@ function xnpfilesGetDetailInformationTotalSize($iids)
  * @param int      $item_id     target item id
  * @param bool     $attachment  true if export attachment or image file
  *
- * @return null|boolean false if failure
+ * @return bool|null false if failure
  */
 function xnpfilesExportItem($export_path, $fhdl, $item_id, $attachment)
 {
@@ -787,7 +787,7 @@ function xnpfilesGetTopBlock($itemtype)
 
 function xnpfilesSupportMetadataFormat($metadataPrefix, $item_id)
 {
-    if ($metadataPrefix == 'oai_dc' || $metadataPrefix == 'junii2') {
+    if ('oai_dc' == $metadataPrefix || 'junii2' == $metadataPrefix) {
         return true;
     }
 
@@ -814,9 +814,9 @@ function xnpfilesGetMetadata($prefix, $item_id)
     $basic['publication_date_iso8601'] = xnpISO8601($basic['publication_year'], $basic['publication_month'], $basic['publication_mday']);
     // indexes
     $indexes = array();
-    if (xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids) == RES_OK) {
+    if (RES_OK == xnp_get_index_id_by_item_id($_SESSION['XNPSID'], $item_id, $xids)) {
         foreach ($xids as $xid) {
-            if (xnp_get_index($_SESSION['XNPSID'], $xid, $index) == RES_OK) {
+            if (RES_OK == xnp_get_index($_SESSION['XNPSID'], $xid, $index)) {
                 $indexes[] = xnpGetIndexPathServerString($_SESSION['XNPSID'], $xid);
             }
         }

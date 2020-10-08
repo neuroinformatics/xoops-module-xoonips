@@ -97,24 +97,24 @@ $config_values = xoonips_admin_get_configs($config_keys, 'e');
 $myxoopsConfigUser = &xoonips_get_xoops_configs(XOOPS_CONF_USER);
 $au['label'] = _AM_XOONIPS_POLICY_ACCOUNT_ACTIVATE_USER_USER;
 $au['value'] = '0';
-$au['selected'] = ($myxoopsConfigUser['activation_type'] == 0) ? 'yes' : 'no';
+$au['selected'] = (0 == $myxoopsConfigUser['activation_type']) ? 'yes' : 'no';
 $activate_user[] = $au;
 $au['label'] = _AM_XOONIPS_POLICY_ACCOUNT_ACTIVATE_USER_AUTO;
 $au['value'] = '1';
-$au['selected'] = ($myxoopsConfigUser['activation_type'] == 1) ? 'yes' : 'no';
+$au['selected'] = (1 == $myxoopsConfigUser['activation_type']) ? 'yes' : 'no';
 $activate_user[] = $au;
 $au['label'] = _AM_XOONIPS_POLICY_ACCOUNT_ACTIVATE_USER_ADMIN;
 $au['value'] = '2';
-$au['selected'] = ($myxoopsConfigUser['activation_type'] == 2) ? 'yes' : 'no';
+$au['selected'] = (2 == $myxoopsConfigUser['activation_type']) ? 'yes' : 'no';
 $activate_user[] = $au;
 // >> certify user
 $cu['label'] = _AM_XOONIPS_POLICY_ACCOUNT_CERTIFY_USER_MANUAL;
 $cu['value'] = 'on';
-$cu['selected'] = ($config_values['certify_user'] == 'on') ? 'yes' : 'no';
+$cu['selected'] = ('on' == $config_values['certify_user']) ? 'yes' : 'no';
 $certify_user[] = $cu;
 $cu['label'] = _AM_XOONIPS_POLICY_ACCOUNT_CERTIFY_USER_AUTO;
 $cu['value'] = 'auto';
-$cu['selected'] = ($config_values['certify_user'] == 'auto') ? 'yes' : 'no';
+$cu['selected'] = ('auto' == $config_values['certify_user']) ? 'yes' : 'no';
 $certify_user[] = $cu;
 
 // user information requirements
@@ -125,7 +125,7 @@ foreach ($userinfo_config_keys as $name => $label) {
     $ir['name'] = $name;
     $ir['require'] = _AM_XOONIPS_LABEL_REQUIRED;
     $ir['optional'] = _AM_XOONIPS_LABEL_OPTIONAL;
-    $ir['checked'] = ($config_values[$name] == 'on') ? 'yes' : 'no';
+    $ir['checked'] = ('on' == $config_values[$name]) ? 'yes' : 'no';
     $info_requirement[] = $ir;
 }
 
@@ -136,7 +136,7 @@ foreach ($initvals_config_keys as $name => $value) {
     $iv['title'] = $value['title'];
     $iv['desc'] = $value['desc'];
     $iv['name'] = $name;
-    if ($value['type'] == 'f') {
+    if ('f' == $value['type']) {
         $iv['value'] = $config_values[$name] / 1000000.0;
     } else {
         $iv['value'] = $config_values[$name];

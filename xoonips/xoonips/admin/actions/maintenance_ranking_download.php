@@ -34,14 +34,14 @@ $request_keys = array(
 );
 $request_vals = xoonips_admin_get_requests('both', $request_keys);
 $filename = $request_vals['ranking_download_file'];
-if ($filename == '') {
+if ('' == $filename) {
     redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_ILLACCESS);
     exit();
 }
 
 // check token ticket for pathinfo
 $ticket_area = 'xoonips_admin_maintenance_ranking';
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+if ('GET' == $_SERVER['REQUEST_METHOD']) {
     if (!$xoopsGTicket->check(false, $ticket_area, false)) {
         redirect_header($xoonips_admin['mypage_url'], 3, $xoopsGTicket->getErrors());
         exit();
@@ -64,7 +64,7 @@ if (!$download->check_pathinfo($filename)) {
 $admin_ranking_handler = &xoonips_gethandler('xoonips', 'admin_ranking');
 $zipfile_path = $admin_ranking_handler->create_sum_file();
 
-if ($zipfile_path === false) {
+if (false === $zipfile_path) {
     redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MAINTENANCE_RANKING_LOCKED);
     exit();
 }

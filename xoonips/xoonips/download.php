@@ -57,7 +57,7 @@ function download_error($num, $msg = '')
 function download_create_zipfile($file_id, $item_id, $file_name, $metadata, $file_path)
 {
     $file_handler = &xoonips_gethandler('xoonips', 'file');
-    if ($file_path === false) {
+    if (false === $file_path) {
         $file_path = $file_handler->getFilePath($file_id);
     }
     if (!file_exists($file_path)) {
@@ -68,7 +68,7 @@ function download_create_zipfile($file_id, $item_id, $file_name, $metadata, $fil
     $dirutil = &xoonips_getutility('directory');
     $metafile_path = $dirutil->get_template('XooNIpsDownloadMetaFile');
     $metafile_fp = $dirutil->mkstemp($metafile_path);
-    if ($metafile_fp === false) {
+    if (false === $metafile_fp) {
         // failed to create temporary file for metadata
         return false;
     }
@@ -98,14 +98,14 @@ function download_create_zipfile($file_id, $item_id, $file_name, $metadata, $fil
     // open zipfile
     $zipfile_path = $dirutil->get_template('XooNIpsDownloadZipFile');
     $zipfile_fp = $dirutil->mkstemp($zipfile_path);
-    if ($zipfile_fp === false) {
+    if (false === $zipfile_fp) {
         // failed to create temporary file for zip
         return false;
     }
     register_shutdown_function('download_unlink', $zipfile_path);
     fclose($zipfile_fp);
     $ziputil = &xoonips_getutility('zip');
-    if ($ziputil->open($zipfile_path) == false) {
+    if (false == $ziputil->open($zipfile_path)) {
         // failed to open zip file
         return false;
     }
@@ -135,7 +135,7 @@ $download = &xoonips_getutility('download');
 $file_handler = &xoonips_gethandler('xoonips', 'file');
 
 $uid = is_object($xoopsUser) ? $xoopsUser->getVar('uid', 's') : UID_GUEST;
-$is_post = $formdata->getRequestMethod() == 'POST' ? true : false;
+$is_post = 'POST' == $formdata->getRequestMethod() ? true : false;
 
 // get parameters
 $file_id = $formdata->getValue('both', 'file_id', 'i', false);
@@ -143,7 +143,7 @@ if (is_null($file_id)) {
     // try to get file_id from doi parameter - NTTDK and Keio University 20080825
     $doi = $formdata->getValue('both', XNP_CONFIG_DOI_FIELD_PARAM_NAME, 's', false);
     $file_id = $file_handler->getFileIdByDOI($doi);
-    if ($file_id === false) {
+    if (false === $file_id) {
         download_error(404);
     }
 }
@@ -182,7 +182,7 @@ if (is_null($itemtype_mid)) {
 $itemtype_handler = &xoonips_getormhandler('xoonips', 'item_type');
 $criteria = new Criteria('mid', $itemtype_mid);
 $itemtype_objs = &$itemtype_handler->getObjects($criteria);
-if (count($itemtype_objs) != 1) {
+if (1 != count($itemtype_objs)) {
     download_error(500, _MD_XOONIPS_ITEM_BAD_FILE_TYPE);
 }
 $itemtype_name = $itemtype_objs[0]->get('name');
@@ -200,7 +200,7 @@ require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype_viewphp;
 $dllimit_func = $itemtype_name.'GetAttachmentDownloadLimitOption';
 if (function_exists($dllimit_func) && $dllimit_func($item_id)) {
     // only registered user can download file
-    if ($uid == UID_GUEST) {
+    if (UID_GUEST == $uid) {
         // if user is guest than redirect to login page
         $parsed = parse_url(XOOPS_URL);
         $xoops_path = isset($parsed['path']) ? $parsed['path'] : '';
@@ -242,7 +242,7 @@ $download_file_compression = $xconfig_handler->getValue('download_file_compressi
 if (is_null($download_file_compression)) {
     download_error(500, _MD_XOONIPS_DOWNLOAD_ABNORMAL_CONFIGURATION);
 }
-$do_compress = $download_file_compression == 'on';
+$do_compress = 'on' == $download_file_compression;
 
 $filename = $xf_obj->get('original_file_name');
 $zip_filename = $itemtype_displayname.'_'.$file_id.'.zip';
@@ -278,7 +278,7 @@ if ($do_compress) {
     $filename = $download->convert_to_client($filename, 'u');
     $dl_filepath = download_create_zipfile($file_id, $item_id, $filename, $metadata, $dl_filepath);
 
-    if ($dl_filepath === false) {
+    if (false === $dl_filepath) {
         download_error(500, _MD_XOONIPS_ITEM_CANNOT_CREATE_TMPFILE);
     }
     if (is_null($dl_filename)) {
@@ -286,7 +286,7 @@ if ($do_compress) {
     }
     $dl_mimetype = 'application/x-zip';
 } else {
-    if ($dl_filepath === false) {
+    if (false === $dl_filepath) {
         $dl_filepath = $file_handler->getFilePath($file_id);
     }
     $dl_filename = $download->convert_to_client($filename, 'u');

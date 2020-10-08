@@ -104,7 +104,7 @@ class XooNIpsViewTransfer extends XooNIpsView
 
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $index = $index_handler->get($index_id);
-        if ($index == false) {
+        if (false == $index) {
             return '';
         }
         $user = &$user_handler->get($index->get('uid'));

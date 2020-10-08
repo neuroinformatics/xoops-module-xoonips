@@ -84,7 +84,7 @@ class JuniiListRecordsHandler extends ListRecordsHandler
 
     public function startElementHandler($parser, $name, $attribs)
     {
-        if ($this->getElementName($name) == 'IDENTIFIER') {
+        if ('IDENTIFIER' == $this->getElementName($name)) {
             if ($this->isTypeIsURL($attribs)) {
                 $this->_identifierTypeAttr = 'URL';
             } else {
@@ -92,7 +92,7 @@ class JuniiListRecordsHandler extends ListRecordsHandler
             }
             $this->_cdata_buf = '';
             array_push($this->tagstack, $name);
-        } elseif ($this->getElementName($name) == 'META') {
+        } elseif ('META' == $this->getElementName($name)) {
             $this->_namespaces = $this->getNamespaceArray($attribs);
             array_push($this->tagstack, $name);
         } else {
@@ -102,27 +102,27 @@ class JuniiListRecordsHandler extends ListRecordsHandler
 
     public function endElementHandler($parser, $name)
     {
-        if (isset($this->tagstack[3]) && $this->getElementName($this->tagstack[3]) == 'HEADER' || !in_array($this->getElementName(end($this->tagstack)), $this->_support_tags)
+        if (isset($this->tagstack[3]) && 'HEADER' == $this->getElementName($this->tagstack[3]) || !in_array($this->getElementName(end($this->tagstack)), $this->_support_tags)
         ) {
             parent::endElementHandler($parser, $name);
-        } elseif ($this->getElementName(end($this->tagstack)) == 'DATE.MODIFIED'
+        } elseif ('DATE.MODIFIED' == $this->getElementName(end($this->tagstack))
         ) {
             $this->_last_update_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
             $this->addMetadataField(end($this->tagstack), $this->_cdata_buf, XOONIPS_METADATA_CATEGORY_LAST_UPDATE_DATE);
             array_pop($this->tagstack);
-        } elseif ($this->getElementName(end($this->tagstack)) == 'DATE.CREATED') {
+        } elseif ('DATE.CREATED' == $this->getElementName(end($this->tagstack))) {
             $this->_creation_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
             $this->addMetadataField(end($this->tagstack), $this->_cdata_buf, XOONIPS_METADATA_CATEGORY_CREATION_DATE);
             array_pop($this->tagstack);
-        } elseif ($this->getElementName(end($this->tagstack)) == 'DATE') {
+        } elseif ('DATE' == $this->getElementName(end($this->tagstack))) {
             $this->_date = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
             $this->addMetadataField(end($this->tagstack), $this->_cdata_buf, XOONIPS_METADATA_CATEGORY_DATE);
             array_pop($this->tagstack);
-        } elseif ($this->getElementName(end($this->tagstack)) == 'IDENTIFIER'
-            && $this->_identifierTypeAttr == 'URL'
+        } elseif ('IDENTIFIER' == $this->getElementName(end($this->tagstack))
+            && 'URL' == $this->_identifierTypeAttr
         ) {
             $this->_resource_url[] = $this->_cdata_buf;
             $this->search_text[] = $this->_cdata_buf;
@@ -138,8 +138,8 @@ class JuniiListRecordsHandler extends ListRecordsHandler
     {
         foreach ($attribs as $key => $val) {
             $tmp = preg_split('/:/', $key);
-            if (end($tmp) == 'TYPE') {
-                return $val == 'URL';
+            if ('TYPE' == end($tmp)) {
+                return 'URL' == $val;
             }
         }
 

@@ -75,7 +75,7 @@ function &get_xoonips_unregistered_users()
     foreach ($users_objs as $users_obj) {
         $uid = $users_obj->getVar('uid', 's');
         $criteria = new Criteria('uid', $uid);
-        if ($xusers_handler->getCount($criteria) == 0) {
+        if (0 == $xusers_handler->getCount($criteria)) {
             $user['uid'] = $uid;
             $user['uname'] = $users_obj->getVar('uname', 's');
             $user['name'] = $users_obj->getVar('name', 's');
@@ -84,14 +84,14 @@ function &get_xoonips_unregistered_users()
             $user['register'] = _AM_XOONIPS_LABEL_REGISTER;
             $user['evenodd'] = $evenodd;
             $users[] = $user;
-            $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+            $evenodd = ('even' == $evenodd) ? 'odd' : 'even';
         }
     }
 
     return $users;
 }
 $users = get_xoonips_unregistered_users();
-$has_users = (count($users) == 0) ? false : true;
+$has_users = (0 == count($users)) ? false : true;
 
 // assign template variables
 $tmpl->addVar('header', 'TITLE', $title);
@@ -156,7 +156,7 @@ function render_zombie_list()
             $zombie['itemcount'] = 0;
         }
         $zombies[] = $zombie;
-        $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+        $evenodd = ('even' == $evenodd) ? 'odd' : 'even';
     }
     $has_zombies = (count($zombies) > 0) ? true : false;
 
@@ -179,7 +179,7 @@ xoops_cp_footer();
  * get number of user's items of specified open level(ignore certify state).
  *
  * @param int $uid        user id
- * @param integer $open_level OL_PUBLIC|OL_GROUP_ONLY|OL_PRIVATE
+ * @param int $open_level OL_PUBLIC|OL_GROUP_ONLY|OL_PRIVATE
  *
  * @return int
  */
@@ -228,7 +228,7 @@ function get_uname_by_index_title($uid, $fmt)
     $criteria->add(new Criteria('parent_index_id', IID_ROOT));
     $criteria->add(new Criteria('open_level', OL_PRIVATE));
     $index_objs = &$index_handler->getObjects($criteria);
-    if (count($index_objs) != 1) {
+    if (1 != count($index_objs)) {
         return '';
     }
     $index_obj = &$index_objs[0];
@@ -237,7 +237,7 @@ function get_uname_by_index_title($uid, $fmt)
     $criteria = new CriteriaCompo(new Criteria('item_id', $index_id));
     $criteria->add(new Criteria('title_id', DEFAULT_INDEX_TITLE_OFFSET));
     $title_objs = &$title_handler->getObjects($criteria);
-    if (count($title_objs) != 1) {
+    if (1 != count($title_objs)) {
         return '';
     }
     $title_obj = &$title_objs[0];

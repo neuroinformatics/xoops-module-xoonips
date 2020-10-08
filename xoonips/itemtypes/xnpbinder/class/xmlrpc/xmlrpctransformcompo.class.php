@@ -55,7 +55,7 @@ class XNPBinderXmlRpcTransformCompo extends XooNIpsXmlRpcTransformCompo
         $basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $item_ids = array();
         foreach ($in_array['detail_field'] as $field) {
-            if (trim($field['name']) != 'item_id') {
+            if ('item_id' != trim($field['name'])) {
                 continue;
             }
             $basic = &$basic_handler->get($field['value']);

@@ -138,7 +138,7 @@ class XooNIpsOrmIndexItemLinkHandler extends XooNIpsTableObjectHandler
         foreach ($index_item_links as $index_item_link) {
             $item_id = $index_item_link->get('item_id');
             $iids[$item_id] = $item_id;
-            if ($index_item_link->get('certify_state') == CERTIFIED) {
+            if (CERTIFIED == $index_item_link->get('certify_state')) {
                 $certified_iids[$item_id] = $item_id;
             }
         }
@@ -203,7 +203,7 @@ class XooNIpsOrmIndexItemLinkHandler extends XooNIpsTableObjectHandler
      * @param uid uid who access to this item
      * @param operation accept|reject|withdraw
      *
-     * @return boolean if permitted
+     * @return bool if permitted
      */
     public function getPerm($index_id, $item_id, $uid, $operation)
     {
@@ -212,7 +212,7 @@ class XooNIpsOrmIndexItemLinkHandler extends XooNIpsTableObjectHandler
             return false;
         }
 
-        if ($uid == UID_GUEST) {
+        if (UID_GUEST == $uid) {
             // guest cannot accept/reject/withdraw
             return false;
         }
@@ -220,11 +220,11 @@ class XooNIpsOrmIndexItemLinkHandler extends XooNIpsTableObjectHandler
         // cannot accept/reject/withdraw to private index
         $index_handler = &xoonips_getormhandler('xoonips', 'index');
         $index = $index_handler->get($index_id);
-        if ($index === false || $index->get('open_level') == OL_PRIVATE) {
+        if (false === $index || OL_PRIVATE == $index->get('open_level')) {
             return false;
         }
 
-        if ($operation == 'withdraw') {
+        if ('withdraw' == $operation) {
             $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
             if ($item_lock_handler->isLocked($item_id)) {
                 // cannot withdraw locked item
@@ -234,13 +234,13 @@ class XooNIpsOrmIndexItemLinkHandler extends XooNIpsTableObjectHandler
 
         // get certify_state
         $index_item_link = &$this->getByIndexIdAndItemId($index_id, $item_id);
-        if ($index_item_link == false) {
+        if (false == $index_item_link) {
             // no such index_item_link
             return false;
         }
         $certify_state = $index_item_link->get('certify_state');
 
-        if ($certify_state == CERTIFY_REQUIRED && $operation == 'accept' || $certify_state == CERTIFY_REQUIRED && $operation == 'reject' || $certify_state == CERTIFIED && $operation == 'withdraw') {
+        if (CERTIFY_REQUIRED == $certify_state && 'accept' == $operation || CERTIFY_REQUIRED == $certify_state && 'reject' == $operation || CERTIFIED == $certify_state && 'withdraw' == $operation) {
             // moderator or admin?
             $member_handler = &xoonips_gethandler('xoonips', 'member');
             if ($member_handler->isModerator($uid) || $member_handler->isAdmin($uid)) {
@@ -248,7 +248,7 @@ class XooNIpsOrmIndexItemLinkHandler extends XooNIpsTableObjectHandler
             }
 
             // group admin && group index ?
-            if ($index->get('open_level') == OL_GROUP_ONLY) {
+            if (OL_GROUP_ONLY == $index->get('open_level')) {
                 $xgroup_handler = &xoonips_gethandler('xoonips', 'group');
                 if ($xgroup_handler->isGroupAdmin($uid, $index->get('gid'))) {
                     return true;

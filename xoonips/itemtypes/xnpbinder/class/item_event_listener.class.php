@@ -56,7 +56,7 @@ class XNPBinderItemEventListener extends XooNIpsItemEventListener
                 continue;
             }
 
-            if (count($child_items) == 1) {
+            if (1 == count($child_items)) {
                 $item_handler = &xoonips_getormcompohandler('xnpbinder', 'item');
                 $binder = $item_handler->get($bilink->get('binder_id'));
                 $basic = $binder->getVar('basic');

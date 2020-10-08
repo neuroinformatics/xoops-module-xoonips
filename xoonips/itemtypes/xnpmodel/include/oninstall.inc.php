@@ -34,7 +34,7 @@ function xoops_module_install_xnpmodel($xoopsMod)
     $table = $xoopsDB->prefix('xoonips_item_type');
     $mid = $xoopsMod->getVar('mid');
     $sql = "INSERT INTO $table ( name, display_name, mid, viewphp ) VALUES ( 'xnpmodel', 'Model', $mid, 'xnpmodel/include/view.php' )";
-    if ($xoopsDB->query($sql) == false) {
+    if (false == $xoopsDB->query($sql)) {
         // cannot register itemtype
         return false;
     }
@@ -43,7 +43,7 @@ function xoops_module_install_xnpmodel($xoopsMod)
     $table = $xoopsDB->prefix('xoonips_file_type');
     $mid = $xoopsMod->getVar('mid');
     $sql = "INSERT INTO $table ( name, display_name, mid ) VALUES ( 'model_data', 'Model Data', $mid )";
-    if ($xoopsDB->query($sql) == false) {
+    if (false == $xoopsDB->query($sql)) {
         // cannot register itemtype
         return false;
     }
@@ -61,7 +61,7 @@ function xoops_module_install_xnpmodel($xoopsMod)
             $criteria->add(new Criteria('gperm_name', 'module_read'));
 
             $objects = &$gperm_handler->getObjects($criteria);
-            if (count($objects) == 1) {
+            if (1 == count($objects)) {
                 $gperm_handler->delete($objects[0]);
             }
         }

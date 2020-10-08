@@ -95,7 +95,7 @@ function _xoonips_eventlog_text2csv($text)
  * convert text array to csv line.
  *
  * @param object $download XooNIpsDownload instance
- * @param array  $oneline   input text array
+ * @param array  $oneline  input text array
  *
  * @return string one line of csv text
  */
@@ -104,7 +104,7 @@ function _xoonips_eventlog_array2csv(&$download, $oneline)
     $text = '';
     $fieldsize = count($oneline);
     for ($i = 0; $i < $fieldsize; ++$i) {
-        if ($i != 0) {
+        if (0 != $i) {
             $text .= ',';
         }
         $field = $download->convert_to_client($oneline[$i], 'h');
@@ -130,18 +130,18 @@ function _xoonips_eventlog_date2time($is_from, $year, $month, $day = 0)
     $month = intval($month);
     $day = intval($day);
     if ($is_from) {
-        if ($day == 0) {
+        if (0 == $day) {
             $day = 1;
         }
         $hour = 0;
         $min = 0;
         $sec = 0;
     } else {
-        if ($day == 0) {
+        if (0 == $day) {
             $no31days = array(2, 4, 6, 9, 11);
             if (in_array($month, $no31days)) {
-                if ($month == 2) {
-                    if ($year % 4 == 0 && ($year % 400 == 0 || $year % 100 != 0)) {
+                if (2 == $month) {
+                    if (0 == $year % 4 && (0 == $year % 400 || 0 != $year % 100)) {
                         $day = 29; // leap year
                     } else {
                         $day = 28;
@@ -225,7 +225,7 @@ function &_xoonips_eventlog_get($start_time, $end_time, $event_type_id, $query_t
     $eventlog_handler = &xoonips_getormhandler('xoonips', 'event_log');
     $criteria = new CriteriaCompo(new Criteria($tables['event_log'].'.timestamp', $start_time, '>='));
     $criteria->add(new Criteria($tables['event_log'].'.timestamp', $end_time, '<='));
-    if ($event_type_id != 0) {
+    if (0 != $event_type_id) {
         $criteria->add(new Criteria('event_type_id', $event_type_id));
     }
     switch ($query_type) {
@@ -503,7 +503,7 @@ function _xoonips_eventlog_make_month_labels($start_time, $end_time)
             break;
         }
         list($year, $month) = array_map('intval', explode('-', $label));
-        if ($month == 12) {
+        if (12 == $month) {
             ++$year;
             $month = 1;
         } else {
@@ -578,7 +578,7 @@ function xoonips_eventlog_get_request_date($is_post, $has_day)
             if (!$has_day) {
                 $data['Day'] = 0;
             }
-            $parsed_time = _xoonips_eventlog_date2time(($pre == 'StartDate'), $data['Year'], $data['Month'], $data['Day']);
+            $parsed_time = _xoonips_eventlog_date2time(('StartDate' == $pre), $data['Year'], $data['Month'], $data['Day']);
         } else {
             $parsed_time = $formdata->getValue('get', $pre, 'i', false, 0);
         }
@@ -608,13 +608,13 @@ function xoonips_eventlog_download($is_post, $log_type_id)
     list($suffix, $event_type_id, $query_type, $csv_title, $graph_title) = _xoonips_eventlog_logtype2vars($log_type_id);
 
     // get request
-    $has_days = ($log_type_id == 0);
+    $has_days = (0 == $log_type_id);
     $time_range = xoonips_eventlog_get_request_date($is_post, $has_days);
     $start_time = $time_range['StartDate']['value'];
     $end_time = $time_range['EndDate']['value'];
     $start_label = $time_range['StartDate']['label'];
     $end_label = $time_range['EndDate']['label'];
-    $filename = $start_label.'-'.$end_label.(($suffix == '') ? '' : '-'.$suffix).'.csv';
+    $filename = $start_label.'-'.$end_label.(('' == $suffix) ? '' : '-'.$suffix).'.csv';
 
     // check time range
     if ($start_time > $end_time) {
@@ -649,7 +649,7 @@ function xoonips_eventlog_download($is_post, $log_type_id)
     $download->output_header($filename, $mimetype, 0);
 
     // output csv title and header
-    if ($csv_title != '') {
+    if ('' != $csv_title) {
         echo $csv_title."\r\n";
     }
     echo $csv_header."\r\n";
@@ -691,7 +691,7 @@ function xoonips_eventlog_download($is_post, $log_type_id)
             $label = date('Y-m-d', $start_time + 86400 * $i);
             $count = (array_key_exists($label, $logs)) ? $logs[$label] : 0;
             $total += $count;
-            $num = ($query_type == 'total') ? $total : $count;
+            $num = ('total' == $query_type) ? $total : $count;
             echo _xoonips_eventlog_array2csv($download, array($label, $num));
         }
         break;
@@ -739,7 +739,7 @@ function xoonips_eventlog_download($is_post, $log_type_id)
             $cnt = $obj->getExtraVar('cnt');
             $logs[$item_id][$event_month] = $cnt;
             if (!isset($names[$item_id])) {
-                $names[$item_id]['name'] = ($name != '') ? $name : $uname;
+                $names[$item_id]['name'] = ('' != $name) ? $name : $uname;
                 $names[$item_id]['item_type'] = $itemtype_name;
                 $names[$item_id]['title'] = xoonips_eventlog_get_item_title($item_id);
             }
@@ -774,7 +774,7 @@ function xoonips_eventlog_download($is_post, $log_type_id)
             if (!isset($file_info[$file_id])) {
                 $file_info[$file_id]['fname'] = $obj->getExtraVar('fname');
                 $file_info[$file_id]['title'] = xoonips_eventlog_get_item_title($item_id);
-                $file_info[$file_id]['uname'] = ($name == '') ? $uname : $uname;
+                $file_info[$file_id]['uname'] = ('' == $name) ? $uname : $uname;
                 $file_info[$file_id]['itemtype'] = $obj->getExtraVar('itemtype_name');
             }
         }
@@ -1053,13 +1053,13 @@ function xoonips_eventlog_graph($log_type_id)
             if ($days < 70) {
                 $day_label = strval(intval($day));
             } elseif ($days < 190) {
-                if ($day == '01') {
+                if ('01' == $day) {
                     $day_label = $year.'.'.$month;
                 } else {
                     $day_label = '';
                 }
             } else {
-                if ($day == '01' && ((intval($month) % 3 == 1))) {
+                if ('01' == $day && ((1 == intval($month) % 3))) {
                     $day_label = $year.'.'.$month;
                 } else {
                     $day_label = '';
@@ -1067,7 +1067,7 @@ function xoonips_eventlog_graph($log_type_id)
             }
             // set data
             $xdata[] = $day_label;
-            $ydata[] = ($query_type == 'total') ? $amount : $count;
+            $ydata[] = ('total' == $query_type) ? $amount : $count;
         }
         break;
     case 'month':

@@ -123,20 +123,21 @@ class XooNIpsTableObject extends XoopsObject
      * @parem bool $doxcode use xcode
      * @parem bool $dosmiley use smiley marks
      * @parem bool $dobr use <br /> new line
-     * @param boolean $dohtml
-     * @param boolean $doxcode
-     * @param boolean $dosmiley
-     * @param boolean $dobr
+     *
+     * @param bool $dohtml
+     * @param bool $doxcode
+     * @param bool $dosmiley
+     * @param bool $dobr
      */
     public function setTextAreaDisplayAttributes($dohtml, $doxcode, $dosmiley, $dobr)
     {
-        $this->vars['dohtml']['value'] = ($dohtml === true) ? 1 : 0;
+        $this->vars['dohtml']['value'] = (true === $dohtml) ? 1 : 0;
         $this->vars['dohtml']['changed'] = false;
-        $this->vars['doxcode']['value'] = ($doxcode === true) ? 1 : 0;
+        $this->vars['doxcode']['value'] = (true === $doxcode) ? 1 : 0;
         $this->vars['doxcode']['changed'] = false;
-        $this->vars['dosmiley']['value'] = ($dosmiley === true) ? 1 : 0;
+        $this->vars['dosmiley']['value'] = (true === $dosmiley) ? 1 : 0;
         $this->vars['dosmiley']['changed'] = false;
-        $this->vars['dobr']['value'] = ($dobr === true) ? 1 : 0;
+        $this->vars['dobr']['value'] = (true === $dobr) ? 1 : 0;
         $this->vars['dobr']['changed'] = false;
     }
 
@@ -148,7 +149,7 @@ class XooNIpsTableObject extends XoopsObject
      * @param mixed
      * @param bool   $required  require html form input?
      * @param int    $maxlength for XOBJ_DTYPE_TXTBOX type only
-     * @param string $options    does this data have any select options?
+     * @param string $options   does this data have any select options?
      */
     public function initVar($key, $data_type, $value = null, $required = false, $maxlength = null, $options = '')
     {
@@ -175,12 +176,12 @@ class XooNIpsTableObject extends XoopsObject
      * @param mixed  $value   value to assign
      * @param bool   $not_gpc
      *
-     * @return null|boolean false if failed
+     * @return bool|null false if failed
      */
     public function setVar($key, $value, $not_gpc = false)
     {
         if (XOONIPS_DEBUG_MODE) {
-            if ($not_gpc == false) {
+            if (false == $not_gpc) {
                 // fatal error if not gpc data set
                 echo '<pre>';
                 print_r(debug_backtrace());
@@ -217,7 +218,7 @@ class XooNIpsTableObject extends XoopsObject
             }
             $format = strtolower($format);
             // fatail error if $format given 'p' or 'f' option
-            if ($format == 'p' || $format == 'preview' || $format == 'f' || $format == 'formpreview') {
+            if ('p' == $format || 'preview' == $format || 'f' == $format || 'formpreview' == $format) {
                 $cname = get_class($this);
                 echo '<pre>';
                 print_r(debug_backtrace());
@@ -247,11 +248,11 @@ class XooNIpsTableObject extends XoopsObject
             switch ($format) {
             case 's':
             case 'show':
-                $html = (isset($this->vars['dohtml']['value']) && $this->vars['dohtml']['value'] == 1);
-                $xcode = (isset($this->vars['doxcode']['value']) && $this->vars['doxcode']['value'] == 1);
-                $smiley = (isset($this->vars['dosmiley']['value']) && $this->vars['dosmiley']['value'] == 1);
-                $image = (isset($this->vars['doimage']['value']) && $this->vars['doimage']['value'] == 1);
-                $br = (isset($this->vars['dobr']['value']) && $this->vars['dobr']['value'] == 1);
+                $html = (isset($this->vars['dohtml']['value']) && 1 == $this->vars['dohtml']['value']);
+                $xcode = (isset($this->vars['doxcode']['value']) && 1 == $this->vars['doxcode']['value']);
+                $smiley = (isset($this->vars['dosmiley']['value']) && 1 == $this->vars['dosmiley']['value']);
+                $image = (isset($this->vars['doimage']['value']) && 1 == $this->vars['doimage']['value']);
+                $br = (isset($this->vars['dobr']['value']) && 1 == $this->vars['dobr']['value']);
                 $ret = $textutil->display_text_area($ret, $html, $smiley, $xcode, $image, $br);
 
                 return $ret;
@@ -289,7 +290,7 @@ class XooNIpsTableObject extends XoopsObject
             }
             break;
         default:
-            if ($this->vars[$key]['options'] != '' && $ret != '') {
+            if ('' != $this->vars[$key]['options'] && '' != $ret) {
                 switch ($format) {
                 case 's':
                 case 'show':
@@ -442,7 +443,7 @@ class XooNIpsTableObject extends XoopsObject
      *
      * @param obj XooNIpsTableObject or empty value
      *
-     * @return boolean if all vars equal to obj vars
+     * @return bool if all vars equal to obj vars
      */
     public function equals($obj)
     {
@@ -473,7 +474,7 @@ class XooNIpsTableObject extends XoopsObject
                 $cleanv = is_string($cleanv) ? trim($cleanv) : $cleanv;
                 switch ($v['data_type']) {
                 case XOBJ_DTYPE_TXTBOX:
-                    if ($v['required'] && $cleanv != '0' && $cleanv == '') {
+                    if ($v['required'] && '0' != $cleanv && '' == $cleanv) {
                         $this->setErrors("$k is required.");
                         continue 2;
                     }
@@ -484,7 +485,7 @@ class XooNIpsTableObject extends XoopsObject
                     }
                     break;
                 case XOBJ_DTYPE_TXTAREA:
-                    if ($v['required'] && $cleanv != '0' && $cleanv == '') {
+                    if ($v['required'] && '0' != $cleanv && '' == $cleanv) {
                         $this->setErrors("$k is required.");
                         continue 2;
                     }
@@ -499,21 +500,21 @@ class XooNIpsTableObject extends XoopsObject
                     }
                     break;
                 case XOBJ_DTYPE_EMAIL:
-                    if ($v['required'] && $cleanv == '') {
+                    if ($v['required'] && '' == $cleanv) {
                         $this->setErrors("$k is required.");
                         continue 2;
                     }
-                    if ($cleanv != '' && !preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+([\.][a-z0-9-]+)+$/i", $cleanv)) {
+                    if ('' != $cleanv && !preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+([\.][a-z0-9-]+)+$/i", $cleanv)) {
                         $this->setErrors('Invalid Email');
                         continue 2;
                     }
                     break;
                 case XOBJ_DTYPE_URL:
-                    if ($v['required'] && $cleanv == '') {
+                    if ($v['required'] && '' == $cleanv) {
                         $this->setErrors("$k is required.");
                         continue 2;
                     }
-                    if ($cleanv != '' && !preg_match("/^http[s]*:\/\//i", $cleanv)) {
+                    if ('' != $cleanv && !preg_match("/^http[s]*:\/\//i", $cleanv)) {
                         $cleanv = 'http://'.$cleanv;
                     }
                     break;
@@ -527,7 +528,7 @@ class XooNIpsTableObject extends XoopsObject
                     break;
                 case XOBJ_DTYPE_BINARY:
                         $cleanv = $v['value'];
-                    if ($v['required'] && (is_null($cleanv) || $cleanv === '')) {
+                    if ($v['required'] && (is_null($cleanv) || '' === $cleanv)) {
                         $this->setErrors($k.' is required.');
                         continue 2;
                     }
@@ -646,7 +647,7 @@ class XooNIpsTableObject extends XoopsObject
         if (!isset($this->vars[$key])) {
             return false;
         }
-        if ($this->vars[$key]['data_type'] == XOBJ_DTYPE_TXTAREA) {
+        if (XOBJ_DTYPE_TXTAREA == $this->vars[$key]['data_type']) {
             // must be mysql data type 'text' or 'blob'
             return 65535;
         }
@@ -811,7 +812,7 @@ class XooNIpsTableObjectHandler extends XoopsObjectHandler
             $sql = sprintf('SELECT * FROM `%s` WHERE `%s`=%s', $this->db->prefix($this->__table_name), $this->__key_name, $id_str);
             if ($result = &$this->_query($sql)) {
                 $numrows = $this->db->getRowsNum($result);
-                if ($numrows == 1) {
+                if (1 == $numrows) {
                     $obj = new $this->__class_name();
                     $obj->assignVars($this->db->fetchArray($result));
                     $ret = &$obj;
@@ -966,7 +967,7 @@ class XooNIpsTableObjectHandler extends XoopsObjectHandler
     public function &open($criteria = null, $fieldlist = '', $distinct = false, $joindef = null)
     {
         $limit = $start = 0;
-        if (isset($criteria) && (is_subclass_of($criteria, 'criteriaelement') || strtolower(get_class($criteria)) == 'criteriaelement')) {
+        if (isset($criteria) && (is_subclass_of($criteria, 'criteriaelement') || 'criteriaelement' == strtolower(get_class($criteria)))) {
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
@@ -1022,7 +1023,7 @@ class XooNIpsTableObjectHandler extends XoopsObjectHandler
     public function getCount($criteria = null, $joindef = null)
     {
         $sql = sprintf('SELECT COUNT(*) FROM `%s`', $this->db->prefix($this->__table_name));
-        if (is_object($joindef) && strtolower(get_class($joindef)) == 'xoonipsjoincriteria') {
+        if (is_object($joindef) && 'xoonipsjoincriteria' == strtolower(get_class($joindef))) {
             $sql .= $joindef->render($this->db, $this->__table_name, false);
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
@@ -1122,8 +1123,8 @@ class XooNIpsTableObjectHandler extends XoopsObjectHandler
         }
 
         $sql = '';
-        if (isset($unioncriteria) && (is_subclass_of($unioncriteria, 'criteriaelement') || strtolower(get_class($unioncriteria)) == 'criteriaelement')) {
-            if ($unioncriteria->getGroupby() != ' GROUP BY ') {
+        if (isset($unioncriteria) && (is_subclass_of($unioncriteria, 'criteriaelement') || 'criteriaelement' == strtolower(get_class($unioncriteria)))) {
+            if (' GROUP BY ' != $unioncriteria->getGroupby()) {
                 $sql .= ' '.$unioncriteria->getGroupby();
             }
             if ((is_array($unioncriteria->getSort()) && count($unioncriteria->getSort()) > 0)) {
@@ -1134,7 +1135,7 @@ class XooNIpsTableObjectHandler extends XoopsObjectHandler
                     $orderDelim = ',';
                 }
                 $sql .= ' '.$orderStr;
-            } elseif ($unioncriteria->getSort() != '') {
+            } elseif ('' != $unioncriteria->getSort()) {
                 $orderStr = 'ORDER BY '.$unioncriteria->getSort().' '.$unioncriteria->getOrder();
                 $sql .= ' '.$orderStr;
             }
@@ -1243,18 +1244,18 @@ class XooNIpsTableObjectHandler extends XoopsObjectHandler
     public function _makeSQL($criteria = null, $fieldlist = '', $distinct = false, $joindef = null)
     {
         $distinct = ($distinct) ? 'DISTINCT ' : '';
-        $fieldlist = ($fieldlist == '') ? '*' : $fieldlist;
+        $fieldlist = ('' == $fieldlist) ? '*' : $fieldlist;
         $sql = sprintf('SELECT %s%s FROM `%s`', $distinct, $fieldlist, $this->db->prefix($this->__table_name));
         if ($joindef) {
-            if (strtolower(get_class($joindef)) == 'xoonipsjoincriteria') {
+            if ('xoonipsjoincriteria' == strtolower(get_class($joindef))) {
                 $sql .= $joindef->render($this->db, $this->__table_name, false);
             }
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
             $sql .= ' '.$criteria->renderWhere();
         }
-        if (isset($criteria) && (is_subclass_of($criteria, 'criteriaelement') || strtolower(get_class($criteria)) == 'criteriaelement')) {
-            if ($criteria->getGroupby() != ' GROUP BY ') {
+        if (isset($criteria) && (is_subclass_of($criteria, 'criteriaelement') || 'criteriaelement' == strtolower(get_class($criteria)))) {
+            if (' GROUP BY ' != $criteria->getGroupby()) {
                 $sql .= ' '.$criteria->getGroupby();
             }
             if ((is_array($criteria->getSort()) && count($criteria->getSort()) > 0)) {
@@ -1265,7 +1266,7 @@ class XooNIpsTableObjectHandler extends XoopsObjectHandler
                     $orderDelim = ',';
                 }
                 $sql .= ' '.$orderStr;
-            } elseif ($criteria->getSort() != '') {
+            } elseif ('' != $criteria->getSort()) {
                 $orderStr = 'ORDER BY '.$criteria->getSort().' '.$criteria->getOrder();
                 $sql .= ' '.$orderStr;
             }

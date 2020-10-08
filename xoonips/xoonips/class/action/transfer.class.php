@@ -112,7 +112,7 @@ class XooNIpsActionTransfer extends XooNIpsAction
         $result = array();
         $handler = &xoonips_getormhandler('xoonips', 'item_basic');
 
-        if (!is_array($item_ids) || count($item_ids) == 0) {
+        if (!is_array($item_ids) || 0 == count($item_ids)) {
             return array();
         }
 
@@ -178,23 +178,23 @@ class XooNIpsActionTransfer extends XooNIpsAction
         $result['child_have_another_parent'] = array();
 
         foreach (xoonips_transfer_get_transferrable_item_information($from_uid, $item_ids) as $info) {
-            if ($info['lock_type'] == XOONIPS_LOCK_TYPE_CERTIFY_REQUEST) {
+            if (XOONIPS_LOCK_TYPE_CERTIFY_REQUEST == $info['lock_type']) {
                 $result['request_certify'][] = $info['item_id'];
             }
-            if ($info['lock_type'] == XOONIPS_LOCK_TYPE_TRANSFER_REQUEST) {
+            if (XOONIPS_LOCK_TYPE_TRANSFER_REQUEST == $info['lock_type']) {
                 $result['request_transfer'][] = $info['item_id'];
             }
             if ($info['have_another_parent']) {
                 $result['have_another_parent'][] = $info['item_id'];
             }
             foreach ($info['child_items'] as $child_info) {
-                if ($child_info['lock_type'] == XOONIPS_LOCK_TYPE_CERTIFY_REQUEST) {
+                if (XOONIPS_LOCK_TYPE_CERTIFY_REQUEST == $child_info['lock_type']) {
                     $result['child_request_certify'][] = $info['item_id'];
                     break;
                 }
             }
             foreach ($info['child_items'] as $child_info) {
-                if ($child_info['lock_type'] == XOONIPS_LOCK_TYPE_TRANSFER_REQUEST) {
+                if (XOONIPS_LOCK_TYPE_TRANSFER_REQUEST == $child_info['lock_type']) {
                     $result['child_request_transfer'][] = $info['item_id'];
                     break;
                 }

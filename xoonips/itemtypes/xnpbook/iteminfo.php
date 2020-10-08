@@ -64,12 +64,12 @@ $iteminfo['ormfield']['author'] = array(array('name' => 'author', 'type' => 'str
 //
 // publication_year(creation_date in XML-RPC) is required
 foreach ($iteminfo['io']['xmlrpc']['item'] as $key => $val) {
-    if ($val['xmlrpc']['field'][0] == 'creation_year') {
+    if ('creation_year' == $val['xmlrpc']['field'][0]) {
         $iteminfo['io']['xmlrpc']['item'][$key]['xmlrpc']['required'] = true;
         $iteminfo['io']['xmlrpc']['item'][$key]['xmlrpc']['display_name'] = '_MD_XNPBOOK_XMLRPC_DISPLAY_NAME_CREATION_YEAR';
-    } elseif ($val['xmlrpc']['field'][0] == 'creation_month') {
+    } elseif ('creation_month' == $val['xmlrpc']['field'][0]) {
         $iteminfo['io']['xmlrpc']['item'][$key]['xmlrpc']['display_name'] = '_MD_XNPBOOK_XMLRPC_DISPLAY_NAME_CREATION_MONTH';
-    } elseif ($val['xmlrpc']['field'][0] == 'creation_mday') {
+    } elseif ('creation_mday' == $val['xmlrpc']['field'][0]) {
         $iteminfo['io']['xmlrpc']['item'][$key]['xmlrpc']['display_name'] = '_MD_XNPBOOK_XMLRPC_DISPLAY_NAME_CREATION_MDAY';
     }
 }

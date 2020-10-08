@@ -90,6 +90,7 @@ class XooNIpsLogicGetFileMetadata extends XooNIpsLogic
         if (empty($item_id)) {
             $response->setResult(false);
             $error->add(XNPERR_NOT_FOUND); // maybe belong to other session
+
             return false;
         }
         // can user access that item?
@@ -141,7 +142,7 @@ class XooNIpsLogicGetFileMetadata extends XooNIpsLogic
         }
         $file_type_handler = &xoonips_getormhandler('xoonips', 'file_type');
         $file_type = $file_type_handler->get($file->get('file_type_id'));
-        if ($file_type === false) {
+        if (false === $file_type) {
             $response->setResult(false);
             $error->add(XNPERR_SERVER_ERROR, 'unknown file type');
 

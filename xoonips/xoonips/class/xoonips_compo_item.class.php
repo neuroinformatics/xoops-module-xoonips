@@ -41,7 +41,6 @@ define('XOONIPS_TEMPLATE_TYPE_ITEM_LIST', 'item_list');
 /**
  * @brief class of item data object handler.
  *
- *
  * @li base class of items depends on xoonips_item_basic table.
  */
 class XooNIpsItemCompoHandler extends XooNIpsRelatedObjectHandler
@@ -98,7 +97,7 @@ class XooNIpsItemCompoHandler extends XooNIpsRelatedObjectHandler
      * @param uid uid who access to this item
      * @param operation string
      *
-     * @return boolean if permitted
+     * @return bool if permitted
      */
     public function getPerm($id, $uid, $operation)
     {
@@ -142,7 +141,6 @@ class XooNIpsItemCompoHandler extends XooNIpsRelatedObjectHandler
 
 /**
  * @brief class of item data object handler according to iteminfo
- *
  *
  * @li base class of items depends on xoonips_item_basic table.
  */
@@ -204,7 +202,7 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
      * @param uid uid who access to this item
      * @param operation read|write|delete|export
      *
-     * @return boolean if permitted
+     * @return bool if permitted
      */
     public function getPerm($item_id, $uid, $operation)
     {
@@ -222,19 +220,19 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
 
         $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $item_basic = &$item_basic_handler->get($item_id);
-        if (!$item_basic || $item_basic->get('item_type_id') == ITID_INDEX) {
+        if (!$item_basic || ITID_INDEX == $item_basic->get('item_type_id')) {
             return false; // no such item
         }
 
         $item_lock_handler = &xoonips_getormhandler('xoonips', 'item_lock');
-        if (($operation == 'write' || $operation == 'delete')
+        if (('write' == $operation || 'delete' == $operation)
             && $item_lock_handler->isLocked($item_id)
         ) {
             return false; // cannot write/delete locked item
         }
 
         $index_group_index_link_handler = &xoonips_getormhandler('xoonips', 'index_group_index_link');
-        if (($operation == 'write' || $operation == 'delete')
+        if (('write' == $operation || 'delete' == $operation)
             && $index_group_index_link_handler->getObjectsByItemId($item_id)
         ) {
             //cannot write/delete if item is in group index that is publication required.
@@ -247,20 +245,20 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
             return true; // moderator or admin
         }
 
-        if ($uid == UID_GUEST) {
+        if (UID_GUEST == $uid) {
             $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
             $target_user = $xconfig_handler->getValue(XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_KEY);
-            if ($target_user != XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_ALL) {
+            if (XNP_CONFIG_PUBLIC_ITEM_TARGET_USER_ALL != $target_user) {
                 return false; // guest not allowed
             }
             // only allowed to read public certified item
-            if ($operation != 'read') {
+            if ('read' != $operation) {
                 return false;
             }
         }
 
         $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
-        if ($operation == 'write') {
+        if ('write' == $operation) {
             // update: item.uid == $uid
             //permit owner
             if ($item_basic->get('uid') == $uid) {
@@ -282,7 +280,7 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
             }
 
             return false;
-        } elseif ($operation == 'delete') {
+        } elseif ('delete' == $operation) {
             // delete: item.uid == $uid && not_group && not_public
             if ($item_basic->get('uid') != $uid) {
                 return false;
@@ -296,8 +294,8 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
             $join = new XooNIpsJoinCriteria('xoonips_index', 'index_id', 'index_id');
             $index_item_links = &$index_item_link_handler->getObjects($criteria, false, '', null, $join);
 
-            return  count($index_item_links) == 0;
-        } elseif ($operation == 'export') {
+            return  0 == count($index_item_links);
+        } elseif ('export' == $operation) {
             // export: item.uid == $uid || group && group admin
             if ($item_basic->get('uid') == $uid) {
                 return true;
@@ -315,8 +313,8 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
             $join1->cascade($join2, 'tx', true);
             $index_item_links = &$index_item_link_handler->getObjects($criteria, false, '', null, $join1);
 
-            return  count($index_item_links) != 0;
-        } elseif ($operation == 'read') {
+            return  0 != count($index_item_links);
+        } elseif ('read' == $operation) {
             // read: item.uid == $uid || group_ceritfied && group_member || group && group admin || public_certified
             if ($item_basic->get('uid') == $uid) {
                 return true;
@@ -338,7 +336,7 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
             $join2 = new XooNIpsJoinCriteria('xoonips_groups_users_link', 'gid', 'gid', 'LEFT', 'tgul');
             $join1->cascade($join2, 'tx', true);
             $index_item_links = &$index_item_link_handler->getObjects($criteria, false, '', null, $join1);
-            if (count($index_item_links) != 0) {
+            if (0 != count($index_item_links)) {
                 return true;
             }
 
@@ -545,7 +543,7 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
         }
 
         // get indexes only not item listing for loading performance improvement
-        if ($type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST) {
+        if (XOONIPS_TEMPLATE_TYPE_ITEM_LIST != $type && XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST != $type) {
             $xoonips_user_handler = &xoonips_getormhandler('xoonips', 'users');
             $xoonips_user = &$xoonips_user_handler->get($basic->get('uid'));
             $private_index_id = $xoonips_user->get('private_index_id');
@@ -557,7 +555,7 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
         }
 
         // get related to part only not item listing for disable to recursive calling
-        if ($type != XOONIPS_TEMPLATE_TYPE_ITEM_LIST && $type != XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST) {
+        if (XOONIPS_TEMPLATE_TYPE_ITEM_LIST != $type && XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST != $type) {
             $basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
             foreach ($item->getVar('related_tos') as $related_to) {
                 $related_basic = &$basic_handler->get($related_to->get('item_id'));
@@ -566,7 +564,7 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
                 } // ignore invalid item id
                 $related_item_type = &$item_type_handler->get($related_basic->get('item_type_id'));
                 $related_item_type_id = $related_item_type->get('item_type_id');
-                if ($related_item_type_id == ITID_INDEX) {
+                if (ITID_INDEX == $related_item_type_id) {
                     continue;
                 } // ignore index id
                 $item_compo_handler = &xoonips_getormcompohandler($related_item_type->getVar('name', 's'), 'item');
@@ -585,6 +583,7 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
         switch ($type) {
         case XOONIPS_TEMPLATE_TYPE_TRANSFER_ITEM_LIST:
             $result['url'] = $textutil->html_special_chars(xoonips_get_transfer_request_item_detail_url($basic->get('item_id')));
+            // no break
         case XOONIPS_TEMPLATE_TYPE_ITEM_LIST:
             $result['pending'] = xnpIsPending($item_id);
         }
@@ -789,7 +788,7 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
         global $xoopsModule;
         $base_url = XOOPS_URL.'/modules/'
             .$xoopsModule->dirname().'/detail.php';
-        if ($basic->get('doi') == ''
+        if ('' == $basic->get('doi')
             || XNP_CONFIG_DOI_FIELD_PARAM_NAME == ''
         ) {
             return $base_url.'?item_id='.intval($item_id);
@@ -831,9 +830,9 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
         $module = $mhandler->getByDirname($iteminfo['ormcompo']['module']);
         $chandler = &xoops_gethandler('config');
         $assoc = $chandler->getConfigsByCat(false, $module->mid());
-        if (isset($assoc['enable_dl_limit']) && $assoc['enable_dl_limit'] == '1') {
+        if (isset($assoc['enable_dl_limit']) && '1' == $assoc['enable_dl_limit']) {
             // guest enabled?
-            if ($uid == UID_GUEST && $detail->get('attachment_dl_limit')) {
+            if (UID_GUEST == $uid && $detail->get('attachment_dl_limit')) {
                 return false;
             }
         }
@@ -858,13 +857,13 @@ class XooNIpsItemInfoCompoHandler extends XooNIpsRelatedObjectHandler
             } else {
                 $use_cc = 0;
             }
-            if ($detail->get('rights') == '' && $use_cc == 0) {
+            if ('' == $detail->get('rights') && 0 == $use_cc) {
                 return false;
             }
         }
         // error if add to public/group and no readme input
         if ($detail_item_type->getFieldByName('detail', 'readme')) {
-            if ($detail->get('readme') == '') {
+            if ('' == $detail->get('readme')) {
                 return false;
             }
         }

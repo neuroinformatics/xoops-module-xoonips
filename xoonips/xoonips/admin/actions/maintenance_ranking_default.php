@@ -57,11 +57,11 @@ $token_ticket = $xoopsGTicket->getTicketHtml(__LINE__, 1800, $ticket_area);
 // max file size
 $max_file_size = ini_get('upload_max_filesize');
 if (!is_numeric($max_file_size)) {
-    if (strpos($max_file_size, 'M') !== false) {
+    if (false !== strpos($max_file_size, 'M')) {
         $max_file_size = intval($max_file_size) * 1024 * 1024;
-    } elseif (strpos($max_file_size, 'K') !== false) {
+    } elseif (false !== strpos($max_file_size, 'K')) {
         $max_file_size = intval($max_file_size) * 1024;
-    } elseif (strpos($max_file_size, 'G') !== false) {
+    } elseif (false !== strpos($max_file_size, 'G')) {
         $max_file_size = intval($max_file_size) * 1024 * 1024 * 1024;
     } else {
         exit();
@@ -79,7 +79,7 @@ $config_keys = array(
 $config_values = xoonips_admin_get_configs($config_keys, 'n');
 $sum_start = $config_values['ranking_sum_start'];
 $sum_last_update = $config_values['ranking_sum_last_update'];
-if ($sum_start != 0 && $sum_last_update != 0) {
+if (0 != $sum_start && 0 != $sum_last_update) {
     $clear_message = sprintf(_AM_XOONIPS_MAINTENANCE_RANKING_CLEAR_MESSAGE, date('Y/m/d', $sum_start), date('Y/m/d', $sum_last_update));
 } else {
     $clear_message = _AM_XOONIPS_MAINTENANCE_RANKING_CLEAR_EMPTY;

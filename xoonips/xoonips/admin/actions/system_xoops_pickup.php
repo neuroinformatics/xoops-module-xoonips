@@ -46,7 +46,7 @@ $config_keys = array(
     'certify_user' => 's',
 );
 $config_values = xoonips_admin_get_configs($config_keys, 'n');
-$is_certified = ($config_values['certify_user'] == 'on') ? false : true;
+$is_certified = ('on' == $config_values['certify_user']) ? false : true;
 
 // XOOPS user pickup
 $xm_handler = &xoonips_gethandler('xoonips', 'member');

@@ -149,7 +149,7 @@ class XooNIpsNotificationHandler extends XoopsNotificationHandler
 
     public function getTemplateDirByMid($mid = null)
     {
-        if ($mid == null) {
+        if (null == $mid) {
             global $xoopsModule;
             $module = &$xoopsModule;
         } else {

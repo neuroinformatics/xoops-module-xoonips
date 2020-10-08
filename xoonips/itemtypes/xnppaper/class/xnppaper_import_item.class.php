@@ -152,7 +152,7 @@ class XNPPaperImportItemHandler extends XooNIpsImportItemHandler
             $file_handler = &xoonips_getormhandler('xoonips', 'file');
             $criteria = new Criteria('name', addslashes($attribs['FILE_TYPE_NAME']));
             $file_type = &$file_type_handler->getObjects($criteria);
-            if (count($file_type) == 0) {
+            if (0 == count($file_type)) {
                 $this->_import_item->setErrors(E_XOONIPS_ATTR_NOT_FOUND, 'file_type_id is not found:'.$attribs['FILE_TYPE_NAME'].$this->_get_parser_error_at());
                 break;
             }
@@ -183,13 +183,13 @@ class XNPPaperImportItemHandler extends XooNIpsImportItemHandler
 
         switch (implode('/', $this->_tag_stack)) {
         case 'ITEM/DETAIL':
-            foreach (array('journal', 'volume', 'number', 'page', 'abstract', 'pubmed_id', ) as $key) {
+            foreach (array('journal', 'volume', 'number', 'page', 'abstract', 'pubmed_id') as $key) {
                 if (is_null($detail->get($key, 'n'))) {
                     $this->_import_item->setErrors(E_XOONIPS_TAG_NOT_FOUND, " no $key".$this->_get_parser_error_at());
                 }
             }
             //error is no authors
-            if (count($this->_import_item->getVar('author')) == 0) {
+            if (0 == count($this->_import_item->getVar('author'))) {
                 $this->_import_item->setErrors(E_XOONIPS_TAG_NOT_FOUND, ' no author'.$this->_get_parser_error_at());
             }
             break;

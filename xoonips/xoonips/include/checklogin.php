@@ -35,7 +35,7 @@ $redirect = !empty($xoops_redirect) ? '?xoops_redirect='.urlencode($xoops_redire
 
 $myts = &MyTextsanitizer::getInstance();
 
-if ($uname == '' || $pass == '') {
+if ('' == $uname || '' == $pass) {
     // Record events (login failure)
     $event_handler = &xoonips_getormhandler('xoonips', 'event_log');
     $event_handler->recordLoginFailureEvent($myts->stripSlashesGPC($uname));
@@ -53,7 +53,7 @@ if (false != $user) {
         redirect_header(XOOPS_URL.'/', 5, _US_NOACTTPADM);
         exit();
     }
-    if ($myxoopsConfig['closesite'] == 1) {
+    if (1 == $myxoopsConfig['closesite']) {
         $allowed = false;
         foreach ($user->getGroups() as $group) {
             if (in_array($group, $myxoopsConfig['closesite_okgrp']) || XOOPS_GROUP_ADMIN == $group) {
@@ -74,7 +74,7 @@ if (false != $user) {
     $_SESSION = array();
     $_SESSION['xoopsUserId'] = $user->getVar('uid');
     $_SESSION['xoopsUserGroups'] = $user->getGroups();
-    if ($myxoopsConfig['use_mysession'] && $myxoopsConfig['session_name'] != '') {
+    if ($myxoopsConfig['use_mysession'] && '' != $myxoopsConfig['session_name']) {
         setcookie($myxoopsConfig['session_name'], session_id(), time() + (60 * $myxoopsConfig['session_expire']), '/', '', 0);
     }
     $user_theme = $user->getVar('theme');

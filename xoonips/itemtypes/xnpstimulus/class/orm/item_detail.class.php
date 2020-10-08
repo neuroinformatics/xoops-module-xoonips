@@ -110,7 +110,7 @@ class XNPStimulusOrmItemDetailHandler extends XooNIpsTableObjectHandler
 
     public function get_cc($detail)
     {
-        if ($detail->get('use_cc') == '1') {
+        if ('1' == $detail->get('use_cc')) {
             return xoonips_get_cc_license($detail->get('cc_commercial_use'), $detail->get('cc_modification'), 2.5, 'GENERIC');
         } else {
             return false;

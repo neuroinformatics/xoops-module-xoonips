@@ -35,7 +35,7 @@ function b_xoonips_itemtypes_show()
     if (!is_object($xoopsUser)) {
         $xconfig_handler = &xoonips_getormhandler('xoonips', 'config');
         $target_user = $xconfig_handler->getValue('public_item_target_user');
-        if ($target_user != 'all') {
+        if ('all' != $target_user) {
             // 'platform'
             return false;
         }

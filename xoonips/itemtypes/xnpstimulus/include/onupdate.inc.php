@@ -43,6 +43,7 @@ function xoops_module_update_xnpstimulus($xoopsMod, $oldversion)
         if (!$result) {
             echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
         }
+        // no break
     case 312:
     case 330:
     case 331:
@@ -84,7 +85,7 @@ function xoops_module_update_xnpstimulus($xoopsMod, $oldversion)
                 $sql = 'insert into '.$xoopsDB->prefix($table_developer);
                 $sql .= '('.$key_name.',developer,developer_order) values (';
                 $sql .= $id.','.$xoopsDB->quoteString($developer).','.$i.')';
-                if ($xoopsDB->queryF($sql) == false) {
+                if (false == $xoopsDB->queryF($sql)) {
                     echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
                     return false;
@@ -100,6 +101,7 @@ function xoops_module_update_xnpstimulus($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 340:
     default:
     }

@@ -117,7 +117,7 @@ class XooNIpsOrmItemStatusHandler extends XooNIpsTableObjectHandler
             if (!$results) {
                 return false;
             }
-            if ($results[0]->getExtraVar('count(*)') == 0) {
+            if (0 == $results[0]->getExtraVar('count(*)')) {
                 $row->set('is_deleted', 1);
                 $row->set('deleted_timestamp', time());
                 $item_status_handler->insert($row);

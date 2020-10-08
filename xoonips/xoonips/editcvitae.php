@@ -63,8 +63,8 @@ if (isset($op_modify)) {
 }
 
 // operation
-if ($op == 'open' || $op == '') {
-} elseif ($op == 'register') {
+if ('open' == $op || '' == $op) {
+} elseif ('register' == $op) {
     $cvitae_title = $formdata->getValue('post', 'cvitae_title', 's', false);
     if (empty($cvitae_title)) {
         $ent = 1;
@@ -92,7 +92,7 @@ if ($op == 'open' || $op == '') {
         }
         redirect_header('editcvitae.php', 1, _MD_XOONIPS_CURRICULUM_VITAE_INSERT);
     }
-} elseif ($op == 'modify') {
+} elseif ('modify' == $op) {
     $check = $formdata->getValueArray('post', 'check', 'i', false);
     foreach ($check as $cvitae_id) {
         $cvitaes_obj = $cvitaes_handler->get($cvitae_id);
@@ -125,7 +125,7 @@ if ($op == 'open' || $op == '') {
             xoonips_error_exit(500);
         }
     }
-} elseif ($op == 'delete') {
+} elseif ('delete' == $op) {
     $check = $formdata->getValueArray('post', 'check', 'i', false);
     foreach ($check as $cvitae_id) {
         $cvitaes_obj = $cvitaes_handler->get($cvitae_id);
@@ -142,7 +142,7 @@ if ($op == 'open' || $op == '') {
             xoonips_error_exit(500);
         }
     }
-} elseif ($op == 'up' || $op == 'down') {
+} elseif ('up' == $op || 'down' == $op) {
     $move_id = $formdata->getValue('post', 'updown_cvitae', 'i', true);
     $steps = $formdata->getValueArray('post', 'steps', 'i', true);
     $step = isset($steps[$move_id]) ? $steps[$move_id] : 0;
@@ -207,7 +207,7 @@ function xnpMktime($year, $month, $day)
     $int_year = intval($year);
     $int_month = intval($month);
     $int_day = intval($day);
-    if ($int_month == 0) {
+    if (0 == $int_month) {
         $date = sprintf('%04s--%02s', $int_year, $int_day);
     } else {
         $date = sprintf('%04s-%02s-%02s', $int_year, $int_month, $int_day);

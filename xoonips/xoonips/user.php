@@ -43,7 +43,7 @@ $myxoopsConfigUser = &xoonips_get_xoops_configs(XOOPS_CONF_USER);
 
 $textutil = &xoonips_getutility('text');
 
-if ($op == 'main') {
+if ('main' == $op) {
     if (!$xoopsUser) {
         $xoopsOption['template_main'] = 'xoonips_userform.html';
         require XOOPS_ROOT_PATH.'/header.php';
@@ -61,12 +61,12 @@ if ($op == 'main') {
     exit();
 }
 
-if ($op == 'login') {
+if ('login' == $op) {
     require_once XOOPS_ROOT_PATH.'/modules/xoonips/include/checklogin.php';
     exit();
 }
 
-if ($op == 'logout') {
+if ('logout' == $op) {
     // logout of Platform
     if (isset($_SESSION['xoonips_old_uid'])) {
         redirect_header(XOOPS_URL.'/', 3, _MD_XOONIPS_SU_CANNOT_LOGOUT);
@@ -87,7 +87,7 @@ if ($op == 'logout') {
     $message = '';
     $_SESSION = array();
     session_destroy();
-    if ($myxoopsConfig['use_mysession'] && $myxoopsConfig['session_name'] != '') {
+    if ($myxoopsConfig['use_mysession'] && '' != $myxoopsConfig['session_name']) {
         setcookie($myxoopsConfig['session_name'], '', time() - 3600, '/', '', 0);
     }
     // clear autologin cookies
@@ -108,7 +108,7 @@ if ($op == 'logout') {
     exit();
 }
 
-if ($op == 'lostpass') {
+if ('lostpass' == $op) {
     // page for password lost
     $xoopsOption['template_main'] = 'xoonips_userform.html';
     require XOOPS_ROOT_PATH.'/header.php';
@@ -117,8 +117,8 @@ if ($op == 'lostpass') {
 }
 
 // activate an account of user(uid=$id)
-if ($op == 'actv') {
-    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+if ('actv' == $op) {
+    if ('GET' == $_SERVER['REQUEST_METHOD']) {
         $id = $formdata->getValue('get', 'id', 'i', true);
         $actkey = $formdata->getValue('get', 'actkey', 's', true);
         $xoopsOption['template_main'] = 'xoonips_activate_user.html';
@@ -158,19 +158,19 @@ if ($op == 'actv') {
                 $moderator_gid = $xconfig_handler->getValue('moderator_gid');
                 require XOOPS_ROOT_PATH.'/header.php';
                 // To send e-mail to activated user.
-                if ($certify_user == 'on') {
+                if ('on' == $certify_user) {
                     // To send a e-mail to users who are belong to the group
                     // specified by moderator_gid if certify_user is 'manual'
                     xoonips_notification_account_certify_request($id);
-                    if ($myxoopsConfigUser['activation_type'] == 2) {//activate by xoops admin & certify manual
+                    if (2 == $myxoopsConfigUser['activation_type']) {//activate by xoops admin & certify manual
                         echo _MD_XOONIPS_ACTIVATED_BY_ADMIN_AND_CERTIFY_MANUAL;
-                    } elseif ($myxoopsConfigUser['activation_type'] == 0) {//activate by xoops by user & certify manual
+                    } elseif (0 == $myxoopsConfigUser['activation_type']) {//activate by xoops by user & certify manual
                         echo _MD_XOONIPS_ACTIVATED_BY_USER_AND_CERTIFY_MANUAL;
                     }
                 } else {
                     //certification automatically
                     xoonips_notification_account_certified($id);
-                    if ($myxoopsConfigUser['activation_type'] == 2) { //activate xoops account by xoops administrator
+                    if (2 == $myxoopsConfigUser['activation_type']) { //activate xoops account by xoops administrator
                         // send e-mail to the registered address
                         // notify a completion of certification to the certified user by e-mail
                         $langman = &xoonips_getutility('languagemanager');
@@ -202,7 +202,7 @@ if ($op == 'actv') {
     }
 }
 
-if ($op == 'delete_confirm') {
+if ('delete_confirm' == $op) {
     $xnpsid = $_SESSION['XNPSID'];
     $uid = $_SESSION['xoopsUserId'];
 
@@ -229,7 +229,7 @@ if ($op == 'delete_confirm') {
     exit();
 }
 
-if ($op == 'delete') {
+if ('delete' == $op) {
     $uid = $_SESSION['xoopsUserId'];
 
     if (!isset($_POST['is_exec'])) {

@@ -28,7 +28,7 @@ if (!defined('XOONIPS_PATH')) {
     exit();
 }
 
-if (!isset($_SERVER['HTTP_REFERER']) || preg_match('/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER']) == 0) {
+if (!isset($_SERVER['HTTP_REFERER']) || 0 == preg_match('/\\/modules\\/xoonips\\//', $_SERVER['HTTP_REFERER'])) {
     die('Turn REFERER on');
 }
 

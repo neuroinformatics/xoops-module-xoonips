@@ -98,7 +98,7 @@ class XooNIpsActionTransferAdminTransfer extends XooNIpsActionTransfer
         $a = is_array($gids1) ? $gids1 : array();
         $b = is_array($gids2) ? $gids2 : array();
 
-        return count(array_diff($a, $b)) == 0 && count(array_diff($b, $a)) == 0;
+        return 0 == count(array_diff($a, $b)) && 0 == count(array_diff($b, $a));
     }
 
     public function get_item_ids_to_transfer()

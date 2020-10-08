@@ -175,7 +175,7 @@ class XooNIpsUtilityMysqlinfo extends XooNIpsUtility
      */
     public function isVersion41orHigher()
     {
-        if ($this->_version['major'] >= 5 || ($this->_version['major'] == 4 && $this->_version['minor'] >= 1)) {
+        if ($this->_version['major'] >= 5 || (4 == $this->_version['major'] && $this->_version['minor'] >= 1)) {
             return true;
         }
 
@@ -189,7 +189,7 @@ class XooNIpsUtilityMysqlinfo extends XooNIpsUtility
      */
     public function isMSJapaneseSupport()
     {
-        if (($this->_version['major'] >= 5 && $this->_version['minor'] >= 1) || ($this->_version['major'] == 5 && $this->_version['minor'] == 0 && $this->_version['micro'] >= 3)) {
+        if (($this->_version['major'] >= 5 && $this->_version['minor'] >= 1) || (5 == $this->_version['major'] && 0 == $this->_version['minor'] && $this->_version['micro'] >= 3)) {
             return true;
         }
 

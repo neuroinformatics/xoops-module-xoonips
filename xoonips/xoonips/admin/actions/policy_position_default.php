@@ -69,7 +69,7 @@ foreach ($posi_array as $posi_id => $posi) {
         'evenodd' => $evenodd,
         'delete' => _AM_XOONIPS_LABEL_DELETE,
     );
-    $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+    $evenodd = ('even' == $evenodd) ? 'odd' : 'even';
 }
 
 // templates

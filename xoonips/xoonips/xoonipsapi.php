@@ -76,7 +76,7 @@ if (!$parser->parse()) {
     global $xoopsModule;
     $module = &$xoopsModule;
     $methods = explode('.', $parser->getMethodName());
-    if ($methods[0] == 'XooNIps') {
+    if ('XooNIps' == $methods[0]) {
         $request = new XooNIpsXmlRpcRequest($methods[1], $parser->getParam());
         $response = new XooNIpsXmlRpcResponse();
         $factory = &XooNIpsXmlRpcLogicFactory::getInstance();

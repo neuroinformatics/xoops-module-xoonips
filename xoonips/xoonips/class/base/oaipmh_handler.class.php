@@ -198,7 +198,7 @@ class OAIPMHHarvester
         $resumptionToken = null;
         do {
             $url = $this->_baseUrl.'?verb=ListRecords';
-            if ($resumptionToken == null) {
+            if (null == $resumptionToken) {
                 foreach (array('metadataPrefix', 'from', 'until', 'set') as $k) {
                     if (isset($args[$k])) {
                         $url .= '&'.urlencode($k).'='.urlencode($args[$k]);
@@ -234,7 +234,7 @@ class OAIPMHHarvester
             $result = $this->parse($snoopy->results);
             if (!$result) {
                 //some erorr has occured
-                if ($listRecordsHandler->getIdentifier() != null) {
+                if (null != $listRecordsHandler->getIdentifier()) {
                     $this->_lastError .= '[identifier]'
                         .$listRecordsHandler->getIdentifier();
                 }
@@ -244,7 +244,7 @@ class OAIPMHHarvester
             }
             xml_parser_free($this->parser);
             $resumptionToken = $listRecordsHandler->getResumptionToken();
-        } while ($resumptionToken != null);
+        } while (null != $resumptionToken);
         $xoopsDB->setLogger(XoopsLogger::instance());
 
         return true;

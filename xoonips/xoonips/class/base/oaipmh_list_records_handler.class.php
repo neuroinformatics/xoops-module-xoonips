@@ -74,7 +74,7 @@ class ListRecordsHandler extends HarvesterHandler
     {
         array_push($this->tagstack, $name);
         $this->_cdata_buf = '';
-        if ($name == 'RECORD') {
+        if ('RECORD' == $name) {
             global $xoopsDB;
             $xoopsDB->setLogger(new XoopsLogger());
 
@@ -82,9 +82,9 @@ class ListRecordsHandler extends HarvesterHandler
             $this->title = null;
             $this->search_text = array();
         }
-        if ($name == 'HEADER') {
+        if ('HEADER' == $name) {
             if (isset($attribs['STATUS'])
-                && $attribs['STATUS'] == 'deleted'
+                && 'deleted' == $attribs['STATUS']
             ) {
                 $this->delete_flag = true;
             } else {
@@ -96,41 +96,41 @@ class ListRecordsHandler extends HarvesterHandler
     public function endElementHandler($parser, $name)
     {
         array_push($this->search_text, ' ');
-        if (end($this->tagstack) == 'RESUMPTIONTOKEN') {
+        if ('RESUMPTIONTOKEN' == end($this->tagstack)) {
             $this->resumptionToken = $this->_cdata_buf;
             array_pop($this->tagstack);
 
             return;
-        } elseif (end($this->tagstack) == 'IDENTIFIER'
-            && prev($this->tagstack) == 'HEADER'
+        } elseif ('IDENTIFIER' == end($this->tagstack)
+            && 'HEADER' == prev($this->tagstack)
         ) {
             $this->addMetadataField(end($this->tagstack), $this->_cdata_buf, XOONIPS_METADATA_CATEGORY_ID);
             $this->identifier = $this->_cdata_buf;
             array_pop($this->tagstack);
 
             return;
-        } elseif (end($this->tagstack) == 'DATESTAMP'
-            && prev($this->tagstack) == 'HEADER'
+        } elseif ('DATESTAMP' == end($this->tagstack)
+            && 'HEADER' == prev($this->tagstack)
         ) {
             $this->_datestamp = $this->_cdata_buf;
             array_pop($this->tagstack);
 
             return;
-        } elseif ($this->getElementName(end($this->tagstack)) == 'TITLE'
+        } elseif ('TITLE' == $this->getElementName(end($this->tagstack))
         ) {
             $this->addMetadataField(end($this->tagstack), $this->_cdata_buf, XOONIPS_METADATA_CATEGORY_TITLE);
             $this->title[] = $this->_cdata_buf;
             array_pop($this->tagstack);
 
             return;
-        } elseif ($this->getElementName(end($this->tagstack)) == 'CREATOR'
+        } elseif ('CREATOR' == $this->getElementName(end($this->tagstack))
         ) {
             $this->addMetadataField(end($this->tagstack), $this->_cdata_buf, XOONIPS_METADATA_CATEGORY_CREATOR);
             $this->_creator[] = $this->_cdata_buf;
             array_pop($this->tagstack);
 
             return;
-        } elseif ($name == 'RECORD') {
+        } elseif ('RECORD' == $name) {
             $repository_handler = &xoonips_getormhandler('xoonips', 'oaipmh_repositories');
             $metadata_handler = &xoonips_getormhandler('xoonips', 'oaipmh_metadata');
             $unicode = &xoonips_getutility('unicode');
@@ -244,10 +244,10 @@ class ListRecordsHandler extends HarvesterHandler
         foreach ($attrs as $key => $val) {
             $tmp = explode(':', $key);
             // skip other attribute
-            if (strtolower($tmp[0]) != 'xmlns') {
+            if ('xmlns' != strtolower($tmp[0])) {
                 continue;
             }
-            if (count($tmp) == 1) {
+            if (1 == count($tmp)) {
                 // add namespace as default
                 $result[''] = $val;
             } else {
@@ -270,7 +270,7 @@ class ListRecordsHandler extends HarvesterHandler
     public function getNamespacePrefix($elementname)
     {
         $tmp = explode(':', $elementname);
-        if (count($tmp) == 1) {
+        if (1 == count($tmp)) {
             return '';
         }
 
@@ -287,9 +287,9 @@ class ListRecordsHandler extends HarvesterHandler
     public function getElementName($elementname)
     {
         $tmp = explode(':', $elementname);
-        if (count($tmp) == 1) {
+        if (1 == count($tmp)) {
             return $tmp[0];
-        } elseif (count($tmp) == 2) {
+        } elseif (2 == count($tmp)) {
             return $tmp[1];
         }
 

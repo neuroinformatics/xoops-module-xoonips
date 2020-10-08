@@ -127,7 +127,7 @@ foreach ($users_objs as $users_obj) {
         'modify' => _AM_XOONIPS_LABEL_MODIFY,
         'delete' => _AM_XOONIPS_LABEL_DELETE,
     );
-    $evenodd = ($evenodd == 'even') ? 'odd' : 'even';
+    $evenodd = ('even' == $evenodd) ? 'odd' : 'even';
 }
 
 // templates
@@ -148,7 +148,7 @@ $tmpl->addVar('main', 'uname', _AM_XOONIPS_LABEL_UNAME);
 $tmpl->addVar('main', 'name', _AM_XOONIPS_LABEL_NAME);
 $tmpl->addVar('main', 'email', _AM_XOONIPS_LABEL_EMAIL);
 $tmpl->addVar('main', 'action', _AM_XOONIPS_LABEL_ACTION);
-if (count($users) == 0) {
+if (0 == count($users)) {
     $tmpl->setAttribute('users', 'visibility', 'hidden');
     $tmpl->setAttribute('users_empty', 'visibility', 'visible');
     $tmpl->addVar('users_empty', 'empty', _AM_XOONIPS_MAINTENANCE_ACCOUNT_EMPTY);
@@ -157,7 +157,7 @@ if (count($users) == 0) {
 } else {
     $tmpl->addRows('users', $users);
     $tmpl->addVar('page_navi_title', 'navi_title', $navi_title);
-    if ($navi['maxpage'] == 1) {
+    if (1 == $navi['maxpage']) {
         $tmpl->setAttribute('page_navi', 'visibility', 'hidden');
     } else {
         $tmpl->addVar('page_navi_prev', 'prev', $navi['prev']);

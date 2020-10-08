@@ -45,6 +45,7 @@ function xoops_module_update_xnppresentation($xoopsMod, $oldversion)
                 return false;
             }
         }
+        // no break
     case 311:
     case 330:
     case 331:
@@ -86,7 +87,7 @@ function xoops_module_update_xnppresentation($xoopsMod, $oldversion)
                 $sql = 'insert into '.$xoopsDB->prefix($table_creator);
                 $sql .= '('.$key_name.',creator,creator_order) values (';
                 $sql .= $id.','.$xoopsDB->quoteString($creator).','.$i.')';
-                if ($xoopsDB->queryF($sql) == false) {
+                if (false == $xoopsDB->queryF($sql)) {
                     echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
                     return false;
@@ -102,6 +103,7 @@ function xoops_module_update_xnppresentation($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 340:
     default:
     }

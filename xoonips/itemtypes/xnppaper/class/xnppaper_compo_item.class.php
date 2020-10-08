@@ -157,7 +157,7 @@ class XNPPaperCompoHandler extends XooNIpsItemInfoCompoHandler
         $assoc = $chandler->getConfigsByCat(false, $module->mid());
         $pdf_access_rights = $assoc['pdf_access_rights']; // 1:public, 2:group, 3:private
 
-        if ($pdf_access_rights == 1) { // 1:public
+        if (1 == $pdf_access_rights) { // 1:public
             return true;
         }
 
@@ -167,12 +167,12 @@ class XNPPaperCompoHandler extends XooNIpsItemInfoCompoHandler
             return true; // moderator or admin or public
         }
 
-        if ($pdf_access_rights == 2) { // 2:group
+        if (2 == $pdf_access_rights) { // 2:group
             $index_item_link_handler = &xoonips_getormhandler('xoonips', 'index_item_link');
             $index_handler = &xoonips_getormhandler('xoonips', 'index');
             $index_item_links = $index_item_link_handler->getByItemId($item_id, array(OL_GROUP_ONLY));
             foreach ($index_item_links as $index_item_link) {
-                if ($index_item_link->get('certify_state') == CERTIFIED) {
+                if (CERTIFIED == $index_item_link->get('certify_state')) {
                     if ($index_handler->getPerm($index_item_link->get('index_id'), $uid, 'read')) {
                         return true; // group member && item certified
                     }

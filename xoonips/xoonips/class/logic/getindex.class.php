@@ -76,7 +76,7 @@ class XooNIpsLogicGetIndex extends XooNIpsLogic
         // get index from index_id
         $index_compo_handler = &xoonips_getormcompohandler('xoonips', 'index');
         $index = $index_compo_handler->get($index_id);
-        if ($index == false) {
+        if (false == $index) {
             $response->setResult(false);
             $response->error->add(XNPERR_NOT_FOUND, 'cannot get index');
 

@@ -65,7 +65,7 @@ function xoonips_admin_initialize($myfile, $preference, $pages)
     if (!preg_match('/^[a-z]+$/', $action)) {
         die('illegal request');
     }
-    if ($action != 'default' && (!isset($actions[$method]) || !in_array($action, $actions[$method]))) {
+    if ('default' != $action && (!isset($actions[$method]) || !in_array($action, $actions[$method]))) {
         die('illegal request');
     }
     $xoonips_admin['myaction_path'] = 'actions/'.$preference.'_'.$page.'_'.$action.'.php';
@@ -84,7 +84,7 @@ function xoonips_admin_get_requests($method, $keys)
     $ret = array();
     foreach ($keys as $key => $attributes) {
         list($type, $is_array, $required) = $attributes;
-        if ($method == 'files') {
+        if ('files' == $method) {
             $value = $formdata->getFile($key, $required);
         } else {
             if ($is_array) {

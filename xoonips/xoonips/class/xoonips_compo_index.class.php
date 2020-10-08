@@ -69,7 +69,7 @@ class XooNIpsIndexCompoHandler extends XooNIpsItemCompoHandler
                 $ret[] = $index_obj->getTitle($fmt);
             }
             $index_id = $index_obj->get('parent_index_id');
-            if ($index_id == IID_ROOT) {
+            if (IID_ROOT == $index_id) {
                 break;
             }
         }
@@ -126,12 +126,12 @@ class XooNIpsIndexCompoHandler extends XooNIpsItemCompoHandler
 
             return false;
         }
-        if ($target_index->get('open_level') != OL_PUBLIC) {
+        if (OL_PUBLIC != $target_index->get('open_level')) {
             trigger_error('target index must be public index');
 
             return false;
         }
-        if ($source_index->get('open_level') != OL_GROUP_ONLY) {
+        if (OL_GROUP_ONLY != $source_index->get('open_level')) {
             trigger_error('source index must be group index');
 
             return false;

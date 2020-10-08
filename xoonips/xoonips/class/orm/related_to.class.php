@@ -136,8 +136,8 @@ class XooNIpsOrmRelatedToHandler extends XooNIpsTableObjectHandler
     /**
      * get objects by parent item id.
      *
+     * @param int $parent_id
      *
-     * @param integer $parent_id
      * @return array objects
      */
     public function _getObjectsByParentItemId($parent_id)

@@ -35,7 +35,7 @@ function xoops_module_install_xnppaper($xoopsMod)
     $table = $xoopsDB->prefix('xoonips_item_type');
     $mid = $xoopsMod->getVar('mid');
     $sql = "INSERT INTO $table ( name, display_name, mid, viewphp ) VALUES ( 'xnppaper', 'Paper', $mid, 'xnppaper/include/view.php' )";
-    if ($xoopsDB->query($sql) == false) {
+    if (false == $xoopsDB->query($sql)) {
         // cannot register itemtype
         return false;
     }
@@ -44,7 +44,7 @@ function xoops_module_install_xnppaper($xoopsMod)
     $table = $xoopsDB->prefix('xoonips_file_type');
     $mid = $xoopsMod->getVar('mid');
     $sql = "INSERT INTO $table ( name, display_name, mid ) VALUES ( 'paper_pdf_reprint', 'PDF Reprint', $mid )";
-    if ($xoopsDB->query($sql) == false) {
+    if (false == $xoopsDB->query($sql)) {
         // cannot register itemtype
         return false;
     }
@@ -62,7 +62,7 @@ function xoops_module_install_xnppaper($xoopsMod)
             $criteria->add(new Criteria('gperm_name', 'module_read'));
 
             $objects = &$gperm_handler->getObjects($criteria);
-            if (count($objects) == 1) {
+            if (1 == count($objects)) {
                 $gperm_handler->delete($objects[0]);
             }
         }

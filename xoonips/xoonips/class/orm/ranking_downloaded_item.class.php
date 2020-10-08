@@ -67,7 +67,7 @@ class XooNIpsOrmRankingDownloadedItemHandler extends XooNIpsOrmAbstractRankingHa
     public function insert(&$obj, $force = false)
     {
         $item_id = $obj->get('item_id');
-        if ($item_id == 0) {
+        if (0 == $item_id) {
             // ignore if item id is zero
             return true;
         }

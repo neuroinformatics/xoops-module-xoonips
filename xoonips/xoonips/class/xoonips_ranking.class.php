@@ -73,13 +73,13 @@ class XooNIpsRankingHandler
     /**
      * update rankings.
      *
-     * @return boolean|null false if failure
+     * @return bool|null false if failure
      */
     public function update()
     {
         // lock ranking data
         $h = $this->_lock();
-        if ($h === false) {
+        if (false === $h) {
             return false;
         }
         // update ranking
@@ -110,7 +110,7 @@ class XooNIpsRankingHandler
      *
      * @param bool $is_update flag for update mode
      *
-     * @return boolean|null false if failure
+     * @return bool|null false if failure
      */
     public function _recalc($is_update)
     {
@@ -165,7 +165,7 @@ class XooNIpsRankingHandler
             if ($config['days_enabled']) {
                 $add_days_criteria->add(new Criteria('timestamp', $now - $config['days'] * 86400, '>='));
             } else {
-                if ($config['sum_last_update'] != 0) {
+                if (0 != $config['sum_last_update']) {
                     // rankings are ( sum_start ... sum_last_updated of ranking_sum ) +
                     //              ( sum_last_update ... now of event_log )
                     $add_days_criteria->add(new Criteria('timestamp', $config['sum_last_update'], '>='));
@@ -191,7 +191,7 @@ class XooNIpsRankingHandler
      * @param object &$sub_days_criteria
      * @param bool   $update_sum         flag for update sum tables
      *
-     * @return boolean|null false if failure
+     * @return bool|null false if failure
      */
     public function _recalc_sql(&$add_days_criteria, &$sub_days_criteria, $update_sum)
     {
@@ -212,15 +212,15 @@ class XooNIpsRankingHandler
         // days criteria
         $days_criteria = new CriteriaCompo();
         $days_criteria->add($add_days_criteria);
-        if ($sub_days_criteria->render() != '') {
+        if ('' != $sub_days_criteria->render()) {
             $days_criteria->add($sub_days_criteria, 'OR');
         }
         $add_days_sql = $add_days_criteria->render();
-        if ($add_days_sql == '') {
+        if ('' == $add_days_sql) {
             $add_days_sql = '0';
         }
         $sub_days_sql = $sub_days_criteria->render();
-        if ($sub_days_sql == '') {
+        if ('' == $sub_days_sql) {
             $sub_days_sql = '0';
         }
 
@@ -358,7 +358,7 @@ class XooNIpsRankingHandler
                                 continue;
                             }
                             $keyword = strtolower($keyword);
-                            if ($keyword == 'and' || $keyword == 'or') {
+                            if ('and' == $keyword || 'or' == $keyword) {
                                 continue;
                             }
                             if (strlen($keyword) > 2) {
@@ -412,7 +412,7 @@ class XooNIpsRankingHandler
                     //       handler
                     $sql = 'REPLACE INTO '.$new_item_table.' ( item_id, timestamp ) SELECT t.item_id, FROM_UNIXTIME(timestamp) FROM '.$log_table.' AS t INNER JOIN '.$xoopsDB->prefix('xoonips_index_item_link').' AS txil ON t.item_id=txil.item_id INNER JOIN '.$xoopsDB->prefix('xoonips_index').' AS tx ON txil.index_id=tx.index_id WHERE tx.open_level='.OL_PUBLIC.' AND event_type_id='.ETID_CERTIFY_ITEM.' AND ( '.$add_days_sql.' ) GROUP BY t.item_id ORDER BY timestamp DESC LIMIT '.$config['new_num_rows'];
                     $result = $xoopsDB->queryF($sql);
-                    if ($result == false) {
+                    if (false == $result) {
                         die('fatal error in '.__FILE__.' at '.__LINE__);
                     }
                     // remove old entry
@@ -427,7 +427,7 @@ class XooNIpsRankingHandler
                     //       handler
                     $sql = 'REPLACE INTO '.$new_group_table.' ( gid, timestamp ) SELECT t.gid, FROM_UNIXTIME(timestamp) FROM '.$log_table.' AS t INNER JOIN '.$xoopsDB->prefix('xoonips_groups').' AS tg ON t.gid=tg.gid WHERE tg.gid IS NOT NULL AND event_type_id='.ETID_INSERT_GROUP.' AND ( '.$add_days_sql.' ) ORDER BY timestamp DESC LIMIT '.$config['new_num_rows'];
                     $result = $xoopsDB->queryF($sql);
-                    if ($result == false) {
+                    if (false == $result) {
                         die('fatal error in '.__FILE__.' at '.__LINE__);
                     }
                     // remove old entry
@@ -451,7 +451,7 @@ class XooNIpsRankingHandler
         $now = time();
         $timeout = $now + 180;
         $result = $xoopsDB->queryF('UPDATE '.$table.' SET value='.$timeout.' WHERE name=\'ranking_lock_timeout\' AND value < '.$now);
-        if ($result != false && $xoopsDB->getAffectedRows()) {
+        if (false != $result && $xoopsDB->getAffectedRows()) {
             // transaction
             $transaction = &XooNIpsTransaction::getInstance();
             $transaction->start();

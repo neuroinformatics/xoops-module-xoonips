@@ -87,7 +87,7 @@ class XooNIpsAdminSystemCheckResult
         // name
         $html .= $textutil->html_special_chars($this->name).' : ';
         // label
-        if ($this->label != '') {
+        if ('' != $this->label) {
             $html .= $textutil->html_special_chars($this->label).' : ';
         }
         // result

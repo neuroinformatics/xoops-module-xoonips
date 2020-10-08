@@ -56,10 +56,10 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
                 $error->add(XNPERR_INVALID_PARAM, 'parameter2 must be subclass of XooNIpsItemCompo');
             }
             $basic = $vars[1]->getVar('basic');
-            if ($basic->get('item_id') == false) {
+            if (false == $basic->get('item_id')) {
                 $error->add(XNPERR_MISSING_PARAM, 'parameter 2 missing basic.item_id');
             }
-            if ($basic->get('item_type_id') == false) {
+            if (false == $basic->get('item_type_id')) {
                 $error->add(XNPERR_MISSING_PARAM, 'parameter 2 missing basic.item_type_id');
             }
 
@@ -111,7 +111,7 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
         $item_compo_handler = &xoonips_getormcompohandler('xoonips', 'item');
         $basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $old_basic = $basic_handler->get($item_id);
-        if ($old_basic == false) {
+        if (false == $old_basic) {
             $response->setResult(false);
             $error->add(XNPERR_NOT_FOUND);
 
@@ -234,11 +234,11 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
                     $error->add(XNPERR_ACCESS_FORBIDDEN, "cannot access index(index_id=$index_id)");
                 }
                 $open_level = $index->get('open_level');
-                if ($open_level == OL_PRIVATE) {
+                if (OL_PRIVATE == $open_level) {
                     $add_to_private = true;
-                } elseif ($open_level == OL_GROUP_ONLY) {
+                } elseif (OL_GROUP_ONLY == $open_level) {
                     $add_to_group = true;
-                } elseif ($open_level == OL_PUBLIC) {
+                } elseif (OL_PUBLIC == $open_level) {
                     $add_to_public = true;
                 }
             }
@@ -338,7 +338,7 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
             $file = $old_item->getVar($file_type_name);
             if (!empty($file) && !is_array($file)) {
                 // avoid error in inserting empty file
-                if ($file->get('file_id') == 0) {
+                if (0 == $file->get('file_id')) {
                     $file->unsetNew();
                     $file->unsetDirty();
                 }
@@ -355,8 +355,8 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
             return false;
         }
 
-        if (count($add_files) == 0
-            && count($delete_file_ids) == 0
+        if (0 == count($add_files)
+            && 0 == count($delete_file_ids)
             && $this->isOnlyPrivateIndexChanged($error, $detail_item_type->getIteminfo(), $item, $old_item)
         ) {
             $transaction->commit();
@@ -472,7 +472,7 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
     {
         foreach ($iteminfo['orm'] as $orminfo) {
             $key = $orminfo['field'];
-            if ($key != 'indexes') {
+            if ('indexes' != $key) {
                 $new_orm = $new_item->getVar($key);
                 $old_orm = $old_item->getVar($key);
                 if ($orminfo['multiple']) {
@@ -485,7 +485,7 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
                         }
                     }
                 } else {
-                    if ($new_orm == false && $old_orm != false
+                    if (false == $new_orm && false != $old_orm
                         || !$new_orm->equals($old_orm)
                     ) {
                         return false;
@@ -510,7 +510,7 @@ class XooNIpsLogicUpdateItem2 extends XooNIpsLogic
         $criteria = new CriteriaCompo(new Criteria('open_level', OL_PRIVATE, '<>'));
         $criteria->add(new Criteria('index_id', '('.implode(',', $changed_index_ids).')', 'in'));
         $indexes = &$index_handler->getObjects($criteria);
-        if ($indexes === false) {
+        if (false === $indexes) {
             $error->add(XNPERR_SERVER_ERROR, 'cannot get changed nonprivate index');
 
             return false;

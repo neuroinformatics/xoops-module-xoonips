@@ -55,7 +55,7 @@ if (defined('XOOPS_CUBE_LEGACY')) {
 }
 $criteria->add(new Criteria('conf_name', 'activation_type'));
 $xoopsUserConfigs = &$config_handler->getConfigs($criteria);
-if (count($xoopsUserConfigs) != 1) {
+if (1 != count($xoopsUserConfigs)) {
     redirect_header($xoonips_admin['mypage_url'], 3, _AM_XOONIPS_MSG_UNEXPECTED_ERROR);
     exit();
 }

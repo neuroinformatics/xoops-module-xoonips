@@ -93,7 +93,7 @@ class XooNIpsXmlRpcLogic
 
         case 3: //private
             $open_level = 'private';
-            if ($index->get('parent_index_id') == IID_ROOT && $index->get('uid') == $_SESSION['xoopsUserId']) {
+            if (IID_ROOT == $index->get('parent_index_id') && $index->get('uid') == $_SESSION['xoopsUserId']) {
                 $title = XNP_PRIVATE_INDEX_TITLE; // title of /Private is not username but "Private"
             }
             break;

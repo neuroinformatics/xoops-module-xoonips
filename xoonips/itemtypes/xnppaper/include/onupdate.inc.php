@@ -41,6 +41,7 @@ function xoops_module_update_xnppaper($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 311:
     case 330:
     case 331:
@@ -82,7 +83,7 @@ function xoops_module_update_xnppaper($xoopsMod, $oldversion)
                 $sql = 'insert into '.$xoopsDB->prefix($table_author);
                 $sql .= '('.$key_name.',author,author_order) values (';
                 $sql .= $id.','.$xoopsDB->quoteString($val).','.$i.')';
-                if ($xoopsDB->queryF($sql) == false) {
+                if (false == $xoopsDB->queryF($sql)) {
                     echo '&nbsp;&nbsp;'.$xoopsDB->error().'<br />';
 
                     return false;
@@ -98,6 +99,7 @@ function xoops_module_update_xnppaper($xoopsMod, $oldversion)
 
             return false;
         }
+        // no break
     case 340:
     default:
     }

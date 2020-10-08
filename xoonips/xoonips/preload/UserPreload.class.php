@@ -30,11 +30,9 @@ class Xoonips_UserPreload extends XCube_ActionFilter
 
 class XooNIps_UserPreloadFunctions
 {
-    /***********************/
     /**
      * Public Functions.
      **/
-    /***********************/
 
     /**
      * custom 'Legacypage.Userinfo.Access' Delegate for XooNIps.
@@ -176,11 +174,9 @@ class XooNIps_UserPreloadFunctions
         $eventlog_handler->recordLogoutEvent($uid);
     }
 
-    /***********************/
     /**
      * Private Functions.
      **/
-    /***********************/
 
     /**
      * redirect to xoonips script url.

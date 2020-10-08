@@ -339,6 +339,7 @@ SQL;
         $xoopsDB->query($sql);
 
         xoonips_delete_obsolete_configs(330);
+        // no break
     case 330:
     case 331:
         // fixed default xoonips group bug.
@@ -397,6 +398,7 @@ SQL;
         if (!xoonips_sql_queries($sqls)) {
             return false;
         }
+        // no break
     case 332:
         // Notice:
         //   version 333-339 are reserved number for future releases of
@@ -543,6 +545,7 @@ SQL;
 
         // remove obsolete configs
         xoonips_delete_obsolete_configs(340);
+        // no break
     case 340:
     case 341:
     case 342:
@@ -553,6 +556,7 @@ SQL;
         xoonips_remove_zombie_related_to_ids();
         // remove duplicated private item ids
         xoonips_remove_duplicated_private_item_ids();
+        // no break
     default:
         break;
     }
@@ -638,7 +642,7 @@ function xoonips_sql_queries($sqls)
             $error = true;
             break;
         }
-        if (strncmp('CREATE', strtoupper($prefixed_query[0]), 6) == 0 && !in_array($prefixed_query[4], $created_tables)) {
+        if (0 == strncmp('CREATE', strtoupper($prefixed_query[0]), 6) && !in_array($prefixed_query[4], $created_tables)) {
             $msgs[] = '&nbsp;&nbsp;Table <b>'.$xoopsDB->prefix($prefixed_query[4]).'</b> created.';
             $created_tables[] = $prefixed_query[4];
         }
@@ -676,7 +680,7 @@ function xoonips_sql_has_index($table, $name)
     $num = $xoopsDB->getRowsNum($result);
     $xoopsDB->freeRecordSet($result);
 
-    return  $num != 0;
+    return  0 != $num;
 }
 
 function xoonips_sql_fetch_column($table, $name)
