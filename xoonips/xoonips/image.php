@@ -214,7 +214,7 @@ if (!empty($thumbnail)) {
         exit();
     }
 } else {
-    if ('preview' != $file_type_name) {
+    if ('preview' != $file_type_name && null === $sess_id) {
         /* check the download limitation */
         $item_basic_handler = &xoonips_getormhandler('xoonips', 'item_basic');
         $criteria = new Criteria('item_id', $item_id);
@@ -233,7 +233,7 @@ if (!empty($thumbnail)) {
         if (empty($viewphp)) {
             image_error(500);
         }
-        require_once XOOPS_ROOT_PATH.'/modules/'.$itemtype['viewphp'];
+        require_once XOOPS_ROOT_PATH.'/modules/'.$viewphp;
         $fname_dllimit = "${name}GetAttachmentDownloadLimitOption";
         if (function_exists($fname_dllimit) && 1 == $fname_dllimit($item_id)) {
             /* require to confirm file download */
