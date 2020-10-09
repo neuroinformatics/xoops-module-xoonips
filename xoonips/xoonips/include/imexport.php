@@ -569,14 +569,11 @@ function _xoonips_import_indexEndElement($parser, $name, &$parser_hash)
         $indexes = $parser_hash['indexes'];
 
         // To construct tree structure from given indexes by $indexes
-        // associative array (child ID -> parent ID)
-        $c2p = array();
         // associative array (parent ID -> array of child ID)
         $p2c = array();
         // $index_by_id[ index_id ] => index array;
         $index_by_id = array();
         foreach ($indexes as $i) {
-            $c2p[$i['index_id']] = $i['parent_id'];
             if (!isset($p2c[$i['parent_id']])) {
                 $p2c[$i['parent_id']] = array();
             }
@@ -586,31 +583,10 @@ function _xoonips_import_indexEndElement($parser, $name, &$parser_hash)
 
         // Index id of root of each index trees
         $root_ids = array();
-        while (list($child, $parent) = each($c2p)) {
-            while (array_key_exists($parent, $c2p)) {
-                // track back to root
-                unset($c2p[$child]);
-                $child = $parent;
-                $parent = $c2p[$parent];
+        foreach ($index_by_id as $index_id => $index) {
+            if (!isset($index_by_id[$index['parent_id']])) {
+                $root_ids[] = $index_id;
             }
-
-            $parent = $child;
-
-            $root_ids[] = $parent;
-            unset($c2p[$parent]);
-
-            // remove all childs of the root($parent)
-            if (isset($p2c[$parent])) {
-                $stack = $p2c[$parent];
-                while (count($stack) > 0) {
-                    $id = array_pop($stack);
-                    unset($c2p[$id]);
-                    if (isset($p2c[$id])) {
-                        $stack = array_merge($stack, $p2c[$id]);
-                    }
-                }
-            }
-            reset($c2p);
         }
         // structured index tree
         $tree = array();

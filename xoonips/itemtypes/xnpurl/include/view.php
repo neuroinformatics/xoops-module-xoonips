@@ -95,8 +95,7 @@ function xnpurlGetUrlBannerFileDetailBlock($item_id, $url)
     $files = xnpGetFileInfo('t_file.file_id, t_file.caption', 't_file_type.name=\'url_banner_file\' and sess_id is NULL ', $item_id);
     // generate html
     if (0 != count($files)) {
-        reset($files);
-        list($dummy, list($fileID, $caption)) = each($files);
+        list($fileID, $caption) = array_shift($files);
         $imageFileName = XOOPS_URL."/modules/xoonips/image.php?file_id=$fileID";
         $html = '<a href="'.$url.'"><img src="'.$imageFileName.'" alt="'.$url.'"/></a>';
         $hidden = xnpCreateHidden('url_banner_fileFileID', $fileID);

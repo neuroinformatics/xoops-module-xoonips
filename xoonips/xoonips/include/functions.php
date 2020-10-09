@@ -30,6 +30,11 @@ defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 require_once dirname(__DIR__).'/class/base/tableobject.class.php';
 require_once dirname(__DIR__).'/class/base/criteria.class.php';
 
+// compatibility functions
+if (!function_exists('array_key_first')) {
+    require_once __DIR__.'/compat/array_key_first.php';
+}
+
 // session check
 if (isset($_SESSION['xnpsess_destroyed']) && $_SESSION['xnpsess_destroyed'] < time() - 300) {
     // should not happen usually. this could be attack or due to unstable network.

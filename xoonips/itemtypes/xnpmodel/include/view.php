@@ -248,7 +248,7 @@ function xnpmodelGetRegisterBlock()
     $basic = xnpGetBasicInformationRegisterBlock();
     $model_types = xnpmodel_get_type_array();
     if (false == $model_type) {
-        list($model_type) = each($model_types);
+        $model_type = array_key_first($model_types);
     }
     $detail = array(
     'model_type' => array(

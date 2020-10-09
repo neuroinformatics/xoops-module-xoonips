@@ -228,7 +228,7 @@ function xnpstimulusGetRegisterBlock()
         $stimulus_type = $formdata->getValue('post', 'stimulus_type', 's', false);
     }
     if (false == $stimulus_type) {
-        list($stimulus_type) = each($stimulus_types);
+        $stimulus_type = array_key_first($stimulus_types);
     }
     $detail['stimulus_type'] = array(
     'value' => $stimulus_type,
@@ -281,7 +281,7 @@ function xnpstimulusGetEditBlock($item_id)
     if (!is_null($post_id)) {
         $stimulus_type = $formdata->getValue('post', 'stimulus_type', 's', false);
         if (false == $stimulus_type) {
-            list($stimulus_type) = each($stimulus_types);
+            $stimulus_type = array_key_first($stimulus_types);
         }
         $detail['stimulus_type'] = array(
         'value' => $stimulus_type,

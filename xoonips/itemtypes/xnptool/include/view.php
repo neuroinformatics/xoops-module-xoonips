@@ -235,7 +235,7 @@ function xnptoolGetRegisterBlock()
         $tool_type = $formdata->getValue('post', 'tool_type', 's', false);
     }
     if (false == $tool_type) {
-        list($tool_type) = each($tool_types);
+        $tool_type = array_key_first($tool_types);
     }
     $detail['tool_type'] = array(
     'value' => $tool_type,
@@ -289,7 +289,7 @@ function xnptoolGetEditBlock($item_id)
     if (!is_null($post_id)) {
         $tool_type = $formdata->getValue('post', 'tool_type', 's', false);
         if (false == $tool_type) {
-            list($tool_type) = each($tool_types);
+            $tool_type = array_key_first($tool_types);
         }
         $detail['tool_type'] = array(
         'value' => $tool_type,

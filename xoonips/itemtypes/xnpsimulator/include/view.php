@@ -228,7 +228,7 @@ function xnpsimulatorGetRegisterBlock()
         $simulator_type = $formdata->getValue('post', 'simulator_type', 's', false);
     }
     if (false == $simulator_type) {
-        list($simulator_type) = each($simulator_types);
+        $simulator_type = array_key_first($simulator_types);
     }
     $detail['simulator_type'] = array(
     'value' => $simulator_type,
@@ -282,7 +282,7 @@ function xnpsimulatorGetEditBlock($item_id)
     if (!is_null($post_id)) {
         $simulator_type = $formdata->getValue('post', 'simulator_type', 's', false);
         if (false == $simulator_type) {
-            list($simulator_type) = each($simulator_types);
+            $simulator_type = array_key_first($simulator_types);
         }
         $detail['simulator_type'] = array(
         'value' => $simulator_type,
