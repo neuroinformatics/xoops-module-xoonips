@@ -771,7 +771,6 @@ class XooNIpsImportItemHandler
     public function findDuplicateItems($all_import_items)
     {
         $title_item_map = &$this->_create_title_item_map($all_import_items);
-                error_log(var_export(array_keys($title_item_map), true));
         foreach (array_keys($all_import_items) as $key) {
             $basic = &$all_import_items[$key]->getVar('basic');
             $handler = &$this->_get_import_item_handler_by_item_type_id($basic->get('item_type_id'));
