@@ -1,18 +1,18 @@
 ---------------------------------------------------------------------------
                       List of XooNIps Change Logs
 ---------------------------------------------------------------------------
-3.50 released (XX/Oct/2020)
+3.50 released (10/Oct/2020)
 + maintenance release from ver.3.49
 
 Change Logs:
 * Bug fixes
   - Fixed multiple SQLi and XSS vulnerabilities by malicious registered user.
   - Fixed bug for item deleting with attachment files.
-  - Fixed bug for item registraion with attachment files.
+  - Fixed bug for item registration with attachment files.
   - Fixed bug for response of OAI-PMH metadata harvest requests.
   - Fixed bug for Binder item registration and edit.
   - Fixed bug for keyword search with one character.
-  - Fixed bug for transfering user items.
+  - Fixed bug for transferring user items.
   - Fixed cumulative minor bugs.
 * Compatibility enhancements
   - Support PHP 7.4
@@ -40,7 +40,7 @@ Change Logs:
 * Bug fixes
   - Fixed XSS security issue on item listing page.
   - Fixed detail search bugs.
-    - Fatal error occured on full-text search of attachment file.
+    - Fatal error occurred on full-text search of attachment file.
     - Item is not searched if attachment file is deleted.
   - Fixed bug for HTTPS connection with external systems.
   - Fixed bug for login redirection.
@@ -94,7 +94,7 @@ Change Logs:
   - Fixed bug for extracting zip archive.
   - Fixed bug for 'Add Item' function.
     - Others' items can be added into Private index.
-    - Item editing lock does't come off when pending item selected.
+    - Item editing lock doesn't come off when pending item selected.
   - Fixed 'setSpec' related problems of OAI-PMH repository function.
     - 'setSpec' values in 'ListSets' response are not compatible.
     - Invalid response returned by selective harvesting using 'set'
@@ -130,11 +130,11 @@ Change Logs:
   - fixed to create thumbnail images on import items.
   - fixed fatal error at item editing of Paper item type.
   - fixed bug for publication date become 1970 by editing items.
-  - fixed attachement file search for UTF-8 language environment.
+  - fixed attachment file search for UTF-8 language environment.
   - fixed dead link from the search result of account information page
     "userinfo.php".
   - fixed bug for approval status on update item.
-  - fixed bug for last modified date of OAI-PMH on updte item.
+  - fixed bug for last modified date of OAI-PMH on update item.
   - support Amazon Product Advertising API for Book item type.
 
 
@@ -152,14 +152,14 @@ Change Logs:
 
 Change Logs:
 * Bug fixes
-  - fixed infiniate loop bug when an item has cross-reference related to
+  - fixed infinite loop bug when an item has cross-reference related to
     items.
   - fixed bug for user profile updating.
   - fixed bug for search cache garbage collecting.
   - fixed bug for search index creation of Japanese written MS-Word
     attachment on UNIX/Linux platform.
   - fixed bug for item type modules updating. (Book, Conference, Data, Model,
-    Paper, Presentaion, Simulator, Stimulus and Tool)
+    Paper, Presentation, Simulator, Stimulus and Tool)
   - fixed html validation error on listing page of Book items.
   - fixed linking count bug for Url items.
 * Performance and compatibility enhancements
