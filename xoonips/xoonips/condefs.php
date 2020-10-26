@@ -27,7 +27,7 @@
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
 // debug mode
-!defined('XOONIPS_DEBUG_MODE') || define('XOONIPS_DEBUG_MODE', false);
+defined('XOONIPS_DEBUG_MODE') || define('XOONIPS_DEBUG_MODE', false);
 
 define('XOONIPS_URL', XOOPS_URL.'/modules/xoonips');
 define('XOONIPS_PATH', XOOPS_ROOT_PATH.'/modules/xoonips');
