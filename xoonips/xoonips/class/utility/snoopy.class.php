@@ -126,7 +126,7 @@ class XooNIpsUtilitySnoopy extends XooNIpsUtility
         $config_handler = &xoonips_getormhandler('xoonips', 'config');
         $criteria = new CriteriaCompo();
         foreach ($proxy_configs as $config) {
-            $criteria->add(new Criteria('name', $config), 'OR');
+            $criteria->add(new Criteria('name', addslashes($config)), 'OR');
         }
         $objs = &$config_handler->getObjects($criteria);
         $proxy = array();

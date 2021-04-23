@@ -95,7 +95,7 @@ class XooNIpsLogic
         } else {
             // validate session
             $sess_handler = &xoonips_getormhandler('xoonips', 'session');
-            $sessions = &$sess_handler->getObjects(new Criteria('sess_id', $sessionid));
+            $sessions = &$sess_handler->getObjects(new Criteria('sess_id', addslashes($sessionid)));
             if (!$sessions || 1 != count($sessions)) {
                 if ($sessionid != $prev_sessid) {
                     session_write_close();

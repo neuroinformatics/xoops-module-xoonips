@@ -255,7 +255,7 @@ class XooNIpsUtilitySearch extends XooNIpsUtility
                     $token = '%'.preg_replace('/([%_])/', '\\\\\\1', $token).'%';
                 }
                 $op = false;
-                $val = new Criteria($field, $token, $cr_op, $prefix);
+                $val = new Criteria($field, $token, $cr_op, $prefix); // safe
             }
             $stack[] = array($op, $val);
             unset($op, $val);

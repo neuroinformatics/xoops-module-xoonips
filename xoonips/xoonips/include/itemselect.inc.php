@@ -166,7 +166,7 @@ case 'quicksearch':
     $file_count = xoonips_get_file_count_from_search_cache($search_cache_id);
 
     $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
-    $criteria = new Criteria('name', $search_itemtype);
+    $criteria = new Criteria('name', addslashes($search_itemtype));
     $item_types = &$item_type_handler->getObjects($criteria);
     if (count($item_types) > 0) {
         $xoopsTpl->assign(

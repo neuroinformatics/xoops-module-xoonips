@@ -54,8 +54,8 @@ class XooNIpsMemberHandler
      */
     public function &loginUser($uname, $pass)
     {
-        $criteria = new CriteriaCompo(new Criteria('uname', $uname));
-        $criteria->add(new Criteria('pass', md5($pass)));
+        $criteria = new CriteriaCompo(new Criteria('uname', addslashes($uname)));
+        $criteria->add(new Criteria('pass', md5($pass))); // safe
         $user = &$this->_aHandler->getObjects($criteria);
         if (!$user || 1 != count($user)) {
             $ret = false;

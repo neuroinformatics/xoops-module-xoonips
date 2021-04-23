@@ -129,7 +129,7 @@ function xnpGetItemTypeDisplayNameByDirname($dirname, $fmt)
 {
     // TODO: move this function to felicitous class method
     $item_type_handler = &xoonips_getormhandler('xoonips', 'item_type');
-    $criteria = new Criteria('name', $dirname);
+    $criteria = new Criteria('name', addslashes($dirname));
     $item_type_objs = &$item_type_handler->getObjects($criteria);
     if (1 != count($item_type_objs)) {
         return false;

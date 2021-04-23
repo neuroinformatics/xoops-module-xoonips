@@ -70,7 +70,7 @@ $append_confnames = array(
 if (count($append_confnames) > 0) {
     $criteria_append = new CriteriaCompo();
     foreach ($append_confnames as $confname) {
-        $criteria_append->add(new Criteria('conf_name', $confname), 'OR');
+        $criteria_append->add(new Criteria('conf_name', addslashes($confname)), 'OR');
     }
     $criteria->add($criteria_append);
 }

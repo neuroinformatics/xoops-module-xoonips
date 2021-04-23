@@ -88,7 +88,7 @@ class XooNIpsActionOaipmhSearchDetail extends XooNIpsAction
     public function getMetadataArray($identifier)
     {
         $metadata_handler = &xoonips_getormhandler('xoonips', 'oaipmh_metadata');
-        $metadata = &$metadata_handler->getObjects(new Criteria('identifier', $identifier));
+        $metadata = &$metadata_handler->getObjects(new Criteria('identifier', addslashes($identifier)));
         if (!$metadata) {
             return array();
         }
@@ -121,7 +121,7 @@ class XooNIpsActionOaipmhSearchDetail extends XooNIpsAction
         $metadata_handler = &xoonips_getormhandler('xoonips', 'oaipmh_metadata');
         $repository_handler = &xoonips_getormhandler('xoonips', 'oaipmh_repositories');
 
-        $metadata = &$metadata_handler->getObjects(new Criteria('identifier', $identifier));
+        $metadata = &$metadata_handler->getObjects(new Criteria('identifier', addslashes($identifier)));
         if (!$metadata || 0 == count($metadata)) {
             return '';
         }

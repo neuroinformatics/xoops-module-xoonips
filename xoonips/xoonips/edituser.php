@@ -500,7 +500,7 @@ if ('avatarupload' == $op) {
                 } else {
                     $oldavatar = $u_obj->getVar('user_avatar', 's');
                     if (!empty($oldavatar) && 'blank.gif' != $oldavatar && !preg_match('/^savt/', strtolower($oldavatar))) {
-                        $avatars = &$avt_handler->getObjects(new Criteria('avatar_file', $oldavatar));
+                        $avatars = &$avt_handler->getObjects(new Criteria('avatar_file', addslashes($oldavatar)));
                         $avt_handler->delete($avatars[0]);
                         $oldavatar_path = str_replace('\\', '/', realpath(XOOPS_UPLOAD_PATH.'/'.$oldavatar));
                         if (0 === strpos($oldavatar_path, XOOPS_UPLOAD_PATH) && is_file($oldavatar_path)) {
@@ -540,7 +540,7 @@ if ('avatarchoose' == $op) {
         }
         $avt_handler = &xoops_gethandler('avatar');
         if ($oldavatar && 'blank.gif' != $oldavatar && !preg_match('/^savt/', strtolower($oldavatar))) {
-            $avatars = &$avt_handler->getObjects(new Criteria('avatar_file', $oldavatar));
+            $avatars = &$avt_handler->getObjects(new Criteria('avatar_file', addslashes($oldavatar)));
             if (is_object($avatars[0])) {
                 $avt_handler->delete($avatars[0]);
             }
@@ -550,7 +550,7 @@ if ('avatarchoose' == $op) {
             }
         }
         if ('blank.gif' != $user_avatar) {
-            $avatars = &$avt_handler->getObjects(new Criteria('avatar_file', $user_avatar));
+            $avatars = &$avt_handler->getObjects(new Criteria('avatar_file', addslashes($user_avatar)));
             if (is_object($avatars[0])) {
                 $avt_handler->addUser($avatars[0]->getVar('avatar_id'), $uid);
             }

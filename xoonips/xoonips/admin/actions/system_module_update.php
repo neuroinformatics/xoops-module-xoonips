@@ -73,6 +73,9 @@ if ($count > 0) {
                 // clear cached/compiled files and regenerate them if default theme has been changed
                 if ($xoopsConfig['template_set'] != $_POST[$config->getVar('conf_name')]) {
                     $newtplset = $_POST[$config->getVar('conf_name')];
+                    if (preg_match('/[^a-z0-9-_]/i', $newtplset)) {
+                        xoonips_error_exit(400);
+                    }
 
                     // clear all compiled and cachedfiles
                     $xoopsTpl->clear_compiled_tpl();
@@ -99,7 +102,7 @@ if ($count > 0) {
 
                     // generate image cache files from image binary data, save them under cache/
                     $image_handler = &xoops_gethandler('imagesetimg');
-                    $imagefiles = &$image_handler->getObjects(new Criteria('tplset_name', $newtplset), true);
+                    $imagefiles = &$image_handler->getObjects(new Criteria('tplset_name', addslashes($newtplset)), true);
                     foreach (array_keys($imagefiles) as $i) {
                         if (!$fp = fopen(XOOPS_CACHE_PATH.'/'.$newtplset.'_'.$imagefiles[$i]->getVar('imgsetimg_file'), 'wb')) {
                         } else {

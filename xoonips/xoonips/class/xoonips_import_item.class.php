@@ -901,7 +901,7 @@ class XooNIpsImportItemHandler
         //
         $item_ids = array();
         foreach ($titles as $title => $count) {
-            $criteria = new CriteriaCompo(new Criteria('title', $title));
+            $criteria = new CriteriaCompo(new Criteria('title', addslashes($title)));
             $criteria->add(new Criteria('item_type_id', $basic->get('item_type_id')));
             $criteria->add(new Criteria('uid', $xoopsUser->getVar('uid')));
             if (count($item_ids) > 0) {
@@ -1058,7 +1058,7 @@ class XooNIpsImportItemHandler
         } // no conflict if doi is empty
 
         $handler = &xoonips_getormhandler('xoonips', 'item_basic');
-        $criteria = new Criteria('doi', $doi);
+        $criteria = new Criteria('doi', addslashes($doi));
         $basics = &$handler->getObjects($criteria);
         if (!$basics) {
             return array();
@@ -1755,7 +1755,7 @@ class XooNIpsImportItemHandler
             }
 
             $criteria = new CriteriaCompo(new Criteria('parent_index_id', $index_id));
-            $criteria->add(new Criteria('tt.title', $name));
+            $criteria->add(new Criteria('tt.title', addslashes($name)));
             $join = new XooNIpsJoinCriteria('xoonips_item_title', 'index_id', 'item_id', 'LEFT', 'tt');
             $indexes = &$index_handler->getObjects($criteria, false, '', false, $join);
             if (0 == count($indexes)) {

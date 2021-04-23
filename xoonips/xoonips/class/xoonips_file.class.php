@@ -94,7 +94,7 @@ class XooNIpsFileHandler
         $criteria = new CriteriaCompo(new Criteria('item_id', $item_id));
         $criteria->add(new Criteria('is_deleted', 0));
         if (false !== $file_type_name) {
-            $criteria->add(new Criteria('name', $file_type_name, '=', 'ft'));
+            $criteria->add(new Criteria('name', addslashes($file_type_name), '=', 'ft'));
         }
         $files_info = array();
         $res = &$this->xf_handler->open($criteria, '', false, $join);
@@ -137,8 +137,8 @@ class XooNIpsFileHandler
         }
         $mimetypes = explode(',', XNP_CONFIG_DOWNLOAD_FILE_TYPE_LIMIT);
         $mimetypes = array_map(array(&$GLOBALS['xoopsDB'], 'quoteString'), $mimetypes);
-        $criteria->add(new Criteria('mime_type', '('.implode(',', $mimetypes).')', 'IN'));
-        $criteria->add(new Criteria('doi', $doi, '=', 'ib'));
+        $criteria->add(new Criteria('mime_type', '('.implode(',', $mimetypes).')', 'IN')); // safe
+        $criteria->add(new Criteria('doi', addslashes($doi), '=', 'ib'));
         $xf_objs = &$this->xf_handler->getObjects($criteria, false, 'file_id', false, $join);
         if (0 == count($xf_objs)) {
             return false;

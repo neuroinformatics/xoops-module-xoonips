@@ -54,7 +54,7 @@ class XooNIpsGroupHandler
         if (!is_null($except_gid)) {
             $criteria->add(new Criteria('gid', $except_gid, '!='));
         }
-        $criteria->add(new Criteria('gname', $gname));
+        $criteria->add(new Criteria('gname', addslashes($gname)));
         $cnt = $this->_xg_handler->getCount($criteria);
 
         return  0 != $cnt;

@@ -135,7 +135,7 @@ class ListRecordsHandler extends HarvesterHandler
             $metadata_handler = &xoonips_getormhandler('xoonips', 'oaipmh_metadata');
             $unicode = &xoonips_getutility('unicode');
 
-            $criteria = new Criteria('URL', $this->baseURL);
+            $criteria = new Criteria('URL', addslashes($this->baseURL));
             $repositories = &$repository_handler->getObjects($criteria);
             if (!$repositories) {
                 $this->search_text = array();

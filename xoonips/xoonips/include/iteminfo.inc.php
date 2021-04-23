@@ -108,8 +108,8 @@ $iteminfo['io']['xmlrpc']['item'][] = array(
         'readonly' => true,
     ),
     'eval' => array(
-        'orm2xmlrpc' => '$user_handler =& xoops_gethandler( "user" ); $user =& $user_handler->get($in_var[0]); if( $user ) $out_var[0] = $user->getVar( "uname", "none" );',
-        'xmlrpc2orm' => '$user_handler =& xoops_gethandler( "user" ); $users =& $user_handler->getObjects(new Criteria( "uname", trim($in_var[0]) ) ); if($users) $out_var[0] = $users[0]->getVar( "uid" );',
+        'orm2xmlrpc' => '$user_handler =& xoops_gethandler("user"); $user =& $user_handler->get($in_var[0]); if ($user) $out_var[0] = $user->getVar("uname", "none");',
+        'xmlrpc2orm' => '$user_handler =& xoops_gethandler("user"); $users =& $user_handler->getObjects(new Criteria("uname", addslashes(trim($in_var[0])))); if($users) $out_var[0] = $users[0]->getVar("uid");',
     ),
 );
 
@@ -129,7 +129,7 @@ $iteminfo['io']['xmlrpc']['item'][] = array(
     ),
     'eval' => array(
         'orm2xmlrpc' => '$out_var[0] = $in_var[0];',
-        'xmlrpc2orm' => 'if( strlen( trim($in_var[0]) ) > 0 ){ $out_var[0] = trim($in_var[0]); $out_var[1] = $context["position"]; }',
+        'xmlrpc2orm' => 'if (strlen(trim($in_var[0])) > 0) { $out_var[0] = trim($in_var[0]); $out_var[1] = $context["position"]; }',
     ),
 );
 
@@ -148,7 +148,7 @@ $iteminfo['io']['xmlrpc']['item'][] = array(
     ),
     'eval' => array(
         'orm2xmlrpc' => '$out_var[0] = $in_var[0];',
-        'xmlrpc2orm' => 'if( strlen( trim($in_var[0]) ) > 0 ){ $out_var[0] = trim($in_var[0]); $out_var[1] = $context["position"]; }',
+        'xmlrpc2orm' => 'if (strlen(trim($in_var[0])) > 0) { $out_var[0] = trim($in_var[0]); $out_var[1] = $context["position"]; }',
     ),
 );
 
@@ -279,9 +279,19 @@ $iteminfo['io']['xmlrpc']['item'][] = array(
 );
 
 $iteminfo['io']['xmlrpc']['item'][] = array(
-    'orm' => array('field' => array(array('orm' => 'basic', 'field' => 'item_id'))),
-    'xmlrpc' => array('field' => array('url'), 'display_name' => '_MD_XOONIPS_XMLRPC_DISPLAY_NAME_URL', 'type' => 'string', 'readonly' => true),
-    'eval' => array('orm2xmlrpc' => '$out_var[0] = XOOPS_URL . "/modules/xoonips/detail.php?item_id=" . $in_var[0];', 'xmlrpc2orm' => ';'),
+    'orm' => array(
+        'field' => array(array('orm' => 'basic', 'field' => 'item_id'))
+    ),
+    'xmlrpc' => array(
+        'field' => array('url'),
+        'display_name' => '_MD_XOONIPS_XMLRPC_DISPLAY_NAME_URL',
+        'type' => 'string',
+        'readonly' => true
+    ),
+    'eval' => array(
+        'orm2xmlrpc' => '$out_var[0] = XOOPS_URL."/modules/xoonips/detail.php?item_id=".$in_var[0];',
+        'xmlrpc2orm' => ';'
+    ),
 );
 
 $iteminfo['io']['xmlrpc']['item'][] = array(
@@ -313,7 +323,7 @@ $iteminfo['io']['xmlrpc']['item'][] = array(
     ),
     'eval' => array(
         'orm2xmlrpc' => '$out_var[0] = $in_var[0];',
-        'xmlrpc2orm' => 'if( is_numeric( trim($in_var[0]) ) && ctype_digit( trim($in_var[0]) ) ){ $out_var[0] = trim($in_var[0]); $out_var[1] = $context["position"]; }',
+        'xmlrpc2orm' => 'if (is_numeric(trim($in_var[0])) && ctype_digit(trim($in_var[0]))) { $out_var[0] = trim($in_var[0]); $out_var[1] = $context["position"]; }',
     ),
 );
 
@@ -324,7 +334,7 @@ $iteminfo['io']['xmlrpc']['item'][] = array(
 if (!function_exists('iteminfo_file_criteria')) {
     function iteminfo_file_criteria($file_type_name)
     {
-        $criteria = new CriteriaCompo(new Criteria('name', $file_type_name));
+        $criteria = new CriteriaCompo(new Criteria('name', addslashes($file_type_name)));
         $criteria->add(new Criteria('is_deleted', 0));
 
         return $criteria;

@@ -289,7 +289,7 @@ class XooNIpsLogicSearchItem extends XooNIpsLogic
                     } elseif (!empty($event_logs)) {
                         $search_cache_id = false;
                         // delete old search results from search cache
-                        $c = new CriteriaCompo(new Criteria('sess_id', $sessionid));
+                        $c = new CriteriaCompo(new Criteria('sess_id', addslashes($sessionid)));
                         $c->add(new Criteria('unix_timestamp(timestamp)', $event_logs[0]->get('timestamp'), '<'));
                         $search_caches = &$search_cache_handler->getObjects($c);
                         if (false === $search_caches) {

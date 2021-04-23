@@ -54,7 +54,7 @@ class OAIPMHHarvester
 
         (method_exists('MyTextSanitizer', 'sGetInstance') and $ts = &MyTextSanitizer::sGetInstance()) || $ts = &MyTextSanitizer::getInstance();
 
-        $criteria = new Criteria('URL', $this->_baseUrl);
+        $criteria = new Criteria('URL', addslashes($this->_baseUrl));
         $repository = &$handler->getObjects($criteria);
         if (!$repository) {
             return false;

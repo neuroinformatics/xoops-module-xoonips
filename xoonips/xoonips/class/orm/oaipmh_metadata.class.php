@@ -85,7 +85,7 @@ class XooNIpsOrmOaipmhMetadataHandler extends XooNIpsTableObjectHandler
      */
     public function getByIdentifier($identifier)
     {
-        $criteria = new Criteria('identifier', $identifier);
+        $criteria = new Criteria('identifier', addslashes($identifier));
         $result = &$this->getObjects($criteria);
         if (!$result) {
             return false;
